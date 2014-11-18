@@ -13,7 +13,7 @@ A lot has changed since the last version, hopefully for the better. Many new fea
 The simplest method to get up and running:
 
 ```
-new datepickr('#inputElementId');
+datepickr('#inputElementId');
 ```
 
 Obviously replace 'inputElementId' with the actual id of the input element you will be using.
@@ -21,13 +21,13 @@ Obviously replace 'inputElementId' with the actual id of the input element you w
 What's new is that you can pass in any selector that is supported by [querySelectorAll](https://developer.mozilla.org/en/docs/Web/API/Document.querySelectorAll) (by default, more on this below):
 
 ```
-new datepickr('#some .complex [selector]');
+datepickr('#some .complex [selector]');
 ```
 
 You can also pass in a node directly:
 
 ```
-new datepickr(document.getElementById('myId'));
+datepickr(document.getElementById('myId'));
 ```
 
 ##### Misc.
