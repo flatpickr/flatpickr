@@ -190,7 +190,7 @@ Use an alternate input and format:
 | y | A two digit representation of a year | 99 or 03 |
 | Y | A full numeric representation of a year, 4 digits | 1999 or 2003 |
 
-Note: Suffixes have been removed because the JavaScript's Date.parse didn't like them.
+Note: Suffixes have been removed because JavaScript's Date.parse didn't like them.
 
 ### Escaping date format characters
 
