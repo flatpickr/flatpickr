@@ -2,6 +2,8 @@
 
 A simple JavaScript date picker
 
+Sample implementations: http://joshsalverda.github.io/datepickr
+
 ### Introduction
 
 A simple, powerful, lightweight (only 6KB minified, 8KB including CSS), feature-packed date picker with no external dependencies.
