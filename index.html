@@ -72,9 +72,11 @@
 
             // Overwrite the global datepickr prototype
             // Won't affect previously created datepickrs, but will affect any new ones
+            datepickr.prototype.l10n.months.shorthand = ['janv', 'févr', 'mars', 'avril', 'mai', 'juin', 'juil', 'août', 'sept', 'oct', 'nov', 'déc'];
+            datepickr.prototype.l10n.months.longhand = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
             datepickr.prototype.l10n.weekdays.shorthand = ['dim', 'lun', 'mar', 'mer', 'jeu', 'ven', 'sam'];
             datepickr.prototype.l10n.weekdays.longhand = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
-            datepickr('#someFrench.sil-vous-plait', { dateFormat: 'l' });
+            datepickr('#someFrench.sil-vous-plait', { dateFormat: '\\le j F Y' });
         </script>
     </body>
 </html>
