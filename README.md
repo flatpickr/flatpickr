@@ -154,12 +154,6 @@ Specify a min and max date:
 </script>
 ```
 
-```
-<script>
-    datepickr('.someClassName', { minDate:  });
-</script>
-```
-
 Use an alternate input and format:
 
 ```
