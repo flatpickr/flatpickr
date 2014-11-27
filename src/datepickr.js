@@ -42,6 +42,9 @@ var datepickr = function (selector, config) {
     return instances;
 };
 
+/**
+ * @constructor
+ */
 datepickr.init = function (element, instanceConfig) {
     'use strict';
     var self = this,
@@ -371,17 +374,17 @@ datepickr.init = function (element, instanceConfig) {
     };
 
     bind = function () {
-        self.addEventListener(self.element, getOpenEvent(), open);
-        self.addEventListener(calendarContainer, 'click', calendarClick);
+        self.addEventListener(self.element, getOpenEvent(), open, false);
+        self.addEventListener(calendarContainer, 'click', calendarClick, false);
     };
 
     open = function () {
-        self.addEventListener(document, 'click', documentClick);
+        self.addEventListener(document, 'click', documentClick, false);
         self.addClass(wrapperElement, 'open');
     };
 
     close = function () {
-        self.removeEventListener(document, 'click', documentClick);
+        self.removeEventListener(document, 'click', documentClick, false);
         self.removeClass(wrapperElement, 'open');
     };
 
@@ -389,8 +392,8 @@ datepickr.init = function (element, instanceConfig) {
         var parent,
             element;
 
-        self.removeEventListener(document, 'click', documentClick);
-        self.removeEventListener(self.element, getOpenEvent(), open);
+        self.removeEventListener(document, 'click', documentClick, false);
+        self.removeEventListener(self.element, getOpenEvent(), open, false);
 
         parent = self.element.parentNode;
         parent.removeChild(calendarContainer);
