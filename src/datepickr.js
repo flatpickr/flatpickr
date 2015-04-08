@@ -77,7 +77,6 @@ datepickr.init = function (element, instanceConfig) {
         documentClick,
         calendarClick,
         buildCalendar,
-        getOpenEvent,
         bind,
         open,
         close,
@@ -368,16 +367,16 @@ datepickr.init = function (element, instanceConfig) {
         wrapperElement.appendChild(calendarContainer);
     };
 
-    getOpenEvent = function () {
-        if (self.element.nodeName === 'INPUT') {
-            return 'focus';
-        }
-        return 'click';
-    };
-
     bind = function () {
-        self.addEventListener(self.element, getOpenEvent(), open, false);
-        self.addEventListener(calendarContainer, 'click', calendarClick, false);
+        var openEvent = 'click';
+
+        if (self.element.nodeName === 'INPUT') {
+            openEvent = 'focus';
+            self.addEventListener(self.element, 'blur', close, false);
+        }
+
+        self.addEventListener(self.element, openEvent, open, false);
+        self.addEventListener(calendarContainer, 'mousedown', calendarClick, false);
     };
 
     open = function () {
@@ -395,7 +394,9 @@ datepickr.init = function (element, instanceConfig) {
             element;
 
         self.removeEventListener(document, 'click', documentClick, false);
-        self.removeEventListener(self.element, getOpenEvent(), open, false);
+        self.removeEventListener(self.element, 'focus', open, false);
+        self.removeEventListener(self.element, 'blur', close, false);
+        self.removeEventListener(self.element, 'click', open, false);
 
         parent = self.element.parentNode;
         parent.removeChild(calendarContainer);
