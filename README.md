@@ -134,54 +134,7 @@ Which is probably not what you want...
 
 
 
-### Browser Support
 
-The out-of-the-box browser support is every browser except for IE9 and lower.
-
-WHAT! BUT MY CALENDERZ NEED TO WORK ON IE6!
-
-Whoa, whoa, hold on. So, IE6 might be stretching it a bit (maybe, I haven't tested it), but you could get datepickr to work on IE7 and up. How, you ask...? (continued in next section)
-
-### Modifying datepickr methods
-
-If you don't care about supporting older browsers you can skip this section.
-
-I've tried to make it as easy as possible to modify some of the base methods to support older browsers, if necessary:
-
-| Method | Description | Parameters |
-| ------------- | ----------- | ------------- |
-| hasClass | Whether an element contains a class or not (should return a boolean) | element, className |
-| addClass | Adds a class to an element | element, className |
-| removeClass | Removes a class from an element | element, className |
-| forEach | Iterate over an array | items, callback |
-| querySelectorAll | Should return an array of elements that were matched by the selector | selector |
-| isArray | Is this thing an array? | object |
-| addEventListener | Adds an event listener to an element | element, type, listener, useCapture |
-| removeEventListener | Removes an event listener | element, type, listener, useCapture |
-
-To do this you will need to do some JavaScript magic, for example:
-
-```
-<script>
-    datepickr.prototype.addClass = function (element, className) { element.className += ' ' + className; };
-    datepickr('#yourId');
-</script>
-```
-
-That was easy. Of course implementing a proper shim might be better, but the above would work in all browsers.
-
-This can be done for all of the methods listed above.
-
-For example, if you wanted to use jQuery to select the elements for some reason:
-
-```
-<script>
-    datepickr.prototype.querySelectorAll = jQuery;
-    datepickr('.some #crazy [selector]');
-</script>
-```
-
-If you're not sure what's going on above, that's fine, but then I would recommend getting some help with the implementation. It could get quite complex.
 
 ### Localization
 
