@@ -1,138 +1,218 @@
-var datepickr = function(d, c) {
-    var f, h, a = [],
-        k;
+/*
+    datepickr 3.0 - pick your date not your nose
+
+    https://github.com/joshsalverda/datepickr
+
+    Copyright © 2014 Josh Salverda <josh.salverda@gmail.com>
+    This program is free software. It comes without any warranty, to
+    the extent permitted by applicable law. You can redistribute it
+    and/or modify it under the terms of the Do What The Fuck You Want
+    To Public License, Version 2, as published by Sam Hocevar. See
+    http://www.wtfpl.net/ for more details.
+*/
+
+var datepickr = function (selector, config) {
+    'use strict';
+    var elements,
+        createInstance,
+        instances = [],
+        i;
+
     datepickr.prototype = datepickr.init.prototype;
-    h = function(a) {
-        a._datepickr && a._datepickr.destroy();
-        a._datepickr = new datepickr.init(a, c);
-        return a._datepickr
+
+    createInstance = function (element) {
+        if (element._datepickr) {
+            element._datepickr.destroy();
+        }
+        element._datepickr = new datepickr.init(element, config);
+        return element._datepickr;
     };
-    if (d.nodeName) return h(d);
-    f = datepickr.prototype.querySelectorAll(d);
-    if (1 === f.length) return h(f[0]);
-    for (k = 0; k < f.length; k++) a.push(h(f[k]));
-    return a
+
+    if (selector.nodeName) {
+        return createInstance(selector);
+    }
+
+    elements = datepickr.prototype.querySelectorAll(selector);
+
+    if (elements.length === 1) {
+        return createInstance(elements[0]);
+    }
+
+    for (i = 0; i < elements.length; i++) {
+        instances.push(createInstance(elements[i]));
+    }
+    return instances;
 };
-datepickr.init = function(d, c) {
-    var f, h, a = this,
-        k = {
-            dateFormat: "F j, Y",
+
+/**
+ * @constructor
+ */
+datepickr.init = function (element, instanceConfig) {
+    'use strict';
+    var self = this,
+        defaultConfig = {
+            dateFormat: 'F j, Y',
             altFormat: null,
             altInput: null,
             minDate: null,
             maxDate: null,
             disable: null,
-            shorthandCurrentMonth: !1
+            shorthandCurrentMonth: false
         },
-        l = document.createElement("div"),
-        t = document.createElement("span"),
-        u = document.createElement("table"),
-        v = document.createElement("tbody"),
-        g, m = new Date,
-        B, n, p, w, C, r, x, D, E, s, F, G, y, H, z, A, I, isDisabled;
-    l.className = "datepickr-calendar";
-    t.className = "datepickr-current-month";
-    c = c || {};
-    B = function() {
-        g = document.createElement("div");
-        g.className = "datepickr-wrapper";
-        a.element.parentNode.insertBefore(g,
-            a.element);
-        g.appendChild(a.element)
-    };
-    f = {
-        year: function() {
-            return m.getFullYear()
-        },
-        month: {
-            integer: function() {
-                return m.getMonth()
-            },
-            string: function(a) {
-                var e = m.getMonth();
-                return p(e, a)
-            }
-        },
-        day: function() {
-            return m.getDate()
-        }
-    };
-    h = {
-        string: function() {
-            return p(a.currentMonthView, a.config.shorthandCurrentMonth)
-        },
-        numDays: function() {
-            return 1 === a.currentMonthView && (0 === a.currentYearView % 4 && 0 !== a.currentYearView % 100 || 0 === a.currentYearView % 400) ? 29 : a.l10n.daysInMonth[a.currentMonthView]
-        }
-    };
-    n = function(b, e) {
-        var q = "",
-            d = new Date(e),
-            c = {
-                d: function() {
-                    var a = c.j();
-                    return 10 > a ? "0" + a : a
-                },
-                D: function() {
-                    return a.l10n.weekdays.shorthand[c.w()]
-                },
-                j: function() {
-                    return d.getDate()
-                },
-                l: function() {
-                    return a.l10n.weekdays.longhand[c.w()]
-                },
-                w: function() {
-                    return d.getDay()
-                },
-                F: function() {
-                    return p(c.n() - 1, !1)
-                },
-                m: function() {
-                    var a = c.n();
-                    return 10 > a ? "0" + a : a
-                },
-                M: function() {
-                    return p(c.n() - 1, !0)
-                },
-                n: function() {
-                    return d.getMonth() + 1
-                },
-                U: function() {
-                    return d.getTime() / 1E3
-                },
-                y: function() {
-                    return String(c.Y()).substring(2)
-                },
-                Y: function() {
-                    return d.getFullYear()
-                }
-            },
-            f = b.split("");
-        a.forEach(f, function(a, b) {
-            c[a] && "\\" !== f[b - 1] ? q += c[a]() : "\\" !== a && (q += a)
-        });
-        return q
-    };
-    p = function(b, e) {
-        return !0 === e ? a.l10n.months.shorthand[b] : a.l10n.months.longhand[b]
-    };
-    w = function(b, e, c, d) {
-        return b === d && a.currentMonthView === e && a.currentYearView === c
-    };
-    C = function() {
-        var b = document.createElement("thead"),
-            e = a.l10n.firstDayOfWeek,
-            c = a.l10n.weekdays.shorthand;
-        0 < e && e < c.length && (c = [].concat(c.splice(e, c.length), c.splice(0, e)));
-        b.innerHTML = "<tr><th>" + c.join("</th><th>") + "</th></tr>";
-        u.appendChild(b)
+        calendarContainer = document.createElement('div'),
+        navigationCurrentMonth = document.createElement('span'),
+        calendar = document.createElement('table'),
+        calendarBody = document.createElement('tbody'),
+        wrapperElement,
+        currentDate = new Date(),
+        wrap,
+        date,
+        formatDate,
+        monthToStr,
+        isSpecificDay,
+        isDisabled,
+        buildWeekdays,
+        buildDays,
+        updateNavigationCurrentMonth,
+        buildMonthNavigation,
+        handleYearChange,
+        documentClick,
+        calendarClick,
+        buildCalendar,
+        bind,
+        open,
+        close,
+        destroy,
+        init;
+
+    calendarContainer.className = 'datepickr-calendar';
+    navigationCurrentMonth.className = 'datepickr-current-month';
+    instanceConfig = instanceConfig || {};
+
+    wrap = function () {
+        wrapperElement = document.createElement('div');
+        wrapperElement.className = 'datepickr-wrapper';
+        self.element.parentNode.insertBefore(wrapperElement, self.element);
+        wrapperElement.appendChild(self.element);
     };
 
-     isDisabled = function(date, dis)
+    date = {
+        current: {
+            year: function () {
+                return currentDate.getFullYear();
+            },
+            month: {
+                integer: function () {
+                    return currentDate.getMonth();
+                },
+                string: function (shorthand) {
+                    var month = currentDate.getMonth();
+                    return monthToStr(month, shorthand);
+                }
+            },
+            day: function () {
+                return currentDate.getDate();
+            }
+        },
+        month: {
+            string: function () {
+                return monthToStr(self.currentMonthView, self.config.shorthandCurrentMonth);
+            },
+            numDays: function () {
+                // checks to see if february is a leap year otherwise return the respective # of days
+                return self.currentMonthView === 1 && (((self.currentYearView % 4 === 0) && (self.currentYearView % 100 !== 0)) || (self.currentYearView % 400 === 0)) ? 29 : self.l10n.daysInMonth[self.currentMonthView];
+            }
+        }
+    };
+
+    formatDate = function (dateFormat, milliseconds) {
+        var formattedDate = '',
+            dateObj = new Date(milliseconds),
+            formats = {
+                d: function () {
+                    var day = formats.j();
+                    return (day < 10) ? '0' + day : day;
+                },
+                D: function () {
+                    return self.l10n.weekdays.shorthand[formats.w()];
+                },
+                j: function () {
+                    return dateObj.getDate();
+                },
+                l: function () {
+                    return self.l10n.weekdays.longhand[formats.w()];
+                },
+                w: function () {
+                    return dateObj.getDay();
+                },
+                F: function () {
+                    return monthToStr(formats.n() - 1, false);
+                },
+                m: function () {
+                    var month = formats.n();
+                    return (month < 10) ? '0' + month : month;
+                },
+                M: function () {
+                    return monthToStr(formats.n() - 1, true);
+                },
+                n: function () {
+                    return dateObj.getMonth() + 1;
+                },
+                U: function () {
+                    return dateObj.getTime() / 1000;
+                },
+                y: function () {
+                    return String(formats.Y()).substring(2);
+                },
+                Y: function () {
+                    return dateObj.getFullYear();
+                }
+            },
+            formatPieces = dateFormat.split('');
+
+        self.forEach(formatPieces, function (formatPiece, index) {
+            if (formats[formatPiece] && formatPieces[index - 1] !== '\\') {
+                formattedDate += formats[formatPiece]();
+            } else {
+                if (formatPiece !== '\\') {
+                    formattedDate += formatPiece;
+                }
+            }
+        });
+
+        return formattedDate;
+    };
+
+    monthToStr = function (date, shorthand) {
+        if (shorthand === true) {
+            return self.l10n.months.shorthand[date];
+        }
+
+        return self.l10n.months.longhand[date];
+    };
+
+    isSpecificDay = function (day, month, year, comparison) {
+        return day === comparison && self.currentMonthView === month && self.currentYearView === year;
+    };
+
+    buildWeekdays = function () {
+        var weekdayContainer = document.createElement('thead'),
+            firstDayOfWeek = self.l10n.firstDayOfWeek,
+            weekdays = self.l10n.weekdays.shorthand;
+
+        if (firstDayOfWeek > 0 && firstDayOfWeek < weekdays.length) {
+            weekdays = [].concat(weekdays.splice(firstDayOfWeek, weekdays.length), weekdays.splice(0, firstDayOfWeek));
+        }
+
+        weekdayContainer.innerHTML = '<tr><th>' + weekdays.join('</th><th>') + '</th></tr>';
+        calendar.appendChild(weekdayContainer);
+    };
+
+    isDisabled = function(date)
     {
-        for (var i = 0; i < dis.length; i++) {
-            if (date >= new Date( dis[i]['from'] ) && date <= new Date( dis[i]['to'] ) )
+
+        for (var i = 0; i < self.config.disable.length; i++) {
+            if (date >= new Date( self.config.disable[i]['from'] ) && date <= new Date( self.config.disable[i]['to'] ) )
                     {
 
                         return true;
@@ -142,157 +222,270 @@ datepickr.init = function(d, c) {
         return false;
     };
 
-    r = function() {
-        var b =
-            (new Date(a.currentYearView, a.currentMonthView, 1)).getDay(),
-            c = h.numDays(),
-            d = document.createDocumentFragment(),
-            g = document.createElement("tr"),
-            k, l = "",
-            p = "",
-            m = "",
-            n, b = b - a.l10n.firstDayOfWeek;
-        0 > b && (b += 7);
-        k = b;
-        v.innerHTML = "";
-        0 < b && (g.innerHTML += '<td colspan="' + b + '">&nbsp;</td>');
+    buildDays = function () {
+        var firstOfMonth = new Date(self.currentYearView, self.currentMonthView, 1).getDay(),
+            numDays = date.month.numDays(),
+            calendarFragment = document.createDocumentFragment(),
+            row = document.createElement('tr'),
+            dayCount,
+            dayNumber,
+            today = '',
+            selected = '',
+            disabled = '',
+            currentTimestamp;
 
-        if( a.config.minDate != null)
-            a.config.minDate.setHours(0,0,0,0);
-
-        if( a.config.maxDate != null)
-            a.config.maxDate.setHours(0,0,0,0);
-
-        for (b = 1; b <= c; b++) {
-            7 === k && (d.appendChild(g), g = document.createElement("tr"), k = 0);
-            l = ( w(f.day(), f.month.integer(), f.year(), b) && a.selectedDate == null ) ? " today" : "";
-            a.selectedDate && (p = w(a.selectedDate.day, a.selectedDate.month, a.selectedDate.year, b) ? " selected" : "");
-            n = (new Date(a.currentYearView, a.currentMonthView, b)).getTime();
-            var date = new Date(a.currentYearView, a.currentMonthView, b);
-            var date_is_disabled = (a.config.disable != null && isDisabled( date, a.config.disable  ));
-            var date_outside_minmax = ( (a.config.minDate !=null && date < a.config.minDate ) || (a.config.maxDate != null && date >= a.config.maxDate));
-
-            m = (date_is_disabled || date_outside_minmax) ? " disabled" : "";
-
-            g.innerHTML += '<td class="' + l + p + m + '"><span class="datepickr-day">' + b + "</span></td>";
-            k++
+        // Offset the first day by the specified amount
+        firstOfMonth -= self.l10n.firstDayOfWeek;
+        if (firstOfMonth < 0) {
+            firstOfMonth += 7;
         }
-        d.appendChild(g);
-        v.appendChild(d)
+
+        dayCount = firstOfMonth;
+        calendarBody.innerHTML = '';
+
+        // Add spacer to line up the first day of the month correctly
+        if (firstOfMonth > 0) {
+            row.innerHTML += '<td colspan="' + firstOfMonth + '">&nbsp;</td>';
+        }
+
+         if( self.config.minDate != null)
+            self.config.minDate.setHours(0,0,0,0);
+
+        if( self.config.maxDate != null)
+            self.config.maxDate.setHours(0,0,0,0);
+
+        // Start at 1 since there is no 0th day
+        for (dayNumber = 1; dayNumber <= numDays; dayNumber++) {
+            // if we have reached the end of a week, wrap to the next line
+            if (dayCount === 7) {
+                calendarFragment.appendChild(row);
+                row = document.createElement('tr');
+                dayCount = 0;
+            }
+
+            today = (isSpecificDay(date.current.day(), date.current.month.integer(), date.current.year(), dayNumber) && self.selectedDate == null) ? ' today' : '';
+            if (self.selectedDate) {
+                selected = isSpecificDay(self.selectedDate.day, self.selectedDate.month, self.selectedDate.year, dayNumber) ? ' selected' : '';
+            }
+
+            var cur_date = new Date(self.currentYearView, self.currentMonthView, dayNumber);
+            var date_is_disabled = (self.config.disable != null && isDisabled( cur_date  ));
+            var date_outside_minmax = ( (self.config.minDate !=null && cur_date < self.config.minDate ) || (self.config.maxDate != null && cur_date >= self.config.maxDate));
+
+            disabled = (date_is_disabled || date_outside_minmax) ? " disabled" : "";
+
+
+
+            row.innerHTML += '<td class="' + today + selected + disabled + '"><span class="datepickr-day">' + dayNumber + '</span></td>';
+            dayCount++;
+        }
+
+        calendarFragment.appendChild(row);
+        calendarBody.appendChild(calendarFragment);
     };
-    x = function() {
-        t.innerHTML = h.string() + " " + a.currentYearView
+
+    updateNavigationCurrentMonth = function () {
+        navigationCurrentMonth.innerHTML = date.month.string() + ' ' + self.currentYearView;
     };
-    D = function() {
-        var a = document.createElement("div");
-        a.className = "datepickr-months";
-        a.innerHTML = '<span class="datepickr-prev-month">&lt;</span><span class="datepickr-next-month">&gt;</span>';
-        a.appendChild(t);
-        x();
-        l.appendChild(a)
+
+    buildMonthNavigation = function () {
+        var months = document.createElement('div'),
+            monthNavigation;
+
+        monthNavigation  = '<span class="datepickr-prev-month">&lt;</span>';
+        monthNavigation += '<span class="datepickr-next-month">&gt;</span>';
+
+        months.className = 'datepickr-months';
+        months.innerHTML = monthNavigation;
+
+        months.appendChild(navigationCurrentMonth);
+        updateNavigationCurrentMonth();
+        calendarContainer.appendChild(months);
     };
-    E = function() {
-        0 > a.currentMonthView && (a.currentYearView--, a.currentMonthView = 11);
-        11 < a.currentMonthView && (a.currentYearView++, a.currentMonthView = 0)
+
+    handleYearChange = function () {
+        if (self.currentMonthView < 0) {
+            self.currentYearView--;
+            self.currentMonthView = 11;
+        }
+
+        if (self.currentMonthView > 11) {
+            self.currentYearView++;
+            self.currentMonthView = 0;
+        }
     };
-    s = function(b) {
-        if (b.target !== a.element && b.target !== g && (b = b.target.parentNode, b !== g))
-            for (; b !== g;)
-                if (b = b.parentNode, null === b) {
-                    A();
-                    break
+
+    documentClick = function (event) {
+        var parent;
+        if (event.target !== self.element && event.target !== wrapperElement) {
+            parent = event.target.parentNode;
+            if (parent !== wrapperElement) {
+                while (parent !== wrapperElement) {
+                    parent = parent.parentNode;
+                    if (parent === null) {
+                        close();
+                        break;
+                    }
                 }
+            }
+        }
     };
-    F = function(b) {
-        b = b.target;
-        var c = b.className;
-        c && ("datepickr-prev-month" === c || "datepickr-next-month" === c ? ("datepickr-prev-month" === c ? a.currentMonthView-- : a.currentMonthView++, E(), x(), r()) :
-            "datepickr-day" !== c || a.hasClass(b.parentNode, "disabled") || (a.selectedDate = {
-                day: parseInt(b.innerHTML, 10),
-                month: a.currentMonthView,
-                year: a.currentYearView
-            }, b = (new Date(a.currentYearView, a.currentMonthView, a.selectedDate.day)).getTime(), a.config.altInput && (a.config.altInput.value = a.config.altFormat ? n(a.config.altFormat, b) : n(a.config.dateFormat, b)), a.element.value = n(a.config.dateFormat, b), A(), r()))
+
+    calendarClick = function (event) {
+        var target = event.target,
+            targetClass = target.className,
+            currentTimestamp;
+
+        if (targetClass) {
+            if (targetClass === 'datepickr-prev-month' || targetClass === 'datepickr-next-month') {
+                if (targetClass === 'datepickr-prev-month') {
+                    self.currentMonthView--;
+                } else {
+                    self.currentMonthView++;
+                }
+
+                handleYearChange();
+                updateNavigationCurrentMonth();
+                buildDays();
+            } else if (targetClass === 'datepickr-day' && !self.hasClass(target.parentNode, 'disabled')) {
+                self.selectedDate = {
+                    day: parseInt(target.innerHTML, 10),
+                    month: self.currentMonthView,
+                    year: self.currentYearView
+                };
+
+                currentTimestamp = new Date(self.currentYearView, self.currentMonthView, self.selectedDate.day).getTime();
+
+                if (self.config.altInput) {
+                    if (self.config.altFormat) {
+                        self.config.altInput.value = formatDate(self.config.altFormat, currentTimestamp);
+                    } else {
+                        // I don't know why someone would want to do this... but just in case?
+                        self.config.altInput.value = formatDate(self.config.dateFormat, currentTimestamp);
+                    }
+                }
+
+                self.element.value = formatDate(self.config.dateFormat, currentTimestamp);
+
+                close();
+                buildDays();
+            }
+        }
     };
-    G = function() {
-        D();
-        C();
-        r();
-        u.appendChild(v);
-        l.appendChild(u);
-        g.appendChild(l)
+
+    buildCalendar = function () {
+        buildMonthNavigation();
+        buildWeekdays();
+        buildDays();
+
+        calendar.appendChild(calendarBody);
+        calendarContainer.appendChild(calendar);
+
+        wrapperElement.appendChild(calendarContainer);
     };
-    y = function() {
-        return "INPUT" ===
-            a.element.nodeName ? "focus" : "click"
+
+    bind = function () {
+        var openEvent = 'click';
+
+        if (self.element.nodeName === 'INPUT') {
+            openEvent = 'focus';
+            //self.addEventListener(self.element, 'blur', close, false);
+        }
+
+        self.addEventListener(self.element, openEvent, open, false);
+        self.addEventListener(calendarContainer, 'mousedown', calendarClick, false);
     };
-    H = function() {
-        a.addEventListener(a.element, y(), z);
-        a.addEventListener(l, "click", F)
+
+    open = function () {
+        self.addEventListener(document, 'click', documentClick, false);
+        self.addClass(wrapperElement, 'open');
     };
-    z = function() {
-        a.addEventListener(document, "click", s);
-        a.addClass(g, "open")
+
+    close = function () {
+        self.removeEventListener(document, 'click', documentClick, false);
+        self.removeClass(wrapperElement, 'open');
     };
-    A = function() {
-        a.removeEventListener(document, "click", s);
-        a.removeClass(g, "open")
+
+    destroy = function () {
+        var parent,
+            element;
+
+        self.removeEventListener(document, 'click', documentClick, false);
+        self.removeEventListener(self.element, 'focus', open, false);
+        self.removeEventListener(self.element, 'blur', close, false);
+        self.removeEventListener(self.element, 'click', open, false);
+
+        parent = self.element.parentNode;
+        parent.removeChild(calendarContainer);
+        element = parent.removeChild(self.element);
+        parent.parentNode.replaceChild(element, parent);
     };
-    I = function() {
-        var b, c;
-        a.removeEventListener(document, "click", s);
-        a.removeEventListener(a.element, y(), z);
-        b = a.element.parentNode;
-        b.removeChild(l);
-        c = b.removeChild(a.element);
-        b.parentNode.replaceChild(c, b)
+
+    init = function () {
+        var config,
+            parsedDate;
+
+        self.config = {};
+        self.destroy = destroy;
+
+        for (config in defaultConfig) {
+            self.config[config] = instanceConfig[config] || defaultConfig[config];
+        }
+
+        self.element = element;
+
+        if (self.element.value) {
+            parsedDate = Date.parse(self.element.value);
+        }
+
+        if (parsedDate && !isNaN(parsedDate)) {
+            parsedDate = new Date(parsedDate);
+            self.selectedDate = {
+                day: parsedDate.getDate(),
+                month: parsedDate.getMonth(),
+                year: parsedDate.getFullYear()
+            };
+            self.currentYearView = self.selectedDate.year;
+            self.currentMonthView = self.selectedDate.month;
+            self.currentDayView = self.selectedDate.day;
+        } else {
+            self.selectedDate = null;
+            self.currentYearView = date.current.year();
+            self.currentMonthView = date.current.month.integer();
+            self.currentDayView = date.current.day();
+        }
+
+        wrap();
+        buildCalendar();
+        bind();
     };
-    (function() {
-        var b, e;
-        a.config = {};
-        a.destroy = I;
-        for (b in k) a.config[b] = c[b] || k[b];
-        a.element = d;
-        a.element.value && (e = Date.parse(a.element.value));
-        e && !isNaN(e) ? (e = new Date(e), a.selectedDate = {
-            day: e.getDate(),
-            month: e.getMonth(),
-            year: e.getFullYear()
-        }, a.currentYearView = a.selectedDate.year, a.currentMonthView = a.selectedDate.month, a.currentDayView = a.selectedDate.day) : (a.selectedDate = null, a.currentYearView = f.year(), a.currentMonthView = f.month.integer(), a.currentDayView = f.day());
-        B();
-        G();
-        H()
-    })();
-    return a
+
+    init();
+
+    return self;
 };
+
 datepickr.init.prototype = {
-    hasClass: function(d, c) {
-        return d.classList.contains(c)
-    },
-    addClass: function(d, c) {
-        d.classList.add(c)
-    },
-    removeClass: function(d, c) {
-        d.classList.remove(c)
-    },
-    forEach: function(d, c) {
-        [].forEach.call(d, c)
-    },
+    hasClass: function (element, className) { return element.classList.contains(className); },
+    addClass: function (element, className) { element.classList.add(className); },
+    removeClass: function (element, className) { element.classList.remove(className); },
+    forEach: function (items, callback) { [].forEach.call(items, callback); },
     querySelectorAll: document.querySelectorAll.bind(document),
     isArray: Array.isArray,
-    addEventListener: function(d, c, f, h) {
-        d.addEventListener(c, f, h)
+    addEventListener: function (element, type, listener, useCapture) {
+        element.addEventListener(type, listener, useCapture);
     },
-    removeEventListener: function(d, c, f, h) {
-        d.removeEventListener(c, f, h)
+    removeEventListener: function (element, type, listener, useCapture) {
+        element.removeEventListener(type, listener, useCapture);
     },
     l10n: {
         weekdays: {
-            shorthand: "Sun Mon Tue Wed Thu Fri Sat".split(" "),
-            longhand: "Sunday Monday Tuesday Wednesday Thursday Friday Saturday".split(" ")
+            shorthand: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+            longhand: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
         },
         months: {
-            shorthand: "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec".split(" "),
-            longhand: "January February March April May June July August September October November December".split(" ")
+            shorthand: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            longhand: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
         },
         daysInMonth: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
         firstDayOfWeek: 0
