@@ -2,12 +2,13 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Sample datepickrs</title>
+        <title>chmln.datepickr - super lightweight vanilla javascript flat design date picker</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" type="text/css" href="src/datepickr.css">
+        <link href='http://fonts.googleapis.com/css?family=Raleway:400,200,500' rel='stylesheet' type='text/css'>
         <style>
-            body {
-                font-family: Verdana;
+            body, input {
+                font-family: Raleway;
             }
 
             h1 {
@@ -17,10 +18,14 @@
 
 
             input {
-                border: 1px solid #aaa;
-                padding: 5px;
+                border: 2px solid #ddd;
+                padding: 1rem;
                 width: 300px;
+                font-weight: 300;
+                font-size: 1rem;
             }
+
+
         </style>
     </head>
 
@@ -30,11 +35,11 @@
 
         <p><input id="disableRange" placeholder="Datepicker with a disabled range"></p>
 
-        <p><input id="minDate" placeholder="Custom format"></p>
+        <p><input id="minDate" placeholder="Custom format ('d-m-Y')"></p>
 
-        <p><input id="minDate" placeholder="Datepicker with a minimum date"></p>
+        <p><input id="minDate" placeholder="Datepicker with a minimum date (e.g. today)"></p>
 
-        <p><input id="maxDate" placeholder="Datepicker with a maximum date"></p>
+        <p><input id="maxDate" placeholder="Datepicker with a maximum date (e.g. today"></p>
 
 
 
