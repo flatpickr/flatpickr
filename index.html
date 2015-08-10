@@ -7,12 +7,17 @@
         <link rel="stylesheet" type="text/css" href="src/datepickr.css">
         <link href='http://fonts.googleapis.com/css?family=Raleway:400,200,500' rel='stylesheet' type='text/css'>
         <style>
+        html, body
+        {
+            margin: 0;
+            padding: 0
+        }
             body, input {
                 font-family: Raleway;
             }
 
             h1 {
-                font-size: 25px;
+                font-size: 48px;
             }
 
 
@@ -27,9 +32,21 @@
 
             .hero
             {
-                height: 25vh;
-                min-height: 300px;
-                background: #4183D7
+                padding: 7.5vh 0;
+                min-height: 150px;
+                max-height: 420px;
+                background: #4183d7;
+                background: #4183d7;
+background: -moz-linear-gradient(45deg,  #4183d7 0%, #87d37c 76%);
+background: -webkit-gradient(linear, left bottom, right top, color-stop(0%,#4183d7), color-stop(76%,#87d37c));
+background: -webkit-linear-gradient(45deg,  #4183d7 0%,#87d37c 76%);
+background: -o-linear-gradient(45deg,  #4183d7 0%,#87d37c 76%);
+background: -ms-linear-gradient(45deg,  #4183d7 0%,#87d37c 76%);
+background: linear-gradient(45deg,  #4183d7 0%,#87d37c 76%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4183d7', endColorstr='#87d37c',GradientType=1 );
+
+
+                color: white
             }
 
             .center_text
@@ -43,10 +60,13 @@
 
     <body>
         <div class='hero center_text'>
-            <h1>a datepicker that doesn't suck</h1>
+            <h1>chmln.datepickr </h1>
+            <p class=desc>Super lightweight, flat, simply fabolous datepicker written in vanilla JS </p>
         </div>
 
         <div class='half_height center_text'>
+
+            <p><input id="datepickr" placeholder="Simple datepicker with default options"></p>
 
             <p><input id="disableRange" placeholder="Datepicker with a disabled range"></p>
 
