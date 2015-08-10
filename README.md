@@ -1,8 +1,8 @@
-## datepickr
+## flatpickr
 
-A simple JavaScript date picker
+Lightweight. Flat. User-friendly.
 
-Demos and Usage: http://chmln.github.io/datepickr
+Demos and Usage: http://chmln.github.io/flatpickr
 
 ### Introduction
 
@@ -15,7 +15,7 @@ A super lightweight (only 2.75kb minified and gzipped), feature-packed date pick
 The easiest way to start:
 
 ```
-datepickr('#inputElementId');
+flatpickr('#inputElementId');
 ```
 
 Obviously replace 'inputElementId' with the actual id of the input element you will be using.
@@ -23,18 +23,18 @@ Obviously replace 'inputElementId' with the actual id of the input element you w
 You can pass in any selector that is supported by [querySelectorAll](https://developer.mozilla.org/en/docs/Web/API/Document.querySelectorAll) (by default, more on this below):
 
 ```
-datepickr('#some .complex [selector]');
+flatpickr('#some .complex [selector]');
 ```
 
 You can also pass in a node directly:
 
 ```
-datepickr(document.getElementById('myId'));
+flatpickr(document.getElementById('myId'));
 ```
 
 ### Config Options
 
-You can also customize each datepickr instance by passing in some extra config options. The default values that can be overridden are:
+You can also customize each flatpickr instance by passing in some extra config options. The default values that can be overridden are:
 
 | Config Option | Type | Default | Description |
 | ------------- | ----------- | ------------- | ------------- |
@@ -50,7 +50,7 @@ Change the default date format:
 
 ```
 <script>
-    datepickr('.someClassName', { dateFormat: 'd-m-Y' });
+    flatpickr('.someClassName', { dateFormat: 'd-m-Y' });
 </script>
 ```
 
@@ -58,7 +58,7 @@ Specify a min and max date:
 
 ```
 <script>
-    datepickr('#minAndMax', {
+    flatpickr('#minAndMax', {
         // today
         minDate: new Date(),
         // some point in the future
@@ -71,7 +71,7 @@ Disable a date range:
 
 ```
 <script>
-    datepickr('#sampleInput', {
+    flatpickr('#sampleInput', {
         disable: [ { 'from': '2015-09-02', 'to': '2015-10-02' } ]
     });
 </script>
@@ -84,7 +84,7 @@ Use an alternate input and format:
 <input id="altInput" type="hidden">
 
 <script>
-    datepickr('#userInput', {
+    flatpickr('#userInput', {
         dateFormat: 'l, F d, Y', // Wednesday, January 15, 2014
         altInput: document.getElementById('altInput'),
         altFormat: 'm-d-Y' // 01-15-2014
@@ -138,7 +138,7 @@ Which is probably not what you want...
 
 ### Localization
 
-Datepickr supports localizing text in a similar way to modifying the methods (above).
+flatpickr supports localizing text in a similar way to modifying the methods (above).
 
 | Property | Type | Default | Description |
 | ------------- | ----------- | ------------- | ------------- |
@@ -153,8 +153,8 @@ Weekdays in french:
 
 ```
 <script>
-    datepickr.prototype.l10n.weekdays.longhand = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
-    datepickr('#yourId');
+    flatpickr.prototype.l10n.weekdays.longhand = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
+    flatpickr('#yourId');
 </script>
 ```
 
@@ -162,8 +162,8 @@ Start the calendar on Monday instead of Sunday:
 
 ```
 <script>
-    datepickr.prototype.l10n.firstDayOfWeek = 1;
-    datepickr('#yourId');
+    flatpickr.prototype.l10n.firstDayOfWeek = 1;
+    flatpickr('#yourId');
 </script>
 ```
 

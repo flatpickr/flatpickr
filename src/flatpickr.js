@@ -1,9 +1,12 @@
 /*
-    datepickr 3.0 - pick your date not your nose
+    chmln.flatpickr  - pick dates elegantly
+    © Gregory Petrosyan
 
-    https://github.com/joshsalverda/datepickr
+    https://github.com/chmln/flatpickr
 
-    Copyright © 2014 Josh Salverda <josh.salverda@gmail.com>
+    Credits to Josh Salverda <josh.salverda@gmail.com> for providing a
+    magnificent starting point.
+
     This program is free software. It comes without any warranty, to
     the extent permitted by applicable law. You can redistribute it
     and/or modify it under the terms of the Do What The Fuck You Want
@@ -11,28 +14,28 @@
     http://www.wtfpl.net/ for more details.
 */
 
-var datepickr = function (selector, config) {
+var flatpickr = function (selector, config) {
     'use strict';
     var elements,
         createInstance,
         instances = [],
         i;
 
-    datepickr.prototype = datepickr.init.prototype;
+    flatpickr.prototype = flatpickr.init.prototype;
 
     createInstance = function (element) {
-        if (element._datepickr) {
-            element._datepickr.destroy();
+        if (element._flatpickr) {
+            element._flatpickr.destroy();
         }
-        element._datepickr = new datepickr.init(element, config);
-        return element._datepickr;
+        element._flatpickr = new flatpickr.init(element, config);
+        return element._flatpickr;
     };
 
     if (selector.nodeName) {
         return createInstance(selector);
     }
 
-    elements = datepickr.prototype.querySelectorAll(selector);
+    elements = flatpickr.prototype.querySelectorAll(selector);
 
     if (elements.length === 1) {
         return createInstance(elements[0]);
@@ -47,7 +50,7 @@ var datepickr = function (selector, config) {
 /**
  * @constructor
  */
-datepickr.init = function (element, instanceConfig) {
+flatpickr.init = function (element, instanceConfig) {
     'use strict';
     var self = this,
         defaultConfig = {
@@ -85,13 +88,13 @@ datepickr.init = function (element, instanceConfig) {
         destroy,
         init;
 
-    calendarContainer.className = 'datepickr-calendar';
-    navigationCurrentMonth.className = 'datepickr-current-month';
+    calendarContainer.className = 'flatpickr-calendar';
+    navigationCurrentMonth.className = 'flatpickr-current-month';
     instanceConfig = instanceConfig || {};
 
     wrap = function () {
         wrapperElement = document.createElement('div');
-        wrapperElement.className = 'datepickr-wrapper';
+        wrapperElement.className = 'flatpickr-wrapper';
         self.element.parentNode.insertBefore(wrapperElement, self.element);
         wrapperElement.appendChild(self.element);
     };
@@ -276,7 +279,7 @@ datepickr.init = function (element, instanceConfig) {
 
 
 
-            row.innerHTML += '<td class="' + today + selected + disabled + '"><span class="datepickr-day">' + dayNumber + '</span></td>';
+            row.innerHTML += '<td class="' + today + selected + disabled + '"><span class="flatpickr-day">' + dayNumber + '</span></td>';
             dayCount++;
         }
 
@@ -292,10 +295,10 @@ datepickr.init = function (element, instanceConfig) {
         var months = document.createElement('div'),
             monthNavigation;
 
-        monthNavigation  = '<span class="datepickr-prev-month">&lt;</span>';
-        monthNavigation += '<span class="datepickr-next-month">&gt;</span>';
+        monthNavigation  = '<span class="flatpickr-prev-month">&lt;</span>';
+        monthNavigation += '<span class="flatpickr-next-month">&gt;</span>';
 
-        months.className = 'datepickr-months';
+        months.className = 'flatpickr-months';
         months.innerHTML = monthNavigation;
 
         months.appendChild(navigationCurrentMonth);
@@ -337,8 +340,8 @@ datepickr.init = function (element, instanceConfig) {
             currentTimestamp;
 
         if (targetClass) {
-            if (targetClass === 'datepickr-prev-month' || targetClass === 'datepickr-next-month') {
-                if (targetClass === 'datepickr-prev-month') {
+            if (targetClass === 'flatpickr-prev-month' || targetClass === 'flatpickr-next-month') {
+                if (targetClass === 'flatpickr-prev-month') {
                     self.currentMonthView--;
                 } else {
                     self.currentMonthView++;
@@ -347,7 +350,7 @@ datepickr.init = function (element, instanceConfig) {
                 handleYearChange();
                 updateNavigationCurrentMonth();
                 buildDays();
-            } else if (targetClass === 'datepickr-day' && !self.hasClass(target.parentNode, 'disabled')) {
+            } else if (targetClass === 'flatpickr-day' && !self.hasClass(target.parentNode, 'disabled')) {
                 self.selectedDate = {
                     day: parseInt(target.innerHTML, 10),
                     month: self.currentMonthView,
@@ -465,7 +468,7 @@ datepickr.init = function (element, instanceConfig) {
     return self;
 };
 
-datepickr.init.prototype = {
+flatpickr.init.prototype = {
     hasClass: function (element, className) { return element.classList.contains(className); },
     addClass: function (element, className) { element.classList.add(className); },
     removeClass: function (element, className) { element.classList.remove(className); },

@@ -1,9 +1,9 @@
-.datepickr-wrapper {
+.flatpickr-wrapper {
     display: inline-block;
     position: relative;
 }
 
-.datepickr-calendar {
+.flatpickr-calendar {
 	font-size: 13px;
 	background-color: white;
 	color: #333;
@@ -19,11 +19,11 @@
 	z-index: 100;
 }
 
-.open .datepickr-calendar {
+.open .flatpickr-calendar {
     display: block;
 }
 
-.datepickr-calendar .datepickr-months {
+.flatpickr-calendar .flatpickr-months {
 
 
 	color: black;
@@ -33,58 +33,58 @@
     font-weight: 200;
 }
 
-.datepickr-calendar .datepickr-prev-month,
-.datepickr-calendar .datepickr-next-month {
+.flatpickr-calendar .flatpickr-prev-month,
+.flatpickr-calendar .flatpickr-next-month {
 	color: black;
 	text-decoration: none;
 	padding: 0 .4em;
 	cursor: pointer;
 }
 
-.datepickr-calendar .datepickr-prev-month {
+.flatpickr-calendar .flatpickr-prev-month {
 	float: left;
 }
 
-.datepickr-calendar .datepickr-next-month {
+.flatpickr-calendar .flatpickr-next-month {
 	float: right;
 }
 
-.datepickr-calendar .datepickr-current-month {
+.flatpickr-calendar .flatpickr-current-month {
 	padding: 0 .5em;
 }
 
-.datepickr-calendar .datepickr-prev-month:hover,
-.datepickr-calendar .datepickr-next-month:hover {
+.flatpickr-calendar .flatpickr-prev-month:hover,
+.flatpickr-calendar .flatpickr-next-month:hover {
 	color: #c77405;
 }
 
-.datepickr-calendar table {
+.flatpickr-calendar table {
 	border-collapse: collapse;
 	padding: 0;
 	width: 100%;
 }
 
-.datepickr-calendar thead {
+.flatpickr-calendar thead {
     font-size: 90%;
 }
 
-.datepickr-calendar th,
-.datepickr-calendar td {
+.flatpickr-calendar th,
+.flatpickr-calendar td {
     width: 14.3%;
 }
 
-.datepickr-calendar th {
+.flatpickr-calendar th {
 	text-align: center;
     padding: 5px;
     font-weight: 500
 }
 
-.datepickr-calendar td {
+.flatpickr-calendar td {
 	text-align: right;
 	padding: 1px;
 }
 
-.datepickr-calendar .datepickr-day {
+.flatpickr-calendar .flatpickr-day {
 	display: block;
 
 	padding: 5px;
@@ -96,27 +96,27 @@
 	border: 1px solid transparent;
 }
 
-.datepickr-calendar .datepickr-day:hover {
+.flatpickr-calendar .flatpickr-day:hover {
 	border: 1px solid #ddd;
 
 
 }
 
-.datepickr-calendar .today .datepickr-day {
+.flatpickr-calendar .today .flatpickr-day {
 	background-color: #f64747;
 	border: 1px solid transparent;
 	color: #fff;
 	border-radius: 150px;
 }
 
-.datepickr-calendar .selected .datepickr-day {
+.flatpickr-calendar .selected .flatpickr-day {
 	background-color: #1c94c4;
 	color: #f6f6f6;
 	border-radius: 150px
 }
 
-.datepickr-calendar .disabled .datepickr-day,
-.datepickr-calendar .disabled .datepickr-day:hover {
+.flatpickr-calendar .disabled .flatpickr-day,
+.flatpickr-calendar .disabled .flatpickr-day:hover {
 	background: transparent;
     color: #bbb;
     cursor: default;
