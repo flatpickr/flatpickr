@@ -129,8 +129,9 @@ You can also customize each datepickr instance by passing in some extra config o
 | dateFormat | string | 'F j, Y' | A string of characters which are used to define how the date will be displayed in the input box. Very similar to the PHP date function, but with less options. The supported characters are defined below. |
 | altInput | node | null | A reference to another input element. This can be useful if you want to show the user a readable date, but return something totally different to the server. |
 | altFormat | string | null | Exactly the same as date format, but for the altInput field |
-| minDate | integer | null | The minimum date that a user can start picking from, as a JavaScript timestamp. I recommend using [getTime](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getTime) |
-| maxDate | integer | null | The maximum date that a user can pick from, as a JavaScript timestamp. I recommend using [getTime](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getTime) |
+| minDate | integer | Date() | The minimum date that a user can start picking from, as a JavaScript Date. See (https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date) |
+| maxDate | integer | Date() | The maximum date that a user can pick to, as a JavaScript Date. See (https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date) |
+| disable | array | null | Dates to disable, using intervals |
 | shorthandCurrentMonth | boolean | false | Show the month using the shorthand version. I don't know if this is very useful, but maybe? |
 
 Change the default date format:
@@ -146,10 +147,20 @@ Specify a min and max date:
 ```
 <script>
     datepickr('#minAndMax', {
-        // few days ago
-        minDate: new Date().getTime() - 2.592e8,
-        // few days from now
-        maxDate: new Date().getTime() + 2.592e8
+        // today
+        minDate: new Date(),
+        // some point in the future
+        maxDate: new Date("2015-12-31")
+    });
+</script>
+```
+
+Disable a date range:
+
+```
+<script>
+    datepickr('#sampleInput', {
+        disable: [ { 'from': '2015-09-02', 'to': '2015-10-02' } ]
     });
 </script>
 ```

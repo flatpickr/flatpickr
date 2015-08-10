@@ -171,7 +171,7 @@ datepickr.init = function(d, c) {
             var date = new Date(a.currentYearView, a.currentMonthView, b);
             var date_is_disabled = (a.config.disable != null && isDisabled( date, a.config.disable  ));
             var date_outside_minmax = ( (a.config.minDate !=null && date < a.config.minDate ) || (a.config.maxDate != null && date >= a.config.maxDate));
-            console.log(a.element.value);
+
             m = (date_is_disabled || date_outside_minmax) ? " disabled" : "";
 
             g.innerHTML += '<td class="' + l + p + m + '"><span class="datepickr-day">' + b + "</span></td>";
