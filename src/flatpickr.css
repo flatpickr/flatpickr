@@ -93,12 +93,12 @@
 	line-height: 24px;
 	text-align: center;
 	cursor: pointer;
-	border: 1px solid transparent;
+	border: 2px solid transparent;
 }
 
 .flatpickr-calendar .flatpickr-day:hover {
-	border: 1px solid #ddd;
-
+	background: #e6e6e6;
+	border-radius: 150px;
 
 }
 
