@@ -21,7 +21,7 @@ datepickr.init = function(d, c) {
             altInput: null,
             minDate: null,
             maxDate: null,
-            disableRange: null,
+            disable: null,
             shorthandCurrentMonth: !1
         },
         l = document.createElement("div"),
@@ -169,7 +169,7 @@ datepickr.init = function(d, c) {
             a.selectedDate && (p = w(a.selectedDate.day, a.selectedDate.month, a.selectedDate.year, b) ? " selected" : "");
             n = (new Date(a.currentYearView, a.currentMonthView, b)).getTime();
             var date = new Date(a.currentYearView, a.currentMonthView, b);
-            var date_is_disabled = (a.config.disableRange != null && isDisabled( date, a.config.disableRange  ));
+            var date_is_disabled = (a.config.disable != null && isDisabled( date, a.config.disable  ));
             var date_outside_minmax = ( (a.config.minDate !=null && date < a.config.minDate ) || (a.config.maxDate != null && date >= a.config.maxDate));
             console.log(a.element.value);
             m = (date_is_disabled || date_outside_minmax) ? " disabled" : "";
