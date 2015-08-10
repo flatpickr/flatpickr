@@ -97,7 +97,8 @@
 }
 
 .flatpickr-calendar .flatpickr-day:hover {
-	border: 1px solid #ddd;
+	background: #e6e6e6;
+	border-radius: 150px;
 
 
 }
