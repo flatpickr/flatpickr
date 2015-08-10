@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html>
     <head>
         <title>Sample datepickrs</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" type="text/css" href="src/datepickr.min.css">
+        <link rel="stylesheet" type="text/css" href="src/datepickr.css">
         <style>
             body {
                 font-family: Verdana;
@@ -13,13 +14,7 @@
                 font-size: 25px;
             }
 
-            .calendar-icon {
-                display: inline-block;
-                vertical-align: middle;
-                width: 32px;
-                height: 32px;
-                background: url(images/calendar.png);
-            }
+
 
             input {
                 border: 1px solid #aaa;
@@ -30,26 +25,20 @@
     </head>
 
     <body>
-        <h1>datepickr examples</h1>
+        <h1>a datepicker that doesn't suck</h1>
 
-        <p><input id="datepickr" placeholder="Nothin' special"></p>
 
-        <p><input class="datepickr" placeholder="Custom formatting"></p>
+        <p><input id="disableRange" placeholder="Datepicker with a disabled range"></p>
 
-        <p><input id="minAndMax" placeholder="Min and max date options"></p>
 
-        <p>
-            <span class="calendar-icon"></span>
-            <input id="calendar-input" placeholder="Click on my fancy icon">
-        </p>
 
         <p><input title="parseMe" value="January 1, 3000" placeholder="Welcome to the world of tomorrow!"></p>
 
         <p><input id="someFrench" class="sil-vous-plait" placeholder="En francais"></p>
 
-        <script src="src/datepickr.min.js"></script>
+        <script src="src/datepickr.js"></script>
         <script>
-            // Regular datepickr
+            Regular datepickr
             datepickr('#datepickr');
 
             // Custom date format
@@ -57,15 +46,19 @@
 
             // Min and max date
             datepickr('#minAndMax', {
-                // few days ago
-                minDate: new Date().getTime() - 2.592e8,
-                // few days from now
-                maxDate: new Date().getTime() + 2.592e8
+                // today
+                minDate: new Date(),
+
             });
 
-            // datepickr on an icon, using altInput to store the value
-            // altInput must be a direct reference to an input element (for now)
-            datepickr('.calendar-icon', { altInput: document.getElementById('calendar-input') });
+            datepickr('#disableRange', {
+
+                disable: [ { 'from' : "2015-09-06", 'to' : "2015-09-09" } ],
+                minDate: new Date(),
+                dateFormat: 'Y-m-d'
+
+            });
+
 
             // If the input contains a value, datepickr will attempt to run Date.parse on it
             datepickr('[title="parseMe"]');
