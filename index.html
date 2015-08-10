@@ -30,11 +30,13 @@
 
         <p><input id="disableRange" placeholder="Datepicker with a disabled range"></p>
 
+        <p><input id="minDate" placeholder="Custom format"></p>
+
+        <p><input id="minDate" placeholder="Datepicker with a minimum date"></p>
+
+        <p><input id="maxDate" placeholder="Datepicker with a maximum date"></p>
 
 
-        <p><input title="parseMe" value="January 1, 3000" placeholder="Welcome to the world of tomorrow!"></p>
-
-        <p><input id="someFrench" class="sil-vous-plait" placeholder="En francais"></p>
 
         <script src="src/datepickr.js"></script>
         <script>
@@ -44,10 +46,16 @@
             // Custom date format
             datepickr('.datepickr', { dateFormat: 'd-m-Y'});
 
-            // Min and max date
-            datepickr('#minAndMax', {
+            // Min date
+            datepickr('#minDate', {
                 // today
-                minDate: new Date(),
+                minDate: new Date()
+
+            });
+
+            datepickr('#maxDate', {
+                // today
+                maxDate: new Date()
 
             });
 
@@ -60,16 +68,7 @@
             });
 
 
-            // If the input contains a value, datepickr will attempt to run Date.parse on it
-            datepickr('[title="parseMe"]');
 
-            // Overwrite the global datepickr prototype
-            // Won't affect previously created datepickrs, but will affect any new ones
-            datepickr.prototype.l10n.months.shorthand = ['janv', 'févr', 'mars', 'avril', 'mai', 'juin', 'juil', 'août', 'sept', 'oct', 'nov', 'déc'];
-            datepickr.prototype.l10n.months.longhand = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
-            datepickr.prototype.l10n.weekdays.shorthand = ['dim', 'lun', 'mar', 'mer', 'jeu', 'ven', 'sam'];
-            datepickr.prototype.l10n.weekdays.longhand = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
-            datepickr('#someFrench.sil-vous-plait', { dateFormat: '\\le j F Y' });
         </script>
     </body>
 </html>
