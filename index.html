@@ -2,9 +2,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>chmln.datepickr - super lightweight vanilla javascript flat design date picker</title>
+        <title>flatpickr - super lightweight vanilla javascript flat design date picker</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" type="text/css" href="src/datepickr.css">
+        <link rel="stylesheet" type="text/css" href="src/flatpickr.css">
         <link href='http://fonts.googleapis.com/css?family=Lato:400,200,500' rel='stylesheet' type='text/css'>
         <style>
         html, body
@@ -60,13 +60,13 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4183d7', end
 
     <body>
         <div class='hero center_text'>
-            <h1>chmln.datepickr </h1>
+            <h1>chmln.flatpickr </h1>
             <p class=desc>Super lightweight, flat, simply fabolous datepicker written in vanilla JS </p>
         </div>
 
         <div class='half_height center_text'>
 
-            <p><input id="datepickr" placeholder="Simple datepicker with default options"></p>
+            <p><input id="flatpickr" placeholder="Simple datepicker with default options"></p>
 
             <p><input id="disableRange" placeholder="Datepicker with a disabled range"></p>
 
@@ -79,28 +79,28 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4183d7', end
         </div>
 
 
-        <script src="src/datepickr.js"></script>
+        <script src="src/flatpickr.js"></script>
         <script>
-            //Regular datepickr
-            datepickr('#datepickr');
+            //Regular flatpickr
+            flatpickr('#flatpickr');
 
             // Custom date format
-            datepickr('.datepickr', { dateFormat: 'd-m-Y'});
+            flatpickr('.flatpickr', { dateFormat: 'd-m-Y'});
 
             // Min date
-            datepickr('#minDate', {
+            flatpickr('#minDate', {
                 // today
                 minDate: new Date()
 
             });
 
-            datepickr('#maxDate', {
+            flatpickr('#maxDate', {
                 // today
                 maxDate: new Date()
 
             });
 
-            datepickr('#disableRange', {
+            flatpickr('#disableRange', {
 
                 disable: [ { 'from' : "2015-09-06", 'to' : "2015-09-09" } ],
                 minDate: new Date(),
