@@ -387,12 +387,7 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     bind = function () {
-        var openEvent = 'click';
-
-        if (self.element.nodeName === 'INPUT') {
-            openEvent = 'focus';
-            //self.addEventListener(self.element, 'blur', close, false);
-        }
+        var openEvent = (self.element.nodeName === 'INPUT') 'focus' ? : 'click';
 
         self.addEventListener(self.element, openEvent, open, false);
         self.addEventListener(calendarContainer, 'mousedown', calendarClick, false);
@@ -482,7 +477,6 @@ flatpickr.init = function (element, instanceConfig) {
     	if (key in self.config)
     		self.config[key] = value;
 
-    	// redraw
     	self.redraw();
     }
 
