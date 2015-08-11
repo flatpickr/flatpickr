@@ -3,6 +3,11 @@
     position: relative;
 }
 
+.flatpickr-wrapper input
+{
+	cursor: pointer
+}
+
 .flatpickr-calendar {
 	font-size: 13px;
 	background-color: white;
