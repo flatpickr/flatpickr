@@ -342,16 +342,15 @@ flatpickr.init = function (element, instanceConfig) {
 
         if (targetClass) {
             if (targetClass === 'flatpickr-prev-month' || targetClass === 'flatpickr-next-month') {
-                if (targetClass === 'flatpickr-prev-month') {
-                    self.currentMonthView--;
-                } else {
-                    self.currentMonthView++;
-                }
+
+            	(targetClass === 'flatpickr-prev-month') ?  self.currentMonthView-- : self.currentMonthView++;
 
                 handleYearChange();
                 updateNavigationCurrentMonth();
                 buildDays();
+
             } else if (targetClass === 'flatpickr-day' && !self.hasClass(target.parentNode, 'disabled')) {
+
                 self.selectedDate = {
                     day: parseInt(target.innerHTML, 10),
                     month: self.currentMonthView,
@@ -360,14 +359,12 @@ flatpickr.init = function (element, instanceConfig) {
 
                 currentTimestamp = new Date(self.currentYearView, self.currentMonthView, self.selectedDate.day).getTime();
 
-                if (self.config.altInput) {
-                    if (self.config.altFormat) {
-                        self.config.altInput.value = formatDate(self.config.altFormat, currentTimestamp);
-                    } else {
-                        // I don't know why someone would want to do this... but just in case?
-                        self.config.altInput.value = formatDate(self.config.dateFormat, currentTimestamp);
-                    }
+                if (self.config.altInput)
+                {
+                	var alt_format = (self.config.altFormat) ? self.config.altFormat : self.config.dateFormat;
+                    self.config.altInput.value = formatDate(alt_format, currentTimestamp);
                 }
+
 
                 self.element.value = formatDate(self.config.dateFormat, currentTimestamp);
 
