@@ -275,6 +275,7 @@ flatpickr.init = function (element, instanceConfig) {
             }
 
             var cur_date = new Date(self.currentYearView, self.currentMonthView, dayNumber);
+
             var date_is_disabled = (self.config.disable != null && isDisabled( cur_date  ));
             var date_outside_minmax = ( (self.config.minDate !=null && cur_date < self.config.minDate )
             							|| (self.config.maxDate != null && cur_date >= self.config.maxDate));
@@ -289,6 +290,7 @@ flatpickr.init = function (element, instanceConfig) {
 
         calendarFragment.appendChild(row);
         calendarBody.appendChild(calendarFragment);
+
     };
 
     updateNavigationCurrentMonth = function () {
@@ -416,6 +418,7 @@ flatpickr.init = function (element, instanceConfig) {
     open = function () {
         self.addEventListener(document, 'click', documentClick, false);
         self.addClass(wrapperElement, 'open');
+
     };
 
     close = function () {
@@ -454,6 +457,7 @@ flatpickr.init = function (element, instanceConfig) {
         parsedDate = (self.element.value) ? Date.parse(self.element.value) : null;
 
 
+
         if (parsedDate && !isNaN(parsedDate)) {
             parsedDate = new Date(parsedDate);
             self.selectedDate = {
@@ -471,9 +475,14 @@ flatpickr.init = function (element, instanceConfig) {
             self.currentDayView = date.current.day();
         }
 
+        if (self.config.minDate != null)
+        	self.currentMonthView = self.config.minDate.getMonth();
+
         wrap();
         buildCalendar();
         bind();
+
+
     };
 
     self.redraw = function(){
