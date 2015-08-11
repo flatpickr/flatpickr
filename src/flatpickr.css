@@ -82,7 +82,7 @@
 .flatpickr-calendar th {
 	text-align: center;
     padding: 5px;
-    font-weight: 500
+    font-weight: bold
 }
 
 .flatpickr-calendar td {
