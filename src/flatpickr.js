@@ -463,6 +463,9 @@ flatpickr.init = function (element, instanceConfig) {
             self.currentDayView = date.current.day();
         }
 
+        if (self.config.minDate != null)
+        	self.currentMonthView = self.config.minDate.getMonth();
+
         wrap();
         buildCalendar();
         bind();
