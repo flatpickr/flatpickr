@@ -254,7 +254,7 @@ flatpickr.init = function (element, instanceConfig) {
         }
 
          if( self.config.minDate != null)
-            self.config.minDate.setHours(0,0,0,0);
+            self.config.minDate = new Date( self.config.minDate.getUTCFullYear(), self.config.minDate.getUTCMonth(),self.config.minDate.getUTCDate()  );
 
         if( self.config.maxDate != null)
             self.config.maxDate.setHours(0,0,0,0);
@@ -379,6 +379,7 @@ flatpickr.init = function (element, instanceConfig) {
                 close();
                 buildDays();
                 triggerChange();
+                event.preventDefault();
 
             }
         }

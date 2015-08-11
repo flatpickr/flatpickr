@@ -40,7 +40,6 @@
 
 .flatpickr-calendar .flatpickr-prev-month,
 .flatpickr-calendar .flatpickr-next-month {
-	color: black;
 	text-decoration: none;
 	padding: 0 .4em;
 	cursor: pointer;
