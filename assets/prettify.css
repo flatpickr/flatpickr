@@ -73,6 +73,7 @@
   line-height: 1;
   border: 1px solid #ccc;
   padding: 10px;
+  overflow: hidden
 }
 
 /* Specify class=linenums on a pre to get line numbering */
