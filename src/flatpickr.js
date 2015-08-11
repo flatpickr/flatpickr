@@ -1,5 +1,5 @@
 /*
-    flatpickr  - pick dates elegantly
+    chmln.flatpickr  - pick dates elegantly
     © Gregory Petrosyan
 
     https://github.com/chmln/flatpickr
@@ -87,7 +87,6 @@ flatpickr.init = function (element, instanceConfig) {
         close,
         destroy,
         init,
-        set,
         triggerChange;
 
     calendarContainer.className = 'flatpickr-calendar';
@@ -254,7 +253,7 @@ flatpickr.init = function (element, instanceConfig) {
         }
 
          if( self.config.minDate != null)
-            self.config.minDate = new Date( self.config.minDate.getUTCFullYear(), self.config.minDate.getUTCMonth(),self.config.minDate.getUTCDate()  );
+            self.config.minDate.setHours(0,0,0,0);
 
         if( self.config.maxDate != null)
             self.config.maxDate.setHours(0,0,0,0);
@@ -268,17 +267,14 @@ flatpickr.init = function (element, instanceConfig) {
                 dayCount = 0;
             }
 
-            today = ( isSpecificDay(date.current.day(), date.current.month.integer(), date.current.year(), dayNumber)
-            		  && self.selectedDate == null) ? ' today' : '';
+            today = (isSpecificDay(date.current.day(), date.current.month.integer(), date.current.year(), dayNumber) && self.selectedDate == null) ? ' today' : '';
             if (self.selectedDate) {
                 selected = isSpecificDay(self.selectedDate.day, self.selectedDate.month, self.selectedDate.year, dayNumber) ? ' selected' : '';
             }
 
             var cur_date = new Date(self.currentYearView, self.currentMonthView, dayNumber);
-
             var date_is_disabled = (self.config.disable != null && isDisabled( cur_date  ));
-            var date_outside_minmax = ( (self.config.minDate !=null && cur_date < self.config.minDate )
-            							|| (self.config.maxDate != null && cur_date >= self.config.maxDate));
+            var date_outside_minmax = ( (self.config.minDate !=null && cur_date < self.config.minDate ) || (self.config.maxDate != null && cur_date >= self.config.maxDate));
 
             disabled = (date_is_disabled || date_outside_minmax) ? " disabled" : "";
 
@@ -290,7 +286,6 @@ flatpickr.init = function (element, instanceConfig) {
 
         calendarFragment.appendChild(row);
         calendarBody.appendChild(calendarFragment);
-
     };
 
     updateNavigationCurrentMonth = function () {
@@ -347,16 +342,15 @@ flatpickr.init = function (element, instanceConfig) {
 
         if (targetClass) {
             if (targetClass === 'flatpickr-prev-month' || targetClass === 'flatpickr-next-month') {
-                if (targetClass === 'flatpickr-prev-month') {
-                    self.currentMonthView--;
-                } else {
-                    self.currentMonthView++;
-                }
+
+                (targetClass === 'flatpickr-prev-month') ?  self.currentMonthView-- : self.currentMonthView++;
 
                 handleYearChange();
                 updateNavigationCurrentMonth();
                 buildDays();
+
             } else if (targetClass === 'flatpickr-day' && !self.hasClass(target.parentNode, 'disabled')) {
+
                 self.selectedDate = {
                     day: parseInt(target.innerHTML, 10),
                     month: self.currentMonthView,
@@ -365,14 +359,12 @@ flatpickr.init = function (element, instanceConfig) {
 
                 currentTimestamp = new Date(self.currentYearView, self.currentMonthView, self.selectedDate.day).getTime();
 
-                if (self.config.altInput) {
-                    if (self.config.altFormat) {
-                        self.config.altInput.value = formatDate(self.config.altFormat, currentTimestamp);
-                    } else {
-                        // I don't know why someone would want to do this... but just in case?
-                        self.config.altInput.value = formatDate(self.config.dateFormat, currentTimestamp);
-                    }
+                if (self.config.altInput)
+                {
+                    var alt_format = (self.config.altFormat) ? self.config.altFormat : self.config.dateFormat;
+                    self.config.altInput.value = formatDate(alt_format, currentTimestamp);
                 }
+
 
                 self.element.value = formatDate(self.config.dateFormat, currentTimestamp);
 
@@ -380,7 +372,6 @@ flatpickr.init = function (element, instanceConfig) {
                 buildDays();
                 triggerChange();
                 event.preventDefault();
-
             }
         }
     };
@@ -396,37 +387,34 @@ flatpickr.init = function (element, instanceConfig) {
         wrapperElement.appendChild(calendarContainer);
     };
 
-    triggerChange = function(){
-
-    	if ("createEvent" in document) {
-		    var evt = document.createEvent("HTMLEvents");
-		    evt.initEvent("change", false, true);
-		    self.element.dispatchEvent(evt);
-		}
-		else
-	    	self.element.fireEvent("onchange");
-	}
-
-
     bind = function () {
-        var openEvent = (self.element.nodeName === 'INPUT') ? 'focus' : 'click';
-
+        var openEvent = (self.element.nodeName === 'INPUT') ? 'focus'  : 'click';
 
         self.addEventListener(self.element, openEvent, open, false);
         self.addEventListener(calendarContainer, 'mousedown', calendarClick, false);
     };
 
     open = function () {
-    	self.element.blur();
+        self.element.blur();
         self.addEventListener(document, 'click', documentClick, false);
         self.addClass(wrapperElement, 'open');
-
     };
 
     close = function () {
         self.removeEventListener(document, 'click', documentClick, false);
         self.removeClass(wrapperElement, 'open');
     };
+
+    triggerChange = function(){
+
+        if ("createEvent" in document) {
+            var evt = document.createEvent("HTMLEvents");
+            evt.initEvent("change", false, true);
+            self.element.dispatchEvent(evt);
+        }
+        else
+            self.element.fireEvent("onchange");
+    }
 
     destroy = function () {
         var parent,
@@ -456,9 +444,9 @@ flatpickr.init = function (element, instanceConfig) {
 
         self.element = element;
 
-        parsedDate = (self.element.value) ? Date.parse(self.element.value) : null;
-
-
+        if (self.element.value) {
+            parsedDate = Date.parse(self.element.value);
+        }
 
         if (parsedDate && !isNaN(parsedDate)) {
             parsedDate = new Date(parsedDate);
@@ -478,26 +466,23 @@ flatpickr.init = function (element, instanceConfig) {
         }
 
         if (self.config.minDate != null)
-        	self.currentMonthView = self.config.minDate.getMonth();
+            self.currentMonthView = self.config.minDate.getMonth();
 
         wrap();
         buildCalendar();
         bind();
-
-
     };
 
     self.redraw = function(){
-    	flatpickr(self.element, self.config);
+        flatpickr(self.element, self.config);
     }
 
     self.set = function(key, value)
     {
-    	if (key in self.config)
-    		self.config[key] = value;
+        if (key in self.config)
+            self.config[key] = value;
 
-    	// redraw
-    	self.redraw();
+        self.redraw();
     }
 
     init();
@@ -518,10 +503,6 @@ flatpickr.init.prototype = {
     removeEventListener: function (element, type, listener, useCapture) {
         element.removeEventListener(type, listener, useCapture);
     },
-
-
-
-
     l10n: {
         weekdays: {
             shorthand: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
