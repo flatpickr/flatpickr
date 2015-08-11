@@ -30,7 +30,7 @@
 	padding: 2px;
 	text-align: center;
     font-size: 135%;
-    font-weight: 200;
+
 }
 
 .flatpickr-calendar .flatpickr-prev-month,
@@ -51,6 +51,7 @@
 
 .flatpickr-calendar .flatpickr-current-month {
 	padding: 0 .5em;
+	font-weight: 300;
 }
 
 .flatpickr-calendar .flatpickr-prev-month:hover,
@@ -87,31 +88,28 @@
 .flatpickr-calendar .flatpickr-day {
 	display: block;
 
-	padding: 5px;
-	width: 22px;
-	height: 22px;
-	line-height: 24px;
+	padding: 0;
+	width: 32px;
+	height: 32px;
+	line-height: 32px;
 	text-align: center;
 	cursor: pointer;
-	border: 1px solid transparent;
 }
 
 .flatpickr-calendar .flatpickr-day:hover {
 	background: #e6e6e6;
 	border-radius: 150px;
 
-
 }
 
 .flatpickr-calendar .today .flatpickr-day {
 	background-color: #f64747;
-	border: 1px solid transparent;
 	color: #fff;
 	border-radius: 150px;
 }
 
 .flatpickr-calendar .selected .flatpickr-day {
-	background-color: #1c94c4;
+	background-color: #446CB3;
 	color: #f6f6f6;
 	border-radius: 150px
 }
