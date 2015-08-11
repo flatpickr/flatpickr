@@ -387,7 +387,7 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     bind = function () {
-        var openEvent = (self.element.nodeName === 'INPUT') 'focus' ? : 'click';
+        var openEvent = (self.element.nodeName === 'INPUT') ? 'focus'  : 'click';
 
         self.addEventListener(self.element, openEvent, open, false);
         self.addEventListener(calendarContainer, 'mousedown', calendarClick, false);
