@@ -1,5 +1,5 @@
 /*
-    chmln.flatpickr  - pick dates elegantly
+    flatpickr  - pick dates elegantly
     © Gregory Petrosyan
 
     https://github.com/chmln/flatpickr
@@ -86,7 +86,8 @@ flatpickr.init = function (element, instanceConfig) {
         open,
         close,
         destroy,
-        init;
+        init,
+        set;
 
     calendarContainer.className = 'flatpickr-calendar';
     navigationCurrentMonth.className = 'flatpickr-current-month';
@@ -266,14 +267,16 @@ flatpickr.init = function (element, instanceConfig) {
                 dayCount = 0;
             }
 
-            today = (isSpecificDay(date.current.day(), date.current.month.integer(), date.current.year(), dayNumber) && self.selectedDate == null) ? ' today' : '';
+            today = ( isSpecificDay(date.current.day(), date.current.month.integer(), date.current.year(), dayNumber)
+            		  && self.selectedDate == null) ? ' today' : '';
             if (self.selectedDate) {
                 selected = isSpecificDay(self.selectedDate.day, self.selectedDate.month, self.selectedDate.year, dayNumber) ? ' selected' : '';
             }
 
             var cur_date = new Date(self.currentYearView, self.currentMonthView, dayNumber);
             var date_is_disabled = (self.config.disable != null && isDisabled( cur_date  ));
-            var date_outside_minmax = ( (self.config.minDate !=null && cur_date < self.config.minDate ) || (self.config.maxDate != null && cur_date >= self.config.maxDate));
+            var date_outside_minmax = ( (self.config.minDate !=null && cur_date < self.config.minDate )
+            							|| (self.config.maxDate != null && cur_date >= self.config.maxDate));
 
             disabled = (date_is_disabled || date_outside_minmax) ? " disabled" : "";
 
@@ -388,12 +391,8 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     bind = function () {
-        var openEvent = 'click';
+        var openEvent = (self.element.nodeName === 'INPUT') ? 'focus' : 'click';
 
-        if (self.element.nodeName === 'INPUT') {
-            openEvent = 'focus';
-            //self.addEventListener(self.element, 'blur', close, false);
-        }
 
         self.addEventListener(self.element, openEvent, open, false);
         self.addEventListener(calendarContainer, 'mousedown', calendarClick, false);
@@ -437,9 +436,8 @@ flatpickr.init = function (element, instanceConfig) {
 
         self.element = element;
 
-        if (self.element.value) {
-            parsedDate = Date.parse(self.element.value);
-        }
+        parsedDate = (self.element.value) ? Date.parse(self.element.value) : null;
+
 
         if (parsedDate && !isNaN(parsedDate)) {
             parsedDate = new Date(parsedDate);
@@ -463,6 +461,19 @@ flatpickr.init = function (element, instanceConfig) {
         bind();
     };
 
+    self.redraw = function(){
+    	flatpickr(self.element, self.config);
+    }
+
+    self.set = function(key, value)
+    {
+    	if (key in self.config)
+    		self.config[key] = value;
+
+    	// redraw
+    	self.redraw();
+    }
+
     init();
 
     return self;
@@ -481,6 +492,10 @@ flatpickr.init.prototype = {
     removeEventListener: function (element, type, listener, useCapture) {
         element.removeEventListener(type, listener, useCapture);
     },
+
+
+
+
     l10n: {
         weekdays: {
             shorthand: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],

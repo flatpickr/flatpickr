@@ -1,0 +1,154 @@
+html, body, div, p, h1, h2, h3, table, tr, td
+{
+    margin: 0;
+    padding: 0;
+    text-rendering: optimizeLegibility;
+}
+body, input {
+    font-family: 'Lato', sans-serif;
+    color: #333;
+    font-size: 15px
+}
+
+h1, h2, h3
+{
+    margin-bottom: 0.5rem;
+    color: black
+
+}
+
+h1 {
+
+    font-size: 48px;
+    font-family: 'nunito'
+}
+
+h2
+{
+    margin-top: 3rem;
+
+}
+
+p
+{
+    margin-bottom: 1.3em;
+    font-size: 15px;
+    line-height: 1.4;
+
+}
+
+.nomargin
+{
+    margin-bottom: 0
+}
+
+a
+{
+    color: #52B3D9
+}
+
+
+
+input {
+    border: 2px solid #ddd;
+    padding: 1rem;
+    width: 400px;
+    font-weight: 400;
+    font-size: 1rem;
+}
+
+input:focus, input:active
+{
+    outline: 0;
+    border: 2px solid #52B3D9;
+    border: 2px solid rgba(82, 179, 217, 0.35);
+}
+
+.hero
+{
+    padding: 7.5vh 0;
+    min-height: 150px;
+    max-height: 420px;
+    background: #4183d7;
+    background: #4183d7;
+    background: -moz-linear-gradient(45deg,  #4183d7 0%, #87d37c 76%);
+    background: -webkit-gradient(linear, left bottom, right top, color-stop(0%,#4183d7), color-stop(76%,#87d37c));
+    background: -webkit-linear-gradient(45deg,  #4183d7 0%,#87d37c 76%);
+    background: -o-linear-gradient(45deg,  #4183d7 0%,#87d37c 76%);
+    background: -ms-linear-gradient(45deg,  #4183d7 0%,#87d37c 76%);
+    background: linear-gradient(45deg,  #4183d7 0%,#87d37c 76%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4183d7', endColorstr='#87d37c',GradientType=1 );
+    color: white
+}
+
+.hero h1{
+    color: white
+}
+.hero p
+{
+    color: white;
+    opacity: 0.85
+}
+
+.center_text
+{
+    text-align: center
+}
+
+.wrapper
+{
+    max-width: 960px;
+    margin: 0 auto;
+    width: 85%;
+    margin-bottom: 10rem
+}
+
+pre
+{
+    width: auto;
+    width: 650px ;
+
+    font-family: Consolas,Menlo,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace,sans-serif;
+}
+
+.example_wrapper
+{
+    margin: 1.5rem 0 3.5rem 0;
+
+}
+
+.table
+{
+    border: 1px solid #e4e4e4;
+    border-spacing: 0;
+    font-size: 14px
+
+}
+
+.table th
+{
+    text-align: left;
+    background: transparent;
+    font-size: 1.25rem;
+    font-weight: 300;
+    border-bottom: 1px solid rgba(68,68,68,0.13);
+}
+
+.table th, .table td
+{
+    padding: 11px
+}
+
+.table tr
+{
+    border-bottom: 1px solid rgba(68,68,68,0.13);
+}
+
+.table tr td:last-child
+{
+    color: #999
+}
+
+.table  tr:nth-child(2n) {
+    background-color: #f9f9f9;
+}
