@@ -463,6 +463,19 @@ flatpickr.init = function (element, instanceConfig) {
         bind();
     };
 
+    self.redraw = function(){
+    	flatpickr(self.element, self.config);
+    }
+
+    self.set = function(key, value)
+    {
+    	if (key in self.config)
+    		self.config[key] = value;
+
+    	// redraw
+    	self.redraw();
+    }
+
     init();
 
     return self;
