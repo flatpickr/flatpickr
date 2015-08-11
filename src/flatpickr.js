@@ -416,6 +416,7 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     open = function () {
+    	self.element.blur();
         self.addEventListener(document, 'click', documentClick, false);
         self.addClass(wrapperElement, 'open');
 
