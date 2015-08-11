@@ -87,7 +87,8 @@ flatpickr.init = function (element, instanceConfig) {
         close,
         destroy,
         init,
-        set;
+        set,
+        triggerChange;
 
     calendarContainer.className = 'flatpickr-calendar';
     navigationCurrentMonth.className = 'flatpickr-current-month';
@@ -375,6 +376,8 @@ flatpickr.init = function (element, instanceConfig) {
 
                 close();
                 buildDays();
+                triggerChange();
+
             }
         }
     };
@@ -389,6 +392,18 @@ flatpickr.init = function (element, instanceConfig) {
 
         wrapperElement.appendChild(calendarContainer);
     };
+
+    triggerChange = function(){
+
+    	if ("createEvent" in document) {
+		    var evt = document.createEvent("HTMLEvents");
+		    evt.initEvent("change", false, true);
+		    self.element.dispatchEvent(evt);
+		}
+		else
+	    	self.element.fireEvent("onchange");
+	}
+
 
     bind = function () {
         var openEvent = (self.element.nodeName === 'INPUT') ? 'focus' : 'click';
