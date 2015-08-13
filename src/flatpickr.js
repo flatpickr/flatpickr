@@ -264,7 +264,7 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     updateNavigationCurrentMonth = function () {
-        navigationCurrentMonth.innerHTML = '<span>' + monthToStr(currentDate.getMonth(), false) + '</span> ' + self.currentYearView;
+        navigationCurrentMonth.innerHTML = '<span>' + monthToStr(self.currentMonthView, false) + '</span> ' + self.currentYearView;
     };
 
     buildMonthNavigation = function () {
@@ -312,7 +312,7 @@ flatpickr.init = function (element, instanceConfig) {
 
     changeMonth = function(to)
     {
-        (to === '-') ?  self.currentMonthView-- : self.currentMonthView++;
+        (to === 'prev') ?  self.currentMonthView-- : self.currentMonthView++;
         handleYearChange();
         updateNavigationCurrentMonth();
         buildDays();
@@ -325,7 +325,7 @@ flatpickr.init = function (element, instanceConfig) {
 
         if (targetClass) {
             if (targetClass === 'flatpickr-prev-month' || targetClass === 'flatpickr-next-month') {
-                targetClass === 'flatpickr-prev-month' ?  ( changeMonth('-') ) : ( changeMonth('+') );
+                targetClass === 'flatpickr-prev-month' ?  ( changeMonth('prev') ) : ( changeMonth('next') );
 
 
 
@@ -407,7 +407,7 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     init = function () {
-        var config, parsedDate;
+        var config, parsedDate, t;
 
         self.config = {};
         self.destroy = destroy;
@@ -420,14 +420,19 @@ flatpickr.init = function (element, instanceConfig) {
         self.element.value && (parsedDate = Date.parse(self.element.value) );
 
 
-        if (parsedDate && !isNaN(parsedDate))
+       if (parsedDate && !isNaN(parsedDate))
+       {
             self.selectedDateObj = new Date(parsedDate);
+            t = self.selectedDateObj;
+       }
+       else
+        t = currentDate;
 
-        else {
-            self.currentYearView = currentDate.getFullYear();
-            self.currentMonthView = currentDate.getMonth;
-            self.currentDayView = currentDate.getDate();
-        }
+
+        self.currentYearView = t.getFullYear();
+        self.currentMonthView = t.getMonth();
+        self.currentDayView = t.getDate();
+
 
         typeof self.config.minDate === 'string' && (self.config.minDate = new Date(self.config.minDate));
         typeof self.config.maxDate === 'string' && (self.config.maxDate = new Date(self.config.maxDate));
