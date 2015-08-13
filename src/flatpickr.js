@@ -52,6 +52,7 @@ var flatpickr = function (selector, config) {
  */
 flatpickr.init = function (element, instanceConfig) {
     'use strict';
+
     var self = this,
         defaultConfig = {
             dateFormat: 'F j, Y',
@@ -60,7 +61,7 @@ flatpickr.init = function (element, instanceConfig) {
             minDate: null,
             maxDate: null,
             disable: null,
-            shorthandCurrentMonth: false
+            shorthandCurrentMonth: false,
         },
         calendarContainer = document.createElement('div'),
         navigationCurrentMonth = document.createElement('span'),
@@ -72,7 +73,6 @@ flatpickr.init = function (element, instanceConfig) {
         date,
         formatDate,
         monthToStr,
-        isSpecificDay,
         isDisabled,
         buildWeekdays,
         buildDays,
@@ -87,7 +87,9 @@ flatpickr.init = function (element, instanceConfig) {
         close,
         destroy,
         init,
-        triggerChange;
+        triggerChange,
+        changeMonth,
+        getDaysinMonth;
 
     calendarContainer.className = 'flatpickr-calendar';
     navigationCurrentMonth.className = 'flatpickr-current-month';
@@ -100,34 +102,11 @@ flatpickr.init = function (element, instanceConfig) {
         wrapperElement.appendChild(self.element);
     };
 
-    date = {
-        current: {
-            year: function () {
-                return currentDate.getFullYear();
-            },
-            month: {
-                integer: function () {
-                    return currentDate.getMonth();
-                },
-                string: function (shorthand) {
-                    var month = currentDate.getMonth();
-                    return monthToStr(month, shorthand);
-                }
-            },
-            day: function () {
-                return currentDate.getDate();
-            }
-        },
-        month: {
-            string: function () {
-                return monthToStr(self.currentMonthView, self.config.shorthandCurrentMonth);
-            },
-            numDays: function () {
-                // checks to see if february is a leap year otherwise return the respective # of days
-                return self.currentMonthView === 1 && (((self.currentYearView % 4 === 0) && (self.currentYearView % 100 !== 0)) || (self.currentYearView % 400 === 0)) ? 29 : self.l10n.daysInMonth[self.currentMonthView];
-            }
-        }
-    };
+
+
+    getDaysinMonth = function(){
+        return self.currentMonthView === 1 && (((self.currentYearView % 4 === 0) && (self.currentYearView % 100 !== 0)) || (self.currentYearView % 400 === 0)) ? 29 : self.l10n.daysInMonth[self.currentMonthView];
+    }
 
     formatDate = function (dateFormat, milliseconds) {
         var formattedDate = '',
@@ -177,10 +156,8 @@ flatpickr.init = function (element, instanceConfig) {
         self.forEach(formatPieces, function (formatPiece, index) {
             if (formats[formatPiece] && formatPieces[index - 1] !== '\\') {
                 formattedDate += formats[formatPiece]();
-            } else {
-                if (formatPiece !== '\\') {
+            } else if (formatPiece !== '\\') {
                     formattedDate += formatPiece;
-                }
             }
         });
 
@@ -195,9 +172,7 @@ flatpickr.init = function (element, instanceConfig) {
         return self.l10n.months.longhand[date];
     };
 
-    isSpecificDay = function (day, month, year, comparison) {
-        return day === comparison && self.currentMonthView === month && self.currentYearView === year;
-    };
+
 
     buildWeekdays = function () {
         var weekdayContainer = document.createElement('thead'),
@@ -228,7 +203,7 @@ flatpickr.init = function (element, instanceConfig) {
 
     buildDays = function () {
         var firstOfMonth = new Date(self.currentYearView, self.currentMonthView, 1).getDay(),
-            numDays = date.month.numDays(),
+            numDays = getDaysinMonth(),
             calendarFragment = document.createDocumentFragment(),
             row = document.createElement('tr'),
             dayCount,
@@ -236,27 +211,21 @@ flatpickr.init = function (element, instanceConfig) {
             today = '',
             selected = '',
             disabled = '',
-            currentTimestamp;
+            currentTimestamp,
+            cur_date;
 
         // Offset the first day by the specified amount
         firstOfMonth -= self.l10n.firstDayOfWeek;
-        if (firstOfMonth < 0) {
-            firstOfMonth += 7;
-        }
+        firstOfMonth < 0 && (firstOfMonth += 7);
+
+        // Add spacer to line up the first day of the month correctly
+        firstOfMonth > 0 && (row.innerHTML += '<td colspan="' + firstOfMonth + '">&nbsp;</td>');
 
         dayCount = firstOfMonth;
         calendarBody.innerHTML = '';
 
-        // Add spacer to line up the first day of the month correctly
-        if (firstOfMonth > 0) {
-            row.innerHTML += '<td colspan="' + firstOfMonth + '">&nbsp;</td>';
-        }
 
-         if( self.config.minDate != null)
-            self.config.minDate.setHours(0,0,0,0);
 
-        if( self.config.maxDate != null)
-            self.config.maxDate.setHours(0,0,0,0);
 
         // Start at 1 since there is no 0th day
         for (dayNumber = 1; dayNumber <= numDays; dayNumber++) {
@@ -267,14 +236,18 @@ flatpickr.init = function (element, instanceConfig) {
                 dayCount = 0;
             }
 
-            today = (isSpecificDay(date.current.day(), date.current.month.integer(), date.current.year(), dayNumber) && self.selectedDate == null) ? ' today' : '';
-            if (self.selectedDate) {
-                selected = isSpecificDay(self.selectedDate.day, self.selectedDate.month, self.selectedDate.year, dayNumber) ? ' selected' : '';
-            }
+            cur_date = new Date(self.currentYearView, self.currentMonthView, dayNumber);
 
-            var cur_date = new Date(self.currentYearView, self.currentMonthView, dayNumber);
-            var date_is_disabled = (self.config.disable != null && isDisabled( cur_date  ));
-            var date_outside_minmax = ( (self.config.minDate !=null && cur_date < self.config.minDate ) || (self.config.maxDate != null && cur_date >= self.config.maxDate));
+
+            today = (!self.selectedDateObj && cur_date.valueOf() === currentDate.valueOf() ) ? ' today' : '';
+
+            selected = self.selectedDateObj && cur_date.valueOf() === self.selectedDateObj.valueOf() ? ' selected' : '';
+
+
+
+            var date_is_disabled = self.config.disable && isDisabled( cur_date  );
+
+            var date_outside_minmax = (self.config.minDate && cur_date < self.config.minDate ) || (self.config.maxDate && cur_date >= self.config.maxDate);
 
             disabled = (date_is_disabled || date_outside_minmax) ? " disabled" : "";
 
@@ -289,7 +262,7 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     updateNavigationCurrentMonth = function () {
-        navigationCurrentMonth.innerHTML = date.month.string() + ' ' + self.currentYearView;
+        navigationCurrentMonth.innerHTML = '<span>' + monthToStr(self.currentMonthView, false) + '</span> ' + self.currentYearView;
     };
 
     buildMonthNavigation = function () {
@@ -320,20 +293,17 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     documentClick = function (event) {
-        var parent;
-        if (event.target !== self.element && event.target !== wrapperElement) {
-            parent = event.target.parentNode;
-            if (parent !== wrapperElement) {
-                while (parent !== wrapperElement) {
-                    parent = parent.parentNode;
-                    if (parent === null) {
-                        close();
-                        break;
-                    }
-                }
-            }
-        }
+       if (!wrapperElement.contains(event.target))
+        close();
     };
+
+    changeMonth = function(to)
+    {
+        (to === 'prev') ?  self.currentMonthView-- : self.currentMonthView++;
+        handleYearChange();
+        updateNavigationCurrentMonth();
+        buildDays();
+    }
 
     calendarClick = function (event) {
         var target = event.target,
@@ -342,26 +312,21 @@ flatpickr.init = function (element, instanceConfig) {
 
         if (targetClass) {
             if (targetClass === 'flatpickr-prev-month' || targetClass === 'flatpickr-next-month') {
+                targetClass === 'flatpickr-prev-month' ?  ( changeMonth('prev') ) : ( changeMonth('next') );
 
-            	(targetClass === 'flatpickr-prev-month') ?  self.currentMonthView-- : self.currentMonthView++;
 
-                handleYearChange();
-                updateNavigationCurrentMonth();
-                buildDays();
 
             } else if (targetClass === 'flatpickr-day' && !self.hasClass(target.parentNode, 'disabled')) {
 
-                self.selectedDate = {
-                    day: parseInt(target.innerHTML, 10),
-                    month: self.currentMonthView,
-                    year: self.currentYearView
-                };
 
-                currentTimestamp = new Date(self.currentYearView, self.currentMonthView, self.selectedDate.day).getTime();
+
+                self.selectedDateObj = new Date(self.currentYearView,self.currentMonthView,parseInt(target.innerHTML, 10) );
+
+                currentTimestamp = new Date(self.currentYearView, self.currentMonthView, parseInt(target.innerHTML, 10)).getTime();
 
                 if (self.config.altInput)
                 {
-                	var alt_format = (self.config.altFormat) ? self.config.altFormat : self.config.dateFormat;
+                    var alt_format = (self.config.altFormat) ? self.config.altFormat : self.config.dateFormat;
                     self.config.altInput.value = formatDate(alt_format, currentTimestamp);
                 }
 
@@ -371,6 +336,7 @@ flatpickr.init = function (element, instanceConfig) {
                 close();
                 buildDays();
                 triggerChange();
+                event.preventDefault();
             }
         }
     };
@@ -394,7 +360,7 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     open = function () {
-    	self.element.blur();
+        self.element.blur();
         self.addEventListener(document, 'click', documentClick, false);
         self.addClass(wrapperElement, 'open');
     };
@@ -406,14 +372,11 @@ flatpickr.init = function (element, instanceConfig) {
 
     triggerChange = function(){
 
-    	if ("createEvent" in document) {
-		    var evt = document.createEvent("HTMLEvents");
-		    evt.initEvent("change", false, true);
-		    self.element.dispatchEvent(evt);
-		}
-		else
-	    	self.element.fireEvent("onchange");
-	}
+        "createEvent" in document
+            ? ( element.dispatchEvent( new Event("change") ) )
+            : ( element.fireEvent("onchange") );
+
+    }
 
     destroy = function () {
         var parent,
@@ -431,41 +394,38 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     init = function () {
-        var config,
-            parsedDate;
+        var config, parsedDate, D;
 
         self.config = {};
         self.destroy = destroy;
 
-        for (config in defaultConfig) {
+        for (config in defaultConfig)
             self.config[config] = instanceConfig[config] || defaultConfig[config];
-        }
 
         self.element = element;
 
-        if (self.element.value) {
-            parsedDate = Date.parse(self.element.value);
-        }
+        self.element.value && (parsedDate = Date.parse(self.element.value) );
 
-        if (parsedDate && !isNaN(parsedDate)) {
-            parsedDate = new Date(parsedDate);
-            self.selectedDate = {
-                day: parsedDate.getDate(),
-                month: parsedDate.getMonth(),
-                year: parsedDate.getFullYear()
-            };
-            self.currentYearView = self.selectedDate.year;
-            self.currentMonthView = self.selectedDate.month;
-            self.currentDayView = self.selectedDate.day;
-        } else {
-            self.selectedDate = null;
-            self.currentYearView = date.current.year();
-            self.currentMonthView = date.current.month.integer();
-            self.currentDayView = date.current.day();
-        }
+        D =  currentDate;
 
-        if (self.config.minDate != null)
-        	self.currentMonthView = self.config.minDate.getMonth();
+       (parsedDate && !isNaN(parsedDate)) && ( D = self.selectedDateObj = new Date(parsedDate) )
+
+
+        self.currentYearView = D.getFullYear();
+        self.currentMonthView = D.getMonth();
+        self.currentDayView = D.getDate();
+
+
+        typeof self.config.minDate === 'string' && (self.config.minDate = new Date(self.config.minDate));
+        typeof self.config.maxDate === 'string' && (self.config.maxDate = new Date(self.config.maxDate));
+
+        // jump to minDate's month
+        self.config.minDate && ( self.currentMonthView = self.config.minDate.getMonth() );
+
+        self.config.minDate && ( self.config.minDate.setHours(0,0,0,0) );
+        self.config.maxDate && ( self.config.maxDate.setHours(0,0,0,0) );
+
+        currentDate.setHours(0,0,0,0);
 
         wrap();
         buildCalendar();
@@ -473,15 +433,11 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     self.redraw = function(){
-    	flatpickr(self.element, self.config);
+        flatpickr(self.element, self.config);
     }
 
-    self.set = function(key, value)
-    {
-    	if (key in self.config)
-    		self.config[key] = value;
-
-    	self.redraw();
+    self.set = function(key, value){
+        key in self.config && (self.config[key] = value , self.redraw() );
     }
 
     init();
