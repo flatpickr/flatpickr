@@ -60,7 +60,8 @@
 
 .flatpickr-calendar .flatpickr-prev-month:hover,
 .flatpickr-calendar .flatpickr-next-month:hover {
-	color: #c77405;
+	color: #f64747;
+
 }
 
 .flatpickr-calendar table {
@@ -107,14 +108,14 @@
 }
 
 .flatpickr-calendar .today .flatpickr-day {
-	background-color: #f64747;
+	background-color: #446CB3;
 	color: #fff;
 	border-radius: 150px;
 }
 
 .flatpickr-calendar .selected .flatpickr-day {
 	background-color: #446CB3;
-	color: #f6f6f6;
+	color: #fff;
 	border-radius: 150px
 }
 

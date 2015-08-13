@@ -52,6 +52,7 @@ var flatpickr = function (selector, config) {
  */
 flatpickr.init = function (element, instanceConfig) {
     'use strict';
+
     var self = this,
         defaultConfig = {
             dateFormat: 'F j, Y',
@@ -60,7 +61,9 @@ flatpickr.init = function (element, instanceConfig) {
             minDate: null,
             maxDate: null,
             disable: null,
-            shorthandCurrentMonth: false
+            shorthandCurrentMonth: false,
+            prevArrow: "&lt;",
+            nextArrow: "&gt;"
         },
         calendarContainer = document.createElement('div'),
         navigationCurrentMonth = document.createElement('span'),
@@ -72,7 +75,6 @@ flatpickr.init = function (element, instanceConfig) {
         date,
         formatDate,
         monthToStr,
-        isSpecificDay,
         isDisabled,
         buildWeekdays,
         buildDays,
@@ -87,7 +89,9 @@ flatpickr.init = function (element, instanceConfig) {
         close,
         destroy,
         init,
-        triggerChange;
+        triggerChange,
+        changeMonth,
+        getDaysinMonth;
 
     calendarContainer.className = 'flatpickr-calendar';
     navigationCurrentMonth.className = 'flatpickr-current-month';
@@ -100,34 +104,11 @@ flatpickr.init = function (element, instanceConfig) {
         wrapperElement.appendChild(self.element);
     };
 
-    date = {
-        current: {
-            year: function () {
-                return currentDate.getFullYear();
-            },
-            month: {
-                integer: function () {
-                    return currentDate.getMonth();
-                },
-                string: function (shorthand) {
-                    var month = currentDate.getMonth();
-                    return monthToStr(month, shorthand);
-                }
-            },
-            day: function () {
-                return currentDate.getDate();
-            }
-        },
-        month: {
-            string: function () {
-                return monthToStr(self.currentMonthView, self.config.shorthandCurrentMonth);
-            },
-            numDays: function () {
-                // checks to see if february is a leap year otherwise return the respective # of days
-                return self.currentMonthView === 1 && (((self.currentYearView % 4 === 0) && (self.currentYearView % 100 !== 0)) || (self.currentYearView % 400 === 0)) ? 29 : self.l10n.daysInMonth[self.currentMonthView];
-            }
-        }
-    };
+
+
+    getDaysinMonth = function(){
+        return self.currentMonthView === 1 && (((self.currentYearView % 4 === 0) && (self.currentYearView % 100 !== 0)) || (self.currentYearView % 400 === 0)) ? 29 : self.l10n.daysInMonth[self.currentMonthView];
+    }
 
     formatDate = function (dateFormat, milliseconds) {
         var formattedDate = '',
@@ -177,10 +158,8 @@ flatpickr.init = function (element, instanceConfig) {
         self.forEach(formatPieces, function (formatPiece, index) {
             if (formats[formatPiece] && formatPieces[index - 1] !== '\\') {
                 formattedDate += formats[formatPiece]();
-            } else {
-                if (formatPiece !== '\\') {
+            } else if (formatPiece !== '\\') {
                     formattedDate += formatPiece;
-                }
             }
         });
 
@@ -195,9 +174,7 @@ flatpickr.init = function (element, instanceConfig) {
         return self.l10n.months.longhand[date];
     };
 
-    isSpecificDay = function (day, month, year, comparison) {
-        return day === comparison && self.currentMonthView === month && self.currentYearView === year;
-    };
+
 
     buildWeekdays = function () {
         var weekdayContainer = document.createElement('thead'),
@@ -228,7 +205,7 @@ flatpickr.init = function (element, instanceConfig) {
 
     buildDays = function () {
         var firstOfMonth = new Date(self.currentYearView, self.currentMonthView, 1).getDay(),
-            numDays = date.month.numDays(),
+            numDays = getDaysinMonth(),
             calendarFragment = document.createDocumentFragment(),
             row = document.createElement('tr'),
             dayCount,
@@ -236,27 +213,21 @@ flatpickr.init = function (element, instanceConfig) {
             today = '',
             selected = '',
             disabled = '',
-            currentTimestamp;
+            currentTimestamp,
+            cur_date;
 
         // Offset the first day by the specified amount
         firstOfMonth -= self.l10n.firstDayOfWeek;
-        if (firstOfMonth < 0) {
-            firstOfMonth += 7;
-        }
+        firstOfMonth < 0 && (firstOfMonth += 7);
+
+        // Add spacer to line up the first day of the month correctly
+        firstOfMonth > 0 && (row.innerHTML += '<td colspan="' + firstOfMonth + '">&nbsp;</td>');
 
         dayCount = firstOfMonth;
         calendarBody.innerHTML = '';
 
-        // Add spacer to line up the first day of the month correctly
-        if (firstOfMonth > 0) {
-            row.innerHTML += '<td colspan="' + firstOfMonth + '">&nbsp;</td>';
-        }
 
-         if( self.config.minDate != null)
-            self.config.minDate.setHours(0,0,0,0);
 
-        if( self.config.maxDate != null)
-            self.config.maxDate.setHours(0,0,0,0);
 
         // Start at 1 since there is no 0th day
         for (dayNumber = 1; dayNumber <= numDays; dayNumber++) {
@@ -267,14 +238,18 @@ flatpickr.init = function (element, instanceConfig) {
                 dayCount = 0;
             }
 
-            today = (isSpecificDay(date.current.day(), date.current.month.integer(), date.current.year(), dayNumber) && self.selectedDate == null) ? ' today' : '';
-            if (self.selectedDate) {
-                selected = isSpecificDay(self.selectedDate.day, self.selectedDate.month, self.selectedDate.year, dayNumber) ? ' selected' : '';
-            }
+            cur_date = new Date(self.currentYearView, self.currentMonthView, dayNumber);
 
-            var cur_date = new Date(self.currentYearView, self.currentMonthView, dayNumber);
-            var date_is_disabled = (self.config.disable != null && isDisabled( cur_date  ));
-            var date_outside_minmax = ( (self.config.minDate !=null && cur_date < self.config.minDate ) || (self.config.maxDate != null && cur_date >= self.config.maxDate));
+
+            today = (!self.selectedDateObj && cur_date.valueOf() === currentDate.valueOf() ) ? ' today' : '';
+
+            selected = self.selectedDateObj && cur_date.valueOf() === self.selectedDateObj.valueOf() ? ' selected' : '';
+
+
+
+            var date_is_disabled = (self.config.disable && isDisabled( cur_date  ));
+
+            var date_outside_minmax = (self.config.minDate && cur_date < self.config.minDate ) || (self.config.maxDate && cur_date >= self.config.maxDate);
 
             disabled = (date_is_disabled || date_outside_minmax) ? " disabled" : "";
 
@@ -289,15 +264,15 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     updateNavigationCurrentMonth = function () {
-        navigationCurrentMonth.innerHTML = date.month.string() + ' ' + self.currentYearView;
+        navigationCurrentMonth.innerHTML = '<span>' + monthToStr(currentDate.getMonth(), false) + '</span> ' + self.currentYearView;
     };
 
     buildMonthNavigation = function () {
         var months = document.createElement('div'),
             monthNavigation;
 
-        monthNavigation  = '<span class="flatpickr-prev-month">&lt;</span>';
-        monthNavigation += '<span class="flatpickr-next-month">&gt;</span>';
+        monthNavigation  = '<span class="flatpickr-prev-month">' + self.config.prevArrow + '</span>';
+        monthNavigation += '<span class="flatpickr-next-month">' + self.config.nextArrow + '</span>';
 
         months.className = 'flatpickr-months';
         months.innerHTML = monthNavigation;
@@ -335,6 +310,14 @@ flatpickr.init = function (element, instanceConfig) {
         }
     };
 
+    changeMonth = function(to)
+    {
+        (to === '-') ?  self.currentMonthView-- : self.currentMonthView++;
+        handleYearChange();
+        updateNavigationCurrentMonth();
+        buildDays();
+    }
+
     calendarClick = function (event) {
         var target = event.target,
             targetClass = target.className,
@@ -342,22 +325,17 @@ flatpickr.init = function (element, instanceConfig) {
 
         if (targetClass) {
             if (targetClass === 'flatpickr-prev-month' || targetClass === 'flatpickr-next-month') {
+                targetClass === 'flatpickr-prev-month' ?  ( changeMonth('-') ) : ( changeMonth('+') );
 
-                (targetClass === 'flatpickr-prev-month') ?  self.currentMonthView-- : self.currentMonthView++;
 
-                handleYearChange();
-                updateNavigationCurrentMonth();
-                buildDays();
 
             } else if (targetClass === 'flatpickr-day' && !self.hasClass(target.parentNode, 'disabled')) {
 
-                self.selectedDate = {
-                    day: parseInt(target.innerHTML, 10),
-                    month: self.currentMonthView,
-                    year: self.currentYearView
-                };
 
-                currentTimestamp = new Date(self.currentYearView, self.currentMonthView, self.selectedDate.day).getTime();
+
+                self.selectedDateObj = new Date(self.currentYearView,self.currentMonthView,parseInt(target.innerHTML, 10) );
+
+                currentTimestamp = new Date(self.currentYearView, self.currentMonthView, parseInt(target.innerHTML, 10)).getTime();
 
                 if (self.config.altInput)
                 {
@@ -407,13 +385,10 @@ flatpickr.init = function (element, instanceConfig) {
 
     triggerChange = function(){
 
-        if ("createEvent" in document) {
-            var evt = document.createEvent("HTMLEvents");
-            evt.initEvent("change", false, true);
-            self.element.dispatchEvent(evt);
-        }
-        else
-            self.element.fireEvent("onchange");
+        "createEvent" in document
+            ? ( element.dispatchEvent( new Event("change") ) )
+            : ( element.fireEvent("onchange") );
+
     }
 
     destroy = function () {
@@ -432,41 +407,38 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     init = function () {
-        var config,
-            parsedDate;
+        var config, parsedDate;
 
         self.config = {};
         self.destroy = destroy;
 
-        for (config in defaultConfig) {
+        for (config in defaultConfig)
             self.config[config] = instanceConfig[config] || defaultConfig[config];
-        }
 
         self.element = element;
 
-        if (self.element.value) {
-            parsedDate = Date.parse(self.element.value);
+        self.element.value && (parsedDate = Date.parse(self.element.value) );
+
+
+        if (parsedDate && !isNaN(parsedDate))
+            self.selectedDateObj = new Date(parsedDate);
+
+        else {
+            self.currentYearView = currentDate.getFullYear();
+            self.currentMonthView = currentDate.getMonth;
+            self.currentDayView = currentDate.getDate();
         }
 
-        if (parsedDate && !isNaN(parsedDate)) {
-            parsedDate = new Date(parsedDate);
-            self.selectedDate = {
-                day: parsedDate.getDate(),
-                month: parsedDate.getMonth(),
-                year: parsedDate.getFullYear()
-            };
-            self.currentYearView = self.selectedDate.year;
-            self.currentMonthView = self.selectedDate.month;
-            self.currentDayView = self.selectedDate.day;
-        } else {
-            self.selectedDate = null;
-            self.currentYearView = date.current.year();
-            self.currentMonthView = date.current.month.integer();
-            self.currentDayView = date.current.day();
-        }
+        typeof self.config.minDate === 'string' && (self.config.minDate = new Date(self.config.minDate));
+        typeof self.config.maxDate === 'string' && (self.config.maxDate = new Date(self.config.maxDate));
 
-        if (self.config.minDate != null)
-            self.currentMonthView = self.config.minDate.getMonth();
+        // jump to minDate's month
+        self.config.minDate && ( self.currentMonthView = self.config.minDate.getMonth() );
+
+        self.config.minDate && ( self.config.minDate.setHours(0,0,0,0) );
+        self.config.maxDate && ( self.config.maxDate.setHours(0,0,0,0) );
+
+        currentDate.setHours(0,0,0,0);
 
         wrap();
         buildCalendar();
