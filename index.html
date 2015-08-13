@@ -7,7 +7,6 @@
 <link rel="stylesheet" type="text/css" href="assets/site.css">
 <link rel="stylesheet" type="text/css" href="assets/prettify.css">
 <link rel="stylesheet" type="text/css" href="src/flatpickr.css">
-<link rel="stylesheet" type="text/css" href="http://fortawesome.github.io/Font-Awesome/assets/font-awesome/css/font-awesome.css">
 <link href='http://fonts.googleapis.com/css?family=Nunito:700' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
 
@@ -272,7 +271,7 @@ check_out.element.addEventListener("change", function(){
 
 
 
-            var check_in = flatpickr("#check_in_date", { minDate: new Date(), prevArrow: "<i class='fa fa-chevron-left'></i>", nextArrow: "<i class='fa fa-chevron-right'></i>" });
+            var check_in = flatpickr("#check_in_date", { minDate: new Date() });
             var check_out = flatpickr("#check_out_date", { minDate: new Date() });
 
             check_in.element.addEventListener("change", function(){

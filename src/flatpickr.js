@@ -62,8 +62,6 @@ flatpickr.init = function (element, instanceConfig) {
             maxDate: null,
             disable: null,
             shorthandCurrentMonth: false,
-            prevArrow: "&lt;",
-            nextArrow: "&gt;"
         },
         calendarContainer = document.createElement('div'),
         navigationCurrentMonth = document.createElement('span'),
@@ -247,7 +245,7 @@ flatpickr.init = function (element, instanceConfig) {
 
 
 
-            var date_is_disabled = (self.config.disable && isDisabled( cur_date  ));
+            var date_is_disabled = self.config.disable && isDisabled( cur_date  );
 
             var date_outside_minmax = (self.config.minDate && cur_date < self.config.minDate ) || (self.config.maxDate && cur_date >= self.config.maxDate);
 
@@ -271,8 +269,8 @@ flatpickr.init = function (element, instanceConfig) {
         var months = document.createElement('div'),
             monthNavigation;
 
-        monthNavigation  = '<span class="flatpickr-prev-month">' + self.config.prevArrow + '</span>';
-        monthNavigation += '<span class="flatpickr-next-month">' + self.config.nextArrow + '</span>';
+        monthNavigation  = '<span class="flatpickr-prev-month">&lt;</span>';
+        monthNavigation += '<span class="flatpickr-next-month">&gt;</span>';
 
         months.className = 'flatpickr-months';
         months.innerHTML = monthNavigation;
@@ -295,19 +293,8 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     documentClick = function (event) {
-        var parent;
-        if (event.target !== self.element && event.target !== wrapperElement) {
-            parent = event.target.parentNode;
-            if (parent !== wrapperElement) {
-                while (parent !== wrapperElement) {
-                    parent = parent.parentNode;
-                    if (parent === null) {
-                        close();
-                        break;
-                    }
-                }
-            }
-        }
+       if (!wrapperElement.contains(event.target))
+        close();
     };
 
     changeMonth = function(to)
@@ -407,7 +394,7 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     init = function () {
-        var config, parsedDate, t;
+        var config, parsedDate, D;
 
         self.config = {};
         self.destroy = destroy;
@@ -419,19 +406,14 @@ flatpickr.init = function (element, instanceConfig) {
 
         self.element.value && (parsedDate = Date.parse(self.element.value) );
 
+        D =  currentDate;
 
-       if (parsedDate && !isNaN(parsedDate))
-       {
-            self.selectedDateObj = new Date(parsedDate);
-            t = self.selectedDateObj;
-       }
-       else
-        t = currentDate;
+       (parsedDate && !isNaN(parsedDate)) && ( D = self.selectedDateObj = new Date(parsedDate) )
 
 
-        self.currentYearView = t.getFullYear();
-        self.currentMonthView = t.getMonth();
-        self.currentDayView = t.getDate();
+        self.currentYearView = D.getFullYear();
+        self.currentMonthView = D.getMonth();
+        self.currentDayView = D.getDate();
 
 
         typeof self.config.minDate === 'string' && (self.config.minDate = new Date(self.config.minDate));
@@ -454,12 +436,8 @@ flatpickr.init = function (element, instanceConfig) {
         flatpickr(self.element, self.config);
     }
 
-    self.set = function(key, value)
-    {
-        if (key in self.config)
-            self.config[key] = value;
-
-        self.redraw();
+    self.set = function(key, value){
+        key in self.config && (self.config[key] = value , self.redraw() );
     }
 
     init();
