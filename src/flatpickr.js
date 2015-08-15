@@ -241,7 +241,7 @@ flatpickr.init = function (element, instanceConfig) {
 
             var date_outside_minmax = (self.config.minDate && cur_date < self.config.minDate ) || (self.config.maxDate && cur_date >= self.config.maxDate);
 
-            disabled = (date_is_disabled || date_outside_minmax) ? " disabled" : "";
+            disabled = (date_is_disabled || date_outside_minmax) ? " disabled" : "slot";
 
 
 
@@ -298,24 +298,31 @@ flatpickr.init = function (element, instanceConfig) {
     }
 
     calendarClick = function (event) {
+        event.preventDefault();
+        var t = event.target;
 
-        var selDate = parseInt( event.target.childNodes[0].innerHTML || event.target.innerHTML, 10),
+        if ( t.classList.contains('slot') || t.parentNode.classList.contains('slot') )
+        {
+            var selDate = parseInt( t.childNodes[0].innerHTML || t.innerHTML, 10),
             currentTimestamp;
 
-        self.selectedDateObj = new Date(self.currentYearView,self.currentMonthView,selDate ),
-        currentTimestamp = self.selectedDateObj.getTime();
+            self.selectedDateObj = new Date(self.currentYearView,self.currentMonthView,selDate ),
+            currentTimestamp = self.selectedDateObj.getTime();
 
-        if (self.config.altInput)
-            self.config.altInput.value = formatDate(self.config.altFormat || self.config.dateFormat, currentTimestamp);
+            if (self.config.altInput)
+                self.config.altInput.value = formatDate(self.config.altFormat || self.config.dateFormat, currentTimestamp);
 
 
 
-        self.element.value = formatDate(self.config.dateFormat, currentTimestamp);
+            self.element.value = formatDate(self.config.dateFormat, currentTimestamp);
 
-        close();
-        buildDays();
-        triggerChange();
-        event.preventDefault();
+            close();
+            buildDays();
+            triggerChange();
+        }
+
+
+
 
 
     };
@@ -339,9 +346,8 @@ flatpickr.init = function (element, instanceConfig) {
         wrapperElement.querySelector(".flatpickr-prev-month").addEventListener('click', function(){ changeMonth('prev') });
         wrapperElement.querySelector(".flatpickr-next-month").addEventListener('click', function(){ changeMonth('next') });
 
-        self.forEach( wrapperElement.querySelectorAll('tbody td'), function(slot){
-            !slot.classList.contains('disabled') && ( slot.addEventListener('click', calendarClick) );
-        } )
+        calendar.addEventListener('click', calendarClick);
+
     };
 
     open = function () {
