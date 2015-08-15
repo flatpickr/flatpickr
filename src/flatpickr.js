@@ -24,16 +24,14 @@ var flatpickr = function (selector, config) {
     flatpickr.prototype = flatpickr.init.prototype;
 
     createInstance = function (element) {
-        if (element._flatpickr) {
-            element._flatpickr.destroy();
-        }
+        element._flatpickr && ( element._flatpickr.destroy() );
         element._flatpickr = new flatpickr.init(element, config);
         return element._flatpickr;
     };
 
-    if (selector.nodeName) {
-        return createInstance(selector);
-    }
+    // if a node is passed
+    selector.nodeName && ( return createInstance(selector) )
+
 
     elements = document.querySelectorAll(selector);
 
@@ -41,9 +39,10 @@ var flatpickr = function (selector, config) {
         return createInstance(elements[0]);
     }
 
-    for (i = 0; i < elements.length; i++) {
-        instances.push(createInstance(elements[i]));
-    }
+    i = elements.length;
+
+    do { instances.push(createInstance(elements[i])); } while(i--);
+
     return instances;
 };
 
@@ -254,7 +253,7 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     updateNavigationCurrentMonth = function () {
-        navigationCurrentMonth.innerHTML = '<span>' + monthToStr(self.currentMonthView, false) + '</span> ' + self.currentYearView;
+        navigationCurrentMonth.innerHTML = '<span>' + monthToStr(self.currentMonthView, false) + '</span>, ' + self.currentYearView;
     };
 
     buildMonthNavigation = function () {
