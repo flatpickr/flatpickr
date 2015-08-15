@@ -241,7 +241,7 @@ flatpickr.init = function (element, instanceConfig) {
 
             var date_outside_minmax = (self.config.minDate && cur_date < self.config.minDate ) || (self.config.maxDate && cur_date >= self.config.maxDate);
 
-            disabled = (date_is_disabled || date_outside_minmax) ? " disabled" : "slot";
+            disabled = (date_is_disabled || date_outside_minmax) ? " disabled" : " slot";
 
 
 
@@ -399,6 +399,7 @@ flatpickr.init = function (element, instanceConfig) {
 
         D =  currentDate;
 
+        console.log((parsedDate && !isNaN(parsedDate)));
        (parsedDate && !isNaN(parsedDate)) && ( D = self.selectedDateObj = new Date(parsedDate) )
 
 
