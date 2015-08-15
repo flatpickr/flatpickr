@@ -54,15 +54,6 @@ flatpickr.init = function (element, instanceConfig) {
     'use strict';
 
     var self = this,
-        defaultConfig = {
-            dateFormat: 'F j, Y',
-            altFormat: null,
-            altInput: null,
-            minDate: null,
-            maxDate: null,
-            disable: null,
-            shorthandCurrentMonth: false,
-        },
         calendarContainer = document.createElement('div'),
         navigationCurrentMonth = document.createElement('span'),
         calendar = document.createElement('table'),
@@ -269,8 +260,8 @@ flatpickr.init = function (element, instanceConfig) {
         var months = document.createElement('div'),
             monthNavigation;
 
-        monthNavigation  = '<span class="flatpickr-prev-month">&lt;</span>';
-        monthNavigation += '<span class="flatpickr-next-month">&gt;</span>';
+        monthNavigation  = '<span class="flatpickr-prev-month">' + self.config.prevArrow + '</span>'
+                         + '<span class="flatpickr-next-month">' + self.config.nextArrow + '</span>';
 
         months.className = 'flatpickr-months';
         months.innerHTML = monthNavigation;
@@ -311,12 +302,7 @@ flatpickr.init = function (element, instanceConfig) {
             currentTimestamp;
 
         if (targetClass) {
-            if (targetClass === 'flatpickr-prev-month' || targetClass === 'flatpickr-next-month') {
-                targetClass === 'flatpickr-prev-month' ?  ( changeMonth('prev') ) : ( changeMonth('next') );
-
-
-
-            } else if (targetClass === 'flatpickr-day' && !self.hasClass(target.parentNode, 'disabled')) {
+             if (targetClass === 'flatpickr-day' && !self.hasClass(target.parentNode, 'disabled')) {
 
 
 
@@ -357,6 +343,9 @@ flatpickr.init = function (element, instanceConfig) {
 
         self.addEventListener(self.element, openEvent, open, false);
         self.addEventListener(calendarContainer, 'mousedown', calendarClick, false);
+
+        wrapperElement.querySelector(".flatpickr-prev-month").addEventListener('click', function(){ changeMonth('prev') });
+        //wrapperElement.querySelector(".flatpickr-next-month").addEventListener('click', function(){ changeMonth('next') });
     };
 
     open = function () {
@@ -399,8 +388,8 @@ flatpickr.init = function (element, instanceConfig) {
         self.config = {};
         self.destroy = destroy;
 
-        for (config in defaultConfig)
-            self.config[config] = instanceConfig[config] || defaultConfig[config];
+        for (config in self.defaultConfig)
+            self.config[config] = instanceConfig[config] || self.defaultConfig[config];
 
         self.element = element;
 
@@ -446,6 +435,17 @@ flatpickr.init = function (element, instanceConfig) {
 };
 
 flatpickr.init.prototype = {
+    defaultConfig : {
+            dateFormat: 'F j, Y',
+            altFormat: null,
+            altInput: null,
+            minDate: null,
+            maxDate: null,
+            disable: null,
+            shorthandCurrentMonth: false,
+            prevArrow: '&lt;',
+            nextArrow: '&gt;',
+    },
     hasClass: function (element, className) { return element.classList.contains(className); },
     addClass: function (element, className) { element.classList.add(className); },
     removeClass: function (element, className) { element.classList.remove(className); },

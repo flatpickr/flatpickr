@@ -5,6 +5,7 @@
 <title>flatpickr - super lightweight vanilla javascript flat design date picker</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" type="text/css" href="assets/site.css">
+<link rel="stylesheet" type="text/css" href="assets/icons.css">
 <link rel="stylesheet" type="text/css" href="assets/prettify.css">
 <link rel="stylesheet" type="text/css" href="src/flatpickr.css">
 <link href='http://fonts.googleapis.com/css?family=Nunito:700' rel='stylesheet' type='text/css'>
@@ -211,6 +212,9 @@ check_out.element.addEventListener("change", function(){
         <script>
             var $ = document.querySelector.bind(document);
             var $$ = document.querySelectorAll.bind(document);
+            console.log(flatpickr);
+            flatpickr.init.prototype.defaultConfig.prevArrow = "<i class='icon i-angle-left'></i>";
+            flatpickr.init.prototype.defaultConfig.nextArrow = "<i class='icon i-angle-right'></i>";
 
             //Regular flatpickr
             var reg = flatpickr('#flatpickr');

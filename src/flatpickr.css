@@ -82,7 +82,8 @@
 .flatpickr-calendar th {
 	text-align: center;
     padding: 5px;
-    font-weight: bold
+    font-weight: bold;
+    color: #999
 }
 
 .flatpickr-calendar td {
@@ -108,8 +109,9 @@
 }
 
 .flatpickr-calendar .today .flatpickr-day {
-	background-color: #446CB3;
-	color: #fff;
+	/*background-color: #446CB3;
+	color: #fff;*/
+	border: 1px solid #f64747;
 	border-radius: 150px;
 }
 
@@ -122,6 +124,6 @@
 .flatpickr-calendar .disabled .flatpickr-day,
 .flatpickr-calendar .disabled .flatpickr-day:hover {
 	background: transparent;
-    color: #bbb;
+    color: #ddd;
     cursor: default;
 }
