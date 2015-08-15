@@ -345,7 +345,7 @@ flatpickr.init = function (element, instanceConfig) {
         self.addEventListener(calendarContainer, 'mousedown', calendarClick, false);
 
         wrapperElement.querySelector(".flatpickr-prev-month").addEventListener('click', function(){ changeMonth('prev') });
-        //wrapperElement.querySelector(".flatpickr-next-month").addEventListener('click', function(){ changeMonth('next') });
+        wrapperElement.querySelector(".flatpickr-next-month").addEventListener('click', function(){ changeMonth('next') });
     };
 
     open = function () {
