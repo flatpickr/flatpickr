@@ -155,5 +155,7 @@ pre
 
 .flatpickr-months i
 {
-    font-size: 1.25rem
+    font-size: 1.25rem;
+    position: relative;
+    bottom: -2px;
 }
