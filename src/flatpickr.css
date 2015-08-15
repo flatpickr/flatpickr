@@ -23,16 +23,11 @@
     padding: 3px;
     border: 1px solid #ddd;
     max-height: 0;
-    -webkit-transition: all 150ms cubic-bezier(0.075, 0.820, 0.165, 1.000);
-    -moz-transition: all 150ms cubic-bezier(0.075, 0.820, 0.165, 1.000);
-    -o-transition: all 150ms cubic-bezier(0.075, 0.820, 0.165, 1.000);
-    transition: all 150ms cubic-bezier(0.075, 0.820, 0.165, 1.000);
     z-index: 0;
-	-webkit-transition-timing-function: cubic-bezier(0.075, 0.820, 0.165, 1.000);
-	-moz-transition-timing-function: cubic-bezier(0.075, 0.820, 0.165, 1.000);
-	-o-transition-timing-function: cubic-bezier(0.075, 0.820, 0.165, 1.000);
+    -webkit-transition: all 150ms cubic-bezier(0.075, 0.820, 0.165, 1.000);
+    transition: all 150ms cubic-bezier(0.075, 0.820, 0.165, 1.000);
+    -webkit-transition-timing-function: cubic-bezier(0.075, 0.820, 0.165, 1.000);
     transition-timing-function: cubic-bezier(0.075, 0.820, 0.165, 1.000);
-
 }
 
 .open .flatpickr-calendar
@@ -115,7 +110,6 @@
 {
     background: #e6e6e6;
     border-color: #e6e6e6;
-
 }
 
 .today .flatpickr-day
@@ -136,9 +130,9 @@ td.today:hover .flatpickr-day
     color: #fff;
     border-color: #446CB3;
 }
-.disabled,
-td.disabled:hover .flatpickr-day,
-.disabled .flatpickr-day
+
+.disabled, .disabled .flatpickr-day,
+td.disabled:hover .flatpickr-day
 {
     background: transparent;
     border-color: transparent;
