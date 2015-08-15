@@ -212,9 +212,10 @@ check_out.element.addEventListener("change", function(){
         <script>
             var $ = document.querySelector.bind(document);
             var $$ = document.querySelectorAll.bind(document);
-            console.log(flatpickr);
+
             flatpickr.init.prototype.defaultConfig.prevArrow = "<i class='icon i-angle-left'></i>";
             flatpickr.init.prototype.defaultConfig.nextArrow = "<i class='icon i-angle-right'></i>";
+            flatpickr.init.prototype.l10n.firstDayOfWeek = 1;
 
             //Regular flatpickr
             var reg = flatpickr('#flatpickr');
