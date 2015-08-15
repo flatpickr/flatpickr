@@ -88,7 +88,7 @@
     color: #999;
 }
 
-.flatpickr-calendar tbody td
+.flatpickr-calendar .slot
 {
 	cursor: pointer;
 }
@@ -131,8 +131,9 @@ td.today:hover .flatpickr-day
     border-color: #446CB3;
 }
 
-.disabled, .disabled .flatpickr-day,
-td.disabled:hover .flatpickr-day
+.flatpickr-calendar .disabled,
+.flatpickr-calendar .disabled .flatpickr-day,
+.flatpickr-calendar .disabled:hover .flatpickr-day
 {
     background: transparent;
     border-color: transparent;
