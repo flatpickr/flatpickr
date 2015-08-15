@@ -37,13 +37,12 @@ var flatpickr = function (selector, config) {
 
     elements = document.querySelectorAll(selector);
 
-    if (elements.length === 1) {
+    if (elements.length === 1)
         return createInstance(elements[0]);
-    }
 
-    for (i = 0; i < elements.length; i++) {
-        instances.push(createInstance(elements[i]));
-    }
+    i = elements.length;
+    do { instances.push(createInstance(elements[i]));  } while(i--);
+
     return instances;
 };
 
@@ -399,7 +398,6 @@ flatpickr.init = function (element, instanceConfig) {
 
         D =  currentDate;
 
-        console.log((parsedDate && !isNaN(parsedDate)));
        (parsedDate && !isNaN(parsedDate)) && ( D = self.selectedDateObj = new Date(parsedDate) )
 
 
