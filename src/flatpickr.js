@@ -35,7 +35,7 @@ var flatpickr = function (selector, config) {
         return createInstance(selector);
     }
 
-    elements = flatpickr.prototype.querySelectorAll(selector);
+    elements = document.querySelectorAll(selector);
 
     if (elements.length === 1) {
         return createInstance(elements[0]);
@@ -54,15 +54,6 @@ flatpickr.init = function (element, instanceConfig) {
     'use strict';
 
     var self = this,
-        defaultConfig = {
-            dateFormat: 'F j, Y',
-            altFormat: null,
-            altInput: null,
-            minDate: null,
-            maxDate: null,
-            disable: null,
-            shorthandCurrentMonth: false,
-        },
         calendarContainer = document.createElement('div'),
         navigationCurrentMonth = document.createElement('span'),
         calendar = document.createElement('table'),
@@ -177,7 +168,8 @@ flatpickr.init = function (element, instanceConfig) {
     buildWeekdays = function () {
         var weekdayContainer = document.createElement('thead'),
             firstDayOfWeek = self.l10n.firstDayOfWeek,
-            weekdays = self.l10n.weekdays.shorthand;
+            weekdays = self.l10n.weekdays.shorthand.slice();
+
 
         if (firstDayOfWeek > 0 && firstDayOfWeek < weekdays.length) {
             weekdays = [].concat(weekdays.splice(firstDayOfWeek, weekdays.length), weekdays.splice(0, firstDayOfWeek));
@@ -269,8 +261,8 @@ flatpickr.init = function (element, instanceConfig) {
         var months = document.createElement('div'),
             monthNavigation;
 
-        monthNavigation  = '<span class="flatpickr-prev-month">&lt;</span>';
-        monthNavigation += '<span class="flatpickr-next-month">&gt;</span>';
+        monthNavigation  = '<span class="flatpickr-prev-month">' + self.config.prevArrow + '</span>'
+                         + '<span class="flatpickr-next-month">' + self.config.nextArrow + '</span>';
 
         months.className = 'flatpickr-months';
         months.innerHTML = monthNavigation;
@@ -306,39 +298,26 @@ flatpickr.init = function (element, instanceConfig) {
     }
 
     calendarClick = function (event) {
-        var target = event.target,
-            targetClass = target.className,
+
+        var selDate = parseInt( event.target.childNodes[0].innerHTML || event.target.innerHTML, 10),
             currentTimestamp;
 
-        if (targetClass) {
-            if (targetClass === 'flatpickr-prev-month' || targetClass === 'flatpickr-next-month') {
-                targetClass === 'flatpickr-prev-month' ?  ( changeMonth('prev') ) : ( changeMonth('next') );
+        self.selectedDateObj = new Date(self.currentYearView,self.currentMonthView,selDate ),
+        currentTimestamp = self.selectedDateObj.getTime();
+
+        if (self.config.altInput)
+            self.config.altInput.value = formatDate(self.config.altFormat || self.config.dateFormat, currentTimestamp);
 
 
 
-            } else if (targetClass === 'flatpickr-day' && !self.hasClass(target.parentNode, 'disabled')) {
+        self.element.value = formatDate(self.config.dateFormat, currentTimestamp);
+
+        close();
+        buildDays();
+        triggerChange();
+        event.preventDefault();
 
 
-
-                self.selectedDateObj = new Date(self.currentYearView,self.currentMonthView,parseInt(target.innerHTML, 10) );
-
-                currentTimestamp = new Date(self.currentYearView, self.currentMonthView, parseInt(target.innerHTML, 10)).getTime();
-
-                if (self.config.altInput)
-                {
-                    var alt_format = (self.config.altFormat) ? self.config.altFormat : self.config.dateFormat;
-                    self.config.altInput.value = formatDate(alt_format, currentTimestamp);
-                }
-
-
-                self.element.value = formatDate(self.config.dateFormat, currentTimestamp);
-
-                close();
-                buildDays();
-                triggerChange();
-                event.preventDefault();
-            }
-        }
     };
 
     buildCalendar = function () {
@@ -355,19 +334,25 @@ flatpickr.init = function (element, instanceConfig) {
     bind = function () {
         var openEvent = (self.element.nodeName === 'INPUT') ? 'focus'  : 'click';
 
-        self.addEventListener(self.element, openEvent, open, false);
-        self.addEventListener(calendarContainer, 'mousedown', calendarClick, false);
+        self.element.addEventListener(openEvent, open, false);
+
+        wrapperElement.querySelector(".flatpickr-prev-month").addEventListener('click', function(){ changeMonth('prev') });
+        wrapperElement.querySelector(".flatpickr-next-month").addEventListener('click', function(){ changeMonth('next') });
+
+        self.forEach( wrapperElement.querySelectorAll('tbody td'), function(slot){
+            !slot.classList.contains('disabled') && ( slot.addEventListener('click', calendarClick) );
+        } )
     };
 
     open = function () {
         self.element.blur();
-        self.addEventListener(document, 'click', documentClick, false);
-        self.addClass(wrapperElement, 'open');
+        document.addEventListener('click', documentClick, false);
+        wrapperElement.classList.add('open');
     };
 
     close = function () {
-        self.removeEventListener(document, 'click', documentClick, false);
-        self.removeClass(wrapperElement, 'open');
+        document.removeEventListener('click', documentClick, false);
+        wrapperElement.classList.remove('open');
     };
 
     triggerChange = function(){
@@ -382,10 +367,10 @@ flatpickr.init = function (element, instanceConfig) {
         var parent,
             element;
 
-        self.removeEventListener(document, 'click', documentClick, false);
-        self.removeEventListener(self.element, 'focus', open, false);
-        self.removeEventListener(self.element, 'blur', close, false);
-        self.removeEventListener(self.element, 'click', open, false);
+        document.removeEventListener('click', documentClick, false);
+        self.element.removeEventListener('focus', open, false);
+        self.element.removeEventListener('blur', close, false);
+        self.element.removeEventListener('click', open, false);
 
         parent = self.element.parentNode;
         parent.removeChild(calendarContainer);
@@ -399,8 +384,8 @@ flatpickr.init = function (element, instanceConfig) {
         self.config = {};
         self.destroy = destroy;
 
-        for (config in defaultConfig)
-            self.config[config] = instanceConfig[config] || defaultConfig[config];
+        for (config in self.defaultConfig)
+            self.config[config] = instanceConfig[config] || self.defaultConfig[config];
 
         self.element = element;
 
@@ -446,18 +431,9 @@ flatpickr.init = function (element, instanceConfig) {
 };
 
 flatpickr.init.prototype = {
-    hasClass: function (element, className) { return element.classList.contains(className); },
-    addClass: function (element, className) { element.classList.add(className); },
-    removeClass: function (element, className) { element.classList.remove(className); },
+
     forEach: function (items, callback) { [].forEach.call(items, callback); },
-    querySelectorAll: document.querySelectorAll.bind(document),
-    isArray: Array.isArray,
-    addEventListener: function (element, type, listener, useCapture) {
-        element.addEventListener(type, listener, useCapture);
-    },
-    removeEventListener: function (element, type, listener, useCapture) {
-        element.removeEventListener(type, listener, useCapture);
-    },
+
     l10n: {
         weekdays: {
             shorthand: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
@@ -469,5 +445,17 @@ flatpickr.init.prototype = {
         },
         daysInMonth: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
         firstDayOfWeek: 0
+    },
+
+    defaultConfig : {
+            dateFormat: 'F j, Y',
+            altFormat: null,
+            altInput: null,
+            minDate: null,
+            maxDate: null,
+            disable: null,
+            shorthandCurrentMonth: false,
+            prevArrow: '&lt;',
+            nextArrow: '&gt;'
     }
 };
