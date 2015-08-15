@@ -58,6 +58,11 @@
 	font-weight: 300;
 }
 
+.flatpickr-current-month span
+{
+	font-weight: 700
+}
+
 .flatpickr-calendar .flatpickr-prev-month:hover,
 .flatpickr-calendar .flatpickr-next-month:hover {
 	color: #f64747;
