@@ -96,7 +96,10 @@ flatpickr.init = function (element, instanceConfig) {
 
 
     getDaysinMonth = function(){
-        return self.currentMonthView === 1 && (((self.currentYearView % 4 === 0) && (self.currentYearView % 100 !== 0)) || (self.currentYearView % 400 === 0)) ? 29 : self.l10n.daysInMonth[self.currentMonthView];
+        var yr = self.currentYearView;
+        if (yr === 1 && ( !((yr % 4) || (!(yr % 100) && (yr % 400))) ) )
+            return 29;
+        return self.l10n.daysInMonth[self.currentMonthView];
     }
 
     formatDate = function (dateFormat, milliseconds) {
@@ -399,9 +402,7 @@ flatpickr.init = function (element, instanceConfig) {
 
         D =  currentDate;
 
-        console.log((parsedDate && !isNaN(parsedDate)));
        (parsedDate && !isNaN(parsedDate)) && ( D = self.selectedDateObj = new Date(parsedDate) )
-
 
         self.currentYearView = D.getFullYear();
         self.currentMonthView = D.getMonth();

@@ -90,6 +90,19 @@ input:focus, input:active
     opacity: 0.85
 }
 
+.btn.juicy {
+    background: #00b796;
+    padding: 1rem 1.5rem;
+    display: inline-block;
+    color: white;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: white;
+    border-radius: 4px;
+}
+
+
 .center_text
 {
     text-align: center
