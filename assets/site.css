@@ -100,6 +100,20 @@ input:focus, input:active
     font-weight: bold;
     color: white;
     border-radius: 4px;
+    transition: background 150ms ease-out;
+}
+
+.btn.juicy i
+{
+    font-size: 1.4rem;
+    line-height: 1rem;
+    position: relative;
+    bottom: -4px;
+}
+
+.btn.juicy:hover
+{
+    background: #1BA39C;
 }
 
 
