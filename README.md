@@ -149,7 +149,7 @@ flatpickr supports localizing text in a similar way to modifying the methods (ab
 | l10n.daysInMonth | array | [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31] | How many days in each month, starting with January |
 | l10n.firstDayOfWeek | integer | 0 | Start the calendar on a different weekday (0 = Sunday, 1 = Monday, 2 = Tuesday, etc.) |
 
-Weekdays in french:
+Weekdays in French:
 
 ```
 <script>
