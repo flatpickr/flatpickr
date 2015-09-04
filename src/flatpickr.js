@@ -365,7 +365,7 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     triggerChange = function(){
-
+		self.config.onClickEvent();
         "createEvent" in document
             ? ( element.dispatchEvent( new Event("change") ) )
             : ( element.fireEvent("onchange") );
@@ -464,6 +464,7 @@ flatpickr.init.prototype = {
             disable: null,
             shorthandCurrentMonth: false,
             prevArrow: '&lt;',
-            nextArrow: '&gt;'
+            nextArrow: '&gt;',
+			onClickEvent: function(){}
     }
 };
