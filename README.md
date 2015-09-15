@@ -153,7 +153,7 @@ Weekdays in French:
 
 ```
 <script>
-    flatpickr.prototype.l10n.weekdays.longhand = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
+    flatpickr.init.prototype.l10n.weekdays.longhand = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
     flatpickr('#yourId');
 </script>
 ```
@@ -162,7 +162,7 @@ Start the calendar on Monday instead of Sunday:
 
 ```
 <script>
-    flatpickr.prototype.l10n.firstDayOfWeek = 1;
+    flatpickr.init.prototype.l10n.firstDayOfWeek = 1;
     flatpickr('#yourId');
 </script>
 ```
