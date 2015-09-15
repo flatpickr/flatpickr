@@ -393,7 +393,7 @@ flatpickr.init = function (element, instanceConfig) {
         parent.parentNode.replaceChild(element, parent);
     };
 
-    self.jumpToDate = function(jumpDate) {
+    jumpToDate = function(jumpDate) {
     	self.currentYearView = jumpDate.getFullYear();
         self.currentMonthView = jumpDate.getMonth();
         self.currentDayView = jumpDate.getDate();
@@ -423,7 +423,7 @@ flatpickr.init = function (element, instanceConfig) {
 
        (parsedDate && !isNaN(parsedDate)) && ( selDate = self.selectedDateObj = new Date(parsedDate) )
 
-        self.jumpToDate(selDate);
+        jumpToDate(selDate);
 
 
         typeof self.config.minDate === 'string' && (self.config.minDate = new Date(self.config.minDate));
