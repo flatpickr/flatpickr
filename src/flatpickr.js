@@ -80,7 +80,8 @@ flatpickr.init = function (element, instanceConfig) {
         init,
         triggerChange,
         changeMonth,
-        getDaysinMonth;
+        getDaysinMonth,
+        jumpToDate;
 
     calendarContainer.className = 'flatpickr-calendar';
     navigationCurrentMonth.className = 'flatpickr-current-month';
@@ -346,6 +347,7 @@ flatpickr.init = function (element, instanceConfig) {
 
         self.element.addEventListener(openEvent, open, false);
 
+
         wrapperElement.querySelector(".flatpickr-prev-month").addEventListener('click', function(){ changeMonth('prev') });
         wrapperElement.querySelector(".flatpickr-next-month").addEventListener('click', function(){ changeMonth('next') });
 
@@ -354,14 +356,18 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     open = function () {
+
         self.element.blur();
         document.addEventListener('click', documentClick, false);
         wrapperElement.classList.add('open');
     };
 
     close = function () {
+
         document.removeEventListener('click', documentClick, false);
         wrapperElement.classList.remove('open');
+         self.redraw();
+
     };
 
     triggerChange = function(){
@@ -387,38 +393,52 @@ flatpickr.init = function (element, instanceConfig) {
         parent.parentNode.replaceChild(element, parent);
     };
 
-    init = function () {
-        var config, parsedDate, D;
+    self.jumpToDate = function(jumpDate) {
+    	self.currentYearView = jumpDate.getFullYear();
+        self.currentMonthView = jumpDate.getMonth();
+        self.currentDayView = jumpDate.getDate();
 
-        self.config = {};
+
+
+
+    };
+
+    init = function () {
+
+    	self.config = {};
+        self.element = element;
         self.destroy = destroy;
+
+    	currentDate.setHours(0,0,0,0);
+        var config, parsedDate, selDate =  currentDate;
+
 
         for (config in self.defaultConfig)
             self.config[config] = instanceConfig[config] || self.defaultConfig[config];
 
-        self.element = element;
+        if ( self.element.value || (!self.element.value && self.config.defaultDate) )
+        	parsedDate = Date.parse(self.element.value||self.config.defaultDate);
 
-        self.element.value && (parsedDate = Date.parse(self.element.value) );
 
-        D =  currentDate;
 
-       (parsedDate && !isNaN(parsedDate)) && ( D = self.selectedDateObj = new Date(parsedDate) )
+       (parsedDate && !isNaN(parsedDate)) && ( selDate = self.selectedDateObj = new Date(parsedDate) )
 
-        self.currentYearView = D.getFullYear();
-        self.currentMonthView = D.getMonth();
-        self.currentDayView = D.getDate();
+        self.jumpToDate(selDate);
 
 
         typeof self.config.minDate === 'string' && (self.config.minDate = new Date(self.config.minDate));
         typeof self.config.maxDate === 'string' && (self.config.maxDate = new Date(self.config.maxDate));
 
         // jump to minDate's month
-        self.config.minDate && ( self.currentMonthView = self.config.minDate.getMonth() );
+        if ( self.config.minDate )
+        {
+        	self.currentYearView = self.config.minDate.getFullYear();
+        	self.currentMonthView = self.config.minDate.getMonth();
+        	self.config.minDate.setHours(0,0,0,0)
+        }
 
-        self.config.minDate && ( self.config.minDate.setHours(0,0,0,0) );
         self.config.maxDate && ( self.config.maxDate.setHours(0,0,0,0) );
 
-        currentDate.setHours(0,0,0,0);
 
         wrap();
         buildCalendar();
@@ -431,6 +451,7 @@ flatpickr.init = function (element, instanceConfig) {
 
     self.set = function(key, value){
         key in self.config && (self.config[key] = value , self.redraw() );
+
     }
 
     init();
@@ -459,6 +480,7 @@ flatpickr.init.prototype = {
             dateFormat: 'F j, Y',
             altFormat: null,
             altInput: null,
+            defaultDate: null,
             minDate: null,
             maxDate: null,
             disable: null,

@@ -92,7 +92,7 @@ input:focus, input:active
 
 .btn.juicy {
     background: #00b796;
-    padding: 1rem 1.5rem;
+    padding: 0.5rem 1.25rem;
     display: inline-block;
     color: white;
     text-decoration: none;
@@ -157,8 +157,8 @@ pre
     text-align: left;
     background: transparent;
     font-size: 1.25rem;
-    font-weight: 300;
-    border-bottom: 1px solid rgba(68,68,68,0.13);
+    font-weight: 400;
+    border-bottom: 3px solid rgba(68,68,68,0.13);
 }
 
 .table th, .table td
@@ -171,13 +171,18 @@ pre
     border-bottom: 1px solid rgba(68,68,68,0.13);
 }
 
-.table tr td:last-child
+.table tr td
 {
-    color: #999
+    color: #888
+}
+
+.table tr td:first-child, .table tr td:last-child
+{
+    color: #333
 }
 
 .table  tr:nth-child(2n) {
-    background-color: #f9f9f9;
+    background-color: #f3f3f3;
 }
 
 .flatpickr-months i

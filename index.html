@@ -143,6 +143,17 @@ check_out.element.addEventListener("change", function(){
 <p><input id="check_out_date" placeholder="Check Out Date"></p>
 </div>
 
+<div class=example_wrapper>
+<p><b>Custom default date</b></p>
+
+<pre class='prettyprint lang-js'>
+var defDate = flatpickr("#defDate");
+defDate.set('defaultDate', '2015-10-10');
+</pre>
+
+<p><input id="defDate" placeholder="Custom default date"></p>
+</div>
+
 
 
 
@@ -169,36 +180,49 @@ check_out.element.addEventListener("change", function(){
 <td>'F j, Y'</td>
 <td>A string of characters which are used to define how the date will be displayed in the input box. Very similar to the PHP date function, but with less options. The supported characters are defined below.</td>
 </tr>
+
 <tr>
-<td>altInput</td>
-<td>node</td>
-<td>null</td>
-<td>A reference to another input element. This can be useful if you want to show the user a readable date, but return something totally different to the server.</td>
+<td>defaultDate</td>
+<td>Date(), String</td>
+<td>Today</td>
+<td>Set the date to highlight on first opening if the associated input field is blank. Specify either an actual date via a Date object or as a string. See (<a target=_blank href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date">https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date</a>)</td>
 </tr>
-<tr>
-<td>altFormat</td>
-<td>string</td>
-<td>null</td>
-<td>Exactly the same as date format, but for the altInput field</td>
-</tr>
+
 <tr>
 <td>minDate</td>
-<td>Date()</td>
+<td>Date(), String</td>
 <td>null</td>
 <td>The minimum date that a user can start picking from, as a string or a JavaScript Date. See (<a target=_blank href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date">https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date</a>)</td>
 </tr>
+
 <tr>
 <td>maxDate</td>
-<td>Date()</td>
+<td>Date(), String</td>
 <td>null</td>
 <td>The maximum date that a user can pick to, as a string or a JavaScript Date. See (<a target=_blank href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date">https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date</a>)</td>
 </tr>
+
 <tr>
 <td>disable</td>
 <td>array</td>
 <td>null</td>
 <td>Dates to disable, using intervals</td>
 </tr>
+
+<tr>
+<td>altInput</td>
+<td>node</td>
+<td>null</td>
+<td>A reference to another input element. This can be useful if you want to show the user a readable date, but return something totally different to the server.</td>
+</tr>
+
+<tr>
+<td>altFormat</td>
+<td>string</td>
+<td>null</td>
+<td>Exactly the same as date format, but for the altInput field</td>
+</tr>
+
 <tr>
 <td>shorthandCurrentMonth</td>
 <td>boolean</td>
@@ -223,7 +247,6 @@ check_out.element.addEventListener("change", function(){
             var reg = flatpickr('#flatpickr');
 
 
-
             // Custom date format
             flatpickr('#dateFormat', { dateFormat: 'Y-m-d'});
 
@@ -238,7 +261,7 @@ check_out.element.addEventListener("change", function(){
 
             flatpickr('#minDateString', {
                 // using a string
-                minDate: new Date('2015-09-20')
+                minDate: new Date('2016-09-20')
             });
 
             flatpickr('#minDateYMD', {
@@ -288,6 +311,12 @@ check_out.element.addEventListener("change", function(){
             check_out.element.addEventListener("change", function(){
                 check_in.set( "maxDate" , check_out.element.value );
             });
+
+
+
+
+            var defDate = flatpickr("#defDate");
+            defDate.set('defaultDate', '2015-10-10');
 
 
 
