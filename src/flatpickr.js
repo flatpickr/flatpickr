@@ -90,6 +90,8 @@ flatpickr.init = function (element, instanceConfig) {
     wrap = function () {
         wrapperElement = document.createElement('div');
         wrapperElement.className = 'flatpickr-wrapper';
+        console.log( String(self.config.inline) );
+        String(self.config.inline) == 'true' && wrapperElement.classList.add('inline');
         self.element.parentNode.insertBefore(wrapperElement, self.element);
         wrapperElement.appendChild(self.element);
     };
@@ -314,7 +316,7 @@ flatpickr.init = function (element, instanceConfig) {
             currentTimestamp = self.selectedDateObj.getTime();
 
             if (self.config.altInput)
-                self.config.altInput.value = formatDate(self.config.altFormat || self.config.dateFormat, currentTimestamp);
+                document.querySelector(self.config.altInput).value = formatDate(self.config.altFormat || self.config.dateFormat, currentTimestamp);
 
 
 
@@ -343,9 +345,13 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     bind = function () {
-        var openEvent = (self.element.nodeName === 'INPUT') ? 'focus'  : 'click';
+    	if (String(self.config.inline) != 'true') {
 
-        self.element.addEventListener(openEvent, open, false);
+    	  	var openEvent = (self.element.nodeName === 'INPUT') ? 'focus'  : 'click';
+        	self.element.addEventListener(openEvent, open, false);
+
+    	}
+
 
 
         wrapperElement.querySelector(".flatpickr-prev-month").addEventListener('click', function(){ changeMonth('prev') });
@@ -363,10 +369,12 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     close = function () {
+    	if (self.config.inline)
+    		return;
 
         document.removeEventListener('click', documentClick, false);
         wrapperElement.classList.remove('open');
-         self.redraw();
+        self.redraw();
 
     };
 
@@ -414,12 +422,11 @@ flatpickr.init = function (element, instanceConfig) {
 
 
         for (config in self.defaultConfig)
-            self.config[config] = instanceConfig[config] || self.defaultConfig[config];
+            self.config[config] = instanceConfig[config] || self.element.dataset[config.toLowerCase()] || self.defaultConfig[config];
 
-        if ( self.element.value || (!self.element.value && self.config.defaultDate) )
+
+        if ( self.element.value || (!self.element.value && self.config.defaultDate ) )
         	parsedDate = Date.parse(self.element.value||self.config.defaultDate);
-
-
 
        (parsedDate && !isNaN(parsedDate)) && ( selDate = self.selectedDateObj = new Date(parsedDate) )
 
@@ -485,6 +492,7 @@ flatpickr.init.prototype = {
             maxDate: null,
             disable: null,
             shorthandCurrentMonth: false,
+            inline: false,
             prevArrow: '&lt;',
             nextArrow: '&gt;'
     }

@@ -31,11 +31,16 @@
     transition-timing-function: cubic-bezier(0.075, 0.820, 0.165, 1.000);
 }
 
-.open .flatpickr-calendar
+.open .flatpickr-calendar, .inline .flatpickr-calendar
 {
     max-height: 286px;
     z-index: 100;
     opacity: 1;
+}
+
+.inline .flatpickr-calendar
+{
+    position: static;
 }
 
 .flatpickr-months
@@ -125,7 +130,7 @@ td.today:hover .flatpickr-day
 	color: white
 }
 
-.selected .flatpickr-day
+.selected .flatpickr-day, td.selected:hover .flatpickr-day
 {
     background-color: #446CB3;
     color: #fff;

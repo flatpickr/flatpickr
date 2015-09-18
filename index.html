@@ -152,9 +152,80 @@ defDate.set('defaultDate', '2015-10-10');
 </pre>
 
 <p><input id="defDate" placeholder="Custom default date"></p>
+
+<br>
+Alternative: use the <b>data-defaultDate</b> attribute
+<pre class='prettyprint lang-html'>
+&lt;input class="flatpickr" data-defaultDate="2016-1-10" placeholder="Custom default date"&gt;
+</pre>
+
+<pre class='prettyprint lang-js'>
+flatpickr(".flatpickr");
+</pre>
+
+<p><input class='flatpickr' data-defaultDate="2016-1-10" placeholder="Custom date with data-defaultDate"></p>
 </div>
 
 
+<div class=example_wrapper id=inline-calendar>
+<p><b>Inline or embedded calendar</b></p>
+
+<pre class='prettyprint lang-html'>
+&lt;div class=inline_picker&gt;&lt;/div&gt;
+&lt;input id=inline_picked_date type=hidden&gt;
+</pre>
+
+<pre class='prettyprint lang-js'>
+flatpickr(".inline_picker", { 'inline' : true, 'altInput' : "#inline_picked_date"});
+</pre>
+
+<p>
+    <div class=inline_picker></div>
+    <input id=inline_picked_date type=hidden>
+</p>
+
+<br>
+Alternative:
+<pre class='prettyprint lang-html'>
+&lt;input id=inline_picked_date2&gt;
+&lt;div class=flatpickr data-inline='true' data-altInput='#inline_picked_date2'&gt;&lt;/div&gt;
+</pre>
+
+<pre class='prettyprint lang-js'>
+flatpickr(".flatpickr");
+</pre>
+
+<p>
+    <input id=inline_picked_date2 type=text placeholder='Select a date...'>
+    <div class=flatpickr data-inline='true' data-altInput='#inline_picked_date2'></div>
+
+</p>
+
+
+</div>
+
+
+
+
+
+<div class=example_wrapper>
+<b>Modifying default configuration for all calendars:</b>
+
+<pre class='prettyprint lang-js'>
+// use your own arrow icons
+flatpickr.init.prototype.defaultConfig.prevArrow = "&lt;i class='icon i-angle-left'&gt;&lt;/i&gt;";
+flatpickr.init.prototype.defaultConfig.nextArrow = "&lt;i class='icon i-angle-right'&gt;&lt;/i&gt;";
+
+// change the first day of the week to Monday
+flatpickr.init.prototype.l10n.firstDayOfWeek = 1;
+
+// then initialize your calendars
+flatpickr(".flatpickr")
+....
+</pre>
+
+
+</div>
 
 
 
@@ -166,6 +237,10 @@ defDate.set('defaultDate', '2015-10-10');
 
 
             <h2 id=options>Options</h2>
+            <p>
+                <b>Protip: </b> <i>all</i> of the config options except 'disable' can also be provided using data attributes, e.g. data-mindate, data-defaultdate etc.
+            </p>
+
             <table class=table><thead>
 <tr>
 <th>Config Option</th>
@@ -211,9 +286,9 @@ defDate.set('defaultDate', '2015-10-10');
 
 <tr>
 <td>altInput</td>
-<td>node</td>
+<td>String</td>
 <td>null</td>
-<td>A reference to another input element. This can be useful if you want to show the user a readable date, but return something totally different to the server.</td>
+<td>A reference to another input element. This can be useful if you want to show the user a readable date, but return something totally different to the server. Pass in a string selector such as "#yourID" or ".className"</td>
 </tr>
 
 <tr>
@@ -221,6 +296,13 @@ defDate.set('defaultDate', '2015-10-10');
 <td>string</td>
 <td>null</td>
 <td>Exactly the same as date format, but for the altInput field</td>
+</tr>
+
+<tr>
+<td>inline</td>
+<td>Boolean / String</td>
+<td>false</td>
+<td>Display the calendar inline.</td>
 </tr>
 
 <tr>
@@ -318,7 +400,13 @@ defDate.set('defaultDate', '2015-10-10');
             var defDate = flatpickr("#defDate");
             defDate.set('defaultDate', '2015-10-10');
 
+            flatpickr("#dataDate");
 
+
+
+            flatpickr(".inline_picker", { 'inline' : true, 'altInput' : "#inline_picked_date"});
+
+            flatpickr(".flatpickr");
 
 
 
