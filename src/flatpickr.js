@@ -90,7 +90,7 @@ flatpickr.init = function (element, instanceConfig) {
     wrap = function () {
         wrapperElement = document.createElement('div');
         wrapperElement.className = 'flatpickr-wrapper';
-        console.log( String(self.config.inline) );
+
         String(self.config.inline) == 'true' && wrapperElement.classList.add('inline');
         self.element.parentNode.insertBefore(wrapperElement, self.element);
         wrapperElement.appendChild(self.element);
