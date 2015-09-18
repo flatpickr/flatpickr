@@ -313,6 +313,167 @@ flatpickr(".flatpickr")
 </tr>
 </tbody></table>
 
+
+
+
+
+<br><br>
+<h3><a id="user-content-date-format" class="anchor" href="#date-format" aria-hidden="true"><span class="octicon octicon-link"></span></a>Date Format</h3>
+
+<table class=table><thead>
+<tr>
+<th>Character</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>d</td>
+<td>Day of the month, 2 digits with leading zeros</td>
+<td>01 to 31</td>
+</tr>
+<tr>
+<td>D</td>
+<td>A textual representation of a day</td>
+<td>Mon through Sun</td>
+</tr>
+<tr>
+<td>j</td>
+<td>Day of the month without leading zeros</td>
+<td>1 to 31</td>
+</tr>
+<tr>
+<td>l (lowercase 'L')</td>
+<td>A full textual representation of the day of the week</td>
+<td>Sunday through Saturday</td>
+</tr>
+<tr>
+<td>w</td>
+<td>Numeric representation of the day of the week</td>
+<td>0 (for Sunday) through 6 (for Saturday)</td>
+</tr>
+<tr>
+<td>F</td>
+<td>A full textual representation of a month</td>
+<td>January through December</td>
+</tr>
+<tr>
+<td>m</td>
+<td>Numeric representation of a month, with leading zero</td>
+<td>01 through 12</td>
+</tr>
+<tr>
+<td>M</td>
+<td>A short textual representation of a month</td>
+<td>Jan through Dec</td>
+</tr>
+<tr>
+<td>n</td>
+<td>Numeric representation of a month, without leading zeros</td>
+<td>1 through 12</td>
+</tr>
+<tr>
+<td>U</td>
+<td>The number of seconds since the Unix Epoch</td>
+<td>1413704993</td>
+</tr>
+<tr>
+<td>y</td>
+<td>A two digit representation of a year</td>
+<td>99 or 03</td>
+</tr>
+<tr>
+<td>Y</td>
+<td>A full numeric representation of a year, 4 digits</td>
+<td>1999 or 2003</td>
+</tr>
+</tbody></table>
+
+<p>Note: Suffixes have been removed because JavaScript's Date.parse didn't like them.</p>
+
+<br><br>
+<h3><a id="user-content-escaping-date-format-characters" class="anchor" href="#escaping-date-format-characters" aria-hidden="true"><span class="octicon octicon-link"></span></a>Escaping date format characters</h3>
+
+<p>To escape a character (if you need to use one of the reserved format characters above) use a double backslash: \\</p>
+
+<p>Example:</p>
+
+<pre class='prettyprint'><code>dateFormat: '\\Da\\y picke\\d: Y/m/d'
+</code></pre>
+
+<p>To get something like:</p>
+
+<p><strong>Day picked: 2013/02/12</strong></p>
+
+<p>If you do not escape the characters you would end up with something like this instead:</p>
+
+<p><strong>Tuea13 picke12: 2013/02/12</strong></p>
+
+<p>Which is probably not what you want...</p>
+
+
+<br><br>
+<h3><a id="user-content-localization" class="anchor" href="#localization" aria-hidden="true"><span class="octicon octicon-link"></span></a>Localization</h3>
+
+<p>flatpickr supports localizing text in a similar way to modifying the methods (above).</p>
+
+<table class=table><thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>l10n.weekdays.shorthand</td>
+<td>array</td>
+<td>['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']</td>
+<td>The shortened version of each weekday, starting with Sunday</td>
+</tr>
+<tr>
+<td>l10n.weekdays.longhand</td>
+<td>array</td>
+<td>['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']</td>
+<td>The long version of each weekday, starting with Sunday</td>
+</tr>
+<tr>
+<td>l10n.months.shorthand</td>
+<td>array</td>
+<td>['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']</td>
+<td>Shortened version of each month, starting with January</td>
+</tr>
+<tr>
+<td>l10n.months.longhand</td>
+<td>array</td>
+<td>['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']</td>
+<td>Long version of each month, starting with January</td>
+</tr>
+<tr>
+<td>l10n.daysInMonth</td>
+<td>array</td>
+<td>[31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]</td>
+<td>How many days in each month, starting with January</td>
+</tr>
+<tr>
+<td>l10n.firstDayOfWeek</td>
+<td>integer</td>
+<td>0</td>
+<td>Start the calendar on a different weekday (0 = Sunday, 1 = Monday, 2 = Tuesday, etc.)</td>
+</tr>
+</tbody></table>
+
+<br>
+<p><b>Example:</b> weekdays in French:
+
+<pre class='prettyprint lang-js'><code>&lt;script&gt;
+    flatpickr.init.prototype.l10n.weekdays.longhand = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
+    flatpickr('#yourId');
+&lt;/script&gt;
+</code></pre>
+
+</p>
+
         </div>
 
 
