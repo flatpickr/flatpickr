@@ -4,10 +4,13 @@
 </head>
 <body>
 
-<input class=flatpickr data-defaultdate="2015-10-10">
+<input class=flatpickr>
 
 <script src="flatpickr.min.js"></script>
-<script>flatpickr(".flatpickr");</script>
+<script>
+var f = flatpickr(".flatpickr");
+f.set('defaultDate', '2015-10-10');
+</script>
 
 </body>
 </html>
