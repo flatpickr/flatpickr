@@ -91,7 +91,9 @@ flatpickr.init = function (element, instanceConfig) {
         wrapperElement = document.createElement('div');
         wrapperElement.className = 'flatpickr-wrapper';
 
-        String(self.config.inline) == 'true' && wrapperElement.classList.add('inline');
+        String(self.config.inline) == 'true' &&
+            wrapperElement.classList.add('inline');
+
         self.element.parentNode.insertBefore(wrapperElement, self.element);
         wrapperElement.appendChild(self.element);
     };
@@ -188,13 +190,12 @@ flatpickr.init = function (element, instanceConfig) {
     isDisabled = function(date)
     {
 
-        for (var i = 0; i < self.config.disable.length; i++) {
-            if (date >= new Date( self.config.disable[i]['from'] ) && date <= new Date( self.config.disable[i]['to'] ) )
-                    {
+        for (var i = 0; i < self.config.disable.length; i++)
+            if ( date >= new Date( self.config.disable[i]['from'] ) &&
+            date <= new Date( self.config.disable[i]['to'] ) )
+                return true;
 
-                        return true;
-                    }
-        }
+
 
         return false;
     };
@@ -316,7 +317,8 @@ flatpickr.init = function (element, instanceConfig) {
             currentTimestamp = self.selectedDateObj.getTime();
 
             if (self.config.altInput)
-                document.querySelector(self.config.altInput).value = formatDate(self.config.altFormat || self.config.dateFormat, currentTimestamp);
+                document.querySelector(self.config.altInput).value =
+                formatDate(self.config.altFormat || self.config.dateFormat, currentTimestamp);
 
 
 
@@ -351,8 +353,6 @@ flatpickr.init = function (element, instanceConfig) {
         	self.element.addEventListener(openEvent, open, false);
 
     	}
-
-
 
         wrapperElement.querySelector(".flatpickr-prev-month").addEventListener('click', function(){ changeMonth('prev') });
         wrapperElement.querySelector(".flatpickr-next-month").addEventListener('click', function(){ changeMonth('next') });
@@ -413,38 +413,40 @@ flatpickr.init = function (element, instanceConfig) {
 
     init = function () {
 
+        var config, parsedDate;
+
     	self.config = {};
         self.element = element;
         self.destroy = destroy;
 
     	currentDate.setHours(0,0,0,0);
-        var config, parsedDate, selDate =  currentDate;
+
 
 
         for (config in self.defaultConfig)
-            self.config[config] = instanceConfig[config] || self.element.dataset[config.toLowerCase()] || self.defaultConfig[config];
+            self.config[config] =
+                instanceConfig[config] ||
+                self.element.dataset[config.toLowerCase()] ||
+                self.defaultConfig[config];
+
+        // firefox doesn't like dashes
+        typeof self.config.defaultDate === 'string' &&
+            ( self.config.defaultDate = self.config.defaultDate.replace(new RegExp('-', 'g'), '/') );
 
 
-        if ( self.element.value || (!self.element.value && self.config.defaultDate ) )
+        if ( self.element.value || (!self.element.value && self.config.defaultDate ) ){
         	parsedDate = Date.parse(self.element.value||self.config.defaultDate);
-
-       (parsedDate && !isNaN(parsedDate)) && ( selDate = self.selectedDateObj = new Date(parsedDate) )
-
-        jumpToDate(selDate);
-
-
-        typeof self.config.minDate === 'string' && (self.config.minDate = new Date(self.config.minDate));
-        typeof self.config.maxDate === 'string' && (self.config.maxDate = new Date(self.config.maxDate));
-
-        // jump to minDate's month
-        if ( self.config.minDate )
-        {
-        	self.currentYearView = self.config.minDate.getFullYear();
-        	self.currentMonthView = self.config.minDate.getMonth();
-        	self.config.minDate.setHours(0,0,0,0)
+            self.selectedDateObj = ( !isNaN(parsedDate) ) ?  new Date(parsedDate) : null;
         }
 
-        self.config.maxDate && ( self.config.maxDate.setHours(0,0,0,0) );
+        self.config.minDate &&
+            (self.config.minDate = new Date(self.config.minDate), self.config.minDate.setHours(0,0,0,0) );
+
+        self.config.maxDate &&
+            (self.config.maxDate = new Date(self.config.maxDate), self.config.maxDate.setHours(0,0,0,0) );
+
+
+        jumpToDate(self.selectedDateObj||self.config.minDate||currentDate);
 
 
         wrap();
