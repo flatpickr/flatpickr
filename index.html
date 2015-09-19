@@ -515,7 +515,7 @@ flatpickr(".flatpickr")
             flatpickr('#maxDate', {
                 // today
                 minDate: new Date(),
-                maxDate: new Date("2015-09-20")
+                maxDate: new Date("2015-12-20")
 
             });
 
@@ -558,10 +558,7 @@ flatpickr(".flatpickr")
 
 
 
-            var defDate = flatpickr("#defDate");
-            defDate.set('defaultDate', '2015-10-10');
-
-            flatpickr("#dataDate");
+            var defDate = flatpickr("#defDate", { 'defaultDate' : '2015-10-10' });
 
 
 
