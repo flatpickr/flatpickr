@@ -8,8 +8,11 @@ A super lightweight (only 2.75kb minified and gzipped), feature-packed date pick
 
 Demos and documentation : http://chmln.github.io/flatpickr
 
+
 Bloat comparison between the 2 most popular datepickers and **flatpickr**:
+
 ![bloat-free](https://github.com/chmln/flatpickr/blob/gh-pages/assets/size_chart.png?raw=true)
+
 
 \* sizes include dependencies
 
