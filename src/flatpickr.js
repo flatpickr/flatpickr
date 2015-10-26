@@ -207,11 +207,11 @@ flatpickr.init = function (element, instanceConfig) {
             row = document.createElement('tr'),
             dayCount,
             dayNumber,
-            today = '',
-            selected = '',
-            disabled = '',
+            className,
             currentTimestamp,
-            cur_date;
+            cur_date,
+            date_is_disabled,
+            date_outside_minmax;
 
         // Offset the first day by the specified amount
         firstOfMonth -= self.l10n.firstDayOfWeek;
@@ -235,24 +235,23 @@ flatpickr.init = function (element, instanceConfig) {
                 dayCount = 0;
             }
 
+            className = '';
             cur_date = new Date(self.currentYearView, self.currentMonthView, dayNumber);
 
-
-            today = (!self.selectedDateObj && cur_date.valueOf() === currentDate.valueOf() ) ? ' today' : '';
-
-            selected = self.selectedDateObj && cur_date.valueOf() === self.selectedDateObj.valueOf() ? ' selected' : '';
-
+            date_is_disabled = self.config.disable && isDisabled( cur_date  );
+            date_outside_minmax = (self.config.minDate && cur_date < self.config.minDate )
+            					  || (self.config.maxDate && cur_date >= self.config.maxDate);
 
 
-            var date_is_disabled = self.config.disable && isDisabled( cur_date  );
+            if (!self.selectedDateObj && cur_date.valueOf() === currentDate.valueOf() )
+            	className += ' today';
 
-            var date_outside_minmax = (self.config.minDate && cur_date < self.config.minDate ) || (self.config.maxDate && cur_date >= self.config.maxDate);
+            if (self.selectedDateObj && cur_date.valueOf() === self.selectedDateObj.valueOf() )
+            	className += ' selected';
 
-            disabled = (date_is_disabled || date_outside_minmax) ? " disabled" : " slot";
+            className += (date_is_disabled || date_outside_minmax) ? " disabled" : " slot";
 
-
-
-            row.innerHTML += '<td class="' + today + selected + disabled + '"><span class="flatpickr-day">' + dayNumber + '</span></td>';
+            row.innerHTML += '<td class="' + className + '"><span class="flatpickr-day">' + dayNumber + '</span></td>';
             dayCount++;
         }
 
@@ -266,15 +265,22 @@ flatpickr.init = function (element, instanceConfig) {
 
     buildMonthNavigation = function () {
         var months = document.createElement('div'),
-            monthNavigation;
+            prevMonth, nextMonth;
 
-        monthNavigation  = '<span class="flatpickr-prev-month">' + self.config.prevArrow + '</span>'
-                         + '<span class="flatpickr-next-month">' + self.config.nextArrow + '</span>';
+        prevMonth = document.createElement('span');
+        prevMonth.className = "flatpickr-prev-month";
+        prevMonth.innerHTML = self.config.prevArrow;
+
+        nextMonth = document.createElement('span');
+        nextMonth.className = "flatpickr-next-month";
+        nextMonth.innerHTML = self.config.nextArrow;
 
         months.className = 'flatpickr-months';
-        months.innerHTML = monthNavigation;
 
+        months.appendChild(prevMonth);
         months.appendChild(navigationCurrentMonth);
+        months.appendChild(nextMonth);
+
         updateNavigationCurrentMonth();
         calendarContainer.appendChild(months);
     };
