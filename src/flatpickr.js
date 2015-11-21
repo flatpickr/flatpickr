@@ -192,7 +192,7 @@ flatpickr.init = function (element, instanceConfig) {
 
     	var  toDate;
 
-        for (i = 0; i < self.config.disable.length; i++){
+        for (var i = 0; i < self.config.disable.length; i++){
 
         	// js date is a day behind
         	toDate = new Date( self.config.disable[i]['to'] );
