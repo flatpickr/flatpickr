@@ -1,0 +1,22 @@
+{
+  "name": "flatpickr",
+  "version": "1.2",
+  "description": "An elegant date picker",
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.5.1"
+  },
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chmln/flatpickr.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chmln/flatpickr/issues"
+  },
+  "homepage": "https://github.com/chmln/flatpickr#readme"
+}

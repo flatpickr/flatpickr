@@ -190,15 +190,15 @@ flatpickr.init = function (element, instanceConfig) {
 
     isDisabled = function(date){
 
-    	var toDate;
+    	var  toDate;
 
-        for (var disabled_date of self.config.disable){
+        for (i = 0; i < self.config.disable.length; i++){
 
         	// js date is a day behind
-        	toDate = new Date( disabled_date['to'] );
+        	toDate = new Date( self.config.disable[i]['to'] );
         	toDate.setDate(toDate.getDate() + 1);
 
-            if ( date >= new Date( disabled_date['from'] ) && date < toDate )
+            if ( date >= new Date( self.config.disable[i]['from'] ) && date < toDate )
                 return true;
         }
 
