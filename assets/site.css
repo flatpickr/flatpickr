@@ -124,16 +124,14 @@ input:focus, input:active
 
 .wrapper
 {
-    max-width: 960px;
+    max-width: 840px;
     margin: 0 auto;
-    width: 85%;
     margin-bottom: 10rem
 }
 
 pre
 {
     width: auto;
-    width: 650px ;
 
     font-family: Consolas,Menlo,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace,sans-serif;
 }

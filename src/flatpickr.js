@@ -41,7 +41,7 @@ var flatpickr = function (selector, config) {
         return createInstance(elements[0]);
     }
 
-    for (i = 0; i < elements.length; i++) {
+    for (var i = 0; i < elements.length; i++) {
         instances.push(createInstance(elements[i]));
     }
     return instances;
