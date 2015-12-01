@@ -102,9 +102,10 @@ flatpickr.init = function (element, instanceConfig) {
 
     getDaysinMonth = function(){
 
-        var yr = self.currentYear;
+        var yr = self.currentYear,
+        	month = self.currentMonth;
 
-        if (yr === 1 && ( !( (yr % 4) || (!(yr % 100) && (yr % 400))) ) )
+        if (month === 1 && ( !( (yr % 4) || (!(yr % 100) && (yr % 400))) ) )
             return 29;
 
         return self.l10n.daysInMonth[self.currentMonth];
