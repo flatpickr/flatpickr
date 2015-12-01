@@ -242,13 +242,13 @@ flatpickr.init = function (element, instanceConfig) {
 
             className = '';
             cur_date = new Date(self.currentYear, self.currentMonth, dayNumber);
-
+            cur_date.setHours(0,0,0,0);
 
             date_is_disabled = dayNumber > numDays || (self.config.disable && isDisabled( cur_date  ) );
 
             date_outside_minmax =
             	(self.config.minDate && cur_date < self.config.minDate )
-            	||	(self.config.maxDate && cur_date >= self.config.maxDate);
+            	||	(self.config.maxDate && cur_date > self.config.maxDate);
 
 
             if (!self.selectedDateObj && cur_date.valueOf() === currentDate.valueOf() )
