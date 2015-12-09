@@ -44,6 +44,7 @@ var flatpickr = function (selector, config) {
     for (var i = 0; i < elements.length; i++) {
         instances.push(createInstance(elements[i]));
     }
+
     return instances;
 };
 
@@ -61,6 +62,7 @@ flatpickr.init = function (element, instanceConfig) {
         wrapperElement,
         currentDate = new Date(),
         wrap,
+        utcDate,
         date,
         formatDate,
         monthToStr,
@@ -86,6 +88,17 @@ flatpickr.init = function (element, instanceConfig) {
     calendarContainer.className = 'flatpickr-calendar';
     navigationCurrentMonth.className = 'flatpickr-current-month';
     instanceConfig = instanceConfig || {};
+
+    utcDate = function(date){
+
+    	if (typeof date === 'string')
+            date = new Date( date.replace(new RegExp('-', 'g'), '/') );
+
+    	date.setTime( date.getTime() + date.getTimezoneOffset()*60*1000 );
+    	date.setHours(0,0,0,0);
+
+    	return date;
+    }
 
     wrap = function () {
         wrapperElement = document.createElement('div');
@@ -192,14 +205,15 @@ flatpickr.init = function (element, instanceConfig) {
     isDisabled = function(date){
 
     	var  toDate;
+    	date = utcDate(date);
 
         for (var i = 0; i < self.config.disable.length; i++){
 
         	// js date is a day behind
-        	toDate = new Date( self.config.disable[i]['to'] );
+        	toDate = utcDate( self.config.disable[i]['to'] );
         	toDate.setDate(toDate.getDate() + 1);
 
-            if ( date >= new Date( self.config.disable[i]['from'] ) && date < toDate )
+            if ( date >= utcDate( self.config.disable[i]['from'] ) && date < toDate )
                 return true;
         }
 
@@ -231,6 +245,9 @@ flatpickr.init = function (element, instanceConfig) {
         // Start at 1 since there is no 0th day
         for (dayNumber = 1; dayNumber <= 42 - firstOfMonth; dayNumber++) {
 
+        	className = '';
+            cur_date = utcDate(self.currentYear + "/" + (self.currentMonth + 1) + "/" + dayNumber);
+
 
             // if we have reached the end of a week, wrap to the next line
             if (dayCount % 7 === 0) {
@@ -240,11 +257,10 @@ flatpickr.init = function (element, instanceConfig) {
 
             }
 
-            className = '';
-            cur_date = new Date(self.currentYear, self.currentMonth, dayNumber);
-            cur_date.setHours(0,0,0,0);
+
 
             date_is_disabled = dayNumber > numDays || (self.config.disable && isDisabled( cur_date  ) );
+
 
             date_outside_minmax =
             	(self.config.minDate && cur_date < self.config.minDate )
@@ -428,9 +444,6 @@ flatpickr.init = function (element, instanceConfig) {
         self.currentMonth = jumpDate.getMonth();
         self.currentDayView = jumpDate.getDate();
 
-
-
-
     };
 
     init = function () {
@@ -444,7 +457,6 @@ flatpickr.init = function (element, instanceConfig) {
     	currentDate.setHours(0,0,0,0);
 
 
-
         for (config in self.defaultConfig)
             self.config[config] =
                 instanceConfig[config] ||
@@ -452,8 +464,8 @@ flatpickr.init = function (element, instanceConfig) {
                 self.defaultConfig[config];
 
         // firefox doesn't like dashes
-        typeof self.config.defaultDate === 'string' &&
-            ( self.config.defaultDate = self.config.defaultDate.replace(new RegExp('-', 'g'), '/') );
+        self.config.defaultDate &&
+            ( self.config.defaultDate = utcDate(self.config.defaultDate) );
 
 
         if ( self.element.value || (!self.element.value && self.config.defaultDate ) ){
@@ -462,10 +474,10 @@ flatpickr.init = function (element, instanceConfig) {
         }
 
         self.config.minDate &&
-            (self.config.minDate = new Date(self.config.minDate), self.config.minDate.setHours(0,0,0,0) );
+            (self.config.minDate = utcDate(self.config.minDate) );
 
         self.config.maxDate &&
-            (self.config.maxDate = new Date(self.config.maxDate), self.config.maxDate.setHours(0,0,0,0) );
+            (self.config.maxDate = utcDate(self.config.maxDate) );
 
 
         jumpToDate(self.selectedDateObj||self.config.minDate||currentDate);
@@ -521,3 +533,7 @@ flatpickr.init.prototype = {
             nextArrow: '&gt;'
     }
 };
+
+
+if (typeof module != 'undefined')
+	module.exports = flatpickr;
