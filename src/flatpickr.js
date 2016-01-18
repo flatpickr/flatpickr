@@ -60,9 +60,9 @@ flatpickr.init = function (element, instanceConfig) {
         calendar = document.createElement('table'),
         calendarBody = document.createElement('tbody'),
         wrapperElement,
-        currentDate = new Date(),
         wrap,
         utcDate,
+        currentDate,
         date,
         formatDate,
         monthToStr,
@@ -91,8 +91,12 @@ flatpickr.init = function (element, instanceConfig) {
 
     utcDate = function(date){
 
-    	if (typeof date === 'string')
+    	if (typeof date === 'undefined') // no args = use today's date
+        	date = new Date();
+
+    	else if (typeof date === 'string') // dashes to slashes
             date = new Date( date.replace(new RegExp('-', 'g'), '/') );
+        
 
     	date.setTime( date.getTime() + date.getTimezoneOffset()*60*1000 );
     	date.setHours(0,0,0,0);
@@ -124,9 +128,8 @@ flatpickr.init = function (element, instanceConfig) {
         return self.l10n.daysInMonth[self.currentMonth];
     }
 
-    formatDate = function (dateFormat, milliseconds) {
+    formatDate = function (dateFormat, dateObj) {
         var formattedDate = '',
-            dateObj = new Date(milliseconds),
             formats = {
                 d: function () {
                     var day = formats.j();
@@ -236,7 +239,7 @@ flatpickr.init = function (element, instanceConfig) {
         firstOfMonth < 0 && (firstOfMonth += 7);
 
         // Add spacer to line up the first day of the month correctly
-        firstOfMonth > 0 && (row.innerHTML += '<td colspan="' + firstOfMonth + '">&nbsp;</td>');
+        row.innerHTML += '<td colspan="' + firstOfMonth + '">&nbsp;</td>';
 
         dayCount = firstOfMonth;
         calendarBody.innerHTML = '';
@@ -245,18 +248,18 @@ flatpickr.init = function (element, instanceConfig) {
         // Start at 1 since there is no 0th day
         for (dayNumber = 1; dayNumber <= 42 - firstOfMonth; dayNumber++) {
 
-        	className = '';
-            cur_date = utcDate(self.currentYear + "/" + (self.currentMonth + 1) + "/" + dayNumber);
+
+        	
+            cur_date = utcDate(self.currentYear + "-" + (self.currentMonth + 1) + "-" + dayNumber);            
 
 
-            // if we have reached the end of a week, wrap to the next line
+            // we have reached the end of a week, wrap to the next line
             if (dayCount % 7 === 0) {
 
                 calendarFragment.appendChild(row);
                 row = document.createElement('tr');
 
             }
-
 
 
             date_is_disabled = dayNumber > numDays || (self.config.disable && isDisabled( cur_date  ) );
@@ -267,18 +270,21 @@ flatpickr.init = function (element, instanceConfig) {
             	||	(self.config.maxDate && cur_date > self.config.maxDate);
 
 
+            className = (date_is_disabled || date_outside_minmax) ? "disabled" : "slot";
+
+
             if (!self.selectedDateObj && cur_date.valueOf() === currentDate.valueOf() )
             	className += ' today';
 
             if (self.selectedDateObj && cur_date.valueOf() === self.selectedDateObj.valueOf() )
             	className += ' selected';
 
-            className += (date_is_disabled || date_outside_minmax) ? " disabled" : " slot";
+            
 
             row.innerHTML +=
             				'<td class="' + className + '">'
             				 	+ '<span class="flatpickr-day">'
-            				 		+ (dayNumber > numDays ? dayNumber-numDays : dayNumber)
+            				 		+ (dayNumber > numDays ? dayNumber % numDays : dayNumber)
             				 	+ '</span></td>';
 
             dayCount++;
@@ -291,7 +297,7 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     updateNavigationCurrentMonth = function () {
-        navigationCurrentMonth.innerHTML = '<span>' + monthToStr(self.currentMonth, false) + '</span> ' + self.currentYear;
+        navigationCurrentMonth.innerHTML = '<span>' + monthToStr(self.currentMonth, self.config.shorthandCurrentMonth) + '</span> ' + self.currentYear;
     };
 
     buildMonthNavigation = function () {
@@ -336,7 +342,9 @@ flatpickr.init = function (element, instanceConfig) {
 
     changeMonth = function(to)
     {
+
         (to === 'prev') ?  self.currentMonth-- : self.currentMonth++;
+
         handleYearChange();
         updateNavigationCurrentMonth();
         buildDays();
@@ -348,22 +356,20 @@ flatpickr.init = function (element, instanceConfig) {
 
         if ( t.classList.contains('slot') || t.parentNode.classList.contains('slot') )
         {
-            var selDate = parseInt( t.childNodes[0].innerHTML || t.innerHTML, 10),
-            currentTimestamp;
 
-            self.selectedDateObj = new Date(self.currentYear,self.currentMonth,selDate ),
-            currentTimestamp = self.selectedDateObj.getTime();
+            var selDate = parseInt( t.childNodes[0].innerHTML || t.innerHTML, 10);
+
+            self.selectedDateObj = utcDate(self.currentYear + "/" + (self.currentMonth+1) + "/" + selDate);
+
 
             if (self.config.altInput)
                 document.querySelector(self.config.altInput).value =
-                formatDate(self.config.altFormat || self.config.dateFormat, currentTimestamp);
+                	formatDate(self.config.altFormat || self.config.dateFormat, self.selectedDateObj);
 
 
-
-            self.element.value = formatDate(self.config.dateFormat, currentTimestamp);
+            self.element.value = formatDate(self.config.dateFormat, self.selectedDateObj);
 
             close();
-            buildDays();
             triggerChange();
         }
 
@@ -454,7 +460,7 @@ flatpickr.init = function (element, instanceConfig) {
         self.element = element;
         self.destroy = destroy;
 
-    	currentDate.setHours(0,0,0,0);
+    	currentDate = utcDate();
 
 
         for (config in self.defaultConfig)
@@ -469,8 +475,7 @@ flatpickr.init = function (element, instanceConfig) {
 
 
         if ( self.element.value || (!self.element.value && self.config.defaultDate ) ){
-        	parsedDate = Date.parse(self.element.value||self.config.defaultDate);
-            self.selectedDateObj = ( !isNaN(parsedDate) ) ?  new Date(parsedDate) : null;
+            self.selectedDateObj = utcDate(self.element.value||self.config.defaultDate);
         }
 
         self.config.minDate &&
