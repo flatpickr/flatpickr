@@ -225,7 +225,7 @@ flatpickr.init = function (element, instanceConfig) {
         // prepend days from the ending of previous month
     	for( dayNumber = prevMonthDays + 1 - firstOfMonth ; dayNumber <= prevMonthDays; dayNumber++ )
     		row.innerHTML +=
-				'<td class="slot disabled">'
+				'<td class="disabled">'
 				 	+ '<span class="flatpickr-day">'
 				 		+ (dayNumber )
 				 	+ '</span>' +
