@@ -95,7 +95,7 @@ flatpickr.init = function (element, instanceConfig) {
         	date = new Date();
 
     	else if (typeof date === 'string') // dashes to slashes
-            date = new Date( date.replace(new RegExp('-', 'g'), '/') );
+            date = new Date(date );
         
 
     	date.setTime( date.getTime() + date.getTimezoneOffset()*60*1000 );
@@ -370,6 +370,7 @@ flatpickr.init = function (element, instanceConfig) {
             self.element.value = formatDate(self.config.dateFormat, self.selectedDateObj);
 
             close();
+            buildDays();
             triggerChange();
         }
 
@@ -418,7 +419,6 @@ flatpickr.init = function (element, instanceConfig) {
 
         document.removeEventListener('click', documentClick, false);
         wrapperElement.classList.remove('open');
-        self.redraw();
 
     };
 
