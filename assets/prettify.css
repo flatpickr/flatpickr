@@ -1,94 +1,160 @@
-/* Pretty printing styles. Used with prettify.js. */
+/* Atelier Sulphurpool Light by Bram de Haan (http://atelierbram.github.io/syntax-highlighting/atelier-schemes/sulphurpool) */
 
-/* SPAN elements with the classes below are added by prettyprint. */
+/* plain text */
 .pln {
-  color: #333;
+  color: #202746;
 }
 
 @media screen {
-.str {
-    color: #dd1144;
+  /* string content */
+  .str {
+    color: #ac9739;
+  }
+
+  /* a keyword */
+  .kwd {
+    color: #6679cc;
+  }
+
+  /* a comment */
+  .com {
+    color: #898ea4;
+  }
+
+  /* a type name */
+  .typ {
+    color: #3d8fd1;
+  }
+
+  /* a literal value */
+  .lit {
+    color: #c76b29;
+  }
+
+  /* punctuation */
+  .pun {
+    color: #202746;
+  }
+
+  /* lisp open bracket */
+  .opn {
+    color: #202746;
+  }
+
+  /* lisp close bracket */
+  .clo {
+    color: #202746;
+  }
+
+  /* a markup tag name */
+  .tag {
+    color: #c94922;
+  }
+
+  /* a markup attribute name */
+  .atn {
+    color: #c76b29;
+  }
+
+  /* a markup attribute value */
+  .atv {
+    color: #22a2c9;
+  }
+
+  /* a declaration */
+  .dec {
+    color: #c76b29;
+  }
+
+  /* a variable name */
+  .var {
+    color: #c94922;
+  }
+
+  /* a function name */
+  .fun {
+    color: #3d8fd1;
+  }
+}
+/* Use higher contrast and text-weight for printable form. */
+@media print, projection {
+  .str {
+    color: #006600;
   }
 
   .kwd {
-    color: #333333;
+    color: #006;
+    font-weight: bold;
   }
 
   .com {
-    color: #999988;
+    color: #600;
+    font-style: italic;
   }
 
   .typ {
-    color: #445588;
+    color: #404;
+    font-weight: bold;
   }
 
   .lit {
-    color: #445588;
+    color: #004444;
   }
 
-  .pun {
-    color: #333333;
-  }
-
-  .opn {
-    color: #333333;
-  }
-
-  .clo {
-    color: #333333;
+  .pun, .opn, .clo {
+    color: #444400;
   }
 
   .tag {
-    color: navy;
+    color: #006;
+    font-weight: bold;
   }
 
   .atn {
-    color: teal;
+    color: #440044;
   }
 
   .atv {
-    color: #dd1144;
-  }
-
-  .dec {
-    color: #333333;
-  }
-
-  .var {
-    color: teal;
-  }
-
-  .fun {
-    color: #990000;
+    color: #006600;
   }
 }
-
-
-
-/* Put a border around prettyprinted code snippets. */
-.prettyprint {
-  background: white;
-  font-family: Menlo, 'Bitstream Vera Sans Mono', 'DejaVu Sans Mono', Monaco, Consolas, monospace;
+/* Style */
+pre.prettyprint {
+  background: #f5f7ff;
+  color: #979db4;
+  font-family: Menlo, Consolas, "Bitstream Vera Sans Mono", "DejaVu Sans Mono", Monaco, monospace;
   font-size: 14px;
-  line-height: 18px;
-  border: 1px solid #ccc;
+  line-height: 1.5;
+  border: 1px solid #dfe2f1;
   padding: 10px;
-  overflow: hidden
+  /* border-radius: 3px; */
 }
 
 /* Specify class=linenums on a pre to get line numbering */
-ol.linenums { margin-top: 0; margin-bottom: 0 } /* IE indents via margin-left */
+ol.linenums {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* IE indents via margin-left */
 li.L0,
 li.L1,
 li.L2,
 li.L3,
+li.L4,
 li.L5,
 li.L6,
 li.L7,
-li.L8 { list-style-type: none }
+li.L8,
+li.L9 {
+  /* */
+}
+
 /* Alternate shading for lines */
 li.L1,
 li.L3,
 li.L5,
 li.L7,
-li.L9 { background: #eee }
+li.L9 {
+  /* */
+}

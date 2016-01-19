@@ -7,7 +7,7 @@ html, body, div, p, h1, h2, h3, table, tr, td
 body, input {
     font-family: 'Lato', sans-serif;
     color: #333;
-    font-size: 15px
+    font-size: 16px
 }
 
 h1, h2, h3
@@ -32,7 +32,7 @@ h2
 p
 {
     margin-bottom: 1.3em;
-    font-size: 15px;
+    font-size: 16px;
     line-height: 1.4;
 
 }
