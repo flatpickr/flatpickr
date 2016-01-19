@@ -117,15 +117,15 @@ flatpickr.init = function (element, instanceConfig) {
 
 
 
-    getDaysinMonth = function(){
+    getDaysinMonth = function(givenMonth){
 
         var yr = self.currentYear,
-        	month = self.currentMonth;
+        	month = (typeof givenMonth === 'undefined') ? self.currentMonth : givenMonth;
 
         if (month === 1 && ( !( (yr % 4) || (!(yr % 100) && (yr % 400))) ) )
             return 29;
 
-        return self.l10n.daysInMonth[self.currentMonth];
+        return self.l10n.daysInMonth[month];
     }
 
     formatDate = function (dateFormat, dateObj) {
@@ -224,8 +224,10 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     buildDays = function () {
-        var firstOfMonth = new Date(self.currentYear, self.currentMonth, 1).getDay() - self.l10n.firstDayOfWeek,
+        var firstOfMonth = ( new Date(self.currentYear, self.currentMonth, 1).getDay() - self.l10n.firstDayOfWeek + 7 )%7,
             numDays = getDaysinMonth(),
+            prevMonth = ( self.currentMonth - 1 + 12)%12,
+            prevMonthDays = getDaysinMonth( prevMonth ),
             calendarFragment = document.createDocumentFragment(),
             row = document.createElement('tr'),
             dayCount,
@@ -235,11 +237,18 @@ flatpickr.init = function (element, instanceConfig) {
             date_is_disabled,
             date_outside_minmax;
 
-        // Offset the first day by the specified amount
-        firstOfMonth < 0 && (firstOfMonth += 7);
+           
+        // prepend days from the ending of previous month
+    	for( dayNumber = prevMonthDays + 1 - firstOfMonth ; dayNumber <= prevMonthDays; dayNumber++ )
+    		row.innerHTML +=
+				'<td class="slot disabled">'
+				 	+ '<span class="flatpickr-day">'
+				 		+ (dayNumber )
+				 	+ '</span>' +
+				'</td>';
 
-        // Add spacer to line up the first day of the month correctly
-        row.innerHTML += '<td colspan="' + firstOfMonth + '">&nbsp;</td>';
+            
+
 
         dayCount = firstOfMonth;
         calendarBody.innerHTML = '';
@@ -324,15 +333,15 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     handleYearChange = function () {
-        if (self.currentMonth < 0) {
-            self.currentYear--;
-            self.currentMonth = 11;
+    	
+        if (self.currentMonth < 0 || self.currentMonth > 11) {
+
+            self.currentYear += self.currentMonth % 11;
+            self.currentMonth = (self.currentMonth + 12) % 12;
+            
         }
 
-        if (self.currentMonth > 11) {
-            self.currentYear++;
-            self.currentMonth = 0;
-        }
+        
     };
 
     documentClick = function (event) {
@@ -446,9 +455,9 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     jumpToDate = function(jumpDate) {
+    	
     	self.currentYear = jumpDate.getFullYear();
         self.currentMonth = jumpDate.getMonth();
-        self.currentDayView = jumpDate.getDate();
 
     };
 
