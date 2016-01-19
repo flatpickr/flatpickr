@@ -1,19 +1,3 @@
-/*
-    chmln.flatpickr  - pick dates elegantly
-    © Gregory Petrosyan
-
-    https://github.com/chmln/flatpickr
-
-    Credits to Josh Salverda <josh.salverda@gmail.com> for providing a
-    magnificent starting point.
-
-    This program is free software. It comes without any warranty, to
-    the extent permitted by applicable law. You can redistribute it
-    and/or modify it under the terms of the Do What The Fuck You Want
-    To Public License, Version 2, as published by Sam Hocevar. See
-    http://www.wtfpl.net/ for more details.
-*/
-
 var flatpickr = function (selector, config) {
     'use strict';
     var elements,
