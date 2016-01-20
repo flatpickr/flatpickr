@@ -468,7 +468,7 @@ flatpickr.init = function (element, instanceConfig) {
 
 
         if ( self.element.value || (!self.element.value && self.config.defaultDate ) ){
-            self.selectedDateObj = utcDate(self.element.value||self.config.defaultDate);
+            self.selectedDateObj = utcDate(self.config.defaultDate||self.element.value);
         }
 
         self.config.minDate &&
