@@ -301,11 +301,13 @@ flatpickr.init = function (element, instanceConfig) {
 
         months.className = 'flatpickr-months';
 
-        prevMonth = r.createContextualFragment
-        	("<span class=flatpickr-prev-month>" + self.config.prevArrow + "</span>");
+        prevMonth = document.createElement('span');
+        prevMonth.className = "flatpickr-prev-month";
+        prevMonth.innerHTML = self.config.prevArrow;
 
-        nextMonth = r.createContextualFragment
-        	("<span class=flatpickr-next-month>" + self.config.nextArrow + "</span>");
+        nextMonth = document.createElement('span');
+        nextMonth.className = "flatpickr-next-month";
+        nextMonth.innerHTML = self.config.nextArrow;
 
 
         months.appendChild(prevMonth);
