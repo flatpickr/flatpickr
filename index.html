@@ -73,11 +73,11 @@ flatpickr('#minDate', {
     minDate: new Date()
 
     // can also use a string date, e.g. yyyy-mm-dd
-    minDate: new Date("2015-09-20")
+    minDate: new Date("2018-09-20")
     // or even
-    minDate: new Date("September 2, 2015"),
+    minDate: new Date("September 2, 2018"),
 
-    maxDate: new Date("2015-09-20")
+    maxDate: new Date("2018-09-20")
 
 
 });
@@ -87,7 +87,7 @@ flatpickr('#minDate', {
 <p><input id="minDateToday" placeholder="minDate: new Date()"></p>
 <p><input id="minDateString" placeholder="minDate: new Date('2016-09-20')"></p>
 <p><input id="minDateYMD" placeholder="minDate: new Date('September 2, 2015')"></p>
-<p><input id="maxDate" placeholder="minDate: new Date(), maxDate: new Date('2015-12-20')"></p>
+<p><input id="maxDate" placeholder="minDate: new Date(), maxDate: new Date('2016-8-20')"></p>
 </div>
 
 <div class=example_wrapper>
@@ -514,7 +514,7 @@ flatpickr(".flatpickr")
             flatpickr('#maxDate', {
                 // today
                 minDate: new Date(),
-                maxDate: new Date("2015-12-20")
+                maxDate: new Date("2016-8-20")
 
             });
 
