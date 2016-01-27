@@ -78,11 +78,10 @@ flatpickr.init = function (element, instanceConfig) {
     	if (typeof date === 'undefined') // no args = use today's date
         	date = new Date();
 
-    	else if (typeof date === 'string') // dashes to slashes
+    	else if (typeof date === 'string')
             date = new Date(date );
         
-
-    	date.setTime( date.getTime() + date.getTimezoneOffset()*60*1000 );
+        date = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
     	date.setHours(0,0,0,0);
 
     	return date;
@@ -191,20 +190,15 @@ flatpickr.init = function (element, instanceConfig) {
 
     isDisabled = function(date){
 
-    	var  toDate;
     	date = utcDate(date);
 
-        for (var i = 0; i < self.config.disable.length; i++){
-
-        	// js date is a day behind
-        	toDate = utcDate( self.config.disable[i]['to'] );
-        	toDate.setDate(toDate.getDate() + 1);
-
-            if ( date >= utcDate( self.config.disable[i]['from'] ) && date < toDate )
-                return true;
-        }
+        for (var i = 0; i < self.config.disable.length; i++)
+            if ( date >= utcDate( self.config.disable[i]['from'] ) 
+            	 && date <= utcDate( self.config.disable[i]['to'] ) )
+                	return true;        
 
         return false;
+
     };
 
     buildDays = function () {
@@ -240,7 +234,6 @@ flatpickr.init = function (element, instanceConfig) {
 
         // Start at 1 since there is no 0th day
         for (dayNumber = 1; dayNumber <= 42 - firstOfMonth; dayNumber++) {
-
 
         	
             cur_date = utcDate(self.currentYear + "-" + (self.currentMonth + 1) + "-" + dayNumber);            
@@ -346,13 +339,15 @@ flatpickr.init = function (element, instanceConfig) {
     }
 
     calendarClick = function (event) {
-        event.preventDefault();
-        var t = event.target;
 
-        if ( t.classList.contains('slot') || t.parentNode.classList.contains('slot') )
+        event.preventDefault();
+        
+        var targetDate = event.target;
+
+        if ( targetDate.classList.contains('slot') || targetDate.parentNode.classList.contains('slot') )
         {
 
-            var selDate = parseInt( t.childNodes[0].innerHTML || t.innerHTML, 10);
+            var selDate = parseInt( targetDate.childNodes[0].innerHTML || targetDate.innerHTML, 10);
 
             self.selectedDateObj = utcDate(self.currentYear + "/" + (self.currentMonth+1) + "/" + selDate);
 
