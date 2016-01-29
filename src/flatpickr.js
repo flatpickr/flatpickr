@@ -236,9 +236,9 @@ flatpickr.init = function (element, instanceConfig) {
         for (dayNumber = 1; dayNumber <= 42 - firstOfMonth; dayNumber++) {
 
         	
-            cur_date = utcDate(self.currentYear + "-" + (self.currentMonth + 1) + "-" + dayNumber);            
+            dayNumber <= numDays && (cur_date = utcDate( new Date(self.currentYear, self.currentMonth, dayNumber) ) );            
 
-
+            console.log(cur_date);
             // we have reached the end of a week, wrap to the next line
             if (dayCount % 7 === 0) {
 
@@ -349,7 +349,7 @@ flatpickr.init = function (element, instanceConfig) {
 
             var selDate = parseInt( targetDate.childNodes[0].innerHTML || targetDate.innerHTML, 10);
 
-            self.selectedDateObj = utcDate(self.currentYear + "/" + (self.currentMonth+1) + "/" + selDate);
+            self.selectedDateObj = utcDate( new Date( self.currentYear, self.currentMonth, selDate) );
 
 
             if (self.config.altInput)
