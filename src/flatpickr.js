@@ -190,8 +190,6 @@ flatpickr.init = function (element, instanceConfig) {
 
     isDisabled = function(date){
 
-    	date = utcDate(date);
-
         for (var i = 0; i < self.config.disable.length; i++)
             if ( date >= utcDate( self.config.disable[i]['from'] ) 
             	 && date <= utcDate( self.config.disable[i]['to'] ) )
@@ -208,7 +206,6 @@ flatpickr.init = function (element, instanceConfig) {
             prevMonthDays = getDaysinMonth( prevMonth ),
             calendarFragment = document.createDocumentFragment(),
             row = document.createElement('tr'),
-            dayCount,
             dayNumber,
             className,
             cur_date,
@@ -223,12 +220,10 @@ flatpickr.init = function (element, instanceConfig) {
 				 	+ '<span class="flatpickr-day">'
 				 		+ (dayNumber )
 				 	+ '</span>' +
-				'</td>';
-
-            
+				'</td>';       
 
 
-        dayCount = firstOfMonth;
+        
         calendarBody.innerHTML = '';
 
 
@@ -241,7 +236,7 @@ flatpickr.init = function (element, instanceConfig) {
 
 
             // we have reached the end of a week, wrap to the next line
-            if (dayCount % 7 === 0) {
+            if ( (dayNumber + firstOfMonth - 1) % 7 === 0) {
 
                 calendarFragment.appendChild(row);
                 row = document.createElement('tr');
@@ -273,8 +268,7 @@ flatpickr.init = function (element, instanceConfig) {
             				 	+ '<span class="flatpickr-day">'
             				 		+ (dayNumber > numDays ? dayNumber % numDays : dayNumber)
             				 	+ '</span></td>';
-
-            dayCount++;
+            
 
         }
 
@@ -284,22 +278,26 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     updateNavigationCurrentMonth = function () {
-        navigationCurrentMonth.innerHTML = '<span>' + monthToStr(self.currentMonth, self.config.shorthandCurrentMonth) + '</span> ' + self.currentYear;
+
+        navigationCurrentMonth.innerHTML = 
+            '<span>' + 
+                monthToStr(self.currentMonth, self.config.shorthandCurrentMonth) +
+            '</span> ' 
+            + self.currentYear;
+
     };
 
     buildMonthNavigation = function () {
 
-        var r = document.createRange(),
-        	months = document.createElement('div'),
-            prevMonth, nextMonth;
+        var months = document.createElement('div'),
+            prevMonth = document.createElement('span'),
+            nextMonth = document.createElement('span');
 
         months.className = 'flatpickr-months';
 
-        prevMonth = document.createElement('span');
         prevMonth.className = "flatpickr-prev-month";
         prevMonth.innerHTML = self.config.prevArrow;
 
-        nextMonth = document.createElement('span');
         nextMonth.className = "flatpickr-next-month";
         nextMonth.innerHTML = self.config.nextArrow;
 
@@ -325,14 +323,16 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     documentClick = function (event) {
-       if (!wrapperElement.contains(event.target))
-        close();
+
+        if (!wrapperElement.contains(event.target))
+            close();
+
     };
 
-    changeMonth = function(to)
+    changeMonth = function(offset)
     {
 
-        (to === 'prev') ?  self.currentMonth-- : self.currentMonth++;
+        self.currentMonth += offset;
 
         handleYearChange();
         updateNavigationCurrentMonth();
@@ -372,6 +372,7 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     buildCalendar = function () {
+
         buildMonthNavigation();
         buildWeekdays();
         buildDays();
@@ -383,6 +384,7 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     bind = function () {
+
     	if (String(self.config.inline) != 'true') {
 
     	  	var openEvent = (self.element.nodeName === 'INPUT') ? 'focus'  : 'click';
@@ -390,26 +392,24 @@ flatpickr.init = function (element, instanceConfig) {
 
     	}
 
-        wrapperElement.querySelector(".flatpickr-prev-month").addEventListener('click', function(){ changeMonth('prev') });
-        wrapperElement.querySelector(".flatpickr-next-month").addEventListener('click', function(){ changeMonth('next') });
+        wrapperElement.querySelector(".flatpickr-prev-month").addEventListener('click', function(){ changeMonth(-1) });
+        wrapperElement.querySelector(".flatpickr-next-month").addEventListener('click', function(){ changeMonth(1) });
 
         calendar.addEventListener('click', calendarClick);
+        document.addEventListener('click', documentClick, false);
 
     };
 
     open = function () {
 
-        self.element.blur();
-        document.addEventListener('click', documentClick, false);
+        self.element.blur();        
         wrapperElement.classList.add('open');
     };
 
     close = function () {
-    	if (self.config.inline)
-    		return;
 
-        document.removeEventListener('click', documentClick, false);
-        wrapperElement.classList.remove('open');
+    	if (!self.config.inline)
+    		wrapperElement.classList.remove('open');        
 
     };
 
@@ -427,7 +427,6 @@ flatpickr.init = function (element, instanceConfig) {
 
         document.removeEventListener('click', documentClick, false);
         self.element.removeEventListener('focus', open, false);
-        self.element.removeEventListener('blur', close, false);
         self.element.removeEventListener('click', open, false);
 
         parent = self.element.parentNode;
