@@ -1,6 +1,6 @@
 var gulp = require('gulp'),
 	uglify = require('gulp-uglify'),
-	cssnano = require('gulp-cssnano'),
+	cssmin = require('gulp-cssmin'),
 	rename = require("gulp-rename");
 
 gulp.task('compress-js', function() {
@@ -12,7 +12,7 @@ gulp.task('compress-js', function() {
 
 gulp.task('compress-css', function() {
   return gulp.src('src/flatpickr.css')
-    .pipe(cssnano()).on('error', errorHandler)
+    .pipe(cssmin()).on('error', errorHandler)
     .pipe(rename({        suffix: '.min'   }))
     .pipe(gulp.dest('dist'));
 });
