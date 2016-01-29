@@ -79,9 +79,9 @@ flatpickr.init = function (element, instanceConfig) {
         	date = new Date();
 
     	else if (typeof date === 'string')
-            date = new Date(date );
-        
-        date = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
+            // dashes to slashes keep firefox happy
+            date = new Date(date.replace(/-/g, "/")); 
+
     	date.setHours(0,0,0,0);
 
     	return date;
@@ -236,9 +236,10 @@ flatpickr.init = function (element, instanceConfig) {
         for (dayNumber = 1; dayNumber <= 42 - firstOfMonth; dayNumber++) {
 
         	
-            dayNumber <= numDays && (cur_date = utcDate( new Date(self.currentYear, self.currentMonth, dayNumber) ) );            
+            dayNumber <= numDays && 
+                (cur_date = utcDate( new Date(self.currentYear, self.currentMonth, dayNumber) ) );            
 
-            console.log(cur_date);
+
             // we have reached the end of a week, wrap to the next line
             if (dayCount % 7 === 0) {
 
