@@ -13,6 +13,7 @@
     "javascript"
   ],
   "homepage": "https://github.com/chmln/flatpickr",
+  "main": "dist/flatpickr.min.js",
   "moduleType": [],
   "ignore": [
     "**/.*",
