@@ -1,7 +1,17 @@
 var gulp = require('gulp'),
+  less = require('gulp-less'),
 	uglify = require('gulp-uglify'),
 	cssmin = require('gulp-cssmin'),
 	rename = require("gulp-rename");
+
+
+gulp.task('less', function () {
+  return gulp.src('src/flatpickr.less')
+    .pipe(less())
+    .pipe(cssmin()).on('error', errorHandler)
+    .pipe(rename({        suffix: '.min'   }))
+    .pipe(gulp.dest('dist'));
+});
 
 gulp.task('compress-js', function() {
   return gulp.src('src/*.js')
@@ -10,12 +20,7 @@ gulp.task('compress-js', function() {
     .pipe(gulp.dest('dist'));
 });
 
-gulp.task('compress-css', function() {
-  return gulp.src('src/flatpickr.css')
-    .pipe(cssmin()).on('error', errorHandler)
-    .pipe(rename({        suffix: '.min'   }))
-    .pipe(gulp.dest('dist'));
-});
+
 
 // Handle the error
 function errorHandler (error) {
@@ -23,4 +28,4 @@ function errorHandler (error) {
   this.emit('end');
 }
 
-gulp.task('default', ['compress-js', 'compress-css']);
+gulp.task('default', ['compress-js', 'less' ]);
