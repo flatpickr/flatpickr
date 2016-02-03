@@ -47,7 +47,6 @@ flatpickr.init = function (element, instanceConfig) {
         wrap,
         utcDate,
         currentDate,
-        date,
         formatDate,
         monthToStr,
         isDisabled,
@@ -103,7 +102,7 @@ flatpickr.init = function (element, instanceConfig) {
     getDaysinMonth = function(givenMonth){
 
         var yr = self.currentYear,
-        	month = (typeof givenMonth === 'undefined') ? self.currentMonth : givenMonth;
+        	month = givenMonth || self.currentMonth;
 
         if (month === 1 && ( !( (yr % 4) || (!(yr % 100) && (yr % 400))) ) )
             return 29;
@@ -255,10 +254,10 @@ flatpickr.init = function (element, instanceConfig) {
             className = (date_is_disabled || date_outside_minmax) ? "disabled" : "slot";
 
 
-            if (!self.selectedDateObj && cur_date.valueOf() === currentDate.valueOf() )
+            if (!date_is_disabled && !self.selectedDateObj && cur_date.valueOf() === currentDate.valueOf() )
             	className += ' today';
 
-            if (self.selectedDateObj && cur_date.valueOf() === self.selectedDateObj.valueOf() )
+            if (!date_is_disabled && self.selectedDateObj && cur_date.valueOf() === self.selectedDateObj.valueOf() )
             	className += ' selected';
 
             
@@ -266,7 +265,7 @@ flatpickr.init = function (element, instanceConfig) {
             row.innerHTML +=
             				'<td class="' + className + '">'
             				 	+ '<span class="flatpickr-day">'
-            				 		+ (dayNumber > numDays ? dayNumber % numDays : dayNumber)
+            				 		+ (date_is_disabled ? dayNumber % numDays : dayNumber)
             				 	+ '</span></td>';
             
 
@@ -419,6 +418,8 @@ flatpickr.init = function (element, instanceConfig) {
             ? ( element.dispatchEvent( new Event("change") ) )
             : ( element.fireEvent("onchange") );
 
+        self.config.onChange(self.selectedDateObj);
+
     }
 
     destroy = function () {
@@ -484,7 +485,7 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     self.redraw = function(){
-        flatpickr(self.element, self.config);
+        buildDays();
     }
 
     self.set = function(key, value){
@@ -515,7 +516,7 @@ flatpickr.init.prototype = {
     },
 
     defaultConfig : {
-            dateFormat: 'F j, Y',
+            dateFormat: 'd-m-Y',
             altFormat: null,
             altInput: null,
             defaultDate: null,
@@ -525,7 +526,8 @@ flatpickr.init.prototype = {
             shorthandCurrentMonth: false,
             inline: false,
             prevArrow: '&lt;',
-            nextArrow: '&gt;'
+            nextArrow: '&gt;',
+            onChange: function(dateObj){}
     }
 };
 

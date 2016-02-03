@@ -92,7 +92,7 @@
     color: #999;
 }
 
-.flatpickr-calendar .slot
+.flatpickr-calendar tbody td
 {
 	cursor: pointer;
 }
