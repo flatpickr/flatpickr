@@ -516,7 +516,7 @@ flatpickr.init.prototype = {
     },
 
     defaultConfig : {
-            dateFormat: 'd-m-Y',
+            dateFormat: 'Y-m-d',
             altFormat: null,
             altInput: null,
             defaultDate: null,
