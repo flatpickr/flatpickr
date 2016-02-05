@@ -265,7 +265,7 @@ flatpickr.init = function (element, instanceConfig) {
             row.innerHTML +=
             				'<td class="' + className + '">'
             				 	+ '<span class="flatpickr-day">'
-            				 		+ (date_is_disabled ? dayNumber % numDays : dayNumber)
+            				 		+ (dayNumber > numDays ? dayNumber % numDays : dayNumber)
             				 	+ '</span></td>';
             
 
