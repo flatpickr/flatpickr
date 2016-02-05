@@ -1,9 +1,9 @@
 var gulp = require('gulp'),
   less = require('gulp-less'),
+  watchLess = require('gulp-watch-less'),
 	uglify = require('gulp-uglify'),
 	cssmin = require('gulp-cssmin'),
 	rename = require("gulp-rename");
-
 
 gulp.task('less', function () {
   return gulp.src('src/flatpickr.less')
@@ -12,6 +12,15 @@ gulp.task('less', function () {
     .pipe(rename({        suffix: '.min'   }))
     .pipe(gulp.dest('dist'));
 });
+
+gulp.task('less-watch', ['less'], function() {
+    return gulp.src('src/flatpickr.less')
+        .pipe(watchLess('src/flatpickr.less', function() {
+            gulp.start('less');
+        }));
+});
+
+
 
 gulp.task('compress-js', function() {
   return gulp.src('src/*.js')
@@ -28,4 +37,4 @@ function errorHandler (error) {
   this.emit('end');
 }
 
-gulp.task('default', ['compress-js', 'less' ]);
+gulp.task('default', ['compress-js', 'less', 'less-watch' ]);

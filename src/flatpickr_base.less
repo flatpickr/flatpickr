@@ -18,17 +18,14 @@
     position: absolute; top: 100%; left: 0;
     margin-top: 3px;
     opacity: 0;
-    padding: 3px;
-    max-height: 0;
     z-index: 0;
     overflow: hidden;
-    -webkit-transition: opacity 250ms cubic-bezier(0.075, 0.820, 0.165, 1.000);
-    transition: opacity 250ms cubic-bezier(0.075, 0.820, 0.165, 1.000);
+    -webkit-transition: opacity 75ms;
+    transition: opacity 75ms;
 }
 
 .open .flatpickr-calendar, .inline .flatpickr-calendar
 {
-    max-height: 286px;
     z-index: 100;
     opacity: 1;
 }
@@ -40,7 +37,7 @@
 
 .flatpickr-months
 {
-    padding: 2px;
+    padding: 4px 0;
     text-align: center;
     font-size: 135%;
 }
@@ -49,17 +46,15 @@
 .flatpickr-next-month
 {
     text-decoration: none;
-    padding: 0 .4em;
     cursor: pointer;
+    position: absolute
 }
 
-.flatpickr-prev-month { float: left }
-
-.flatpickr-next-month { float: right }
+.flatpickr-prev-month { left: 0.4em }
+.flatpickr-next-month { right: 0.4em }
 
 .flatpickr-current-month
 {
-    padding: 0 .5em;
     font-weight: 300;
 }
 
@@ -82,7 +77,7 @@
 .flatpickr-calendar th
 {
     text-align: center;
-    padding: 5px;
+    padding: 2px 0 4px;
     font-weight: bold;
 }
 
@@ -93,16 +88,22 @@
 
 .flatpickr-day
 {
+	display: block;  
+	width: 32px;
+	height: 32px;
+    line-height: 32px; text-align: center;      
+    padding: 0; margin: 0 1px 1px 0;    
     border: 1px solid transparent;
-    display: block;
-    height: 32px;
-    line-height: 32px;
-    padding: 0;
-    text-align: center;
-    width: 32px;
-    border-radius: 150px;
-    margin: 1px;
+    border-radius: 150px; 
 }
+
+
+.flatpickr-calendar tbody td:first-child .flatpickr-day
+{
+	margin-left: 1px;
+}
+
+
 
 .flatpickr-calendar .disabled,
 .flatpickr-calendar .disabled .flatpickr-day,
