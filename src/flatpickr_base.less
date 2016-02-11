@@ -1,3 +1,5 @@
+/* ============== CALENDAR ============== */
+
 .flatpickr-wrapper
 {
     display: inline-block;
@@ -13,6 +15,10 @@
 
 .flatpickr-calendar
 {
+    background: @calendar_background;
+    color: @day_text_color;
+    border: 1px solid @calendar_border_color;
+
     font-size: 13px;
     border-radius: 4px;
     position: absolute; top: 100%; left: 0;
@@ -22,6 +28,7 @@
     overflow: hidden;
     -webkit-transition: opacity 75ms;
     transition: opacity 75ms;
+    max-width: 256px;        
 }
 
 .open .flatpickr-calendar, .inline .flatpickr-calendar
@@ -35,8 +42,13 @@
     position: static;
 }
 
-.flatpickr-months
-{
+/* ======== Month Navigation ======== */
+
+.flatpickr-months {
+
+    background: @months_background;
+    color: @months_color;
+
     padding: 4px 0;
     text-align: center;
     font-size: 135%;
@@ -47,11 +59,14 @@
 {
     text-decoration: none;
     cursor: pointer;
-    position: absolute
 }
 
-.flatpickr-prev-month { left: 0.4em }
-.flatpickr-next-month { right: 0.4em }
+.flatpickr-prev-month { float:left; left: 0.4em }
+.flatpickr-next-month { float:right; right: 0.4em }
+
+.flatpickr-prev-month:hover,
+.flatpickr-next-month:hover { color: @today_color }
+
 
 .flatpickr-current-month
 {
@@ -61,6 +76,7 @@
 .flatpickr-current-month span { font-weight: 700 }
 
 
+/* ======== Calendar ======== */
 
 .flatpickr-calendar table
 {
@@ -76,6 +92,8 @@
 
 .flatpickr-calendar th
 {
+    color: @weekdays_color;
+
     text-align: center;
     padding: 2px 0 4px;
     font-weight: bold;
@@ -83,33 +101,114 @@
 
 .flatpickr-calendar tbody td
 {
-	cursor: pointer;
+    cursor: pointer;
+}
+
+.flatpickr-calendar td:hover .flatpickr-day
+{
+    background: @day_hover_background_color;
+    border-color: @day_hover_background_color;
 }
 
 .flatpickr-day
 {
-	display: block;  
-	width: 32px;
-	height: 32px;
+    display: block;  
+    width: 32px;
+    height: 32px;
     line-height: 32px; text-align: center;      
     padding: 0; margin: 0 1px 1px 0;    
     border: 1px solid transparent;
     border-radius: 150px; 
 }
 
-
 .flatpickr-calendar tbody td:first-child .flatpickr-day
 {
-	margin-left: 1px;
+    margin-left: 1px;
 }
 
 
+.today .flatpickr-day
+{
+    border-color: @today_color;
+}
+
+td.today:hover .flatpickr-day
+{
+    border-color: @today_color;
+    background-color: @today_color;
+    color: white
+}
+
+.selected .flatpickr-day, td.selected:hover .flatpickr-day
+{
+    background-color: @selected_day_color;
+    color: #fff;
+    border-color: @selected_day_color;
+}
 
 .flatpickr-calendar .disabled,
 .flatpickr-calendar .disabled .flatpickr-day,
 .flatpickr-calendar .disabled:hover .flatpickr-day
 {
+
+    color: @disabled_color;
+
     background: transparent;
     border-color: transparent;
     cursor: default;
+
+}
+
+
+
+/* ============== TIME PICKER ============== */
+
+.flatpickr-time {
+    overflow: auto;
+    border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.flatpickr-hour, .flatpickr-minute {
+    background: transparent;
+    -webkit-appearance: none;
+    box-shadow: none;
+    border: 0;
+    display: inline-block;  
+    margin: 0;
+    padding: 0;
+    line-height: 38px;
+    cursor: pointer;
+    float: left;
+    font-weight: bold;
+    width: 45%;
+    color: @day_text_color;
+}
+
+.flatpickr-hour:hover, .flatpickr-minute:hover {
+    background: fade(@day_hover_background_color, 30%) ;
+
+}
+
+.flatpickr-hour:focus, .flatpickr-minute:focus {
+    outline: 0;
+    border: 0;
+}
+
+.flatpickr-time-separator {
+    height: 38px;
+    display: block;
+    line-height: 38px;
+    float: left;
+    text-align: center;
+    width: 10%;
+}
+
+.flatpickr-hour {
+    font-weight: bold;
+    text-align:right;
+}
+
+.flatpickr-minute {
+    font-weight: 300;
+    text-align:left;
 }

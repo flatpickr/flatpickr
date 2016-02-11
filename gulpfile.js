@@ -6,7 +6,7 @@ var gulp = require('gulp'),
 	rename = require("gulp-rename");
 
 gulp.task('less', function () {
-  return gulp.src('src/flatpickr.less')
+  return gulp.src(['src/flatpickr.less', 'src/flatpickr.dark.less'], {base: 'src/'})
     .pipe(less())
     .pipe(cssmin()).on('error', errorHandler)
     .pipe(rename({        suffix: '.min'   }))
