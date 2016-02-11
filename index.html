@@ -276,7 +276,7 @@ flatpickr(".flatpickr")
 <td>defaultDate</td>
 <td>String</td>
 <td>null</td>
-<td>Set the date to highlight on first opening. Specify a date as a parsable string. See (<a target=_blank href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date">https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date</a>)</td>
+<td>Set the date to highlight on first opening. Specify a date as a <a target=_blank href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse">parsable string</a>.</td>
 </tr>
 
 <tr>
@@ -310,7 +310,7 @@ flatpickr(".flatpickr")
 <tr>
 <td>altFormat</td>
 <td>string</td>
-<td>null</td>
+<td>"F j, Y"</td>
 <td>Exactly the same as date format, but for the altInput field</td>
 </tr>
 
@@ -333,13 +333,25 @@ flatpickr(".flatpickr")
 <td>n/a</td>
 <td>A function that gets triggered on every date selection </td>
 </tr>
+<tr>
+<td>hourIncrement</td>
+<td>integer</td>
+<td>1</td>
+<td>Adjusts the step for the hour input (incl. scrolling) </td>
+</tr>
+<tr>
+<td>minuteIncrement</td>
+<td>integer</td>
+<td>5</td>
+<td>Adjusts the step for the minute input (incl. scrolling) </td>
+</tr>
 </tbody></table>
 
 
 
 
 
-<br><br>
+
 <h3>Date Format</h3>
 
 <table class=table><thead>
@@ -443,7 +455,7 @@ flatpickr(".flatpickr")
 </tbody>
 </table>
 
-<br><br>
+
 <h3><a id="user-content-escaping-date-format-characters" class="anchor" href="#escaping-date-format-characters" aria-hidden="true"><span class="octicon octicon-link"></span></a>Escaping date format characters</h3>
 
 <p>To escape a character (if you need to use one of the reserved format characters above) use a double backslash: \\</p>

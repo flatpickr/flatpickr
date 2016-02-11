@@ -12,7 +12,7 @@ body, input {
 
 h1, h2, h3
 {
-    margin-bottom: 0.5rem;
+    margin: 4rem 0 0.5rem 0;
     color: black
 
 }
@@ -23,11 +23,6 @@ h1 {
     font-family: 'nunito'
 }
 
-h2
-{
-    margin-top: 3rem;
-
-}
 
 p
 {
@@ -51,10 +46,10 @@ a
 
 input {
     border: 2px solid #ddd;
+    border-radius: 2px;
     padding: 1rem;
     width: 400px;
-    font-weight: 400;
-    font-size: 1rem;
+    font-size: 15px;
 }
 
 input:focus, input:active
@@ -146,25 +141,25 @@ pre
 {
     border: 1px solid #e4e4e4;
     border-spacing: 0;
-    font-size: 14px
+    font-size: 14px;
+    width: 100%;
 
 }
 
-.table th
-{
+.table th {
     text-align: left;
-    background: transparent;
-    border-bottom: 3px solid rgba(68,68,68,0.13);
+    background: #7ABD7C;
+    color: white;
 }
 
 .table th, .table td
 {
-    padding: 11px
+    padding: 0.75rem 1rem;
 }
 
 .table tr
 {
-    border-bottom: 1px solid rgba(68,68,68,0.13);
+    border-bottom: 1px solid #F3F8FF;
 }
 
 .table tr td
@@ -178,7 +173,7 @@ pre
 }
 
 .table  tr:nth-child(2n) {
-    background-color: #f3f3f3;
+    background-color: #F3F8FF;
 }
 
 .flatpickr-months i

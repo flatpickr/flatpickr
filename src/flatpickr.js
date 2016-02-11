@@ -492,14 +492,10 @@ flatpickr.init = function (element, instanceConfig) {
 
     };
 
-    bind = function () {
-
-    	
+    bind = function () {    	
 
         self.element.addEventListener( 'focus' , open);
-        self.config.altInput && (altInput.addEventListener( 'focus' , open) );
-
-    	
+        self.config.altInput && (altInput.addEventListener( 'focus' , open) );    	
 
         wrapperElement.querySelector(".flatpickr-prev-month").addEventListener('click', function(){ changeMonth(-1) });
         wrapperElement.querySelector(".flatpickr-next-month").addEventListener('click', function(){ changeMonth(1) });
@@ -596,8 +592,7 @@ flatpickr.init = function (element, instanceConfig) {
 
 
         if ( self.element.value || self.config.defaultDate )
-            self.selectedDateObj = new Date(self.config.defaultDate||self.element.value);
-        
+            self.selectedDateObj = new Date(self.config.defaultDate||self.element.value);        
 
 
         if (self.config.minDate){
