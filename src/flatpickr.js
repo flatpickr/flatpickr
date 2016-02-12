@@ -74,7 +74,7 @@ flatpickr.init = function (element, instanceConfig) {
         calendar = document.createElement('table'),
         calendarBody = document.createElement('tbody'),
         currentDate,
-        altInput
+        altInput,
         wrapperElement,
         hourElement,
         minuteElement;
