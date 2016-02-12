@@ -73,15 +73,54 @@ flatpickr.init = function (element, instanceConfig) {
         navigationCurrentMonth = document.createElement('span'),
         calendar = document.createElement('table'),
         calendarBody = document.createElement('tbody'),
-        currentDate,
+        currentDate = new Date(),
         altInput,
-        wrapperElement,
+        wrapperElement = document.createElement('div'),
         hourElement,
         minuteElement;
+    
 
-    calendarContainer.className = 'flatpickr-calendar';
-    navigationCurrentMonth.className = 'flatpickr-current-month';
-    instanceConfig = instanceConfig || {};
+    init = function () {
+
+        calendarContainer.className = 'flatpickr-calendar';
+        navigationCurrentMonth.className = 'flatpickr-current-month';
+        instanceConfig = instanceConfig || {};
+
+        self.config = {};
+        self.element = element;
+        self.destroy = destroy;
+
+        for (var config in self.defaultConfig)
+            self.config[config] =
+                instanceConfig[config] ||
+                self.element.dataset[config.toLowerCase()] ||
+                self.defaultConfig[config];
+        
+
+        self.config.defaultDate &&
+            ( self.config.defaultDate = new Date(self.config.defaultDate) );
+
+
+        if ( self.element.value || self.config.defaultDate )
+            self.selectedDateObj = new Date(self.config.defaultDate||self.element.value);        
+
+
+        if (self.config.minDate){
+
+            self.config.minDate === "today" && (self.config.minDate = new Date());
+            self.config.minDate = uDate(self.config.minDate)
+        }
+
+        self.config.maxDate && (self.config.maxDate = uDate(self.config.maxDate) );
+
+
+        jumpToDate(self.selectedDateObj||self.config.minDate||currentDate);
+
+        wrap();
+        buildCalendar();
+        bind();
+        updateValue();
+    };
 
     uDate = function(date){
 
@@ -100,7 +139,7 @@ flatpickr.init = function (element, instanceConfig) {
     }
 
     wrap = function () {
-        wrapperElement = document.createElement('div');
+
         wrapperElement.className = 'flatpickr-wrapper';        
 
         self.element.parentNode.insertBefore(wrapperElement, self.element);
@@ -110,6 +149,7 @@ flatpickr.init = function (element, instanceConfig) {
 
         if ( self.config.altInput ){
 
+            // replicate self.element
             altInput = document.createElement(self.element.nodeName);
             altInput.className = self.element.className;
 
@@ -119,7 +159,6 @@ flatpickr.init = function (element, instanceConfig) {
         }
         
     };
-
 
 
     getDaysinMonth = function(givenMonth){
@@ -239,7 +278,6 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
 
-
     buildWeekdays = function () {
         var weekdayContainer = document.createElement('thead'),
             firstDayOfWeek = self.l10n.firstDayOfWeek,
@@ -299,9 +337,7 @@ flatpickr.init = function (element, instanceConfig) {
 
         calendarContainer.appendChild(timeContainer);
 
-
     }
-
 
 
     timeWrapper = function (e){
@@ -573,47 +609,7 @@ flatpickr.init = function (element, instanceConfig) {
 
     };
 
-    init = function () {
-
-        var config, parsedDate;
-
-        self.config = {};
-        self.element = element;
-        self.destroy = destroy;
-
-        currentDate = new Date();
-
-        for (config in self.defaultConfig)
-            self.config[config] =
-                instanceConfig[config] ||
-                self.element.dataset[config.toLowerCase()] ||
-                self.defaultConfig[config];
-        
-
-        self.config.defaultDate &&
-            ( self.config.defaultDate = uDate(self.config.defaultDate) );
-
-
-        if ( self.element.value || self.config.defaultDate )
-            self.selectedDateObj = new Date(self.config.defaultDate||self.element.value);        
-
-
-        if (self.config.minDate){
-
-            self.config.minDate === "today" && (self.config.minDate = new Date());
-            self.config.minDate = uDate(self.config.minDate)
-        }
-
-        self.config.maxDate && (self.config.maxDate = uDate(self.config.maxDate) );
-
-
-        jumpToDate(self.selectedDateObj||self.config.minDate||currentDate);
-
-        wrap();
-        buildCalendar();
-        bind();
-        updateValue();
-    };
+    
 
     self.redraw = function(){
         buildDays();

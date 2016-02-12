@@ -96,8 +96,8 @@ flatpickr('#yourSelector', { dateFormat: 'm/d/Y'});
 <h3>Date Limits with minDate and maxDate</h3>
 The example below conveniently uses data-attributes for setting <b>minDate</b> and <b>maxDate</b> <a href=#options>options</a>.
 <pre class="prettyprint lang-html">
-&lt;input class=flatpickr data-mindate=today"&gt;
-&lt;input class=flatpickr data-mindate="2016-09-20""&gt;
+&lt;input class=flatpickr data-mindate=today&gt;
+&lt;input class=flatpickr data-mindate="2016-09-20"&gt;
 &lt;input class=flatpickr data-mindate="September 2, 2015"&gt;
 &lt;input class=flatpickr data-mindate=today data-maxdate='2016-8-20'&gt;
 </pre>
@@ -106,6 +106,36 @@ The example below conveniently uses data-attributes for setting <b>minDate</b> a
 <p><input class=flatpickr data-mindate="2016-09-20" placeholder="minDate: '2016-09-20'"></p>
 <p><input class=flatpickr data-mindate="September 2, 2015" placeholder="minDate: new Date('September 2, 2015')"></p>
 <p><input class=flatpickr data-mindate=today data-maxdate='2016-8-20' placeholder="minDate: today, maxDate: '2016-8-20'"></p>
+</div>
+
+<div class=example_wrapper>
+<h3>DateTime Picker</h3>
+<pre class='prettyprint lang-html'>
+&lt;input class=flatpickr data-enabletime=true&gt;
+</pre>
+
+<input class=flatpickr data-enabletime=true placeholder="Pick date and time">
+</div>
+
+<div class=example_wrapper>
+<h3>Utilizing defaultDate, altInput</h3>
+
+<p>altInput can be used for displaying a friendly date format (see altFormat) to the user while sending the date formatted as dateFormat to the server.
+Feel free to inspect the input element below after picking a date to see what's going on. </p>
+
+<pre class='prettyprint lang-html'>
+&lt;input class=flatpickr<br>&#09;data-altinput=true<br>&#09;data-defaultDate="2015/10/10"<br>&#09;data-enabletime=true<br>&#09;data-timeFormat="h:i K"&gt;
+</pre>
+
+<p><input class=flatpickr data-altinput=true data-defaultDate="2015/10/10 7:49" data-enabletime=true data-timeFormat="h:i K" placeholder="Custom default date"></p>
+
+<br>
+Using <b>data-defaultDate</b> attribute and custom dateFormat inline
+<pre class='prettyprint lang-html'>
+&lt;input class=flatpickr data-defaultDate="2016/1/17"<br>&#09;data-altInput=true data-altFormat="F d, \\b\\r\\u\\h"&gt;
+</pre>
+
+<p><input class=flatpickr data-defaultDate="2016/1/17" data-altInput=true data-altFormat="F d, \\b\\r\\u\\h" ></p>
 </div>
 
 <div class=example_wrapper>
@@ -154,39 +184,6 @@ check_out.set("onChange", function(d){ check_in.set( "maxDate" , d ); });
 
 <p><input id="check_in_date" placeholder="Check-In Date"></p>
 <p><input id="check_out_date" placeholder="Check Out Date"></p>
-</div>
-
-<div class=example_wrapper>
-<h3>DateTime Picker</h3>
-<pre class='prettyprint lang-html'>
-&lt;input class=flatpickr data-enabletime=true&gt;
-</pre>
-
-<input class=flatpickr data-enabletime=true placeholder="Pick date and time">
-</div>
-
-<div class=example_wrapper>
-<h3>Utilizing defaultDate, altInput</h3>
-
-<p>altInput can be used for displaying a friendly date format (see altFormat) to the user while sending the date formatted as dateFormat to the server. </p>
-
-<pre class='prettyprint lang-html'>
-&lt;input class=flatpickr data-altinput=true data-defaultDate="2015/10/10" data-enabletime=true&gt;
-</pre>
-
-<p><input class=flatpickr data-altinput=true data-defaultDate=2015/10/10 data-enabletime=true data-timeFormat="h:i K" placeholder="Custom default date"></p>
-
-<br>
-Using <b>data-defaultDate</b> attribute and custom dateFormat inline
-<pre class='prettyprint lang-html'>
-&lt;input class=flatpickr<br>&#09;data-defaultDate="2016/1/17"<br>&#09;data-altInput=true data-altFormat="F d, \\b\\r\\u\\h"<br>&#09;data-timeFormat="h:i K""&gt;
-</pre>
-
-<pre class='prettyprint lang-js'>
-flatpickr(".flatpickr");
-</pre>
-
-<p><input class=flatpickr data-defaultDate="2016/1/17" data-altInput=true data-altFormat="F d, \\b\\r\\u\\h" ></p>
 </div>
 
 
