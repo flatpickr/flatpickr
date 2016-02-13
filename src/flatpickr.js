@@ -322,7 +322,7 @@ flatpickr.init = function (element, instanceConfig) {
         minuteElement.className = "flatpickr-minute";
 
 
-        hourElement.value = self.selectedDateObj ? pad(self.selectedDateObj.getHours()) : "00";
+        hourElement.value = self.selectedDateObj ? pad(self.selectedDateObj.getHours()) : 12;
         minuteElement.value = self.selectedDateObj ? pad(self.selectedDateObj.getMinutes()) : "00";
         am_pm.innerHTML="AM";
 
