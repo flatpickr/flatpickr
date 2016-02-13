@@ -182,11 +182,15 @@ td.today:hover .flatpickr-day
     cursor: pointer;
     float: left;
     font-weight: bold;
-    width: 45%;
+    width: 40%;
     color: @day_text_color;
 }
 
-.flatpickr-hour:hover, .flatpickr-minute:hover {
+.flatpickr-minute {
+    width: 30%;
+}
+
+.flatpickr-hour:hover, .flatpickr-minute:hover, .flatpickr-am-pm:hover {
     background: fade(@day_hover_background_color, 30%) ;
 
 }
@@ -196,13 +200,19 @@ td.today:hover .flatpickr-day
     border: 0;
 }
 
-.flatpickr-time-separator {
+.flatpickr-time-separator, .flatpickr-am-pm  {
     height: 38px;
     display: block;
     line-height: 38px;
     float: left;
-    text-align: center;
-    width: 10%;
+    text-align:center;
+    width: 5%;
+}
+
+.flatpickr-am-pm {
+    width: 25%;
+    cursor: pointer;
+    text-align:left;
 }
 
 .flatpickr-hour {
@@ -213,4 +223,10 @@ td.today:hover .flatpickr-day
 .flatpickr-minute {
     font-weight: 300;
     text-align:left;
+}
+
+.flatpickr-time input[type=number]::-webkit-inner-spin-button, 
+.flatpickr-time input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
 }
