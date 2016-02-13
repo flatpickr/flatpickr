@@ -219,7 +219,7 @@ input:focus, input:active
     background: linear-gradient(45deg,  #4183d7 0%,#87d37c 76%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4183d7', endColorstr='#87d37c',GradientType=1 );
     color: white;
-    width: 100vw;
+    width: 100%;
 }
 
 .hero h1{
@@ -265,7 +265,7 @@ input:focus, input:active
 
 .wrapper
 {
-    width: 96vw;
+    width: 80%;
     max-width: 840px;
     margin: 0 auto;
 

@@ -29,7 +29,8 @@
     overflow: hidden;
     -webkit-transition: opacity 75ms;
     transition: opacity 75ms;
-    max-width: 256px;        
+    width: 100%;
+    max-width: 266px;      
 }
 
 .open .flatpickr-calendar, .inline .flatpickr-calendar
@@ -90,7 +91,7 @@
 .flatpickr-calendar thead { font-size: 90% }
 
 .flatpickr-calendar th,
-.flatpickr-calendar td { width: 14.3% }
+.flatpickr-calendar td { text-align:center; width: 14.3% }
 
 .flatpickr-calendar th
 {
@@ -114,9 +115,9 @@
 
 .flatpickr-day
 {
-    display: block;  
-    width: 32px;
-    height: 32px;
+    display: inline-block;
+    width: 100%;  
+    max-width: 32px;
     line-height: 32px; text-align: center;      
     padding: 0; margin: 0 1px 1px 0;    
     border: 1px solid transparent;
