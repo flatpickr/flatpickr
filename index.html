@@ -21,7 +21,7 @@
 <body>
 <div class='hero center_text'>
 <h1>flatpickr</h1>
-<p class=desc>A lightweight, dependency-free datepicker that doesn't suck </p>
+<p class=desc>A lightweight & powerful datetime picker that <span id=merit></span></p>
 </div>
 
 <div class='wrapper'>
@@ -574,9 +574,6 @@ flatpickr(".flatpickr")
 
 
 
-
-
-
             var check_in = flatpickr("#check_in_date", { minDate: new Date() });
             var check_out = flatpickr("#check_out_date", { minDate: new Date() });
 
@@ -584,13 +581,17 @@ flatpickr(".flatpickr")
             check_out.set("onChange", function(d){ check_in.set( "maxDate" , d ); });
 
 
+            var merits = [
+                "doesn't suck",
+                "doesn't look like its been designed by John Resig",
+                "won't eat the last slice of pizza",
+                "will do your laundry",
+                "will walk your dog on a chilly february morning while you listen to an Al Green vinyl"
+            ];
+
+            document.getElementById("merit").innerHTML = merits[Math.floor((Math.random() * merits.length))];
 
 
-            flatpickr("#defDate", { 'defaultDate' : '2015-10-10' });
-
-
-
-            flatpickr(".inline_picker", { 'inline' : true, 'altInput' : "#inline_picked_date"});
 
             
 

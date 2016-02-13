@@ -223,6 +223,7 @@ input:focus, input:active
 }
 
 .hero h1{
+    margin-top: 0;
     color: white
 }
 .hero p
