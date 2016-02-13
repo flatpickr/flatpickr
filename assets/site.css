@@ -218,7 +218,8 @@ input:focus, input:active
     background: -ms-linear-gradient(45deg,  #4183d7 0%,#87d37c 76%);
     background: linear-gradient(45deg,  #4183d7 0%,#87d37c 76%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4183d7', endColorstr='#87d37c',GradientType=1 );
-    color: white
+    color: white;
+    width: 100%;
 }
 
 .hero h1{
@@ -272,7 +273,7 @@ input:focus, input:active
 
 pre
 {
-    width: auto;
+    white-space: pre-wrap;
     margin: 0.75rem 0;
     font-family: Consolas,Menlo,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace,sans-serif;
 }
