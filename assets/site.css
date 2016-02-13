@@ -189,19 +189,27 @@ a
 
 
 input {
-    border: 2px solid #ddd;
-    border-radius: 2px;
-    padding: 1rem;
-    width: 90%;
-    width: 400px;
+
+    max-width: 400px;
+    outline: none;
+    border: 2px solid #f1f1f1;
+    border-radius: 3px;
+    color: #444;
+    padding: 0px 15px;
+    width: 100%;
     font-size: 15px;
+    background: #fcfcfc;
+
+    height: 45px;
+
 }
 
 input:focus, input:active
 {
     outline: 0;
-    border: 2px solid #52B3D9;
-    border: 2px solid rgba(82, 179, 217, 0.35);
+    background: #fff;
+    border-color: #D8D8D8;
+
 }
 
 .hero

@@ -324,7 +324,7 @@ flatpickr.init = function (element, instanceConfig) {
 
         hourElement.value = self.selectedDateObj ? pad(self.selectedDateObj.getHours()) : 12;
         minuteElement.value = self.selectedDateObj ? pad(self.selectedDateObj.getMinutes()) : "00";
-        am_pm.innerHTML = self.selectedDateObj ? (hourElement.value > 11 ? "PM" : "AM") : "AM";
+        am_pm.innerHTML = ["AM","PM"][(self.selectedDateObj && hourElement.value > 11)|0];
 
         hourElement.step = self.config.hourIncrement;
         minuteElement.step = self.config.minuteIncrement;
