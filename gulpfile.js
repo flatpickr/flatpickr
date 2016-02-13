@@ -29,6 +29,9 @@ gulp.task('compress-js', function() {
     .pipe(gulp.dest('dist'));
 });
 
+gulp.task('watch-js', function(){
+  gulp.watch('src/**/*.js', ['compress-js']);
+});
 
 
 // Handle the error
@@ -37,4 +40,4 @@ function errorHandler (error) {
   this.emit('end');
 }
 
-gulp.task('default', ['compress-js', 'less', 'less-watch' ]);
+gulp.task('default', ['compress-js', 'less', 'less-watch','watch-js' ]);
