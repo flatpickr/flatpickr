@@ -1,23 +1,20 @@
 var gulp = require('gulp'),
-  less = require('gulp-less'),
-  watchLess = require('gulp-watch-less'),
-	uglify = require('gulp-uglify'),
+  sass = require('gulp-sass'),
 	cssmin = require('gulp-cssmin'),
+  uglify = require('gulp-uglify'),
 	rename = require("gulp-rename");
 
-gulp.task('less', function () {
-  return gulp.src(['src/flatpickr.less', 'src/flatpickr.dark.less'], {base: 'src/'})
-    .pipe(less())
+gulp.task('sass', function () {
+  return gulp.src(['src/flatpickr.scss', 'src/flatpickr.dark.scss'], {base: 'src/'})
+    .pipe(sass())
     .pipe(cssmin()).on('error', errorHandler)
     .pipe(rename({        suffix: '.min'   }))
     .pipe(gulp.dest('dist'));
 });
 
-gulp.task('less-watch', ['less'], function() {
-    return gulp.src('src/flatpickr.less')
-        .pipe(watchLess('src/flatpickr.less', function() {
-            gulp.start('less');
-        }));
+gulp.task('watch', function () {
+  gulp.watch('./src/**/*.scss', ['sass']);
+  gulp.watch('src/**/*.js', ['compress-js']);
 });
 
 
@@ -29,9 +26,6 @@ gulp.task('compress-js', function() {
     .pipe(gulp.dest('dist'));
 });
 
-gulp.task('watch-js', function(){
-  gulp.watch('src/**/*.js', ['compress-js']);
-});
 
 
 // Handle the error
@@ -40,4 +34,4 @@ function errorHandler (error) {
   this.emit('end');
 }
 
-gulp.task('default', ['compress-js', 'less', 'less-watch','watch-js' ]);
+gulp.task('default', ['compress-js', 'sass', 'watch' ]);
