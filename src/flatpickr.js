@@ -622,6 +622,20 @@ flatpickr.init = function (element, instanceConfig) {
         buildDays();
     }
 
+    self.jumpToDate = function(date){
+        jumpToDate(date);
+        buildDays();
+        updateNavigationCurrentMonth();
+    }
+
+    self.setDate = function(date, triggerChangeEvent){
+        this.selectedDateObj = date;
+        this.jumpTo(date);
+        if(typeof triggerChangeEvent !== 'undefined' && triggerChangeEvent) {
+            triggerChange();
+        }
+    }
+
     self.set = function(key, value){
         key in self.config && (self.config[key] = value , self.redraw() );
 
