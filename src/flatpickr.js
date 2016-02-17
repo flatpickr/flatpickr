@@ -630,7 +630,7 @@ flatpickr.init = function (element, instanceConfig) {
 
     self.setDate = function(date, triggerChangeEvent){
         this.selectedDateObj = date;
-        this.jumpTo(date);
+        this.jumpToDate(date);
         if(typeof triggerChangeEvent !== 'undefined' && triggerChangeEvent) {
             triggerChange();
         }
