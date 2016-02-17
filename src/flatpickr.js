@@ -623,6 +623,9 @@ flatpickr.init = function (element, instanceConfig) {
     }
 
     self.jumpToDate = function(date){
+        if(!date) {
+            date = new Date();
+        }
         jumpToDate(date);
         buildDays();
         updateNavigationCurrentMonth();
