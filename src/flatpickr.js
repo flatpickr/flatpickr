@@ -102,11 +102,11 @@ flatpickr.init = function (element, instanceConfig) {
 
 
         self.config.defaultDate &&
-            ( self.config.defaultDate = new Date(self.config.defaultDate) );
+            ( self.config.defaultDate = uDate(self.config.defaultDate) );
 
 
         if ( self.element.value || self.config.defaultDate )
-            self.selectedDateObj = new Date(self.config.defaultDate||self.element.value);
+            self.selectedDateObj = uDate(self.config.defaultDate||self.element.value);
 
         self.config.minDate && ( self.config.minDate =
             uDate(self.config.minDate === "today" ? new Date() : self.config.minDate, true) );
