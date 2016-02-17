@@ -192,13 +192,13 @@ input {
 
     max-width: 400px;
     outline: none;
-    border: 2px solid #f1f1f1;
+    border: 1px solid rgba(0,0,0,0.15);
     border-radius: 3px;
     color: #444;
     padding: 0px 15px;
     width: 100%;
     font-size: 15px;
-    background: #fcfcfc;
+    background: white;
 
     height: 45px;
 
@@ -208,7 +208,7 @@ input:focus, input:active
 {
     outline: 0;
     background: #fff;
-    border-color: #D8D8D8;
+    border-color: rgba(0,0,0,0.4);
 
 }
 
