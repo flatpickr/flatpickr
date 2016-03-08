@@ -589,13 +589,17 @@ flatpickr.init = function (element, instanceConfig) {
 
     triggerChange = function(){
 
-        "createEvent" in document
-            ? ( element.dispatchEvent( new Event("change") ) )
-            : ( element.fireEvent("onchange") );
+        if ("createEvent" in document) {
+            var event = document.createEvent("Event");
+            event.initEvent("change", true, true);
+            element.dispatchEvent(event)
+        } else  {
+            element.fireEvent("onchange");
+        }
 
         self.config.onChange(self.selectedDateObj);
 
-    }
+    };
 
     destroy = function () {
         var parent,
