@@ -532,6 +532,7 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     bind = function () {
+        function am_pm_toggle(e){ e.preventDefault(); am_pm.innerHTML =  ["AM","PM"][(am_pm.innerHTML === "AM")|0]; }
 
         self.element.addEventListener( 'focus' , self.open);
         self.config.altInput && (altInput.addEventListener( 'focus' , self.open) );
@@ -543,8 +544,6 @@ flatpickr.init = function (element, instanceConfig) {
         document.addEventListener('click', documentClick, true);
 
         if ( self.config.enableTime ){
-
-            function am_pm_toggle(e){ e.preventDefault(); am_pm.innerHTML =  ["AM","PM"][(am_pm.innerHTML === "AM")|0]; }
 
             hourElement.addEventListener("mousewheel", timeWrapper);
             hourElement.addEventListener("DOMMouseScroll", timeWrapper);
