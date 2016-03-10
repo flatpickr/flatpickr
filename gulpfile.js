@@ -14,13 +14,13 @@ gulp.task('sass', function () {
 
 gulp.task('watch', function () {
   gulp.watch('./src/**/*.scss', ['sass']);
-  gulp.watch('src/**/*.js', ['compress-js']);
+  gulp.watch('src/flatpickr.js', ['compress-js']);
 });
 
 
 
 gulp.task('compress-js', function() {
-  return gulp.src('src/*.js')
+  return gulp.src('src/flatpickr.js')
     .pipe(uglify()).on('error', errorHandler)
     .pipe(rename({        suffix: '.min'   }))
     .pipe(gulp.dest('dist'));
