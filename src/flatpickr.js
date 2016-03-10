@@ -263,7 +263,7 @@ flatpickr.init = function (element, instanceConfig) {
             },
             formatPieces = dateFormat.split('');
 
-        self.forEach(formatPieces, function (formatPiece, index) {
+        [].forEach.call(formatPieces, function (formatPiece, index) {
 
             if (formats[formatPiece] && formatPieces[index - 1] !== '\\') 
                 formattedDate += formats[formatPiece]();
@@ -663,8 +663,6 @@ flatpickr.init = function (element, instanceConfig) {
 };
 
 flatpickr.init.prototype = {
-
-    forEach: function (items, callback) { [].forEach.call(items, callback); },
 
     l10n: {
         weekdays: {

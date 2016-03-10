@@ -1,14 +1,14 @@
 {
   "name": "flatpickr",
-  "version": "1.6.4",
+  "version": "1.6.5",
   "description": "A fast, feature-rich, and elegant javascript date picker (vanilla/no dependencies)",
   "dependencies": {},
   "devDependencies": {
-    "gulp": "^3.9.0",
+    "gulp": "^3.9.1",
     "gulp-cssmin": "^0.1.7",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^2.2.0",
-    "gulp-uglify": "^1.5.1"
+    "gulp-uglify": "^1.5.3"
   },
   "scripts": {},
   "main": "dist/flatpickr.min.js",
