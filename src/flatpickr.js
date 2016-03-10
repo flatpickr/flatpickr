@@ -530,6 +530,7 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     bind = function () {
+        function am_pm_toggle(e){ e.preventDefault(); am_pm.innerHTML =  ["AM","PM"][(am_pm.innerHTML === "AM")|0]; }
 
         function am_pm_toggle(e){ 
             e.preventDefault();
@@ -590,13 +591,17 @@ flatpickr.init = function (element, instanceConfig) {
 
     triggerChange = function(){
 
-        "createEvent" in document
-            ? ( element.dispatchEvent( new Event("change") ) )
-            : ( element.fireEvent("onchange") );
+        if ("createEvent" in document) {
+            var event = document.createEvent("Event");
+            event.initEvent("change", true, true);
+            element.dispatchEvent(event)
+        } else  {
+            element.fireEvent("onchange");
+        }
 
         self.config.onChange(self.selectedDateObj, self.element.value);
 
-    }
+    };
 
     destroy = function () {
         var parent,
