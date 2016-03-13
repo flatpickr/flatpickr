@@ -178,12 +178,17 @@ flatpickr.init = function (element, instanceConfig) {
         if (self.selectedDateObj && self.config.enableTime ){
 
             // update time
-            var hour = parseInt(hourElement.value)%12 + 12*(am_pm.innerHTML=== "PM"),
+            var hour = parseInt(hourElement.value),
                 minute = (60+parseInt(minuteElement.value ))%60;
+
+            if (!self.config.time_24hr)
+                hour = hour%12 + 12*(am_pm.innerHTML=== "PM");
 
             self.selectedDateObj.setHours(hour , minute );
 
-            hourElement.value = pad((12 + hour)%12+12*(hour%12===0));
+            hourElement.value = 
+                self.config.time_24hr ? pad(hour) : pad((12 + hour)%12+12*(hour%12===0));
+
             minuteElement.value = pad(minute);
 
         }
@@ -317,8 +322,7 @@ flatpickr.init = function (element, instanceConfig) {
 
         hourElement = document.createElement("input");
         minuteElement = document.createElement("input");
-        am_pm = document.createElement("span");
-        am_pm.className = "flatpickr-am-pm";
+        
 
         separator.className = "flatpickr-time-separator";
         separator.innerHTML = ":";
@@ -328,22 +332,33 @@ flatpickr.init = function (element, instanceConfig) {
         minuteElement.className = "flatpickr-minute";
 
 
-        hourElement.value = self.selectedDateObj ? pad(self.selectedDateObj.getHours()) : 12;
-        minuteElement.value = self.selectedDateObj ? pad(self.selectedDateObj.getMinutes()) : "00";
-        am_pm.innerHTML = ["AM","PM"][(self.selectedDateObj && hourElement.value > 11)|0];
+        hourElement.value = 
+            self.selectedDateObj ? pad(self.selectedDateObj.getHours()) : 12;
+        minuteElement.value = 
+            self.selectedDateObj ? pad(self.selectedDateObj.getMinutes()) : "00";
+
 
         hourElement.step = self.config.hourIncrement;
         minuteElement.step = self.config.minuteIncrement;
 
-        hourElement.max = 12;
-        minuteElement.max = 59;
-        hourElement.min = 1;
+        hourElement.min = self.config.time_24hr ? 0 : 1;
+        hourElement.max = self.config.time_24hr ? 23 : 12;
+
         minuteElement.min = 0;
+        minuteElement.max = 59;
+               
 
         timeContainer.appendChild(hourElement);
         timeContainer.appendChild(separator);
         timeContainer.appendChild(minuteElement);
-        timeContainer.appendChild(am_pm);
+
+        if (!self.config.time_24hr){ // add am_pm if appropriate
+            am_pm = document.createElement("span");
+            am_pm.className = "flatpickr-am-pm";
+            am_pm.innerHTML = ["AM","PM"][(self.selectedDateObj && hourElement.value > 11)|0];
+            timeContainer.appendChild(am_pm);
+        }
+        
 
         calendarContainer.appendChild(timeContainer);
 
@@ -561,12 +576,15 @@ flatpickr.init = function (element, instanceConfig) {
             hourElement.addEventListener("click", function(){hourElement.select();});
             minuteElement.addEventListener("click", function(){minuteElement.select();});
 
-            am_pm.addEventListener("focus", function(){am_pm.blur();});
-            am_pm.addEventListener("click", am_pm_toggle);
+            if (!self.config.time_24hr) {
+                am_pm.addEventListener("focus", function(){am_pm.blur();});
+                am_pm.addEventListener("click", am_pm_toggle);
 
-            am_pm.addEventListener("mousewheel", am_pm_toggle);
-            am_pm.addEventListener("DOMMouseScroll", am_pm_toggle);
-            am_pm.addEventListener("mouseout", updateValue);
+                am_pm.addEventListener("mousewheel", am_pm_toggle);
+                am_pm.addEventListener("DOMMouseScroll", am_pm_toggle);
+                am_pm.addEventListener("mouseout", updateValue);
+            }
+            
 
         }
 
@@ -693,8 +711,9 @@ flatpickr.init.prototype = {
             inline: false,
             prevArrow: '&lt;',
             nextArrow: '&gt;',
-            enableTime: false,
-            timeFormat: "h:i K",
+            enableTime: false,            
+            timeFormat: "H:i K",
+            time_24hr: false,
             hourIncrement: 1,
             minuteIncrement: 5,
             onChange: function(dateObj, dateStr){}
