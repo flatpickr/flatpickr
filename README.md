@@ -8,7 +8,7 @@
 A lightweight (only 2.75kb minified and gzipped), feature-packed datetime picker. 
 Framework-agnostic, and written in vanilla JS.
 
-![bloat-free](https://github.com/chmln/flatpickr/blob/gh-pages/assets/size_chart.png?raw=true)
+![wew](https://cloud.githubusercontent.com/assets/11352152/13730755/d79b5c4a-e92e-11e5-9fc9-b4f1acd50abd.png)
 
 ### Installing
 
