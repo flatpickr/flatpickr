@@ -712,7 +712,7 @@ flatpickr.init.prototype = {
             prevArrow: '&lt;',
             nextArrow: '&gt;',
             enableTime: false,            
-            timeFormat: "H:i K",
+            timeFormat: "h:i K",
             time_24hr: false,
             hourIncrement: 1,
             minuteIncrement: 5,
