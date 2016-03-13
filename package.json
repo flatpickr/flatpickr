@@ -1,6 +1,6 @@
 {
   "name": "flatpickr",
-  "version": "1.6.6",
+  "version": "1.6.7",
   "description": "A fast, feature-rich, and elegant javascript date picker (vanilla/no dependencies)",
   "dependencies": {},
   "devDependencies": {
