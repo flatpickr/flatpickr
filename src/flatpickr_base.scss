@@ -194,6 +194,7 @@
 .flatpickr-time {
     overflow: auto;
     border-top: 1px solid rgba($day_text_color, 0.15);
+    text-align: center;
 }
 
 .flatpickr-hour, .flatpickr-minute {
@@ -203,14 +204,14 @@
     border: 0;
     border-radius: 0;
     display: inline-block;
-    margin: 0;
-    padding: 0 2%;
+    width: 33%;
+    min-width: 33%;
+    text-align: center;
+    margin: 0; padding: 0;
     height: 38px;
     line-height: 38px;
     cursor: pointer;
-    float: left;
     font-weight: bold;
-    width: 36%;
     color: $day_text_color;
 
     &:focus {
@@ -222,14 +223,12 @@
 
 .flatpickr-hour {
     font-weight: bold;
-    text-align:right;
 }
 
 
 .flatpickr-minute {
     width: 26%;
     font-weight: 300;
-    text-align:left;
 }
 
 .flatpickr-hour:hover, .flatpickr-minute:hover, .flatpickr-am-pm:hover {
@@ -239,11 +238,8 @@
 
 .flatpickr-time-separator, .flatpickr-am-pm  {
     height: 38px;
-    display: block;
+    display: inline-block;
     line-height: 38px;
-    float: left;
-    text-align:center;
-    width: 5%;
 }
 
 .flatpickr-am-pm {
