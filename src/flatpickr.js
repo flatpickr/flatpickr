@@ -127,7 +127,7 @@ flatpickr.init = function (element, instanceConfig) {
         timeless = timeless||false;
 
         // dashes to slashes (just in case) to keep firefox happy
-        typeof date === 'string' && (date = new Date(date.replace(/-/g, "/")));
+        typeof date === 'string' && (date = new Date(date.replace(/[-.]/g, "/")));
         timeless && ( date.setHours(0,0,0,0) );
 
         return date;
