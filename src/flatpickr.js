@@ -649,7 +649,13 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     jumpToDate = function(jumpDate) {
-        jumpDate = jumpDate||self.selectedDateObj||self.config.minDate||currentDate;
+        jumpDate = uDate(
+            jumpDate||
+            self.selectedDateObj||
+            self.config.defaultDate||
+            self.config.minDate||
+            currentDate
+        );
         self.currentYear = jumpDate.getFullYear();
         self.currentMonth = jumpDate.getMonth();
 
@@ -675,6 +681,7 @@ flatpickr.init = function (element, instanceConfig) {
 
         self.selectedDateObj = uDate(date);
         self.jumpToDate(self.selectedDateObj);
+        updateValue();
 
         triggerChangeEvent = triggerChangeEvent||false;
         triggerChangeEvent && (triggerChange());
@@ -684,11 +691,9 @@ flatpickr.init = function (element, instanceConfig) {
     self.set = function(key, value){
 
         if (key in self.config) {
-
             self.config[key] = value;
             jumpToDate();
             self.redraw();
-
         }
 
     }
