@@ -61,6 +61,7 @@ flatpickr.init = function (element, instanceConfig) {
         bind,
         open,
         close,
+        toggle,
         destroy,
         init,
         triggerChange,
@@ -148,6 +149,7 @@ flatpickr.init = function (element, instanceConfig) {
         wrapperElement.appendChild(self.element);
 
         self.config.inline && ( wrapperElement.classList.add('inline') );
+        self.config.triggerElement !== null && ( wrapperElement.classList.add('manual-triggered') );
 
         if ( self.config.altInput ){
 
@@ -342,7 +344,7 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     documentClick = function (event) {
-        if (wrapperElement.classList.contains("open") && !wrapperElement.contains(event.target))
+        if (wrapperElement.classList.contains("open") && !wrapperElement.contains(event.target) && (self.config.triggerElement === null || !self.config.triggerElement.contains(event.target)))
             self.close();
 
     };
@@ -565,8 +567,12 @@ flatpickr.init = function (element, instanceConfig) {
             am_pm.innerHTML =  ["AM","PM"][(am_pm.innerHTML === "AM")|0]; 
         }
 
-        self.element.addEventListener( 'focus' , self.open);
-        self.config.altInput && (altInput.addEventListener( 'focus' , self.open) );
+        if ( self.config.triggerElement === null) {
+            self.element.addEventListener( 'focus' , self.open);
+            self.config.altInput && (altInput.addEventListener( 'focus' , self.open) );
+        } else {
+            self.config.triggerElement.addEventListener( 'click' , self.toggle);
+        }
 
         prevMonthNav.addEventListener('click', function(){ changeMonth(-1) });
         nextMonthNav.addEventListener('click', function(){ changeMonth(1) });
@@ -618,6 +624,14 @@ flatpickr.init = function (element, instanceConfig) {
     self.close = function () {
         wrapperElement.classList.remove('open');
 
+    };
+
+    self.toggle = function () {
+        if (wrapperElement.classList.contains('open')) {
+            self.close();
+        } else {
+            self.open();
+        }
     };
 
     triggerChange = function(){
@@ -736,7 +750,8 @@ flatpickr.init.prototype = {
             time_24hr: false,
             hourIncrement: 1,
             minuteIncrement: 5,
-            onChange: function(dateObj, dateStr){}
+            onChange: function(dateObj, dateStr){},
+            triggerElement: null
     }
 };
 

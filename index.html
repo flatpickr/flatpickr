@@ -244,6 +244,33 @@ flatpickr(".flatpickr")
 </div>
 
 
+<div class=example_wrapper>
+<b>Trigger the datepicker with another element:</b>
+
+<pre class='prettyprint lang-js'>
+// select the element you want to use as a trigger
+var trigger_button = document.getElementById("trigger-button");
+
+// then initialize the calendar
+flatpickr(".triggered-calendar", {
+    triggerElement: trigger_button
+});
+....
+</pre>
+
+<pre class="prettyprint lang-html">
+&lt;input class="triggered-calendar" placeholder="Click button for datepicker or just enter text"&gt;
+&lt;button type="button" id="trigger-button"&gt;Click for datepicker&lt;/button&gt;
+</pre>
+
+<p>
+    <input class="triggered-calendar" placeholder="Click button for datepicker or just enter text">
+    <button type="button" id="trigger-button">Click for datepicker</button>
+</p>
+
+</div>
+
+
 
 
 
@@ -597,6 +624,11 @@ flatpickr(".flatpickr")
             check_in.set("onChange", function(d){ check_out.set( "minDate" , d ); });
             check_out.set("onChange", function(d){ check_in.set( "maxDate" , d ); });
 
+            // Triggered flatpickr
+            var trigger_button = document.getElementById("trigger-button");
+            flatpickr(".triggered-calendar", {
+                triggerElement: trigger_button
+            });
 
             var merits = [
                 "doesn't suck",

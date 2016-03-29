@@ -14,6 +14,11 @@
         z-index: 1;
     }
 
+	&.manual-triggered input
+	{
+		cursor: inherit;
+	}
+
     .flatpickr-calendar
     {
         background: $calendar_background;
