@@ -29,7 +29,15 @@ var flatpickr = function (selector, config) {
         instances.push(createInstance(elements[i]));
     }
 
-    return instances;
+    return {
+        calendars: instances,
+        byID: function(id){
+            for (var i = 0; i < this.calendars.length; i++) {
+                if (this.calendars[i].element.id === id)
+                    return this.calendars[i];
+            }
+        }
+    };
 };
 
 /**
@@ -100,24 +108,24 @@ flatpickr.init = function (element, instanceConfig) {
                 self.element.dataset[config.toLowerCase()] ||
                 self.defaultConfig[config];
 
+        
+        self.input = (self.config.wrap) ? element.querySelector("[data-input]") : element;    
+        self.config.defaultDate = uDate(self.config.defaultDate);
 
-        self.config.defaultDate &&
-            ( self.config.defaultDate = uDate(self.config.defaultDate) );
+        if ( self.input.value || self.config.defaultDate )
+            self.selectedDateObj = uDate(self.config.defaultDate||self.input.value);
 
+       self.config.minDate =
+            uDate(self.config.minDate === "today" ? new Date() : self.config.minDate, true);
 
-        if ( self.element.value || self.config.defaultDate )
-            self.selectedDateObj = uDate(self.config.defaultDate||self.element.value);
-
-        self.config.minDate && ( self.config.minDate =
-            uDate(self.config.minDate === "today" ? new Date() : self.config.minDate, true) );
-
-        self.config.maxDate && (self.config.maxDate = uDate(self.config.maxDate, true) );
+       self.config.maxDate = uDate(self.config.maxDate, true);
 
         jumpToDate(self.selectedDateObj||self.config.minDate||currentDate);
 
         wrap();        
         buildCalendar();
         bind();
+
         if (!self.config.noCalendar)
             updateValue();
     };
@@ -128,7 +136,7 @@ flatpickr.init = function (element, instanceConfig) {
 
         // dashes to slashes (just in case) to keep firefox happy
         typeof date === 'string' && (date = new Date(date.replace(/[-.]/g, "/")));
-        timeless && ( date.setHours(0,0,0,0) );
+        timeless && date && ( date.setHours(0,0,0,0) );
 
         return date;
     }
@@ -152,10 +160,10 @@ flatpickr.init = function (element, instanceConfig) {
         if ( self.config.altInput ){
 
             // replicate self.element
-            altInput = document.createElement(self.element.nodeName);
-            altInput.className = self.element.className;
+            altInput = document.createElement(self.input.nodeName);
+            altInput.className = self.input.className;
 
-            self.element.type='hidden';
+            self.input.type='hidden';
             wrapperElement.appendChild(altInput);
 
         }
@@ -194,7 +202,7 @@ flatpickr.init = function (element, instanceConfig) {
         }
 
         if ( self.selectedDateObj )
-            self.element.value = formatDate(self.config.dateFormat);
+            self.input.value = formatDate(self.config.dateFormat);
 
         if ( self.config.altInput && self.selectedDateObj )
             altInput.value = formatDate(self.config.altFormat);
@@ -496,7 +504,6 @@ flatpickr.init = function (element, instanceConfig) {
                                     + (dayNumber > numDays ? dayNumber % numDays : dayNumber)
                                 + '</span></td>';
 
-
         }
 
         calendarFragment.appendChild(row);
@@ -565,8 +572,23 @@ flatpickr.init = function (element, instanceConfig) {
             am_pm.innerHTML =  ["AM","PM"][(am_pm.innerHTML === "AM")|0]; 
         }
 
-        self.element.addEventListener( 'focus' , self.open);
-        self.config.altInput && (altInput.addEventListener( 'focus' , self.open) );
+        if (String(self.config.clickOpens)==='true'){
+            self.input.addEventListener( 'focus' , self.open);
+            self.config.altInput && (altInput.addEventListener( 'focus' , self.open) );
+        }
+
+        if (self.config.wrap && self.element.querySelector("[data-open]"))
+            self.element.querySelector("[data-open]").addEventListener( 'click' , self.open);
+
+        if (self.config.wrap && self.element.querySelector("[data-close]"))
+            self.element.querySelector("[data-close]").addEventListener( 'click' , self.close);
+
+        if (self.config.wrap && self.element.querySelector("[data-toggle]"))
+            self.element.querySelector("[data-toggle]").addEventListener( 'click' , self.toggle);
+
+        if (self.config.wrap && self.element.querySelector("[data-clear]"))
+            self.element.querySelector("[data-clear]").addEventListener( 'click' , self.clear);
+        
 
         prevMonthNav.addEventListener('click', function(){ changeMonth(-1) });
         nextMonthNav.addEventListener('click', function(){ changeMonth(1) });
@@ -591,34 +613,45 @@ flatpickr.init = function (element, instanceConfig) {
             minuteElement.addEventListener("click", function(){minuteElement.select();});
 
             if (!self.config.time_24hr) {
-                am_pm.addEventListener("focus", function(){am_pm.blur();});
+                am_pm.addEventListener("focus", function(){ am_pm.blur(); });
                 am_pm.addEventListener("click", am_pm_toggle);
 
                 am_pm.addEventListener("mousewheel", am_pm_toggle);
                 am_pm.addEventListener("DOMMouseScroll", am_pm_toggle);
                 am_pm.addEventListener("mouseout", updateValue);
-            }
-            
+            }            
 
         }
-
-
 
     };
 
     self.open = function () {
 
-        self.element.blur();
+        self.input.blur();
+        self.input.classList.add('active');
         altInput && (altInput.blur());
 
-        !self.config.inline && ( wrapperElement.classList.add('open') );
+        !self.config.inline && ( self.element.parentNode.classList.add('open') );
 
+    };
+
+    self.toggle = function () {
+        self.element.parentNode.classList.toggle('open');
+        self.input.classList.toggle('active');
     };
 
     self.close = function () {
-        wrapperElement.classList.remove('open');
+        self.element.parentNode.classList.remove('open');
+        self.input.classList.remove('active');
 
     };
+
+    self.clear = function() {
+        self.input.value="";
+        self.selectedDateObj = null;
+        jumpToDate();
+        self.redraw();
+    }
 
     triggerChange = function(){
 
@@ -630,7 +663,7 @@ flatpickr.init = function (element, instanceConfig) {
             element.fireEvent("onchange");
         }
 
-        self.config.onChange(self.selectedDateObj, self.element.value);
+        self.config.onChange(self.selectedDateObj, self.input.value);
 
     }
 
@@ -639,8 +672,8 @@ flatpickr.init = function (element, instanceConfig) {
             element;
 
         document.removeEventListener('click', documentClick, false);
-        self.element.removeEventListener('focus', self.open, false);
-        self.element.removeEventListener('click', self.open, false);
+        self.input.removeEventListener('focus', self.open, false);
+        self.input.removeEventListener('click', self.open, false);
 
         parent = self.element.parentNode;
         parent.removeChild(calendarContainer);
@@ -720,6 +753,8 @@ flatpickr.init.prototype = {
 
     defaultConfig : {
             noCalendar: false,
+            wrap: false,
+            clickOpens: true,
             dateFormat: 'Y-m-d',
             altInput: false,
             altFormat: "F j, Y",
