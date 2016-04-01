@@ -108,6 +108,39 @@ The example below conveniently uses data-attributes for setting <b>minDate</b> a
 <p><input class=flatpickr data-mindate=today data-maxdate='2016-8-20' placeholder="minDate: today, maxDate: '2016-8-20'"></p>
 </div>
 
+
+
+<div class=example_wrapper id="strap">
+<h3>Using custom elements to open/close/clear the calendar</h3>
+
+<p>flatpickr can parse an input group of textboxes and buttons, common in <strong>Bootstrap</strong> and other frameworks.<br>This permits additional markup, as well as custom elements to trigger the state of the calendar. </p>
+
+<p>Mark your input element with <code>data-input</code> (mandatory), and any additional buttons with <code>data-toggle</code>, <code>data-open</code>, <code>data-close</code>, or <code>data-clear</code>.</p>
+
+<pre class='prettyprint lang-html'>
+&lt;p class="flatpickr input-group" data-wrap="true" data-clickOpens="false"&gt;
+
+    &lt;input placeholder="Pick date" data-input&gt;
+
+    &lt;a class="input-btn" data-toggle&gt;&lt;i class="icon-calendar"&gt;&lt;/i&gt;&lt;/a&gt;
+    &lt;a class="input-btn" data-clear&gt;&lt;i class="icon-close"&gt;&lt;/i&gt;&lt;/a&gt;
+
+&lt;/p>
+</pre>
+
+<p class="flatpickr input-group" data-wrap="true" data-clickOpens="false">
+    <input data-input placeholder="Pick date">
+
+    <a class="input-btn" data-toggle><i class="icon-calendar"></i></a>
+    <a class="input-btn" data-clear><i class="icon-close"></i></a>
+
+</p>
+
+</div>
+
+
+
+
 <div class=example_wrapper>
 <h3>DateTime Picker</h3>
 <pre class='prettyprint lang-html'>
@@ -559,19 +592,19 @@ flatpickr(".flatpickr")
         <script>
 
             // setting custom defaults
-            flatpickr.init.prototype.defaultConfig.prevArrow = "<i class='icon i-angle-left'></i>";
-            flatpickr.init.prototype.defaultConfig.nextArrow = "<i class='icon i-angle-right'></i>";
+            flatpickr.init.prototype.defaultConfig.prevArrow = "<i class='icon icon-angle-left'></i>";
+            flatpickr.init.prototype.defaultConfig.nextArrow = "<i class='icon icon-angle-right'></i>";
             flatpickr.init.prototype.l10n.firstDayOfWeek = 1;
 
             //Regular flatpickr
             flatpickr('#flatpickr-tryme');
-            flatpickr(".flatpickr");
+            calendars = flatpickr(".flatpickr");
             flatpickr('.calendar');
+
 
             // Custom date format
             flatpickr('#dateFormat', { dateFormat: 'd-m-Y'});
             flatpickr('#dateFormat-mdy', { dateFormat: 'm/d/Y'});
-
 
 
             flatpickr('#disableRange', {

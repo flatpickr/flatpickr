@@ -223,11 +223,11 @@ input {
     user-select: none;
     border: 1px solid transparent;
     border-radius: .25rem;
-        color: #373a3c;
-        float: left;
-        border-radius: 0;
-        border-left: 0;
-    background-color: #f6f6f6;
+    color: #373a3c;
+    float: left;
+    border-radius: 0;
+    border-left: 0;
+    background-color: #f9f9f9;
     border-color: #ccc;
 
 }
@@ -236,12 +236,17 @@ input {
     border-right: 1px solid #ccc;
 
 }
-input:focus, input:active
+input:focus, input.active
 {
     outline: 0;
     background: #fff;
     border-color: #66afe9;
 
+}
+
+code {
+    background: #f3f3f3;
+    padding: 0.15rem 0.25rem;
 }
 
 .hero
