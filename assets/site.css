@@ -170,7 +170,7 @@ h1 {
 
 p
 {
-    margin-bottom: 1.3em;
+    margin-top: 0.75rem;
     font-size: 1rem;
     line-height: 1.4;
 
@@ -195,20 +195,52 @@ input {
     border: 1px solid rgba(0,0,0,0.15);
     border-radius: 3px;
     color: #444;
-    padding: 0px 15px;
+    padding: 11px;
     width: 100%;
-    font-size: 15px;
+    font-size: 14px;
     background: white;
-
-    height: 45px;
+    margin-right: 0;
 
 }
 
+.input-group [data-input]{
+    float: left;
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.input-btn {
+    display: inline-block;
+    padding: .475rem 1rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+        color: #373a3c;
+        float: left;
+        border-radius: 0;
+        border-left: 0;
+    background-color: #f6f6f6;
+    border-color: #ccc;
+
+}
+
+.input-btn.last {
+    border-right: 1px solid #ccc;
+
+}
 input:focus, input:active
 {
     outline: 0;
     background: #fff;
-    border-color: rgba(0,0,0,0.4);
+    border-color: #66afe9;
 
 }
 
@@ -330,11 +362,4 @@ pre
 
 .table  tr:nth-child(2n) {
     background-color: #F3F8FF;
-}
-
-.flatpickr-months i
-{
-    font-size: 1.25rem;
-    position: relative;
-    bottom: -2px;
 }
