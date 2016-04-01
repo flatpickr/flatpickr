@@ -3,7 +3,8 @@
 
 # flatpickr
 
-![calendar](https://cloud.githubusercontent.com/assets/11352152/12437093/dea42f28-bee8-11e5-8cd9-c9fdb92a04db.png) ![](https://cloud.githubusercontent.com/assets/11352152/12774092/8574034c-ca0f-11e5-9656-14711e806479.png)
+ ![](https://cloud.githubusercontent.com/assets/11352152/12774092/8574034c-ca0f-11e5-9656-14711e806479.png)
+![scr_custom](https://cloud.githubusercontent.com/assets/11352152/14218528/b80adb0a-f822-11e5-9e89-0020345fa80d.PNG)
 
 A lightweight (only 2.75kb minified and gzipped), feature-packed datetime picker. 
 Framework-agnostic, and written in vanilla JS.
