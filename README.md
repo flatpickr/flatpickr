@@ -3,7 +3,7 @@
 
 # flatpickr
 
- ![](https://cloud.githubusercontent.com/assets/11352152/12774092/8574034c-ca0f-11e5-9656-14711e806479.png)
+<!-- ![](https://cloud.githubusercontent.com/assets/11352152/12774092/8574034c-ca0f-11e5-9656-14711e806479.png)-->
 ![scr_custom](https://cloud.githubusercontent.com/assets/11352152/14218528/b80adb0a-f822-11e5-9e89-0020345fa80d.PNG)
 
 A lightweight (only 2.75kb minified and gzipped), feature-packed datetime picker. 
