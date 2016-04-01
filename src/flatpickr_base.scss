@@ -43,9 +43,13 @@
 
             .flatpickr-prev-month,
             .flatpickr-next-month  {
-
                 text-decoration: none;
                 cursor: pointer;
+
+                i {
+                    font-size: 0.75rem;
+                }
+                
 
                 &:hover {
                     color: $today_color
