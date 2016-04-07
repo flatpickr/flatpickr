@@ -626,7 +626,8 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     self.open = function () {
-
+        if (self.input.disabled)
+            return;
         self.input.blur();
         self.input.classList.add('active');
         altInput && (altInput.blur());
@@ -636,6 +637,8 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     self.toggle = function () {
+        if (self.input.disabled)
+            return;
         self.element.parentNode.classList.toggle('open');
         self.input.classList.toggle('active');
     };
@@ -771,8 +774,16 @@ flatpickr.init.prototype = {
             time_24hr: false,
             hourIncrement: 1,
             minuteIncrement: 5,
-            onChange: function(dateObj, dateStr){}
+            onChange: function( dateObj, dateStr ){}
     }
+};
+
+Date.prototype.fp_incr = function(days){    
+    return new Date( 
+        this.getFullYear(),
+        this.getMonth(),
+        this.getDate() + parseInt(days, 10)
+    );
 };
 
 
