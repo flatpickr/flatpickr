@@ -1,179 +1,32 @@
-/* =Reset
------------------------------------------------------------------------------*/
-html, body, div, span, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, section, summary,
-time, mark, audio, video {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    vertical-align: baseline;
-}
-
-html, div, article, section, main, footer, header, form, fieldset, pre, code, p,
-input[type="text"], input[type="tel"], input[type="email"], input[type="url"],
-input[type="password"] { box-sizing: border-box; }
-
-a:active,
-a:hover {
-    outline: 0;
-}
-
-audio:not([controls]) {
-    display: none;
-    height: 0;
-}
-
-blockquote,
-q {
-    quotes: none;
-}
-blockquote p:before,
-blockquote p:after,
-q:before,
-q:after {
-    content: '';
-    content: none;
-}
-
-table {
-    border-collapse: collapse;
-    border-spacing: 0;
-}
-caption,
-th,
-td {
-    text-align: left;
-    vertical-align: top;
-}
-thead th,
-thead td {
-    font-weight: bold;
-    vertical-align: bottom;
-}
-
-a img,
-th img,
-td img {
-    vertical-align: top;
-}
-
-button,
-input,
-select,
-textarea {
-    margin: 0;
-}
-textarea {
-    overflow: auto;
-    vertical-align: top;
-    resize: vertical;
-}
-button {
-    width: auto;
-    overflow: visible;
-}
-input[type="reset"],
-input[type="submit"],
-input[type="file"],
-input[type="radio"],
-input[type="checkbox"],
-select,
-button,
-a {
-    cursor: pointer;
-}
-button:active,
-button:focus {
-    outline: none;
-}
-input::-moz-focus-inner,
-button::-moz-focus-inner {
-    border: 0;
-    padding: 0;
-}
-
-input[type="radio"],
-input[type="checkbox"] {
-    font-size: 110%;
-    position: relative;
-    margin-right: 3px;
-    padding: 0;
-}
-input[type="search"] {
-    -webkit-appearance: textfield;
-}
-input[type="search"]::-webkit-search-decoration,
-input[type="search"]::-webkit-search-cancel-button {
-    -webkit-appearance: none;
-}
-
-hr {
-    display: block;
-    box-sizing: content-box;
-    height: 1px;
-    border: 0;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-img,
-video,
-audio,
-embed,
-object {
-    max-width: 100%;
-}
-img,
-video,
-embed,
-object {
-    height: auto;
-}
-embed,
-object {
-    height: 100%;
-}
-img {
-    vertical-align: middle;
-    -ms-interpolation-mode: bicubic;
-}
-
+@import url("http://fonts.googleapis.com/css?family=Nunito:700|Roboto:300,400,700");
+@import url("reset.css");
+@import url("icons.css");
+@import url("prettify.css");
 
 body, input {
-    font-family: 'Lato', sans-serif;
+    font: 300 15px 'Roboto', sans-serif;
     color: #333;
-    font-size: 1rem;
 }
 
-h1, h2, h3
-{
-    margin: 4rem 0 0.5rem 0;
-    color: #4A4A4A
 
-}
 
 h1 {
-
-    font-size: 48px;
+    font-size: 3rem;
     font-family: 'nunito'
 }
 
+h2 {
+    margin-bottom: 0.75rem;
+}
+
+h3 {
+    margin-bottom: 0.25rem
+}
 
 p
 {
-    margin-top: 0.75rem;
-    font-size: 1rem;
+    margin: 0.25rem 0 1rem;
     line-height: 1.4;
-
 }
 
 .nomargin
@@ -183,9 +36,103 @@ p
 
 a
 {
-    color: #52B3D9
+    color: #256bc9;
+    text-decoration: none
 }
 
+a:hover {
+    color: #111;
+    text-decoration: underline;
+}
+
+.wrapper
+{
+
+}
+
+.flex {
+    display: -ms-flex;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    width: 96%;
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+.c-l {
+    width: 65%;
+}
+
+.c-r {
+    width: 35%;
+    padding-left: 3%
+}
+
+.c-r ol {
+    list-style: none;
+    color: #999
+}
+
+.c-r li {
+    padding: 0.05rem 0
+}
+
+.c-r li span {
+    float: left;
+    min-width: 24px
+}
+
+.c-r li a {
+    display: block
+}
+
+.fixed {
+    position: fixed;
+    top: 1rem;
+    min-width: 250px
+}
+
+.example_wrapper
+{
+    margin-bottom: 3rem;
+
+}
+
+.sep {
+    padding: 0 0.25rem
+}
+
+
+.hero
+{
+    padding: 7.5vh 0;
+    min-height: 150px;
+    max-height: 420px;
+    background: #4183d7;
+    background: #4183d7;
+    background: -moz-linear-gradient(45deg,  #4183d7 0%, #87d37c 76%);
+    background: -webkit-gradient(linear, left bottom, right top, color-stop(0%,#4183d7), color-stop(76%,#87d37c));
+    background: -webkit-linear-gradient(45deg,  #4183d7 0%,#87d37c 76%);
+    background: -o-linear-gradient(45deg,  #4183d7 0%,#87d37c 76%);
+    background: -ms-linear-gradient(45deg,  #4183d7 0%,#87d37c 76%);
+    background: linear-gradient(45deg,  #4183d7 0%,#87d37c 76%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4183d7', endColorstr='#87d37c',GradientType=1 );
+    color: white;
+    width: 100%;
+    margin-bottom: 1.4rem;
+    text-align: center;
+}
+
+.hero h1{
+    margin-top: 0;
+}
+.hero p
+{
+    color: white;
+    opacity: 0.85
+}
 
 
 input {
@@ -198,7 +145,6 @@ input {
     padding: 11px;
     width: 100%;
     font-size: 14px;
-    background: white;
     margin-right: 0;
 
 }
@@ -234,7 +180,14 @@ input {
 
 .input-btn.last {
     border-right: 1px solid #ccc;
+}
 
+.input-btn:hover {
+    background-color: #e9e9e9;
+}
+
+.input-btn:active {
+    background-color: #ddd;
 }
 input:focus, input.active
 {
@@ -244,77 +197,30 @@ input:focus, input.active
 
 }
 
+.btn {
+
+    padding: 0.5rem 1.25rem;
+    display: inline-block;
+    border: 1px solid;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.btn.white {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255,255,255,0.3);
+    color: white;
+}
+
+.btn.white:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+
+
 code {
     background: #f3f3f3;
     padding: 0.15rem 0.25rem;
-}
-
-.hero
-{
-    padding: 7.5vh 0;
-    min-height: 150px;
-    max-height: 420px;
-    background: #4183d7;
-    background: #4183d7;
-    background: -moz-linear-gradient(45deg,  #4183d7 0%, #87d37c 76%);
-    background: -webkit-gradient(linear, left bottom, right top, color-stop(0%,#4183d7), color-stop(76%,#87d37c));
-    background: -webkit-linear-gradient(45deg,  #4183d7 0%,#87d37c 76%);
-    background: -o-linear-gradient(45deg,  #4183d7 0%,#87d37c 76%);
-    background: -ms-linear-gradient(45deg,  #4183d7 0%,#87d37c 76%);
-    background: linear-gradient(45deg,  #4183d7 0%,#87d37c 76%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4183d7', endColorstr='#87d37c',GradientType=1 );
-    color: white;
-    width: 100%;
-}
-
-.hero h1{
-    margin-top: 0;
-    color: white
-}
-.hero p
-{
-    color: white;
-    opacity: 0.85
-}
-
-.btn.juicy {
-    background: #00b796;
-    padding: 0.5rem 1.25rem;
-    display: inline-block;
-    color: white;
-    text-decoration: none;
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: white;
-    border-radius: 4px;
-    transition: background 150ms ease-out;
-}
-
-.btn.juicy i
-{
-    font-size: 1.4rem;
-    line-height: 1rem;
-    position: relative;
-    bottom: -4px;
-}
-
-.btn.juicy:hover
-{
-    background: #1BA39C;
-}
-
-
-.center_text
-{
-    text-align: center
-}
-
-.wrapper
-{
-    width: 80%;
-    max-width: 840px;
-    margin: 0 auto;
-
 }
 
 pre
@@ -324,11 +230,6 @@ pre
     font-family: Consolas,Menlo,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace,sans-serif;
 }
 
-.example_wrapper
-{
-    margin: 1.5rem 0 3.5rem 0;
-
-}
 
 .table
 {
@@ -336,7 +237,6 @@ pre
     border-spacing: 0;
     font-size: 14px;
     width: 100%;
-
 }
 
 .table th {
@@ -367,4 +267,16 @@ pre
 
 .table  tr:nth-child(2n) {
     background-color: #F3F8FF;
+}
+
+@media screen and (max-width: 960px){
+
+    .c-r {
+        display: none
+    }
+
+    .c-l {
+        width: 100%
+    }
+
 }
