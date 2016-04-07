@@ -3,6 +3,7 @@
 /* plain text */
 .pln {
   color: #202746;
+  color: rgba(32, 39, 70, 0.81);
 }
 
 @media screen {
@@ -123,7 +124,7 @@ pre.prettyprint {
   background: #f5f7ff;
   color: #979db4;
   line-height: 1.5;
-  border: 1px solid #dfe2f1;
+  border: 1px solid rgba(223, 226, 241, 0.51);
   padding: 10px;
   font-size: 14px;
 }
