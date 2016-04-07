@@ -17,6 +17,7 @@ time, mark, audio, video {
     padding: 0;
     border: 0;
     vertical-align: baseline;
+    box-sizing: border-box;
 }
 
 html, div, article, section, main, footer, header, form, fieldset, pre, code, p,

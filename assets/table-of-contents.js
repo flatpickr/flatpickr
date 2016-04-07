@@ -4,7 +4,7 @@ var table = document.querySelector(".c-r div"),
     header_height = document.querySelector(".hero").offsetHeight,
     onScroll = function(){
 
-        if (document.body.scrollTop > header_height)
+        if (document.body.scrollTop > header_height || document.documentElement.scrollTop > header_height)
             table.classList.add("fixed");
         else
             table.classList.remove("fixed");

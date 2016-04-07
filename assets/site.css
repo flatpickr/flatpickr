@@ -100,15 +100,11 @@ a:hover {
 
 }
 
-.sep {
-    padding: 0 0.25rem
-}
-
 
 .hero
 {
     padding: 7.5vh 0;
-    min-height: 150px;
+    min-height: 210px;
     max-height: 420px;
     background: #4183d7;
     background: #4183d7;
@@ -134,6 +130,10 @@ a:hover {
     opacity: 0.85
 }
 
+.hero .btn,.hero .btn:hover {
+    border-color: #639f6e;
+}
+
 
 input {
 
@@ -142,7 +142,8 @@ input {
     border: 1px solid rgba(0,0,0,0.15);
     border-radius: 3px;
     color: #444;
-    padding: 11px;
+    padding: 0 0 0 11px;
+    height: 40px;
     width: 100%;
     font-size: 14px;
     margin-right: 0;
@@ -157,10 +158,10 @@ input {
 
 .input-btn {
     display: inline-block;
-    padding: .475rem 1rem;
+    padding: 0 1rem;
     font-size: 1rem;
     font-weight: 400;
-    line-height: 1.5;
+    line-height: 40px;
     text-align: center;
     white-space: nowrap;
     vertical-align: middle;
@@ -184,6 +185,7 @@ input {
 
 .input-btn:hover {
     background-color: #e9e9e9;
+    text-decoration: none;
 }
 
 .input-btn:active {
@@ -198,25 +200,53 @@ input:focus, input.active
 }
 
 .btn {
-
-    padding: 0.5rem 1.25rem;
+    
+    background: #eee;
+    background: -webkit-linear-gradient(top,#fcfcfc,#eee);
+    background: -moz-linear-gradient(top,#fcfcfc,#eee);
+    background: linear-gradient(to bottom,#fcfcfc,#eee);
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcfcfc', endColorstr='#eeeeee')";
+    *filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcfcfc', endColorstr='#eeeeee');    
+    border: 1px solid #d5d5d5;
+    border-radius: 3px;
+    color: #444;
+    cursor: pointer;
     display: inline-block;
-    border: 1px solid;
-    text-decoration: none;
-    border-radius: 4px;
+    font-weight: 700;
+    margin-right: 0.5rem;
+    padding: 3px 12px;
+    text-shadow: 0 1px 0 rgba(255,255,255,.9);
+    vertical-align: middle;
 }
 
-.btn.white {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255,255,255,0.3);
-    color: white;
+.btn i {
+    vertical-align: middle;
 }
 
-.btn.white:hover {
-    background: rgba(255, 255, 255, 0.3);
+.btn i, .btn span {
+    line-height: 26px;
 }
 
+.btn span {
+    padding-top: 1px;
+}
 
+.btn:hover {
+    background: #ddd;
+    background: -webkit-linear-gradient(top,#eee,#ddd);
+    background: -moz-linear-gradient(top,#eee,#ddd);
+    background: linear-gradient(to bottom,#eee,#ddd);
+    border-color: #ccc;
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#dddddd')";
+    *filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#dddddd');
+    text-decoration: none
+}
+
+.btn:active {
+    background: #dcdcdc;
+    border-color: #b5b5b5;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,.15);
+}
 
 code {
     background: #f3f3f3;
