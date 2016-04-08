@@ -85,7 +85,6 @@ flatpickr.init = function (element, instanceConfig) {
         calendar = document.createElement('table'),
         calendarBody = document.createElement('tbody'),
         currentDate = new Date(),
-        altInput,
         wrapperElement = document.createElement('div'),
         hourElement,
         minuteElement,
@@ -160,11 +159,12 @@ flatpickr.init = function (element, instanceConfig) {
         if ( self.config.altInput ){
 
             // replicate self.element
-            altInput = document.createElement(self.input.nodeName);
-            altInput.className = self.input.className;
+            self.altInput = document.createElement(self.input.nodeName);
+            self.altInput.className = self.input.className;
+            self.altInput.placeholder = self.input.placeholder;
 
             self.input.type='hidden';
-            wrapperElement.appendChild(altInput);
+            wrapperElement.appendChild(self.altInput);
 
         }
 
@@ -205,7 +205,7 @@ flatpickr.init = function (element, instanceConfig) {
             self.input.value = formatDate(self.config.dateFormat);
 
         if ( self.config.altInput && self.selectedDateObj )
-            altInput.value = formatDate(self.config.altFormat);
+            self.altInput.value = formatDate(self.config.altFormat);
 
         triggerChange();
 
@@ -574,7 +574,7 @@ flatpickr.init = function (element, instanceConfig) {
 
         if (String(self.config.clickOpens)==='true'){
             self.input.addEventListener( 'focus' , self.open);
-            self.config.altInput && (altInput.addEventListener( 'focus' , self.open) );
+            self.config.altInput && (self.altInput.addEventListener( 'focus' , self.open) );
         }
 
         if (self.config.wrap && self.element.querySelector("[data-open]"))
@@ -630,7 +630,7 @@ flatpickr.init = function (element, instanceConfig) {
             return;
         self.input.blur();
         self.input.classList.add('active');
-        altInput && (altInput.blur());
+        self.altInput && (self.altInput.blur(),self.altInput.classList.add('active'));
 
         !self.config.inline && ( self.element.parentNode.classList.add('open') );
 
@@ -639,13 +639,20 @@ flatpickr.init = function (element, instanceConfig) {
     self.toggle = function () {
         if (self.input.disabled)
             return;
+
         self.element.parentNode.classList.toggle('open');
+
+        if(self.altInput)
+            self.altInput.classList.toggle('active');
+
         self.input.classList.toggle('active');
     };
 
     self.close = function () {
         self.element.parentNode.classList.remove('open');
         self.input.classList.remove('active');
+        if (self.altInput)
+            self.altInput.classList.remove('active');
 
     };
 
