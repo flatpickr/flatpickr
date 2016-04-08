@@ -58,7 +58,7 @@ a:hover {
     -webkit-flex-direction: row;
     flex-direction: row;
     width: 96%;
-    max-width: 1280px;
+    max-width: 880px;
     margin: 0 auto;
 }
 
@@ -138,7 +138,7 @@ a:hover {
 
 input {
 
-    max-width: 400px;
+    max-width: 320px;
     outline: none;
     border: 1px solid rgba(0,0,0,0.15);
     border-radius: 3px;
