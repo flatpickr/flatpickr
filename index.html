@@ -247,23 +247,34 @@ flatpickr('#yourSelector', { dateFormat: 'm/d/Y'});
             <input class=flatpickr data-enabletime=true data-nocalendar=true placeholder="Pick date and time">
         </div>
 
-        <div class="example_wrapper">
-            <h3>Utilizing defaultDate, altInput</h3>
+        <div class="example_wrapper" data-desc="User-Friendly date output" id="altinput">
+            <h3>User-friendly Date Output with <code>altInput</code></h3>
 
-            <p>altInput can be used for displaying a friendly date format (see altFormat) to the user while sending the date formatted as dateFormat to the server. Feel free to inspect the input element below after picking a date to see what's going on. </p>
+            <p>altInput can be used for displaying a friendly date format (per <code>altFormat</code>) to the user while sending the date formatted as dateFormat to the server. Feel free to inspect the input element below after picking a date to see what's going on. </p>
 
             <pre class='prettyprint lang-html'>
-&lt;input class=flatpickr<br>&#09;data-altinput=true<br>&#09;data-defaultDate="2015/10/10 3:30 PM"<br>&#09;data-enabletime=true<br>&#09;data-timeFormat="h:i K"&gt;
+&lt;input class=flatpickr data-altinput=true data-altFormat="F j, Y"&gt;
 </pre>
-
             <p>
-                <input class=flatpickr data-altinput=true data-defaultDate="2015/10/10 3:30 PM" data-enabletime=true data-timeFormat="h:i K" placeholder="Custom default date">
+                <input class=flatpickr id="alt" data-altinput=true data-altFormat="F j, Y" placeholder="The real input is hidden :^)">
             </p>
 
-            <br> Using <strong>data-defaultDate</strong> attribute and custom dateFormat inline
+            <p>Selected date: <span id=realdate></span></p>
+</div>
+        
+        <div class="example_wrapper" data-desc="Preloading dates" id="defaultdate">
+
+            <h3>Preload dates (with time, optionally)</h3>            
+
+             <p>
+            This will display the date in an obscure manner to the user, but send
+            a proper date to the server (in this case, per default dateFormat because we 
+            didn't override it).
+            </p>
             <pre class='prettyprint lang-html'>
 &lt;input class=flatpickr data-defaultDate="2016/1/17"<br>&#09;data-altInput=true data-altFormat="F d, \\b\\r\\u\\h"&gt;
 </pre>
+       
 
             <p>
                 <input class=flatpickr data-defaultDate="2016/1/17" data-altInput=true data-altFormat="F d, \\b\\r\\u\\h">
@@ -710,6 +721,10 @@ flatpickr(".flatpickr")
     flatpickr('#dateFormat-mdy', {
         dateFormat: 'm/d/Y'
     });
+
+    calendars.byID("alt").config.onChange = function(obj, str){
+        document.querySelector("#realdate").innerText = str;
+    }
 
     flatpickr('#disableRange', {
 
