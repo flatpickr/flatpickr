@@ -1,24 +1,29 @@
-[![npm version](https://badge.fury.io/js/flatpickr.svg)](https://badge.fury.io/js/flatpickr)
-[![Bower version](https://badge.fury.io/bo/flatpickr-calendar.svg)](https://badge.fury.io/bo/flatpickr-calendar)
+[![npm version](https://badge.fury.io/js/flatpickr.svg)](https://www.npmjs.com/package/flatpickr)
+![Bower version](https://badge.fury.io/bo/flatpickr-calendar.svg)
 
-# flatpickr
+## Preamble
+![wew](https://cloud.githubusercontent.com/assets/11352152/14397836/d02d2f7c-fdad-11e5-9658-bedfb997ff52.png)
+Almost every large SPA or project involves date and time input. There are limited options, however, if you also prefer to keep your projects lean and consequently stay away from heavy frameworks such as [jQuery](https://jsperf.com/jquery-vs-javascript-performance-comparison/22), or even Bootstrap. 
 
-<!-- ![](https://cloud.githubusercontent.com/assets/11352152/12774092/8574034c-ca0f-11e5-9656-14711e806479.png)-->
-![scr_custom](https://cloud.githubusercontent.com/assets/11352152/14218528/b80adb0a-f822-11e5-9e89-0020345fa80d.PNG)
+Unfortunately, current HTML5 implementations (`input[type='datetime']`) are neither aesthetically pleasing nor [widely supported](http://caniuse.com/#feat=input-datetime). So that's out of the way.
 
-A lightweight (only 2.75kb minified and gzipped), feature-packed datetime picker. 
-Framework-agnostic, and written in vanilla JS.
+Appalled at the fact that I have to load 300kb of jquery and jquery UI or hook up bootstrap just to use a calendar, I created this \[date\]\[time\]picker that's powerful, easy to use, and looks good out of the box. 
 
-![wew](https://cloud.githubusercontent.com/assets/11352152/13730755/d79b5c4a-e92e-11e5-9fc9-b4f1acd50abd.png)
+Written in vanilla javascript, works with anything, anywhere.
 
-### Installing
+## Screenshots
 
-`npm i flatpickr` or `bower install flatpickr-calendar`
+
+![light datetimepicker](https://cloud.githubusercontent.com/assets/11352152/14218528/b80adb0a-f822-11e5-9e89-0020345fa80d.PNG)
+![dark datetimepicker](https://cloud.githubusercontent.com/assets/11352152/12774092/8574034c-ca0f-11e5-9656-14711e806479.png)
+
+## Install & Use
+Along with demos and documentation: http://chmln.github.io/flatpickr
+
 
 See also:
 * [ember.js package](https://www.npmjs.com/package/ember-cli-flatpickr)
 * [Vue.js directive](https://github.com/chmln/flatpickr/blob/gh-pages/src/flatpickr.vue.js)
 
 
-### Using
-Demos and documentation : http://chmln.github.io/flatpickr
+
