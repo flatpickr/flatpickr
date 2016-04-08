@@ -15,19 +15,25 @@ var flatpickr = function (selector, config) {
         return element._flatpickr;
     };
 
-    if (selector.nodeName) {
+    if (selector.nodeName)
         return createInstance(selector);
-    }
+    /*
+    Utilize the performance of native getters if applicable
+    https://jsperf.com/getelementsbyclassname-vs-queryselectorall/18
+    https://jsperf.com/jquery-vs-javascript-performance-comparison/22
+    */
+    else if ( /^\#[a-zA-Z0-9\-\_]*$/.test(selector) )
+        return createInstance(document.getElementById(selector.slice(1)));
 
-    elements = document.querySelectorAll(selector);
+    else if ( /^\.[a-zA-Z0-9\-\_]*$/.test(selector) )
+        elements = document.getElementsByClassName(selector.slice(1));    
+    
+    else
+        elements = document.querySelectorAll(selector);
+    
 
-    if (elements.length === 1) {
-        return createInstance(elements[0]);
-    }
-
-    for (var i = 0; i < elements.length; i++) {
-        instances.push(createInstance(elements[i]));
-    }
+    for (i = 0; i < elements.length; i++)
+        instances.push(createInstance(elements[i]));    
 
     return {
         calendars: instances,
