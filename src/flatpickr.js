@@ -557,6 +557,8 @@ flatpickr.init = function (element, instanceConfig) {
         minuteElement.min = 0;
         minuteElement.max = 59;               
 
+        hourElement.title = minuteElement.title = "Scroll to increment";
+
         timeContainer.appendChild(hourElement);
         timeContainer.appendChild(separator);
         timeContainer.appendChild(minuteElement);
@@ -565,6 +567,7 @@ flatpickr.init = function (element, instanceConfig) {
             am_pm = document.createElement("span");
             am_pm.className = "flatpickr-am-pm";
             am_pm.innerHTML = ["AM","PM"][(hourElement.value > 11)|0];
+            am_pm.title="Click to toggle";
             timeContainer.appendChild(am_pm);
         }
 
