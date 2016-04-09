@@ -115,7 +115,9 @@ flatpickr.init = function (element, instanceConfig) {
 
         
         self.input = (self.config.wrap) ? element.querySelector("[data-input]") : element;    
-        self.config.defaultDate = uDate(self.config.defaultDate);
+
+        if(self.config.defaultDate)
+            self.config.defaultDate = uDate(self.config.defaultDate);
 
         if ( self.input.value || self.config.defaultDate )
             self.selectedDateObj = uDate(self.config.defaultDate||self.input.value);
@@ -167,6 +169,7 @@ flatpickr.init = function (element, instanceConfig) {
             // replicate self.element
             self.altInput = document.createElement(self.input.nodeName);
             self.altInput.className = self.input.className;
+            self.altInput.classList.remove("flatpickr");
             self.altInput.placeholder = self.input.placeholder;
 
             self.input.type='hidden';
@@ -206,12 +209,13 @@ flatpickr.init = function (element, instanceConfig) {
             minuteElement.value = pad(minute);
 
         }
+                
 
-        if ( self.selectedDateObj )
-            self.input.value = formatDate(self.config.dateFormat);
-
-        if ( self.config.altInput && self.selectedDateObj )
+        else if ( self.altInput && self.selectedDateObj )
             self.altInput.value = formatDate(self.config.altFormat);
+        
+        else if ( self.selectedDateObj )
+            self.input.value = formatDate(self.config.dateFormat);
 
         triggerChange();
 
@@ -636,7 +640,10 @@ flatpickr.init = function (element, instanceConfig) {
             return;
         self.input.blur();
         self.input.classList.add('active');
-        self.altInput && (self.altInput.blur(),self.altInput.classList.add('active'));
+        if(self.altInput){
+            self.altInput.blur();
+            self.altInput.classList.add('active');
+        }
 
         !self.config.inline && ( self.element.parentNode.classList.add('open') );
 
