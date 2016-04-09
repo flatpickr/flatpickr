@@ -116,8 +116,10 @@ flatpickr.init = function (element, instanceConfig) {
         
         self.input = (self.config.wrap) ? element.querySelector("[data-input]") : element;    
 
-        if(self.config.defaultDate)
+        if(self.config.defaultDate){
             self.config.defaultDate = uDate(self.config.defaultDate);
+            console.log(("2016-03-01 00:00:00 -0300"));
+        }
 
         if ( self.input.value || self.config.defaultDate )
             self.selectedDateObj = uDate(self.config.defaultDate||self.input.value);
@@ -141,8 +143,10 @@ flatpickr.init = function (element, instanceConfig) {
 
         timeless = timeless||false;
 
-        // dashes to slashes (just in case) to keep firefox happy
-        typeof date === 'string' && (date = new Date(date.replace(/[-.]/g, "/")));
+        // dashes to slashes because firefox sucks
+        if (typeof date === 'string')
+            date = new Date(date.replace(/(\d*)[\-\.](\d*)[\-\.](\d*)/g, "$1/$2/$3"));
+
         timeless && date && ( date.setHours(0,0,0,0) );
 
         return date;
@@ -582,6 +586,7 @@ flatpickr.init = function (element, instanceConfig) {
 
         if (String(self.config.clickOpens)==='true'){
             self.input.addEventListener( 'focus' , self.open);
+
             if(self.altInput)
                 self.altInput.addEventListener( 'focus' , self.open);
         }

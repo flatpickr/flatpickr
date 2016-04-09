@@ -268,17 +268,16 @@ flatpickr('#yourSelector', { dateFormat: 'm/d/Y'});
             <h3>Preload dates (with time, optionally)</h3>            
 
              <p>
-            This will display the date in an obscure manner to the user, but send
-            a proper date to the server (in this case, per default <code>dateFormat</code> because we 
-            didn't override it).
+            You may load the calendar with a predefined value, ranging from 
+            simple dates, such as "2016-04-10" to full-fledged datetime strings.
             </p>
             <pre class='prettyprint lang-html'>
-&lt;input class=flatpickr data-defaultDate="2016/1/17"<br>&#09;data-altInput=true data-altFormat="F d, \\b\\r\\u\\h"&gt;
+&lt;input class=flatpickr data-defaultDate="2016-03-01 03:30:00 -0300"&gt;
 </pre>
        
 
             <p>
-                <input class=flatpickr data-defaultDate="2016/1/17" data-altInput=true  data-enableTime="true" data-altFormat="F d, \\b\\r\\u\\h">
+                <input class=flatpickr data-defaultDate="2016-03-01 03:30:00 -0300"  data-enableTime="true">
             </p>
         </div>
         <div class="example_wrapper" data-desc="Disabling dates" id="disable">
