@@ -168,8 +168,6 @@ flatpickr.init = function (element, instanceConfig) {
 
             // replicate self.element
             self.altInput = document.createElement(self.input.nodeName);
-            self.altInput.className = self.input.className;
-            self.altInput.classList.remove("flatpickr");
             self.altInput.placeholder = self.input.placeholder;
 
             self.input.type='hidden';
@@ -584,7 +582,8 @@ flatpickr.init = function (element, instanceConfig) {
 
         if (String(self.config.clickOpens)==='true'){
             self.input.addEventListener( 'focus' , self.open);
-            self.config.altInput && (self.altInput.addEventListener( 'focus' , self.open) );
+            if(self.altInput)
+                self.altInput.addEventListener( 'focus' , self.open);
         }
 
         if (self.config.wrap && self.element.querySelector("[data-open]"))
