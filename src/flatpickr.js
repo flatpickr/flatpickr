@@ -211,10 +211,10 @@ flatpickr.init = function (element, instanceConfig) {
         }
                 
 
-        else if ( self.altInput && self.selectedDateObj )
+        if ( self.altInput && self.selectedDateObj )
             self.altInput.value = formatDate(self.config.altFormat);
         
-        else if ( self.selectedDateObj )
+        if ( self.selectedDateObj )
             self.input.value = formatDate(self.config.dateFormat);
 
         triggerChange();
