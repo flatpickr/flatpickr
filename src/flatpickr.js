@@ -287,10 +287,9 @@ flatpickr.init = function (element, instanceConfig) {
                     return self.selectedDateObj.getHours() > 11 ? "PM" : "AM";
                 }
             },
-            formatPieces = dateFormat.split(''),
-            i;
+            formatPieces = dateFormat.split('');
 
-        for(i=0; i < formatPieces.length; i++){
+        for(var i = 0; i < formatPieces.length; i++){
 
             if (formats[formatPieces[i]] && formatPieces[i - 1] !== '\\') 
                 formattedDate += formats[formatPieces[i]]();
