@@ -118,7 +118,6 @@ flatpickr.init = function (element, instanceConfig) {
 
         if(self.config.defaultDate){
             self.config.defaultDate = uDate(self.config.defaultDate);
-            console.log(("2016-03-01 00:00:00 -0300"));
         }
 
         if ( self.input.value || self.config.defaultDate )
@@ -206,7 +205,7 @@ flatpickr.init = function (element, instanceConfig) {
             self.selectedDateObj.setHours(hour , minute );
 
             hourElement.value = 
-                self.config.time_24hr ? pad(hour) : pad((12 + hour)%12+12*(hour%12===0));
+                pad( self.config.time_24hr ? hour : ((12 + hour)%12+12*(hour%12===0)));
 
             minuteElement.value = pad(minute);
 
@@ -288,18 +287,17 @@ flatpickr.init = function (element, instanceConfig) {
                     return self.selectedDateObj.getHours() > 11 ? "PM" : "AM";
                 }
             },
-            formatPieces = dateFormat.split('');
+            formatPieces = dateFormat.split(''),
+            i;
 
-        [].forEach.call(formatPieces, function (formatPiece, index) {
+        for(i=0; i < formatPieces.length; i++){
 
-            if (formats[formatPiece] && formatPieces[index - 1] !== '\\') 
-                formattedDate += formats[formatPiece]();
+            if (formats[formatPieces[i]] && formatPieces[i - 1] !== '\\') 
+                formattedDate += formats[formatPieces[i]]();
 
-            else if (formatPiece !== '\\') 
-                    formattedDate += formatPiece;
-            
-
-        });
+            else if (formatPieces[i] !== '\\') 
+                    formattedDate += formatPieces[i];
+        }
 
         return formattedDate;
     };
