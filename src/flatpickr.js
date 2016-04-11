@@ -172,7 +172,8 @@ flatpickr.init = function (element, instanceConfig) {
             // replicate self.element
             self.altInput = document.createElement(self.input.nodeName);
             self.altInput.placeholder = self.input.placeholder;
-
+            self.altInput.type = self.input.type||"text";
+            
             self.input.type='hidden';
             wrapperElement.appendChild(self.altInput);
 
