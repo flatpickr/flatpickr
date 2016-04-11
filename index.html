@@ -50,8 +50,8 @@
     <div class=flex>
     <div class="c-l">
     <div class='wrapper'>
-        <div class="example_wrapper">
-            <h2>Install</h2>
+        <div class="example_wrapper" data-desc="Install" id=install>
+            <h3>Install</h3>
 
             <p>
                 Node Package Manager:<br>
@@ -82,16 +82,17 @@
 
         <div class="example_wrapper">
 
-            <h2>Usage</h2>
+            <h3>Syntax</h3>
 
             <pre class='prettyprint lang-js'>
 flatpickr('selector', [options]);
 </pre>
         </div>
 
-        <h2>Examples</h2>
+        
 
         <div class="example_wrapper" data-desc="A basic datepicker" id="basic">
+            <h3>Basics</h3>
             <strong>A basic datepicker</strong>
 
 
@@ -100,9 +101,9 @@ flatpickr('selector', [options]);
             <p>
                 <input id="flatpickr-tryme" placeholder="Try me..">
             </p>
-        </div>
+        
 
-        <div class="example_wrapper" data-desc="Multiple datetimepickers" id="multiple">
+        
 
             <strong>Multiple datetimepickers</strong>
 
@@ -131,8 +132,8 @@ flatpickr('.calendar')
         </div>
 
         <div class="example_wrapper" data-desc="Custom date/time formats" id="format">
-            <h3>Custom formatting with <a href=#options>dateFormat</a></h3>
-
+            <h3>Date Formatting</h3>
+            <p>Using <a href=#options>dateFormat</a></p>
             <pre class='prettyprint lang-js'>
 flatpickr('#yourSelector', { dateFormat: 'd-m-Y'});
 flatpickr('#yourSelector', { dateFormat: 'm/d/Y'});
@@ -155,7 +156,7 @@ flatpickr('#yourSelector', { dateFormat: 'm/d/Y'});
 
 
         <div class="example_wrapper" data-desc="Date Limits (maxDate/minDate)" id="maxmindate">
-            <h3>Date Limits with minDate and maxDate</h3> The example below conveniently uses data-attributes for setting
+            <h3>Date Limits - minDate and maxDate</h3> The example below conveniently uses data-attributes for setting
             <strong>minDate</strong> and <strong>maxDate</strong> <a href=#options>options</a>.
 
             <pre class="prettyprint lang-html">
@@ -185,7 +186,7 @@ flatpickr('#yourSelector', { dateFormat: 'm/d/Y'});
 
 
         <div class="example_wrapper" id="strap">
-            <h3>Using custom elements to open/close/clear the calendar</h3>
+            <h3>Custom elements and input groups</h3>
 
             <p>flatpickr can parse an input group of textboxes and buttons, common in <strong>Bootstrap</strong> and other frameworks.</p>
 
@@ -226,11 +227,9 @@ flatpickr('#yourSelector', { dateFormat: 'm/d/Y'});
             <pre class='prettyprint lang-html'>
 &lt;input class=flatpickr data-enabletime=true&gt;
 </pre>
-
+        <p>
             <input class=flatpickr data-enabletime=true placeholder="Pick date and time">
-        </div>
-
-        <div class="example_wrapper">
+        </p>
             <h3>DateTime Picker: 24 Hour Mode</h3>
             <pre class='prettyprint lang-html'>
 &lt;input class=flatpickr data-enabletime=true data-time_24hr=true&gt;
@@ -249,7 +248,7 @@ flatpickr('#yourSelector', { dateFormat: 'm/d/Y'});
         </div>
 
         <div class="example_wrapper" data-desc="User-Friendly date output" id="altinput">
-            <h3>User-friendly Date Output with <code>altInput</code></h3>
+            <h3>Human-friendly Date Output</h3>
 
             <p>altInput can be used for displaying a friendly date format (per <code>altFormat</code>) to the user while sending the date formatted as <code>dateFormat</code> to the server. Feel free to inspect the input element below after picking a date to see what's going on. </p>
 
@@ -265,7 +264,7 @@ flatpickr('#yourSelector', { dateFormat: 'm/d/Y'});
         
         <div class="example_wrapper" data-desc="Preloading dates" id="defaultdate">
 
-            <h3>Preload dates (with time, optionally)</h3>            
+            <h3>Preload date and time</h3>            
 
              <p>
             You may load the calendar with a predefined value, ranging from 
@@ -281,7 +280,8 @@ flatpickr('#yourSelector', { dateFormat: 'm/d/Y'});
             </p>
         </div>
         <div class="example_wrapper" data-desc="Disabling dates" id="disable">
-            <h3>Disabling date intervals with <a href=#options>disable</a></h3>
+            <h3>Disable date intervals</h3>
+            <p>With <code><a href=#options>disable</a></code> option</p>
 
             <pre class='prettyprint lang-js'>
 flatpickr('#disableRange', {
@@ -336,7 +336,7 @@ check_out.set("onChange", function(d){ check_in.set( "maxDate" , d ); });
 
 
         <div class="example_wrapper" id=inline-calendar  data-desc="Inline calendar" >
-            <p><strong>Inline or embedded calendar</strong></p>
+            <h3>Inline or embedded calendar</h3>
 
             <pre class='prettyprint lang-html'>
 &lt;input class=flatpickr data-inline=true placeholder="Pick a date below"&gt;
@@ -351,7 +351,7 @@ check_out.set("onChange", function(d){ check_in.set( "maxDate" , d ); });
 
 
         <div class="example_wrapper" data-desc="Customizing default options" id="prototype">
-            <strong>Modifying default configuration for all calendars:</strong>
+            <h3>Customizing default options</h3>
 
             <pre class='prettyprint lang-js'>
 // use your own arrow icons
@@ -372,8 +372,8 @@ flatpickr(".flatpickr")
 
         <p></p>
 
-        <div class="example_wrapper">   
-        <h2 id=options data-desc="Options">Options</h2>
+        <div class="example_wrapper" id=options>   
+        <h3  data-desc="Options">Options</h3>
         <p>
             <strong>Protip: </strong> <u>all</u> of the string/boolean config options can also be supplied using data attributes, e.g. data-mindate, data-defaultdate, data-dateformat etc.
         </p>
@@ -489,8 +489,8 @@ flatpickr(".flatpickr")
         </table>
         </div>
 
-        <div class="example_wrapper">   
-        <h3>Date Format</h3>
+        <div class="example_wrapper" id=dateformat>   
+        <h3>Date Format Characters</h3>
 
         <table class=table>
             <thead>
@@ -564,8 +564,8 @@ flatpickr(".flatpickr")
             </tbody>
         </table>
         </div>
-        <div class="example_wrapper">        
-        <h3>Time Format</h3>
+        <div class="example_wrapper" id=timeformat>        
+        <h3>Time Format Characters</h3>
 
         <table class=table>
             <thead>
@@ -621,9 +621,9 @@ flatpickr(".flatpickr")
 
         </div>
 
-        <div class="example_wrapper">
+        <div class="example_wrapper" id=local>
 
-        <h3 data-desc="Localization/Languages" id="locale">Localization</h3>
+        <h3 id="locale">Localization</h3>
 
         <p>flatpickr supports localizing text in a similar way to modifying the methods (above).</p>
 

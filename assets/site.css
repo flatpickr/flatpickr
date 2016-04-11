@@ -68,7 +68,8 @@ a:hover {
 
 .c-r {
     width: 35%;
-    padding-left: 3%
+    padding-left: 3%;
+
 }
 
 .c-r ol {
@@ -77,7 +78,7 @@ a:hover {
 }
 
 .c-r li {
-    padding: 0.05rem 0
+    padding: 0.03rem 0
 }
 
 .c-r li span {
@@ -89,10 +90,14 @@ a:hover {
     display: block
 }
 
+.c-r li a:hover {
+    background: #f6f6f6
+}
+
 .fixed {
     position: fixed;
     top: 1rem;
-    min-width: 250px
+    min-width: 270px;
 }
 
 .example_wrapper
