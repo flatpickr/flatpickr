@@ -94,7 +94,8 @@ flatpickr.init = function (element, instanceConfig) {
         wrapperElement = document.createElement('div'),
         hourElement,
         minuteElement,
-        am_pm;
+        am_pm,
+        clickEvt;
 
 
     init = function () {
@@ -413,14 +414,14 @@ flatpickr.init = function (element, instanceConfig) {
             prevMonthDays = getDaysinMonth( prevMonth ),
             calendarFragment = document.createDocumentFragment(),
             row = document.createElement('tr'),
-            dayNumber,
+            dayNumber = prevMonthDays + 1 - firstOfMonth,
             className,
             cur_date,
             date_is_disabled,
             date_outside_minmax;
 
         // prepend days from the ending of previous month
-        for( dayNumber = prevMonthDays + 1 - firstOfMonth ; dayNumber <= prevMonthDays; dayNumber++ )
+        for( ; dayNumber <= prevMonthDays; dayNumber++ )
             row.innerHTML +=
                 '<td class="disabled">'
                     + '<span class="flatpickr-day">'
@@ -429,7 +430,6 @@ flatpickr.init = function (element, instanceConfig) {
                 '</td>';
 
         calendarBody.innerHTML = '';
-
 
         // Start at 1 since there is no 0th day
         for (dayNumber = 1; dayNumber <= 42 - firstOfMonth; dayNumber++) {
@@ -586,6 +586,8 @@ flatpickr.init = function (element, instanceConfig) {
             }            
 
         }
+        if(typeof MouseEvent !== "undefined")
+            clickEvt = new MouseEvent("click", {bubbles: true, cancelable: true})
 
     };
 
@@ -634,38 +636,29 @@ flatpickr.init = function (element, instanceConfig) {
 
     triggerChange = function(){
 
-        if ("createEvent" in document) {
-            var event = document.createEvent("Event");
-            event.initEvent("change", true, true);
-            element.dispatchEvent(event)
-        } else  {
-            element.fireEvent("onchange");
-        }
+        if (clickEvt) 
+            self.input.dispatchEvent(clickEvt)
+        else // IE
+            self.input.fireEvent("onchange");        
 
         self.config.onChange(self.selectedDateObj, self.input.value);
 
     }
 
     destroy = function () {
-        var parent,
-            element;
+        let parent = self.element.parentNode,
+            element  = parent.removeChild(self.element);
 
         document.removeEventListener('click', documentClick, false);
-        self.input.removeEventListener('focus', self.open, false);
-        self.input.removeEventListener('click', self.open, false);
 
-        parent = self.element.parentNode;
         parent.removeChild(calendarContainer);
-        element = parent.removeChild(self.element);
         parent.parentNode.replaceChild(element, parent);
     };
 
     jumpToDate = function(jumpDate) {
         jumpDate = uDate(
             jumpDate||
-            self.selectedDateObj||
-            self.config.defaultDate||
-            self.config.minDate||
+            self.selectedDateObj||self.config.defaultDate||self.config.minDate||
             currentDate
         );
         self.currentYear = jumpDate.getFullYear();
