@@ -1,28 +1,40 @@
 var gulp = require('gulp'),
-  sass = require('gulp-sass'),
-	cssmin = require('gulp-cssmin'),
-  uglify = require('gulp-uglify'),
-	rename = require("gulp-rename");
+stylus = require('gulp-stylus'),
+babel = require('gulp-babel'),
+cssmin = require('gulp-cssmin'),
+uglify = require('gulp-uglify'),
+rename = require("gulp-rename");
 
-gulp.task('sass', function () {
-  return gulp.src(['src/flatpickr.scss', 'src/flatpickr.dark.scss'], {base: 'src/'})
-    .pipe(sass())
+gulp.task('style', function () {
+    return gulp.src('./src/style/flatpickr.styl')
+    .pipe(stylus())
     .pipe(cssmin()).on('error', errorHandler)
-    .pipe(rename({        suffix: '.min'   }))
+    .pipe(rename({ suffix: '.min'}))
+    .pipe(gulp.dest('dist'));
+});
+
+gulp.task('themes', function () {
+    return gulp.src('./src/style/themes/*.styl')
+    .pipe(stylus())
+    .pipe(cssmin()).on('error', errorHandler)
+    .pipe(rename({ prefix: 'flatpickr.',suffix: '.min'}))
     .pipe(gulp.dest('dist'));
 });
 
 gulp.task('watch', function () {
-  gulp.watch('./src/**/*.scss', ['sass']);
-  gulp.watch('src/flatpickr.js', ['compress-js']);
+    //gulp.watch('./src/**/*.scss', ['sass']);
+    gulp.watch('./src/style/*.styl', ['style']);
+    gulp.watch('./src/style/themes/*.styl', ['themes']);
+    gulp.watch('src/flatpickr.js', ['compress-js']);
 });
 
 
 
 gulp.task('compress-js', function() {
-  return gulp.src('src/flatpickr.js')
+    return gulp.src('src/flatpickr.js')
+    .pipe(babel({presets: ['es2015']}))
     .pipe(uglify()).on('error', errorHandler)
-    .pipe(rename({        suffix: '.min'   }))
+    .pipe(rename({ suffix: '.min'}))
     .pipe(gulp.dest('dist'));
 });
 
@@ -30,8 +42,7 @@ gulp.task('compress-js', function() {
 
 // Handle the error
 function errorHandler (error) {
-  console.log(error.toString());
-  this.emit('end');
+    console.log(error.toString());
 }
 
-gulp.task('default', ['compress-js', 'sass', 'watch' ]);
+gulp.task('default', ['compress-js', 'style', 'themes','watch' ]);
