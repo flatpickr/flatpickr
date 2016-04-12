@@ -172,7 +172,8 @@ flatpickr.init = function (element, instanceConfig) {
             // replicate self.element
             self.altInput = document.createElement(self.input.nodeName);
             self.altInput.placeholder = self.input.placeholder;
-
+            self.altInput.type = self.input.type||"text";
+            
             self.input.type='hidden';
             wrapperElement.appendChild(self.altInput);
         }
@@ -621,7 +622,7 @@ flatpickr.init = function (element, instanceConfig) {
         self.input.classList.remove('active');
         if (self.altInput)
             self.altInput.classList.remove('active');
-
+        self.config.onClose();
     };
 
     self.clear = function() {
@@ -747,7 +748,8 @@ flatpickr.init.prototype = {
             time_24hr: false,
             hourIncrement: 1,
             minuteIncrement: 5,
-            onChange: function( dateObj, dateStr ){}
+            onChange: function( dateObj, dateStr ){},
+            onClose: function() {}
     }
 };
 
