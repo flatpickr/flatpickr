@@ -671,7 +671,7 @@ flatpickr.init = function (element, instanceConfig) {
         self.input.classList.remove('active');
         if (self.altInput)
             self.altInput.classList.remove('active');
-
+        self.config.onClose();
     };
 
     self.clear = function() {
@@ -799,7 +799,8 @@ flatpickr.init.prototype = {
             time_24hr: false,
             hourIncrement: 1,
             minuteIncrement: 5,
-            onChange: function( dateObj, dateStr ){}
+            onChange: function( dateObj, dateStr ){},
+            onClose: function() {}
     }
 };
 
