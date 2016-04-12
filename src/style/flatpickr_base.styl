@@ -1,0 +1,190 @@
+/* ============== CALENDAR ============== */
+
+.flatpickr-wrapper
+    display: inline-block
+    width: 100%
+    position: relative
+    box-sizing: content-box
+    
+    input
+        cursor: pointer
+        position: relative
+        z-index: 1
+        
+    .flatpickr-calendar
+        background: $calendar_background
+        color: $day_text_color
+        border: 1px solid $calendar_border_color
+        font-size: 88%
+        border-radius: 4px
+        position: absolute
+        top: 100%
+        left: 0
+        margin-top: 3px
+        opacity: 0
+        z-index: 0
+        visibility: hidden
+        overflow: hidden
+        -webkit-transition: opacity 75ms
+        transition: opacity 75ms
+        width: 100%
+        max-width: 256px
+        
+        .flatpickr-months
+            background: $months_background
+            color: $months_color
+            padding: 4px 0 2px 0
+            text-align: center
+            .flatpickr-prev-month, .flatpickr-next-month
+                text-decoration: none
+                cursor: pointer
+                
+                i
+                    position: relative
+                    bottom: -3.2px
+
+                &:hover
+                    color: $today_color
+                    
+            .flatpickr-prev-month
+                float: left
+                margin-left: 0.4em
+                
+            .flatpickr-next-month
+                float: right
+                margin-right: 0.4em
+                
+            .flatpickr-current-month
+                font-size: 135%
+                font-weight: 300
+                color: alpha($months_color, 0.7)
+                
+                span
+                    font-weight: 700
+                    color: $months_color
+        /* //flatpickr-months */
+        table
+            border-collapse: collapse
+            margin: 0
+            padding: 0
+            width: 100%
+            background: transparent
+            thead
+                font-size: 90%
+                background: transparent
+            th, td
+                text-align: center
+                width: 14.3%
+            th
+                color: $weekdays_color
+                padding: 2px 0 4px
+                font-weight: bold
+            tr
+                background: transparent
+            td
+                cursor: pointer
+                padding: 0
+                .flatpickr-day
+                    background: none
+                    display: inline-block
+                    width: 100%
+                    max-width: 32px
+                    line-height: 32px
+                    text-align: center
+                    padding: 0
+                    margin: 0 1px 1px 0
+                    border: 1px solid transparent
+                    border-radius: 150px
+
+                &:hover .flatpickr-day
+                    background: $day_hover_background_color
+                    border-color: $day_hover_background_color
+
+                &:first-child .flatpickr-day
+                    margin-left: 1px
+
+                &.today
+                    .flatpickr-day
+                        border-color: $today_color
+
+                    &:hover .flatpickr-day
+                        border-color: $today_color
+                        background-color: $today_color
+                        color: white
+
+                &.selected, &.selected:hover
+                    .flatpickr-day
+                        background-color: $selected_day_color
+                        color: invert($day_text_color)
+                        border-color: $selected_day_color
+        /* //flatpickr-calendar table */
+        .disabled, .disabled .flatpickr-day, .disabled:hover .flatpickr-day
+            color: $disabled_color
+            background: transparent
+            border-color: transparent
+            cursor: default
+    /* //flatpickr-calendar */
+
+    &.open .flatpickr-calendar, &.inline .flatpickr-calendar
+        z-index: 100
+        opacity: 1
+        visibility: visible
+
+    &.inline .flatpickr-calendar
+        position: static
+        
+
+/* ============== TIME PICKER ============== */
+
+.flatpickr-time
+    overflow: auto
+    border-top: 1px solid alpha($day_text_color, 0.15)
+    text-align: center
+
+.flatpickr-hour, .flatpickr-minute
+    background: transparent
+    -webkit-appearance: none
+    box-shadow: none
+    border: 0
+    border-radius: 0
+    display: inline-block
+    width: 33%
+    min-width: 33%
+    text-align: center
+    margin: 0
+    padding: 0
+    height: 38px
+    line-height: 38px
+    cursor: pointer
+    font-weight: bold
+    color: $day_text_color
+
+    &:focus
+        outline: 0
+        border: 0
+
+.flatpickr-hour
+    font-weight: bold
+
+.flatpickr-minute
+    width: 26%
+    font-weight: 300
+
+.flatpickr-hour:hover, .flatpickr-minute:hover, .flatpickr-am-pm:hover
+    background: lighten($day_hover_background_color, 6)
+
+.flatpickr-time-separator, .flatpickr-am-pm
+    height: 38px
+    display: inline-block
+    line-height: 38px
+
+.flatpickr-am-pm
+    width: 21%
+    padding: 0 2%
+    cursor: pointer
+    text-align: left
+
+.flatpickr-time input[type=number]::-webkit-inner-spin-button,
+.flatpickr-time input[type=number]::-webkit-outer-spin-button
+    -webkit-appearance: none
+    margin: 0
