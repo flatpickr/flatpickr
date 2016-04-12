@@ -22,7 +22,7 @@ Along with demos and documentation: http://chmln.github.io/flatpickr
 
 
 See also:
-* [ember.js package](https://www.npmjs.com/package/ember-cli-flatpickr)
+* [ember-flatpickr addon](https://www.npmjs.com/package/ember-flatpickr)
 * [Vue.js directive](https://github.com/chmln/flatpickr/blob/gh-pages/src/flatpickr.vue.js)
 
 
