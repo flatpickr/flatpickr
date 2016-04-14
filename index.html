@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
     <link rel="stylesheet" type="text/css" href="assets/site.css">
-    <link rel="stylesheet" type="text/css" href="dist/flatpickr.min.css">
+    <link rel="stylesheet" id=cal_style type="text/css" href="dist/flatpickr.min.css">
 
     <link rel="icon" type="image/png" href="favicon.png">
 
@@ -25,13 +25,13 @@
                 A lightweight & powerful datetimepicker
             </p>
             <div>                
-                <a title="Follow @chmln on GitHub" class="btn" href="https://github.com/chmln">
+                <a title="Follow @chmln on GitHub" target="_blank" class="btn" href="https://github.com/chmln">
                     <i class="icon-github"></i> 
                     <span>Follow</span>
                 </a>              
                 
 
-                <a title="Star chmln/flatpickr on GitHub" class="btn" href="https://github.com/chmln/flatpickr">
+                <a title="Star chmln/flatpickr on GitHub" target="_blank" class="btn" href="https://github.com/chmln/flatpickr">
                     <i class="icon-star"></i> 
                     <span>Star</span>
                 </a>   
@@ -694,13 +694,16 @@ flatpickr(".flatpickr")
     <div class="c-r">
         
         <div>
+            <strong>Theme:</strong>
+            <select id=themes>
+                <option value="">Default</option>
+            </select>
             <h2>Table of Contents</h2>
             <ol></ol>
         </div>
 
     </div>
     </div>
-
     <script src="dist/flatpickr.min.js"></script>
     <script>
     // setting custom defaults
@@ -766,6 +769,7 @@ flatpickr(".flatpickr")
 
     <script async src="assets/prettify.js?skin=none"></script>
     <script async src="assets/table-of-contents.js"></script>
+    <script async src="assets/themer.js"></script>
 </body>
 
 </html>
