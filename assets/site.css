@@ -52,6 +52,7 @@ a:hover {
 }
 
 .flex {
+    display: inline-block;
     display: -ms-flex;
     display: -webkit-flex;
     display: flex;
@@ -113,14 +114,11 @@ a:hover {
     min-height: 210px;
     max-height: 420px;
     background: #4183d7;
-    background: #4183d7;
     background: -moz-linear-gradient(45deg,  #4183d7 0%, #87d37c 76%);
     background: -webkit-gradient(linear, left bottom, right top, color-stop(0%,#4183d7), color-stop(76%,#87d37c));
     background: -webkit-linear-gradient(45deg,  #4183d7 0%,#87d37c 76%);
-    background: -o-linear-gradient(45deg,  #4183d7 0%,#87d37c 76%);
     background: -ms-linear-gradient(45deg,  #4183d7 0%,#87d37c 76%);
     background: linear-gradient(45deg,  #4183d7 0%,#87d37c 76%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4183d7', endColorstr='#87d37c',GradientType=1 );
     color: white;
     width: 100%;
     margin-bottom: 1.4rem;
@@ -140,6 +138,20 @@ a:hover {
     border-color: #639f6e;
 }
 
+select {
+    padding: 0.25rem;
+    font-family: "Roboto";
+    text-transform: capitalize;
+}
+
+select:focus {
+    outline: 0
+}
+
+select option {
+    font-family: "Roboto";
+    text-transform: capitalize;
+}
 
 input {
 
