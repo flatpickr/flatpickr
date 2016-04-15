@@ -15,7 +15,8 @@ const paths = {
 export function script() {
     return gulp.src(paths.script)
     .pipe(lint({
-         'esversion': 6
+        "esversion": 6,
+        "unused": true
     }))
     .pipe(lint.reporter('default'))
     .pipe(babel({presets: ['es2015']}))
