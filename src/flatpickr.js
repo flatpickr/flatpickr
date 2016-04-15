@@ -727,8 +727,39 @@ Date.prototype.fp_incr = function(days){
 };
 
 // classList polyfill
-"classList"in document.documentElement||!Object.defineProperty||"undefined"==typeof HTMLElement||Object.defineProperty(HTMLElement.prototype,"classList",{get:function(){function e(e){return function(t){var s=n.className.split(/\s+/),i=s.indexOf(t);e(s,i,t),n.className=s.join(" ")}}var n=this,t={add:e(function(e,n,t){~n||e.push(t)}),remove:e(function(e,n){~n&&e.splice(n,1)}),toggle:e(function(e,n,t){~n?e.splice(n,1):e.push(t)}),contains:function(e){return!!~n.className.split(/\s+/).indexOf(e)},item:function(e){return n.className.split(/\s+/)[e]||null}};return Object.defineProperty(t,"length",{get:function(){return n.className.split(/\s+/).length}}),t}});
+if (!("classList" in document.documentElement) && Object.defineProperty && typeof HTMLElement !== 'undefined') {
+    Object.defineProperty(HTMLElement.prototype, 'classList', {
+        get: function() {
+            var self = this;
+            function update(fn) {
+                return function(value) {
+                    var classes = self.className.split(/\s+/),
+                        index = classes.indexOf(value);
 
+                    fn(classes, index, value);
+                    self.className = classes.join(" ");
+                };
+            }
 
-if (typeof module != 'undefined')
+            var ret = {                    
+                add: update(function(classes, index, value) {
+                    ~index || classes.push(value);
+                }),
+                remove: update(function(classes, index) {
+                    ~index && classes.splice(index, 1);
+                }),
+                toggle: update(function(classes, index, value) {
+                    ~index ? classes.splice(index, 1) : classes.push(value);
+                }),
+                contains: function(value) {
+                    return !!~self.className.split(/\s+/).indexOf(value);
+                }
+            };
+
+            return ret;
+        }
+    });
+}
+
+if (typeof module !=='undefined')
     module.exports = flatpickr;
