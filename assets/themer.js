@@ -1,6 +1,6 @@
 var theme_sel = document.getElementById("themes"),
     stylesheet = document.getElementById("cal_style"),
-    themes = [".material_blue", ".material_red", ".material_orange", ".material_green", ".dark"];
+    themes = [".material_blue", ".material_red", ".material_orange", ".material_green", ".dark", ".confetti"];
 
 for(var i = 0; i < themes.length; i++){
     var opt = document.createElement("option");
