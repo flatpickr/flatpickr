@@ -409,7 +409,7 @@ flatpickr.init = function (element, instanceConfig) {
         for( ; dayNumber <= prevMonthDays; dayNumber++ ){
             let d = document.createElement("span");
             d.className="disabled flatpickr-day";
-            d.innerText=dayNumber;
+            d.innerHTML=dayNumber;
             calendar.appendChild(d); 
         }
 
@@ -436,7 +436,7 @@ flatpickr.init = function (element, instanceConfig) {
             let cell = document.createElement("span");
 
             cell.className = className;
-            cell.innerText = (dayNumber > numDays ? dayNumber % numDays : dayNumber);
+            cell.innerHTML = (dayNumber > numDays ? dayNumber % numDays : dayNumber);
             calendar.appendChild(cell);
 
         }
