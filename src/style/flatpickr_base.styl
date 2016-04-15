@@ -125,42 +125,44 @@ $width = 256px;
 
 
     .flatpickr-time
-        overflow: auto
+        overflow auto
         if $border-calendar-only is defined
-            border: 1px solid $calendar_border_color
+            border 1px solid $calendar_border_color
             border-top 0
         else
-            border-top: 1px solid $calendar_border_color
-        text-align: center
+            border-top 1px solid $calendar_border_color
+        text-align center
 
         .flatpickr-hour, .flatpickr-minute
-            background: transparent
-            -webkit-appearance: none
-            box-shadow: none
-            border: 0
-            border-radius: 0
-            display: inline-block
-            width: 33%
-            min-width: 33%
-            text-align: center
-            margin: 0
-            padding: 0
-            height: 38px
-            line-height: 38px
-            cursor: pointer
-            font-weight: bold
-            color: $day_text_color
+            background transparent
+            -webkit-appearance none
+            -moz-appearance textfield
+            box-shadow none
+            border 0
+            border-radius 0
+            display inline-block
+            width 33%
+            min-width 33%
+            text-align center
+            margin 0
+            padding 0
+            height 38px
+            line-height 38px
+            cursor pointer
+            font-weight bold
+            color $day_text_color
 
             &:focus
-                outline: 0
-                border: 0
+                outline 0
+                border 0
+            
+            &:hover
+                background: lighten($day_hover_background_color, 4)
 
         .flatpickr-minute
-            width: 26%
-            font-weight: 300
-
-    .flatpickr-hour:hover, .flatpickr-minute:hover, .flatpickr-am-pm:hover
-        background: lighten($day_hover_background_color, 4)
+            width 26%
+            font-weight 300
+    
 
     .flatpickr-time-separator, .flatpickr-am-pm
         height: 38px
@@ -172,8 +174,7 @@ $width = 256px;
         padding: 0 2%
         cursor: pointer
         text-align: left
+        &:hover
+            background: lighten($day_hover_background_color, 4)
 
-    .flatpickr-time input[type=number]::-webkit-inner-spin-button,
-    .flatpickr-time input[type=number]::-webkit-outer-spin-button
-        -webkit-appearance: none
-        margin: 0
+    
