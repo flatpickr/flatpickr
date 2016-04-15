@@ -111,13 +111,9 @@ flatpickr.init = function (element, instanceConfig) {
 
         if ( self.input.value || self.config.defaultDate )
             self.selectedDateObj = uDate(self.config.defaultDate||self.input.value);
+  
 
-       self.config.minDate =
-            uDate(self.config.minDate === "today" ? new Date() : self.config.minDate, true);
-
-       self.config.maxDate = uDate(self.config.maxDate, true);
-
-        self.jumpToDate(self.selectedDateObj||self.config.minDate||currentDate);
+        self.jumpToDate();
 
         wrap();        
         buildCalendar();
@@ -131,8 +127,12 @@ flatpickr.init = function (element, instanceConfig) {
 
         timeless = timeless||false;
 
+        if (date === 'today'){
+            date = new Date();
+            timeless=true;
+        }
         // dashes to slashes because firefox sucks
-        if (typeof date === 'string')
+        else if (typeof date === 'string')
             date = new Date(date.replace(/(\d*)[\-\.](\d*)[\-\.](\d*)/g, "$1/$2/$3"));
 
         if(timeless && date)
@@ -405,6 +405,11 @@ flatpickr.init = function (element, instanceConfig) {
 
         calendar.innerHTML = '';
 
+        self.config.minDate =
+            uDate(self.config.minDate === "today" ? new Date() : self.config.minDate, true);
+
+       self.config.maxDate = uDate(self.config.maxDate, true);
+
         // prepend days from the ending of previous month
         for( ; dayNumber <= prevMonthDays; dayNumber++ ){
             let d = document.createElement("span");
@@ -641,9 +646,7 @@ flatpickr.init = function (element, instanceConfig) {
 
     self.jumpToDate = function(jumpDate){
         jumpDate = uDate(
-            jumpDate||
-            self.selectedDateObj||self.config.defaultDate||self.config.minDate||
-            currentDate
+            jumpDate||self.selectedDateObj||self.config.defaultDate||self.config.minDate||currentDate
         );
         self.currentYear = jumpDate.getFullYear();
         self.currentMonth = jumpDate.getMonth();        
@@ -664,7 +667,7 @@ flatpickr.init = function (element, instanceConfig) {
      };
 
     self.set = function(key, value){
-
+       
         if (key in self.config) {
             self.config[key] = value;
             self.jumpToDate();
