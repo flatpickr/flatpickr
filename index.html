@@ -272,7 +272,7 @@ flatpickr('#yourSelector', { dateFormat: 'm/d/Y'});
             simple dates, such as "2016-04-10" to full-fledged datetime strings.
             </p>
             <pre class='prettyprint lang-html'>
-&lt;input class=flatpickr data-defaultDate="2016-03-01 03:30:00 -0300"&gt;
+&lt;input class=flatpickr data-defaultDate="2016-03-01 03:30:00 -0300"  data-enableTime="true"&gt;
 </pre>
        
 
@@ -716,8 +716,9 @@ flatpickr(".flatpickr")
     flatpickr.init.prototype.l10n.firstDayOfWeek = 1;
 
     //Regular flatpickr
-    flatpickr('#flatpickr-tryme');
-    calendars = flatpickr(".flatpickr");
+    var t = flatpickr('#flatpickr-tryme');
+    var calendars = flatpickr(".flatpickr");
+
     flatpickr('.calendar');
 
     // Custom date format
