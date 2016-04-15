@@ -726,6 +726,9 @@ Date.prototype.fp_incr = function(days){
     );
 };
 
+// classList polyfill
+"classList"in document.documentElement||!Object.defineProperty||"undefined"==typeof HTMLElement||Object.defineProperty(HTMLElement.prototype,"classList",{get:function(){function e(e){return function(t){var s=n.className.split(/\s+/),i=s.indexOf(t);e(s,i,t),n.className=s.join(" ")}}var n=this,t={add:e(function(e,n,t){~n||e.push(t)}),remove:e(function(e,n){~n&&e.splice(n,1)}),toggle:e(function(e,n,t){~n?e.splice(n,1):e.push(t)}),contains:function(e){return!!~n.className.split(/\s+/).indexOf(e)},item:function(e){return n.className.split(/\s+/)[e]||null}};return Object.defineProperty(t,"length",{get:function(){return n.className.split(/\s+/).length}}),t}});
+
 
 if (typeof module != 'undefined')
     module.exports = flatpickr;
