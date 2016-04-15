@@ -32,5 +32,5 @@ See also:
 * [Vue.js directive](https://github.com/chmln/flatpickr/blob/gh-pages/src/flatpickr.vue.js)
 
 ## Compatibility
-IE10+, iOS Safari 6+, MS Edge, Chrome 8+, Firefox 6+
+IE9+, iOS Safari 6+, MS Edge, Chrome 8+, Firefox 6+
 
