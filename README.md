@@ -27,10 +27,10 @@ Written in vanilla javascript, works with anything, anywhere.
 ## Install & Use
 Along with demos and documentation: http://chmln.github.io/flatpickr
 
-
 See also:
 * [ember-flatpickr addon](https://www.npmjs.com/package/ember-flatpickr)
 * [Vue.js directive](https://github.com/chmln/flatpickr/blob/gh-pages/src/flatpickr.vue.js)
 
-
+## Compatibility
+IE10+, iOS Safari 6+, MS Edge, Chrome 8+, Firefox 6+
 
