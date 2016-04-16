@@ -1,4 +1,5 @@
-@import url("http://fonts.googleapis.com/css?family=Nunito:700|Roboto:300,400,700");
+@import url("http://fonts.googleapis.com/css?family=Nunito:700&text=flatpickr");
+@import url("http://fonts.googleapis.com/css?family=Roboto:300,400,700");
 @import url("reset.css");
 @import url("icons.css");
 @import url("prettify.css");
@@ -114,20 +115,35 @@ a:hover {
     padding: 7.5vh 0;
     min-height: 210px;
     max-height: 420px;
-    background: #4183d7;
-    background: -moz-linear-gradient(45deg,  #4183d7 0%, #87d37c 76%);
-    background: -webkit-gradient(linear, left bottom, right top, color-stop(0%,#4183d7), color-stop(76%,#87d37c));
-    background: -webkit-linear-gradient(45deg,  #4183d7 0%,#87d37c 76%);
-    background: -ms-linear-gradient(45deg,  #4183d7 0%,#87d37c 76%);
-    background: linear-gradient(45deg,  #4183d7 0%,#87d37c 76%);
     color: white;
     width: 100%;
     margin-bottom: 1.4rem;
     text-align: center;
 }
 
+.hero1 {
+    background: #1fc8db;
+    background: linear-gradient(141deg, #0fb8ad 0%, #1fc8db 71%, #2cb5e8 100%);
+}
+
+.hero2 {
+    background: #42afe3;
+    background: linear-gradient(141deg, #13bfdf 0%, #42afe3 71%, #53a1eb 100%);
+}
+
+.hero3 {
+    background: #fce473;
+    background: linear-gradient(141deg, #ffbd3d 0%, #fce473 71%, #fffe8a 100%);
+}
+
+.hero4 {
+    background: #97cd76;
+    background: linear-gradient(141deg, #8ecb45 0%, #97cd76 71%, #96d885 100%);   
+}
+
 .hero h1{
     margin-top: 0;
+    line-height: 3rem;
 }
 .hero p
 {
@@ -136,7 +152,7 @@ a:hover {
 }
 
 .hero .btn,.hero .btn:hover {
-    border-color: #639f6e;
+    border-color: rgba(0,0,0,0.1);
 }
 
 select {
@@ -218,14 +234,9 @@ input:focus, input.active
 
 }
 
-.btn {
-    
+.btn {    
     background: #eee;
-    background: -webkit-linear-gradient(top,#fcfcfc,#eee);
-    background: -moz-linear-gradient(top,#fcfcfc,#eee);
     background: linear-gradient(to bottom,#fcfcfc,#eee);
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcfcfc', endColorstr='#eeeeee')";
-    *filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcfcfc', endColorstr='#eeeeee');    
     border: 1px solid #d5d5d5;
     border-radius: 3px;
     color: #444;
@@ -252,12 +263,8 @@ input:focus, input.active
 
 .btn:hover {
     background: #ddd;
-    background: -webkit-linear-gradient(top,#eee,#ddd);
-    background: -moz-linear-gradient(top,#eee,#ddd);
     background: linear-gradient(to bottom,#eee,#ddd);
     border-color: #ccc;
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#dddddd')";
-    *filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#dddddd');
     text-decoration: none
 }
 

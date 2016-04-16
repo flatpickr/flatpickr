@@ -13,3 +13,5 @@ theme_sel.addEventListener("change", function(e){
     stylesheet.href="dist/flatpickr"+e.target.value+".min.css";
     theme_sel.blur();
 });
+
+document.getElementById("hero").className+= " hero"+(Math.floor(Math.random() *4)+1);
