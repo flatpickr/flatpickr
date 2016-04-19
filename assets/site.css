@@ -151,8 +151,18 @@ a:hover {
     opacity: 0.85
 }
 
-.hero .btn,.hero .btn:hover {
-    border-color: rgba(0,0,0,0.1);
+.hero .btn {
+    border-color: rgba(255,255,255,0.2);
+    background: transparent;
+    color: #fff;
+    font-weight: 400;
+    text-shadow: none;
+}
+
+.hero .btn:hover {
+    background: white;
+    color: black;
+    border-color: white;
 }
 
 select {
@@ -242,7 +252,6 @@ input:focus, input.active
     color: #444;
     cursor: pointer;
     display: inline-block;
-    font-weight: 700;
     margin-right: 0.5rem;
     padding: 3px 12px;
     text-shadow: 0 1px 0 rgba(255,255,255,.9);
