@@ -79,7 +79,23 @@ $width = 256px
                 span
                     font-weight 700
                     color $months_color
-            
+                    
+            .cur_year
+                -webkit-appearance: none
+                appearance none
+                -moz-appearance textfield
+                display: inline
+                background: transparent
+                border: 0
+                max-width: 56px;
+                height: inherit
+                border-radius: 0
+                font-size: inherit
+                padding: 0 2px
+                cursor: text 
+                &:hover
+                    -moz-appearance number-input
+                    background lighten($day_hover_background_color, 4)
 
         
         

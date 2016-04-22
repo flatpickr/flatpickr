@@ -56,6 +56,7 @@ flatpickr.init = function (element, instanceConfig) {
         buildDays,
         buildTime,
         timeWrapper,
+        yearScroll,
         updateValue,
         updateNavigationCurrentMonth,
         buildMonthNavigation,
@@ -74,6 +75,8 @@ flatpickr.init = function (element, instanceConfig) {
         navigationCurrentMonth = document.createElement('span'),
         monthsNav = document.createElement('div'),
         prevMonthNav = document.createElement('span'),
+        cur_year = document.createElement('input'),
+        cur_month = document.createElement('span'),
         nextMonthNav = document.createElement('span'),
         calendar = document.createElement('div'),
         currentDate = new Date(),
@@ -271,6 +274,13 @@ flatpickr.init = function (element, instanceConfig) {
 
     };  
 
+    yearScroll = event => {
+        event.preventDefault();
+        let delta = Math.max(-1, Math.min(1, (event.wheelDelta || -event.deltaY )));
+        event.target.value = parseInt(event.target.value) + delta;
+        self.currentYear = event.target.value;
+        self.redraw();
+    };
 
     timeWrapper = function (e){
         e.preventDefault();
@@ -290,8 +300,8 @@ flatpickr.init = function (element, instanceConfig) {
 
     updateNavigationCurrentMonth = function () {
 
-        navigationCurrentMonth.innerHTML = `
-            <span>${monthToStr(self.currentMonth)}</span> ${self.currentYear}`;
+        cur_month.innerHTML = monthToStr(self.currentMonth) +" ";
+        cur_year.value = self.currentYear;
 
     };
 
@@ -366,6 +376,13 @@ flatpickr.init = function (element, instanceConfig) {
 
         nextMonthNav.className = "flatpickr-next-month";
         nextMonthNav.innerHTML = self.config.nextArrow;
+        
+        cur_year.className = "cur_year";
+        cur_year.type = "number";
+        cur_year.title = "Scroll to increment";
+
+        navigationCurrentMonth.appendChild(cur_month);
+        navigationCurrentMonth.appendChild(cur_year);
 
         monthsNav.appendChild(prevMonthNav);
         monthsNav.appendChild(navigationCurrentMonth);
@@ -531,6 +548,12 @@ flatpickr.init = function (element, instanceConfig) {
 
         prevMonthNav.addEventListener('click', () => { changeMonth(-1); });
         nextMonthNav.addEventListener('click', () => { changeMonth(1); });
+
+        cur_year.addEventListener('wheel', yearScroll);
+        cur_year.addEventListener("change", e => {
+            self.currentYear = e.target.value;
+            self.redraw();
+        });
 
         calendar.addEventListener('click', calendarClick);
         document.addEventListener('click', documentClick, true);
