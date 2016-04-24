@@ -135,8 +135,13 @@ flatpickr.init = function (element, instanceConfig) {
             timeless=true;
         }
 
-        else if (typeof date === 'string')
-            date = new Date(date);
+        else if (typeof date === 'string'){
+            if (Date.parse(date))
+                return new Date(date);
+            console.error(`flatpickr: invalid date string ${date}`);
+            console.info(self.element);
+            return null;
+        }
 
         if(timeless && date)
             date.setHours(0,0,0,0);
