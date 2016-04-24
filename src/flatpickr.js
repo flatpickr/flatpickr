@@ -282,8 +282,7 @@ flatpickr.init = function (element, instanceConfig) {
     yearScroll = event => {
         event.preventDefault();
         let delta = Math.max(-1, Math.min(1, (event.wheelDelta || -event.deltaY )));
-        event.target.innerHTML = parseInt(event.target.innerHTML) + delta;
-        self.currentYear = event.target.innerHTML;
+        self.currentYear = event.target.innerHTML = parseInt(event.target.innerHTML,10) + delta;
         self.redraw();
 
     };
