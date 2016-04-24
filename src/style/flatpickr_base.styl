@@ -1,190 +1,221 @@
-/* ============== CALENDAR ============== */
+$width = 256px
+
 
 .flatpickr-wrapper
-    display: inline-block
-    width: 100%
-    position: relative
-    box-sizing: content-box
+    display inline-block
+    width 100%
+    position relative
     
     input
-        cursor: pointer
-        position: relative
-        z-index: 1
-        
+        cursor pointer
+        z-index 1
+
     .flatpickr-calendar
-        background: $calendar_background
-        color: $day_text_color
-        border: 1px solid $calendar_border_color
-        font-size: 88%
-        border-radius: 4px
-        position: absolute
-        top: 100%
-        left: 0
-        margin-top: 3px
-        opacity: 0
-        z-index: 0
-        visibility: hidden
-        overflow: hidden
-        -webkit-transition: opacity 75ms
-        transition: opacity 75ms
-        width: 100%
-        max-width: 256px
+        background $calendar_background   
+        unless $border-calendar-only is defined  
+            border 1px solid $calendar_border_color
+        font-size 90%
+        border-radius 4px
+        position absolute
+        top 100%
+        left 0
+        margin-top 3px
+        opacity 0
+        visibility hidden
+        transition opacity 75ms
+        width $width            
         
-        .flatpickr-months
-            background: $months_background
-            color: $months_color
-            padding: 4px 0 2px 0
-            text-align: center
+        &:before,&:after
+            position absolute
+            pointer-events none
+            border solid transparent
+            content ''
+            height 0
+            width 0
+            bottom 100%
+            left 22px
+        
+        &:before
+            border-width 5px
+            margin 0 -5px
+            border-bottom-color $calendar_border_color
+        
+        &:after
+            border-width 4px
+            margin 0 -4px
+            border-bottom-color $calendar_background
+
+
+
+        .flatpickr-month
+            background $months_background
+            color $months_color
+            padding 4px 5px 2px 5px
+            text-align center
+            position relative
+            
             .flatpickr-prev-month, .flatpickr-next-month
-                text-decoration: none
-                cursor: pointer
+                text-decoration none
+                cursor pointer
                 
                 i
-                    position: relative
-                    bottom: -3.2px
+                    position relative
+                    bottom -4px
 
                 &:hover
-                    color: $today_color
+                    color $today_color
                     
             .flatpickr-prev-month
-                float: left
-                margin-left: 0.4em
+                float left
                 
             .flatpickr-next-month
-                float: right
-                margin-right: 0.4em
+                float right
                 
             .flatpickr-current-month
-                font-size: 135%
-                font-weight: 300
-                color: alpha($months_color, 0.7)
+                font-size 135%
+                font-weight 300
+                color alpha($months_color, 0.7)
                 
                 span
-                    font-weight: 700
-                    color: $months_color
-        /* //flatpickr-months */
-        table
-            border-collapse: collapse
-            margin: 0
-            padding: 0
-            width: 100%
-            background: transparent
-            thead
-                font-size: 90%
+                    font-weight 700
+                    color $months_color
+                    
+            .cur_year
+                -webkit-appearance: none
+                appearance none
+                -moz-appearance textfield
+                color inherit
+                display: inline
                 background: transparent
-            th, td
-                text-align: center
-                width: 14.3%
-            th
-                color: $weekdays_color
-                padding: 2px 0 4px
-                font-weight: bold
-            tr
-                background: transparent
-            td
-                cursor: pointer
-                padding: 0
-                .flatpickr-day
-                    background: none
-                    display: inline-block
-                    width: 100%
-                    max-width: 32px
-                    line-height: 32px
-                    text-align: center
-                    padding: 0
-                    margin: 0 1px 1px 0
-                    border: 1px solid transparent
-                    border-radius: 150px
+                border: 0
+                max-width: 56px;
+                height: inherit
+                border-radius: 0
+                font-size: inherit
+                padding: 0 2px
+                cursor: text 
+                &:hover
+                    -moz-appearance number-input
+                    background rgba(0,0,0,0.05)
 
-                &:hover .flatpickr-day
-                    background: $day_hover_background_color
-                    border-color: $day_hover_background_color
+        
+        
+        .flatpickr-weekdays
+            font-size 90%
+            background $weekdays_background            
+            padding 2px 0 4px
+            
+            span
+                color $weekdays_color
+                text-align center
+                display inline-block
+                width 14.2857142857%
+                font-weight bold
+                
+        .flatpickr-days
+            if $border-calendar-only is defined  
+                border 1px solid $calendar_border_color
+                border-top 0
+                
+        .flatpickr-day
+            background none
+            border 1px solid transparent
+            border-radius 150px
+            box-sizing border-box
+            color $day_text_color
+            cursor pointer
+            display inline-block
+            width floor(($width/7 - 2),0) 
+            height (@width)
+            line-height (@width - 1px)
+            margin 0 1px 1px 1px            
+            text-align center                 
 
-                &:first-child .flatpickr-day
-                    margin-left: 1px
+            &:hover
+                background $day_hover_background_color
+                border-color $day_hover_background_color
 
-                &.today
-                    .flatpickr-day
-                        border-color: $today_color
+            &.today
+                border-color $today_color
 
-                    &:hover .flatpickr-day
-                        border-color: $today_color
-                        background-color: $today_color
-                        color: white
+                &:hover
+                    border-color $today_color
+                    background $today_color
+                    color white
 
-                &.selected, &.selected:hover
-                    .flatpickr-day
-                        background-color: $selected_day_color
-                        color: invert($day_text_color)
-                        border-color: $selected_day_color
-        /* //flatpickr-calendar table */
-        .disabled, .disabled .flatpickr-day, .disabled:hover .flatpickr-day
-            color: $disabled_color
-            background: transparent
-            border-color: transparent
-            cursor: default
-    /* //flatpickr-calendar */
+            &.selected, &.selected:hover
+                background $selected_day_background
+                color white
+                border-color $selected_day_background
+                
+
+            &.disabled, &.disabled:hover
+                color alpha($day_text_color, 0.3)
+                background transparent
+                border-color transparent
+                cursor default
+
 
     &.open .flatpickr-calendar, &.inline .flatpickr-calendar
-        z-index: 100
-        opacity: 1
-        visibility: visible
+        z-index 100
+        opacity 1
+        visibility visible
 
     &.inline .flatpickr-calendar
-        position: static
-        
+        position static        
 
-/* ============== TIME PICKER ============== */
 
-.flatpickr-time
-    overflow: auto
-    border-top: 1px solid alpha($day_text_color, 0.15)
-    text-align: center
+    .flatpickr-time
+        overflow auto
+        if $border-calendar-only is defined
+            border 1px solid $calendar_border_color
+            border-top 0
+        else
+            border-top 1px solid $calendar_border_color
+        text-align center
 
-.flatpickr-hour, .flatpickr-minute
-    background: transparent
-    -webkit-appearance: none
-    box-shadow: none
-    border: 0
-    border-radius: 0
-    display: inline-block
-    width: 33%
-    min-width: 33%
-    text-align: center
-    margin: 0
-    padding: 0
-    height: 38px
-    line-height: 38px
-    cursor: pointer
-    font-weight: bold
-    color: $day_text_color
+        .flatpickr-hour, .flatpickr-minute
+            background transparent
+            -webkit-appearance none
+            -moz-appearance textfield
+            box-shadow none
+            border 0
+            border-radius 0
+            display inline-block
+            width 33%
+            min-width 33%
+            text-align center
+            margin 0
+            padding 0
+            height 38px
+            line-height 38px
+            cursor pointer
+            font-weight bold
+            color $day_text_color
 
-    &:focus
-        outline: 0
-        border: 0
+            &:focus
+                outline 0
+                border 0
+            
+            &:hover
+                background lighten($day_hover_background_color, 4)
 
-.flatpickr-hour
-    font-weight: bold
+        .flatpickr-minute
+            width 26%
+            font-weight 300
+    
 
-.flatpickr-minute
-    width: 26%
-    font-weight: 300
+    .flatpickr-time-separator, .flatpickr-am-pm
+        height 38px
+        display inline-block
+        line-height 38px
 
-.flatpickr-hour:hover, .flatpickr-minute:hover, .flatpickr-am-pm:hover
-    background: lighten($day_hover_background_color, 6)
+    .flatpickr-am-pm
+        width 21%
+        padding 0 2%
+        cursor pointer
+        text-align left
+        &:hover
+            background lighten($day_hover_background_color, 4)
 
-.flatpickr-time-separator, .flatpickr-am-pm
-    height: 38px
-    display: inline-block
-    line-height: 38px
-
-.flatpickr-am-pm
-    width: 21%
-    padding: 0 2%
-    cursor: pointer
-    text-align: left
-
-.flatpickr-time input[type=number]::-webkit-inner-spin-button,
-.flatpickr-time input[type=number]::-webkit-outer-spin-button
-    -webkit-appearance: none
-    margin: 0
+    

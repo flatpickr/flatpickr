@@ -6,9 +6,10 @@
     <title>flatpickr - lightweight datetimepicker & calendar</title>
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    
     <link rel="stylesheet" type="text/css" href="assets/site.css">
-    <link rel="stylesheet" type="text/css" href="dist/flatpickr.min.css">
+    <link rel="stylesheet" id=cal_style type="text/css" href="dist/flatpickr.min.css">
 
     <link rel="icon" type="image/png" href="favicon.png">
 
@@ -16,7 +17,7 @@
 
 <body>
 
-    <header class="hero">
+    <header class="hero" id=hero>
 
         <div class='wrapper'>
 
@@ -25,15 +26,15 @@
                 A lightweight & powerful datetimepicker
             </p>
             <div>                
-                <a title="Follow @chmln on GitHub" class="btn" href="https://github.com/chmln">
+                <a title="Follow @chmln on GitHub" target="_blank" class="btn" href="https://github.com/chmln">
                     <i class="icon-github"></i> 
                     <span>Follow</span>
                 </a>              
                 
 
-                <a title="Star chmln/flatpickr on GitHub" class="btn" href="https://github.com/chmln/flatpickr">
+                <a title="Star chmln/flatpickr on GitHub" target="_blank" class="btn" href="https://github.com/chmln/flatpickr">
                     <i class="icon-star"></i> 
-                    <span>Star</span>
+                    <span>Star!</span>
                 </a>   
 
 
@@ -271,7 +272,7 @@ flatpickr('#yourSelector', { dateFormat: 'm/d/Y'});
             simple dates, such as "2016-04-10" to full-fledged datetime strings.
             </p>
             <pre class='prettyprint lang-html'>
-&lt;input class=flatpickr data-defaultDate="2016-03-01 03:30:00 -0300"&gt;
+&lt;input class=flatpickr data-defaultDate="2016-03-01 03:30:00 -0300"  data-enableTime="true"&gt;
 </pre>
        
 
@@ -694,13 +695,19 @@ flatpickr(".flatpickr")
     <div class="c-r">
         
         <div>
+            
             <h2>Table of Contents</h2>
             <ol></ol>
+            <hr>
+            <strong>Theme:</strong>
+
+            <select id=themes>
+                <option value="">Default</option>
+            </select>
         </div>
 
     </div>
     </div>
-
     <script src="dist/flatpickr.min.js"></script>
     <script>
     // setting custom defaults
@@ -709,8 +716,9 @@ flatpickr(".flatpickr")
     flatpickr.init.prototype.l10n.firstDayOfWeek = 1;
 
     //Regular flatpickr
-    flatpickr('#flatpickr-tryme');
-    calendars = flatpickr(".flatpickr");
+    var t = flatpickr('#flatpickr-tryme');
+    var calendars = flatpickr(".flatpickr");
+
     flatpickr('.calendar');
 
     // Custom date format
@@ -766,6 +774,7 @@ flatpickr(".flatpickr")
 
     <script async src="assets/prettify.js?skin=none"></script>
     <script async src="assets/table-of-contents.js"></script>
+    <script async src="assets/themer.js"></script>
 </body>
 
 </html>
