@@ -75,7 +75,7 @@ flatpickr.init = function (element, instanceConfig) {
         navigationCurrentMonth = document.createElement('span'),
         monthsNav = document.createElement('div'),
         prevMonthNav = document.createElement('span'),
-        cur_year = document.createElement('input'),
+        cur_year = document.createElement('span'),
         cur_month = document.createElement('span'),
         nextMonthNav = document.createElement('span'),
         calendar = document.createElement('div'),
@@ -282,9 +282,10 @@ flatpickr.init = function (element, instanceConfig) {
     yearScroll = event => {
         event.preventDefault();
         let delta = Math.max(-1, Math.min(1, (event.wheelDelta || -event.deltaY )));
-        event.target.value = parseInt(event.target.value) + delta;
-        self.currentYear = event.target.value;
+        event.target.innerHTML = parseInt(event.target.innerHTML) + delta;
+        self.currentYear = event.target.innerHTML;
         self.redraw();
+
     };
 
     timeWrapper = function (e){
@@ -306,7 +307,7 @@ flatpickr.init = function (element, instanceConfig) {
     updateNavigationCurrentMonth = function () {
 
         cur_month.innerHTML = monthToStr(self.currentMonth) +" ";
-        cur_year.value = self.currentYear;
+        cur_year.innerHTML = self.currentYear;
 
     };
 
@@ -382,8 +383,8 @@ flatpickr.init = function (element, instanceConfig) {
         nextMonthNav.className = "flatpickr-next-month";
         nextMonthNav.innerHTML = self.config.nextArrow;
 
+        cur_month.className = "cur_month";
         cur_year.className = "cur_year";
-        cur_year.type = "number";
         cur_year.title = "Scroll to increment";
 
         navigationCurrentMonth.appendChild(cur_month);
@@ -555,10 +556,6 @@ flatpickr.init = function (element, instanceConfig) {
         nextMonthNav.addEventListener('click', () => { changeMonth(1); });
 
         cur_year.addEventListener('wheel', yearScroll);
-        cur_year.addEventListener("change", e => {
-            self.currentYear = e.target.value;
-            self.redraw();
-        });
 
         calendar.addEventListener('click', calendarClick);
         document.addEventListener('click', documentClick, true);

@@ -76,27 +76,15 @@ $width = 256px
                 font-weight 300
                 color alpha($months_color, 0.7)
                 
-                span
+                .cur_month
                     font-weight 700
                     color $months_color
                     
-            .cur_year
-                -webkit-appearance: none
-                appearance none
-                -moz-appearance textfield
-                color inherit
-                display: inline
-                background: transparent
-                border: 0
-                max-width: 56px;
-                height: inherit
-                border-radius: 0
-                font-size: inherit
-                padding: 0 2px
-                cursor: text 
-                &:hover
-                    -moz-appearance number-input
-                    background rgba(0,0,0,0.05)
+                .cur_year
+                    cursor default
+                    padding 0 2px
+                    &:hover
+                        background rgba(0,0,0,0.05)
 
         
         
