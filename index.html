@@ -233,10 +233,10 @@ flatpickr('#yourSelector', { dateFormat: 'm/d/Y'});
         </p>
             <h3>DateTime Picker: 24 Hour Mode</h3>
             <pre class='prettyprint lang-html'>
-&lt;input class=flatpickr data-enabletime=true data-time_24hr=true&gt;
+&lt;input class=flatpickr data-enabletime=true data-time_24hr=true data-timeFormat="H:i"&gt;
 </pre>
 
-            <input class=flatpickr data-enabletime=true data-time_24hr=true placeholder="24 hour time">
+            <input class=flatpickr data-enabletime=true data-time_24hr=true data-timeFormat="H:i" placeholder="24 hour time">
         </div>
 
         <div class="example_wrapper" data-desc="Time Picker" id="timepicker">
@@ -245,7 +245,7 @@ flatpickr('#yourSelector', { dateFormat: 'm/d/Y'});
 &lt;input class=flatpickr data-enabletime=true  data-nocalendar=true&gt;
 </pre>
 
-            <input class=flatpickr data-enabletime=true data-nocalendar=true placeholder="Pick date and time">
+            <input class=flatpickr data-enabletime=true data-nocalendar=true value="09:00" placeholder="Pick date and time">
         </div>
 
         <div class="example_wrapper" data-desc="User-Friendly date output" id="altinput">
@@ -322,8 +322,12 @@ flatpickr('#disableRangeMultiple', {
 var check_in = flatpickr("#check_in_date", { minDate: new Date() });
 var check_out = flatpickr("#check_out_date", { minDate: new Date() });
 
-check_in.set("onChange", function(d){ check_out.set( "minDate" , d ); });
-check_out.set("onChange", function(d){ check_in.set( "maxDate" , d ); });
+check_in.set("onChange", function(d) { 
+    check_out.set("minDate", d.fp_incr(1)); //increment by one day
+});
+check_out.set("onChange", function(d) { 
+    check_in.set("maxDate", d); 
+});
 </pre>
 
 
