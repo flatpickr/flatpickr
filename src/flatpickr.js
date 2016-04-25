@@ -121,9 +121,7 @@ flatpickr.init = function (element, instanceConfig) {
         wrap();
         buildCalendar();
         bind();
-
-        if (!self.config.noCalendar)
-            updateValue();
+        updateValue();
     };
 
     uDate = function(date, timeless){
@@ -136,8 +134,14 @@ flatpickr.init = function (element, instanceConfig) {
         }
 
         else if (typeof date === 'string'){
-            if (Date.parse(date))
+
+            if ( Date.parse(date) )
                 return new Date(date);
+
+            else if (self.config.noCalendar && /\d\d[:\s]\d\d/.test(date))
+                // time-only picker
+                return new Date(`${currentDate.toDateString()} ${date}`);
+
             console.error(`flatpickr: invalid date string ${date}`);
             console.info(self.element);
             return null;
@@ -517,8 +521,8 @@ flatpickr.init = function (element, instanceConfig) {
         }
 
         // picking time only
-        if (self.config.noCalendar)
-            self.selectedDateObj = new Date();
+        // if (self.config.noCalendar)
+        //     self.selectedDateObj = new Date();
 
         calendarContainer.appendChild(timeContainer);
 
