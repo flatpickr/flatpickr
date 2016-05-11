@@ -1,6 +1,6 @@
 {
   "name": "flatpickr",
-  "version": "1.7.5-2",
+  "version": "1.8.0",
   "description": "A lightweight, powerful datetimepicker",
   "dependencies": {},
   "devDependencies": {
@@ -12,10 +12,10 @@
     "gulp-cssmin": "^0.1.7",
     "gulp-jshint": "^2.0.0",
     "gulp-rename": "^1.2.2",
-    "gulp-sass": "^2.2.0",
+    "gulp-sass": "^2.3.1",
     "gulp-stylus": "^2.3.1",
     "gulp-uglify": "^1.5.3",
-    "jshint": "^2.9.1"
+    "jshint": "^2.9.2"
   },
   "main": "dist/flatpickr.min.js",
   "repository": {

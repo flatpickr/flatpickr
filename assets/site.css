@@ -92,9 +92,7 @@ a:hover {
     display: block
 }
 
-.c-r li a:hover {
-    background: #f6f6f6
-}
+
 
 .fixed {
     position: fixed;
@@ -136,11 +134,6 @@ a:hover {
     background: linear-gradient(141deg, #474d5b 0%, #333 71%, #000 100%);
 }
 
-.hero4 {
-    background: #97cd76;
-    background: linear-gradient(141deg, #8ecb45 0%, #97cd76 71%, #96d885 100%);
-}
-
 .hero h1{
     margin-top: 0;
     line-height: 3rem;
@@ -151,19 +144,8 @@ a:hover {
     opacity: 0.85
 }
 
-.hero .btn {
-    border-color: rgba(255,255,255,0.2);
-    background: transparent;
-    color: #fff;
-    font-weight: 400;
-    text-shadow: none;
-}
 
-.hero .btn:hover {
-    background: white;
-    color: black;
-    border-color: white;
-}
+
 
 select {
     padding: 0.25rem;
@@ -250,6 +232,7 @@ input:focus, input.active
     border: 1px solid #d5d5d5;
     border-radius: 3px;
     color: #444;
+    font-weight: 400;
     cursor: pointer;
     display: inline-block;
     margin-right: 0.5rem;

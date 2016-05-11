@@ -76,10 +76,15 @@ $width = 256px
                 font-weight 300
                 color alpha($months_color, 0.7)
                 
-                span
+                .cur_month
                     font-weight 700
                     color $months_color
-            
+                    
+                .cur_year
+                    cursor default
+                    padding 0 2px
+                    &:hover
+                        background rgba(0,0,0,0.05)
 
         
         
