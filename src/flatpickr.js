@@ -153,10 +153,18 @@ flatpickr.init = function (element, instanceConfig) {
         return date;
     };
 
-    equalDates = function(date1, date2){
+    equalDates = function(date1, date2, utc){
+
+        utc = utc||false;
+
+        if(utc)
+            return date1.getUTCFullYear() === date2.getUTCFullYear() &&
+                    date1.getUTCMonth() === date2.getUTCMonth() &&
+                    date1.getUTCDate() === date2.getUTCDate();
+
         return date1.getFullYear() === date2.getFullYear() &&
-                date1.getMonth() === date2.getMonth() &&
-                date1.getDate() === date2.getDate();
+                    date1.getMonth() === date2.getMonth() &&
+                    date1.getDate() === date2.getDate();
 
     };
 
@@ -267,17 +275,24 @@ flatpickr.init = function (element, instanceConfig) {
     };
 
     monthToStr = function (date, shorthand) {
-        shorthand=shorthand||self.config.shorthandCurrentMonth;
-        return shorthand ? self.l10n.months.shorthand[date] : self.l10n.months.longhand[date];
-
+        return shorthand||self.config.shorthandCurrentMonth ? self.l10n.months.shorthand[date] : self.l10n.months.longhand[date];
     };
 
 
-    isDisabled = function(date){
+    isDisabled = function(check_date){
 
-        for (let i = 0;i<self.config.disable.length;i++)
-            if ( date >= uDate(self.config.disable[i].from)  && date <= uDate(self.config.disable[i].to) )
+        check_date = uDate(check_date, true);
+
+        let from_d, to_d;
+
+        for (let i = 0; i < self.config.disable.length; i++){
+
+            from_d = uDate(self.config.disable[i]['from'],true);
+            to_d = uDate(self.config.disable[i]['to'],true);
+
+            if ( equalDates(from_d,check_date, true) || equalDates(to_d, check_date, true) || (check_date > from_d && check_date < to_d ))
                 return true;
+        }
 
         return false;
 
