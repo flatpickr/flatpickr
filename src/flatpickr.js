@@ -121,7 +121,9 @@ flatpickr.init = function (element, instanceConfig) {
         wrap();
         buildCalendar();
         bind();
-        updateValue();
+
+        if(!self.config.noCalendar)
+            updateValue();
     };
 
     uDate = function(date, timeless){
@@ -287,8 +289,8 @@ flatpickr.init = function (element, instanceConfig) {
 
         for (let i = 0; i < self.config.disable.length; i++){
 
-            from_d = uDate(self.config.disable[i]['from'],true);
-            to_d = uDate(self.config.disable[i]['to'],true);
+            from_d = uDate(self.config.disable[i].from,true);
+            to_d = uDate(self.config.disable[i].to,true);
 
             if ( equalDates(from_d,check_date, true) || equalDates(to_d, check_date, true) || (check_date > from_d && check_date < to_d ))
                 return true;
@@ -536,8 +538,8 @@ flatpickr.init = function (element, instanceConfig) {
         }
 
         // picking time only
-        // if (self.config.noCalendar)
-        //     self.selectedDateObj = new Date();
+        if (self.config.noCalendar && !self.selectedDateObj)
+            self.selectedDateObj = new Date();
 
         calendarContainer.appendChild(timeContainer);
 

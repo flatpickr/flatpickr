@@ -7,7 +7,7 @@
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge"/>
-    
+
     <link rel="stylesheet" type="text/css" href="assets/site.css">
     <link rel="stylesheet" id=cal_style type="text/css" href="dist/flatpickr.min.css">
 
@@ -25,23 +25,23 @@
             <p class="desc">
                 A lightweight & powerful datetimepicker
             </p>
-            <div>                
+            <div>
                 <a title="Follow @chmln on GitHub" target="_blank" class="btn" href="https://github.com/chmln">
-                    <i class="icon-github"></i> 
+                    <i class="icon-github"></i>
                     <span>Follow</span>
-                </a>              
-                
+                </a>
+
 
                 <a title="Star chmln/flatpickr on GitHub" target="_blank" class="btn" href="https://github.com/chmln/flatpickr">
-                    <i class="icon-star"></i> 
+                    <i class="icon-star"></i>
                     <span>Star!</span>
-                </a>   
+                </a>
 
 
                 <a class="btn" href="https://github.com/chmln/flatpickr/archive/gh-pages.zip">
-                    <i class="icon-cloud-down"></i> 
+                    <i class="icon-cloud-down"></i>
                     <span>Download</span>
-                </a>   
+                </a>
 
             </div>
 
@@ -66,9 +66,9 @@
 
             <p>Otherwise:<br>
                 <a class="btn" href="https://github.com/chmln/flatpickr/archive/gh-pages.zip">
-                    <i class="icon-cloud-down"></i> 
+                    <i class="icon-cloud-down"></i>
                     <span>Download</span>
-                </a> 
+                </a>
             </p>
 
 
@@ -90,7 +90,7 @@ flatpickr('selector', [options]);
 </pre>
         </div>
 
-        
+
 
         <div class="example_wrapper" data-desc="A basic datepicker" id="basic">
             <h3>Basics</h3>
@@ -102,9 +102,9 @@ flatpickr('selector', [options]);
             <p>
                 <input id="flatpickr-tryme" placeholder="Try me..">
             </p>
-        
 
-        
+
+
 
             <strong>Multiple datetimepickers</strong>
 
@@ -245,7 +245,7 @@ flatpickr('#yourSelector', { dateFormat: 'm/d/Y'});
 &lt;input class=flatpickr data-enabletime=true  data-nocalendar=true value="09:00"&gt;
 </pre>
 
-            <input class=flatpickr data-enabletime=true data-nocalendar=true value="09:00" placeholder="Pick date and time">
+            <input class=flatpickr data-enabletime=true data-nocalendar=true placeholder="Pick time">
         </div>
 
         <div class="example_wrapper" data-desc="User-Friendly date output" id="altinput">
@@ -262,19 +262,19 @@ flatpickr('#yourSelector', { dateFormat: 'm/d/Y'});
 
             <p><strong>Selected date</strong>: <span id=realdate>nothing yet</span></p>
 </div>
-        
+
         <div class="example_wrapper" data-desc="Preloading dates" id="defaultdate">
 
-            <h3>Preload date and time</h3>            
+            <h3>Preload date and time</h3>
 
              <p>
-            You may load the calendar with a predefined value, ranging from 
+            You may load the calendar with a predefined value, ranging from
             simple dates, such as "2016-04-10" to full-fledged datetime strings.
             </p>
             <pre class='prettyprint lang-html'>
 &lt;input class=flatpickr data-defaultDate="2016-03-01 03:30:00 -0300"  data-enableTime="true"&gt;
 </pre>
-       
+
 
             <p>
                 <input class=flatpickr data-defaultDate="2016-03-01 03:30:00 -0300"  data-enableTime="true">
@@ -322,11 +322,11 @@ flatpickr('#disableRangeMultiple', {
 var check_in = flatpickr("#check_in_date", { minDate: new Date() });
 var check_out = flatpickr("#check_out_date", { minDate: new Date() });
 
-check_in.set("onChange", function(d) { 
+check_in.set("onChange", function(d) {
     check_out.set("minDate", d.fp_incr(1)); //increment by one day
 });
-check_out.set("onChange", function(d) { 
-    check_in.set("maxDate", d); 
+check_out.set("onChange", function(d) {
+    check_in.set("maxDate", d);
 });
 </pre>
 
@@ -377,7 +377,7 @@ flatpickr(".flatpickr")
 
         <p></p>
 
-        <div class="example_wrapper" id=options>   
+        <div class="example_wrapper" id=options>
         <h3  data-desc="Options">Options</h3>
         <p>
             <strong>Protip: </strong> <u>all</u> of the string/boolean config options can also be supplied using data attributes, e.g. data-mindate, data-defaultdate, data-dateformat etc.
@@ -494,7 +494,7 @@ flatpickr(".flatpickr")
         </table>
         </div>
 
-        <div class="example_wrapper" id=dateformat>   
+        <div class="example_wrapper" id=dateformat>
         <h3>Date Format Characters</h3>
 
         <table class=table>
@@ -569,7 +569,7 @@ flatpickr(".flatpickr")
             </tbody>
         </table>
         </div>
-        <div class="example_wrapper" id=timeformat>        
+        <div class="example_wrapper" id=timeformat>
         <h3>Time Format Characters</h3>
 
         <table class=table>
@@ -697,9 +697,9 @@ flatpickr(".flatpickr")
     </div>
     </div>
     <div class="c-r">
-        
+
         <div>
-            
+
             <h2>Table of Contents</h2>
             <ol></ol>
             <hr>
