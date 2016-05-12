@@ -448,10 +448,8 @@ flatpickr.init = function (element, instanceConfig) {
 
         calendar.innerHTML = '';
 
-        self.config.minDate =
-            uDate(self.config.minDate === "today" ? new Date() : self.config.minDate, true);
-
-       self.config.maxDate = uDate(self.config.maxDate, true);
+        self.config.minDate = uDate(self.config.minDate);
+        self.config.maxDate = uDate(self.config.maxDate);
 
         // prepend days from the ending of previous month
         for( ; dayNumber <= prevMonthDays; dayNumber++ ){
@@ -465,7 +463,7 @@ flatpickr.init = function (element, instanceConfig) {
         for (dayNumber = 1; dayNumber <= 42 - firstOfMonth; dayNumber++) {
 
             if (dayNumber <= numDays) // avoids new date objects for appended dates
-                cur_date = new Date(self.currentYear, self.currentMonth, dayNumber);
+                cur_date = new Date(self.currentYear, self.currentMonth, dayNumber,0,0,0,0);
 
             date_outside_minmax =
                 (self.config.minDate && cur_date < self.config.minDate ) ||
