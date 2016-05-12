@@ -285,12 +285,17 @@ flatpickr.init = function (element, instanceConfig) {
 
         check_date = uDate(check_date, true);
 
-        let from_d, to_d;
+        let d, from_d, to_d;
 
         for (let i = 0; i < self.config.disable.length; i++){
 
-            from_d = uDate(self.config.disable[i].from,true);
-            to_d = uDate(self.config.disable[i].to,true);
+            d = self.config.disable[i];
+
+            if (d instanceof Date || typeof d === 'string')
+                return equalDates(uDate(d,true), check_date, true);
+
+            from_d = uDate(d.from);
+            to_d = uDate(d.to);
 
             if ( equalDates(from_d,check_date, true) || equalDates(to_d, check_date, true) || (check_date > from_d && check_date < to_d ))
                 return true;

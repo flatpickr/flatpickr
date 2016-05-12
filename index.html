@@ -287,7 +287,7 @@ flatpickr('#yourSelector', { dateFormat: 'm/d/Y'});
             <pre class='prettyprint lang-js'>
 flatpickr('#disableRange', {
 
-    disable: [ { 'from' : "2016-07-06", 'to' : "2016-07-09" } ],
+    disable: [ { 'from' : "2016-07-06", 'to' : "2016-07-09" }, "2016-07-24" ],
     minDate: "today"
 
 });
@@ -739,10 +739,13 @@ flatpickr(".flatpickr")
 
     flatpickr('#disableRange', {
 
-        disable: [{
-            'from': "2016-07-06",
-            'to': "2016-07-09"
-        }],
+        disable: [
+            {
+                from: "2016-07-06",
+                to: "2016-07-09"
+            },
+            "2016-07-24"
+        ],
         minDate: "today"
 
     });
