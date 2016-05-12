@@ -14,11 +14,11 @@
 
 
 ## Preamble
-Almost every large SPA or project involves date and time input. There are limited options, however, if you also prefer to keep your projects lean and consequently stay away from heavy frameworks such as [jQuery](https://jsperf.com/jquery-vs-javascript-performance-comparison/22), or even Bootstrap. 
+Almost every large SPA or project involves date and time input. There are limited options, however, if you also prefer to keep your projects lean and consequently stay away from heavy frameworks such as [jQuery](https://jsperf.com/jquery-vs-javascript-performance-comparison/22), or even Bootstrap.
 
 Unfortunately, current HTML5 implementations (`input[type='datetime']`) are neither aesthetically pleasing nor [widely supported](http://caniuse.com/#feat=input-datetime). So that's out of the way.
 
-Appalled at the fact that I have to load 300kb of jquery and jquery UI or hook up bootstrap just to use a calendar, I created this \[date\]\[time\]picker that's powerful, easy to use, and looks good out of the box. 
+Appalled at the fact that I have to load 300kb of jquery and jquery UI or hook up bootstrap just to use a calendar, I created this \[date\]\[time\]picker that's powerful, easy to use, and looks good out of the box.
 
 Written in vanilla javascript, works with anything, anywhere.
 
@@ -29,7 +29,6 @@ Along with demos and documentation: http://chmln.github.io/flatpickr
 
 See also:
 * [ember-flatpickr addon](https://www.npmjs.com/package/ember-flatpickr)
-* [Vue.js directive](https://github.com/chmln/flatpickr/blob/gh-pages/src/flatpickr.vue.js)
 
 ## Compatibility
 IE9+, iOS Safari 6+, MS Edge, Chrome 8+, Firefox 6+
