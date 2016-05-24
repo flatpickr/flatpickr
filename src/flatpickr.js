@@ -453,8 +453,8 @@ flatpickr.init = function (element, instanceConfig) {
 
         calendar.innerHTML = '';
 
-        self.config.minDate = uDate(self.config.minDate, true);
-        self.config.maxDate = uDate(self.config.maxDate, true);
+        self.config.minDate = uDate(self.config.minDate);
+        self.config.maxDate = uDate(self.config.maxDate);
 
         // prepend days from the ending of previous month
         for( ; dayNumber <= prevMonthDays; dayNumber++ ){
