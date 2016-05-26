@@ -122,6 +122,8 @@ flatpickr.init = function (element, instanceConfig) {
         buildCalendar();
         bind();
 
+        self.uDate = uDate;
+
         if(!self.config.noCalendar)
             updateValue();
     };
@@ -137,7 +139,10 @@ flatpickr.init = function (element, instanceConfig) {
 
         else if (typeof date === 'string'){
 
-            if ( Date.parse(date) )
+            if (/\d\d\d\d\-\d\d\-\d\d/.test(date)) // disable special utc datestring
+                return new Date(date.replace(/\-/g, "/") );
+            
+            else if ( Date.parse(date) )
                 return new Date(date);
 
             else if (self.config.noCalendar && /\d\d[:\s]\d\d/.test(date))
@@ -283,9 +288,9 @@ flatpickr.init = function (element, instanceConfig) {
 
     isDisabled = function(check_date){
 
-        check_date = uDate(check_date, true);
+        check_date = uDate(check_date, true); //timeless
 
-        let d, from_d, to_d;
+        let d;
 
         for (let i = 0; i < self.config.disable.length; i++){
 
@@ -294,10 +299,7 @@ flatpickr.init = function (element, instanceConfig) {
             if (d instanceof Date || typeof d === 'string')
                 return equalDates(uDate(d,true), check_date, true);
 
-            from_d = uDate(d.from);
-            to_d = uDate(d.to);
-
-            if ( equalDates(from_d,check_date, true) || equalDates(to_d, check_date, true) || (check_date > from_d && check_date < to_d ))
+            if ( check_date >= uDate(d.from) || check_date <= uDate(d.to) )
                 return true;
         }
 
