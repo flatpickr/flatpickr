@@ -208,7 +208,7 @@ flatpickr.init = function (element, instanceConfig) {
         return self.l10n.daysInMonth[month];
     };
 
-    updateValue = function(){
+    updateValue = function(triggerChangeEvent){
 
         if (self.selectedDateObj && self.config.enableTime ){
 
@@ -234,7 +234,9 @@ flatpickr.init = function (element, instanceConfig) {
         if ( self.selectedDateObj )
             self.input.value = formatDate(self.config.dateFormat);
 
-        triggerChange();
+        if (triggerChangeEvent !== false) {
+            triggerChange();
+        }
 
     };
 
@@ -718,7 +720,7 @@ flatpickr.init = function (element, instanceConfig) {
 
         self.selectedDateObj = uDate(date);
         self.jumpToDate(self.selectedDateObj);
-        updateValue();
+        updateValue(false);
 
         triggerChangeEvent = triggerChangeEvent||false;
         if(triggerChangeEvent)
