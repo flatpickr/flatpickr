@@ -700,6 +700,16 @@ flatpickr.init = function (element, instanceConfig) {
         );
         self.currentYear = jumpDate.getFullYear();
         self.currentMonth = jumpDate.getMonth();
+
+        if (self.config.enableTime && hourElement && minuteElement) {
+            hourElement.value = jumpDate.getHours();
+            minuteElement.value = jumpDate.getMinutes();
+
+            if (am_pm) {
+                am_pm.innerHTML = jumpDate.getHours() > 11 ? 'PM' : 'AM';
+            }
+        }
+
         self.redraw();
 
     };
