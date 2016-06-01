@@ -211,7 +211,13 @@ flatpickr.init = function (element, instanceConfig) {
 		return self.l10n.daysInMonth[month];
 	};
 
-	updateValue = function(){
+	updateValue = function(e){
+
+		let prev_date;
+
+		if(self.selectedDateObj)
+			prev_date = self.selectedDateObj.getTime();
+
 
 		if (self.selectedDateObj && self.config.enableTime ){
 
@@ -237,7 +243,8 @@ flatpickr.init = function (element, instanceConfig) {
 		if ( self.selectedDateObj )
 			self.input.value = formatDate(self.config.dateFormat);
 
-		triggerChange();
+		if(prev_date && self.selectedDateObj.getTime() !== prev_date)
+			triggerChange();
 
 	};
 
@@ -769,7 +776,7 @@ flatpickr.init.prototype = {
 			time_24hr: false,
 			hourIncrement: 1,
 			minuteIncrement: 5,
-			onChange: null, //function( dateObj, dateStr ){}
+			onChange: function( dateObj, dateStr ){alert(dateStr);}, //function( dateObj, dateStr ){}
 			onOpen: null,
 			onClose: null // function() {}
 	}
