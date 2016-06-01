@@ -1,6 +1,6 @@
 {
   "name": "flatpickr",
-  "version": "1.8.1",
+  "version": "1.8.2",
   "description": "A lightweight, powerful datetimepicker",
   "dependencies": {},
   "devDependencies": {
