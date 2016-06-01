@@ -20,7 +20,7 @@ function script() {
     }))
     .pipe(lint.reporter('default'))
     .pipe(babel({presets: ['es2015']}))
-    .pipe(uglify()).on('error', errorHandler)
+    .pipe(uglify({compress: {hoist_funs: false, hoist_vars: false}})).on('error', errorHandler)
     .pipe(rename({ suffix: '.min'}))
     .pipe(gulp.dest('dist'));
 };
