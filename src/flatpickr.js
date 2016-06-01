@@ -776,7 +776,7 @@ flatpickr.init.prototype = {
 			time_24hr: false,
 			hourIncrement: 1,
 			minuteIncrement: 5,
-			onChange: function( dateObj, dateStr ){alert(dateStr);}, //function( dateObj, dateStr ){}
+			onChange: null, //function( dateObj, dateStr ){}
 			onOpen: null,
 			onClose: null // function() {}
 	}
