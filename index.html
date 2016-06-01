@@ -3,362 +3,368 @@
 
 <head>
 
-    <title>flatpickr - lightweight datetimepicker & calendar</title>
+	<title>flatpickr - lightweight datetimepicker & calendar</title>
 
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge"/>
 
-    <link rel="stylesheet" type="text/css" href="assets/site.css">
-    <link rel="stylesheet" id=cal_style type="text/css" href="dist/flatpickr.min.css">
+	<link rel="stylesheet" type="text/css" href="assets/site.css">
+	<link rel="stylesheet" id=cal_style type="text/css" href="dist/flatpickr.min.css">
 
-    <link rel="icon" type="image/png" href="favicon.png">
+	<link rel="icon" type="image/png" href="favicon.png">
 
 </head>
 
 <body>
 
-    <header class="hero" id=hero>
+	<header class="hero" id=hero>
 
-        <div class='wrapper'>
+		<div class='wrapper'>
 
-            <h1>flatpickr</h1>
-            <p class="desc">
-                A lightweight & powerful datetimepicker
-            </p>
-            <div>
-                <a title="Follow @chmln on GitHub" target="_blank" class="btn" href="https://github.com/chmln">
-                    <i class="icon-github"></i>
-                    <span>Follow</span>
-                </a>
-
-
-                <a title="Star chmln/flatpickr on GitHub" target="_blank" class="btn" href="https://github.com/chmln/flatpickr">
-                    <i class="icon-star"></i>
-                    <span>Star!</span>
-                </a>
+			<h1>flatpickr</h1>
+			<p class="desc">
+				A lightweight & powerful datetimepicker
+			</p>
+			<div>
+				<a title="Follow @chmln on GitHub" target="_blank" class="btn" href="https://github.com/chmln">
+					<i class="icon-github"></i>
+					<span>Follow</span>
+				</a>
 
 
-                <a class="btn" href="https://github.com/chmln/flatpickr/archive/gh-pages.zip">
-                    <i class="icon-cloud-down"></i>
-                    <span>Download</span>
-                </a>
-
-            </div>
-
-        </div>
-
-    </header>
-    <div class=flex>
-    <div class="c-l">
-    <div class='wrapper'>
-        <div class="example_wrapper" data-desc="Install" id=install>
-            <h3>Install</h3>
-
-            <p>
-                Node Package Manager:<br>
-                <code>npm install flatpickr</code>
-            </p>
-
-            <p>
-                Bower:<br>
-                <code>bower install flatpickr-calendar</code>
-            </p>
-
-            <p>Otherwise:<br>
-                <a class="btn" href="https://github.com/chmln/flatpickr/archive/gh-pages.zip">
-                    <i class="icon-cloud-down"></i>
-                    <span>Download</span>
-                </a>
-            </p>
+				<a title="Star chmln/flatpickr on GitHub" target="_blank" class="btn" href="https://github.com/chmln/flatpickr">
+					<i class="icon-star"></i>
+					<span>Star!</span>
+				</a>
 
 
-            <p class=nomargin>Then <code>require('flatpickr')</code>, use wiredep, or otherwise load the necessary files.</p>
+				<a class="btn" href="https://github.com/chmln/flatpickr/archive/gh-pages.zip">
+					<i class="icon-cloud-down"></i>
+					<span>Download</span>
+				</a>
 
-        <pre class='prettyprint lang-html' style='clear:both'>
+			</div>
+
+		</div>
+
+	</header>
+	<div class=flex>
+	<div class="c-l">
+	<div class='wrapper'>
+		<div class="example_wrapper" data-desc="Install" id=install>
+			<h3>Install</h3>
+
+			<p>
+				Node Package Manager:<br>
+				<code>npm install flatpickr</code>
+			</p>
+
+			<p>
+				Bower:<br>
+				<code>bower install flatpickr-calendar</code>
+			</p>
+
+			<p>Otherwise:<br>
+				<a class="btn" href="https://github.com/chmln/flatpickr/archive/gh-pages.zip">
+					<i class="icon-cloud-down"></i>
+					<span>Download</span>
+				</a>
+			</p>
+
+
+			<p class=nomargin>Then <code>require('flatpickr')</code>, use wiredep, or otherwise load the necessary files.</p>
+
+		<pre class='prettyprint lang-html' style='clear:both'>
 &lt;link rel="stylesheet" type="text/css" href="/path/to/flatpickr.css"&gt;
 &lt;script src="/path/to/flatpickr.js"&gt;&lt;/script&gt;
 </pre>
 
-        </div>
+		</div>
 
-        <div class="example_wrapper">
+		<div class="example_wrapper">
 
-            <h3>Syntax</h3>
+			<h3>Syntax</h3>
 
-            <pre class='prettyprint lang-js'>
+			<pre class='prettyprint lang-js'>
 flatpickr('selector', [options]);
 </pre>
-        </div>
+		</div>
 
 
 
-        <div class="example_wrapper" data-desc="A basic datepicker" id="basic">
-            <h3>Basics</h3>
-            <strong>A basic datepicker</strong>
+		<div class="example_wrapper" data-desc="A basic datepicker" id="basic">
+			<h3>Basics</h3>
+			<strong>A basic datepicker</strong>
 
 
-            <pre class='prettyprint lang-js'>flatpickr('#flatpickr-tryme')</pre>
+			<pre class='prettyprint lang-js'>flatpickr('#flatpickr-tryme')</pre>
 
-            <p>
-                <input id="flatpickr-tryme" placeholder="Try me..">
-            </p>
-
-
+			<p>
+				<input id="flatpickr-tryme" placeholder="Try me..">
+			</p>
 
 
-            <strong>Multiple datetimepickers</strong>
 
-            <p>
-                The selector can be a class as well, turning multiple inputs/fields into calendars.
-            </p>
-            <pre class='prettyprint lang-js'>
+
+			<strong>Multiple datetimepickers</strong>
+
+			<p>
+				The selector can be a class as well, turning multiple inputs/fields into calendars.
+			</p>
+			<pre class='prettyprint lang-js'>
 flatpickr('.calendar')
 </pre>
-            <pre class="prettyprint lang-html">
+			<pre class="prettyprint lang-html">
 &lt;input class=calendar placeholder="calendar 1"&gt;
 &lt;input class=calendar placeholder="calendar 2"&gt;
 &lt;input class=calendar placeholder="calendar 3"&gt;
 </pre>
 
-            <p>
-                <input class=calendar placeholder="calendar 1">
-            </p>
-            <p>
-                <input class=calendar placeholder="calendar 2">
-            </p>
-            <p>
-                <input class=calendar placeholder="calendar 3">
-            </p>
+			<p>
+				<input class=calendar placeholder="calendar 1">
+			</p>
+			<p>
+				<input class=calendar placeholder="calendar 2">
+			</p>
+			<p>
+				<input class=calendar placeholder="calendar 3">
+			</p>
 
-        </div>
+		</div>
 
-        <div class="example_wrapper" data-desc="Custom date/time formats" id="format">
-            <h3>Date Formatting</h3>
-            <p>Using <a href=#options>dateFormat</a></p>
-            <pre class='prettyprint lang-js'>
+		<div class="example_wrapper" data-desc="Custom date/time formats" id="format">
+			<h3>Date Formatting</h3>
+			<p>Using <a href=#options>dateFormat</a></p>
+			<pre class='prettyprint lang-js'>
 flatpickr('#yourSelector', { dateFormat: 'd-m-Y'});
 flatpickr('#yourSelector', { dateFormat: 'm/d/Y'});
 </pre>
-            <pre class='prettyprint lang-html'>
+			<pre class='prettyprint lang-html'>
 &lt;input class=flatpickr data-dateFormat="l, F j, Y"&gt;
 </pre>
 
-            <p>
-                <input id="dateFormat" placeholder="European Format ('d-m-Y')">
-            </p>
-            <p>
-                <input id="dateFormat-mdy" placeholder="American Format ('m/d/Y')">
-            </p>
-            <p>
-                <input class=flatpickr data-dateFormat="l, F j, Y" placeholder="Fancy Textual Format ('l, F j, Y')">
-            </p>
+			<p>
+				<input id="dateFormat" placeholder="European Format ('d-m-Y')">
+			</p>
+			<p>
+				<input id="dateFormat-mdy" placeholder="American Format ('m/d/Y')">
+			</p>
+			<p>
+				<input class=flatpickr data-dateFormat="l, F j, Y" placeholder="Fancy Textual Format ('l, F j, Y')">
+			</p>
 
-        </div>
+		</div>
 
 
-        <div class="example_wrapper" data-desc="Date Limits (maxDate/minDate)" id="maxmindate">
-            <h3>Date Limits - minDate and maxDate</h3> The example below conveniently uses data-attributes for setting
-            <strong>minDate</strong> and <strong>maxDate</strong> <a href=#options>options</a>.
+		<div class="example_wrapper" data-desc="Date Limits (maxDate/minDate)" id="maxmindate">
+			<h3>Date Limits - minDate and maxDate</h3> The example below conveniently uses data-attributes for setting
+			<strong>minDate</strong> and <strong>maxDate</strong> <a href=#options>options</a>.
 
-            <pre class="prettyprint lang-html">
+			<pre class="prettyprint lang-html">
 &lt;input class=flatpickr data-mindate=today&gt;
 &lt;input class=flatpickr data-mindate="2016-09-20"&gt;
 &lt;input class=flatpickr data-mindate="September 2, 2015"&gt;
 &lt;input class=flatpickr data-mindate=today data-maxdate='2016-8-20'&gt;
 </pre>
 
-            <p>
-                <input class=flatpickr data-mindate=today placeholder="minDate: today">
-            </p>
+			<p>
+				<input class=flatpickr data-mindate=today placeholder="minDate: today">
+			</p>
 
-            <p>
-                <input class=flatpickr data-mindate="2016-09-20" placeholder="minDate: '2016-09-20'">
-            </p>
+			<p>
+				<input class=flatpickr data-mindate="2016-09-20" placeholder="minDate: '2016-09-20'">
+			</p>
 
-            <p>
-                <input class=flatpickr data-mindate="September 2, 2015" placeholder="minDate: new Date('September 2, 2015')">
-            </p>
+			<p>
+				<input class=flatpickr data-mindate="September 2, 2015" placeholder="minDate: new Date('September 2, 2015')">
+			</p>
 
-            <p>
-                <input class=flatpickr data-mindate=today data-maxdate='2016-8-20' placeholder="minDate: today, maxDate: '2016-8-20'">
-            </p>
+			<p>
+				<input class=flatpickr data-mindate=today data-maxdate='2016-8-20' placeholder="minDate: today, maxDate: '2016-8-20'">
+			</p>
 
-        </div>
+		</div>
 
 
-        <div class="example_wrapper" id="strap">
-            <h3>Custom elements and input groups</h3>
+		<div class="example_wrapper" id="strap">
+			<h3>Custom elements and input groups</h3>
 
-            <p>flatpickr can parse an input group of textboxes and buttons, common in <strong>Bootstrap</strong> and other frameworks.</p>
+			<p>flatpickr can parse an input group of textboxes and buttons, common in <strong>Bootstrap</strong> and other frameworks.</p>
 
-            <p>This permits additional markup, as well as custom elements to trigger the state of the calendar. </p>
+			<p>This permits additional markup, as well as custom elements to trigger the state of the calendar. </p>
 
-            <p>Mark your input element with
-                <code>data-input</code> (mandatory), and any additional buttons with
-                <code>data-toggle</code>,
-                <code>data-open</code>,
-                <code>data-close</code>, or
-                <code>data-clear</code>.</p>
+			<p>Mark your input element with
+				<code>data-input</code> (mandatory), and any additional buttons with
+				<code>data-toggle</code>,
+				<code>data-open</code>,
+				<code>data-close</code>, or
+				<code>data-clear</code>.</p>
 
-            <pre class='prettyprint lang-html'>
+			<pre class='prettyprint lang-html'>
 &lt;p class="flatpickr input-group" data-wrap="true" data-clickOpens="false"&gt;
 
-    &lt;input placeholder="Pick date" data-input&gt;
+	&lt;input placeholder="Pick date" data-input&gt;
 
-    &lt;a class="input-btn" data-toggle&gt;&lt;i class="icon-calendar"&gt;&lt;/i&gt;&lt;/a&gt;
-    &lt;a class="input-btn" data-clear&gt;&lt;i class="icon-close"&gt;&lt;/i&gt;&lt;/a&gt;
+	&lt;a class="input-btn" data-toggle&gt;&lt;i class="icon-calendar"&gt;&lt;/i&gt;&lt;/a&gt;
+	&lt;a class="input-btn" data-clear&gt;&lt;i class="icon-close"&gt;&lt;/i&gt;&lt;/a&gt;
 
 &lt;/p>
 </pre>
 
-            <p class="flatpickr input-group" data-wrap="true" data-clickOpens="false">
+			<p class="flatpickr input-group" data-wrap="true" data-clickOpens="false">
 
-                <input data-input placeholder="Pick date">
+				<input data-input placeholder="Pick date">
 
-                <a class="input-btn" data-toggle><i class="icon-calendar"></i></a>
-                <a class="input-btn" data-clear><i class="icon-close"></i></a>
+				<a class="input-btn" data-toggle><i class="icon-calendar"></i></a>
+				<a class="input-btn" data-clear><i class="icon-close"></i></a>
 
-            </p>
+			</p>
 
-        </div>
+		</div>
 
 
-        <div class="example_wrapper" data-desc="Datetimepicker" id="datetimepicker">
-            <h3>DateTime Picker</h3>
-            <pre class='prettyprint lang-html'>
+		<div class="example_wrapper" data-desc="Datetimepicker" id="datetimepicker">
+			<h3>DateTime Picker</h3>
+			<pre class='prettyprint lang-html'>
 &lt;input class=flatpickr data-enabletime=true&gt;
 </pre>
-        <p>
-            <input class=flatpickr data-enabletime=true placeholder="Pick date and time">
-        </p>
-            <h3>DateTime Picker: 24 Hour Mode</h3>
-            <pre class='prettyprint lang-html'>
+		<p>
+			<input class=flatpickr data-enabletime=true placeholder="Pick date and time">
+		</p>
+			<h3>DateTime Picker: 24 Hour Mode</h3>
+			<pre class='prettyprint lang-html'>
 &lt;input class=flatpickr data-enabletime=true data-time_24hr=true data-timeFormat="H:i"&gt;
 </pre>
 
-            <input class=flatpickr data-enabletime=true data-time_24hr=true data-timeFormat="H:i" placeholder="24 hour time">
-        </div>
+			<input class=flatpickr data-enabletime=true data-time_24hr=true data-timeFormat="H:i" placeholder="24 hour time">
+		</div>
 
-        <div class="example_wrapper" data-desc="Time Picker" id="timepicker">
-            <h3>Time Picker</h3>
-            <pre class='prettyprint lang-html'>
+		<div class="example_wrapper" data-desc="Time Picker" id="timepicker">
+			<h3>Time Picker</h3>
+			<pre class='prettyprint lang-html'>
 &lt;input class=flatpickr data-enabletime=true  data-nocalendar=true value="09:00"&gt;
 </pre>
 
-            <input class=flatpickr data-enabletime=true data-nocalendar=true placeholder="Pick time">
-        </div>
+			<input class=flatpickr data-enabletime=true data-nocalendar=true placeholder="Pick time"  value="09:00">
+		</div>
 
-        <div class="example_wrapper" data-desc="User-Friendly date output" id="altinput">
-            <h3>Human-friendly Date Output</h3>
+		<div class="example_wrapper" data-desc="User-Friendly date output" id="altinput">
+			<h3>Human-friendly Date Output</h3>
 
-            <p>altInput can be used for displaying a friendly date format (per <code>altFormat</code>) to the user while sending the date formatted as <code>dateFormat</code> to the server. Feel free to inspect the input element below after picking a date to see what's going on. </p>
+			<p>altInput can be used for displaying a friendly date format (per <code>altFormat</code>) to the user while sending the date formatted as <code>dateFormat</code> to the server. Feel free to inspect the input element below after picking a date to see what's going on. </p>
 
-            <pre class='prettyprint lang-html'>
+			<pre class='prettyprint lang-html'>
 &lt;input class=flatpickr data-altinput=true data-altFormat="F j, Y"&gt;
 </pre>
-            <p>
-                <input class=flatpickr id="alt" data-altinput=true data-altFormat="F j, Y" placeholder="The real input is hidden :^)">
-            </p>
+			<p>
+				<input class=flatpickr id="alt" data-altinput=true data-altFormat="F j, Y" placeholder="The real input is hidden :^)">
+			</p>
 
-            <p><strong>Selected date</strong>: <span id=realdate>nothing yet</span></p>
+			<p><strong>Selected date</strong>: <span id=realdate>nothing yet</span></p>
 </div>
 
-        <div class="example_wrapper" data-desc="Preloading dates" id="defaultdate">
+		<div class="example_wrapper" data-desc="Preloading dates" id="defaultdate">
 
-            <h3>Preload date and time</h3>
+			<h3>Preload date and time</h3>
 
-             <p>
-            You may load the calendar with a predefined value, ranging from
-            simple dates, such as "2016-04-10" to full-fledged datetime strings.
-            </p>
-            <pre class='prettyprint lang-html'>
+			 <p>
+			You may load the calendar with a predefined value, ranging from
+			simple dates, such as "2016-04-10" to full-fledged datetime strings.
+			</p>
+			<pre class='prettyprint lang-html'>
 &lt;input class=flatpickr data-defaultDate="2016-03-01 03:30:00 -0300"  data-enableTime="true"&gt;
 </pre>
 
 
-            <p>
-                <input class=flatpickr data-defaultDate="2016-03-01 03:30:00 -0300"  data-enableTime="true">
-            </p>
-        </div>
-        <div class="example_wrapper" data-desc="Disabling dates" id="disable">
-            <h3>Disable date intervals</h3>
-            <p>With <code><a href=#options>disable</a></code> option</p>
+			<p>
+				<input class=flatpickr data-defaultDate="2016-03-01 03:30:00 -0300"  data-enableTime="true">
+			</p>
+		</div>
+		<div class="example_wrapper" data-desc="Disabling dates" id="disable">
+			<h3>Disable date intervals</h3>
+			<p>With <code><a href=#options>disable</a></code> option</p>
 
-            <pre class='prettyprint lang-js'>
+			<pre class='prettyprint lang-js'>
 flatpickr('#disableRange', {
 
-    disable: [ { 'from' : "2016-07-06", 'to' : "2016-07-09" }, "2016-07-24" ],
-    minDate: "today"
+	disable: [
+		{
+			from: "2016-07-06",
+			to: "2016-07-09"
+		},
+		"2016-07-24"
+	],
+	minDate: "today"
 
 });
 
 flatpickr('#disableRangeMultiple', {
 
-    disable:
-    [
-        { 'from' : "2016-09-06", 'to' : "2016-09-09" },
-        { 'from' : "August 25, 2016", 'to' : "August 31, 2016" }
-    ],
-    minDate: "today",
-    dateFormat: 'Y-m-d'
+	disable:
+	[
+		{ 'from' : "2016-09-06", 'to' : "2016-09-09" },
+		{ 'from' : "August 25, 2016", 'to' : "August 31, 2016" }
+	],
+	minDate: "today",
+	dateFormat: 'Y-m-d'
 
 });
 </pre>
 
 
-            <p>
-                <input id="disableRange" placeholder="disabled from July 6-9">
-            </p>
-            <p>
-                <input id="disableRangeMultiple" placeholder="disabled September 6-9 & August 25-31 2016 ">
-            </p>
-        </div>
+			<p>
+				<input id="disableRange" placeholder="disabled from July 6-9">
+			</p>
+			<p>
+				<input id="disableRangeMultiple" placeholder="disabled September 6-9 & August 25-31 2016 ">
+			</p>
+		</div>
 
 
-        <div class="example_wrapper" data-desc="Utilizing onChange Event" id="onchange">
-            <h3>Setting options on the fly</h3>
+		<div class="example_wrapper" data-desc="Utilizing onChange Event" id="onchange">
+			<h3>Setting options on the fly</h3>
 
-            <pre class='prettyprint lang-js'>
+			<pre class='prettyprint lang-js'>
 var check_in = flatpickr("#check_in_date", { minDate: new Date() });
 var check_out = flatpickr("#check_out_date", { minDate: new Date() });
 
 check_in.set("onChange", function(d) {
-    check_out.set("minDate", d.fp_incr(1)); //increment by one day
+	check_out.set("minDate", d.fp_incr(1)); //increment by one day
 });
 check_out.set("onChange", function(d) {
-    check_in.set("maxDate", d);
+	check_in.set("maxDate", d);
 });
 </pre>
 
 
-            <p>
-                <input id="check_in_date" placeholder="Check-In Date">
-            </p>
-            <p>
-                <input id="check_out_date" placeholder="Check Out Date">
-            </p>
-        </div>
+			<p>
+				<input id="check_in_date" placeholder="Check-In Date">
+			</p>
+			<p>
+				<input id="check_out_date" placeholder="Check Out Date">
+			</p>
+		</div>
 
 
-        <div class="example_wrapper" id=inline-calendar  data-desc="Inline calendar" >
-            <h3>Inline or embedded calendar</h3>
+		<div class="example_wrapper" id=inline-calendar  data-desc="Inline calendar" >
+			<h3>Inline or embedded calendar</h3>
 
-            <pre class='prettyprint lang-html'>
+			<pre class='prettyprint lang-html'>
 &lt;input class=flatpickr data-inline=true placeholder="Pick a date below"&gt;
 </pre>
 
-            <p>
-                <input class=flatpickr data-inline=true placeholder="Pick a date below">
-            </p>
+			<p>
+				<input class=flatpickr data-inline=true placeholder="Pick a date below">
+			</p>
 
 
-        </div>
+		</div>
 
 
-        <div class="example_wrapper" data-desc="Customizing default options" id="prototype">
-            <h3>Customizing default options</h3>
+		<div class="example_wrapper" data-desc="Customizing default options" id="prototype">
+			<h3>Customizing default options</h3>
 
-            <pre class='prettyprint lang-js'>
+			<pre class='prettyprint lang-js'>
 // use your own arrow icons
 flatpickr.init.prototype.defaultConfig.prevArrow = "&lt;i class='icon i-angle-left'&gt;&lt;/i&gt;";
 flatpickr.init.prototype.defaultConfig.nextArrow = "&lt;i class='icon i-angle-right'&gt;&lt;/i&gt;";
@@ -372,416 +378,416 @@ flatpickr(".flatpickr")
 </pre>
 
 
-        </div>
+		</div>
 
 
-        <p></p>
+		<p></p>
 
-        <div class="example_wrapper" id=options>
-        <h3  data-desc="Options">Options</h3>
-        <p>
-            <strong>Protip: </strong> <u>all</u> of the string/boolean config options can also be supplied using data attributes, e.g. data-mindate, data-defaultdate, data-dateformat etc.
-        </p>
+		<div class="example_wrapper" id=options>
+		<h3  data-desc="Options">Options</h3>
+		<p>
+			<strong>Protip: </strong> <u>all</u> of the string/boolean config options can also be supplied using data attributes, e.g. data-mindate, data-defaultdate, data-dateformat etc.
+		</p>
 
-        <table class=table>
-            <thead>
-                <tr>
-                    <th>Config Option</th>
-                    <th>Type</th>
-                    <th>Default</th>
-                    <th>Description</th>
-                </tr>
-            </thead>
-            <tbody>
+		<table class=table>
+			<thead>
+				<tr>
+					<th>Config Option</th>
+					<th>Type</th>
+					<th>Default</th>
+					<th>Description</th>
+				</tr>
+			</thead>
+			<tbody>
 
-                <tr>
-                    <td>enableTime</td>
-                    <td>boolean</td>
-                    <td>false</td>
-                    <td>Enables time picker </td>
-                </tr>
+				<tr>
+					<td>enableTime</td>
+					<td>boolean</td>
+					<td>false</td>
+					<td>Enables time picker </td>
+				</tr>
 
-                <tr>
-                    <td>dateFormat</td>
-                    <td>string</td>
-                    <td>'Y-m-d'</td>
-                    <td>A string of characters which are used to define how the date will be displayed in the input box. Very similar to the PHP date function, but with less options. The supported characters are defined below.</td>
-                </tr>
+				<tr>
+					<td>dateFormat</td>
+					<td>string</td>
+					<td>'Y-m-d'</td>
+					<td>A string of characters which are used to define how the date will be displayed in the input box. Very similar to the PHP date function, but with less options. The supported characters are defined below.</td>
+				</tr>
 
-                <tr>
-                    <td>timeFormat</td>
-                    <td>string</td>
-                    <td>'H:i'</td>
-                    <td>A string of characters which are used to define how the time will be displayed in the input box. </td>
-                </tr>
+				<tr>
+					<td>timeFormat</td>
+					<td>string</td>
+					<td>'H:i'</td>
+					<td>A string of characters which are used to define how the time will be displayed in the input box. </td>
+				</tr>
 
-                <tr>
-                    <td>defaultDate</td>
-                    <td>String</td>
-                    <td>null</td>
-                    <td>Set the date to highlight on first opening. Specify a date as a <a target=_blank href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse">parsable string</a>.</td>
-                </tr>
+				<tr>
+					<td>defaultDate</td>
+					<td>String</td>
+					<td>null</td>
+					<td>Set the date to highlight on first opening. Specify a date as a <a target=_blank href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse">parsable string</a>.</td>
+				</tr>
 
-                <tr>
-                    <td>minDate</td>
-                    <td>String</td>
-                    <td>null</td>
-                    <td>The minimum date that a user can start picking from, as a string.
-                        <br>See <a target=_blank href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse">Date.parse()</a></td>
-                </tr>
+				<tr>
+					<td>minDate</td>
+					<td>String</td>
+					<td>null</td>
+					<td>The minimum date that a user can start picking from, as a string.
+						<br>See <a target=_blank href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse">Date.parse()</a></td>
+				</tr>
 
-                <tr>
-                    <td>maxDate</td>
-                    <td>String</td>
-                    <td>null</td>
-                    <td>The maximum date that a user can pick to, as a string.
-                        <br>See <a target=_blank href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse">Date.parse()</a></td>
-                </tr>
+				<tr>
+					<td>maxDate</td>
+					<td>String</td>
+					<td>null</td>
+					<td>The maximum date that a user can pick to, as a string.
+						<br>See <a target=_blank href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse">Date.parse()</a></td>
+				</tr>
 
-                <tr>
-                    <td>disable</td>
-                    <td>array</td>
-                    <td>null</td>
-                    <td>Dates to disable, using intervals</td>
-                </tr>
+				<tr>
+					<td>disable</td>
+					<td>array</td>
+					<td>null</td>
+					<td>Dates to disable, using intervals</td>
+				</tr>
 
-                <tr>
-                    <td>altInput</td>
-                    <td>Boolean</td>
-                    <td>false</td>
-                    <td>Show the user a readable date (as per altFormat), but return something totally different to the server. </td>
-                </tr>
+				<tr>
+					<td>altInput</td>
+					<td>Boolean</td>
+					<td>false</td>
+					<td>Show the user a readable date (as per altFormat), but return something totally different to the server. </td>
+				</tr>
 
-                <tr>
-                    <td>altFormat</td>
-                    <td>string</td>
-                    <td>"F j, Y"</td>
-                    <td>Exactly the same as date format, but for the altInput field</td>
-                </tr>
+				<tr>
+					<td>altFormat</td>
+					<td>string</td>
+					<td>"F j, Y"</td>
+					<td>Exactly the same as date format, but for the altInput field</td>
+				</tr>
 
-                <tr>
-                    <td>inline</td>
-                    <td>Boolean</td>
-                    <td>false</td>
-                    <td>Display the calendar inline.</td>
-                </tr>
+				<tr>
+					<td>inline</td>
+					<td>Boolean</td>
+					<td>false</td>
+					<td>Display the calendar inline.</td>
+				</tr>
 
-                <tr>
-                    <td>shorthandCurrentMonth</td>
-                    <td>boolean</td>
-                    <td>false</td>
-                    <td>Show the month using the shorthand version. </td>
-                </tr>
-                <tr>
-                    <td>onChange</td>
-                    <td>function(dateObject)</td>
-                    <td>n/a</td>
-                    <td>A function that gets triggered on every date selection </td>
-                </tr>
-                <tr>
-                    <td>hourIncrement</td>
-                    <td>integer</td>
-                    <td>1</td>
-                    <td>Adjusts the step for the hour input (incl. scrolling) </td>
-                </tr>
-                <tr>
-                    <td>minuteIncrement</td>
-                    <td>integer</td>
-                    <td>5</td>
-                    <td>Adjusts the step for the minute input (incl. scrolling) </td>
-                </tr>
-            </tbody>
-        </table>
-        </div>
+				<tr>
+					<td>shorthandCurrentMonth</td>
+					<td>boolean</td>
+					<td>false</td>
+					<td>Show the month using the shorthand version. </td>
+				</tr>
+				<tr>
+					<td>onChange</td>
+					<td>function(dateObject)</td>
+					<td>n/a</td>
+					<td>A function that gets triggered on every date selection </td>
+				</tr>
+				<tr>
+					<td>hourIncrement</td>
+					<td>integer</td>
+					<td>1</td>
+					<td>Adjusts the step for the hour input (incl. scrolling) </td>
+				</tr>
+				<tr>
+					<td>minuteIncrement</td>
+					<td>integer</td>
+					<td>5</td>
+					<td>Adjusts the step for the minute input (incl. scrolling) </td>
+				</tr>
+			</tbody>
+		</table>
+		</div>
 
-        <div class="example_wrapper" id=dateformat>
-        <h3>Date Format Characters</h3>
+		<div class="example_wrapper" id=dateformat>
+		<h3>Date Format Characters</h3>
 
-        <table class=table>
-            <thead>
-                <tr>
-                    <th>Character</th>
-                    <th>Description</th>
-                    <th>Example</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>d</td>
-                    <td>Day of the month, 2 digits with leading zeros</td>
-                    <td>01 to 31</td>
-                </tr>
-                <tr>
-                    <td>D</td>
-                    <td>A textual representation of a day</td>
-                    <td>Mon through Sun</td>
-                </tr>
-                <tr>
-                    <td>j</td>
-                    <td>Day of the month without leading zeros</td>
-                    <td>1 to 31</td>
-                </tr>
-                <tr>
-                    <td>l (lowercase 'L')</td>
-                    <td>A full textual representation of the day of the week</td>
-                    <td>Sunday through Saturday</td>
-                </tr>
-                <tr>
-                    <td>w</td>
-                    <td>Numeric representation of the day of the week</td>
-                    <td>0 (for Sunday) through 6 (for Saturday)</td>
-                </tr>
-                <tr>
-                    <td>F</td>
-                    <td>A full textual representation of a month</td>
-                    <td>January through December</td>
-                </tr>
-                <tr>
-                    <td>m</td>
-                    <td>Numeric representation of a month, with leading zero</td>
-                    <td>01 through 12</td>
-                </tr>
-                <tr>
-                    <td>M</td>
-                    <td>A short textual representation of a month</td>
-                    <td>Jan through Dec</td>
-                </tr>
-                <tr>
-                    <td>n</td>
-                    <td>Numeric representation of a month, without leading zeros</td>
-                    <td>1 through 12</td>
-                </tr>
-                <tr>
-                    <td>U</td>
-                    <td>The number of seconds since the Unix Epoch</td>
-                    <td>1413704993</td>
-                </tr>
-                <tr>
-                    <td>y</td>
-                    <td>A two digit representation of a year</td>
-                    <td>99 or 03</td>
-                </tr>
-                <tr>
-                    <td>Y</td>
-                    <td>A full numeric representation of a year, 4 digits</td>
-                    <td>1999 or 2003</td>
-                </tr>
-            </tbody>
-        </table>
-        </div>
-        <div class="example_wrapper" id=timeformat>
-        <h3>Time Format Characters</h3>
+		<table class=table>
+			<thead>
+				<tr>
+					<th>Character</th>
+					<th>Description</th>
+					<th>Example</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>d</td>
+					<td>Day of the month, 2 digits with leading zeros</td>
+					<td>01 to 31</td>
+				</tr>
+				<tr>
+					<td>D</td>
+					<td>A textual representation of a day</td>
+					<td>Mon through Sun</td>
+				</tr>
+				<tr>
+					<td>j</td>
+					<td>Day of the month without leading zeros</td>
+					<td>1 to 31</td>
+				</tr>
+				<tr>
+					<td>l (lowercase 'L')</td>
+					<td>A full textual representation of the day of the week</td>
+					<td>Sunday through Saturday</td>
+				</tr>
+				<tr>
+					<td>w</td>
+					<td>Numeric representation of the day of the week</td>
+					<td>0 (for Sunday) through 6 (for Saturday)</td>
+				</tr>
+				<tr>
+					<td>F</td>
+					<td>A full textual representation of a month</td>
+					<td>January through December</td>
+				</tr>
+				<tr>
+					<td>m</td>
+					<td>Numeric representation of a month, with leading zero</td>
+					<td>01 through 12</td>
+				</tr>
+				<tr>
+					<td>M</td>
+					<td>A short textual representation of a month</td>
+					<td>Jan through Dec</td>
+				</tr>
+				<tr>
+					<td>n</td>
+					<td>Numeric representation of a month, without leading zeros</td>
+					<td>1 through 12</td>
+				</tr>
+				<tr>
+					<td>U</td>
+					<td>The number of seconds since the Unix Epoch</td>
+					<td>1413704993</td>
+				</tr>
+				<tr>
+					<td>y</td>
+					<td>A two digit representation of a year</td>
+					<td>99 or 03</td>
+				</tr>
+				<tr>
+					<td>Y</td>
+					<td>A full numeric representation of a year, 4 digits</td>
+					<td>1999 or 2003</td>
+				</tr>
+			</tbody>
+		</table>
+		</div>
+		<div class="example_wrapper" id=timeformat>
+		<h3>Time Format Characters</h3>
 
-        <table class=table>
-            <thead>
-                <tr>
-                    <th>Character</th>
-                    <th>Description</th>
-                    <th>Example</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>H</td>
-                    <td>Hours</td>
-                    <td>00 to 23</td>
-                </tr>
-                <tr>
-                    <td>h</td>
-                    <td>Hours</td>
-                    <td>1 to 12</td>
-                </tr>
-                <tr>
-                    <td>i</td>
-                    <td>Minutes</td>
-                    <td>00 to 59</td>
-                </tr>
-                <tr>
-                    <td>K</td>
-                    <td>AM/PM</td>
-                    <td>AM or PM</td>
-                </tr>
-            </tbody>
-        </table>
+		<table class=table>
+			<thead>
+				<tr>
+					<th>Character</th>
+					<th>Description</th>
+					<th>Example</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>H</td>
+					<td>Hours</td>
+					<td>00 to 23</td>
+				</tr>
+				<tr>
+					<td>h</td>
+					<td>Hours</td>
+					<td>1 to 12</td>
+				</tr>
+				<tr>
+					<td>i</td>
+					<td>Minutes</td>
+					<td>00 to 59</td>
+				</tr>
+				<tr>
+					<td>K</td>
+					<td>AM/PM</td>
+					<td>AM or PM</td>
+				</tr>
+			</tbody>
+		</table>
 
-        <p>
-        <h3>Escaping date format characters</h3>
-        </p>
-        <p>To escape a character (if you need to use one of the reserved format characters above) use a double backslash: \\</p>
+		<p>
+		<h3>Escaping date format characters</h3>
+		</p>
+		<p>To escape a character (if you need to use one of the reserved format characters above) use a double backslash: \\</p>
 
-        <p>Example:</p>
+		<p>Example:</p>
 
-        <pre class='prettyprint'><code>dateFormat: '\\Da\\y picke\\d: Y/m/d'
+		<pre class='prettyprint'><code>dateFormat: '\\Da\\y picke\\d: Y/m/d'
 </code></pre>
 
-        <p>To get something like:</p>
+		<p>To get something like:</p>
 
-        <p><strong>Day picked: 2013/02/12</strong></p>
+		<p><strong>Day picked: 2013/02/12</strong></p>
 
-        <p>If you do not escape the characters you would end up with something like this instead:</p>
+		<p>If you do not escape the characters you would end up with something like this instead:</p>
 
-        <p><strong>Tuea13 picke12: 2013/02/12</strong></p>
+		<p><strong>Tuea13 picke12: 2013/02/12</strong></p>
 
-        <p>Which is probably not what you want...</p>
+		<p>Which is probably not what you want...</p>
 
-        </div>
+		</div>
 
-        <div class="example_wrapper" id=local>
+		<div class="example_wrapper" id=local>
 
-        <h3 id="locale">Localization</h3>
+		<h3 id="locale">Localization</h3>
 
-        <p>flatpickr supports localizing text in a similar way to modifying the methods (above).</p>
+		<p>flatpickr supports localizing text in a similar way to modifying the methods (above).</p>
 
-        <table class=table>
-            <thead>
-                <tr>
-                    <th>Property</th>
-                    <th>Type</th>
-                    <th>Default</th>
-                    <th>Description</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>l10n.weekdays.shorthand</td>
-                    <td>array</td>
-                    <td>['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']</td>
-                    <td>The shortened version of each weekday, starting with Sunday</td>
-                </tr>
-                <tr>
-                    <td>l10n.weekdays.longhand</td>
-                    <td>array</td>
-                    <td>['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']</td>
-                    <td>The long version of each weekday, starting with Sunday</td>
-                </tr>
-                <tr>
-                    <td>l10n.months.shorthand</td>
-                    <td>array</td>
-                    <td>['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']</td>
-                    <td>Shortened version of each month, starting with January</td>
-                </tr>
-                <tr>
-                    <td>l10n.months.longhand</td>
-                    <td>array</td>
-                    <td>['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']</td>
-                    <td>Long version of each month, starting with January</td>
-                </tr>
-                <tr>
-                    <td>l10n.daysInMonth</td>
-                    <td>array</td>
-                    <td>[31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]</td>
-                    <td>How many days in each month, starting with January</td>
-                </tr>
-                <tr>
-                    <td>l10n.firstDayOfWeek</td>
-                    <td>integer</td>
-                    <td>0</td>
-                    <td>Start the calendar on a different weekday (0 = Sunday, 1 = Monday, 2 = Tuesday, etc.)</td>
-                </tr>
-            </tbody>
-        </table>
+		<table class=table>
+			<thead>
+				<tr>
+					<th>Property</th>
+					<th>Type</th>
+					<th>Default</th>
+					<th>Description</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>l10n.weekdays.shorthand</td>
+					<td>array</td>
+					<td>['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']</td>
+					<td>The shortened version of each weekday, starting with Sunday</td>
+				</tr>
+				<tr>
+					<td>l10n.weekdays.longhand</td>
+					<td>array</td>
+					<td>['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']</td>
+					<td>The long version of each weekday, starting with Sunday</td>
+				</tr>
+				<tr>
+					<td>l10n.months.shorthand</td>
+					<td>array</td>
+					<td>['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']</td>
+					<td>Shortened version of each month, starting with January</td>
+				</tr>
+				<tr>
+					<td>l10n.months.longhand</td>
+					<td>array</td>
+					<td>['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']</td>
+					<td>Long version of each month, starting with January</td>
+				</tr>
+				<tr>
+					<td>l10n.daysInMonth</td>
+					<td>array</td>
+					<td>[31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]</td>
+					<td>How many days in each month, starting with January</td>
+				</tr>
+				<tr>
+					<td>l10n.firstDayOfWeek</td>
+					<td>integer</td>
+					<td>0</td>
+					<td>Start the calendar on a different weekday (0 = Sunday, 1 = Monday, 2 = Tuesday, etc.)</td>
+				</tr>
+			</tbody>
+		</table>
 
 
-        <p><strong>Example:</strong> weekdays in French:
+		<p><strong>Example:</strong> weekdays in French:
 
-            <pre class='prettyprint lang-js'><code>&lt;script&gt;
-    flatpickr.init.prototype.l10n.weekdays.longhand = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
-    flatpickr('#yourId');
+			<pre class='prettyprint lang-js'><code>&lt;script&gt;
+	flatpickr.init.prototype.l10n.weekdays.longhand = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
+	flatpickr('#yourId');
 &lt;/script&gt;
 </code></pre>
 
-        </p>
+		</p>
 
-    </div>
+	</div>
 
-    </div>
-    </div>
-    <div class="c-r">
+	</div>
+	</div>
+	<div class="c-r">
 
-        <div>
+		<div>
 
-            <h2>Table of Contents</h2>
-            <ol></ol>
-            <hr>
-            <strong>Theme:</strong>
+			<h2>Table of Contents</h2>
+			<ol></ol>
+			<hr>
+			<strong>Theme:</strong>
 
-            <select id=themes>
-                <option value="">Default</option>
-            </select>
-        </div>
+			<select id=themes>
+				<option value="">Default</option>
+			</select>
+		</div>
 
-    </div>
-    </div>
-    <script src="src/flatpickr.js"></script>
-    <script>
-    // setting custom defaults
-    flatpickr.init.prototype.defaultConfig.prevArrow = "<i class='icon icon-angle-left'></i>";
-    flatpickr.init.prototype.defaultConfig.nextArrow = "<i class='icon icon-angle-right'></i>";
-    flatpickr.init.prototype.l10n.firstDayOfWeek = 1;
+	</div>
+	</div>
+	<script src="src/flatpickr.js"></script>
+	<script>
+	// setting custom defaults
+	flatpickr.init.prototype.defaultConfig.prevArrow = "<i class='icon icon-angle-left'></i>";
+	flatpickr.init.prototype.defaultConfig.nextArrow = "<i class='icon icon-angle-right'></i>";
+	flatpickr.init.prototype.l10n.firstDayOfWeek = 1;
 
-    //Regular flatpickr
-    var t = flatpickr('#flatpickr-tryme');
-    var calendars = flatpickr(".flatpickr");
+	//Regular flatpickr
+	var t = flatpickr('#flatpickr-tryme');
+	var calendars = flatpickr(".flatpickr");
 
-    flatpickr(".calendar");
+	flatpickr(".calendar");
 
-    // Custom date format
-    flatpickr('#dateFormat', {
-        dateFormat: 'd-m-Y'
-    });
-    flatpickr('#dateFormat-mdy', {
-        dateFormat: 'm/d/Y'
-    });
+	// Custom date format
+	flatpickr('#dateFormat', {
+		dateFormat: 'd-m-Y'
+	});
+	flatpickr('#dateFormat-mdy', {
+		dateFormat: 'm/d/Y'
+	});
 
-    calendars.byID("alt").config.onChange = function(obj, str){
-        document.querySelector("#realdate").innerText = str;
-    }
+	calendars.byID("alt").config.onChange = function(obj, str){
+		document.querySelector("#realdate").innerText = str;
+	}
 
-    flatpickr('#disableRange', {
+	flatpickr('#disableRange', {
 
-        disable: [
-            {
-                from: "2016-07-06",
-                to: "2016-07-09"
-            },
-            "2016-07-24"
-        ],
-        minDate: "today"
+		disable: [
+			{
+				from: "2016-07-06",
+				to: "2016-07-09"
+			},
+			"2016-07-24"
+		],
+		minDate: "today"
 
-    });
+	});
 
-    flatpickr('#disableRangeMultiple', {
+	flatpickr('#disableRangeMultiple', {
 
-        disable: [{
-            'from': "2016-09-06",
-            'to': "2016-09-09"
-        }, {
-            'from': "August 25, 2016",
-            'to': "August 31, 2016"
-        }],
-        minDate: "today",
-        dateFormat: 'Y-m-d'
+		disable: [{
+			'from': "2016-09-06",
+			'to': "2016-09-09"
+		}, {
+			'from': "August 25, 2016",
+			'to': "August 31, 2016"
+		}],
+		minDate: "today",
+		dateFormat: 'Y-m-d'
 
-    });
+	});
 
-    var check_in = flatpickr("#check_in_date", {
-        minDate: new Date()
-    });
-    var check_out = flatpickr("#check_out_date", {
-        minDate: new Date()
-    });
+	var check_in = flatpickr("#check_in_date", {
+		minDate: new Date()
+	});
+	var check_out = flatpickr("#check_out_date", {
+		minDate: new Date()
+	});
 
-    check_in.set("onChange", function(d) {
-        check_out.set("minDate", d.fp_incr(1));
-    });
-    check_out.set("onChange", function(d) {
-        check_in.set("maxDate", d);
-    });
-    </script>
+	check_in.set("onChange", function(d) {
+		check_out.set("minDate", d.fp_incr(1));
+	});
+	check_out.set("onChange", function(d) {
+		check_in.set("maxDate", d);
+	});
+	</script>
 
-    <script async src="assets/prettify.js?skin=none"></script>
-    <script async src="assets/table-of-contents.js"></script>
-    <script async src="assets/themer.js"></script>
+	<script async src="assets/prettify.js?skin=none"></script>
+	<script async src="assets/table-of-contents.js"></script>
+	<script async src="assets/themer.js"></script>
 </body>
 
 </html>
