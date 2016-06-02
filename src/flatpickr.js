@@ -771,16 +771,16 @@ flatpickr.init.prototype = {
 			// noCalendar: true will hide the calendar. use for a time picker along w/ enableTime
 			noCalendar: false,
 
-			// wrap: see file:///home/greg/Workspace/flatpickr/index.html#strap
+			// wrap: see https://chmln.github.io/flatpickr/#strap
 			wrap: false,
 
 			/* clicking on input opens the date(time)picker. disable if you wish to open the calendar manually with .open() */
 			clickOpens: true,
 
-			// more date format chars at file:///home/greg/Workspace/flatpickr/index.html#dateformat
+			// more date format chars at https://chmln.github.io/flatpickr/#dateformat
 			dateFormat: 'Y-m-d',
 
-			// altInput - see file:///home/greg/Workspace/flatpickr/index.html#altinput
+			// altInput - see https://chmln.github.io/flatpickr/#altinput
 			altInput: false,
 			altFormat: "F j, Y",
 
@@ -793,7 +793,7 @@ flatpickr.init.prototype = {
 			// the maximum date that user can pick (inclusive)
 			maxDate: null,
 
-			// see file:///home/greg/Workspace/flatpickr/index.html#disable
+			// see https://chmln.github.io/flatpickr/#disable
 			disable: [],
 			shorthandCurrentMonth: false,
 			inline: false,
