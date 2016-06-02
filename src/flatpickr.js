@@ -79,7 +79,7 @@ flatpickr.init = function (element, instanceConfig) {
 		cur_month = document.createElement('span'),
 		nextMonthNav = document.createElement('span'),
 		calendar = document.createElement('div'),
-		currentDate = new Date(),
+		currentDate,
 		wrapperElement = document.createElement('div'),
 		hourElement,
 		minuteElement,
@@ -105,7 +105,7 @@ flatpickr.init = function (element, instanceConfig) {
 				self.element.getAttribute("data-"+config)||
 				self.defaultConfig[config];
 
-
+		currentDate = new Date();
 		self.input = (self.config.wrap) ? element.querySelector("[data-input]") : element;
 
 		if(self.config.defaultDate)
@@ -160,23 +160,17 @@ flatpickr.init = function (element, instanceConfig) {
 		if(timeless && date)
 			date.setHours(0,0,0,0);
 
+		if(String(self.config.utc) === 'true' && date && !date.fp_isUTC)
+			date = date.fp_toUTC();
+
 		return date;
 	};
 
-	equalDates = function(date1, date2, utc){
-
-		utc = utc||false;
-
-		if(utc)
-			return date1.getUTCFullYear() === date2.getUTCFullYear() &&
-					date1.getUTCMonth() === date2.getUTCMonth() &&
-					date1.getUTCDate() === date2.getUTCDate();
-
-		return date1.getFullYear() === date2.getFullYear() &&
-					date1.getMonth() === date2.getMonth() &&
-					date1.getDate() === date2.getDate();
-
-	};
+	equalDates = (date1, date2) => (
+		date1.getFullYear() === date2.getFullYear() &&
+		date1.getMonth() === date2.getMonth() &&
+		date1.getDate() === date2.getDate()
+	);
 
 	wrap = function () {
 
@@ -215,11 +209,9 @@ flatpickr.init = function (element, instanceConfig) {
 
 		let prev_date;
 
-		if(self.selectedDateObj)
-			prev_date = self.selectedDateObj.getTime();
-
-
 		if (self.selectedDateObj && self.config.enableTime ){
+
+			prev_date = self.selectedDateObj.getTime();
 
 			// update time
 			var hour = parseInt(hourElement.value),
@@ -243,8 +235,9 @@ flatpickr.init = function (element, instanceConfig) {
 		if ( self.selectedDateObj )
 			self.input.value = formatDate(self.config.dateFormat);
 
-		if(prev_date && self.selectedDateObj.getTime() !== prev_date)
+		if(prev_date && self.selectedDateObj.getTime() !== prev_date){
 			triggerChange();
+		}
 
 	};
 
@@ -280,12 +273,12 @@ flatpickr.init = function (element, instanceConfig) {
 			formatPieces = dateFormat.split('');
 
 		for(let i = 0; i < formatPieces.length; i++){
+			let c = formatPieces[i];
+			if (formats[c] && formatPieces[i - 1] !== '\\')
+				formattedDate += formats[c]();
 
-			if (formats[formatPieces[i]] && formatPieces[i - 1] !== '\\')
-				formattedDate += formats[formatPieces[i]]();
-
-			else if (formatPieces[i] !== '\\')
-					formattedDate += formatPieces[i];
+			else if (c !== '\\')
+					formattedDate += c;
 		}
 
 		return formattedDate;
@@ -386,6 +379,7 @@ flatpickr.init = function (element, instanceConfig) {
 			);
 
 			updateValue();
+			triggerChange();
 			buildDays();
 
 			if ( !self.config.inline && !self.config.enableTime )
@@ -648,7 +642,7 @@ flatpickr.init = function (element, instanceConfig) {
 		self.element.parentNode.classList.add('open');
 
 		if (self.config.onOpen)
-			self.config.onOpen();
+			self.config.onOpen(self.selectedDateObj, self.input.value);
 
 	};
 
@@ -685,6 +679,7 @@ flatpickr.init = function (element, instanceConfig) {
 	triggerChange = function(){
 
 		self.input.dispatchEvent(clickEvt);
+
 		if (self.config.onChange)
 			self.config.onChange(self.selectedDateObj, self.input.value);
 
@@ -723,10 +718,20 @@ flatpickr.init = function (element, instanceConfig) {
 		self.jumpToDate(self.selectedDateObj);
 		updateValue();
 
-		triggerChangeEvent = triggerChangeEvent||false;
-		if(triggerChangeEvent)
+		if(triggerChangeEvent||false)
 			triggerChange();
 
+	 };
+
+	 self.setTime = function(hour, minute, triggerChangeEvent) {
+	 	if(self.selectedDateObj){
+
+	 		self.selectedDateObj.setHours(hour, minute, 0, 0);
+	 		updateValue();
+
+	 		if(triggerChangeEvent||false)
+				triggerChange();
+	 	}
 	 };
 
 	self.set = function(key, value){
@@ -759,27 +764,64 @@ flatpickr.init.prototype = {
 	},
 
 	defaultConfig : {
-			noCalendar: false, // true will hide the calendar. use for a time picker along w/ enableTime
+			/* if true, dates will be parsed, formatted, and displayed in UTC.
+			preloading date strings w/ timezones is recommended but not necessary */
+			utc: false,
+
+			// noCalendar: true will hide the calendar. use for a time picker along w/ enableTime
+			noCalendar: false,
+
+			// wrap: see file:///home/greg/Workspace/flatpickr/index.html#strap
 			wrap: false,
+
+			/* clicking on input opens the date(time)picker. disable if you wish to open the calendar manually with .open() */
 			clickOpens: true,
+
+			// more date format chars at file:///home/greg/Workspace/flatpickr/index.html#dateformat
 			dateFormat: 'Y-m-d',
+
+			// altInput - see file:///home/greg/Workspace/flatpickr/index.html#altinput
 			altInput: false,
 			altFormat: "F j, Y",
+
+			// defaultDate - either a datestring or a date object. used for datetimepicker's initial value
 			defaultDate: null,
+
+			// the minimum date that user can pick (inclusive)
 			minDate: null,
+
+			// the maximum date that user can pick (inclusive)
 			maxDate: null,
+
+			// see file:///home/greg/Workspace/flatpickr/index.html#disable
 			disable: [],
 			shorthandCurrentMonth: false,
 			inline: false,
+
+			// code for previous/next icons. this is where you put your custom icon code e.g. fontawesome
 			prevArrow: '&lt;',
 			nextArrow: '&gt;',
+
+			// enables the time picker functionality
 			enableTime: false,
 			timeFormat: "h:i K",
+
+			// display time picker in 24 hour mode
 			time_24hr: false,
+
+			// step size used when scrolling/incrementing on the hour element
 			hourIncrement: 1,
+
+			// step size used when scrolling/incrementing on the minute element
 			minuteIncrement: 5,
+
+			// onChange callback when user selects/changes selected date or time
 			onChange: null, //function( dateObj, dateStr ){}
-			onOpen: null,
+
+			// called every time calendar is opened
+			onOpen: null, // function( dateObj, dateStr ){}
+
+			// called every time calendar is opened
 			onClose: null // function( dateObj, dateStr ){}
 	}
 };
@@ -790,6 +832,15 @@ Date.prototype.fp_incr = function(days){
 		this.getMonth(),
 		this.getDate() + parseInt(days, 10)
 	);
+};
+
+Date.prototype.fp_isUTC = false;
+Date.prototype.fp_toUTC = function(){
+
+	let new_date = new Date(this.getTime() + this.getTimezoneOffset() * 60000);
+	new_date.fp_isUTC = true;
+
+	return new_date;
 };
 
 // classList polyfill
