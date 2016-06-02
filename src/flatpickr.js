@@ -211,7 +211,7 @@ flatpickr.init = function (element, instanceConfig) {
 		return self.l10n.daysInMonth[month];
 	};
 
-	updateValue = function(e){
+	updateValue = function(){
 
 		let prev_date;
 
@@ -665,13 +665,15 @@ flatpickr.init = function (element, instanceConfig) {
 	};
 
 	self.close = function () {
+
 		self.element.parentNode.classList.remove('open');
 		self.input.classList.remove('active');
+
 		if (self.altInput)
 			self.altInput.classList.remove('active');
 
 		if (self.config.onClose)
-			self.config.onClose();
+			self.config.onClose(self.selectedDateObj, self.input.value);
 	};
 
 	self.clear = function() {
@@ -757,7 +759,7 @@ flatpickr.init.prototype = {
 	},
 
 	defaultConfig : {
-			noCalendar: false,
+			noCalendar: false, // true will hide the calendar. use for a time picker along w/ enableTime
 			wrap: false,
 			clickOpens: true,
 			dateFormat: 'Y-m-d',
@@ -778,7 +780,7 @@ flatpickr.init.prototype = {
 			minuteIncrement: 5,
 			onChange: null, //function( dateObj, dateStr ){}
 			onOpen: null,
-			onClose: null // function() {}
+			onClose: null // function( dateObj, dateStr ){}
 	}
 };
 
