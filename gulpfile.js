@@ -12,7 +12,7 @@ const paths = {
     themes: "./src/style/themes/*.styl"
 };
 
-function script() {
+gulp.task('script', function(){
     return gulp.src(paths.script)
     .pipe(lint({
         "esversion": 6,
@@ -23,36 +23,33 @@ function script() {
     .pipe(uglify({compress: {hoist_funs: false, hoist_vars: false}})).on('error', errorHandler)
     .pipe(rename({ suffix: '.min'}))
     .pipe(gulp.dest('dist'));
-};
+});
 
-function style() {
+gulp.task('style', function(){
     return gulp.src(paths.style)
     .pipe(stylus())
     .pipe(cssmin()).on('error', errorHandler)
     .pipe(rename({ suffix: '.min'}))
     .pipe(gulp.dest('dist'));
-};
+});
 
-function themes() {
+gulp.task('themes', function(){
     return gulp.src(paths.themes)
     .pipe(stylus())
     .pipe(cssmin()).on('error', errorHandler)
     .pipe(rename({ prefix: 'flatpickr.',suffix: '.min'}))
     .pipe(gulp.dest('dist'));
-};
+});
 
-function watch(cb) {
-    gulp.watch('./src/style/**/*.styl', gulp.parallel(style, themes));
-    gulp.watch(paths.script, script);
-    return cb();
-};
+gulp.task('watch', function() {
+    gulp.watch('./src/style/**/*.styl', gulp.parallel('style', 'themes'));
+    gulp.watch(paths.script, gulp.series('script'));
+});
 
 // Handle the error
 function errorHandler (error) {
     console.log(error.toString());
 }
 
-const build = gulp.parallel(script, style, themes,watch);
 
-gulp.task("build",  build );
-gulp.task("default", build);
+gulp.task('default', gulp.parallel('script', 'style', 'themes', 'watch'));
