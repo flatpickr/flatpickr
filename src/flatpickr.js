@@ -142,7 +142,7 @@ flatpickr.init = function (element, instanceConfig) {
 				date = new Date(date.replace(/-/g, "/") );
 
 
-			else if ( /\d\d[\:]\d\d/.test(date)){ // time-only picker
+			else if ( /^\d\d[\:]\d\d$/.test(date)){ // time-only picker
 				let matches = date.match(/(\d\d)[\:](\d\d)/);
 				date = new Date();
 				date.setHours(matches[1], matches[2], 0, 0);
