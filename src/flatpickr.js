@@ -1,4 +1,4 @@
-var flatpickr = function (selector, config) {
+var flatpickr = function(selector, config) {
 	'use strict';
 	let elements, instances, createInstance = element => {
 		if (element._flatpickr)
@@ -40,7 +40,7 @@ var flatpickr = function (selector, config) {
 /**
  * @constructor
  */
-flatpickr.init = function (element, instanceConfig) {
+flatpickr.init = function(element, instanceConfig) {
 	'use strict';
 
 	// functions
@@ -64,6 +64,7 @@ flatpickr.init = function (element, instanceConfig) {
 		documentClick,
 		calendarClick,
 		buildCalendar,
+		getRandomCalendarIdStr,
 		bind,
 		init,
 		triggerChange,
@@ -87,10 +88,11 @@ flatpickr.init = function (element, instanceConfig) {
 		clickEvt;
 
 
-	init = function () {
+	init = function() {
 
 		navigationCurrentMonth.className = 'flatpickr-current-month';
 		calendarContainer.className = 'flatpickr-calendar';
+		calendarContainer.id = getRandomCalendarIdStr();
 		calendar.className = "flatpickr-days";
 
 		instanceConfig = instanceConfig || {};
@@ -125,6 +127,15 @@ flatpickr.init = function (element, instanceConfig) {
 
 		// if(!self.config.noCalendar)
 		updateValue();
+	};
+
+	getRandomCalendarIdStr = function() {
+		var randNum, idStr;
+		do {
+			randNum = Math.round(Math.random()*Math.pow(10,10));
+			idStr   = 'flatpickr-'+randNum;
+		} while(document.getElementById(idStr) !== null);
+		return idStr;
 	};
 
 	uDate = function(date, timeless){
@@ -172,15 +183,22 @@ flatpickr.init = function (element, instanceConfig) {
 		date1.getDate() === date2.getDate()
 	);
 
-	wrap = function () {
+	wrap = function() {
 
 		wrapperElement.className = 'flatpickr-wrapper';
 
-		self.element.parentNode.insertBefore(wrapperElement, self.element);
-		wrapperElement.appendChild(self.element);
-
-		if(self.config.inline)
+		if(self.config.inline) {
+			// Wrap input and place calendar underneath
+			self.element.parentNode.insertBefore(wrapperElement, self.element);
+			wrapperElement.appendChild(self.element);
 			wrapperElement.classList.add('inline');
+		} else {
+			// Insert at bottom of BODY tag to display outside
+			// of relative positioned elements with css 'overflow: hidden;'
+			// property set.
+			var bodyElement = document.getElementsByTagName("BODY")[0];
+			bodyElement.appendChild(wrapperElement);
+		}
 
 		if (self.config.altInput){
 			// replicate self.element
@@ -243,7 +261,7 @@ flatpickr.init = function (element, instanceConfig) {
 
 	pad = num =>("0" + num).slice(-2);
 
-	formatDate = function (dateFormat) {
+	formatDate = function(dateFormat) {
 
 		if (self.config.noCalendar)
 			dateFormat = "";
@@ -284,7 +302,7 @@ flatpickr.init = function (element, instanceConfig) {
 		return formattedDate;
 	};
 
-	monthToStr = function (date, shorthand) {
+	monthToStr = function(date, shorthand) {
 		return shorthand||self.config.shorthandCurrentMonth ? self.l10n.months.shorthand[date] : self.l10n.months.longhand[date];
 	};
 
@@ -319,7 +337,7 @@ flatpickr.init = function (element, instanceConfig) {
 
 	};
 
-	timeWrapper = function (e){
+	timeWrapper = function(e){
 		e.preventDefault();
 
 		let min = parseInt(e.target.min), max = parseInt(e.target.max),
@@ -335,14 +353,14 @@ flatpickr.init = function (element, instanceConfig) {
 	};
 
 
-	updateNavigationCurrentMonth = function () {
+	updateNavigationCurrentMonth = function() {
 
 		cur_month.innerHTML = monthToStr(self.currentMonth) +" ";
 		cur_year.innerHTML = self.currentYear;
 
 	};
 
-	handleYearChange = function () {
+	handleYearChange = function() {
 
 		if (self.currentMonth < 0 || self.currentMonth > 11) {
 
@@ -353,10 +371,12 @@ flatpickr.init = function (element, instanceConfig) {
 
 	};
 
-	documentClick = function (event) {
-		if (wrapperElement.classList.contains("open") && !wrapperElement.contains(event.target))
+	documentClick = function(event) {
+		if(
+			wrapperElement.classList.contains("open") && 
+			(!wrapperElement.contains(event.target) && event.target != self.element)
+		)
 			self.close();
-
 	};
 
 	changeMonth = function(offset) {
@@ -367,7 +387,7 @@ flatpickr.init = function (element, instanceConfig) {
 		buildDays();
 	};
 
-	calendarClick = function (e) {
+	calendarClick = function(e) {
 
 		e.preventDefault();
 
@@ -389,7 +409,7 @@ flatpickr.init = function (element, instanceConfig) {
 
 	};
 
-	buildCalendar = function () {
+	buildCalendar = function() {
 
 		if (!self.config.noCalendar) {
 			buildMonthNavigation();
@@ -405,7 +425,7 @@ flatpickr.init = function (element, instanceConfig) {
 
 	};
 
-	buildMonthNavigation = function () {
+	buildMonthNavigation = function() {
 
 		monthsNav.className = 'flatpickr-month';
 
@@ -430,7 +450,7 @@ flatpickr.init = function (element, instanceConfig) {
 		calendarContainer.appendChild(monthsNav);
 	};
 
-	buildWeekdays = function () {
+	buildWeekdays = function() {
 
 		let weekdayContainer = document.createElement('div'),
 			firstDayOfWeek = self.l10n.firstDayOfWeek,
@@ -447,7 +467,7 @@ flatpickr.init = function (element, instanceConfig) {
 		calendarContainer.appendChild(weekdayContainer);
 	};
 
-	buildDays = function () {
+	buildDays = function() {
 
 		let firstOfMonth = (new Date(self.currentYear, self.currentMonth, 1).getDay() - self.l10n.firstDayOfWeek + 7)%7,
 			numDays = getDaysinMonth(),
@@ -555,7 +575,7 @@ flatpickr.init = function (element, instanceConfig) {
 
 	};
 
-	bind = function () {
+	bind = function() {
 
 		function am_pm_toggle(e){
 			e.preventDefault();
@@ -627,7 +647,7 @@ flatpickr.init = function (element, instanceConfig) {
 
 	};
 
-	self.open = function () {
+	self.open = function() {
 		if (self.input.disabled || self.config.inline)
 			return;
 
@@ -639,18 +659,30 @@ flatpickr.init = function (element, instanceConfig) {
 			self.altInput.classList.add('active');
 		}
 
-		self.element.parentNode.classList.add('open');
+		wrapperElement.classList.add('open');
+		self.positionCalendar();
 
 		if (self.config.onOpen)
 			self.config.onOpen(self.selectedDateObj, self.input.value);
-
 	};
 
-	self.toggle = function () {
+	// For calendars inserted in BODY (as opposed to inline wrapper) 
+	// it's necessary to properly calculate top/left position.
+	self.positionCalendar = function() {
+		var bounds = self.input.getBoundingClientRect();
+		// account for scroll & input height
+		var top = (window.pageYOffset + self.input.offsetHeight + bounds.top);
+		var left = (window.pageXOffset + bounds.left);
+		wrapperElement.style.top = top + 'px';
+		wrapperElement.style.left = left + 'px';
+	};
+
+	self.toggle = function() {
 		if (self.input.disabled)
 			return;
 
-		self.element.parentNode.classList.toggle('open');
+		wrapperElement.classList.toggle('open');
+		self.positionCalendar();
 
 		if(self.altInput)
 			self.altInput.classList.toggle('active');
@@ -658,9 +690,8 @@ flatpickr.init = function (element, instanceConfig) {
 		self.input.classList.toggle('active');
 	};
 
-	self.close = function () {
-
-		self.element.parentNode.classList.remove('open');
+	self.close = function() {
+		wrapperElement.classList.remove('open');
 		self.input.classList.remove('active');
 
 		if (self.altInput)
@@ -685,14 +716,18 @@ flatpickr.init = function (element, instanceConfig) {
 
 	};
 
-	self.destroy = function () {
-		let parent = self.element.parentNode,
-			element  = parent.removeChild(self.element);
-
+	self.destroy = function() {
 		document.removeEventListener('click', documentClick, false);
 
-		parent.removeChild(calendarContainer);
-		parent.parentNode.replaceChild(element, parent);
+		if(self.config.inline) {
+			let parent  = self.element.parentNode;
+			let element = parent.removeChild(self.element);
+			parent.removeChild(calendarContainer);
+			parent.parentNode.replaceChild(element, parent);
+		} else {
+			var bodyElement = document.getElementsByTagName("BODY")[0];
+			bodyElement.removeChild(wrapperElement);
+		}
 	};
 
 	self.redraw = function(){
@@ -724,14 +759,14 @@ flatpickr.init = function (element, instanceConfig) {
 	 };
 
 	 self.setTime = function(hour, minute, triggerChangeEvent) {
-	 	if(self.selectedDateObj){
+		if(self.selectedDateObj){
 
-	 		self.selectedDateObj.setHours(hour, minute, 0, 0);
-	 		updateValue();
+			self.selectedDateObj.setHours(hour, minute, 0, 0);
+			updateValue();
 
-	 		if(triggerChangeEvent||false)
+			if(triggerChangeEvent||false)
 				triggerChange();
-	 	}
+		}
 	 };
 
 	self.set = function(key, value){
@@ -860,13 +895,13 @@ if (!("classList" in document.documentElement) && Object.defineProperty && typeo
 
 			var ret = {
 				add: update(function(classes, index, value) {
-					~index || classes.push(value);
+					return ~index || classes.push(value);
 				}),
 				remove: update(function(classes, index) {
-					~index && classes.splice(index, 1);
+					return ~index && classes.splice(index, 1);
 				}),
 				toggle: update(function(classes, index, value) {
-					~index ? classes.splice(index, 1) : classes.push(value);
+					return ~index ? classes.splice(index, 1) : classes.push(value);
 				}),
 				contains: function(value) {
 					return !!~self.className.split(/\s+/).indexOf(value);
