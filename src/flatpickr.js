@@ -138,12 +138,14 @@ flatpickr.init = function (element, instanceConfig) {
 
 		else if (typeof date === 'string'){
 
-			if (/^\d\d\d\d\-\d\d\-\d\d$/.test(date)) // disable special utc datestring
-				date = new Date(date.replace(/-/g, "/") );
+			date = date.trim();
+
+			if (/^\d\d\d\d\-\d\d\-\d\d/.test(date)) // disable special utc datestring
+				date = new Date(date.replace(/(\d)-(\d)/g, "$1/$2") );
 
 
-			else if ( /^\d\d[\:]\d\d$/.test(date)){ // time-only picker
-				let matches = date.match(/(\d\d)[\:](\d\d)/);
+			else if (/^(\d?\d):(\d\d)(\s[\A\?P?]\M)?/.test(date)){ // time-only picker
+				let matches = date.match(/(\d?\d):(\d\d)(\s[\A\?P?]\M)?/);
 				date = new Date();
 				date.setHours(matches[1], matches[2], 0, 0);
 			}
