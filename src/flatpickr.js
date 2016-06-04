@@ -856,6 +856,7 @@ flatpickr.init.prototype = {
 			// wrap: see https://chmln.github.io/flatpickr/#strap
 			wrap: false,
 
+			// enables week numbers
 			weekNumbers: false,
 
 			/* clicking on input opens the date(time)picker. disable if you wish to open the calendar manually with .open() */
