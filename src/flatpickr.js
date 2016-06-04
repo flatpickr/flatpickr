@@ -43,8 +43,23 @@ var flatpickr = function(selector, config) {
 flatpickr.init = function(element, instanceConfig) {
 	'use strict';
 
+	var createElement = (tag, className, content) => {
+
+		let element = document.createElement(tag);
+
+		if(content)
+			element.innerHTML = content;
+
+		if(className)
+			element.className = className;
+
+		return element;
+
+	};
+
 	// functions
 	var self = this,
+		init,
 		wrap,
 		uDate,
 		equalDates,
@@ -52,34 +67,41 @@ flatpickr.init = function(element, instanceConfig) {
 		formatDate,
 		monthToStr,
 		isDisabled,
+
+		buildMonthNavigation,
 		buildWeekdays,
+		buildCalendar,
 		buildDays,
+		buildWeeks,
 		buildTime,
+
 		timeWrapper,
 		yearScroll,
 		updateValue,
+
 		updateNavigationCurrentMonth,
-		buildMonthNavigation,
+
 		handleYearChange,
+		changeMonth,
+		getDaysinMonth,
 		documentClick,
 		calendarClick,
-		buildCalendar,
+
 		getRandomCalendarIdStr,
 		bind,
-		init,
-		triggerChange,
-		changeMonth,
-		getDaysinMonth;
+
+		triggerChange;
 
 	// elements & variables
-	var calendarContainer = document.createElement('div'),
-		navigationCurrentMonth = document.createElement('span'),
+	var calendarContainer = createElement('div', 'flatpickr-calendar'),
+		navigationCurrentMonth = createElement('span', 'flatpickr-current-month'),
 		monthsNav = document.createElement('div'),
 		prevMonthNav = document.createElement('span'),
 		cur_year = document.createElement('span'),
 		cur_month = document.createElement('span'),
 		nextMonthNav = document.createElement('span'),
-		calendar = document.createElement('div'),
+		calendar = createElement('div', "flatpickr-days"),
+		weekNumbers,
 		currentDate = new Date(),
 		wrapperElement = document.createElement('div'),
 		hourElement,
@@ -90,10 +112,7 @@ flatpickr.init = function(element, instanceConfig) {
 
 	init = function() {
 
-		navigationCurrentMonth.className = 'flatpickr-current-month';
-		calendarContainer.className = 'flatpickr-calendar';
 		calendarContainer.id = getRandomCalendarIdStr();
-		calendar.className = "flatpickr-days";
 
 		instanceConfig = instanceConfig || {};
 
@@ -193,13 +212,13 @@ flatpickr.init = function(element, instanceConfig) {
 			self.element.parentNode.insertBefore(wrapperElement, self.element);
 			wrapperElement.appendChild(self.element);
 			wrapperElement.classList.add('inline');
-		} else {
+		}
+		else
 			// Insert at bottom of BODY tag to display outside
 			// of relative positioned elements with css 'overflow: hidden;'
 			// property set.
-			var bodyElement = document.getElementsByTagName("BODY")[0];
-			bodyElement.appendChild(wrapperElement);
-		}
+			document.body.appendChild(wrapperElement);
+
 
 		if (self.config.altInput){
 			// replicate self.element
@@ -374,7 +393,7 @@ flatpickr.init = function(element, instanceConfig) {
 
 	documentClick = function(event) {
 		if(
-			wrapperElement.classList.contains("open") && 
+			wrapperElement.classList.contains("open") &&
 			(!wrapperElement.contains(event.target) && event.target != self.element)
 		)
 			self.close();
@@ -415,7 +434,12 @@ flatpickr.init = function(element, instanceConfig) {
 		if (!self.config.noCalendar) {
 			buildMonthNavigation();
 			buildWeekdays();
+
+			if(self.config.weekNumbers)
+				buildWeeks();
+
 			buildDays();
+
 			calendarContainer.appendChild(calendar);
 		}
 
@@ -453,20 +477,29 @@ flatpickr.init = function(element, instanceConfig) {
 
 	buildWeekdays = function() {
 
-		let weekdayContainer = document.createElement('div'),
+		let weekdayContainer = createElement('div',"flatpickr-weekdays"),
 			firstDayOfWeek = self.l10n.firstDayOfWeek,
 			weekdays = self.l10n.weekdays.shorthand.slice();
 
-		weekdayContainer.className = "flatpickr-weekdays";
 
 		if (firstDayOfWeek > 0 && firstDayOfWeek < weekdays.length) {
 			weekdays = [].concat(weekdays.splice(firstDayOfWeek, weekdays.length), weekdays.splice(0, firstDayOfWeek));
 		}
 
-		weekdayContainer.innerHTML = '<span>' + weekdays.join('</span><span>') + '</span>';
+		weekdayContainer.innerHTML = self.config.weekNumbers ? "<span>Wk</span>" : "";
+		weekdayContainer.innerHTML += '<span>' + weekdays.join('</span><span>') + '</span>';
 
 		calendarContainer.appendChild(weekdayContainer);
 	};
+
+	buildWeeks = function(){
+
+		calendarContainer.classList.add("hasWeeks");
+
+		weekNumbers = createElement("div", 'flatpickr-weeks');
+		calendarContainer.appendChild(weekNumbers);
+
+	}
 
 	buildDays = function() {
 
@@ -479,24 +512,30 @@ flatpickr.init = function(element, instanceConfig) {
 			date_is_disabled,
 			date_outside_minmax;
 
+		if(self.config.weekNumbers && weekNumbers)
+			weekNumbers.innerHTML = '';
+
 		calendar.innerHTML = '';
 
 		self.config.minDate = uDate(self.config.minDate, true);
 		self.config.maxDate = uDate(self.config.maxDate, true);
 
 		// prepend days from the ending of previous month
-		for(; dayNumber <= prevMonthDays; dayNumber++){
-			let d = document.createElement("span");
-			d.className="disabled flatpickr-day";
-			d.innerHTML=dayNumber;
-			calendar.appendChild(d);
-		}
+		for(; dayNumber <= prevMonthDays; dayNumber++)
+			calendar.appendChild(createElement("span", "disabled flatpickr-day", dayNumber));
+
 
 		// Start at 1 since there is no 0th day
 		for (dayNumber = 1; dayNumber <= 42 - firstOfMonth; dayNumber++) {
 
-			if (dayNumber <= numDays) // avoids new date objects for appended dates
+			if (dayNumber <= numDays || dayNumber%7 === 1) // avoids new date objects for appended dates
 				cur_date = new Date(self.currentYear, self.currentMonth, dayNumber,0,0,0,0);
+
+			if(self.config.weekNumbers && weekNumbers && dayNumber%7 === 1)
+				weekNumbers.appendChild(
+					createElement("span", "disabled flatpickr-day", cur_date.fp_getWeek())
+				);
+
 
 			date_outside_minmax =
 				(self.config.minDate && cur_date < self.config.minDate) ||
@@ -512,11 +551,9 @@ flatpickr.init = function(element, instanceConfig) {
 			if (!date_is_disabled && self.selectedDateObj && equalDates(cur_date, self.selectedDateObj))
 				className += ' selected';
 
-			let cell = document.createElement("span");
-
-			cell.className = className;
-			cell.innerHTML = (dayNumber > numDays ? dayNumber % numDays : dayNumber);
-			calendar.appendChild(cell);
+			calendar.appendChild(
+				createElement("span", className, (dayNumber > numDays ? dayNumber % numDays : dayNumber))
+			);
 
 		}
 
@@ -524,23 +561,17 @@ flatpickr.init = function(element, instanceConfig) {
 
 	buildTime = function(){
 
-		let timeContainer = document.createElement("div"),
-			separator = document.createElement("span");
+		let timeContainer = createElement("div", "flatpickr-time"),
+			separator = createElement("span", "flatpickr-time-separator", ":");
 
-		timeContainer.className = "flatpickr-time";
-
-		hourElement = document.createElement("input");
-		minuteElement = document.createElement("input");
-
-		separator.className = "flatpickr-time-separator";
-		separator.innerHTML = ":";
+		hourElement = createElement("input", "flatpickr-hour");
+		minuteElement = createElement("input", "flatpickr-minute");
 
 		hourElement.type = minuteElement.type = "number";
-		hourElement.className = "flatpickr-hour";
-		minuteElement.className = "flatpickr-minute";
 
 		hourElement.value =
 			self.selectedDateObj ? pad(self.selectedDateObj.getHours()) : 12;
+
 		minuteElement.value =
 			self.selectedDateObj ? pad(self.selectedDateObj.getMinutes()) : "00";
 
@@ -561,9 +592,7 @@ flatpickr.init = function(element, instanceConfig) {
 		timeContainer.appendChild(minuteElement);
 
 		if (!self.config.time_24hr){ // add am_pm if appropriate
-			am_pm = document.createElement("span");
-			am_pm.className = "flatpickr-am-pm";
-			am_pm.innerHTML = ["AM","PM"][(hourElement.value > 11)|0];
+			am_pm = createElement("span", "flatpickr-am-pm", ["AM","PM"][(hourElement.value > 11)|0]);
 			am_pm.title="Click to toggle";
 			timeContainer.appendChild(am_pm);
 		}
@@ -622,11 +651,11 @@ flatpickr.init = function(element, instanceConfig) {
 			hourElement.addEventListener("change", updateValue);
 			minuteElement.addEventListener("change", updateValue);
 
-			hourElement.addEventListener("click", () => {hourElement.select();});
-			minuteElement.addEventListener("click", () => {minuteElement.select();});
+			hourElement.addEventListener("click", hourElement.select);
+			minuteElement.addEventListener("click", minuteElement.select);
 
 			if (!self.config.time_24hr) {
-				am_pm.addEventListener("focus", () =>  am_pm.blur());
+				am_pm.addEventListener("focus", am_pm.blur);
 				am_pm.addEventListener("click", am_pm_toggle);
 
 				am_pm.addEventListener("wheel", am_pm_toggle);
@@ -667,13 +696,13 @@ flatpickr.init = function(element, instanceConfig) {
 			self.config.onOpen(self.selectedDateObj, self.input.value);
 	};
 
-	// For calendars inserted in BODY (as opposed to inline wrapper) 
+	// For calendars inserted in BODY (as opposed to inline wrapper)
 	// it's necessary to properly calculate top/left position.
 	self.positionCalendar = function() {
 
 		let bounds = self.input.getBoundingClientRect(),
 			// account for scroll & input height
-			top = (window.pageYOffset + self.input.offsetHeight + bounds.top);
+			top = (window.pageYOffset + self.input.offsetHeight + bounds.top),
 			left = (window.pageXOffset + bounds.left);
 
 		wrapperElement.style.top = top + 'px';
@@ -731,11 +760,11 @@ flatpickr.init = function(element, instanceConfig) {
 			parent.removeChild(calendarContainer);
 			parent.parentNode.replaceChild(element, parent);
 
-		} 
+		}
 
-		else 
+		else
 			document.getElementsByTagName("body")[0].removeChild(wrapperElement);
-		
+
 	};
 
 	self.redraw = function(){
@@ -783,7 +812,7 @@ flatpickr.init = function(element, instanceConfig) {
 
 		if(triggerChangeEvent||false)
 			triggerChange();
-		
+
 	 };
 
 	self.set = function(key, value){
@@ -826,6 +855,8 @@ flatpickr.init.prototype = {
 
 			// wrap: see https://chmln.github.io/flatpickr/#strap
 			wrap: false,
+
+			weekNumbers: false,
 
 			/* clicking on input opens the date(time)picker. disable if you wish to open the calendar manually with .open() */
 			clickOpens: true,
@@ -895,6 +926,19 @@ Date.prototype.fp_toUTC = function(){
 
 	return new_date;
 };
+
+Date.prototype.fp_getWeek = function() {
+
+	let date = new Date(this.getTime());
+	date.setHours(0,0,0,0);
+
+	// Thursday in current week decides the year.
+	date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
+	// January 4 is always in week 1.
+	var week1 = new Date(date.getFullYear(), 0, 4);
+	// Adjust to Thursday in week 1 and count number of weeks from date to week1.
+	return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
+}
 
 // classList polyfill
 if (!("classList" in document.documentElement) && Object.defineProperty && typeof HTMLElement !== 'undefined') {
