@@ -1,3 +1,4 @@
+## flatpickr - javascript datetime picker
 [![npm version](https://badge.fury.io/js/flatpickr.svg)](https://www.npmjs.com/package/flatpickr)
 ![Bower version](https://badge.fury.io/bo/flatpickr-calendar.svg)
 
