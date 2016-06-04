@@ -15,7 +15,8 @@
     "gulp-sass": "^2.3.1",
     "gulp-stylus": "^2.4.0",
     "gulp-uglify": "^1.5.3",
-    "jshint": "^2.9.2"
+    "jshint": "^2.9.2",
+    "stylus": "^0.54.5"
   },
   "main": "dist/flatpickr.min.js",
   "repository": {
