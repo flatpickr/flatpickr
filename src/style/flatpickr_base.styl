@@ -7,46 +7,49 @@ $width = 256px
 .flatpickr-wrapper
 	position absolute
 	display block
-	
+
 	&.inline
 		display block
 		position relative
-		
+
 		.flatpickr-calendar
 			position static
 
 	input
 		cursor pointer
 		z-index 1
-	
+
 	&.open, &.inline
 		 .flatpickr-calendar
-		 	
+
 			z-index 100
-			opacity 1
 			display block
 
 
 .flatpickr-calendar
-	
+
 	background $calendar_background
-	
+
 	unless $border-calendar-only is defined
 		border 1px solid $calendar_border_color
-		
+
 	font-size 90%
 	border-radius 4px
 	position absolute
 	top 100%
 	left 0
 	margin-top 3px
-	opacity 0
 	display none
-	transition opacity 200ms
-	width $width
+	min-width $width
+
+	&.hasWeeks
+		min-width $width + 32px
+		.flatpickr-weekdays span
+			padding 0 2.7%
 
 	&:before, &:after
 		position absolute
+		display block
 		pointer-events none
 		border solid transparent
 		content ''
@@ -113,14 +116,18 @@ $width = 256px
 	font-size 90%
 	background $weekdays_background
 	padding 2px 0 4px
+	text-align center
 
 	span
 		color $weekdays_color
 		text-align center
 		display inline-block
-		width 14.2857142857%
+		padding 0 3.11%
 		font-weight bold
 
+.flatpickr-weeks
+	width 32px
+	float left
 
 .flatpickr-days
 	padding-top 1px
@@ -172,14 +179,14 @@ $width = 256px
 
 	overflow auto
 	text-align center
-	
+
 	if $border-calendar-only is defined
 		border 1px solid $calendar_border_color
 		border-top 0
-		
+
 	else
 		border-top 1px solid $calendar_border_color
-	
+
 
 .flatpickr-hour, .flatpickr-minute
 	background transparent
