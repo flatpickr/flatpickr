@@ -80,7 +80,7 @@ flatpickr.init = function(element, instanceConfig) {
 		cur_month = document.createElement('span'),
 		nextMonthNav = document.createElement('span'),
 		calendar = document.createElement('div'),
-		currentDate,
+		currentDate = new Date(),
 		wrapperElement = document.createElement('div'),
 		hourElement,
 		minuteElement,
@@ -103,11 +103,10 @@ flatpickr.init = function(element, instanceConfig) {
 		for (var config in self.defaultConfig)
 			self.config[config] =
 				instanceConfig[config] ||
-				self.element.dataset&&self.element.dataset[config.toLowerCase()] ||
+				self.element.dataset && self.element.dataset[config.toLowerCase()] ||
 				self.element.getAttribute("data-"+config)||
 				self.defaultConfig[config];
 
-		currentDate = new Date();
 		self.input = (self.config.wrap) ? element.querySelector("[data-input]") : element;
 		self.input.classList.add("flatpickr-input");
 
@@ -126,12 +125,11 @@ flatpickr.init = function(element, instanceConfig) {
 
 		self.uDate = uDate;
 
-		// if(!self.config.noCalendar)
 		updateValue();
 	};
 
 	getRandomCalendarIdStr = function() {
-		var randNum, idStr;
+		let randNum, idStr;
 		do {
 			randNum = Math.round(Math.random()*Math.pow(10,10));
 			idStr   = 'flatpickr-'+randNum;
@@ -781,7 +779,8 @@ flatpickr.init = function(element, instanceConfig) {
 
 	};
 
-	init();
+	try { init(); }
+	catch(error) {} // skip and carry on
 
 	return self;
 };
