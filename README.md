@@ -24,6 +24,7 @@ IE9+, iOS Safari 6+, MS Edge, Chrome 8+, Firefox 6+
 
 ## Install & Use
 CDNJS: https://cdnjs.com/libraries/flatpickr
+
 Demos and documentation: https://chmln.github.io/flatpickr
 
 See also:
