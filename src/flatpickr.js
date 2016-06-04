@@ -109,6 +109,7 @@ flatpickr.init = function(element, instanceConfig) {
 
 		currentDate = new Date();
 		self.input = (self.config.wrap) ? element.querySelector("[data-input]") : element;
+		self.input.classList.add("flatpickr-input");
 
 		if(self.config.defaultDate)
 			self.config.defaultDate = uDate(self.config.defaultDate);
@@ -234,13 +235,13 @@ flatpickr.init = function(element, instanceConfig) {
 			prev_date = self.selectedDateObj.getTime();
 
 			// update time
-			var hour = parseInt(hourElement.value),
-				minute = (60+parseInt(minuteElement.value))%60;
+			var hour = parseInt(hourElement.value, 10),
+				minute = (60+parseInt(minuteElement.value, 10))%60;
 
 			if (!self.config.time_24hr)
 				hour = hour%12 + 12*(am_pm.innerHTML=== "PM");
 
-			self.selectedDateObj.setHours(hour , minute);
+			self.selectedDateObj.setHours(hour, minute);
 
 			hourElement.value =
 				pad(self.config.time_24hr ? hour : ((12 + hour)%12+12*(hour%12===0)));
@@ -334,7 +335,7 @@ flatpickr.init = function(element, instanceConfig) {
 	yearScroll = event => {
 		event.preventDefault();
 		let delta = Math.max(-1, Math.min(1, (event.wheelDelta || -event.deltaY)));
-		self.currentYear = event.target.innerHTML = parseInt(event.target.innerHTML,10) + delta;
+		self.currentYear = event.target.innerHTML = parseInt(event.target.innerHTML, 10) + delta;
 		self.redraw();
 
 	};
