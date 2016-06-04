@@ -670,10 +670,12 @@ flatpickr.init = function(element, instanceConfig) {
 	// For calendars inserted in BODY (as opposed to inline wrapper) 
 	// it's necessary to properly calculate top/left position.
 	self.positionCalendar = function() {
-		var bounds = self.input.getBoundingClientRect();
-		// account for scroll & input height
-		var top = (window.pageYOffset + self.input.offsetHeight + bounds.top);
-		var left = (window.pageXOffset + bounds.left);
+
+		let bounds = self.input.getBoundingClientRect(),
+			// account for scroll & input height
+			top = (window.pageYOffset + self.input.offsetHeight + bounds.top);
+			left = (window.pageXOffset + bounds.left);
+
 		wrapperElement.style.top = top + 'px';
 		wrapperElement.style.left = left + 'px';
 	};
@@ -718,17 +720,22 @@ flatpickr.init = function(element, instanceConfig) {
 	};
 
 	self.destroy = function() {
+
 		document.removeEventListener('click', documentClick, false);
 
 		if(self.config.inline) {
-			let parent  = self.element.parentNode;
-			let element = parent.removeChild(self.element);
+
+			let parent  = self.element.parentNode,
+				element = parent.removeChild(self.element);
+
 			parent.removeChild(calendarContainer);
 			parent.parentNode.replaceChild(element, parent);
-		} else {
-			var bodyElement = document.getElementsByTagName("BODY")[0];
-			bodyElement.removeChild(wrapperElement);
-		}
+
+		} 
+
+		else 
+			document.getElementsByTagName("body")[0].removeChild(wrapperElement);
+		
 	};
 
 	self.redraw = function(){
@@ -739,9 +746,11 @@ flatpickr.init = function(element, instanceConfig) {
 	};
 
 	self.jumpToDate = function(jumpDate){
+
 		jumpDate = uDate(
 			jumpDate||self.selectedDateObj||self.config.defaultDate||self.config.minDate||currentDate
 		);
+
 		self.currentYear = jumpDate.getFullYear();
 		self.currentMonth = jumpDate.getMonth();
 		self.redraw();
@@ -749,6 +758,11 @@ flatpickr.init = function(element, instanceConfig) {
 	};
 
 	self.setDate = function(date, triggerChangeEvent){
+
+		if(!( uDate(date) instanceof Date )){
+			console.error(`flatpickr: setDate() - invalid date: ${date}`);
+			return;
+		}
 
 		self.selectedDateObj = uDate(date);
 		self.jumpToDate(self.selectedDateObj);
@@ -760,14 +774,16 @@ flatpickr.init = function(element, instanceConfig) {
 	 };
 
 	 self.setTime = function(hour, minute, triggerChangeEvent) {
-		if(self.selectedDateObj){
 
-			self.selectedDateObj.setHours(hour, minute, 0, 0);
-			updateValue();
+		if(!self.selectedDateObj)
+			return;
 
-			if(triggerChangeEvent||false)
-				triggerChange();
-		}
+		self.selectedDateObj.setHours(hour, minute, 0, 0);
+		updateValue();
+
+		if(triggerChangeEvent||false)
+			triggerChange();
+		
 	 };
 
 	self.set = function(key, value){
