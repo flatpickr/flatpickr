@@ -14,4 +14,4 @@ theme_sel.addEventListener("change", function(e){
     theme_sel.blur();
 });
 
-document.getElementById("hero").className+= " hero"+(Math.floor(Math.random() *3)+1);
+document.getElementById("hero").className+= " hero"+(Math.floor(Math.random() *2)+1);
