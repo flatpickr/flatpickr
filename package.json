@@ -2,6 +2,9 @@
   "name": "flatpickr",
   "version": "1.8.4",
   "description": "A lightweight, powerful javascript datetime picker",
+  "scripts": {
+    "test": "start test/index.html"
+  },
   "dependencies": {},
   "devDependencies": {
     "babel-preset-es2015": "^6.9.0",
