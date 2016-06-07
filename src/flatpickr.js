@@ -222,12 +222,12 @@ flatpickr.init = function(element, instanceConfig) {
 
 		if (self.config.altInput){
 			// replicate self.element
-			self.altInput = document.createElement(self.input.nodeName);
+			self.altInput = createElement(self.input.nodeName, "flatpickr-input");
 			self.altInput.placeholder = self.input.placeholder;
 			self.altInput.type = self.input.type||"text";
 
 			self.input.type='hidden';
-			wrapperElement.appendChild(self.altInput);
+			self.input.parentNode.insertBefore(self.altInput, self.input.nextSibling);
 		}
 
 	};
@@ -393,10 +393,17 @@ flatpickr.init = function(element, instanceConfig) {
 
 	documentClick = function(event) {
 		if(
-			wrapperElement.classList.contains("open") &&
-			(!wrapperElement.contains(event.target) && event.target != self.element)
+			!(wrapperElement.classList.contains("open")) ||
+			wrapperElement.contains(event.target) ||
+			event.target === self.element ||
+			event.target === self.altInput
 		)
-			self.close();
+			return;
+		// if(
+		// 	 &&
+		// 	(!wrapperElement.contains(event.target) && event.target != self.element)
+		// )
+		self.close();
 	};
 
 	changeMonth = function(offset) {
@@ -681,6 +688,7 @@ flatpickr.init = function(element, instanceConfig) {
 		if (self.input.disabled || self.config.inline)
 			return;
 
+		self.positionCalendar();
 		self.input.blur();
 		self.input.classList.add('active');
 
@@ -690,7 +698,7 @@ flatpickr.init = function(element, instanceConfig) {
 		}
 
 		wrapperElement.classList.add('open');
-		self.positionCalendar();
+
 
 		if (self.config.onOpen)
 			self.config.onOpen(self.selectedDateObj, self.input.value);
@@ -700,9 +708,10 @@ flatpickr.init = function(element, instanceConfig) {
 	// it's necessary to properly calculate top/left position.
 	self.positionCalendar = function() {
 
-		let bounds = self.input.getBoundingClientRect(),
+		let input = self.altInput ? self.altInput : self.input,
+			bounds = input.getBoundingClientRect(),
 			// account for scroll & input height
-			top = (window.pageYOffset + self.input.offsetHeight + bounds.top),
+			top = (window.pageYOffset + input.offsetHeight + bounds.top),
 			left = (window.pageXOffset + bounds.left);
 
 		wrapperElement.style.top = top + 'px';
@@ -790,6 +799,7 @@ flatpickr.init = function(element, instanceConfig) {
 
 		if(!( uDate(date) instanceof Date )){
 			console.error(`flatpickr: setDate() - invalid date: ${date}`);
+			console.info(self.element);
 			return;
 		}
 
