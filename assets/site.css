@@ -113,35 +113,16 @@ a:hover {
     padding: 7.5vh 0;
     min-height: 210px;
     max-height: 420px;
-    color: white;
     width: 100%;
     margin-bottom: 1.4rem;
     text-align: center;
-}
-
-.hero1 {
-    background: #42afe3;
-    background: linear-gradient(141deg, #13bfdf 0%, #42afe3 71%, #53a1eb 100%);
-}
-
-.hero1 .btn:hover {
-    color: #42afe3;;
-}
-
-.hero2 {
-    color: #222;
+        color: #222;
     border-bottom: 1px solid #eee;
     background: #f5faff;
 }
 
-.hero2 .btn {
-    border-color: rgba(0, 0, 0, 0.15);
-    color: #444;
-}
 
-
-
-.hero2 .btn:hover {
+.hero .btn:hover {
     color: #636363;
     border-color: rgba(0, 0, 0, 0.35);
 }
@@ -237,9 +218,9 @@ input:focus, input.active
 }
 
 .btn {
-    border: 1px solid rgba(255, 255, 255, 0.67);
+    border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 3px;
-    color: rgba(255, 255, 255, 0.9);
+    color: #444;
     font-weight: 400;
     cursor: pointer;
     display: inline-block;
