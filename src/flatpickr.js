@@ -552,7 +552,7 @@ flatpickr.init = function(element, instanceConfig) {
 
 			className = date_is_disabled ? "disabled flatpickr-day" : "slot flatpickr-day";
 
-			if (!date_is_disabled && !self.selectedDateObj && equalDates(cur_date, currentDate))
+			if (!date_is_disabled && equalDates(cur_date, currentDate))
 				className += ' today';
 
 			if (!date_is_disabled && self.selectedDateObj && equalDates(cur_date, self.selectedDateObj))
