@@ -57,6 +57,17 @@ flatpickr.init = function(element, instanceConfig) {
 
 	};
 
+	function throttle (callback, limit) {
+		var wait = false;
+		return function () {
+			if (!wait) {
+				callback.call();
+				wait = true;
+				setTimeout(() => {wait = false}, limit);
+			}
+		}
+	}
+
 	// functions
 	var self = this,
 		init,
@@ -396,11 +407,9 @@ flatpickr.init = function(element, instanceConfig) {
 			event.target === self.altInput
 		)
 			return;
-		// if(
-		// 	 &&
-		// 	(!wrapperElement.contains(event.target) && event.target != self.element)
-		// )
+
 		self.close();
+
 	};
 
 	changeMonth = function(offset) {
@@ -697,6 +706,10 @@ flatpickr.init = function(element, instanceConfig) {
 				'cancelable': true
 			});
 
+		window.addEventListener('resize', throttle(() => {
+			wrapperElement.classList.contains('open') && (self.positionCalendar());
+		}, 150));
+
 	};
 
 	self.open = function() {
@@ -704,6 +717,9 @@ flatpickr.init = function(element, instanceConfig) {
 			return;
 
 		self.positionCalendar();
+
+		wrapperElement.classList.add('open');
+
 		self.input.blur();
 		self.input.classList.add('active');
 
@@ -712,7 +728,7 @@ flatpickr.init = function(element, instanceConfig) {
 			self.altInput.classList.add('active');
 		}
 
-		wrapperElement.classList.add('open');
+
 
 
 		if (self.config.onOpen)
