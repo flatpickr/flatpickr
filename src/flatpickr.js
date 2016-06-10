@@ -349,7 +349,7 @@ flatpickr.init = function(element, instanceConfig) {
 	yearScroll = event => {
 		event.preventDefault();
 		let delta = Math.max(-1, Math.min(1, (event.wheelDelta || -event.deltaY)));
-		self.currentYear = event.target.innerHTML = parseInt(event.target.innerHTML, 10) + delta;
+		self.currentYear = event.target.innerHTML = parseInt(event.target.value, 10) + delta;
 		self.redraw();
 
 	};
@@ -373,7 +373,7 @@ flatpickr.init = function(element, instanceConfig) {
 	updateNavigationCurrentMonth = function() {
 
 		cur_month.innerHTML = monthToStr(self.currentMonth) +" ";
-		cur_year.innerHTML = self.currentYear;
+		cur_year.value = self.currentYear;
 
 	};
 
@@ -467,7 +467,8 @@ flatpickr.init = function(element, instanceConfig) {
 
 		cur_month = createElement("span", "cur_month");
 
-		cur_year = createElement("span", "cur_year");
+		cur_year = createElement("input", "cur_year");
+		cur_year.type = "number";
 		cur_year.title = "Scroll to increment";
 
 		nextMonthNav = createElement("span", "flatpickr-next-month", self.config.nextArrow);
@@ -646,6 +647,14 @@ flatpickr.init = function(element, instanceConfig) {
 			nextMonthNav.addEventListener('click', () => { changeMonth(1); });
 
 			cur_year.addEventListener('wheel', yearScroll);
+			cur_year.addEventListener("focus", cur_year.select);
+			cur_year.addEventListener("change", event => {
+
+				cur_year.blur();
+				self.currentYear = event.target.value;
+				self.redraw();
+
+			});
 
 			calendar.addEventListener('click', calendarClick);
 
