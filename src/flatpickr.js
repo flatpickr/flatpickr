@@ -270,8 +270,12 @@ flatpickr.init = function(element, instanceConfig) {
 		if (self.altInput && self.selectedDateObj)
 			self.altInput.value = formatDate(self.config.altFormat);
 
-		if (self.selectedDateObj)
-			self.input.value = formatDate(self.config.dateFormat);
+		if (self.selectedDateObj){
+			if(self.config.enableRange && (self.input.value).length > 1 && (self.input.value).indexOf('~') < 0)
+				self.input.value = self.input.value +' ~ '+formatDate(self.config.dateFormat);
+			else
+				self.input.value = formatDate(self.config.dateFormat);
+		}
 
 		if(prev_date && self.selectedDateObj.getTime() !== prev_date){
 			triggerChange();
@@ -420,7 +424,6 @@ flatpickr.init = function(element, instanceConfig) {
 
 		if (e.target.classList.contains('slot'))
 		{
-
 			self.selectedDateObj = new Date(
 				self.currentYear, self.currentMonth, e.target.innerHTML
 			);
@@ -429,7 +432,10 @@ flatpickr.init = function(element, instanceConfig) {
 			triggerChange();
 			buildDays();
 
-			if (!self.config.inline && !self.config.enableTime)
+			if (!self.config.inline && !self.config.enableTime && !self.config.enableRange)
+				self.close();
+
+			if(self.config.enableRange && (self.input.value).indexOf("~")>1)
 				self.close();
 
 		}
@@ -917,7 +923,10 @@ flatpickr.init.prototype = {
 			onOpen: null, // function(dateObj, dateStr){}
 
 			// called every time calendar is opened
-			onClose: null // function(dateObj, dateStr){}
+			onClose: null, // function(dateObj, dateStr){},
+
+			// enable to pick the range of date
+			enableRange: false
 	}
 };
 
