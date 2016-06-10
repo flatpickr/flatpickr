@@ -93,17 +93,17 @@ flatpickr.init = function(element, instanceConfig) {
 		triggerChange;
 
 	// elements & variables
-	var calendarContainer = createElement('div', 'flatpickr-calendar'),
-		navigationCurrentMonth = createElement('span', 'flatpickr-current-month'),
-		monthsNav = document.createElement('div'),
-		prevMonthNav = document.createElement('span'),
-		cur_year = document.createElement('span'),
-		cur_month = document.createElement('span'),
-		nextMonthNav = document.createElement('span'),
-		calendar = createElement('div', "flatpickr-days"),
+	var calendarContainer,
+		navigationCurrentMonth,
+		monthsNav,
+		prevMonthNav,
+		cur_year,
+		cur_month,
+		nextMonthNav,
+		calendar,
 		weekNumbers,
 		currentDate = new Date(),
-		wrapperElement = document.createElement('div'),
+		wrapperElement,
 		hourElement,
 		minuteElement,
 		am_pm,
@@ -111,8 +111,6 @@ flatpickr.init = function(element, instanceConfig) {
 
 
 	init = function() {
-
-		calendarContainer.id = getRandomCalendarIdStr();
 
 		instanceConfig = instanceConfig || {};
 
@@ -136,14 +134,13 @@ flatpickr.init = function(element, instanceConfig) {
 			self.selectedDateObj = uDate(self.config.defaultDate||self.input.value);
 
 
-		self.jumpToDate();
-
 		wrap();
 		buildCalendar();
 		bind();
 
 		self.uDate = uDate;
 
+		self.jumpToDate();
 		updateValue();
 	};
 
@@ -205,7 +202,7 @@ flatpickr.init = function(element, instanceConfig) {
 
 	wrap = function() {
 
-		wrapperElement.className = 'flatpickr-wrapper';
+		wrapperElement = createElement("div", "flatpickr-wrapper");
 
 		if(self.config.inline) {
 			// Wrap input and place calendar underneath
@@ -438,6 +435,11 @@ flatpickr.init = function(element, instanceConfig) {
 
 	buildCalendar = function() {
 
+		calendarContainer = createElement('div', 'flatpickr-calendar');
+		calendarContainer.id = getRandomCalendarIdStr();
+
+		calendar = createElement("div", "flatpickr-days");
+
 		if (!self.config.noCalendar) {
 			buildMonthNavigation();
 			buildWeekdays();
@@ -459,18 +461,18 @@ flatpickr.init = function(element, instanceConfig) {
 
 	buildMonthNavigation = function() {
 
-		monthsNav.className = 'flatpickr-month';
+		monthsNav = createElement("div", "flatpickr-month");
 
-		prevMonthNav.className = "flatpickr-prev-month";
-		prevMonthNav.innerHTML = self.config.prevArrow;
+		prevMonthNav = createElement("span", "flatpickr-prev-month", self.config.prevArrow);
 
-		nextMonthNav.className = "flatpickr-next-month";
-		nextMonthNav.innerHTML = self.config.nextArrow;
+		cur_month = createElement("span", "cur_month");
 
-		cur_month.className = "cur_month";
-		cur_year.className = "cur_year";
+		cur_year = createElement("span", "cur_year");
 		cur_year.title = "Scroll to increment";
 
+		nextMonthNav = createElement("span", "flatpickr-next-month", self.config.nextArrow);
+
+		navigationCurrentMonth = createElement('span', 'flatpickr-current-month');
 		navigationCurrentMonth.appendChild(cur_month);
 		navigationCurrentMonth.appendChild(cur_year);
 
@@ -638,13 +640,17 @@ flatpickr.init = function(element, instanceConfig) {
 		if (self.config.wrap && self.element.querySelector("[data-clear]"))
 			self.element.querySelector("[data-clear]").addEventListener('click' , self.clear);
 
+		if(!self.config.noCalendar){
 
-		prevMonthNav.addEventListener('click', () => { changeMonth(-1); });
-		nextMonthNav.addEventListener('click', () => { changeMonth(1); });
+			prevMonthNav.addEventListener('click', () => { changeMonth(-1); });
+			nextMonthNav.addEventListener('click', () => { changeMonth(1); });
 
-		cur_year.addEventListener('wheel', yearScroll);
+			cur_year.addEventListener('wheel', yearScroll);
 
-		calendar.addEventListener('click', calendarClick);
+			calendar.addEventListener('click', calendarClick);
+
+		}
+
 		document.addEventListener('click', documentClick, true);
 
 		if (self.config.enableTime){
@@ -778,6 +784,9 @@ flatpickr.init = function(element, instanceConfig) {
 
 	self.redraw = function(){
 
+		if(self.config.noCalendar)
+			return;
+
 		updateNavigationCurrentMonth();
 		buildDays();
 
@@ -835,7 +844,7 @@ flatpickr.init = function(element, instanceConfig) {
 	};
 
 	try { init(); }
-	catch(error) {} // skip and carry on
+	catch(error) {console.error(error);console.info(self.element);} // skip and carry on
 
 	return self;
 };
