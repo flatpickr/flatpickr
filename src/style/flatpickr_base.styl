@@ -22,7 +22,7 @@ $width = 256px
 	&.open, &.inline
 		 .flatpickr-calendar
 
-			z-index 100
+			z-index 99999
 			display block
 
 
@@ -197,7 +197,7 @@ $width = 256px
 		border-top 1px solid $calendar_border_color
 
 
-.flatpickr-hour, .flatpickr-minute
+.flatpickr-hour[type='number'], .flatpickr-minute[type='number']
 	background transparent
 	-webkit-appearance none
 	-moz-appearance textfield
