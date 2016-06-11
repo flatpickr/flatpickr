@@ -63,9 +63,9 @@ flatpickr.init = function(element, instanceConfig) {
 			if (!wait) {
 				callback.call();
 				wait = true;
-				setTimeout(() => {wait = false}, limit);
+				setTimeout(() => {wait = false;}, limit);
 			}
-		}
+		};
 	}
 
 	// functions
@@ -359,8 +359,9 @@ flatpickr.init = function(element, instanceConfig) {
 
 	yearScroll = event => {
 		event.preventDefault();
+
 		let delta = Math.max(-1, Math.min(1, (event.wheelDelta || -event.deltaY)));
-		self.currentYear = event.target.innerHTML = parseInt(event.target.value, 10) + delta;
+		self.currentYear = event.target.value = parseInt(event.target.value, 10) + delta;
 		self.redraw();
 
 	};
@@ -660,7 +661,7 @@ flatpickr.init = function(element, instanceConfig) {
 			cur_year.addEventListener("change", event => {
 
 				cur_year.blur();
-				self.currentYear = event.target.value;
+				self.currentYear = parseInt(event.target.value, 10);
 				self.redraw();
 
 			});
@@ -706,13 +707,18 @@ flatpickr.init = function(element, instanceConfig) {
 				'cancelable': true
 			});
 
+
 		window.addEventListener('resize', throttle(() => {
-			wrapperElement.classList.contains('open') && (self.positionCalendar());
+
+			if( wrapperElement.classList.contains('open') )
+				self.positionCalendar();
+
 		}, 150));
 
 	};
 
 	self.open = function() {
+
 		if (self.input.disabled || self.config.inline)
 			return;
 
@@ -720,15 +726,15 @@ flatpickr.init = function(element, instanceConfig) {
 
 		wrapperElement.classList.add('open');
 
-		self.input.blur();
-		self.input.classList.add('active');
-
 		if(self.altInput){
 			self.altInput.blur();
 			self.altInput.classList.add('active');
 		}
 
-
+		else {
+			self.input.blur();
+			self.input.classList.add('active');
+		}
 
 
 		if (self.config.onOpen)
