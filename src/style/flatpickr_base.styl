@@ -34,7 +34,7 @@ $width = 256px
 		border 1px solid $calendar_border_color
 
 	font-size 90%
-	border-radius 4px
+	border-radius 3px
 	position absolute
 	top 100%
 	left 0
@@ -66,11 +66,16 @@ $width = 256px
 	&:after
 		border-width 4px
 		margin 0 -4px
-		border-bottom-color $calendar_background
+		if $border-calendar-only is defined
+			border-bottom-color $months_background
+		else
+			border-bottom-color $calendar_background
 
 
 
 .flatpickr-month
+	if $border-calendar-only is defined
+		border-radius 3px 3px 0 0
 	background $months_background
 	color $months_color
 	padding 4px 5px 2px 5px
@@ -128,7 +133,9 @@ $width = 256px
 	text-align center
 
 	span
-		color inherit
+		if $weekdays_color is defined
+			color $weekdays_color
+
 		opacity 0.54
 		text-align center
 		display inline-block
@@ -144,6 +151,7 @@ $width = 256px
 	if $border-calendar-only is defined
 		border 1px solid $calendar_border_color
 		border-top 0
+		border-radius 0 0 3px 3px
 
 
 .flatpickr-day
@@ -174,7 +182,12 @@ $width = 256px
 
 	&.selected, &.selected:hover
 		background $selected_day_background
-		color white
+
+		if $selected_day_color is defined
+			color $selected_day_color
+		else
+			color white
+
 		border-color $selected_day_background
 
 
