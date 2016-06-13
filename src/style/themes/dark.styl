@@ -1,18 +1,17 @@
-$calendar_background = #2a2a3e
-$calendar_border_color = #444
+$calendar_background = #323A45
+$calendar_border_color = darken($calendar_background, 10%)
 
 $months_color = #fff
 $months_background = transparent
 
 $weekdays_background = transparent
-$weekdays_color = #999
+$weekdays_color = #fff
 
-$day_text_color = #d3d3d3
-$day_hover_background_color = lighten($calendar_background, 10%)
+$day_text_color = alpha(white, 0.9)
+$day_hover_background_color = lighten($calendar_background, 17.5%)
 
-$today_color = #81abe0
+$today_color = #FF6B66
 
-$selected_day_background = #E26A6A
-$selected_day_color = #fff
+$selected_day_background =  #FF6B66
 
 @require "../flatpickr_base"
