@@ -857,7 +857,12 @@ flatpickr.init = function(element, instanceConfig) {
 		if(!self.selectedDateObj)
 			return;
 
-		self.selectedDateObj.setHours(hour, minute, 0, 0);
+		hourElement.value = parseInt(hour,10)%24;
+		minuteElement.value = parseInt(minute||0,10)%60;
+
+		if (!self.config.time_24hr)
+			am_pm.innerHTML = hour > 11 ? "PM" : "AM";
+
 		updateValue();
 
 		if(triggerChangeEvent||false)
