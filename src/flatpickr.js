@@ -804,7 +804,7 @@ flatpickr.init = function(element, instanceConfig) {
 		document.removeEventListener('click', documentClick, false);
 
 		if(self.altInput)
-			self.altInput.parentNoderemoveChild(self.altInput);
+			self.altInput.parentNode.removeChild(self.altInput);
 
 		if(self.config.inline) {
 
