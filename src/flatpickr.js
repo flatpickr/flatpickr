@@ -215,11 +215,12 @@ flatpickr.init = function(element, instanceConfig) {
 
 		wrapperElement = createElement("div", "flatpickr-wrapper");
 
-		if(self.config.inline) {
+		if(self.config.inline || self.config.static) {
 			// Wrap input and place calendar underneath
 			self.element.parentNode.insertBefore(wrapperElement, self.element);
 			wrapperElement.appendChild(self.element);
-			wrapperElement.classList.add('inline');
+
+			wrapperElement.classList.add(self.config.inline ? 'inline' : 'static');
 		}
 		else
 			// Insert at bottom of BODY tag to display outside
@@ -230,9 +231,9 @@ flatpickr.init = function(element, instanceConfig) {
 
 		if (self.config.altInput){
 			// replicate self.element
-			self.altInput = createElement(self.input.nodeName, "flatpickr-input");
+			self.altInput = createElement(self.input.nodeName, self.config.altInputClass + " flatpickr-input");
 			self.altInput.placeholder = self.input.placeholder;
-			self.altInput.type = self.input.type||"text";
+			self.altInput.type = "text";
 
 			self.input.type='hidden';
 			self.input.parentNode.insertBefore(self.altInput, self.input.nextSibling);
@@ -710,7 +711,10 @@ flatpickr.init = function(element, instanceConfig) {
 
 		window.addEventListener('resize', throttle(() => {
 
-			if( wrapperElement.classList.contains('open') )
+			if (self.input.disabled || self.config.inline || self.config.static)
+				return;
+
+			else if( wrapperElement.classList.contains('open') )
 				self.positionCalendar();
 
 		}, 150));
@@ -722,7 +726,8 @@ flatpickr.init = function(element, instanceConfig) {
 		if (self.input.disabled || self.config.inline)
 			return;
 
-		self.positionCalendar();
+		if(!self.config.static)
+			self.positionCalendar();
 
 		wrapperElement.classList.add('open');
 
@@ -797,6 +802,9 @@ flatpickr.init = function(element, instanceConfig) {
 	self.destroy = function() {
 
 		document.removeEventListener('click', documentClick, false);
+
+		if(self.altInput)
+			self.altInput.parentNoderemoveChild(self.altInput);
 
 		if(self.config.inline) {
 
@@ -922,7 +930,12 @@ flatpickr.init.prototype = {
 
 			// altInput - see https://chmln.github.io/flatpickr/#altinput
 			altInput: false,
-			altFormat: "F j, Y",
+
+			// the created altInput element will have this class.
+			altInputClass: "",
+
+			// same as dateFormat, but for altInput
+			altFormat: "F j, Y", // defaults to e.g. June 10, 2016
 
 			// defaultDate - either a datestring or a date object. used for datetimepicker's initial value
 			defaultDate: null,
@@ -935,8 +948,16 @@ flatpickr.init.prototype = {
 
 			// see https://chmln.github.io/flatpickr/#disable
 			disable: [],
+
+			// display the short version of month names - e.g. Sep instead of September
 			shorthandCurrentMonth: false,
+
+			// displays calendar inline. see https://chmln.github.io/flatpickr/#inline-calendar
 			inline: false,
+
+			// position calendar inside wrapper and next to the input element
+			// leave at false unless you know what you're doing
+			static: false,
 
 			// code for previous/next icons. this is where you put your custom icon code e.g. fontawesome
 			prevArrow: '&lt;',
@@ -944,24 +965,26 @@ flatpickr.init.prototype = {
 
 			// enables the time picker functionality
 			enableTime: false,
+
+			// self-explanatory. defaults to e.g. 3:02 PM
 			timeFormat: "h:i K",
 
 			// display time picker in 24 hour mode
 			time_24hr: false,
 
-			// step size used when scrolling/incrementing on the hour element
+			// step size used when scrolling/incrementing the hour element
 			hourIncrement: 1,
 
-			// step size used when scrolling/incrementing on the minute element
+			// step size used when scrolling/incrementing the minute element
 			minuteIncrement: 5,
 
-			// onChange callback when user selects/changes selected date or time
+			// onChange callback when user selects a date or time
 			onChange: null, //function(dateObj, dateStr){}
 
 			// called every time calendar is opened
 			onOpen: null, // function(dateObj, dateStr){}
 
-			// called every time calendar is opened
+			// called every time calendar is closed
 			onClose: null // function(dateObj, dateStr){}
 	}
 };

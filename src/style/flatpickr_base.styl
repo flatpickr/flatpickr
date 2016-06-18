@@ -8,12 +8,15 @@ $width = 256px
 	position absolute
 	display block
 
-	&.inline
+	&.inline, &.static
 		display block
 		position relative
 
-		.flatpickr-calendar
-			position relative
+	&.inline .flatpickr-calendar
+		position relative
+
+	&.static flatpickr-calendar
+		position absolute
 
 	input
 		cursor pointer
