@@ -280,9 +280,30 @@ flatpickr('#yourSelector', { dateFormat: 'm/d/Y'});
 				<input class=flatpickr data-defaultDate="2016-03-01 03:30:00 -0300"  data-enableTime="true">
 			</p>
 		</div>
+
+
+
+		<div class="example_wrapper" data-desc="Timezones & UTC" id="utc">
+
+			<h3>UTC mode</h3>
+
+			 <p>
+			By defaults, JavaScript's Date converts all dates to a local time. However, locale-agnostic databases often store dates in UTC. flatpickr can convert any given dates to UTC and select a datetime in UTC with a simple switch. Here's the previous example with UTC mode enabled.
+			</p>
+			<pre class='prettyprint lang-html'>
+&lt;input class=flatpickr data-utc="true" data-defaultDate="2016-03-01 03:30:00 -0300"  data-enableTime="true"&gt;
+</pre>
+
+
+			<p>
+				<input class=flatpickr data-utc="true" data-defaultDate="2016-03-01 03:30:00 -0300"  data-enableTime="true">
+			</p>
+		</div>
+
+
+
 		<div class="example_wrapper" data-desc="Disabling dates" id="disable">
-			<h3>Disable date intervals</h3>
-			<p>With <code><a href=#options>disable</a></code> option</p>
+			<h3>Disable specific dates or date intervals</h3>
 
 			<pre class='prettyprint lang-js'>
 flatpickr('#disableRange', {
