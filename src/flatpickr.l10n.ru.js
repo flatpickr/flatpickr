@@ -1,3 +1,5 @@
+/* Russian locals for flatpickr */
+
 flatpickr.init.prototype.l10n.weekdays = {
 	shorthand: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
 	longhand: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']
