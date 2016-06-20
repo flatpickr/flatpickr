@@ -1,3 +1,5 @@
+/* French locals for flatpickr */
+
 flatpickr.init.prototype.l10n.weekdays = {
 	shorthand: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
 	longhand: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']

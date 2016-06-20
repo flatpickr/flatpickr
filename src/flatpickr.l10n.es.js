@@ -1,3 +1,5 @@
+/* Spanish locals for flatpickr */
+
 flatpickr.init.prototype.l10n.weekdays = {
 	shorthand: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
 	longhand: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
