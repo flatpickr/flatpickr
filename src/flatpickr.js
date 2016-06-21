@@ -177,7 +177,10 @@ flatpickr.init = function(element, instanceConfig) {
 
 			date = date.trim();
 
-			if (/^\d\d\d\d\-\d\d\-\d\d/.test(date)) // disable special utc datestring
+			if (self.config.parseDate)
+				date = self.config.parseDate(date);
+
+			else if (/^\d\d\d\d\-\d\d\-\d\d/.test(date)) // disable special utc datestring
 				date = new Date(date.replace(/(\d)-(\d)/g, "$1/$2") );
 
 			else if (/^(\d?\d):(\d\d)/.test(date)){ // time-only picker
@@ -945,6 +948,9 @@ flatpickr.init.prototype = {
 
 			// the maximum date that user can pick (inclusive)
 			maxDate: null,
+
+			// dateparser that transforms a given string to a date object
+			parseDate: false,
 
 			// see https://chmln.github.io/flatpickr/#disable
 			disable: [],
