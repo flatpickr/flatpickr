@@ -306,7 +306,7 @@ flatpickr.init = function(element, instanceConfig) {
 				K: () => self.selectedDateObj.getHours() > 11 ? "PM" : "AM",
 				M: () => monthToStr(formats.n() - 1, true),
 				U: () => self.selectedDateObj.getTime() / 1000,
-				S: () => new Number(self.selectedDateObj.getDate()).nth(),
+				S: () => self.l10n.ordinal(formats.j()),
 				Y: () => self.selectedDateObj.getFullYear(),
 				d: () => pad(formats.j()),
 				h: () => self.selectedDateObj.getHours()%12 ? self.selectedDateObj.getHours()%12 : 12,
@@ -906,7 +906,17 @@ flatpickr.init.prototype = {
 			longhand: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 		},
 		daysInMonth: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
-		firstDayOfWeek: 0
+		firstDayOfWeek: 0,
+		ordinal: (nth) => {
+			let s = nth % 100;
+			if (s > 3 && s < 21) return "th";
+			switch (s % 10) {
+				case 1: return "st";
+				case 2: return "nd";
+				case 3: return "rd";
+				default: return "th";
+			}
+		}
 	},
 
 	defaultConfig : {
@@ -1005,18 +1015,6 @@ Date.prototype.fp_toUTC = function(){
 	new_date.fp_isUTC = true;
 
 	return new_date;
-};
-
-Number.prototype.nth = function() {
-	if (this % 1) return this;
-	let s = this % 100;
-	if (s > 3 && s < 21) return "th";
-	switch (s % 10) {
-		case 1: return "st";
-		case 2: return "nd";
-		case 3: return "rd";
-		default: return "th";
-	}
 };
 
 Date.prototype.fp_getWeek = function() {
