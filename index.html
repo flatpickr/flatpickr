@@ -248,16 +248,16 @@ flatpickr('#yourSelector', { dateFormat: 'm/d/Y'});
 			<input class=flatpickr data-enabletime=true data-nocalendar=true placeholder="Pick time"  value="09:00 PM">
 		</div>
 
-		<div class="example_wrapper" data-desc="User-Friendly date output" id="altinput">
+		<div class="example_wrapper" data-desc="User-Friendly date output" id="altformat">
 			<h3>Human-friendly Date Output</h3>
 
-			<p>altInput can be used for displaying a friendly date format (per <code>altFormat</code>) to the user while sending the date formatted as <code>dateFormat</code> to the server. Feel free to inspect the input element below after picking a date to see what's going on. </p>
+			<p>altFormat can be used for displaying a friendly date format to the user while sending the date formatted as <code>dateFormat</code> to the server. Feel free to inspect the input element below after picking a date to see what's going on. </p>
 
 			<pre class='prettyprint lang-html'>
-&lt;input class=flatpickr data-altinput=true data-altFormat="F j, Y"&gt;
+&lt;input class=flatpickr data-altFormat="F j, Y"&gt;
 </pre>
 			<p>
-				<input class=flatpickr id="alt" data-altinput=true data-altFormat="F j, Y" placeholder="The real input is hidden :^)">
+				<input class=flatpickr id="alt" data-altFormat="F j, Y" placeholder="The real input is hidden :^)">
 			</p>
 
 			<p><strong>Selected date</strong>: <span id=realdate>nothing yet</span></p>
@@ -494,17 +494,10 @@ flatpickr(".flatpickr")
 				</tr>
 
 				<tr>
-					<td>altInput</td>
-					<td>Boolean</td>
-					<td>false</td>
-					<td>Show the user a readable date (as per altFormat), but return something totally different to the server. </td>
-				</tr>
-
-				<tr>
 					<td>altFormat</td>
 					<td>string</td>
-					<td>"F j, Y"</td>
-					<td>Exactly the same as date format, but for the altInput field</td>
+					<td>false</td>
+					<td>Show the user a readable date, but return something totally different to the server.</td>
 				</tr>
 
 				<tr>
