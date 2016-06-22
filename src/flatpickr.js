@@ -232,7 +232,7 @@ flatpickr.init = function(element, instanceConfig) {
 			document.body.appendChild(wrapperElement);
 
 
-		if (self.config.altInput){
+		if (self.config.altFormat){
 			// replicate self.element
 			self.altInput = createElement(self.input.nodeName, self.config.altInputClass + " flatpickr-input");
 			self.altInput.placeholder = self.input.placeholder;
@@ -931,14 +931,11 @@ flatpickr.init.prototype = {
 			// more date format chars at https://chmln.github.io/flatpickr/#dateformat
 			dateFormat: 'Y-m-d',
 
-			// altInput - see https://chmln.github.io/flatpickr/#altinput
-			altInput: false,
-
 			// the created altInput element will have this class.
 			altInputClass: "",
 
 			// same as dateFormat, but for altInput
-			altFormat: "F j, Y", // defaults to e.g. June 10, 2016
+			altFormat: false,
 
 			// defaultDate - either a datestring or a date object. used for datetimepicker's initial value
 			defaultDate: null,
