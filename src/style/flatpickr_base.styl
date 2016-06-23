@@ -214,35 +214,44 @@ $width = 256px
 		border-top 1px solid $calendar_border_color
 
 
-.flatpickr-hour[type='number'], .flatpickr-minute[type='number']
-	background transparent
-	-webkit-appearance none
-	-moz-appearance textfield
-	box-shadow none
-	border 0
-	border-radius 0
-	display inline-block
-	width 33%
-	min-width 33%
-	text-align center
-	margin 0
-	padding 0
-	height 38px
-	line-height 38px
-	cursor pointer
-	font-weight bold
-	color $day_text_color
-
-	&:focus
-		outline 0
+	input[type='number']
+		background transparent
+		-webkit-appearance none
+		-moz-appearance textfield
+		box-shadow none
 		border 0
+		border-radius 0
+		display inline-block
+		width 33%
+		min-width 33%
+		text-align center
+		margin 0
+		padding 0
+		height 38px
+		line-height 38px
+		cursor pointer
+		font-weight bold
+		color $day_text_color
 
-	&:hover
-		background lighten($day_hover_background_color, 4)
+		&.flatpickr-minute
+			width 26%
+			font-weight 300
 
-.flatpickr-minute
-	width 26%
-	font-weight 300
+		&.flatpickr-second
+			font-weight 300
+
+		&:focus
+			outline 0
+			border 0
+
+		&:hover
+			background lighten($day_hover_background_color, 4)
+
+	&.has-seconds
+		input[type='number']
+			width 25%
+			min-width 25%
+
 
 
 .flatpickr-time-separator, .flatpickr-am-pm
@@ -250,7 +259,7 @@ $width = 256px
 	display inline-block
 	line-height 38px
 	color $day_text_color
-	
+
 .flatpickr-am-pm
 	width 21%
 	padding 0 2%
