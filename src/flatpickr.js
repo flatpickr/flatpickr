@@ -676,6 +676,7 @@ flatpickr.init = function(element, instanceConfig) {
 		}
 
 		document.addEventListener('click', documentClick, true);
+		document.addEventListener('focus', documentClick, true);
 
 		if (self.config.enableTime){
 
@@ -700,11 +701,13 @@ flatpickr.init = function(element, instanceConfig) {
 			}
 
 		}
+
 		if(document.createEvent){
 			clickEvt = document.createEvent("MouseEvent");
 			// without all these args ms edge spergs out
 			clickEvt.initMouseEvent("click",true,true,window,0,0,0,0,0,false,false,false,false,0,null);
 		}
+
 		else
 			clickEvt = new MouseEvent('click', {
 				'view': window,
@@ -715,10 +718,7 @@ flatpickr.init = function(element, instanceConfig) {
 
 		window.addEventListener('resize', throttle(() => {
 
-			if (self.input.disabled || self.config.inline || self.config.static)
-				return;
-
-			else if( wrapperElement.classList.contains('open') )
+			if (wrapperElement.classList.contains('open') && !self.input.disabled && !self.config.inline && !self.config.static )
 				self.positionCalendar();
 
 		}, 150));
