@@ -168,7 +168,7 @@ input {
 
 }
 
-.input-group [data-input]{
+.input-group input {
     float: left;
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;
@@ -180,6 +180,7 @@ input {
     font-size: 1rem;
     font-weight: 400;
     line-height: 40px;
+    height: 40px;
     text-align: center;
     white-space: nowrap;
     vertical-align: middle;

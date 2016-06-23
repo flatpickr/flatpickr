@@ -21,8 +21,7 @@ time, mark, audio, video {
 }
 
 html, div, article, section, main, footer, header, form, fieldset, pre, code, p,
-input[type="text"], input[type="tel"], input[type="email"], input[type="url"],
-input[type="password"] { box-sizing: border-box; }
+input { box-sizing: border-box; }
 
 a:active,
 a:hover {
