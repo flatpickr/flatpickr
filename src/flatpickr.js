@@ -117,6 +117,7 @@ flatpickr.init = function(element, instanceConfig) {
 		wrapperElement,
 		hourElement,
 		minuteElement,
+		secondElement,
 		am_pm,
 		clickEvt;
 
@@ -264,18 +265,25 @@ flatpickr.init = function(element, instanceConfig) {
 			prev_date = self.selectedDateObj.getTime();
 
 			// update time
-			var hour = parseInt(hourElement.value, 10),
-				minute = (60+parseInt(minuteElement.value, 10))%60;
+			var hours = parseInt(hourElement.value, 10),
+				minutes = (60+parseInt(minuteElement.value, 10))%60,
+				seconds;
+
+			if(self.config.enableSeconds)
+				seconds = (60+parseInt(secondElement.value, 10))%60;
 
 			if (!self.config.time_24hr)
-				hour = hour%12 + 12*(am_pm.innerHTML=== "PM");
+				hours = hours%12 + 12*(am_pm.innerHTML=== "PM");
 
-			self.selectedDateObj.setHours(hour, minute);
+			self.selectedDateObj.setHours(hours, minutes, seconds||self.selectedDateObj.getSeconds());
 
 			hourElement.value =
-				pad(self.config.time_24hr ? hour : ((12 + hour)%12+12*(hour%12===0)));
+				pad(self.config.time_24hr ? hours : ((12 + hours)%12+12*(hours%12===0)));
 
-			minuteElement.value = pad(minute);
+			minuteElement.value = pad(minutes);
+
+			if(seconds)
+				secondElement.value = pad(seconds);
 
 		}
 
@@ -309,6 +317,7 @@ flatpickr.init = function(element, instanceConfig) {
 				J: () => formats.j() + self.l10n.ordinal(formats.j()), // day (1-30) with ordinal suffix e.g. 1st, 2nd
 				K: () => self.selectedDateObj.getHours() > 11 ? "PM" : "AM", // AM/PM
 				M: () => monthToStr(formats.n() - 1, true), // shorthand month e.g. Jan
+				S: () => pad( self.selectedDateObj.getSeconds() ), // seconds 00-59
 				U: () => self.selectedDateObj.getTime() / 1000,
 				Y: () => self.selectedDateObj.getFullYear(), // 2016
 				d: () => pad(formats.j()), // day in month, padded (01-30)
@@ -318,6 +327,7 @@ flatpickr.init = function(element, instanceConfig) {
 				l: () => self.l10n.weekdays.longhand[ formats.w() ], // weekday name, full, e.g. Thursday
 				m: () => pad(formats.n()), // padded month number (01-12)
 				n: () => self.selectedDateObj.getMonth() + 1, // the month number (1-12)
+				s: () => self.selectedDateObj.getSeconds(), // seconds 0-59
 				w: () => self.selectedDateObj.getDay(), // number of the day of the week
 				y: () => String(formats.Y()).substring(2) // last two digits of full year e.g. 16 for full year 2016
 			},
@@ -374,10 +384,10 @@ flatpickr.init = function(element, instanceConfig) {
 	timeWrapper = function(e){
 		e.preventDefault();
 
-		let min = parseInt(e.target.min), max = parseInt(e.target.max),
-			step = parseInt(e.target.step),
+		let min = parseInt(e.target.min, 10), max = parseInt(e.target.max, 10),
+			step = parseInt(e.target.step, 10),
 			delta = step * (Math.max(-1, Math.min(1, (e.wheelDelta || -e.deltaY)))),
-			newValue = (parseInt(e.target.value) + delta)%(max+(min===0));
+			newValue = (parseInt(e.target.value, 10) + delta)%(max+(min===0));
 
 		if (newValue < min)
 			newValue = max + (min === 0) - step*(min === 0);
@@ -616,6 +626,22 @@ flatpickr.init = function(element, instanceConfig) {
 		timeContainer.appendChild(separator);
 		timeContainer.appendChild(minuteElement);
 
+		if(self.config.enableSeconds){
+
+			timeContainer.classList.add("has-seconds");
+
+			secondElement = createElement("input", "flatpickr-second");
+			secondElement.type = "number";
+			secondElement.value = self.selectedDateObj ? pad(self.selectedDateObj.getSeconds()) : "00";
+
+			secondElement.step = 5;
+			secondElement.min = 0;
+			secondElement.max = 59;
+
+			timeContainer.appendChild(createElement("span", "flatpickr-time-separator", ":"));
+			timeContainer.appendChild(secondElement);
+		}
+
 		if (!self.config.time_24hr){ // add am_pm if appropriate
 			am_pm = createElement("span", "flatpickr-am-pm", ["AM","PM"][(hourElement.value > 11)|0]);
 			am_pm.title="Click to toggle";
@@ -691,6 +717,13 @@ flatpickr.init = function(element, instanceConfig) {
 
 			hourElement.addEventListener("click", hourElement.select);
 			minuteElement.addEventListener("click", minuteElement.select);
+
+			if(self.config.enableSeconds){
+				secondElement.addEventListener("wheel", timeWrapper);
+				secondElement.addEventListener("mouseout", updateValue);
+				secondElement.addEventListener("change", updateValue);
+				secondElement.addEventListener("click", secondElement.select);
+			}
 
 			if (!self.config.time_24hr) {
 				am_pm.addEventListener("focus", am_pm.blur);
@@ -982,6 +1015,9 @@ flatpickr.init.prototype = {
 
 			// enables the time picker functionality
 			enableTime: false,
+
+			// enables seconds in the time picker
+			enableSeconds: false,
 
 			// self-explanatory. defaults to e.g. 3:02 PM
 			timeFormat: "h:i K",
