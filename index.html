@@ -224,19 +224,35 @@ flatpickr('#yourSelector', { dateFormat: 'm/d/Y'});
 
 
 		<div class="example_wrapper" data-desc="Datetimepicker" id="datetimepicker">
+
 			<h3>DateTime Picker</h3>
 			<pre class='prettyprint lang-html'>
 &lt;input class=flatpickr data-enabletime=true&gt;
 </pre>
+
 		<p>
 			<input class=flatpickr data-enabletime=true placeholder="Pick date and time">
 		</p>
+		<br>
+
 			<h3>DateTime Picker: 24 Hour Mode</h3>
 			<pre class='prettyprint lang-html'>
 &lt;input class=flatpickr data-enabletime=true data-time_24hr=true data-timeFormat="H:i"&gt;
 </pre>
 
+		<p>
 			<input class=flatpickr data-enabletime=true data-time_24hr=true data-timeFormat="H:i" placeholder="24 hour time">
+		</p>
+		<br>
+
+			<h3>DateTime Picker with seconds</h3>
+						<pre class='prettyprint lang-html'>
+&lt;input class=flatpickr data-enabletime=true data-enableseconds=true data-timeFormat="h:i:S"&gt;
+</pre>
+		<p>
+			<input class=flatpickr data-enabletime=true data-enableseconds=true data-timeFormat="h:i:S" placeholder="Pick date and time">
+		</p>
+
 		</div>
 
 		<div class="example_wrapper" data-desc="Time Picker" id="timepicker">
