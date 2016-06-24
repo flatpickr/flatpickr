@@ -181,6 +181,9 @@ flatpickr.init = function(element, instanceConfig) {
 			if (self.config.parseDate)
 				date = self.config.parseDate(date);
 
+			else if (Date.parse(date))
+				date = new Date(date);
+
 			else if (/^\d\d\d\d\-\d\d\-\d\d/.test(date)) // disable special utc datestring
 				date = new Date(date.replace(/(\d)-(\d)/g, "$1/$2") );
 
@@ -190,9 +193,6 @@ flatpickr.init = function(element, instanceConfig) {
 				date = new Date();
 				date.setHours(matches[1], matches[2], 0, 0);
 			}
-
-			else if (Date.parse(date))
-				date = new Date(date);
 
 			else {
 				console.error(`flatpickr: invalid date string ${date}`);
@@ -1041,6 +1041,7 @@ flatpickr.init.prototype = {
 			onClose: null // function(dateObj, dateStr){}
 	}
 };
+
 
 Date.prototype.fp_incr = function(days){
 	return new Date(
