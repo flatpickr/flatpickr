@@ -689,7 +689,7 @@ flatpickr.init = function(element, instanceConfig) {
 
 			cur_year.addEventListener('wheel', yearScroll);
 			cur_year.addEventListener("focus", cur_year.select);
-			cur_year.addEventListener("change", event => {
+			cur_year.addEventListener("input", event => {
 
 				cur_year.blur();
 				self.currentYear = parseInt(event.target.value, 10);
