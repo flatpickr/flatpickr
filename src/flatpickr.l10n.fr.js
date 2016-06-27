@@ -10,7 +10,7 @@ flatpickr.init.prototype.l10n.months = {
 	longhand: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
 };
 
-flatpickr.init.prototype.l10n.ordinal: (nth) => {
+flatpickr.init.prototype.l10n.ordinal = (nth) => {
 	if (nth > 1) {
 		return "ème";
 	}
