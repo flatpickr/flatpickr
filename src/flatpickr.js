@@ -265,12 +265,12 @@ flatpickr.init = function(element, instanceConfig) {
 			prev_date = self.selectedDateObj.getTime();
 
 			// update time
-			var hours = parseInt(hourElement.value, 10),
-				minutes = (60+parseInt(minuteElement.value, 10))%60,
+			var hours = (parseInt(hourElement.value, 10) || 0),
+				minutes = (60 + (parseInt(minuteElement.value, 10) || 0)) % 60,
 				seconds;
 
 			if(self.config.enableSeconds)
-				seconds = (60+parseInt(secondElement.value, 10))%60;
+				seconds = (60 + (parseInt(secondElement.value, 10)) || 0) % 60;
 
 			if (!self.config.time_24hr)
 				hours = hours%12 + 12*(am_pm.innerHTML=== "PM");
