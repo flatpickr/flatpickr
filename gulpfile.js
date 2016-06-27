@@ -1,10 +1,11 @@
-const gulp = require("gulp");
-const stylus = require("gulp-stylus");
-const babel = require("gulp-babel");
-const cssmin = require("gulp-cssmin");
-const lint = require("gulp-jshint");
-const uglify = require("gulp-uglify");
-const rename = require("gulp-rename");
+const gulp = require("gulp"),
+	babel = require("gulp-babel"),
+	cssmin = require("gulp-cssmin"),
+	lint = require("gulp-jshint"),
+	plumber = require("gulp-plumber"),
+	rename = require("gulp-rename"),
+	stylus = require("gulp-stylus"),
+	uglify = require("gulp-uglify");
 
 const paths = {
 	style: "./src/style/flatpickr.styl",
@@ -14,6 +15,7 @@ const paths = {
 
 gulp.task('script', function(){
 	return gulp.src(paths.script)
+	.pipe(plumber())
 	.pipe(lint({
 		"esversion": 6,
 		"unused": true
@@ -23,10 +25,11 @@ gulp.task('script', function(){
 	.pipe(uglify({compress: {hoist_funs: false, hoist_vars: false}})).on('error', errorHandler)
 	.pipe(rename({ suffix: '.min'}))
 	.pipe(gulp.dest('dist'));
-});  
+});
 
 gulp.task('style', function(){
 	return gulp.src(paths.style)
+	.pipe(plumber())
 	.pipe(stylus())
 	.pipe(cssmin()).on('error', errorHandler)
 	.pipe(rename({ suffix: '.min'}))
@@ -35,15 +38,17 @@ gulp.task('style', function(){
 
 gulp.task('themes', function(){
 	return gulp.src(paths.themes)
+	.pipe(plumber())
 	.pipe(stylus())
 	.pipe(cssmin()).on('error', errorHandler)
 	.pipe(rename({ prefix: 'flatpickr.',suffix: '.min'}))
 	.pipe(gulp.dest('dist'));
 });
 
-gulp.task('watch', function() {
+gulp.task('watch', function(done) {
 	gulp.watch('./src/style/**/*.styl', gulp.parallel('style', 'themes'));
 	gulp.watch(paths.script, gulp.series('script'));
+	done();
 });
 
 // Handle the error
