@@ -14,10 +14,10 @@
     "gulp-concat": "^2.6.0",
     "gulp-cssmin": "^0.1.7",
     "gulp-jshint": "^2.0.1",
+    "gulp-plumber": "^1.1.0",
     "gulp-rename": "^1.2.2",
-    "gulp-sass": "^2.3.1",
-    "gulp-stylus": "^2.4.0",
-    "gulp-uglify": "^1.5.3",
+    "gulp-stylus": "^2.5.0",
+    "gulp-uglify": "^1.5.4",
     "jshint": "^2.9.2",
     "stylus": "^0.54.5"
   },
