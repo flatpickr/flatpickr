@@ -107,6 +107,7 @@ $width = 256px
 	font-size 135%
 	font-weight 300
 	color alpha($months_color, 0.7)
+	display inline-block
 
 	.cur_month
 		font-weight 700
@@ -114,10 +115,11 @@ $width = 256px
 
 	.cur_year
 		background transparent
+		box-sizing content-box
 		color inherit
 		cursor default
 		padding 0 0 0 2px
-		max-width 58px
+		width 3em
 		display inline
 		font-size inherit
 		line-height inherit
