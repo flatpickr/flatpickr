@@ -89,19 +89,22 @@ $width = 256px
 .flatpickr-prev-month, .flatpickr-next-month
 	text-decoration none
 	cursor pointer
+	position absolute
+	top 0.5rem
 
 	i
 		position relative
-		bottom -4px
 
 	&:hover
 		color $today_color
 
 .flatpickr-prev-month
 	float left
+	left 0.5rem
 
 .flatpickr-next-month
 	float right
+	right 0.5rem
 
 .flatpickr-current-month
 	font-size 135%
@@ -119,7 +122,8 @@ $width = 256px
 		color inherit
 		cursor default
 		padding 0 0 0 2px
-		width 3em
+		margin 0
+		width 3.1em
 		display inline
 		font-size inherit
 		line-height inherit
