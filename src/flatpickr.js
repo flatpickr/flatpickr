@@ -360,8 +360,12 @@ flatpickr.init = function(element, instanceConfig) {
 
 			d = self.config.disable[i];
 
-			if (d instanceof Date || typeof d === 'string')
-				return uDate(d,true).getTime() == check_date.getTime();
+			if(typeof d === 'string' &&	d.startsWith("wkd") )
+				if( check_date.getDay() === (parseInt( d.slice(-1), 10 ) + self.l10n.firstDayOfWeek - 1 )%7 )
+					return true;
+
+			else if (d instanceof Date || typeof d === 'string' &&!d.startsWith("wkd"))
+				return uDate(d,true).getTime() === check_date.getTime();
 
 			if (check_date >= uDate(d.from) && check_date <= uDate(d.to))
 				return true;
