@@ -529,7 +529,7 @@ flatpickr.init = function(element, instanceConfig) {
 			weekdays = [].concat(weekdays.splice(firstDayOfWeek, weekdays.length), weekdays.splice(0, firstDayOfWeek));
 		}
 
-		weekdayContainer.innerHTML = self.config.weekNumbers ? "<span>Wk</span>" : "";
+		weekdayContainer.innerHTML = self.config.weekNumbers ? "<span>" + self.l10n.weekAbbreviation + "</span>" : "";
 		weekdayContainer.innerHTML += '<span>' + weekdays.join('</span><span>') + '</span>';
 
 		calendarContainer.appendChild(weekdayContainer);
@@ -960,6 +960,7 @@ flatpickr.init.prototype = {
 				default: return "th";
 			}
 		},
+		weekAbbreviation: "Wk",
 		scrollTitle: "Scroll to increment",
 		toggleTitle: "Click to toggle"
 	},
