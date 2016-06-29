@@ -60,7 +60,7 @@ a:hover {
     -webkit-flex-direction: row;
     flex-direction: row;
     width: 96%;
-    max-width: 880px;
+    max-width: 960px;
     margin: 0 auto;
 }
 
@@ -274,8 +274,8 @@ pre
 
 .table th {
     text-align: left;
-    background: #7ABD7C;
-    color: white;
+    background: #fafafa;
+    color: #888;
 }
 
 .table th, .table td
@@ -290,16 +290,17 @@ pre
 
 .table tr td
 {
-    color: #888
+    color: #444
 }
 
-.table tr td:first-child, .table tr td:last-child
+.table tr td:first-child
 {
-    color: #333
+    color: #111;
+    font-weight: bold
 }
 
 .table  tr:nth-child(2n) {
-    background-color: #F3F8FF;
+    background-color: #f9f9f9;
 }
 
 @media screen and (max-width: 960px){
