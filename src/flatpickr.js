@@ -188,10 +188,14 @@ flatpickr.init = function(element, instanceConfig) {
 				date = new Date(date.replace(/(\d)-(\d)/g, "$1/$2") );
 
 			else if (/^(\d?\d):(\d\d)/.test(date)){ // time-only picker
-				let matches = date.match(/(\d?\d):(\d\d)/);
+				let matches = date.match(/^(\d?\d):(\d\d)(:(\d\d))?/);
+
+				let seconds = 0;
+				if (matches[4] !== undefined)
+					seconds = matches[4];
 
 				date = new Date();
-				date.setHours(matches[1], matches[2], 0, 0);
+				date.setHours(matches[1], matches[2], seconds, 0);
 			}
 
 			else {
@@ -275,14 +279,14 @@ flatpickr.init = function(element, instanceConfig) {
 			if (!self.config.time_24hr)
 				hours = hours%12 + 12*(am_pm.innerHTML=== "PM");
 
-			self.selectedDateObj.setHours(hours, minutes, seconds||self.selectedDateObj.getSeconds());
+			self.selectedDateObj.setHours(hours, minutes, seconds === undefined ? self.selectedDateObj.getSeconds() : seconds);
 
 			hourElement.value =
 				pad(self.config.time_24hr ? hours : ((12 + hours)%12+12*(hours%12===0)));
 
 			minuteElement.value = pad(minutes);
 
-			if(seconds)
+			if(seconds !== undefined)
 				secondElement.value = pad(seconds);
 
 		}
