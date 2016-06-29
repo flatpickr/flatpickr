@@ -498,7 +498,7 @@ flatpickr.init = function(element, instanceConfig) {
 
 		cur_year = createElement("input", "cur_year");
 		cur_year.type = "number";
-		cur_year.title = "Scroll to increment";
+		cur_year.title = self.l10n.scrollTitle;
 
 		nextMonthNav = createElement("span", "flatpickr-next-month", self.config.nextArrow);
 
@@ -955,7 +955,8 @@ flatpickr.init.prototype = {
 				case 3: return "rd";
 				default: return "th";
 			}
-		}
+		},
+		scrollTitle: 'Scroll to increment'
 	},
 
 	defaultConfig : {
