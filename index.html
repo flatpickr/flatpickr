@@ -470,46 +470,64 @@ flatpickr(".flatpickr")
 			<tbody>
 
 				<tr>
-					<td>enableTime</td>
-					<td>boolean</td>
+					<td>altFormat</td>
+					<td>string</td>
+					<td>"F j, Y"</td>
+					<td>Exactly the same as date format, but for the altInput field</td>
+				</tr>
+
+				<tr>
+					<td>altInput</td>
+					<td>Boolean</td>
 					<td>false</td>
-					<td>Enables time picker </td>
+					<td>Show the user a readable date (as per altFormat), but return something totally different to the server. </td>
+				</tr>
+
+				<tr>
+					<td>altInputClass</td>
+					<td>String</td>
+					<td>null</td>
+					<td>This class will be added to the input element created by the altInput option. Helpful if input elements are styled using classes. Bootstrap users will want to specify <code>form-control</code> here.</td>
 				</tr>
 
 				<tr>
 					<td>dateFormat</td>
 					<td>string</td>
 					<td>'Y-m-d'</td>
-					<td>A string of characters which are used to define how the date will be displayed in the input box. Very similar to the PHP date function, but with less options. The supported characters are defined below.</td>
-				</tr>
-
-				<tr>
-					<td>timeFormat</td>
-					<td>string</td>
-					<td>'H:i'</td>
-					<td>A string of characters which are used to define how the time will be displayed in the input box. </td>
+					<td>A string of characters which are used to define how the date will be displayed in the input box. The supported characters are defined in the table below.</td>
 				</tr>
 
 				<tr>
 					<td>defaultDate</td>
-					<td>String</td>
+					<td>String/Date Object</td>
 					<td>null</td>
-					<td>Set the date to highlight on first opening. Specify a date as a <a target=_blank href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse">parsable string</a>.</td>
+					<td>Set the initial selected date. Same as preloading a date string into an input's value attribute, but can also handle a Date object. </td>
 				</tr>
 
 				<tr>
-					<td>parseDate</td>
-					<td>function</td>
-					<td>false</td>,
-					<td>A function that expects a date string and must return a Date object</td>
+					<td>disable</td>
+					<td>array</td>
+					<td>null</td>
+					<td>Dates to disable, using intervals</td>
 				</tr>
 
 				<tr>
-					<td>minDate</td>
-					<td>String</td>
-					<td>null</td>
-					<td>The minimum date that a user can start picking from, as a string.
-						<br>See <a target=_blank href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse">Date.parse()</a></td>
+					<td>enableTime</td>
+					<td>boolean</td>
+					<td>false</td>
+					<td>Enables time picker </td>
+				</tr>
+				<tr>
+					<td>hourIncrement</td>
+					<td>integer</td>
+					<td>1</td>
+					<td>Adjusts the step for the hour input (incl. scrolling) </td>
+				</tr>
+				<tr>
+					<td>inline</td>
+					<td>Boolean</td>
+					<td>false</td>
+					<td>Display the calendar inline.</td>
 				</tr>
 
 				<tr>
@@ -521,50 +539,11 @@ flatpickr(".flatpickr")
 				</tr>
 
 				<tr>
-					<td>disable</td>
-					<td>array</td>
+					<td>minDate</td>
+					<td>String</td>
 					<td>null</td>
-					<td>Dates to disable, using intervals</td>
-				</tr>
-
-				<tr>
-					<td>altInput</td>
-					<td>Boolean</td>
-					<td>false</td>
-					<td>Show the user a readable date (as per altFormat), but return something totally different to the server. </td>
-				</tr>
-
-				<tr>
-					<td>altFormat</td>
-					<td>string</td>
-					<td>"F j, Y"</td>
-					<td>Exactly the same as date format, but for the altInput field</td>
-				</tr>
-
-				<tr>
-					<td>inline</td>
-					<td>Boolean</td>
-					<td>false</td>
-					<td>Display the calendar inline.</td>
-				</tr>
-
-				<tr>
-					<td>shorthandCurrentMonth</td>
-					<td>boolean</td>
-					<td>false</td>
-					<td>Show the month using the shorthand version. </td>
-				</tr>
-				<tr>
-					<td>onChange</td>
-					<td>function(dateObject)</td>
-					<td>n/a</td>
-					<td>A function that gets triggered on every date selection </td>
-				</tr>
-				<tr>
-					<td>hourIncrement</td>
-					<td>integer</td>
-					<td>1</td>
-					<td>Adjusts the step for the hour input (incl. scrolling) </td>
+					<td>The minimum date that a user can start picking from, as a string.
+						<br>See <a target=_blank href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse">Date.parse()</a></td>
 				</tr>
 				<tr>
 					<td>minuteIncrement</td>
@@ -573,11 +552,38 @@ flatpickr(".flatpickr")
 					<td>Adjusts the step for the minute input (incl. scrolling) </td>
 				</tr>
 				<tr>
+					<td>onChange</td>
+					<td>function(dateObject)</td>
+					<td>n/a</td>
+					<td>A function that gets triggered on every date selection </td>
+				</tr>
+				<tr>
+					<td>parseDate</td>
+					<td>function</td>
+					<td>false</td>,
+					<td>A function that expects a date string and must return a Date object</td>
+				</tr>
+				<tr>
+					<td>shorthandCurrentMonth</td>
+					<td>boolean</td>
+					<td>false</td>
+					<td>Show the month using the shorthand version. </td>
+				</tr>
+				<tr>
+					<td>timeFormat</td>
+					<td>string</td>
+					<td>'H:i'</td>
+					<td>A string of characters which are used to define how the time will be displayed in the input box. </td>
+				</tr>
+
+
+				<tr>
 					<td>time_24hr</td>
 					<td>boolean</td>
 					<td>false</td>
 					<td>Displays time picker in 24 hour mode without AM/PM selection when enabled.</td>
 				</tr>
+
 			</tbody>
 		</table>
 		</div>
