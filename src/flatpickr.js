@@ -628,7 +628,7 @@ flatpickr.init = function(element, instanceConfig) {
 		minuteElement.min = 0;
 		minuteElement.max = 59;
 
-		hourElement.title = minuteElement.title = "Scroll to increment";
+		hourElement.title = minuteElement.title = self.l10n.scrollTitle;
 
 		timeContainer.appendChild(hourElement);
 		timeContainer.appendChild(separator);
@@ -652,7 +652,7 @@ flatpickr.init = function(element, instanceConfig) {
 
 		if (!self.config.time_24hr){ // add am_pm if appropriate
 			am_pm = createElement("span", "flatpickr-am-pm", ["AM","PM"][(hourElement.value > 11)|0]);
-			am_pm.title="Click to toggle";
+			am_pm.title = self.l10n.toggleTitle;
 			timeContainer.appendChild(am_pm);
 		}
 
@@ -960,7 +960,8 @@ flatpickr.init.prototype = {
 				default: return "th";
 			}
 		},
-		scrollTitle: 'Scroll to increment'
+		scrollTitle: "Scroll to increment",
+		toggleTitle: "Click to toggle"
 	},
 
 	defaultConfig : {
