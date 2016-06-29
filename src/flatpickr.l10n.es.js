@@ -13,3 +13,5 @@ flatpickr.init.prototype.l10n.months = {
 flatpickr.init.prototype.l10n.ordinal = () => {
 	return "º";
 };
+
+flatpickr.init.prototype.l10n.firstDayOfWeek = 1;
