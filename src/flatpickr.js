@@ -364,6 +364,9 @@ flatpickr.init = function(element, instanceConfig) {
 
 			d = self.config.disable[i];
 
+			if (d instanceof Function && d(check_date))
+    			return true;
+
 			if(typeof d === 'string' &&	d.startsWith("wkd") )
 				if( check_date.getDay() === (parseInt( d.slice(-1), 10 ) + self.l10n.firstDayOfWeek - 1 )%7 )
 					return true;
