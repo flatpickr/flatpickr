@@ -90,6 +90,8 @@ flatpickr.init = function(element, instanceConfig) {
 		yearScroll,
 		updateValue,
 
+		onInput,
+
 		updateNavigationCurrentMonth,
 
 		handleYearChange,
@@ -180,6 +182,10 @@ flatpickr.init = function(element, instanceConfig) {
 
 			if (self.config.parseDate)
 				date = self.config.parseDate(date);
+
+			else if (/^\d\d\d\d\-\d{1,2}\-\d\d$/.test(date))
+				// this utc datestring gets parsed, but incorrectly by Date.parse
+				date = new Date(date.replace(/(\d)-(\d)/g, "$1/$2") );
 
 			else if (Date.parse(date))
 				date = new Date(date);
@@ -356,6 +362,12 @@ flatpickr.init = function(element, instanceConfig) {
 
 	isDisabled = function(check_date){
 
+		if (
+			(self.config.minDate && check_date < self.config.minDate) ||
+			(self.config.maxDate && check_date > self.config.maxDate)
+		)
+			return true;
+
 		check_date = uDate(check_date, true); //timeless
 
 		let d;
@@ -364,17 +376,28 @@ flatpickr.init = function(element, instanceConfig) {
 
 			d = self.config.disable[i];
 
-			if (d instanceof Function && d(check_date))
-    			return true;
+ 			if (d instanceof Function && d(check_date)) // disabled by function
+ 				return true;
 
-			if(typeof d === 'string' &&	d.startsWith("wkd") )
-				if( check_date.getDay() === (parseInt( d.slice(-1), 10 ) + self.l10n.firstDayOfWeek - 1 )%7 )
-					return true;
+			else if ( // disabled weekday
+				typeof d === 'string' &&
+				/^wkd/.test(d) &&
+				check_date.getDay() === (parseInt(d.slice(-1)) + self.l10n.firstDayOfWeek - 1 )%7
+			)
+				return true;
 
-			else if (d instanceof Date || typeof d === 'string' &&!d.startsWith("wkd"))
-				return uDate(d,true).getTime() === check_date.getTime();
+ 			else if ( // disabled by date string
+ 				(d instanceof Date || (typeof d === 'string' && !/^wkd/.test(d) ) ) &&
+ 				uDate(d,true).getTime() === check_date.getTime()
+ 			)
+ 				return true;
 
-			if (check_date >= uDate(d.from) && check_date <= uDate(d.to))
+			else if ( // disabled by range
+				typeof d === 'object' &&
+				d.hasOwnProperty("from") &&
+				check_date >= uDate(d.from) &&
+				check_date <= uDate(d.to)
+			)
 				return true;
 
 		}
@@ -555,8 +578,7 @@ flatpickr.init = function(element, instanceConfig) {
 			dayNumber = prevMonthDays + 1 - firstOfMonth,
 			className,
 			cur_date,
-			date_is_disabled,
-			date_outside_minmax;
+			date_is_disabled;
 
 		if(self.config.weekNumbers && weekNumbers)
 			weekNumbers.innerHTML = '';
@@ -575,7 +597,7 @@ flatpickr.init = function(element, instanceConfig) {
 		for (dayNumber = 1; dayNumber <= 42 - firstOfMonth; dayNumber++) {
 
 			if (dayNumber <= numDays || dayNumber%7 === 1) // avoids new date objects for appended dates
-				cur_date = new Date(self.currentYear, self.currentMonth, dayNumber,0,0,0,0);
+				cur_date = new Date(self.currentYear, self.currentMonth, dayNumber, 0, 0, 0, 0, 0);
 
 			if(self.config.weekNumbers && weekNumbers && dayNumber%7 === 1)
 				weekNumbers.appendChild(
@@ -583,11 +605,7 @@ flatpickr.init = function(element, instanceConfig) {
 				);
 
 
-			date_outside_minmax =
-				(self.config.minDate && cur_date < self.config.minDate) ||
-				(self.config.maxDate && cur_date > self.config.maxDate);
-
-			date_is_disabled = dayNumber > numDays || date_outside_minmax || isDisabled(cur_date);
+			date_is_disabled = dayNumber > numDays || isDisabled(cur_date);
 
 			className = date_is_disabled ? "disabled flatpickr-day" : "slot flatpickr-day";
 
@@ -679,6 +697,14 @@ flatpickr.init = function(element, instanceConfig) {
 
 			if(self.altInput)
 				self.altInput.addEventListener('focus' , self.open);
+		}
+
+		if(self.config.allowInput){
+			if(self.altInput)
+				self.altInput.addEventListener('change' , onInput);
+
+			else
+				self.input.addEventListener('change' , onInput);
 		}
 
 		if (self.config.wrap && self.element.querySelector("[data-open]"))
@@ -779,12 +805,14 @@ flatpickr.init = function(element, instanceConfig) {
 		wrapperElement.classList.add('open');
 
 		if(self.altInput){
-			self.altInput.blur();
+			if(!self.config.allowInput)
+				self.altInput.blur();
 			self.altInput.classList.add('active');
 		}
 
 		else {
-			self.input.blur();
+			if(!self.config.allowInput)
+				self.input.blur();
 			self.input.classList.add('active');
 		}
 
@@ -846,6 +874,12 @@ flatpickr.init = function(element, instanceConfig) {
 
 	};
 
+	onInput = function(event){
+
+		self.setDate(self.altInput ? self.altInput.value : self.input.value);
+
+	};
+
 	self.destroy = function() {
 
 		document.removeEventListener('click', documentClick, false);
@@ -892,18 +926,18 @@ flatpickr.init = function(element, instanceConfig) {
 
 	self.setDate = function(date, triggerChangeEvent){
 
-		if(!( uDate(date) instanceof Date )){
-			console.error(`flatpickr: setDate() - invalid date: ${date}`);
-			console.info(self.element);
-			return;
+		date = uDate(date);
+
+		if(date instanceof Date && date.getTime()){
+
+			self.selectedDateObj = uDate(date);
+			self.jumpToDate(self.selectedDateObj);
+			updateValue();
+
+			if(triggerChangeEvent||false)
+				triggerChange();
+
 		}
-
-		self.selectedDateObj = uDate(date);
-		self.jumpToDate(self.selectedDateObj);
-		updateValue();
-
-		if(triggerChangeEvent||false)
-			triggerChange();
 
 	 };
 
@@ -981,6 +1015,8 @@ flatpickr.init.prototype = {
 
 			// enables week numbers
 			weekNumbers: false,
+
+			allowInput: false,
 
 			/* clicking on input opens the date(time)picker. disable if you wish to open the calendar manually with .open() */
 			clickOpens: true,
