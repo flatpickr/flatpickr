@@ -157,6 +157,7 @@ $width = 256px
 
 .flatpickr-days
 	padding-top 1px
+	outline 0
 	if $border-calendar-only is defined
 		border 1px solid $calendar_border_color
 		border-top 0
@@ -177,7 +178,8 @@ $width = 256px
 	margin 0 1px 1px 1px
 	text-align center
 
-	&:hover
+	&:hover, &:focus
+		outline 0
 		background $day_hover_background_color
 		border-color $day_hover_background_color
 
