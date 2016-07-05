@@ -499,6 +499,7 @@ flatpickr.init = function(element, instanceConfig) {
 		calendarContainer.id = getRandomCalendarIdStr();
 
 		calendar = createElement("div", "flatpickr-days");
+		calendar.tabIndex = -1;
 
 		if (!self.config.noCalendar) {
 			buildMonthNavigation();
@@ -621,8 +622,11 @@ flatpickr.init = function(element, instanceConfig) {
 			if (!date_is_disabled && self.selectedDateObj && equalDates(cur_date, self.selectedDateObj))
 				className += ' selected';
 
+			let dayElement = createElement("span", className, (dayNumber > numDays ? dayNumber % numDays : dayNumber));
+			dayElement.tabIndex = 0;
+
 			calendar.appendChild(
-				createElement("span", className, (dayNumber > numDays ? dayNumber % numDays : dayNumber))
+				dayElement
 			);
 
 		}
@@ -693,6 +697,31 @@ flatpickr.init = function(element, instanceConfig) {
 
 	bind = function() {
 
+		document.addEventListener("keydown", function(e){
+
+			if(!wrapperElement.classList.contains("open") )
+				return;
+
+			if (e.which === 37)
+				changeMonth(-1);
+
+			else if (e.which === 38){
+				e.preventDefault();
+				self.currentYear++;
+				self.redraw();
+			}
+
+			else if (e.which === 39)
+				changeMonth(1);
+
+			else if (e.which === 40){
+				e.preventDefault();
+				self.currentYear--;
+				self.redraw();
+			}
+
+		});
+
 		function am_pm_toggle(e){
 			e.preventDefault();
 			am_pm.innerHTML =  ["AM","PM"][(am_pm.innerHTML === "AM")|0];
@@ -736,6 +765,12 @@ flatpickr.init = function(element, instanceConfig) {
 			});
 
 			calendar.addEventListener('click', calendarClick);
+			calendar.addEventListener("keydown", function(e){
+
+				if(e.which === 13)
+					calendarClick(e);
+
+				});
 
 		}
 
@@ -798,7 +833,7 @@ flatpickr.init = function(element, instanceConfig) {
 
 	self.isOpen = function(){
 		return wrapperElement.classList.contains('open');
-	}
+	};
 
 	self.open = function() {
 
@@ -809,6 +844,7 @@ flatpickr.init = function(element, instanceConfig) {
 			self.positionCalendar();
 
 		wrapperElement.classList.add('open');
+		calendar.focus();
 
 		if(!self.config.allowInput)
 			(self.altInput||self.input).blur();
