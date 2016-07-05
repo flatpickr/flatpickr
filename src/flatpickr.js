@@ -320,43 +320,47 @@ flatpickr.init = function(element, instanceConfig) {
 			dateFormat+= " " + self.config.timeFormat;
 
 		let formattedDate = '',
-			formats = {
-				D: () => self.l10n.weekdays.shorthand[ formats.w() ], // weekday name, short, e.g. Thu
-				F: () => monthToStr(formats.n() - 1, false), // full month name e.g. January
-				H: () => pad(self.selectedDateObj.getHours()), // hours with leading zero e.g. 03
-				J: () => formats.j() + self.l10n.ordinal(formats.j()), // day (1-30) with ordinal suffix e.g. 1st, 2nd
-				K: () => self.selectedDateObj.getHours() > 11 ? "PM" : "AM", // AM/PM
-				M: () => monthToStr(formats.n() - 1, true), // shorthand month e.g. Jan
-				S: () => pad( self.selectedDateObj.getSeconds() ), // seconds 00-59
-				U: () => self.selectedDateObj.getTime() / 1000,
-				Y: () => self.selectedDateObj.getFullYear(), // 2016
-				d: () => pad(formats.j()), // day in month, padded (01-30)
-				h: () => self.selectedDateObj.getHours()%12 ? self.selectedDateObj.getHours()%12 : 12, // hour from 1-12 (am/pm)
-				i: () => pad(self.selectedDateObj.getMinutes()), // minutes, padded with leading zero e.g. 09
-				j: () => self.selectedDateObj.getDate(), // day in month (1-30)
-				l: () => self.l10n.weekdays.longhand[ formats.w() ], // weekday name, full, e.g. Thursday
-				m: () => pad(formats.n()), // padded month number (01-12)
-				n: () => self.selectedDateObj.getMonth() + 1, // the month number (1-12)
-				s: () => self.selectedDateObj.getSeconds(), // seconds 0-59
-				w: () => self.selectedDateObj.getDay(), // number of the day of the week
-				y: () => String(formats.Y()).substring(2) // last two digits of full year e.g. 16 for full year 2016
-			},
 			formatPieces = dateFormat.split('');
+
+		self.formats = {
+			D: () => self.l10n.weekdays.shorthand[ self.formats.w() ], // weekday name, short, e.g. Thu
+			F: () => monthToStr(self.formats.n() - 1, false), // full month name e.g. January
+			H: () => pad(self.selectedDateObj.getHours()), // hours with leading zero e.g. 03
+			J: () => self.formats.j() + self.l10n.ordinal(self.formats.j()), // day (1-30) with ordinal suffix e.g. 1st, 2nd
+			K: () => self.selectedDateObj.getHours() > 11 ? "PM" : "AM", // AM/PM
+			M: () => monthToStr(self.formats.n() - 1, true), // shorthand month e.g. Jan
+			S: () => pad( self.selectedDateObj.getSeconds() ), // seconds 00-59
+			U: () => self.selectedDateObj.getTime() / 1000,
+			Y: () => self.selectedDateObj.getFullYear(), // 2016
+			d: () => pad(self.formats.j()), // day in month, padded (01-30)
+			h: () => self.selectedDateObj.getHours()%12 ? self.selectedDateObj.getHours()%12 : 12, // hour from 1-12 (am/pm)
+			i: () => pad(self.selectedDateObj.getMinutes()), // minutes, padded with leading zero e.g. 09
+			j: () => self.selectedDateObj.getDate(), // day in month (1-30)
+			l: () => self.l10n.weekdays.longhand[ self.formats.w() ], // weekday name, full, e.g. Thursday
+			m: () => pad(self.formats.n()), // padded month number (01-12)
+			n: () => self.selectedDateObj.getMonth() + 1, // the month number (1-12)
+			s: () => self.selectedDateObj.getSeconds(), // seconds 0-59
+			w: () => self.selectedDateObj.getDay(), // number of the day of the week
+			y: () => String(self.formats.Y()).substring(2) // last two digits of full year e.g. 16 for full year 2016
+		};
 
 		for(let i = 0; i < formatPieces.length; i++){
 			let c = formatPieces[i];
-			if (formats[c] && formatPieces[i - 1] !== '\\')
-				formattedDate += formats[c]();
+			if (self.formats[c] && formatPieces[i - 1] !== '\\')
+				formattedDate += self.formats[c]();
 
 			else if (c !== '\\')
-					formattedDate += c;
+				formattedDate += c;
 		}
 
 		return formattedDate;
 	};
 
 	monthToStr = function(date, shorthand) {
-		return shorthand||self.config.shorthandCurrentMonth ? self.l10n.months.shorthand[date] : self.l10n.months.longhand[date];
+		if (shorthand||self.config.shorthandCurrentMonth)
+			return self.l10n.months.shorthand[date];
+
+		return self.l10n.months.longhand[date];
 	};
 
 
@@ -450,15 +454,12 @@ flatpickr.init = function(element, instanceConfig) {
 	};
 
 	documentClick = function(event) {
-		if(
-			!(wrapperElement.classList.contains("open")) ||
-			wrapperElement.contains(event.target) ||
-			event.target === self.element ||
-			event.target === self.altInput
+ 		if ( self.isOpen() &&
+			!wrapperElement.contains(event.target) &&
+			event.target !== self.element &&
+			event.target !== self.altInput
 		)
-			return;
-
-		self.close();
+			self.close();
 
 	};
 
@@ -552,10 +553,15 @@ flatpickr.init = function(element, instanceConfig) {
 
 
 		if (firstDayOfWeek > 0 && firstDayOfWeek < weekdays.length) {
-			weekdays = [].concat(weekdays.splice(firstDayOfWeek, weekdays.length), weekdays.splice(0, firstDayOfWeek));
+			weekdays = [].concat(
+				weekdays.splice(firstDayOfWeek, weekdays.length),
+				weekdays.splice(0, firstDayOfWeek)
+			);
 		}
 
-		weekdayContainer.innerHTML = self.config.weekNumbers ? "<span>" + self.l10n.weekAbbreviation + "</span>" : "";
+		if (self.config.weekNumbers)
+			weekdayContainer.innerHTML = "<span>" + self.l10n.weekAbbreviation + "</span>";
+
 		weekdayContainer.innerHTML += '<span>' + weekdays.join('</span><span>') + '</span>';
 
 		calendarContainer.appendChild(weekdayContainer);
@@ -699,13 +705,9 @@ flatpickr.init = function(element, instanceConfig) {
 				self.altInput.addEventListener('focus' , self.open);
 		}
 
-		if(self.config.allowInput){
-			if(self.altInput)
-				self.altInput.addEventListener('change' , onInput);
+		if(self.config.allowInput)
+			(self.altInput ? self.altInput : self.input).addEventListener('change' , onInput);
 
-			else
-				self.input.addEventListener('change' , onInput);
-		}
 
 		if (self.config.wrap && self.element.querySelector("[data-open]"))
 			self.element.querySelector("[data-open]").addEventListener('click' , self.open);
@@ -787,12 +789,16 @@ flatpickr.init = function(element, instanceConfig) {
 
 		window.addEventListener('resize', throttle(() => {
 
-			if (wrapperElement.classList.contains('open') && !self.input.disabled && !self.config.inline && !self.config.static )
+			if (self.isOpen() && !self.input.disabled && !self.config.inline && !self.config.static )
 				self.positionCalendar();
 
 		}, 150));
 
 	};
+
+	self.isOpen = function(){
+		return wrapperElement.classList.contains('open');
+	}
 
 	self.open = function() {
 
@@ -804,18 +810,10 @@ flatpickr.init = function(element, instanceConfig) {
 
 		wrapperElement.classList.add('open');
 
-		if(self.altInput){
-			if(!self.config.allowInput)
-				self.altInput.blur();
-			self.altInput.classList.add('active');
-		}
+		if(!self.config.allowInput)
+			(self.altInput||self.input).blur();
 
-		else {
-			if(!self.config.allowInput)
-				self.input.blur();
-			self.input.classList.add('active');
-		}
-
+		(self.altInput||self.input).classList.add('active');
 
 		if (self.config.onOpen)
 			self.config.onOpen(self.selectedDateObj, self.input.value);
@@ -823,16 +821,20 @@ flatpickr.init = function(element, instanceConfig) {
 
 	// For calendars inserted in BODY (as opposed to inline wrapper)
 	// it's necessary to properly calculate top/left position.
-	self.positionCalendar = function() {
+	self.positionCalendar = function(force) {
 
-		let input = self.altInput ? self.altInput : self.input,
-			bounds = input.getBoundingClientRect(),
+		if(self.isPositioned && !force)
+			return;
+
+		let bounds = (self.altInput||self.input).getBoundingClientRect(),
 			// account for scroll & input height
-			top = (window.pageYOffset + input.offsetHeight + bounds.top),
+			top = (window.pageYOffset + (self.altInput||self.input).offsetHeight + bounds.top),
 			left = (window.pageXOffset + bounds.left);
 
 		wrapperElement.style.top = top + 'px';
 		wrapperElement.style.left = left + 'px';
+
+		self.isPositioned = true;
 	};
 
 	self.toggle = function() {
@@ -874,7 +876,7 @@ flatpickr.init = function(element, instanceConfig) {
 
 	};
 
-	onInput = function(event){
+	onInput = function(){
 
 		self.setDate(self.altInput ? self.altInput.value : self.input.value);
 
