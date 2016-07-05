@@ -107,6 +107,7 @@ flatpickr.init = function(element, instanceConfig) {
 
 	// elements & variables
 	var calendarContainer,
+		timeContainer,
 		navigationCurrentMonth,
 		monthsNav,
 		prevMonthNav,
@@ -623,7 +624,9 @@ flatpickr.init = function(element, instanceConfig) {
 				className += ' selected';
 
 			let dayElement = createElement("span", className, (dayNumber > numDays ? dayNumber % numDays : dayNumber));
-			dayElement.tabIndex = 0;
+
+			if(!date_is_disabled)
+				dayElement.tabIndex = 0;
 
 			calendar.appendChild(
 				dayElement
@@ -635,12 +638,14 @@ flatpickr.init = function(element, instanceConfig) {
 
 	buildTime = function(){
 
-		let timeContainer = createElement("div", "flatpickr-time"),
-			separator = createElement("span", "flatpickr-time-separator", ":");
+		timeContainer = createElement("div", "flatpickr-time");
+		timeContainer.tabIndex = -1;
+		let separator = createElement("span", "flatpickr-time-separator", ":");
 
 		hourElement = createElement("input", "flatpickr-hour");
 		minuteElement = createElement("input", "flatpickr-minute");
 
+		hourElement.tabIndex = minuteElement.tabIndex = 0;
 		hourElement.type = minuteElement.type = "number";
 
 		hourElement.value =
@@ -684,6 +689,7 @@ flatpickr.init = function(element, instanceConfig) {
 		if (!self.config.time_24hr){ // add am_pm if appropriate
 			am_pm = createElement("span", "flatpickr-am-pm", ["AM","PM"][(hourElement.value > 11)|0]);
 			am_pm.title = self.l10n.toggleTitle;
+			am_pm.tabIndex = 0;
 			timeContainer.appendChild(am_pm);
 		}
 
@@ -699,7 +705,7 @@ flatpickr.init = function(element, instanceConfig) {
 
 		document.addEventListener("keydown", function(e){
 
-			if(!wrapperElement.classList.contains("open") )
+			if( !self.isOpen() || self.config.enableTime && timeContainer.contains(e.target ) )
 				return;
 
 			if (e.which === 37)
@@ -723,6 +729,7 @@ flatpickr.init = function(element, instanceConfig) {
 		});
 
 		function am_pm_toggle(e){
+			console.info(e);
 			e.preventDefault();
 			am_pm.innerHTML =  ["AM","PM"][(am_pm.innerHTML === "AM")|0];
 		}
@@ -799,14 +806,22 @@ flatpickr.init = function(element, instanceConfig) {
 			}
 
 			if (!self.config.time_24hr) {
-				am_pm.addEventListener("focus", am_pm.blur);
+
+				//am_pm.addEventListener("focus", am_pm.blur);
 				am_pm.addEventListener("click", am_pm_toggle);
 
 				am_pm.addEventListener("wheel", am_pm_toggle);
 				am_pm.addEventListener("mouseout", updateValue);
+
+				am_pm.addEventListener("keydown", function(e){
+					if(e.which === 38 || e.which === 40)
+						am_pm_toggle(e);
+				});
 			}
 
 		}
+
+
 
 		if(document.createEvent){
 			clickEvt = document.createEvent("MouseEvent");
@@ -844,7 +859,7 @@ flatpickr.init = function(element, instanceConfig) {
 			self.positionCalendar();
 
 		wrapperElement.classList.add('open');
-		calendar.focus();
+		(self.config.noCalendar ? timeContainer : calendar).focus();
 
 		if(!self.config.allowInput)
 			(self.altInput||self.input).blur();
