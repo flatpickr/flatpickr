@@ -186,12 +186,12 @@ $width = 256px
 	&.today
 		border-color $today_color
 
-		&:hover
+		&:hover, &:focus
 			border-color $today_color
 			background $today_color
 			color white
 
-	&.selected, &.selected:hover
+	&.selected, &.selected:hover, &.selected:focus
 		background $selected_day_background
 
 		if $selected_day_color is defined
@@ -214,6 +214,7 @@ $width = 256px
 	overflow auto
 	text-align center
 	border-top 0
+	outline 0
 
 	input[type='number']
 		background transparent
@@ -245,7 +246,7 @@ $width = 256px
 			outline 0
 			border 0
 
-		&:hover
+		&:hover, &:focus
 			background lighten($day_hover_background_color, 4)
 
 	&.has-seconds
@@ -268,11 +269,12 @@ $width = 256px
 	color $day_text_color
 
 .flatpickr-am-pm
+	outline 0
 	width 21%
 	padding 0 2%
 	cursor pointer
 	text-align left
-	&:hover
+	&:hover, &:focus
 		background lighten($day_hover_background_color, 4)
 
 
