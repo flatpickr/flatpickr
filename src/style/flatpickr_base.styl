@@ -211,14 +211,7 @@ $width = 256px
 
 	overflow auto
 	text-align center
-
-	if $border-calendar-only is defined
-		border 1px solid $calendar_border_color
-		border-top 0
-
-	else
-		border-top 1px solid $calendar_border_color
-
+	border-top 0
 
 	input[type='number']
 		background transparent
@@ -258,7 +251,13 @@ $width = 256px
 			width 25%
 			min-width 25%
 
+.flatpickr-days + .flatpickr-time
+	if $border-calendar-only is defined
+		border 1px solid $calendar_border_color
+		border-top 0
 
+	else
+		border-top 1px solid $calendar_border_color
 
 .flatpickr-time-separator, .flatpickr-am-pm
 	height 38px
