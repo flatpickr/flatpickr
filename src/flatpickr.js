@@ -915,8 +915,7 @@ flatpickr.init = function(element, instanceConfig) {
 		self.input.value="";
 		self.selectedDateObj = null;
 
-		if(self.config.onChange)
-			self.config.onChange(null, null);
+		triggerChange();
 
 		self.jumpToDate();
 	};
