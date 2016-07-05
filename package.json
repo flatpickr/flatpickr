@@ -3,7 +3,8 @@
   "version": "1.8.8",
   "description": "A lightweight, powerful javascript datetime picker",
   "scripts": {
-    "test": "start test/index.html"
+    "test": "start test/index.html",
+    "start": "gulp"
   },
   "dependencies": {},
   "devDependencies": {
