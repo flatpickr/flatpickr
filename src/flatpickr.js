@@ -133,11 +133,7 @@ flatpickr.init = function(element, instanceConfig) {
 		self.element = element;
 
 		for (var config in self.defaultConfig)
-			self.config[config] =
-				instanceConfig[config] ||
-				self.element.dataset && self.element.dataset[config.toLowerCase()] ||
-				self.element.getAttribute("data-"+config)||
-				self.defaultConfig[config];
+			self.config[config] = parseConfig(config);
 
 		self.input = (self.config.wrap) ? element.querySelector("[data-input]") : element;
 		self.input.classList.add("flatpickr-input");
@@ -158,6 +154,18 @@ flatpickr.init = function(element, instanceConfig) {
 		self.jumpToDate();
 		updateValue();
 	};
+
+	function parseConfig(option){
+		let config_value = instanceConfig[option] ||
+			self.element.dataset && self.element.dataset[option.toLowerCase()] ||
+			self.element.getAttribute("data-"+option)||
+			self.defaultConfig[option];
+
+		if (typeof self.defaultConfig[option] === "boolean")
+			return String(config_value) !== "false";
+
+		return config_value;
+	}
 
 	getRandomCalendarIdStr = function() {
 		let randNum, idStr;
@@ -211,10 +219,13 @@ flatpickr.init = function(element, instanceConfig) {
 			}
 		}
 
-		if(timeless && date)
+		if(!(date instanceof Date) || !date.getTime())
+			return null;
+
+		if(timeless)
 			date.setHours(0,0,0,0);
 
-		if(String(self.config.utc) === 'true' && date && !date.fp_isUTC)
+		if(self.config.utc && !date.fp_isUTC)
 			date = date.fp_toUTC();
 
 		return date;
@@ -733,7 +744,7 @@ flatpickr.init = function(element, instanceConfig) {
 			am_pm.innerHTML =  ["AM","PM"][(am_pm.innerHTML === "AM")|0];
 		}
 
-		if (String(self.config.clickOpens)==='true'){
+		if ( self.config.clickOpens ){
 			self.input.addEventListener('focus' , self.open);
 
 			if(self.altInput)
