@@ -90,7 +90,7 @@ flatpickr.init = function(element, instanceConfig) {
 		yearScroll,
 		updateValue,
 
-		onInput,
+		onManualInput,
 
 		updateNavigationCurrentMonth,
 
@@ -729,7 +729,6 @@ flatpickr.init = function(element, instanceConfig) {
 		});
 
 		function am_pm_toggle(e){
-			console.info(e);
 			e.preventDefault();
 			am_pm.innerHTML =  ["AM","PM"][(am_pm.innerHTML === "AM")|0];
 		}
@@ -742,7 +741,7 @@ flatpickr.init = function(element, instanceConfig) {
 		}
 
 		if(self.config.allowInput)
-			(self.altInput ? self.altInput : self.input).addEventListener('change' , onInput);
+			(self.altInput ? self.altInput : self.input).addEventListener('change' , onManualInput);
 
 
 		if (self.config.wrap && self.element.querySelector("[data-open]"))
@@ -840,7 +839,7 @@ flatpickr.init = function(element, instanceConfig) {
 		window.addEventListener('resize', throttle(() => {
 
 			if (self.isOpen() && !self.input.disabled && !self.config.inline && !self.config.static )
-				self.positionCalendar();
+				self.positionCalendar(true);
 
 		}, 150));
 
@@ -931,9 +930,9 @@ flatpickr.init = function(element, instanceConfig) {
 
 	};
 
-	onInput = function(){
+	onManualInput = function(){
 
-		self.setDate(self.altInput ? self.altInput.value : self.input.value);
+		self.setDate( (self.altInput||self.input).value );
 
 	};
 
