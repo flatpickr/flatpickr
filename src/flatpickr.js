@@ -278,13 +278,13 @@ flatpickr.init = function(element, instanceConfig) {
 		return self.l10n.daysInMonth[month];
 	};
 
-	updateValue = function(){
+	updateValue = function(e){
 
-		let prev_date;
+		let time_changed;
 
 		if (self.selectedDateObj && self.config.enableTime){
 
-			prev_date = self.selectedDateObj.getTime();
+			let prev_timestamp = self.selectedDateObj.getTime();
 
 			// update time
 			var hours = (parseInt(hourElement.value, 10) || 0),
@@ -307,17 +307,16 @@ flatpickr.init = function(element, instanceConfig) {
 			if(seconds !== undefined)
 				secondElement.value = pad(seconds);
 
-		}
+			time_changed = self.selectedDateObj.getTime() !== prev_timestamp;
 
-		if (self.altInput && self.selectedDateObj)
-			self.altInput.value = formatDate(self.config.altFormat);
+		}
 
 		if (self.selectedDateObj)
-			self.input.value = formatDate(self.config.dateFormat);
+			(self.altInput||self.input).value = formatDate(self.config.dateFormat);
 
-		if(prev_date && self.selectedDateObj.getTime() !== prev_date){
+		if(time_changed || e && e.target.classList.contains("flatpickr-day") )
 			triggerChange();
-		}
+
 
 	};
 
@@ -494,8 +493,7 @@ flatpickr.init = function(element, instanceConfig) {
 				self.currentYear, self.currentMonth, e.target.innerHTML
 			);
 
-			updateValue();
-			triggerChange();
+			updateValue(e);
 			buildDays();
 
 			if (!self.config.inline && !self.config.enableTime)
@@ -719,6 +717,9 @@ flatpickr.init = function(element, instanceConfig) {
 			if( !self.isOpen() || self.config.enableTime && timeContainer.contains(e.target ) )
 				return;
 
+			if (e.which === 27)
+				self.close();
+
 			if (e.which === 37)
 				changeMonth(-1);
 
@@ -745,10 +746,7 @@ flatpickr.init = function(element, instanceConfig) {
 		}
 
 		if ( self.config.clickOpens ){
-			self.input.addEventListener('focus' , self.open);
-
-			if(self.altInput)
-				self.altInput.addEventListener('focus' , self.open);
+			(self.altInput||self.input).addEventListener('focus' , self.open, false);
 		}
 
 		if(self.config.allowInput)
@@ -792,7 +790,7 @@ flatpickr.init = function(element, instanceConfig) {
 		}
 
 		document.addEventListener('click', documentClick, true);
-		document.addEventListener('focus', documentClick, true);
+		document.addEventListener('focus', documentClick);
 
 		if (self.config.enableTime){
 
