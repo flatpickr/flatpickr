@@ -287,7 +287,7 @@ flatpickr.init = function(element, instanceConfig) {
 			let prev_timestamp = self.selectedDateObj.getTime();
 
 			// update time
-			var hours = (parseInt(hourElement.value, 10) || 0),
+			let hours = (parseInt(hourElement.value, 10) || 0),
 				minutes = (60 + (parseInt(minuteElement.value, 10) || 0)) % 60,
 				seconds;
 
@@ -299,9 +299,7 @@ flatpickr.init = function(element, instanceConfig) {
 
 			self.selectedDateObj.setHours(hours, minutes, seconds === undefined ? self.selectedDateObj.getSeconds() : seconds);
 
-			hourElement.value =
-				pad(self.config.time_24hr ? hours : ((12 + hours)%12+12*(hours%12===0)));
-
+			hourElement.value =	pad(!self.config.time_24hr ? (12 + hours)%12+12*(hours%12===0) : hours);
 			minuteElement.value = pad(minutes);
 
 			if(seconds !== undefined)
@@ -314,7 +312,7 @@ flatpickr.init = function(element, instanceConfig) {
 		if (self.selectedDateObj)
 			(self.altInput||self.input).value = formatDate(self.config.dateFormat);
 
-		if(time_changed || e && e.target.classList.contains("flatpickr-day") )
+		if(e && (time_changed || e.target.classList.contains("flatpickr-day")) )
 			triggerChange();
 
 
@@ -431,15 +429,24 @@ flatpickr.init = function(element, instanceConfig) {
 	};
 
 	timeWrapper = function(e){
+
 		e.preventDefault();
+		e.target.blur();
 
-		let min = parseInt(e.target.min, 10), max = parseInt(e.target.max, 10),
+		let min = parseInt(e.target.min, 10),
+			max = parseInt(e.target.max, 10),
 			step = parseInt(e.target.step, 10),
-			delta = step * (Math.max(-1, Math.min(1, (e.wheelDelta || -e.deltaY)))),
-			newValue = (parseInt(e.target.value, 10) + delta)%(max+(min===0));
+			value = parseInt(e.target.value, 10),
+			newValue = value;
 
-		if (newValue < min)
-			newValue = max + (min === 0) - step*(min === 0);
+		if(e.type === "wheel")
+			newValue = value + step * (Math.max(-1, Math.min(1, (e.wheelDelta || -e.deltaY))));
+
+		if (newValue <= min)
+			newValue = max - step;
+
+		else if (newValue >= max)
+			newValue = min + step;
 
 		e.target.value = pad(newValue);
 
@@ -593,7 +600,6 @@ flatpickr.init = function(element, instanceConfig) {
 			numDays = getDaysinMonth(),
 			prevMonthDays = getDaysinMonth((self.currentMonth - 1 + 12)%12),
 			dayNumber = prevMonthDays + 1 - firstOfMonth,
-			className,
 			cur_date,
 			date_is_disabled;
 
@@ -609,6 +615,7 @@ flatpickr.init = function(element, instanceConfig) {
 		for(; dayNumber <= prevMonthDays; dayNumber++)
 			calendar.appendChild(createElement("span", "disabled flatpickr-day", dayNumber));
 
+		let dayElement;
 
 		// Start at 1 since there is no 0th day
 		for (dayNumber = 1; dayNumber <= 42 - firstOfMonth; dayNumber++) {
@@ -621,25 +628,27 @@ flatpickr.init = function(element, instanceConfig) {
 					createElement("span", "disabled flatpickr-day", cur_date.fp_getWeek())
 				);
 
-
 			date_is_disabled = dayNumber > numDays || isDisabled(cur_date);
 
-			className = date_is_disabled ? "disabled flatpickr-day" : "slot flatpickr-day";
+			dayElement = createElement(
+				"span",
+				(date_is_disabled ? "disabled" : "slot") + " flatpickr-day",
+				(dayNumber > numDays ? dayNumber % numDays : dayNumber)
+			);
 
-			if (!date_is_disabled && equalDates(cur_date, currentDate))
-				className += ' today';
+			if(!date_is_disabled){
 
-			if (!date_is_disabled && self.selectedDateObj && equalDates(cur_date, self.selectedDateObj))
-				className += ' selected';
-
-			let dayElement = createElement("span", className, (dayNumber > numDays ? dayNumber % numDays : dayNumber));
-
-			if(!date_is_disabled)
 				dayElement.tabIndex = 0;
 
-			calendar.appendChild(
-				dayElement
-			);
+				if (equalDates(cur_date, currentDate))
+					dayElement.classList.add('today');
+
+				if (self.selectedDateObj && equalDates(cur_date, self.selectedDateObj))
+					dayElement.classList.add('selected');
+
+			}
+
+			calendar.appendChild(dayElement);
 
 		}
 
@@ -667,11 +676,11 @@ flatpickr.init = function(element, instanceConfig) {
 		hourElement.step = self.config.hourIncrement;
 		minuteElement.step = self.config.minuteIncrement;
 
-		hourElement.min = +!self.config.time_24hr; // 0 in 24hr mode, 1 in 12hr mode
-		hourElement.max = self.config.time_24hr ? 23 : 12;
+		hourElement.min = -self.config.time_24hr; // 0 in 24hr mode, 1 in 12hr mode
+		hourElement.max = self.config.time_24hr ? 24 : 13;
 
-		minuteElement.min = 0;
-		minuteElement.max = 59;
+		minuteElement.min = -minuteElement.step;
+		minuteElement.max = 60;
 
 		hourElement.title = minuteElement.title = self.l10n.scrollTitle;
 
@@ -687,9 +696,9 @@ flatpickr.init = function(element, instanceConfig) {
 			secondElement.type = "number";
 			secondElement.value = self.selectedDateObj ? pad(self.selectedDateObj.getSeconds()) : "00";
 
-			secondElement.step = 5;
-			secondElement.min = 0;
-			secondElement.max = 59;
+			secondElement.step = minuteElement.step;
+			secondElement.min = minuteElement.min;
+			secondElement.max = minuteElement.max;
 
 			timeContainer.appendChild(createElement("span", "flatpickr-time-separator", ":"));
 			timeContainer.appendChild(secondElement);
@@ -797,25 +806,28 @@ flatpickr.init = function(element, instanceConfig) {
 			hourElement.addEventListener("wheel", timeWrapper);
 			minuteElement.addEventListener("wheel", timeWrapper);
 
+			hourElement.addEventListener("input", timeWrapper);
+			minuteElement.addEventListener("input", timeWrapper);
+
 			hourElement.addEventListener("mouseout", updateValue);
 			minuteElement.addEventListener("mouseout", updateValue);
 
 			hourElement.addEventListener("change", updateValue);
 			minuteElement.addEventListener("change", updateValue);
 
-			hourElement.addEventListener("click", hourElement.select);
-			minuteElement.addEventListener("click", minuteElement.select);
+			hourElement.addEventListener("focus", hourElement.select);
+			minuteElement.addEventListener("focus", minuteElement.select);
 
 			if(self.config.enableSeconds){
 				secondElement.addEventListener("wheel", timeWrapper);
+				secondElement.addEventListener("input", timeWrapper);
 				secondElement.addEventListener("mouseout", updateValue);
 				secondElement.addEventListener("change", updateValue);
-				secondElement.addEventListener("click", secondElement.select);
+				secondElement.addEventListener("focus", secondElement.select);
 			}
 
 			if (!self.config.time_24hr) {
 
-				//am_pm.addEventListener("focus", am_pm.blur);
 				am_pm.addEventListener("click", am_pm_toggle);
 
 				am_pm.addEventListener("wheel", am_pm_toggle);
