@@ -897,8 +897,6 @@ flatpickr.init = function(element, instanceConfig) {
 		if(self.isPositioned)
 			return;
 
-		console.info(window.devicePixelRatio);
-
 		let bounds = (self.altInput||self.input).getBoundingClientRect(),
 			// account for scroll & input height
 			top = (window.pageYOffset + (self.altInput||self.input).offsetHeight + bounds.top),
