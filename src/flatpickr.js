@@ -870,10 +870,13 @@ flatpickr.init = function(element, instanceConfig) {
 		return wrapperElement.classList.contains('open');
 	};
 
-	self.open = function() {
+	self.open = function(e) {
 
 		if (self.input.disabled || self.config.inline)
 			return;
+
+		if(e)
+			e.preventDefault();
 
 		if(!self.config.static)
 			self.positionCalendar();
