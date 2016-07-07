@@ -858,9 +858,9 @@ flatpickr.init = function(element, instanceConfig) {
 
 
 		window.addEventListener('resize', throttle(() => {
-
+			self.isPositioned = false;
 			if (self.isOpen() && !self.input.disabled && !self.config.inline && !self.config.static )
-				self.positionCalendar(true);
+				self.positionCalendar();
 
 		}, 150));
 
@@ -892,10 +892,12 @@ flatpickr.init = function(element, instanceConfig) {
 
 	// For calendars inserted in BODY (as opposed to inline wrapper)
 	// it's necessary to properly calculate top/left position.
-	self.positionCalendar = function(force) {
+	self.positionCalendar = function(e) {
 
-		if(self.isPositioned && !force)
+		if(self.isPositioned)
 			return;
+
+		console.info(window.devicePixelRatio);
 
 		let bounds = (self.altInput||self.input).getBoundingClientRect(),
 			// account for scroll & input height
