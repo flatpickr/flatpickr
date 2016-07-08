@@ -166,13 +166,14 @@ flatpickr.init = function(element, instanceConfig) {
 			self.defaultConfig[option];
 
 		if (typeof self.defaultConfig[option] === "boolean")
-			config_value = String(config_value) !== "false";
+			config_value = String(config_value) === "true";
 
-		if(option === "enableTime" && config_value){
-			self.defaultConfig.dateFormat += " h:i K";
-			self.defaultConfig.altFormat += " h:i K";
+
+		if(option === "enableTime" && config_value === true){
+			self.defaultConfig.dateFormat = (!self.config.time_24hr ? "Y-m-d h:i K" : "Y-m-d H:i");
+			self.defaultConfig.altFormat = (!self.config.time_24hr ? "Y-m-d h:i K" : "F j, Y H:i");
 		}
-		else if(option === "noCalendar" && config_value){
+		else if(option === "noCalendar" && config_value === true){
 			self.defaultConfig.dateFormat = "h:i K";
 			self.defaultConfig.altFormat = "h:i K";
 		}
@@ -321,8 +322,12 @@ flatpickr.init = function(element, instanceConfig) {
 
 		}
 
-		if (self.selectedDateObj)
-			(self.altInput||self.input).value = formatDate(self.config.dateFormat);
+		if (self.selectedDateObj){
+			self.input.value = formatDate(self.config.dateFormat);
+
+			if(self.altInput)
+				self.altInput.value = formatDate(self.config.altFormat);
+		}
 
 		if(e && (time_changed || e.target.classList.contains("flatpickr-day")) )
 			triggerChange();
@@ -361,7 +366,7 @@ flatpickr.init = function(element, instanceConfig) {
 
 		for(let i = 0; i < formatPieces.length; i++){
 			let c = formatPieces[i];
-			if (self.formats[c] && formatPieces[i - 1] !== '\\')
+			if (self.formats.hasOwnProperty(c) && formatPieces[i - 1] !== '\\')
 				formattedDate += self.formats[c]();
 
 			else if (c !== '\\')
@@ -395,8 +400,8 @@ flatpickr.init = function(element, instanceConfig) {
 
 			d = (self.config.enable||self.config.disable)[i];
 
- 			if (d instanceof Function && d(check_date)) // disabled by function
- 				return bool;
+			if (d instanceof Function && d(check_date)) // disabled by function
+				return bool;
 
 			else if ( // disabled weekday
 				typeof d === 'string' &&
@@ -405,11 +410,11 @@ flatpickr.init = function(element, instanceConfig) {
 			)
 				return bool;
 
- 			else if ( // disabled by date string
- 				(d instanceof Date || (typeof d === 'string' && !/^wkd/.test(d) ) ) &&
- 				uDate(d,true).getTime() === check_date.getTime()
- 			)
- 				return bool;
+			else if ( // disabled by date string
+				(d instanceof Date || (typeof d === 'string' && !/^wkd/.test(d) ) ) &&
+				uDate(d,true).getTime() === check_date.getTime()
+			)
+				return bool;
 
 			else if ( // disabled by range
 				typeof d === 'object' &&
@@ -1075,9 +1080,6 @@ flatpickr.init.prototype = {
 			preloading date strings w/ timezones is recommended but not necessary */
 			utc: false,
 
-			// noCalendar: true will hide the calendar. use for a time picker along w/ enableTime
-			noCalendar: false,
-
 			// wrap: see https://chmln.github.io/flatpickr/#strap
 			wrap: false,
 
@@ -1089,8 +1091,14 @@ flatpickr.init.prototype = {
 			/* clicking on input opens the date(time)picker. disable if you wish to open the calendar manually with .open() */
 			clickOpens: true,
 
+			// display time picker in 24 hour mode
+			time_24hr: false,
+
 			// enables the time picker functionality
 			enableTime: false,
+
+			// noCalendar: true will hide the calendar. use for a time picker along w/ enableTime
+			noCalendar: false,
 
 			// more date format chars at https://chmln.github.io/flatpickr/#dateformat
 			dateFormat: 'Y-m-d',
@@ -1139,9 +1147,6 @@ flatpickr.init.prototype = {
 
 			// enables seconds in the time picker
 			enableSeconds: false,
-
-			// display time picker in 24 hour mode
-			time_24hr: false,
 
 			// step size used when scrolling/incrementing the hour element
 			hourIncrement: 1,
