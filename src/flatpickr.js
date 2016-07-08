@@ -159,13 +159,20 @@ flatpickr.init = function(element, instanceConfig) {
 	};
 
 	function parseConfig(option){
+
 		let config_value = instanceConfig[option] ||
 			self.element.dataset && self.element.dataset[option.toLowerCase()] ||
 			self.element.getAttribute("data-"+option)||
 			self.defaultConfig[option];
 
 		if (typeof self.defaultConfig[option] === "boolean")
-			return String(config_value) !== "false";
+			config_value = String(config_value) !== "false";
+
+		if(option === "enableTime" && config_value)
+			self.defaultConfig.dateFormat += " h:i K";
+
+		else if(option === "noCalendar" && config_value)
+			self.defaultConfig.dateFormat = "h:i K";
 
 		return config_value;
 	}
@@ -323,12 +330,6 @@ flatpickr.init = function(element, instanceConfig) {
 	pad = num =>("0" + num).slice(-2);
 
 	formatDate = function(dateFormat) {
-
-		if (self.config.noCalendar)
-			dateFormat = "";
-
-		if(self.config.enableTime)
-			dateFormat+= " " + self.config.timeFormat;
 
 		let formattedDate = '',
 			formatPieces = dateFormat.split('');
@@ -1085,6 +1086,9 @@ flatpickr.init.prototype = {
 			/* clicking on input opens the date(time)picker. disable if you wish to open the calendar manually with .open() */
 			clickOpens: true,
 
+			// enables the time picker functionality
+			enableTime: false,
+
 			// more date format chars at https://chmln.github.io/flatpickr/#dateformat
 			dateFormat: 'Y-m-d',
 
@@ -1126,14 +1130,9 @@ flatpickr.init.prototype = {
 			prevArrow: '&lt;',
 			nextArrow: '&gt;',
 
-			// enables the time picker functionality
-			enableTime: false,
 
 			// enables seconds in the time picker
 			enableSeconds: false,
-
-			// self-explanatory. defaults to e.g. 3:02 PM
-			timeFormat: "h:i K",
 
 			// display time picker in 24 hour mode
 			time_24hr: false,
