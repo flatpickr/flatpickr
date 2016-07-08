@@ -163,7 +163,7 @@ flatpickr.init = function(element, instanceConfig) {
 		let config_value = instanceConfig[option] ||
 			self.element.dataset && self.element.dataset[option.toLowerCase()] ||
 			self.element.getAttribute("data-"+option)||
-			self.defaultConfig[option];
+			flatpickr.init.prototype.defaultConfig[option];
 
 		if (typeof self.defaultConfig[option] === "boolean")
 			config_value = String(config_value) === "true";
@@ -171,7 +171,7 @@ flatpickr.init = function(element, instanceConfig) {
 
 		if(option === "enableTime" && config_value === true){
 			self.defaultConfig.dateFormat = (!self.config.time_24hr ? "Y-m-d h:i K" : "Y-m-d H:i");
-			self.defaultConfig.altFormat = (!self.config.time_24hr ? "Y-m-d h:i K" : "F j, Y H:i");
+			self.defaultConfig.altFormat = (!self.config.time_24hr ? "F j Y, h:i K" : "F j, Y H:i");
 		}
 		else if(option === "noCalendar" && config_value === true){
 			self.defaultConfig.dateFormat = "h:i K";
@@ -323,6 +323,7 @@ flatpickr.init = function(element, instanceConfig) {
 		}
 
 		if (self.selectedDateObj){
+			console.info(self.config.dateFormat);
 			self.input.value = formatDate(self.config.dateFormat);
 
 			if(self.altInput)
@@ -914,7 +915,6 @@ flatpickr.init = function(element, instanceConfig) {
 
 		if(self.isOpen)
 			self.close();
-
 		else
 			self.open();
 
