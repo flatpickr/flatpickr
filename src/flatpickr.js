@@ -135,6 +135,7 @@ flatpickr.init = function(element, instanceConfig) {
 		for (var config in self.defaultConfig)
 			self.config[config] = parseConfig(config);
 
+		console.info(self.element.dataset);
 		self.input = (self.config.wrap) ? element.querySelector("[data-input]") : element;
 		self.input.classList.add("flatpickr-input");
 
@@ -160,13 +161,19 @@ flatpickr.init = function(element, instanceConfig) {
 
 	function parseConfig(option){
 
-		let config_value = instanceConfig[option] ||
-			self.element.dataset && self.element.dataset[option.toLowerCase()] ||
-			self.element.getAttribute("data-"+option)||
-			flatpickr.init.prototype.defaultConfig[option];
+		let config_value = flatpickr.init.prototype.defaultConfig[option];
+
+		if(instanceConfig.hasOwnProperty(option))
+			config_value = instanceConfig[option];
+
+		else if (self.element.dataset && self.element.dataset[option.toLowerCase()]!==undefined)
+			config_value = self.element.dataset[option.toLowerCase()];
+
+		else if (!self.element.dataset && self.element.getAttribute("data-"+option) !== undefined)
+			config_value = self.element.getAttribute("data-"+option);
 
 		if (typeof self.defaultConfig[option] === "boolean")
-			config_value = String(config_value) === "true";
+			config_value = String(config_value) !== "false";
 
 
 		if(option === "enableTime" && config_value === true){

@@ -202,7 +202,7 @@ flatpickr('#yourSelector', { dateFormat: 'm/d/Y'});
 				<code>data-clear</code>.</p>
 
 			<pre class='prettyprint lang-html'>
-&lt;p class="flatpickr input-group" data-wrap="true" data-clickOpens="false"&gt;
+&lt;p class="flatpickr input-group" data-wrap data-clickOpens="false"&gt;
 
 	&lt;input placeholder="Pick date" data-input&gt;
 
@@ -212,7 +212,7 @@ flatpickr('#yourSelector', { dateFormat: 'm/d/Y'});
 &lt;/p>
 </pre>
 
-			<p class="flatpickr input-group" data-wrap="true" data-clickOpens="false">
+			<p class="flatpickr input-group" data-wrap data-clickOpens="false">
 
 				<input data-input placeholder="Pick date">
 
@@ -228,30 +228,30 @@ flatpickr('#yourSelector', { dateFormat: 'm/d/Y'});
 
 			<h3>DateTime Picker</h3>
 			<pre class='prettyprint lang-html'>
-&lt;input class=flatpickr data-enabletime=true&gt;
+&lt;input class=flatpickr data-enabletime&gt;
 </pre>
 
 		<p>
-			<input class=flatpickr data-enabletime=true placeholder="Pick date and time">
+			<input class=flatpickr data-enabletime placeholder="Pick date and time">
 		</p>
 		<br>
 
 			<h3>DateTime Picker: 24 Hour Mode</h3>
 			<pre class='prettyprint lang-html'>
-&lt;input class=flatpickr data-enabletime=true data-time_24hr=true&gt;
+&lt;input class=flatpickr data-enabletime data-time_24hr&gt;
 </pre>
 
 		<p>
-			<input class=flatpickr data-enabletime=true data-time_24hr=true placeholder="24 hour time">
+			<input class=flatpickr data-enabletime data-time_24hr placeholder="24 hour time">
 		</p>
 		<br>
 
 			<h3>DateTime Picker with seconds</h3>
 						<pre class='prettyprint lang-html'>
-&lt;input class=flatpickr data-enabletime=true data-enableseconds=true data-dateFormat="Y-m-d h:i:S K"&gt;
+&lt;input class=flatpickr data-enabletime data-enableseconds data-dateFormat="Y-m-d h:i:S K"&gt;
 </pre>
 		<p>
-			<input class=flatpickr data-enabletime=true data-enableseconds=true data-dateFormat="Y-m-d h:i:S K" placeholder="Pick date and time">
+			<input class=flatpickr data-enableTime data-enableseconds data-dateFormat="Y-m-d h:i:S K" placeholder="Pick date and time">
 		</p>
 
 		</div>
@@ -259,10 +259,10 @@ flatpickr('#yourSelector', { dateFormat: 'm/d/Y'});
 		<div class="example_wrapper" data-desc="Time Picker" id="timepicker">
 			<h3>Time Picker</h3>
 			<pre class='prettyprint lang-html'>
-&lt;input class=flatpickr data-enabletime=true  data-nocalendar=true value="09:00"&gt;
+&lt;input class=flatpickr data-enabletime data-nocalendar value="09:00"&gt;
 </pre>
 
-			<input class=flatpickr data-enabletime=true data-nocalendar=true placeholder="Pick time"  value="09:00 PM">
+			<input class=flatpickr data-enabletime data-nocalendar placeholder="Pick time"  value="09:00 PM">
 		</div>
 
 		<div class="example_wrapper" data-desc="User-Friendly date output" id="altinput">
@@ -271,10 +271,10 @@ flatpickr('#yourSelector', { dateFormat: 'm/d/Y'});
 			<p>altInput can be used for displaying a friendly date format (per <code>altFormat</code>) to the user while sending the date formatted as <code>dateFormat</code> to the server. Feel free to inspect the input element below after picking a date to see what's going on. </p>
 
 			<pre class='prettyprint lang-html'>
-&lt;input class=flatpickr data-altinput=true data-altFormat="F j, Y"&gt;
+&lt;input class=flatpickr data-altinput data-altFormat="F j, Y"&gt;
 </pre>
 			<p>
-				<input class=flatpickr id="alt" data-altinput=true data-altFormat="F j, Y" placeholder="The real input is hidden :^)">
+				<input class=flatpickr id="alt" data-altinput data-altFormat="F j, Y" placeholder="The real input is hidden :^)">
 			</p>
 
 			<p><strong>Selected date</strong>: <span id=realdate>nothing yet</span></p>
@@ -289,19 +289,19 @@ flatpickr('#yourSelector', { dateFormat: 'm/d/Y'});
 			simple dates, such as "2016-04-10" to full-fledged datetime strings.
 			</p>
 			<pre class='prettyprint lang-html'>
-&lt;input class=flatpickr data-defaultDate="2016-03-01 03:30:00 -0300"  data-enableTime="true"&gt;
+&lt;input class=flatpickr data-defaultDate="2016-03-01 03:30:00 -0300" data-enableTime&gt;
 </pre>
 
 
 			<p>
-				<input class=flatpickr data-defaultDate="2016-03-01 03:30:00 -0300"  data-enableTime="true">
+				<input class=flatpickr data-defaultDate="2016-03-01 03:30:00 -0300" data-enableTime>
 			</p>
 			<br>
 <pre class='prettyprint lang-html'>
-&lt;input class=flatpickr data-defaultDate="2016-12-27T16:16:22.585Z"  data-enableTime="true"&gt;
+&lt;input class=flatpickr data-defaultDate="2016-12-27T16:16:22.585Z" data-enableTime&gt;
 </pre>
 			<p>
-				<input class=flatpickr data-defaultDate="2016-12-27T16:16:22.585Z"  data-enableTime="true">
+				<input class=flatpickr data-defaultDate="2016-12-27T16:16:22.585Z" data-enableTime>
 			</p>
 
 		</div>
@@ -317,20 +317,20 @@ flatpickr('#yourSelector', { dateFormat: 'm/d/Y'});
 			</p>
 
 			<pre class='prettyprint lang-html'>
-&lt;input class=flatpickr data-utc="true" data-defaultDate="2016-03-01 03:30:00 -0300"  data-enableTime="true"&gt;
+&lt;input class=flatpickr data-utc data-defaultDate="2016-03-01 03:30:00 -0300" data-enableTime&gt;
 </pre>
 
 
 			<p>
-				<input class=flatpickr data-utc="true" data-defaultDate="2016-03-01 03:30:00 -0300"  data-enableTime="true">
+				<input class=flatpickr data-utc data-defaultDate="2016-03-01 03:30:00 -0300" data-enableTime>
 			</p>
 
 			<br>
 			<pre class='prettyprint lang-html'>
-&lt;input class=flatpickr data-defaultDate="2016-12-27T16:16:22.585Z" data-utc="true"  data-enableTime="true"&gt;
+&lt;input class=flatpickr data-defaultDate="2016-12-27T16:16:22.585Z" data-utc data-enableTime&gt;
 </pre>
 			<p>
-				<input class=flatpickr data-defaultDate="2016-12-27T16:16:22.585Z" data-utc="true"  data-enableTime="true">
+				<input class=flatpickr data-defaultDate="2016-12-27T16:16:22.585Z" data-utc data-enableTime>
 			</p>
 
 		</div>
@@ -401,30 +401,30 @@ check_out.set("onChange", function(d) {
 			</p>
 		</div>
 
-				<div class="example_wrapper" id=weeknumbers  data-desc="Week numbers" >
+				<div class="example_wrapper" id=weeknumbers data-desc="Week numbers" >
 			<h3>Display week numbers</h3>
 
 			<pre class='prettyprint lang-html'>
-&lt;input class=flatpickr data-weeknumbers=true placeholder="Enabled week numbers"&gt;
+&lt;input class=flatpickr data-weeknumbers placeholder="Enabled week numbers"&gt;
 </pre>
 
 			<p>
-				<input class=flatpickr data-weeknumbers=true placeholder="Enabled week numbers">
+				<input class=flatpickr data-weeknumbers placeholder="Enabled week numbers">
 			</p>
 
 
 		</div>
 
 
-		<div class="example_wrapper" id=inline-calendar  data-desc="Inline calendar" >
+		<div class="example_wrapper" id=inline-calendar data-desc="Inline calendar" >
 			<h3>Inline or embedded calendar</h3>
 
 			<pre class='prettyprint lang-html'>
-&lt;input class=flatpickr data-inline=true placeholder="Pick a date below"&gt;
+&lt;input class=flatpickr data-inline placeholder="Pick a date below"&gt;
 </pre>
 
 			<p>
-				<input class=flatpickr data-inline=true placeholder="Pick a date below">
+				<input class=flatpickr data-inline placeholder="Pick a date below">
 			</p>
 
 
@@ -454,7 +454,7 @@ flatpickr(".flatpickr")
 		<p></p>
 
 		<div class="example_wrapper" id=options>
-		<h3  data-desc="Options">Options</h3>
+		<h3 data-desc="Options">Options</h3>
 		<p>
 			<strong>Protip: </strong> <u>all</u> of the string/boolean config options can also be supplied using data attributes, e.g. data-mindate, data-defaultdate, data-dateformat etc.
 		</p>
