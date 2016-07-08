@@ -168,11 +168,14 @@ flatpickr.init = function(element, instanceConfig) {
 		if (typeof self.defaultConfig[option] === "boolean")
 			config_value = String(config_value) !== "false";
 
-		if(option === "enableTime" && config_value)
+		if(option === "enableTime" && config_value){
 			self.defaultConfig.dateFormat += " h:i K";
-
-		else if(option === "noCalendar" && config_value)
+			self.defaultConfig.altFormat += " h:i K";
+		}
+		else if(option === "noCalendar" && config_value){
 			self.defaultConfig.dateFormat = "h:i K";
+			self.defaultConfig.altFormat = "h:i K";
+		}
 
 		return config_value;
 	}
