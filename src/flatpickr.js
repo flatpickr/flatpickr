@@ -870,8 +870,8 @@ flatpickr.init = function(element, instanceConfig) {
 
 
 		window.addEventListener('resize', () => {
-			self.isPositioned = false;
-			if (self.isOpen && !self.input.disabled && !self.config.inline && !self.config.static )
+
+			if (!self.input.disabled && !self.config.inline && !self.config.static )
 				self.positionCalendar();
 
 		});
