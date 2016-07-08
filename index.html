@@ -490,6 +490,18 @@ flatpickr(".flatpickr")
 					<td>""</td>
 					<td>This class will be added to the input element created by the altInput option. Helpful if input elements are styled using classes. Bootstrap users will want to specify <code>form-control</code> here.</td>
 				</tr>
+				<tr>
+					<td>allowInput</td>
+					<td>boolean</td>
+					<td>false</td>
+					<td>Allows the user to enter a date directly input the input field. By default, direct entry is disabled.</td>
+				</tr>
+				<tr>
+					<td>clickOpens</td>
+					<td>boolean</td>
+					<td>true</td>
+					<td>Clicking on the input opens the date (time) picker. Disable this if you wish to open the calendar manually with <code>.open()</code></td>
+				</tr>
 
 				<tr>
 					<td>dateFormat</td>
@@ -519,16 +531,46 @@ flatpickr(".flatpickr")
 					<td>Enables time picker </td>
 				</tr>
 				<tr>
+					<td>enableSeconds</td>
+					<td>boolean</td>
+					<td>false</td>
+					<td>Enables seconds in the time picker.</td>
+				</tr>
+				<tr>
+					<td>noCalendar</td>
+					<td>boolean</td>
+					<td>false</td>
+					<td>Hides the calendar. For use along with enableTime.</td>
+				</tr>
+				<tr>
 					<td>hourIncrement</td>
 					<td>integer</td>
 					<td>1</td>
 					<td>Adjusts the step for the hour input (incl. scrolling) </td>
 				</tr>
 				<tr>
+					<td>minuteIncrement</td>
+					<td>integer</td>
+					<td>5</td>
+					<td>Adjusts the step for the minute input (incl. scrolling) </td>
+				</tr>
+				<tr>
 					<td>inline</td>
+					<td>boolean</td>
+					<td>false</td>
+					<td>Displays the calendar inline. See <a href="https://chmln.github.io/flatpickr/#inline-calendar">Inline or embedded calendar</a>.</td>
+				</tr>
+				<tr>
+					<td>static</td>
+					<td>boolean</td>
+					<td>false</td>
+					<td>Position the calendar inside the wrapper and next to the input element. (Leave <code>false</code> unless you know what you're doing.</td>
+				</tr>
+				<tr>
+					<td>wrap</td>
 					<td>Boolean</td>
 					<td>false</td>
-					<td>Display the calendar inline.</td>
+					<td>The wrapping element. See <a href="https://chmln.github.io/flatpickr/#strap">Custom elements and input groups</a>.</td>
 				</tr>
 
 				<tr>
@@ -554,9 +596,21 @@ flatpickr(".flatpickr")
 				</tr>
 				<tr>
 					<td>onChange</td>
-					<td>function(dateObject)</td>
+					<td>function(dateObject, dateString)</td>
 					<td>null</td>
 					<td>A function that gets triggered on every date selection </td>
+				</tr>
+				<tr>
+					<td>onOpen</td>
+					<td>function(dateObject, dateString)</td>
+					<td>null</td>
+					<td>A function that gets triggered on every time the calendar is opened.</td>
+				</tr>
+				<tr>
+					<td>onClose</td>
+					<td>function(dateObject, dateString)</td>
+					<td>null</td>
+					<td>A function that gets triggered on every time the calendar is closed.</td>
 				</tr>
 				<tr>
 					<td>parseDate</td>
@@ -571,12 +625,35 @@ flatpickr(".flatpickr")
 					<td>Show the month using the shorthand version (ie, Sep instead of September).</td>
 				</tr>
 				<tr>
+					<td>weekNumbers</td>
+					<td>boolean</td>
+					<td>false</td>
+					<td>Enables display of week numbers in calendar.</td>
+				</tr>
+				<tr>
 					<td>time_24hr</td>
 					<td>boolean</td>
 					<td>false</td>
 					<td>Displays time picker in 24 hour mode without AM/PM selection when enabled.</td>
 				</tr>
-
+				<tr>
+					<td>utc</td>
+					<td>boolean</td>
+					<td>false</td>
+					<td>When true, dates will parsed, formatted, and displayed in UTC. It's recommended that date strings contain the timezone, but not necessary.</td>
+				</tr>
+				<tr>
+					<td>prevArrow</td>
+					<td>string</td>
+					<td><code>&lt;</code></td>
+					<td>Code for the previous icon.</td>
+				</tr>
+				<tr>
+					<td>nextArrow</td>
+					<td>string</td>
+					<td><code>&gt;</code></td>
+					<td>Code for the next icon.</td>
+				</tr>
 			</tbody>
 		</table>
 		</div>
