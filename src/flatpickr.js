@@ -77,7 +77,7 @@ flatpickr.init = function(element, instanceConfig) {
 		pad,
 		formatDate,
 		monthToStr,
-		isDisabled,
+		isEnabled,
 
 		buildMonthNavigation,
 		buildWeekdays,
@@ -154,7 +154,7 @@ flatpickr.init = function(element, instanceConfig) {
 		self.jumpToDate();
 		updateValue();
 
-		if(!self.config.static)
+		if(!self.config.static && !self.config.inline)
 			self.positionCalendar();
 	};
 
@@ -379,37 +379,37 @@ flatpickr.init = function(element, instanceConfig) {
 	};
 
 
-	isDisabled = function(check_date){
+	isEnabled = function(check_date){
 
 		if (
 			(self.config.minDate && check_date < self.config.minDate) ||
 			(self.config.maxDate && check_date > self.config.maxDate)
 		)
-			return true;
+			return false;
 
 		check_date = uDate(check_date, true); //timeless
 
-		let d;
+		let d, bool = self.config.enable.length > 0;
 
-		for (let i = 0; i < self.config.disable.length; i++){
+		for (let i = 0; i < (self.config.enable||self.config.disable).length; i++){
 
-			d = self.config.disable[i];
+			d = (self.config.enable||self.config.disable)[i];
 
  			if (d instanceof Function && d(check_date)) // disabled by function
- 				return true;
+ 				return bool;
 
 			else if ( // disabled weekday
 				typeof d === 'string' &&
 				/^wkd/.test(d) &&
 				check_date.getDay() === (parseInt(d.slice(-1)) + self.l10n.firstDayOfWeek - 1 )%7
 			)
-				return true;
+				return bool;
 
  			else if ( // disabled by date string
  				(d instanceof Date || (typeof d === 'string' && !/^wkd/.test(d) ) ) &&
  				uDate(d,true).getTime() === check_date.getTime()
  			)
- 				return true;
+ 				return bool;
 
 			else if ( // disabled by range
 				typeof d === 'object' &&
@@ -417,11 +417,11 @@ flatpickr.init = function(element, instanceConfig) {
 				check_date >= uDate(d.from) &&
 				check_date <= uDate(d.to)
 			)
-				return true;
+				return bool;
 
 		}
 
-		return false;
+		return !bool;
 
 	};
 
@@ -635,7 +635,7 @@ flatpickr.init = function(element, instanceConfig) {
 					createElement("span", "disabled flatpickr-day", cur_date.fp_getWeek())
 				);
 
-			date_is_disabled = dayNumber > numDays || isDisabled(cur_date);
+			date_is_disabled = dayNumber > numDays || !isEnabled(cur_date);
 
 			dayElement = createElement(
 				"span",
@@ -1115,6 +1115,9 @@ flatpickr.init.prototype = {
 
 			// dateparser that transforms a given string to a date object
 			parseDate: false,
+
+			// see https://chmln.github.io/flatpickr/#disable
+			enable: [],
 
 			// see https://chmln.github.io/flatpickr/#disable
 			disable: [],
