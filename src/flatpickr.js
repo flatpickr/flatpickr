@@ -153,6 +153,9 @@ flatpickr.init = function(element, instanceConfig) {
 
 		self.jumpToDate();
 		updateValue();
+
+		if(!self.config.static)
+			self.positionCalendar();
 	};
 
 	function parseConfig(option){
@@ -253,7 +256,6 @@ flatpickr.init = function(element, instanceConfig) {
 			// of relative positioned elements with css 'overflow: hidden;'
 			// property set.
 			document.body.appendChild(wrapperElement);
-
 
 		if (self.config.altInput){
 			// replicate self.element
@@ -472,12 +474,13 @@ flatpickr.init = function(element, instanceConfig) {
 	};
 
 	documentClick = function(event) {
- 		if ( self.isOpen() &&
+		console.log("documentclick");
+		if ( self.isOpen &&
 			!wrapperElement.contains(event.target) &&
-			event.target !== self.element &&
-			event.target !== self.altInput
+			!self.element.contains(event.target) &&	event.target !== (self.altInput||self.input)
 		)
 			self.close();
+
 
 	};
 
@@ -676,7 +679,7 @@ flatpickr.init = function(element, instanceConfig) {
 		hourElement.step = self.config.hourIncrement;
 		minuteElement.step = self.config.minuteIncrement;
 
-		hourElement.min = -self.config.time_24hr; // 0 in 24hr mode, 1 in 12hr mode
+		hourElement.min = -self.config.time_24hr;
 		hourElement.max = self.config.time_24hr ? 24 : 13;
 
 		minuteElement.min = -minuteElement.step;
@@ -723,7 +726,7 @@ flatpickr.init = function(element, instanceConfig) {
 
 		document.addEventListener("keydown", function(e){
 
-			if( !self.isOpen() || self.config.enableTime && timeContainer.contains(e.target ) )
+			if( !self.isOpen || self.config.enableTime && timeContainer.contains(e.target ) )
 				return;
 
 			if (e.which === 27)
@@ -798,7 +801,7 @@ flatpickr.init = function(element, instanceConfig) {
 
 		}
 
-		document.addEventListener('click', documentClick, true);
+		document.body.addEventListener('click', documentClick, true);
 		document.addEventListener('focus', documentClick);
 
 		if (self.config.enableTime){
@@ -859,27 +862,19 @@ flatpickr.init = function(element, instanceConfig) {
 
 		window.addEventListener('resize', () => {
 			self.isPositioned = false;
-			if (self.isOpen() && !self.input.disabled && !self.config.inline && !self.config.static )
+			if (self.isOpen && !self.input.disabled && !self.config.inline && !self.config.static )
 				self.positionCalendar();
 
 		});
 
 	};
 
-	self.isOpen = function(){
-		return wrapperElement.classList.contains('open');
-	};
+	self.open = function() {
 
-	self.open = function(e) {
-
-		if (self.input.disabled || self.config.inline)
+		if ((self.altInput||self.input).disabled || self.config.inline)
 			return;
 
-		if(e)
-			e.preventDefault();
-
-		if(!self.config.static)
-			self.positionCalendar();
+		self.isOpen = true;
 
 		wrapperElement.classList.add('open');
 		(self.config.noCalendar ? timeContainer : calendar).focus();
@@ -896,10 +891,6 @@ flatpickr.init = function(element, instanceConfig) {
 	// For calendars inserted in BODY (as opposed to inline wrapper)
 	// it's necessary to properly calculate top/left position.
 	self.positionCalendar = function(e) {
-
-		if(self.isPositioned)
-			return;
-
 		let bounds = (self.altInput||self.input).getBoundingClientRect(),
 			// account for scroll & input height
 			top = (window.pageYOffset + (self.altInput||self.input).offsetHeight + bounds.top),
@@ -908,28 +899,22 @@ flatpickr.init = function(element, instanceConfig) {
 		wrapperElement.style.top = top + 'px';
 		wrapperElement.style.left = left + 'px';
 
-		self.isPositioned = true;
 	};
 
 	self.toggle = function() {
-		if (self.input.disabled)
-			return;
 
-		wrapperElement.classList.toggle('open');
-		self.positionCalendar();
+		if(self.isOpen)
+			self.close();
 
-		if(self.altInput)
-			self.altInput.classList.toggle('active');
+		else
+			self.open();
 
-		self.input.classList.toggle('active');
 	};
 
 	self.close = function() {
+		self.isOpen = false;
 		wrapperElement.classList.remove('open');
-		self.input.classList.remove('active');
-
-		if (self.altInput)
-			self.altInput.classList.remove('active');
+		(self.altInput||self.input).classList.remove('active');
 
 		if (self.config.onClose)
 			self.config.onClose(self.selectedDateObj, self.input.value);
