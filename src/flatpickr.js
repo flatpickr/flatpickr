@@ -937,7 +937,12 @@ flatpickr.init = function(element, instanceConfig) {
 	};
 
 	self.clear = function() {
+
 		self.input.value="";
+
+		if(self.altInput)
+			self.altInput.value = "";
+
 		self.selectedDateObj = null;
 
 		triggerChange();
