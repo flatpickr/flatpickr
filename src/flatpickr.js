@@ -474,7 +474,7 @@ flatpickr.init = function(element, instanceConfig) {
 	};
 
 	documentClick = function(event) {
-		console.log("documentclick");
+
 		if ( self.isOpen &&
 			!wrapperElement.contains(event.target) &&
 			!self.element.contains(event.target) &&	event.target !== (self.altInput||self.input)
@@ -890,7 +890,7 @@ flatpickr.init = function(element, instanceConfig) {
 
 	// For calendars inserted in BODY (as opposed to inline wrapper)
 	// it's necessary to properly calculate top/left position.
-	self.positionCalendar = function(e) {
+	self.positionCalendar = function() {
 		let bounds = (self.altInput||self.input).getBoundingClientRect(),
 			// account for scroll & input height
 			top = (window.pageYOffset + (self.altInput||self.input).offsetHeight + bounds.top),
