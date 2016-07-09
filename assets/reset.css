@@ -117,14 +117,6 @@ input[type="search"]::-webkit-search-cancel-button {
     -webkit-appearance: none;
 }
 
-hr {
-    display: block;
-    box-sizing: content-box;
-    height: 1px;
-    border: 0;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
-}
-
 img,
 video,
 audio,
