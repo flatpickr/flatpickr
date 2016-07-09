@@ -1,5 +1,5 @@
-/*@import url("https://fonts.googleapis.com/css?family=Nunito:700&text=flatpickr");
-@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,700");*/
+@import url("https://fonts.googleapis.com/css?family=Nunito:700&text=flatpickr");
+@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,700");
 @import url("reset.css");
 @import url("icons.css");
 @import url("prettify.css");
@@ -9,8 +9,6 @@ body, input {
     color: #333;
     line-height: 1.5
 }
-
-
 
 h1 {
     font-size: 3rem;
