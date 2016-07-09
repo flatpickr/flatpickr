@@ -106,7 +106,7 @@ flatpickr.init = function (element, instanceConfig) {
 
 		triggerChange;
 
-	// elements & letiables
+	// elements & variables
 	let calendarContainer,
 		timeContainer,
 		navigationCurrentMonth,
@@ -610,7 +610,7 @@ flatpickr.init = function (element, instanceConfig) {
 	buildMonthNavigation = function () {
 		monthsNav = createElement("div", "flatpickr-month");
 
-		prevMonthNav = createElement("span", "flatpickr-prev-month", self.config.preletrow);
+		prevMonthNav = createElement("span", "flatpickr-prev-month", self.config.prevArrow);
 
 		currentMonthElement = createElement("span", "cur_month");
 
@@ -1242,7 +1242,7 @@ flatpickr.init.prototype = {
 		static: false,
 
 		// code for previous/next icons. this is where you put your custom icon code e.g. fontawesome
-		preletrow: "&lt;",
+		prevArrow: "&lt;",
 		nextArrow: "&gt;",
 
 
