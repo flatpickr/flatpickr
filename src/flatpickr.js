@@ -185,6 +185,9 @@ flatpickr.init = function (element, instanceConfig) {
 	};
 
 	init = function () {
+		// deep copy
+		self.defaultConfig = JSON.parse(JSON.stringify(flatpickr.init.prototype.defaultConfig));
+
 		instanceConfig = instanceConfig || {};
 
 		self.config = {};
@@ -221,7 +224,7 @@ flatpickr.init = function (element, instanceConfig) {
 	};
 
 	parseConfig = option => {
-		let configValue = flatpickr.init.prototype.defaultConfig[option];
+		let configValue = self.defaultConfig[option];
 
 		if (instanceConfig.hasOwnProperty(option)) {
 			configValue = instanceConfig[option];
@@ -1263,12 +1266,13 @@ flatpickr.init.prototype = {
 	}
 };
 
-Date.prototype.fp_incr = days => new Date(
-	this.getFullYear(),
-	this.getMonth(),
-	this.getDate() + parseInt(days, 10)
-);
-
+Date.prototype.fp_incr = function (days) {
+	return new Date(
+		this.getFullYear(),
+		this.getMonth(),
+		this.getDate() + parseInt(days, 10)
+	);
+};
 
 Date.prototype.fp_isUTC = false;
 Date.prototype.fp_toUTC = function () {
