@@ -186,7 +186,7 @@ flatpickr.init = function (element, instanceConfig) {
 
 	init = function () {
 		// deep copy
-		self.defaultConfig = JSON.parse(JSON.stringify(flatpickr.init.prototype.defaultConfig));
+		self.defaultConfig = Object.assign({}, flatpickr.init.prototype.defaultConfig);
 
 		instanceConfig = instanceConfig || {};
 
