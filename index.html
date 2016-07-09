@@ -338,57 +338,120 @@ flatpickr('#yourSelector', { dateFormat: 'm/d/Y'});
 
 
 		<div class="example_wrapper" data-desc="Disabling dates" id="disable">
-			<h3>Disable specific dates or date intervals</h3>
-
+			<h3>Disabling dates</h3>
+			<p>Disable a date interval, or a specific date.</p>
 			<pre class='prettyprint lang-js'>
 flatpickr('#disableRange', {
-
 	disable: [
 		{
-			from: "2016-07-06",
-			to: "2016-07-09"
+			from: "2016-08-16",
+			to: "2016-08-19"
 		},
-		"2016-07-24"
-	],
-	minDate: "today"
-
-});
-
-flatpickr('#disableRangeMultiple', {
-
-	disable:
-	[
-		{ 'from' : "2016-09-06", 'to' : "2016-09-09" },
-		{ 'from' : "August 25, 2016", 'to' : "August 31, 2016" }
-	],
-	minDate: "today",
-	dateFormat: 'Y-m-d'
-
+		"2016-08-24",
+		new Date().fp_incr(30) // 30 days from now
+	]
 });
 </pre>
-
-
 			<p>
-				<input id="disableRange" placeholder="disabled from July 6-9">
+				<input id="disableRange" placeholder="Select date">
 			</p>
+
+
+
+			<hr>
+
+			<p>Or pass in a custom function and disable dates using any logic you want.</p>
+						<pre class='prettyprint lang-js'>
+flatpickr('#disableOddDays', {
+	disable: [
+		function(date){ // disable odd days
+			return date.getDate()%2 > 0;
+		}
+	]
+});
+</pre>
 			<p>
-				<input id="disableRangeMultiple" placeholder="disabled September 6-9 &amp; August 25-31 2016 ">
+				<input id="disableOddDays" placeholder="Select date">
+			</p>
+
+			<hr>
+
+			<p>Disable <strong>all</strong> dates except the ones you need, by passing in date strings, Date objects, or functions.</p>
+			<pre class='prettyprint lang-js'>
+flatpickr('#enableNextSeven', {
+	enable: [
+		{
+			from: "today",
+			to: new Date().fp_incr(7) // 7 days from now
+		}
+	]
+});
+</pre>
+			<p>
+				<input id="enableNextSeven" placeholder="Select date">
+			</p>
+
+			<hr>
+
+			<p>Use custom logic to enable the dates you need. For instance, enable business days of 2016:</p>
+			<pre class='prettyprint lang-js'>
+flatpickr('#enableCustom', {
+	enable: [
+		function(dateObj){
+			return dateObj.getDay() %6 !== 0 &amp;&amp; dateObj.getFullYear() === 2016;
+		}
+	]
+});
+</pre>
+			<p>
+				<input id="enableCustom" placeholder="Select date">
 			</p>
 		</div>
 
-
-		<div class="example_wrapper" data-desc="Utilizing onChange Event" id="onchange">
-			<h3>Setting options on the fly</h3>
+		<div class="example_wrapper" data-desc="Events API" id="eventAPI">
+			<h3>Event API</h3>
 
 			<pre class='prettyprint lang-js'>
-var check_in = flatpickr("#check_in_date", { minDate: new Date() });
-var check_out = flatpickr("#check_out_date", { minDate: new Date() });
+flatpickr("#events-api-example", {
+	minDate: "today",
+	enableTime: true,
+	onChange: function(dateObj, dateStr) {
+		...
+	},
+	onOpen: function(dateObj, dateStr){
+		...
+	},
+	onClose: function(dateObj, dateStr){
+		...
+	}
+});
+</pre>
+
+			<p id=events style="height: 60px; overflow-y: auto"></p>
+			<p>
+				<input id="events-api-example" placeholder="Select date">
+			</p>
+
+			<hr>
+			<h3>Example: check in and check out</h3>
+
+			<pre class='prettyprint lang-js'>
+var check_in = flatpickr("#check_in_date", {
+	altInput: true,
+	altFormat: "\\C\\h\\e\\c\\k \\i\\n\\: l, F j Y",
+	minDate: new Date()
+});
+var check_out = flatpickr("#check_out_date", {
+	altInput: true,
+	altFormat: "\\C\\h\\e\\c\\k \\o\\u\\t: l, F j Y",
+	minDate: new Date()
+});
 
 check_in.set("onChange", function(d) {
-	check_out.set("minDate", d.fp_incr(1)); //increment by one day
+	check_out.set("minDate", d.fp_incr(1));
 });
 check_out.set("onChange", function(d) {
-	check_in.set("maxDate", d);
+	check_in.set("maxDate", d.fp_incr(-1));
 });
 </pre>
 
@@ -913,36 +976,69 @@ flatpickr(".flatpickr")
 	}
 
 	flatpickr('#disableRange', {
-
 		disable: [
 			{
-				from: "2016-07-06",
-				to: "2016-07-09"
+				from: "2016-08-16",
+				to: "2016-08-19"
 			},
-			"2016-07-24"
+			"2016-08-24",
+			new Date().fp_incr(30) // 30 days from now
 		],
 		minDate: "today"
-
 	});
 
-	flatpickr('#disableRangeMultiple', {
+	flatpickr('#disableOddDays', {
+		disable: [
+			function(date){ // disable odd days
+				return date.getDate()%2 > 0;
+			}
+		]
+	});
 
-		disable: [{
-			'from': "2016-09-06",
-			'to': "2016-09-09"
-		}, {
-			'from': "August 25, 2016",
-			'to': "August 31, 2016"
-		}],
+	flatpickr('#enableNextSeven', {
+		enable: [
+			{
+				from: "today",
+				to: new Date().fp_incr(7)
+			}
+		]
+	});
+
+
+	flatpickr('#enableCustom', {
+		enable: [
+			function(dateObj){
+				return dateObj.getDay() %6 !== 0 && dateObj.getFullYear() === 2016;
+			}
+		]
+	});
+
+	var events = document.getElementById("events");
+	flatpickr("#events-api-example", {
 		minDate: "today",
-		dateFormat: 'Y-m-d'
-
+		enableTime: true,
+		onChange: function(dateObj, dateStr) {
+			events.innerHTML += "<b>onChange</b> (<code>" + dateObj + "</code>, <code>" + dateStr + "</code> )<br>";
+			events.scrollTop = events.offsetTop;
+		},
+		onOpen: function(dateObj, dateStr){
+			events.innerHTML += "<b>onOpen</b> (<code>" + dateObj + "</code>, <code>" + dateStr + "</code> )<br>";
+			events.scrollTop = events.offsetTop;
+		},
+		onClose: function(dateObj, dateStr){
+			events.innerHTML += "<b>onClose</b> (<code>" + dateObj + "</code>, <code>" + dateStr + "</code> )<br>";
+			events.scrollTop = events.offsetTop;
+		}
 	});
 
 	var check_in = flatpickr("#check_in_date", {
+		altInput: true,
+		altFormat: "\\C\\h\\e\\c\\k \\i\\n\\: l, F j Y",
 		minDate: new Date()
 	});
 	var check_out = flatpickr("#check_out_date", {
+		altInput: true,
+		altFormat: "\\C\\h\\e\\c\\k \\o\\u\\t: l, F j Y",
 		minDate: new Date()
 	});
 
@@ -950,7 +1046,7 @@ flatpickr(".flatpickr")
 		check_out.set("minDate", d.fp_incr(1));
 	});
 	check_out.set("onChange", function(d) {
-		check_in.set("maxDate", d);
+		check_in.set("maxDate", d.fp_incr(-1));
 	});
 
 	}
