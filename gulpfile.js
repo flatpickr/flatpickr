@@ -1,7 +1,7 @@
 const gulp = require("gulp"),
 	babel = require("gulp-babel"),
 	cssmin = require("gulp-cssmin"),
-	lint = require("gulp-jshint"),
+	lint = require("gulp-eslint"),
 	plumber = require("gulp-plumber"),
 	rename = require("gulp-rename"),
 	stylus = require("gulp-stylus"),
@@ -16,11 +16,8 @@ const paths = {
 gulp.task('script', function(){
 	return gulp.src(paths.script)
 	.pipe(plumber())
-	.pipe(lint({
-		"esversion": 6,
-		"unused": true
-	}))
-	.pipe(lint.reporter('default'))
+	.pipe(lint())
+	.pipe(lint.format())
 	.pipe(babel({presets: ['es2015']}))
 	.pipe(uglify({compress: {hoist_funs: false, hoist_vars: false}})).on('error', errorHandler)
 	.pipe(rename({ suffix: '.min'}))
