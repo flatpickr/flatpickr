@@ -462,11 +462,13 @@ flatpickr.init = function (element, instanceConfig) {
 
 		dateToCheck = uDate(dateToCheck, true); // timeless
 
-		const bool = self.config.enable.length > 0;
+		const bool = self.config.enable.length > 0,
+			array = bool ? self.config.enable : self.config.disable;
+
 		let d;
 
-		for (let i = 0; i < (self.config.enable || self.config.disable).length; i++) {
-			d = (self.config.enable || self.config.disable)[i];
+		for (let i = 0; i < array.length; i++) {
+			d = array[i];
 
 			if (d instanceof Function && d(dateToCheck)) { // disabled by function
 				return bool;
