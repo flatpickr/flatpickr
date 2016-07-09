@@ -1,0 +1,38 @@
+---
+    extends: airbnb/base
+
+    rules:
+        brace-style:
+            - error
+            - stroustrup
+
+        comma-dangle:
+            - error
+            - only-multiline
+
+        func-names: off
+
+        indent:
+            - error
+            - tab
+            - { "SwitchCase": 1 }
+
+        new-cap: off
+        no-confusing-arrow: off
+        no-console: off
+        no-extend-native: off
+        no-param-reassign: off
+        no-underscore-dangle: off
+
+        one-var: off
+
+        prefer-const: off
+
+        quotes:
+            - error
+            - double
+
+
+
+
+
