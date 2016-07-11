@@ -13,33 +13,45 @@ const paths = {
 	themes: "./src/style/themes/*.styl"
 };
 
-gulp.task('script', function(){
+function get_script_stream(){
 	return gulp.src(paths.script)
 	.pipe(plumber())
 	.pipe(lint())
 	.pipe(lint.format())
-	.pipe(babel({presets: ['es2015']}))
-	.pipe(uglify({compress: {hoist_funs: false, hoist_vars: false}})).on('error', errorHandler)
+	.pipe(babel({presets: ['es2015']}));
+}
+
+gulp.task('script', function(done){
+	get_script_stream().pipe(gulp.dest('dist'));
+
+	get_script_stream()
+	.pipe(uglify({compress: {hoist_funs: false, hoist_vars: false}}))
 	.pipe(rename({ suffix: '.min'}))
 	.pipe(gulp.dest('dist'));
+
+	done();
 });
 
-gulp.task('style', function(){
-	return gulp.src(paths.style)
+gulp.task('style', function(done){
+	gulp.src(paths.style)
 	.pipe(plumber())
 	.pipe(stylus())
 	.pipe(cssmin()).on('error', errorHandler)
 	.pipe(rename({ suffix: '.min'}))
 	.pipe(gulp.dest('dist'));
+
+	done();
 });
 
-gulp.task('themes', function(){
-	return gulp.src(paths.themes)
+gulp.task('themes', function(done){
+	gulp.src(paths.themes)
 	.pipe(plumber())
 	.pipe(stylus())
 	.pipe(cssmin()).on('error', errorHandler)
 	.pipe(rename({ prefix: 'flatpickr.',suffix: '.min'}))
 	.pipe(gulp.dest('dist'));
+
+	done();
 });
 
 gulp.task('watch', function(done) {

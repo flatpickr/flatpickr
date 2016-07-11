@@ -6,13 +6,9 @@ $width = 256px
 
 .flatpickr-wrapper
 	position absolute
-	display block
+	display inline-block
 
-	&.inline, &.static
-		display block
-		position relative
-
-	&.inline .flatpickr-calendar
+	&.inline, &.static, &.inline .flatpickr-calendar
 		position relative
 
 	&.static .flatpickr-calendar
@@ -282,3 +278,6 @@ $width = 256px
 		background lighten($day_hover_background_color, 4)
 
 
+@media all and (-ms-high-contrast: none)
+	.flatpickr-month
+		padding 0

@@ -27,6 +27,7 @@
         one-var: off
 
         prefer-const: off
+        prefer-template: off
 
         quotes:
             - error
