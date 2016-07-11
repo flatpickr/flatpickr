@@ -30,7 +30,11 @@ const flatpickr = function (selector, config) {
 		elements = document.querySelectorAll(selector);
 	}
 
-	const instances = [].slice.call(elements).map(createInstance);
+	let instances = [];
+
+	for (let i = 0; i < elements.length; i++) {
+		instances.push(createInstance(elements[i]));
+	}
 
 	return {
 		calendars: instances,
@@ -51,11 +55,11 @@ const flatpickr = function (selector, config) {
  * @constructor
  */
 flatpickr.init = function (element, instanceConfig) {
-	const createElement = (tag, className, content) => {
-		const newElement = document.createElement(tag);
+	function createElement(tag, className, content) {
+		let newElement = document.createElement(tag);
 
 		if (content) {
-			newElement.innerHTML = content;
+			newElement.textContent = content;
 		}
 
 		if (className) {
@@ -63,7 +67,7 @@ flatpickr.init = function (element, instanceConfig) {
 		}
 
 		return newElement;
-	};
+	}
 
 	// functions
 	const self = this;
@@ -184,20 +188,106 @@ flatpickr.init = function (element, instanceConfig) {
 		y: () => String(self.formats.Y()).substring(2)
 	};
 
-	init = function () {
-		// deep copy
-		self.defaultConfig = Object.assign({}, flatpickr.init.prototype.defaultConfig);
+	self.defaultConfig = {
+		/* if true, dates will be parsed, formatted, and displayed in UTC.
+		preloading date strings w/ timezones is recommended but not necessary */
+		utc: false,
 
+		// wrap: see https://chmln.github.io/flatpickr/#strap
+		wrap: false,
+
+		// enables week numbers
+		weekNumbers: false,
+
+		allowInput: false,
+
+		/*
+			clicking on input opens the date(time)picker.
+			disable if you wish to open the calendar manually with .open()
+		*/
+		clickOpens: true,
+
+		// display time picker in 24 hour mode
+		time_24hr: false,
+
+		// enables the time picker functionality
+		enableTime: false,
+
+		// noCalendar: true will hide the calendar. use for a time picker along w/ enableTime
+		noCalendar: false,
+
+		// more date format chars at https://chmln.github.io/flatpickr/#dateformat
+		dateFormat: "Y-m-d",
+
+		// altInput - see https://chmln.github.io/flatpickr/#altinput
+		altInput: false,
+
+		// the created altInput element will have this class.
+		altInputClass: "",
+
+		// same as dateFormat, but for altInput
+		altFormat: "F j, Y", // defaults to e.g. June 10, 2016
+
+		// defaultDate - either a datestring or a date object. used for datetimepicker"s initial value
+		defaultDate: null,
+
+		// the minimum date that user can pick (inclusive)
+		minDate: null,
+
+		// the maximum date that user can pick (inclusive)
+		maxDate: null,
+
+		// dateparser that transforms a given string to a date object
+		parseDate: false,
+
+		// see https://chmln.github.io/flatpickr/#disable
+		enable: [],
+
+		// see https://chmln.github.io/flatpickr/#disable
+		disable: [],
+
+		// display the short version of month names - e.g. Sep instead of September
+		shorthandCurrentMonth: false,
+
+		// displays calendar inline. see https://chmln.github.io/flatpickr/#inline-calendar
+		inline: false,
+
+		// position calendar inside wrapper and next to the input element
+		// leave at false unless you know what you"re doing
+		static: false,
+
+		// code for previous/next icons. this is where you put your custom icon code e.g. fontawesome
+		prevArrow: "&lt;",
+		nextArrow: "&gt;",
+
+
+		// enables seconds in the time picker
+		enableSeconds: false,
+
+		// step size used when scrolling/incrementing the hour element
+		hourIncrement: 1,
+
+		// step size used when scrolling/incrementing the minute element
+		minuteIncrement: 5,
+
+		// onChange callback when user selects a date or time
+		onChange: null, // function (dateObj, dateStr) {}
+
+		// called every time calendar is opened
+		onOpen: null, // function (dateObj, dateStr) {}
+
+		// called every time calendar is closed
+		onClose: null // function (dateObj, dateStr) {}
+	};
+
+	init = function () {
 		instanceConfig = instanceConfig || {};
 
-		self.config = {};
 		self.element = element;
 
-		Object.keys(self.defaultConfig).forEach(config => {
-			self.config[config] = parseConfig(config);
-		});
+		parseConfig();
 
-		self.input = (self.config.wrap) ? element.querySelector("[data-input]") : element;
+		self.input = self.config.wrap ? element.querySelector("[data-input]") : element;
 		self.input.classList.add("flatpickr-input");
 
 		if (self.config.defaultDate) {
@@ -208,13 +298,11 @@ flatpickr.init = function (element, instanceConfig) {
 			self.selectedDateObj = uDate(self.config.defaultDate || self.input.value);
 		}
 
-
 		wrap();
 		buildCalendar();
 		bind();
 
 		self.uDate = uDate;
-
 		self.jumpToDate();
 		updateValue();
 
@@ -223,36 +311,41 @@ flatpickr.init = function (element, instanceConfig) {
 		}
 	};
 
-	parseConfig = option => {
-		let configValue = self.defaultConfig[option];
+	parseConfig = function () {
+		self.config = {};
 
-		if (instanceConfig.hasOwnProperty(option)) {
-			configValue = instanceConfig[option];
-		}
+		Object.keys(self.defaultConfig).forEach(key => {
+			if (instanceConfig.hasOwnProperty(key)) {
+				self.config[key] = instanceConfig[key];
+			}
 
-		else if (self.element.dataset && self.element.dataset[option.toLowerCase()] !== undefined) {
-			configValue = self.element.dataset[option.toLowerCase()];
-		}
+			else if (self.element.dataset && self.element.dataset.hasOwnProperty(key.toLowerCase())) {
+				self.config[key] = self.element.dataset[key.toLowerCase()];
+			}
 
-		else if (!self.element.dataset && self.element.getAttribute(`data-${option}`) !== undefined) {
-			configValue = self.element.getAttribute(`data-${option}`);
-		}
+			else if (!self.element.dataset && self.element.hasAttribute("data-" + key)) {
+				self.config[key] =	self.element.getAttribute("data-" + key);
+			}
 
-		if (typeof self.defaultConfig[option] === "boolean") {
-			configValue = String(configValue) !== "false";
-		}
+			else {
+				self.config[key] = flatpickr.init.prototype.defaultConfig[key] || self.defaultConfig[key];
+			}
 
+			if (typeof self.defaultConfig[key] === "boolean") {
+				self.config[key] = self.config[key] === true ||
+					self.config[key] === "" ||
+					self.config[key] === "true";
+			}
 
-		if (option === "enableTime" && configValue === true) {
-			self.defaultConfig.dateFormat = (!self.config.time_24hr ? "Y-m-d h:i K" : "Y-m-d H:i");
-			self.defaultConfig.altFormat = (!self.config.time_24hr ? "F j Y, h:i K" : "F j, Y H:i");
-		}
-		else if (option === "noCalendar" && configValue === true) {
-			self.defaultConfig.dateFormat = "h:i K";
-			self.defaultConfig.altFormat = "h:i K";
-		}
-
-		return configValue;
+			if (key === "enableTime" && self.config[key]) {
+				self.defaultConfig.dateFormat = (!self.config.time_24hr ? "Y-m-d h:i K" : "Y-m-d H:i");
+				self.defaultConfig.altFormat = (!self.config.time_24hr ? "F j Y, h:i K" : "F j, Y H:i");
+			}
+			else if (key === "noCalendar" && self.config[key]) {
+				self.defaultConfig.dateFormat = "h:i K";
+				self.defaultConfig.altFormat = "h:i K";
+			}
+		});
 	};
 
 	getRandomCalendarIdStr = function () {
@@ -351,7 +444,7 @@ flatpickr.init = function (element, instanceConfig) {
 			// replicate self.element
 			self.altInput = createElement(
 				self.input.nodeName,
-				`${self.config.altInputClass} flatpickr-input`
+				self.config.altInputClass + " flatpickr-input"
 			);
 			self.altInput.placeholder = self.input.placeholder;
 			self.altInput.type = "text";
@@ -373,9 +466,13 @@ flatpickr.init = function (element, instanceConfig) {
 	};
 
 	updateValue = function (e) {
+		if (!self.selectedDateObj) {
+			return;
+		}
+
 		let timeHasChanged;
 
-		if (self.selectedDateObj && self.config.enableTime) {
+		if (self.config.enableTime) {
 			const previousTimestamp = self.selectedDateObj.getTime();
 
 			// update time
@@ -410,12 +507,10 @@ flatpickr.init = function (element, instanceConfig) {
 			timeHasChanged = self.selectedDateObj.getTime() !== previousTimestamp;
 		}
 
-		if (self.selectedDateObj) {
-			self.input.value = formatDate(self.config.dateFormat);
+		self.input.value = formatDate(self.config.dateFormat);
 
-			if (self.altInput) {
-				self.altInput.value = formatDate(self.config.altFormat);
-			}
+		if (self.altInput) {
+			self.altInput.value = formatDate(self.config.altFormat);
 		}
 
 		if (e && (timeHasChanged || e.target.classList.contains("flatpickr-day"))) {
@@ -538,7 +633,7 @@ flatpickr.init = function (element, instanceConfig) {
 
 
 	updateNavigationCurrentMonth = function () {
-		currentMonthElement.innerHTML = `${monthToStr(self.currentMonth)} `;
+		currentMonthElement.textContent = monthToStr(self.currentMonth) + " ";
 		currentYearElement.value = self.currentYear;
 	};
 
@@ -563,6 +658,7 @@ flatpickr.init = function (element, instanceConfig) {
 		handleYearChange();
 		updateNavigationCurrentMonth();
 		buildDays();
+		(self.config.noCalendar ? timeContainer : calendar).focus();
 	};
 
 	calendarClick = function (e) {
@@ -612,7 +708,8 @@ flatpickr.init = function (element, instanceConfig) {
 	buildMonthNavigation = function () {
 		monthsNav = createElement("div", "flatpickr-month");
 
-		prevMonthNav = createElement("span", "flatpickr-prev-month", self.config.prevArrow);
+		prevMonthNav = createElement("span", "flatpickr-prev-month");
+		prevMonthNav.innerHTML = self.config.prevArrow;
 
 		currentMonthElement = createElement("span", "cur_month");
 
@@ -620,7 +717,8 @@ flatpickr.init = function (element, instanceConfig) {
 		currentYearElement.type = "number";
 		currentYearElement.title = self.l10n.scrollTitle;
 
-		nextMonthNav = createElement("span", "flatpickr-next-month", self.config.nextArrow);
+		nextMonthNav = createElement("span", "flatpickr-next-month");
+		nextMonthNav.innerHTML = self.config.nextArrow;
 
 		navigationCurrentMonth = createElement("span", "flatpickr-current-month");
 		navigationCurrentMonth.appendChild(currentMonthElement);
@@ -630,8 +728,8 @@ flatpickr.init = function (element, instanceConfig) {
 		monthsNav.appendChild(navigationCurrentMonth);
 		monthsNav.appendChild(nextMonthNav);
 
-		updateNavigationCurrentMonth();
 		calendarContainer.appendChild(monthsNav);
+		updateNavigationCurrentMonth();
 	};
 
 	buildWeekdays = function () {
@@ -838,12 +936,6 @@ flatpickr.init = function (element, instanceConfig) {
 			});
 
 			calendar.addEventListener("click", calendarClick);
-
-			calendar.addEventListener("keydown", e => {
-				if (e.which === 13) {
-					calendarClick(e);
-				}
-			});
 		}
 
 		document.body.addEventListener("click", documentClick, true);
@@ -1063,7 +1155,7 @@ flatpickr.init = function (element, instanceConfig) {
 
 	amPMToggle = e => {
 		e.preventDefault();
-		amPM.innerHTML = ["AM", "PM"][(amPM.innerHTML === "AM") | 0];
+		amPM.textContent = ["AM", "PM"][(amPM.innerHTML === "AM") | 0];
 	};
 
 	function debounce(func, wait, immediate) {
@@ -1091,28 +1183,36 @@ flatpickr.init = function (element, instanceConfig) {
 			return;
 		}
 
-		if (e.which === 27) {
-			self.close();
-		}
+		switch (e.which) {
+			case 13:
+				calendarClick(e);
+				break;
 
-		if (e.which === 37) {
-			changeMonth(-1);
-		}
+			case 27:
+				self.close();
+				break;
 
-		else if (e.which === 38) {
-			e.preventDefault();
-			self.currentYear++;
-			self.redraw();
-		}
+			case 37:
+				changeMonth(-1);
+				break;
 
-		else if (e.which === 39) {
-			changeMonth(1);
-		}
+			case 38:
+				e.preventDefault();
+				self.currentYear++;
+				self.redraw();
+				break;
 
-		else if (e.which === 40) {
-			e.preventDefault();
-			self.currentYear--;
-			self.redraw();
+			case 39:
+				changeMonth(1);
+				break;
+
+			case 40:
+				e.preventDefault();
+				self.currentYear--;
+				self.redraw();
+				break;
+
+			default: break;
 		}
 	};
 
@@ -1138,6 +1238,8 @@ flatpickr.init = function (element, instanceConfig) {
 };
 
 flatpickr.init.prototype = {
+
+	defaultConfig: {},
 
 	l10n: {
 		weekdays: {
@@ -1173,99 +1275,8 @@ flatpickr.init.prototype = {
 		weekAbbreviation: "Wk",
 		scrollTitle: "Scroll to increment",
 		toggleTitle: "Click to toggle"
-	},
-
-	defaultConfig: {
-		/* if true, dates will be parsed, formatted, and displayed in UTC.
-		preloading date strings w/ timezones is recommended but not necessary */
-		utc: false,
-
-		// wrap: see https://chmln.github.io/flatpickr/#strap
-		wrap: false,
-
-		// enables week numbers
-		weekNumbers: false,
-
-		allowInput: false,
-
-		/*
-			clicking on input opens the date(time)picker.
-			disable if you wish to open the calendar manually with .open()
-		*/
-		clickOpens: true,
-
-		// display time picker in 24 hour mode
-		time_24hr: false,
-
-		// enables the time picker functionality
-		enableTime: false,
-
-		// noCalendar: true will hide the calendar. use for a time picker along w/ enableTime
-		noCalendar: false,
-
-		// more date format chars at https://chmln.github.io/flatpickr/#dateformat
-		dateFormat: "Y-m-d",
-
-		// altInput - see https://chmln.github.io/flatpickr/#altinput
-		altInput: false,
-
-		// the created altInput element will have this class.
-		altInputClass: "",
-
-		// same as dateFormat, but for altInput
-		altFormat: "F j, Y", // defaults to e.g. June 10, 2016
-
-		// defaultDate - either a datestring or a date object. used for datetimepicker"s initial value
-		defaultDate: null,
-
-		// the minimum date that user can pick (inclusive)
-		minDate: null,
-
-		// the maximum date that user can pick (inclusive)
-		maxDate: null,
-
-		// dateparser that transforms a given string to a date object
-		parseDate: false,
-
-		// see https://chmln.github.io/flatpickr/#disable
-		enable: [],
-
-		// see https://chmln.github.io/flatpickr/#disable
-		disable: [],
-
-		// display the short version of month names - e.g. Sep instead of September
-		shorthandCurrentMonth: false,
-
-		// displays calendar inline. see https://chmln.github.io/flatpickr/#inline-calendar
-		inline: false,
-
-		// position calendar inside wrapper and next to the input element
-		// leave at false unless you know what you"re doing
-		static: false,
-
-		// code for previous/next icons. this is where you put your custom icon code e.g. fontawesome
-		prevArrow: "&lt;",
-		nextArrow: "&gt;",
-
-
-		// enables seconds in the time picker
-		enableSeconds: false,
-
-		// step size used when scrolling/incrementing the hour element
-		hourIncrement: 1,
-
-		// step size used when scrolling/incrementing the minute element
-		minuteIncrement: 5,
-
-		// onChange callback when user selects a date or time
-		onChange: null, // function (dateObj, dateStr) {}
-
-		// called every time calendar is opened
-		onOpen: null, // function (dateObj, dateStr) {}
-
-		// called every time calendar is closed
-		onClose: null // function (dateObj, dateStr) {}
 	}
+
 };
 
 Date.prototype.fp_incr = function (days) {
@@ -1303,18 +1314,18 @@ if (!("classList" in document.documentElement) && Object.defineProperty &&
 	typeof HTMLElement !== "undefined") {
 	Object.defineProperty(HTMLElement.prototype, "classList", {
 		get: () => {
-			const self = this;
+			let selfElements = this;
 			function update(fn) {
 				return function (value) {
-					const classes = self.className.split(/\s+/);
-					const index = classes.indexOf(value);
+					let classes = selfElements.className.split(/\s+/);
+					let index = classes.indexOf(value);
 
 					fn(classes, index, value);
-					self.className = classes.join(" ");
+					selfElements.className = classes.join(" ");
 				};
 			}
 
-			const ret = {
+			let ret = {
 				add: update((classes, index, value) => ~index || classes.push(value)),
 				remove: update((classes, index) => ~index && classes.splice(index, 1)),
 				toggle: update((classes, index, value) => {
@@ -1325,7 +1336,7 @@ if (!("classList" in document.documentElement) && Object.defineProperty &&
 						classes.push(value);
 					}
 				}),
-				contains: value => !!~self.className.split(/\s+/).indexOf(value)
+				contains: value => !!~selfElements.className.split(/\s+/).indexOf(value)
 			};
 
 			return ret;
