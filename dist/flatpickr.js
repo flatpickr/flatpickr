@@ -428,7 +428,7 @@ flatpickr.init = function (element, instanceConfig) {
 	};
 
 	equalDates = function equalDates(date1, date2) {
-		return date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate();
+		return date1.getDate() === date2.getDate() && date1.getMonth() === date2.getMonth() && date1.getFullYear() === date2.getFullYear();
 	};
 
 	wrap = function wrap() {
@@ -1278,7 +1278,7 @@ if (!("classList" in document.documentElement) && Object.defineProperty && typeo
 					}
 				}),
 				contains: function contains(value) {
-					return !!~selfElements.className.split(/\s+/).indexOf(value);
+					return !! ~selfElements.className.split(/\s+/).indexOf(value);
 				}
 			};
 
