@@ -238,7 +238,7 @@ flatpickr.init = function (element, instanceConfig) {
 		maxDate: null,
 
 		// dateparser that transforms a given string to a date object
-		parseDate: false,
+		parseDate: null,
 
 		// see https://chmln.github.io/flatpickr/#disable
 		enable: [],
@@ -470,6 +470,10 @@ flatpickr.init = function (element, instanceConfig) {
 			return;
 		}
 
+		if (e) {
+			e.target.blur();
+		}
+
 		let timeHasChanged;
 
 		if (self.config.enableTime) {
@@ -607,7 +611,7 @@ flatpickr.init = function (element, instanceConfig) {
 
 	timeWrapper = function (e) {
 		e.preventDefault();
-		e.target.blur();
+
 
 		const min = parseInt(e.target.min, 10),
 			max = parseInt(e.target.max, 10),
