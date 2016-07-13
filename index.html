@@ -391,7 +391,7 @@ flatpickr('#enableCustom', {
 
 
 			<p>
-				<input type=text class=flatpickr data-allowInput>
+				<input type=text class=flatpickr data-allowInput placeholder="Select date">
 			</p>
 			<br>
 <pre class='prettyprint lang-html'>
@@ -978,7 +978,7 @@ flatpickr(".flatpickr")
 	</div>
 	</div>
 
-	<script src="dist/flatpickr.min.js"></script>
+	<script src="dist/flatpickr.js"></script>
 	<script>
 
 	// setting custom defaults
@@ -1000,8 +1000,9 @@ flatpickr(".flatpickr")
 		dateFormat: 'm/d/Y'
 	});
 
+	var real_selection = document.getElementById("realdate");
 	calendars.byID("alt").config.onChange = function(obj, str){
-		document.querySelector("#realdate").innerText = str;
+		real_selection.textContent = str;
 	}
 
 	flatpickr('#disableRange', {
