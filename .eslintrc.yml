@@ -24,6 +24,7 @@
         no-param-reassign: off
         no-underscore-dangle: off
 
+        object-shorthand: off
         one-var: off
 
         prefer-const: off
