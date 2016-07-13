@@ -98,7 +98,7 @@ flatpickr.init = function (element, instanceConfig) {
 	    changeMonth = void 0,
 	    getDaysinMonth = void 0,
 	    documentClick = void 0,
-	    calendarClick = void 0,
+	    selectDate = void 0,
 	    getRandomCalendarIdStr = void 0,
 	    bind = void 0,
 	    triggerChange = void 0;
@@ -635,10 +635,13 @@ flatpickr.init = function (element, instanceConfig) {
 		(self.config.noCalendar ? timeContainer : calendar).focus();
 	};
 
-	calendarClick = function calendarClick(e) {
+	selectDate = function selectDate(e) {
 		e.preventDefault();
 
-		if (e.target.classList.contains("slot")) {
+		if (e.target === (self.altInput || self.input) && e.which === 13) {
+			self.setDate((self.altInput || self.input).value);
+			self.redraw();
+		} else if (e.target.classList.contains("slot")) {
 			self.selectedDateObj = new Date(self.currentYear, self.currentMonth, e.target.innerHTML);
 
 			updateValue(e);
@@ -891,7 +894,7 @@ flatpickr.init = function (element, instanceConfig) {
 				self.redraw();
 			});
 
-			calendar.addEventListener("click", calendarClick);
+			calendar.addEventListener("click", selectDate);
 		}
 
 		document.body.addEventListener("click", documentClick, true);
@@ -951,7 +954,6 @@ flatpickr.init = function (element, instanceConfig) {
 	};
 
 	self.open = function () {
-		console.log(self.config);
 		if ((self.altInput || self.input).disabled || self.config.inline) {
 			return;
 		}
@@ -1068,7 +1070,6 @@ flatpickr.init = function (element, instanceConfig) {
 
 		if (date instanceof Date && date.getTime()) {
 			self.selectedDateObj = uDate(date);
-			self.redraw();
 			self.jumpToDate(self.selectedDateObj);
 			updateValue();
 
@@ -1140,8 +1141,7 @@ flatpickr.init = function (element, instanceConfig) {
 
 		switch (e.which) {
 			case 13:
-				console.log(e);
-				calendarClick(e);
+				selectDate(e);
 				break;
 
 			case 27:
@@ -1171,10 +1171,6 @@ flatpickr.init = function (element, instanceConfig) {
 			default:
 				break;
 		}
-	};
-
-	onManualInput = function onManualInput() {
-		return self.setDate((self.altInput || self.input).value, true);
 	};
 
 	try {
