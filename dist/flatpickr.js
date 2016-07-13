@@ -36,18 +36,15 @@ var flatpickr = function flatpickr(selector, config) {
 		instances.push(createInstance(elements[i]));
 	}
 
+	if (instances.length === 1) {
+		return instances[0];
+	}
+
 	return {
 		calendars: instances,
 		byID: function byID(id) {
-			for (var _i = 0; _i < instances.length; _i++) {
-				if (instances[_i].element.id === id) {
-					return instances[_i];
-				}
-			}
-
-			return null;
+			return document.getElementById(id)._flatpickr;
 		}
-
 	};
 };
 
@@ -91,7 +88,6 @@ flatpickr.init = function (element, instanceConfig) {
 	    updateValue = void 0,
 	    amPMToggle = void 0,
 	    onKeyDown = void 0,
-	    onManualInput = void 0,
 	    onResize = void 0,
 	    updateNavigationCurrentMonth = void 0,
 	    handleYearChange = void 0,
@@ -116,10 +112,6 @@ flatpickr.init = function (element, instanceConfig) {
 	    weekNumbers = void 0,
 	    now = new Date(),
 	    wrapperElement = void 0,
-	    hourElement = void 0,
-	    minuteElement = void 0,
-	    secondElement = void 0,
-	    amPM = void 0,
 	    clickEvt = void 0;
 
 	self.formats = {
@@ -480,26 +472,26 @@ flatpickr.init = function (element, instanceConfig) {
 			var previousTimestamp = self.selectedDateObj.getTime();
 
 			// update time
-			var hours = parseInt(hourElement.value, 10) || 0,
+			var hours = parseInt(self.hourElement.value, 10) || 0,
 			    seconds = void 0;
 
-			var minutes = (60 + (parseInt(minuteElement.value, 10) || 0)) % 60;
+			var minutes = (60 + (parseInt(self.minuteElement.value, 10) || 0)) % 60;
 
 			if (self.config.enableSeconds) {
-				seconds = (60 + parseInt(secondElement.value, 10) || 0) % 60;
+				seconds = (60 + parseInt(self.secondElement.value, 10) || 0) % 60;
 			}
 
 			if (!self.config.time_24hr) {
-				hours = hours % 12 + 12 * (amPM.innerHTML === "PM");
+				hours = hours % 12 + 12 * (self.amPM.innerHTML === "PM");
 			}
 
 			self.selectedDateObj.setHours(hours, minutes, seconds === undefined ? self.selectedDateObj.getSeconds() : seconds);
 
-			hourElement.value = pad(!self.config.time_24hr ? (12 + hours) % 12 + 12 * (hours % 12 === 0) : hours);
-			minuteElement.value = pad(minutes);
+			self.hourElement.value = pad(!self.config.time_24hr ? (12 + hours) % 12 + 12 * (hours % 12 === 0) : hours);
+			self.minuteElement.value = pad(minutes);
 
 			if (seconds !== undefined) {
-				secondElement.value = pad(seconds);
+				self.secondElement.value = pad(seconds);
 			}
 
 			timeHasChanged = self.selectedDateObj.getTime() !== previousTimestamp;
@@ -638,7 +630,7 @@ flatpickr.init = function (element, instanceConfig) {
 	selectDate = function selectDate(e) {
 		e.preventDefault();
 
-		if (e.target === (self.altInput || self.input) && e.which === 13) {
+		if (self.config.allowInput && e.target === (self.altInput || self.input) && e.which === 13) {
 			self.setDate((self.altInput || self.input).value);
 			self.redraw();
 		} else if (e.target.classList.contains("slot")) {
@@ -794,52 +786,52 @@ flatpickr.init = function (element, instanceConfig) {
 		timeContainer.tabIndex = -1;
 		var separator = createElement("span", "flatpickr-time-separator", ":");
 
-		hourElement = createElement("input", "flatpickr-hour");
-		minuteElement = createElement("input", "flatpickr-minute");
+		self.hourElement = createElement("input", "flatpickr-hour");
+		self.minuteElement = createElement("input", "flatpickr-minute");
 
-		hourElement.tabIndex = minuteElement.tabIndex = 0;
-		hourElement.type = minuteElement.type = "number";
+		self.hourElement.tabIndex = self.minuteElement.tabIndex = 0;
+		self.hourElement.type = self.minuteElement.type = "number";
 
-		hourElement.value = self.selectedDateObj ? pad(self.selectedDateObj.getHours()) : 12;
+		self.hourElement.value = self.selectedDateObj ? pad(self.selectedDateObj.getHours()) : 12;
 
-		minuteElement.value = self.selectedDateObj ? pad(self.selectedDateObj.getMinutes()) : "00";
+		self.minuteElement.value = self.selectedDateObj ? pad(self.selectedDateObj.getMinutes()) : "00";
 
-		hourElement.step = self.config.hourIncrement;
-		minuteElement.step = self.config.minuteIncrement;
+		self.hourElement.step = self.config.hourIncrement;
+		self.minuteElement.step = self.config.minuteIncrement;
 
-		hourElement.min = -self.config.time_24hr;
-		hourElement.max = self.config.time_24hr ? 24 : 13;
+		self.hourElement.min = -self.config.time_24hr;
+		self.hourElement.max = self.config.time_24hr ? 24 : 13;
 
-		minuteElement.min = -minuteElement.step;
-		minuteElement.max = 60;
+		self.minuteElement.min = -self.minuteElement.step;
+		self.minuteElement.max = 60;
 
-		hourElement.title = minuteElement.title = self.l10n.scrollTitle;
+		self.hourElement.title = self.minuteElement.title = self.l10n.scrollTitle;
 
-		timeContainer.appendChild(hourElement);
+		timeContainer.appendChild(self.hourElement);
 		timeContainer.appendChild(separator);
-		timeContainer.appendChild(minuteElement);
+		timeContainer.appendChild(self.minuteElement);
 
 		if (self.config.enableSeconds) {
 			timeContainer.classList.add("has-seconds");
 
-			secondElement = createElement("input", "flatpickr-second");
-			secondElement.type = "number";
-			secondElement.value = self.selectedDateObj ? pad(self.selectedDateObj.getSeconds()) : "00";
+			self.secondElement = createElement("input", "flatpickr-second");
+			self.secondElement.type = "number";
+			self.secondElement.value = self.selectedDateObj ? pad(self.selectedDateObj.getSeconds()) : "00";
 
-			secondElement.step = minuteElement.step;
-			secondElement.min = minuteElement.min;
-			secondElement.max = minuteElement.max;
+			self.secondElement.step = self.minuteElement.step;
+			self.secondElement.min = self.minuteElement.min;
+			self.secondElement.max = self.minuteElement.max;
 
 			timeContainer.appendChild(createElement("span", "flatpickr-time-separator", ":"));
-			timeContainer.appendChild(secondElement);
+			timeContainer.appendChild(self.secondElement);
 		}
 
 		if (!self.config.time_24hr) {
-			// add amPM if appropriate
-			amPM = createElement("span", "flatpickr-am-pm", ["AM", "PM"][hourElement.value > 11 | 0]);
-			amPM.title = self.l10n.toggleTitle;
-			amPM.tabIndex = 0;
-			timeContainer.appendChild(amPM);
+			// add self.amPM if appropriate
+			self.amPM = createElement("span", "flatpickr-am-pm", ["AM", "PM"][self.hourElement.value > 11 | 0]);
+			self.amPM.title = self.l10n.toggleTitle;
+			self.amPM.tabIndex = 0;
+			timeContainer.appendChild(self.amPM);
 		}
 
 		// picking time only
@@ -854,11 +846,8 @@ flatpickr.init = function (element, instanceConfig) {
 		document.addEventListener("keydown", onKeyDown);
 
 		if (self.config.clickOpens) {
-			(self.altInput || self.input).addEventListener("focus", self.open, false);
-		}
-
-		if (self.config.allowInput) {
-			(self.altInput ? self.altInput : self.input).addEventListener("change", onManualInput);
+			(self.altInput || self.input).addEventListener("click", self.open);
+			(self.altInput || self.input).addEventListener("focus", self.open);
 		}
 
 		if (self.config.wrap && self.element.querySelector("[data-open]")) {
@@ -901,36 +890,36 @@ flatpickr.init = function (element, instanceConfig) {
 		document.addEventListener("focus", documentClick);
 
 		if (self.config.enableTime) {
-			hourElement.addEventListener("wheel", timeWrapper);
-			minuteElement.addEventListener("wheel", timeWrapper);
+			self.hourElement.addEventListener("wheel", timeWrapper);
+			self.minuteElement.addEventListener("wheel", timeWrapper);
 
-			hourElement.addEventListener("input", timeWrapper);
-			minuteElement.addEventListener("input", timeWrapper);
+			self.hourElement.addEventListener("input", timeWrapper);
+			self.minuteElement.addEventListener("input", timeWrapper);
 
-			hourElement.addEventListener("mouseout", updateValue);
-			minuteElement.addEventListener("mouseout", updateValue);
+			self.hourElement.addEventListener("mouseout", updateValue);
+			self.minuteElement.addEventListener("mouseout", updateValue);
 
-			hourElement.addEventListener("change", updateValue);
-			minuteElement.addEventListener("change", updateValue);
+			self.hourElement.addEventListener("change", updateValue);
+			self.minuteElement.addEventListener("change", updateValue);
 
-			hourElement.addEventListener("focus", hourElement.select);
-			minuteElement.addEventListener("focus", minuteElement.select);
+			self.hourElement.addEventListener("focus", self.hourElement.select);
+			self.minuteElement.addEventListener("focus", self.minuteElement.select);
 
 			if (self.config.enableSeconds) {
-				secondElement.addEventListener("wheel", timeWrapper);
-				secondElement.addEventListener("input", timeWrapper);
-				secondElement.addEventListener("mouseout", updateValue);
-				secondElement.addEventListener("change", updateValue);
-				secondElement.addEventListener("focus", secondElement.select);
+				self.secondElement.addEventListener("wheel", timeWrapper);
+				self.secondElement.addEventListener("input", timeWrapper);
+				self.secondElement.addEventListener("mouseout", updateValue);
+				self.secondElement.addEventListener("change", updateValue);
+				self.secondElement.addEventListener("focus", self.secondElement.select);
 			}
 
 			if (!self.config.time_24hr) {
-				amPM.addEventListener("click", amPMToggle);
+				self.amPM.addEventListener("click", amPMToggle);
 
-				amPM.addEventListener("wheel", amPMToggle);
-				amPM.addEventListener("mouseout", updateValue);
+				self.amPM.addEventListener("wheel", amPMToggle);
+				self.amPM.addEventListener("mouseout", updateValue);
 
-				amPM.addEventListener("keydown", function (e) {
+				self.amPM.addEventListener("keydown", function (e) {
 					if (e.which === 38 || e.which === 40) {
 						amPMToggle(e);
 					}
@@ -954,7 +943,7 @@ flatpickr.init = function (element, instanceConfig) {
 	};
 
 	self.open = function () {
-		if ((self.altInput || self.input).disabled || self.config.inline) {
+		if (self.isOpen || (self.altInput || self.input).disabled || self.config.inline) {
 			return;
 		}
 
@@ -1084,11 +1073,11 @@ flatpickr.init = function (element, instanceConfig) {
 			return;
 		}
 
-		hourElement.value = parseInt(hour, 10) % 24;
-		minuteElement.value = parseInt(minute || 0, 10) % 60;
+		self.hourElement.value = parseInt(hour, 10) % 24;
+		self.minuteElement.value = parseInt(minute || 0, 10) % 60;
 
 		if (!self.config.time_24hr) {
-			amPM.innerHTML = hour > 11 ? "PM" : "AM";
+			self.amPM.innerHTML = hour > 11 ? "PM" : "AM";
 		}
 
 		updateValue();
@@ -1107,7 +1096,7 @@ flatpickr.init = function (element, instanceConfig) {
 
 	amPMToggle = function amPMToggle(e) {
 		e.preventDefault();
-		amPM.textContent = ["AM", "PM"][amPM.innerHTML === "AM" | 0];
+		self.amPM.textContent = ["AM", "PM"][self.amPM.innerHTML === "AM" | 0];
 	};
 
 	function debounce(func, wait, immediate) {
