@@ -335,10 +335,6 @@ flatpickr.init = function (element, instanceConfig) {
 		self.uDate = uDate;
 		self.jumpToDate();
 		updateValue();
-
-		if (!self.config.static && !self.config.inline) {
-			self.positionCalendar();
-		}
 	};
 
 	parseConfig = function parseConfig() {
@@ -959,6 +955,10 @@ flatpickr.init = function (element, instanceConfig) {
 			return;
 		}
 
+		if (!self.config.static) {
+			self.positionCalendar();
+		}
+
 		self.isOpen = true;
 
 		wrapperElement.classList.add("open");
@@ -1171,14 +1171,8 @@ flatpickr.init = function (element, instanceConfig) {
 	};
 
 	onManualInput = function onManualInput() {
-		return self.setDate((self.altInput || self.input).value);
+		return self.setDate((self.altInput || self.input).value, true);
 	};
-
-	onResize = debounce(function () {
-		if (!self.input.disabled && !self.config.inline && !self.config.static) {
-			self.positionCalendar();
-		}
-	}, 300);
 
 	try {
 		init();
