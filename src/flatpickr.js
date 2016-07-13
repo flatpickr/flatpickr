@@ -1317,7 +1317,7 @@ Date.prototype.fp_getWeek = function () {
 if (!("classList" in document.documentElement) && Object.defineProperty &&
 	typeof HTMLElement !== "undefined") {
 	Object.defineProperty(HTMLElement.prototype, "classList", {
-		get: () => {
+		get: function () {
 			let selfElements = this;
 			function update(fn) {
 				return function (value) {
