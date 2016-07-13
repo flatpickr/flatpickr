@@ -951,6 +951,7 @@ flatpickr.init = function (element, instanceConfig) {
 	};
 
 	self.open = function () {
+		console.log(self.config);
 		if ((self.altInput || self.input).disabled || self.config.inline) {
 			return;
 		}
@@ -962,10 +963,10 @@ flatpickr.init = function (element, instanceConfig) {
 		self.isOpen = true;
 
 		wrapperElement.classList.add("open");
-		(self.config.noCalendar ? timeContainer : calendar).focus();
 
 		if (!self.config.allowInput) {
 			(self.altInput || self.input).blur();
+			(self.config.noCalendar ? timeContainer : calendar).focus();
 		}
 
 		(self.altInput || self.input).classList.add("active");
@@ -1067,6 +1068,7 @@ flatpickr.init = function (element, instanceConfig) {
 
 		if (date instanceof Date && date.getTime()) {
 			self.selectedDateObj = uDate(date);
+			self.redraw();
 			self.jumpToDate(self.selectedDateObj);
 			updateValue();
 
@@ -1138,6 +1140,7 @@ flatpickr.init = function (element, instanceConfig) {
 
 		switch (e.which) {
 			case 13:
+				console.log(e);
 				calendarClick(e);
 				break;
 
