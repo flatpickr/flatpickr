@@ -1158,26 +1158,6 @@ flatpickr.init = function (element, instanceConfig) {
 		self.amPM.textContent = ["AM", "PM"][(self.amPM.innerHTML === "AM") | 0];
 	};
 
-	function debounce(func, wait, immediate) {
-		let timeout;
-		return function (...args) {
-			const context = this;
-
-			const later = function () {
-				timeout = null;
-				if (!immediate) {
-					func.apply(context, args);
-				}
-			};
-
-			clearTimeout(timeout);
-			timeout = setTimeout(later, wait);
-			if (immediate && !timeout) {
-				func.apply(context, args);
-			}
-		};
-	}
-
 	onKeyDown = function (e) {
 		if (!self.isOpen || self.config.enableTime && timeContainer.contains(e.target)) {
 			return;

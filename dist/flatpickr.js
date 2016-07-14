@@ -1099,30 +1099,6 @@ flatpickr.init = function (element, instanceConfig) {
 		self.amPM.textContent = ["AM", "PM"][self.amPM.innerHTML === "AM" | 0];
 	};
 
-	function debounce(func, wait, immediate) {
-		var timeout = void 0;
-		return function () {
-			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-				args[_key] = arguments[_key];
-			}
-
-			var context = this;
-
-			var later = function later() {
-				timeout = null;
-				if (!immediate) {
-					func.apply(context, args);
-				}
-			};
-
-			clearTimeout(timeout);
-			timeout = setTimeout(later, wait);
-			if (immediate && !timeout) {
-				func.apply(context, args);
-			}
-		};
-	}
-
 	onKeyDown = function onKeyDown(e) {
 		if (!self.isOpen || self.config.enableTime && timeContainer.contains(e.target)) {
 			return;
@@ -1263,7 +1239,7 @@ if (!("classList" in document.documentElement) && Object.defineProperty && typeo
 					}
 				}),
 				contains: function contains(value) {
-					return !!~selfElements.className.split(/\s+/).indexOf(value);
+					return !! ~selfElements.className.split(/\s+/).indexOf(value);
 				}
 			};
 
