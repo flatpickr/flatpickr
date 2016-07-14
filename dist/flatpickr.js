@@ -14,21 +14,26 @@ var flatpickr = function flatpickr(selector, config) {
 		return element._flatpickr;
 	};
 
+	// if selector is a Node
 	if (selector.nodeName) {
 		return createInstance(selector);
 	}
-	/*
- Utilize the performance of native getters if applicable
- https://jsperf.com/getelementsbyclassname-vs-queryselectorall/18
- https://jsperf.com/jquery-vs-javascript-performance-comparison/22
- */
-	else if (/^#[a-zA-Z0-9\-_]*$/.test(selector)) {
-			return createInstance(document.getElementById(selector.slice(1)));
-		} else if (/^\.[a-zA-Z0-9\-_]*$/.test(selector)) {
-			elements = document.getElementsByClassName(selector.slice(1));
-		} else {
-			elements = document.querySelectorAll(selector);
+	// if selector is a NodeList
+	else if (selector.length && selector.item) {
+			elements = selector;
 		}
+		/*
+  Utilize the performance of native getters if applicable
+  https://jsperf.com/getelementsbyclassname-vs-queryselectorall/18
+  https://jsperf.com/jquery-vs-javascript-performance-comparison/22
+  */
+		else if (/^#[a-zA-Z0-9\-_]*$/.test(selector)) {
+				return createInstance(document.getElementById(selector.slice(1)));
+			} else if (/^\.[a-zA-Z0-9\-_]*$/.test(selector)) {
+				elements = document.getElementsByClassName(selector.slice(1));
+			} else {
+				elements = document.querySelectorAll(selector);
+			}
 
 	var instances = [];
 
@@ -1099,29 +1104,26 @@ flatpickr.init = function (element, instanceConfig) {
 		self.amPM.textContent = ["AM", "PM"][self.amPM.innerHTML === "AM" | 0];
 	};
 
-	function debounce(func, wait, immediate) {
-		var timeout = void 0;
-		return function () {
-			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-				args[_key] = arguments[_key];
-			}
-
-			var context = this;
-
-			var later = function later() {
-				timeout = null;
-				if (!immediate) {
-					func.apply(context, args);
-				}
-			};
-
-			clearTimeout(timeout);
-			timeout = setTimeout(later, wait);
-			if (immediate && !timeout) {
-				func.apply(context, args);
-			}
-		};
-	}
+	// this function is never used ?
+	// function debounce(func, wait, immediate) {
+	// 	let timeout;
+	// 	return function (...args) {
+	// 		const context = this;
+	//
+	// 		const later = function () {
+	// 			timeout = null;
+	// 			if (!immediate) {
+	// 				func.apply(context, args);
+	// 			}
+	// 		};
+	//
+	// 		clearTimeout(timeout);
+	// 		timeout = setTimeout(later, wait);
+	// 		if (immediate && !timeout) {
+	// 			func.apply(context, args);
+	// 		}
+	// 	};
+	// }
 
 	onKeyDown = function onKeyDown(e) {
 		if (!self.isOpen || self.config.enableTime && timeContainer.contains(e.target)) {
