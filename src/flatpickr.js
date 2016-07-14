@@ -89,7 +89,6 @@ flatpickr.init = function (element, instanceConfig) {
 		amPMToggle,
 
 		onKeyDown,
-		onResize,
 
 		updateNavigationCurrentMonth,
 
@@ -992,8 +991,6 @@ flatpickr.init = function (element, instanceConfig) {
 				cancelable: true
 			});
 		}
-
-		window.addEventListener("resize", onResize);
 	};
 
 	self.open = function () {
@@ -1001,7 +998,7 @@ flatpickr.init = function (element, instanceConfig) {
 			return;
 		}
 
-		if (!self.config.static) {
+		else if (!self.config.static) {
 			self.positionCalendar();
 		}
 
