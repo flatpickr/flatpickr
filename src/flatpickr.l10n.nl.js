@@ -12,7 +12,7 @@ flatpickr.init.prototype.l10n.months = {
 
 flatpickr.init.prototype.l10n.firstDayOfWeek = 1;
 
-flatpickr.init.prototype.l10n.ordinal = (nth) => {
+flatpickr.init.prototype.l10n.ordinal = nth => {
 	if (nth === 1 || nth === 8 || nth >= 20) {
 		return "ste";
 	}
