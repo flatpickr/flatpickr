@@ -156,74 +156,6 @@ flatpickr('#yourSelector', { dateFormat: 'm/d/Y'});
 
 		</div>
 
-
-		<div class="example_wrapper" data-desc="Date Limits (maxDate/minDate)" id="maxmindate">
-			<h3>Date Limits - minDate and maxDate</h3> The example below conveniently uses data-attributes for setting
-			<strong>minDate</strong> and <strong>maxDate</strong> <a href=#options>options</a>.
-
-			<pre class="prettyprint lang-html">
-&lt;input class=flatpickr data-mindate=today&gt;
-&lt;input class=flatpickr data-mindate="2016-09-20"&gt;
-&lt;input class=flatpickr data-mindate="September 2, 2015"&gt;
-&lt;input class=flatpickr data-mindate=today data-maxdate='2016-8-20'&gt;
-</pre>
-
-			<p>
-				<input class=flatpickr data-mindate=today placeholder="minDate: today">
-			</p>
-
-			<p>
-				<input class=flatpickr data-mindate="2016-09-20" placeholder="minDate: '2016-09-20'">
-			</p>
-
-			<p>
-				<input class=flatpickr data-mindate="September 2, 2015" placeholder="minDate: new Date('September 2, 2015')">
-			</p>
-
-			<p>
-				<input class=flatpickr data-mindate=today data-maxdate='2016-8-20' placeholder="minDate: today, maxDate: '2016-8-20'">
-			</p>
-
-		</div>
-
-
-		<div class="example_wrapper" id="strap">
-			<h3>Custom elements and input groups</h3>
-
-			<p>flatpickr can parse an input group of textboxes and buttons, common in <strong>Bootstrap</strong> and other frameworks.</p>
-
-			<p>This permits additional markup, as well as custom elements to trigger the state of the calendar. </p>
-
-			<p>Mark your input element with
-				<code>data-input</code> (mandatory), and any additional buttons with
-				<code>data-toggle</code>,
-				<code>data-open</code>,
-				<code>data-close</code>, or
-				<code>data-clear</code>.</p>
-
-			<pre class='prettyprint lang-html'>
-&lt;p class="flatpickr input-group" data-wrap data-clickOpens="false"&gt;
-
-	&lt;input placeholder="Pick date" data-input&gt;
-
-	&lt;a class="input-btn" data-toggle&gt;&lt;i class="icon-calendar"&gt;&lt;/i&gt;&lt;/a&gt;
-	&lt;a class="input-btn" data-clear&gt;&lt;i class="icon-close"&gt;&lt;/i&gt;&lt;/a&gt;
-
-&lt;/p>
-</pre>
-
-			<p class="flatpickr input-group" data-wrap data-clickOpens="false">
-
-				<input data-input placeholder="Pick date">
-
-				<a class="input-btn" data-toggle><i class="icon-calendar"></i></a>
-				<a class="input-btn" data-clear><i class="icon-close"></i></a>
-				<div style="clear:both;"></div>
-			</p>
-
-		</div>
-
-
 		<div class="example_wrapper" data-desc="Datetimepicker" id="datetimepicker">
 
 			<h3>DateTime Picker</h3>
@@ -265,6 +197,39 @@ flatpickr('#yourSelector', { dateFormat: 'm/d/Y'});
 			<input class=flatpickr data-enabletime data-nocalendar placeholder="Pick time"  value="09:00 PM">
 		</div>
 
+
+		<div class="example_wrapper" data-desc="Date Limits (maxDate/minDate)" id="maxmindate">
+			<h3>Date Limits - minDate and maxDate</h3> The example below conveniently uses data-attributes for setting
+			<strong>minDate</strong> and <strong>maxDate</strong> <a href=#options>options</a>.
+
+			<pre class="prettyprint lang-html">
+&lt;input class=flatpickr data-mindate=today&gt;
+&lt;input class=flatpickr data-mindate="2016-09-20"&gt;
+&lt;input class=flatpickr data-mindate="September 2, 2015"&gt;
+&lt;input class=flatpickr data-mindate=today data-maxdate='2016-8-20'&gt;
+</pre>
+
+			<p>
+				<input class=flatpickr data-mindate=today placeholder="minDate: today">
+			</p>
+
+			<p>
+				<input class=flatpickr data-mindate="2016-09-20" placeholder="minDate: '2016-09-20'">
+			</p>
+
+			<p>
+				<input class=flatpickr data-mindate="September 2, 2015" placeholder="minDate: new Date('September 2, 2015')">
+			</p>
+
+			<p>
+				<input class=flatpickr data-mindate=today data-maxdate='2016-8-20' placeholder="minDate: today, maxDate: '2016-8-20'">
+			</p>
+
+		</div>
+
+
+
+
 		<div class="example_wrapper" data-desc="User-Friendly date output" id="altinput">
 			<h3>Human-friendly Date Output</h3>
 
@@ -289,12 +254,12 @@ flatpickr('#yourSelector', { dateFormat: 'm/d/Y'});
 			simple dates, such as "2016-04-10" to full-fledged datetime strings.
 			</p>
 			<pre class='prettyprint lang-html'>
-&lt;input class=flatpickr data-defaultDate="2016-03-01 03:30:00 -0300" data-enableTime&gt;
+&lt;input type=text class=flatpickr data-enableTime value="2016-03-01 03:30:00 -0300"&gt;
 </pre>
 
 
 			<p>
-				<input class=flatpickr data-defaultDate="2016-03-01 03:30:00 -0300" data-enableTime>
+				<input type=text class=flatpickr data-enableTime value="2016-03-01 03:30:00 -0300">
 			</p>
 			<br>
 <pre class='prettyprint lang-html'>
@@ -306,38 +271,43 @@ flatpickr('#yourSelector', { dateFormat: 'm/d/Y'});
 
 		</div>
 
+				<div class="example_wrapper" id="strap">
+			<h3>Custom elements and input groups</h3>
 
+			<p>flatpickr can parse an input group of textboxes and buttons, common in <strong>Bootstrap</strong> and other frameworks.</p>
 
-		<div class="example_wrapper" data-desc="Timezones & UTC" id="utc">
+			<p>This permits additional markup, as well as custom elements to trigger the state of the calendar. </p>
 
-			<h3>UTC mode</h3>
-
-			 <p>
-			By default, JavaScript's Date converts all dates to a local time. However, locale-agnostic databases often store dates in UTC. flatpickr can convert any given dates to UTC and select a datetime in UTC with a simple switch. Here are the previous examples with UTC mode enabled.
-			</p>
+			<p>Mark your input element with
+				<code>data-input</code> (mandatory), and any additional buttons with
+				<code>data-toggle</code>,
+				<code>data-open</code>,
+				<code>data-close</code>, or
+				<code>data-clear</code>.</p>
 
 			<pre class='prettyprint lang-html'>
-&lt;input class=flatpickr data-utc data-defaultDate="2016-03-01 03:30:00 -0300" data-enableTime&gt;
+&lt;p class="flatpickr input-group" data-wrap data-clickOpens="false"&gt;
+
+	&lt;input placeholder="Pick date" data-input&gt;
+
+	&lt;a class="input-btn" data-toggle&gt;&lt;i class="icon-calendar"&gt;&lt;/i&gt;&lt;/a&gt;
+	&lt;a class="input-btn" data-clear&gt;&lt;i class="icon-close"&gt;&lt;/i&gt;&lt;/a&gt;
+
+&lt;/p>
 </pre>
 
+			<p class="flatpickr input-group" data-wrap data-clickOpens="false">
 
-			<p>
-				<input class=flatpickr data-utc data-defaultDate="2016-03-01 03:30:00 -0300" data-enableTime>
-			</p>
+				<input data-input placeholder="Pick date">
 
-			<br>
-			<pre class='prettyprint lang-html'>
-&lt;input class=flatpickr data-defaultDate="2016-12-27T16:16:22.585Z" data-utc data-enableTime&gt;
-</pre>
-			<p>
-				<input class=flatpickr data-defaultDate="2016-12-27T16:16:22.585Z" data-utc data-enableTime>
+				<a class="input-btn" data-toggle><i class="icon-calendar"></i></a>
+				<a class="input-btn" data-clear><i class="icon-close"></i></a>
+				<div style="clear:both;"></div>
 			</p>
 
 		</div>
 
-
-
-		<div class="example_wrapper" data-desc="Disabling dates" id="disable">
+				<div class="example_wrapper" data-desc="Disabling dates" id="disable">
 			<h3>Disabling dates</h3>
 			<p>Disable a date interval, or a specific date.</p>
 			<pre class='prettyprint lang-js'>
@@ -407,6 +377,64 @@ flatpickr('#enableCustom', {
 				<input id="enableCustom" placeholder="Select date">
 			</p>
 		</div>
+
+		<div class="example_wrapper" data-desc="Allowing manual input" id="manual_input">
+
+			<h3>Allowing manual input</h3>
+
+			 <p>
+			You may let your users input dates themselves simply by toggling the <code>allowInput</code> option
+			</p>
+			<pre class='prettyprint lang-html'>
+&lt;input type=text class=flatpickr data-allowInput"&gt;
+</pre>
+
+
+			<p>
+				<input type=text class=flatpickr data-allowInput placeholder="Select date">
+			</p>
+			<br>
+<pre class='prettyprint lang-html'>
+&lt;input class=flatpickr data-defaultDate="2016-12-27T16:16:22.585Z" data-enableTime&gt;
+</pre>
+			<p>
+				<input class=flatpickr data-defaultDate="2016-12-27T16:16:22.585Z" data-enableTime>
+			</p>
+
+		</div>
+
+
+
+		<div class="example_wrapper" data-desc="Timezones & UTC" id="utc">
+
+			<h3>UTC mode</h3>
+
+			 <p>
+			By default, JavaScript's Date converts all dates to a local time. However, locale-agnostic databases often store dates in UTC. flatpickr can convert any given dates to UTC and select a datetime in UTC with a simple switch. Here are the previous examples with UTC mode enabled.
+			</p>
+
+			<pre class='prettyprint lang-html'>
+&lt;input class=flatpickr data-utc data-defaultDate="2016-03-01 03:30:00 -0300" data-enableTime&gt;
+</pre>
+
+
+			<p>
+				<input class=flatpickr data-utc data-defaultDate="2016-03-01 03:30:00 -0300" data-enableTime>
+			</p>
+
+			<br>
+			<pre class='prettyprint lang-html'>
+&lt;input class=flatpickr data-defaultDate="2016-12-27T16:16:22.585Z" data-utc data-enableTime&gt;
+</pre>
+			<p>
+				<input class=flatpickr data-defaultDate="2016-12-27T16:16:22.585Z" data-utc data-enableTime>
+			</p>
+
+		</div>
+
+
+
+
 
 		<div class="example_wrapper" data-desc="Events API" id="eventAPI">
 			<h3>Event API</h3>
@@ -950,7 +978,7 @@ flatpickr(".flatpickr")
 	</div>
 	</div>
 
-	<script src="dist/flatpickr.min.js"></script>
+	<script src="dist/flatpickr.js"></script>
 	<script>
 
 	// setting custom defaults
@@ -972,8 +1000,9 @@ flatpickr(".flatpickr")
 		dateFormat: 'm/d/Y'
 	});
 
+	var real_selection = document.getElementById("realdate");
 	calendars.byID("alt").config.onChange = function(obj, str){
-		document.querySelector("#realdate").innerText = str;
+		real_selection.textContent = str;
 	}
 
 	flatpickr('#disableRange', {

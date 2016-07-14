@@ -23,7 +23,7 @@
     "gulp-uglify": "^1.5.4",
     "stylus": "^0.54.5"
   },
-  "main": "dist/flatpickr.min.js",
+  "main": "dist/flatpickr.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/chmln/flatpickr.git"
