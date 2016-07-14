@@ -390,12 +390,12 @@ flatpickr.init = function (element, instanceConfig) {
 			return null;
 		}
 
-		if (timeless) {
-			date.setHours(0, 0, 0, 0);
-		}
-
 		if (self.config.utc && !date.fp_isUTC) {
 			date = date.fp_toUTC();
+		}
+
+		if (timeless) {
+			date.setHours(0, 0, 0, 0);
 		}
 
 		return date;
