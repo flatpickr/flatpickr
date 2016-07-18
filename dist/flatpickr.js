@@ -612,6 +612,7 @@ flatpickr.init = function (element, instanceConfig) {
 	};
 
 	documentClick = function documentClick(event) {
+
 		if (self.isOpen && !wrapperElement.contains(event.target) && !self.element.contains(event.target) && event.target !== (self.altInput || self.input)) {
 			self.close();
 		}
@@ -885,8 +886,8 @@ flatpickr.init = function (element, instanceConfig) {
 			calendar.addEventListener("click", selectDate);
 		}
 
-		document.body.addEventListener("click", documentClick, true);
-		document.addEventListener("focus", documentClick);
+		document.addEventListener("click", documentClick);
+		document.addEventListener("blur", documentClick, true);
 
 		if (self.config.enableTime) {
 			self.hourElement.addEventListener("wheel", timeWrapper);
