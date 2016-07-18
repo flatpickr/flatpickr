@@ -445,9 +445,10 @@ flatpickr.init = function (element, instanceConfig) {
 		}
 	};
 
-	getDaysinMonth = function getDaysinMonth(givenMonth) {
-		var yr = self.currentYear,
-		    month = givenMonth || self.currentMonth;
+	getDaysinMonth = function getDaysinMonth() {
+		var month = arguments.length <= 0 || arguments[0] === undefined ? self.currentMonth : arguments[0];
+
+		var yr = self.currentYear;
 
 		if (month === 1 && yr % 4 === 0 && yr % 100 !== 0 || yr % 400 === 0) {
 			return 29;
@@ -612,7 +613,6 @@ flatpickr.init = function (element, instanceConfig) {
 	};
 
 	documentClick = function documentClick(event) {
-
 		if (self.isOpen && !wrapperElement.contains(event.target) && !self.element.contains(event.target) && event.target !== (self.altInput || self.input)) {
 			self.close();
 		}
