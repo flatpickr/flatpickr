@@ -458,13 +458,10 @@ flatpickr.init = function (element, instanceConfig) {
 	};
 
 	updateValue = function updateValue(e) {
-		
-		// picking time only and method triggered from picker
 		if (self.config.noCalendar && !self.selectedDateObj) {
+			// picking time only and method triggered from picker
 			self.selectedDateObj = new Date();
-		}				
-		
-		if (!self.selectedDateObj) {
+		} else if (!self.selectedDateObj) {
 			return;
 		}
 
@@ -488,6 +485,7 @@ flatpickr.init = function (element, instanceConfig) {
 			}
 
 			if (!self.config.time_24hr) {
+				// the real number of hours for the date object
 				hours = hours % 12 + 12 * (self.amPM.innerHTML === "PM");
 			}
 
@@ -618,8 +616,13 @@ flatpickr.init = function (element, instanceConfig) {
 		}
 	};
 
-	documentClick = function documentClick(event) {
-		if (self.isOpen && !wrapperElement.contains(event.target) && !self.element.contains(event.target) && event.target !== (self.altInput || self.input)) {
+	documentClick = function documentClick(e) {
+		var isCalendarElement = wrapperElement.contains(e.target),
+		    isDay = e.target.classList.contains("slot"),
+		    isInput = self.element.contains(e.target);
+
+		if (self.isOpen && !isDay && !isCalendarElement && !isInput) {
+			console.log(event);
 			self.close();
 		}
 	};
@@ -1236,7 +1239,7 @@ if (!("classList" in document.documentElement) && Object.defineProperty && typeo
 					}
 				}),
 				contains: function contains(value) {
-					return !!~selfElements.className.split(/\s+/).indexOf(value);
+					return !! ~selfElements.className.split(/\s+/).indexOf(value);
 				}
 			};
 
