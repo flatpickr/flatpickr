@@ -66,6 +66,30 @@ flatpickr.init = function (element, instanceConfig) {
 		return newElement;
 	}
 
+	var debounce = function debounce(func, wait, immediate) {
+		var timeout = void 0;
+		return function () {
+			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+				args[_key] = arguments[_key];
+			}
+
+			var context = this;
+
+			var later = function later() {
+				timeout = null;
+				if (!immediate) {
+					func.apply(context, args);
+				}
+			};
+
+			clearTimeout(timeout);
+			timeout = setTimeout(later, wait);
+			if (immediate && !timeout) {
+				func.apply(context, args);
+			}
+		};
+	};
+
 	// functions
 	var self = this;
 	var parseConfig = void 0,
@@ -87,6 +111,7 @@ flatpickr.init = function (element, instanceConfig) {
 	    updateValue = void 0,
 	    amPMToggle = void 0,
 	    onKeyDown = void 0,
+	    onResize = void 0,
 	    updateNavigationCurrentMonth = void 0,
 	    handleYearChange = void 0,
 	    changeMonth = void 0,
@@ -846,6 +871,7 @@ flatpickr.init = function (element, instanceConfig) {
 
 	bind = function bind() {
 		document.addEventListener("keydown", onKeyDown);
+		window.addEventListener("resize", onResize);
 
 		if (self.config.clickOpens) {
 			(self.altInput || self.input).addEventListener("click", self.open);
@@ -1135,6 +1161,12 @@ flatpickr.init = function (element, instanceConfig) {
 				break;
 		}
 	};
+
+	onResize = debounce(function () {
+		if (!(self.altInput || self.input).disabled && !self.config.inline && !self.config.static) {
+			self.positionCalendar();
+		}
+	}, 300);
 
 	try {
 		init();

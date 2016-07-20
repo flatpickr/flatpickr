@@ -64,6 +64,26 @@ flatpickr.init = function (element, instanceConfig) {
 		return newElement;
 	}
 
+	const debounce = (func, wait, immediate) => {
+		let timeout;
+		return function (...args) {
+			const context = this;
+
+			const later = function () {
+				timeout = null;
+				if (!immediate) {
+					func.apply(context, args);
+				}
+			};
+
+			clearTimeout(timeout);
+			timeout = setTimeout(later, wait);
+			if (immediate && !timeout) {
+				func.apply(context, args);
+			}
+		};
+	};
+
 	// functions
 	const self = this;
 	let	parseConfig,
@@ -88,6 +108,7 @@ flatpickr.init = function (element, instanceConfig) {
 		amPMToggle,
 
 		onKeyDown,
+		onResize,
 
 		updateNavigationCurrentMonth,
 
@@ -892,6 +913,7 @@ flatpickr.init = function (element, instanceConfig) {
 
 	bind = function () {
 		document.addEventListener("keydown", onKeyDown);
+		window.addEventListener("resize", onResize);
 
 		if (self.config.clickOpens) {
 			(self.altInput || self.input).addEventListener("click", self.open);
@@ -1193,6 +1215,12 @@ flatpickr.init = function (element, instanceConfig) {
 			default: break;
 		}
 	};
+
+	onResize = debounce(() => {
+		if (!(self.altInput || self.input).disabled && !self.config.inline && !self.config.static) {
+			self.positionCalendar();
+		}
+	}, 300);
 
 	try {
 		init();
