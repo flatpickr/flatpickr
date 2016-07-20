@@ -74,7 +74,6 @@ flatpickr.init = function (element, instanceConfig) {
 	    uDate = void 0,
 	    equalDates = void 0,
 	    pad = void 0,
-	    formatDate = void 0,
 	    monthToStr = void 0,
 	    isEnabled = void 0,
 	    buildMonthNavigation = void 0,
@@ -501,10 +500,10 @@ flatpickr.init = function (element, instanceConfig) {
 			timeHasChanged = self.selectedDateObj.getTime() !== previousTimestamp;
 		}
 
-		self.input.value = formatDate(self.config.dateFormat);
+		self.input.value = self.formatDate(self.config.dateFormat);
 
 		if (self.altInput) {
-			self.altInput.value = formatDate(self.config.altFormat);
+			self.altInput.value = self.formatDate(self.config.altFormat);
 		}
 
 		if (e && (timeHasChanged || e.target.classList.contains("flatpickr-day"))) {
@@ -516,7 +515,7 @@ flatpickr.init = function (element, instanceConfig) {
 		return ("0" + num).slice(-2);
 	};
 
-	formatDate = function formatDate(dateFormat) {
+	self.formatDate = function (dateFormat) {
 		var formattedDate = "";
 		var formatPieces = dateFormat.split("");
 
@@ -619,10 +618,9 @@ flatpickr.init = function (element, instanceConfig) {
 	documentClick = function documentClick(e) {
 		var isCalendarElement = wrapperElement.contains(e.target),
 		    isDay = e.target.classList.contains("slot"),
-		    isInput = self.element.contains(e.target);
+		    isInput = self.element.contains(e.target) || e.target === self.altInput;
 
 		if (self.isOpen && !isDay && !isCalendarElement && !isInput) {
-			console.log(event);
 			self.close();
 		}
 	};
