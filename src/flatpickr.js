@@ -1217,7 +1217,7 @@ flatpickr.init = function (element, instanceConfig) {
 	};
 
 	onResize = debounce(() => {
-		if (!(self.altInput || self.input).disabled && !self.config.inline && !self.config.static) {
+		if (self.isOpen && !self.config.inline && !self.config.static) {
 			self.positionCalendar();
 		}
 	}, 300);
