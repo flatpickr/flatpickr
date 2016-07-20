@@ -458,6 +458,12 @@ flatpickr.init = function (element, instanceConfig) {
 	};
 
 	updateValue = function updateValue(e) {
+		
+		// picking time only and method triggered from picker
+		if (self.config.noCalendar && !self.selectedDateObj) {
+			self.selectedDateObj = new Date();
+		}				
+		
 		if (!self.selectedDateObj) {
 			return;
 		}
@@ -832,11 +838,6 @@ flatpickr.init = function (element, instanceConfig) {
 			self.amPM.title = self.l10n.toggleTitle;
 			self.amPM.tabIndex = 0;
 			timeContainer.appendChild(self.amPM);
-		}
-
-		// picking time only
-		if (self.config.noCalendar && !self.selectedDateObj) {
-			self.selectedDateObj = new Date();
 		}
 
 		calendarContainer.appendChild(timeContainer);
