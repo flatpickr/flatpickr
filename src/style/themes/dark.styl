@@ -1,5 +1,5 @@
-$calendar_background = #323A45
-$calendar_border_color = darken($calendar_background, 10%)
+$calendar_background = rgba(35, 40, 60, 0.95)
+$calendar_border_color = rgb(35,40,60)
 
 $months_color = #fff
 $months_background = transparent
@@ -8,10 +8,11 @@ $weekdays_background = transparent
 $weekdays_color = #fff
 
 $day_text_color = alpha(white, 0.9)
-$day_hover_background_color = lighten($calendar_background, 17.5%)
+$day_hover_background_color = lighten($calendar_background, 30%)
 
-$today_color = #FF6B66
+$today_color = #eee
+$today_fg_color = rgb(35,40,60)
 
-$selected_day_background =  #FF6B66
+$selected_day_background =  #446CB3
 
 @require "../flatpickr_base"

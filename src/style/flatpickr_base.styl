@@ -187,7 +187,10 @@ $width = 256px
 		&:hover, &:focus
 			border-color $today_color
 			background $today_color
-			color white
+			if $today_fg_color is defined
+				color $today_fg_color
+			else
+				color white
 
 	&.selected, &.selected:hover, &.selected:focus
 		background $selected_day_background
