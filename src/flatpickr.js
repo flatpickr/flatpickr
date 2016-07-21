@@ -286,7 +286,9 @@ flatpickr.init = function (element, instanceConfig) {
 		onOpen: null, // function (dateObj, dateStr) {}
 
 		// called every time calendar is closed
-		onClose: null // function (dateObj, dateStr) {}
+		onClose: null, // function (dateObj, dateStr) {}
+
+		onValueUpdate: null
 	};
 
 	init = function () {
@@ -529,6 +531,10 @@ flatpickr.init = function (element, instanceConfig) {
 
 		if (e && (timeHasChanged || e.target.classList.contains("flatpickr-day"))) {
 			triggerChange();
+		}
+
+		if (self.config.onValueUpdate) {
+			self.config.onValueUpdate(self.selectedDateObj, self.input.value);
 		}
 	};
 
