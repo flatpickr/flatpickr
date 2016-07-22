@@ -155,59 +155,62 @@ $width = 256px
 .flatpickr-days
 	padding-top 1px
 	outline 0
+
 	if $border-calendar-only is defined
 		border 1px solid $calendar_border_color
 		border-top 0
 		border-radius 0 0 3px 3px
 
+.flatpickr-days, .flatpickr-weeks
+	span
+		background none
+		border 1px solid transparent
+		border-radius 150px
+		box-sizing border-box
+		color $day_text_color
+		cursor pointer
+		display inline-block
+		font-weight 300
+		width floor(($width/7 - 2),0)
+		height (@width)
+		line-height (@width - 1px)
+		margin 0 1px 1px 1px
+		text-align center
 
-.flatpickr-day
-	background none
-	border 1px solid transparent
-	border-radius 150px
-	box-sizing border-box
-	color $day_text_color
-	cursor pointer
-	display inline-block
-	font-weight 300
-	width floor(($width/7 - 2),0)
-	height (@width)
-	line-height (@width - 1px)
-	margin 0 1px 1px 1px
-	text-align center
+		&.disabled, &.disabled:hover, &.prevMonthDay, &.nextMonthDay
+			color alpha($day_text_color, 0.3)
+			background transparent
+			border-color transparent
+			cursor default
 
-	&:hover, &:focus
-		outline 0
-		background $day_hover_background_color
-		border-color $day_hover_background_color
+		&, &.prevMonthDay, &.nextMonthDay
+			&:hover, &:focus
+				cursor pointer
+				outline 0
+				background $day_hover_background_color
+				border-color $day_hover_background_color
 
-	&.today
-		border-color $today_color
-
-		&:hover, &:focus
+		&.today
 			border-color $today_color
-			background $today_color
-			if $today_fg_color is defined
-				color $today_fg_color
+
+			&:hover, &:focus
+				border-color $today_color
+				background $today_color
+				if $today_fg_color is defined
+					color $today_fg_color
+				else
+					color white
+
+		&.selected, &.selected:hover, &.selected:focus
+			background $selected_day_background
+
+			if $selected_day_color is defined
+				color $selected_day_color
 			else
 				color white
 
-	&.selected, &.selected:hover, &.selected:focus
-		background $selected_day_background
+			border-color $selected_day_background
 
-		if $selected_day_color is defined
-			color $selected_day_color
-		else
-			color white
-
-		border-color $selected_day_background
-
-
-	&.disabled, &.disabled:hover
-		color alpha($day_text_color, 0.3)
-		background transparent
-		border-color transparent
-		cursor default
 
 
 .flatpickr-time

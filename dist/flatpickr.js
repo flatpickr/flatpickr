@@ -648,10 +648,9 @@ flatpickr.init = function (element, instanceConfig) {
 
 	documentClick = function documentClick(e) {
 		var isCalendarElement = wrapperElement.contains(e.target),
-		    isDay = e.target.classList.contains("slot"),
 		    isInput = self.element.contains(e.target) || e.target === self.altInput;
 
-		if (self.isOpen && !isDay && !isCalendarElement && !isInput) {
+		if (self.isOpen && !isCalendarElement && !isInput) {
 			self.close();
 		}
 	};
@@ -667,19 +666,24 @@ flatpickr.init = function (element, instanceConfig) {
 
 	selectDate = function selectDate(e) {
 		e.preventDefault();
+		e.stopPropagation();
 
 		if (self.config.allowInput && e.target === (self.altInput || self.input) && e.which === 13) {
 			self.setDate((self.altInput || self.input).value);
 			self.redraw();
-		} else if (e.target.classList.contains("slot")) {
-			self.selectedDateObj = new Date(self.currentYear, self.currentMonth, e.target.innerHTML);
+		} else if (e.target.classList.contains("flatpickr-day")) {
+			var isPrevMonthDay = e.target.classList.contains("prevMonthDay"),
+			    isNextMonthDay = e.target.classList.contains("nextMonthDay"),
+			    monthNum = self.currentMonth - isPrevMonthDay + isNextMonthDay;
+
+			if (isPrevMonthDay || isNextMonthDay) {
+				changeMonth(+isNextMonthDay - isPrevMonthDay);
+			}
+
+			self.selectedDateObj = new Date(self.currentYear, monthNum, e.target.innerHTML);
 
 			updateValue(e);
 			buildDays();
-
-			if (!self.config.inline && !self.config.enableTime) {
-				self.close();
-			}
 		}
 	};
 
@@ -765,14 +769,15 @@ flatpickr.init = function (element, instanceConfig) {
 
 	buildDays = function buildDays() {
 		var firstOfMonth = (new Date(self.currentYear, self.currentMonth, 1).getDay() - self.l10n.firstDayOfWeek + 7) % 7,
-		    numDays = getDaysinMonth(),
-		    prevMonthDays = getDaysinMonth((self.currentMonth - 1 + 12) % 12);
+		    daysInMonth = getDaysinMonth(),
+		    prevMonthDays = getDaysinMonth((self.currentMonth - 1 + 12) % 12),
+		    days = document.createDocumentFragment();
 
 		var dayNumber = prevMonthDays + 1 - firstOfMonth,
 		    currentDate = void 0,
 		    dateIsDisabled = void 0;
 
-		if (self.config.weekNumbers && weekNumbers) {
+		if (self.config.weekNumbers) {
 			weekNumbers.innerHTML = "";
 		}
 
@@ -783,25 +788,28 @@ flatpickr.init = function (element, instanceConfig) {
 
 		// prepend days from the ending of previous month
 		for (; dayNumber <= prevMonthDays; dayNumber++) {
-			calendar.appendChild(createElement("span", "disabled flatpickr-day", dayNumber));
-		}
+			var curDate = new Date(self.currentYear, self.currentMonth - 1, dayNumber, 0, 0, 0, 0, 0),
+			    dateIsEnabled = isEnabled(curDate),
+			    dayElem = createElement("span", dateIsEnabled ? "flatpickr-day prevMonthDay" : "disabled", dayNumber);
 
-		var dayElement = void 0;
-
-		// Start at 1 since there is no 0th day
-		for (dayNumber = 1; dayNumber <= 42 - firstOfMonth; dayNumber++) {
-			if (dayNumber <= numDays || dayNumber % 7 === 1) {
-				// avoids new date objects for appended dates
-				currentDate = new Date(self.currentYear, self.currentMonth, dayNumber, 0, 0, 0, 0, 0);
+			if (dateIsEnabled) {
+				dayElem.tabIndex = 0;
 			}
 
-			if (self.config.weekNumbers && weekNumbers && dayNumber % 7 === 1) {
+			days.appendChild(dayElem);
+		}
+
+		// Start at 1 since there is no 0th day
+		for (dayNumber = 1; dayNumber <= daysInMonth; dayNumber++) {
+			currentDate = new Date(self.currentYear, self.currentMonth, dayNumber, 0, 0, 0, 0, 0);
+
+			if (self.config.weekNumbers && dayNumber % 7 === 1) {
 				weekNumbers.appendChild(createElement("span", "disabled flatpickr-day", currentDate.fp_getWeek()));
 			}
 
-			dateIsDisabled = dayNumber > numDays || !isEnabled(currentDate);
+			dateIsDisabled = !isEnabled(currentDate);
 
-			dayElement = createElement("span", (dateIsDisabled ? "disabled" : "slot") + " flatpickr-day", dayNumber > numDays ? dayNumber % numDays : dayNumber);
+			var dayElement = createElement("span", dateIsDisabled ? "disabled" : "flatpickr-day", dayNumber);
 
 			if (!dateIsDisabled) {
 				dayElement.tabIndex = 0;
@@ -815,8 +823,27 @@ flatpickr.init = function (element, instanceConfig) {
 				}
 			}
 
-			calendar.appendChild(dayElement);
+			days.appendChild(dayElement);
 		}
+
+		// append days from the next month
+		for (var dayNum = daysInMonth + 1; dayNum <= 42 - firstOfMonth; dayNum++) {
+			var _curDate = new Date(self.currentYear, self.currentMonth + 1, dayNum % daysInMonth, 0, 0, 0, 0, 0),
+			    _dateIsEnabled = isEnabled(_curDate),
+			    _dayElement = createElement("span", _dateIsEnabled ? "nextMonthDay flatpickr-day" : "disabled", dayNum % daysInMonth);
+
+			if (self.config.weekNumbers && dayNum % 7 === 1) {
+				weekNumbers.appendChild(createElement("span", "disabled", _curDate.fp_getWeek()));
+			}
+
+			if (_dateIsEnabled) {
+				_dayElement.tabIndex = 0;
+			}
+
+			days.appendChild(_dayElement);
+		}
+
+		calendar.appendChild(days);
 	};
 
 	buildTime = function buildTime() {
