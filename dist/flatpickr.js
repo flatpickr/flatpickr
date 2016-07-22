@@ -1028,7 +1028,7 @@ flatpickr.init = function (element, instanceConfig) {
 	// For calendars inserted in BODY (as opposed to inline wrapper)
 	// it"s necessary to properly calculate top/left position.
 	self.positionCalendar = function () {
-		var calendarHeight = 270,
+		var calendarHeight = calendarContainer.offsetHeight,
 		    input = self.altInput || self.input,
 		    inputBounds = input.getBoundingClientRect(),
 		    distanceFromBottom = window.innerHeight - inputBounds.bottom + input.offsetHeight;
