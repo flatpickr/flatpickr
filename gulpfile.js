@@ -2,6 +2,7 @@ const gulp = require("gulp"),
 	babel = require("gulp-babel"),
 	cssmin = require("gulp-cssmin"),
 	lint = require("gulp-eslint"),
+	livereload = require("gulp-livereload"),
 	plumber = require("gulp-plumber"),
 	rename = require("gulp-rename"),
 	stylus = require("gulp-stylus"),
@@ -27,7 +28,8 @@ gulp.task('script', function(done){
 	get_script_stream()
 	.pipe(uglify({compress: {hoist_funs: false, hoist_vars: false}}))
 	.pipe(rename({ suffix: '.min'}))
-	.pipe(gulp.dest('dist'));
+	.pipe(gulp.dest('dist'))
+	.pipe(livereload());
 
 	done();
 });
@@ -38,7 +40,8 @@ gulp.task('style', function(done){
 	.pipe(stylus())
 	.pipe(cssmin()).on('error', errorHandler)
 	.pipe(rename({ suffix: '.min'}))
-	.pipe(gulp.dest('dist'));
+	.pipe(gulp.dest('dist'))
+	.pipe(livereload());
 
 	done();
 });
@@ -49,12 +52,14 @@ gulp.task('themes', function(done){
 	.pipe(stylus())
 	.pipe(cssmin()).on('error', errorHandler)
 	.pipe(rename({ prefix: 'flatpickr.',suffix: '.min'}))
-	.pipe(gulp.dest('dist'));
+	.pipe(gulp.dest('dist'))
+	.pipe(livereload());
 
 	done();
 });
 
 gulp.task('watch', function(done) {
+	livereload.listen();
 	gulp.watch('./src/style/**/*.styl', gulp.parallel('style', 'themes'));
 	gulp.watch(paths.script, gulp.series('script'));
 	done();
