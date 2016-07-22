@@ -125,6 +125,7 @@ flatpickr.init = function (element, instanceConfig) {
 
 	// elements & variables
 	let calendarContainer,
+		weekdayContainer,
 		timeContainer,
 		navigationCurrentMonth,
 		monthsNav,
@@ -762,8 +763,8 @@ flatpickr.init = function (element, instanceConfig) {
 	};
 
 	buildWeekdays = function () {
-		const weekdayContainer = createElement("div", "flatpickr-weekdays"),
-			firstDayOfWeek = self.l10n.firstDayOfWeek;
+		weekdayContainer = createElement("div", "flatpickr-weekdays");
+		const firstDayOfWeek = self.l10n.firstDayOfWeek;
 
 		let	weekdays = self.l10n.weekdays.shorthand.slice();
 
@@ -1090,10 +1091,25 @@ flatpickr.init = function (element, instanceConfig) {
 	// For calendars inserted in BODY (as opposed to inline wrapper)
 	// it"s necessary to properly calculate top/left position.
 	self.positionCalendar = function () {
-		const bounds = (self.altInput || self.input).getBoundingClientRect(),
-			// account for scroll & input height
-			top = (window.pageYOffset + (self.altInput || self.input).offsetHeight + bounds.top),
-			left = (window.pageXOffset + bounds.left);
+		const calendarHeight = 270,
+			input = (self.altInput || self.input),
+			inputBounds = input.getBoundingClientRect(),
+			distanceFromBottom = window.innerHeight - inputBounds.bottom + input.offsetHeight;
+
+		let top,
+			left = (window.pageXOffset + inputBounds.left);
+
+		if (distanceFromBottom < calendarHeight) {
+			top = (window.pageYOffset - calendarHeight + inputBounds.top) - 2;
+			calendarContainer.classList.remove("arrowTop");
+			calendarContainer.classList.add("arrowBottom");
+		}
+
+		else {
+			top = (window.pageYOffset + input.offsetHeight + inputBounds.top) + 2;
+			calendarContainer.classList.remove("arrowBottom");
+			calendarContainer.classList.add("arrowTop");
+		}
 
 		wrapperElement.style.top = `${top}px`;
 		wrapperElement.style.left = `${left}px`;

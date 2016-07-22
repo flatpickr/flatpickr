@@ -37,7 +37,6 @@ $width = 256px
 	position absolute
 	top 100%
 	left 0
-	margin-top 3px
 	display none
 	width $width
 
@@ -49,26 +48,53 @@ $width = 256px
 	&:before, &:after
 		position absolute
 		display block
+		content: ""
+		width 0
+		height 0
+		border-style solid
+
+	&:before, &:after
+		position absolute
+		display block
 		pointer-events none
 		border solid transparent
 		content ''
 		height 0
 		width 0
-		bottom 100%
 		left 22px
 
 	&:before
 		border-width 5px
 		margin 0 -5px
-		border-bottom-color $calendar_border_color
+
 
 	&:after
 		border-width 4px
 		margin 0 -4px
-		if $border-calendar-only is defined
-			border-bottom-color $months_background
-		else
-			border-bottom-color $calendar_background
+
+
+	&.arrowTop
+		&:before, &:after
+			bottom 100%
+		&:before
+			border-bottom-color $calendar_border_color
+		&:after
+			if $border-calendar-only is defined
+				border-bottom-color $months_background
+			else
+				border-bottom-color $calendar_background
+
+	&.arrowBottom
+		&:before, &:after
+			top 100%
+		&:before
+			border-top-color $calendar_border_color
+		&:after
+			if $border-calendar-only is defined
+				border-top-color $months_background
+			else
+				border-top-color $calendar_background
+
 
 
 
