@@ -23,7 +23,9 @@
         no-extend-native: off
         no-nested-ternary: off
         no-param-reassign: off
+        no-return-assign: off
         no-underscore-dangle: off
+        no-unused-expressions: off
 
         object-shorthand: off
         one-var: off
