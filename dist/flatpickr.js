@@ -24,8 +24,6 @@ var Flatpickr = function () {
 
 		this.build();
 		this.bind();
-
-		this.bringIntoView();
 	}
 
 	_createClass(Flatpickr, [{
@@ -406,6 +404,15 @@ var Flatpickr = function () {
 			}
 		}
 	}, {
+		key: "formatDate",
+		value: function formatDate(frmt) {
+			var _this2 = this;
+
+			return frmt.split("").map(function (c) {
+				return _this2.formats[c] ? _this2.formats[c]() : c !== "\\" ? c : "";
+			}).join("");
+		}
+	}, {
 		key: "handleYearChange",
 		value: function handleYearChange() {
 			if (this.currentMonth < 0 || this.currentMonth > 11) {
@@ -614,124 +621,124 @@ var Flatpickr = function () {
 	}, {
 		key: "setupFormats",
 		value: function setupFormats() {
-			var _this2 = this;
+			var _this3 = this;
 
 			this.formats = {
 				// weekday name, short, e.g. Thu
 				D: function D() {
-					return _this2.l10n.weekdays.shorthand[_this2.formats.w()];
+					return _this3.l10n.weekdays.shorthand[_this3.formats.w()];
 				},
 
 				// full month name e.g. January
 				F: function F() {
-					return _this2.utils.monthToStr(_this2.formats.n() - 1, false);
+					return _this3.utils.monthToStr(_this3.formats.n() - 1, false);
 				},
 
 				// hours with leading zero e.g. 03
 				H: function H() {
-					return _this2.utils.pad(_this2.selectedDateObj.getHours());
+					return Flatpickr.pad(_this3.selectedDateObj.getHours());
 				},
 
 				// day (1-30) with ordinal suffix e.g. 1st, 2nd
 				J: function J() {
-					return _this2.formats.j() + _this2.l10n.ordinal(_this2.formats.j());
+					return _this3.formats.j() + _this3.l10n.ordinal(_this3.formats.j());
 				},
 
 				// AM/PM
 				K: function K() {
-					return _this2.selectedDateObj.getHours() > 11 ? "PM" : "AM";
+					return _this3.selectedDateObj.getHours() > 11 ? "PM" : "AM";
 				},
 
 				// shorthand month e.g. Jan, Sep, Oct, etc
 				M: function M() {
-					return _this2.utils.monthToStr(_this2.formats.n() - 1, true);
+					return _this3.utils.monthToStr(_this3.formats.n() - 1, true);
 				},
 
 				// seconds 00-59
 				S: function S() {
-					return _this2.utils.pad(_this2.selectedDateObj.getSeconds());
+					return Flatpickr.pad(_this3.selectedDateObj.getSeconds());
 				},
 
 				// unix timestamp
 				U: function U() {
-					return _this2.selectedDateObj.getTime() / 1000;
+					return _this3.selectedDateObj.getTime() / 1000;
 				},
 
 				// full year e.g. 2016
 				Y: function Y() {
-					return _this2.selectedDateObj.getFullYear();
+					return _this3.selectedDateObj.getFullYear();
 				},
 
 				// day in month, padded (01-30)
 				d: function d() {
-					return _this2.utils.pad(_this2.formats.j());
+					return Flatpickr.pad(_this3.formats.j());
 				},
 
 				// hour from 1-12 (am/pm)
 				h: function h() {
-					return _this2.selectedDateObj.getHours() % 12 ? _this2.selectedDateObj.getHours() % 12 : 12;
+					return _this3.selectedDateObj.getHours() % 12 ? _this3.selectedDateObj.getHours() % 12 : 12;
 				},
 
 				// minutes, padded with leading zero e.g. 09
 				i: function i() {
-					return _this2.utils.pad(_this2.selectedDateObj.getMinutes());
+					return Flatpickr.pad(_this3.selectedDateObj.getMinutes());
 				},
 
 				// day in month (1-30)
 				j: function j() {
-					return _this2.selectedDateObj.getDate();
+					return _this3.selectedDateObj.getDate();
 				},
 
 				// weekday name, full, e.g. Thursday
 				l: function l() {
-					return _this2.l10n.weekdays.longhand[_this2.formats.w()];
+					return _this3.l10n.weekdays.longhand[_this3.formats.w()];
 				},
 
 				// padded month number (01-12)
 				m: function m() {
-					return _this2.utils.pad(_this2.formats.n());
+					return Flatpickr.pad(_this3.formats.n());
 				},
 
 				// the month number (1-12)
 				n: function n() {
-					return _this2.selectedDateObj.getMonth() + 1;
+					return _this3.selectedDateObj.getMonth() + 1;
 				},
 
 				// seconds 0-59
 				s: function s() {
-					return _this2.selectedDateObj.getSeconds();
+					return _this3.selectedDateObj.getSeconds();
 				},
 
 				// number of the day of the week
 				w: function w() {
-					return _this2.selectedDateObj.getDay();
+					return _this3.selectedDateObj.getDay();
 				},
 
 				// last two digits of year e.g. 16 for 2016
 				y: function y() {
-					return String(_this2.formats.Y()).substring(2);
+					return String(_this3.formats.Y()).substring(2);
 				}
 			};
 		}
 	}, {
 		key: "setupHelperFunctions",
 		value: function setupHelperFunctions() {
-			var _this3 = this;
+			var _this4 = this;
 
 			this.utils = {
 				getDaysinMonth: function getDaysinMonth() {
-					var month = arguments.length <= 0 || arguments[0] === undefined ? _this3.currentMonth : arguments[0];
-					var yr = arguments.length <= 1 || arguments[1] === undefined ? _this3.currentYear : arguments[1];
+					var month = arguments.length <= 0 || arguments[0] === undefined ? _this4.currentMonth : arguments[0];
+					var yr = arguments.length <= 1 || arguments[1] === undefined ? _this4.currentYear : arguments[1];
 
 					if (month === 1 && yr % 4 === 0 && yr % 100 !== 0 || yr % 400 === 0) {
 						return 29;
 					}
-					return _this3.l10n.daysInMonth[month];
+					return _this4.l10n.daysInMonth[month];
 				},
 
 				monthToStr: function monthToStr(monthNumber) {
-					var short = arguments.length <= 1 || arguments[1] === undefined ? _this3.config.shorthandCurrentMonth : arguments[1];
-					return _this3.l10n.months[(short ? "short" : "long") + "hand"][monthNumber];
+					var short = arguments.length <= 1 || arguments[1] === undefined ? _this4.config.shorthandCurrentMonth : arguments[1];
+					return _this4.l10n.months[(short ? "short" : "long") + "hand"][monthNumber];
 				}
 			};
 		}
@@ -750,6 +757,13 @@ var Flatpickr = function () {
 		key: "toggle",
 		value: function toggle() {
 			this.isOpen ? this.close() : this.open();
+		}
+	}, {
+		key: "triggerChange",
+		value: function triggerChange() {
+			if (this.config.onChange) {
+				this.config.onChange(this.selectedDateObj, this.input.value);
+			}
 		}
 	}, {
 		key: "updateNavigationCurrentMonth",

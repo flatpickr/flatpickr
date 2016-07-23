@@ -14,8 +14,6 @@ class Flatpickr {
 
 		this.build();
 		this.bind();
-
-		this.bringIntoView();
 	}
 
 	bind() {
@@ -392,6 +390,12 @@ class Flatpickr {
 		}
 	}
 
+	formatDate(frmt) {
+		return frmt.split("")
+			.map(c => this.formats[c] ? this.formats[c]() : c !== "\\" ? c : "")
+			.join("");
+	}
+
 	handleYearChange() {
 		if (this.currentMonth < 0 || this.currentMonth > 11) {
 			this.currentYear += this.currentMonth % 11;
@@ -634,7 +638,7 @@ class Flatpickr {
 			F: () => this.utils.monthToStr(this.formats.n() - 1, false),
 
 			// hours with leading zero e.g. 03
-			H: () => this.utils.pad(this.selectedDateObj.getHours()),
+			H: () => Flatpickr.pad(this.selectedDateObj.getHours()),
 
 			// day (1-30) with ordinal suffix e.g. 1st, 2nd
 			J: () => this.formats.j() + this.l10n.ordinal(this.formats.j()),
@@ -646,7 +650,7 @@ class Flatpickr {
 			M: () => this.utils.monthToStr(this.formats.n() - 1, true),
 
 			// seconds 00-59
-			S: () => this.utils.pad(this.selectedDateObj.getSeconds()),
+			S: () => Flatpickr.pad(this.selectedDateObj.getSeconds()),
 
 			// unix timestamp
 			U: () => this.selectedDateObj.getTime() / 1000,
@@ -655,13 +659,13 @@ class Flatpickr {
 			Y: () => this.selectedDateObj.getFullYear(),
 
 			// day in month, padded (01-30)
-			d: () => this.utils.pad(this.formats.j()),
+			d: () => Flatpickr.pad(this.formats.j()),
 
 			// hour from 1-12 (am/pm)
 			h: () => this.selectedDateObj.getHours() % 12 ? this.selectedDateObj.getHours() % 12 : 12,
 
 			// minutes, padded with leading zero e.g. 09
-			i: () => this.utils.pad(this.selectedDateObj.getMinutes()),
+			i: () => Flatpickr.pad(this.selectedDateObj.getMinutes()),
 
 			// day in month (1-30)
 			j: () => this.selectedDateObj.getDate(),
@@ -670,7 +674,7 @@ class Flatpickr {
 			l: () => this.l10n.weekdays.longhand[this.formats.w()],
 
 			// padded month number (01-12)
-			m: () => this.utils.pad(this.formats.n()),
+			m: () => Flatpickr.pad(this.formats.n()),
 
 			// the month number (1-12)
 			n: () => this.selectedDateObj.getMonth() + 1,
@@ -712,6 +716,12 @@ class Flatpickr {
 
 	toggle() {
 		this.isOpen ? this.close() : this.open();
+	}
+
+	triggerChange() {
+		if (this.config.onChange) {
+			this.config.onChange(this.selectedDateObj, this.input.value);
+		}
 	}
 
 	updateNavigationCurrentMonth() {
