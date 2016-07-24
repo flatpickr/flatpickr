@@ -528,7 +528,13 @@ class Flatpickr {
 	}
 
 	open() {
-		if (this.isOpen || (this.altInput || this.input).disabled || this.config.inline) {
+		if (this.isMobile) {
+			this.mobileInput.click();
+			this.triggerEvent("Open");
+			return;
+		}
+
+		else if (this.isOpen || (this.altInput || this.input).disabled || this.config.inline) {
 			return;
 		}
 
@@ -582,34 +588,27 @@ class Flatpickr {
 				date = this.config.parseDate(date);
 			}
 
-			else if (/^\d\d\d\d\-\d{1,2}\-\d\d$/.test(date)) {
-				// this utc datestring gets parsed, but incorrectly by Date.parse
-				date = new Date(date.replace(/(\d)-(\d)/g, "$1/$2"));
+			else if (/^\d\d:\d\d/.test(date)) { // time picker
+				const m = date.match(/^(\d{1,2})[:\s]?(\d\d)?[:\s]?(\d\d)?/);
+				date = new Date();
+				date.setHours(m[1], m[2] || 0, m[2] || 0);
 			}
 
-			else if (Date.parse(date)) {
+			else if (/Z$/.test(date) || /GMT$/.test(date)) { // datestrings w/ timezone
 				date = new Date(date);
 			}
 
-			else if (/^\d\d\d\d\-\d\d\-\d\d/.test(date)) { // disable special utc datestring
-				date = new Date(date.replace(/(\d)-(\d)/g, "$1/$2"));
-			}
-
-			else if (/^(\d?\d):(\d\d)/.test(date)) { // time-only picker
-				const matches = date.match(/^(\d?\d):(\d\d)(:(\d\d))?/),
-					seconds = matches[4] !== undefined ? matches[4] : 0;
-
-				date = new Date();
-				date.setHours(matches[1], matches[2], seconds, 0);
-			}
-
-			else {
-				console.error(`flatpickr: invalid date string ${date}`);
-				console.info(this.element);
+			else if (/(\d+)/g.test(date)) {
+				const d = date.match(/(\d+)/g);
+				date = new Date(
+					`${d[0]}/${d[1]||1}/${d[2]||1} ${d[3]||0}:${d[4]||0}:${d[5]||0}`
+				);
 			}
 		}
 
 		if (!(date instanceof Date) || !date.getTime()) {
+			console.warn(`flatpickr: invalid date ${date}`);
+			console.info(this.element);
 			return null;
 		}
 
@@ -843,18 +842,20 @@ class Flatpickr {
 
 		this.input.parentNode.appendChild(this.mobileInput);
 
-		this.input.addEventListener("focus", e => {
+		(this.altInput || this.input).addEventListener("focus", e => {
 			e.target.blur();
 			e.preventDefault();
-			setTimeout(() => {
-				this.mobileInput.click();
-				this.triggerEvent("Open");
-			}, 0);
+			setTimeout(() => this.open(), 0);
 		});
 
 		this.mobileInput.addEventListener("change", e => {
+			console.log(e.target.value);
 			this.setDate(e.target.value);
 			this.triggerEvent("Change");
+		});
+
+		this.mobileInput.addEventListener("blur", () => {
+			this.triggerEvent("Close");
 		});
 	}
 

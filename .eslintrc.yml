@@ -33,6 +33,8 @@
         prefer-const: off
         prefer-template: off
 
+        space-infix-ops: warn
+
         quotes:
             - error
             - double

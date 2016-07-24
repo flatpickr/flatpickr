@@ -574,7 +574,11 @@ var Flatpickr = function () {
 	}, {
 		key: "open",
 		value: function open() {
-			if (this.isOpen || (this.altInput || this.input).disabled || this.config.inline) {
+			if (this.isMobile) {
+				this.mobileInput.click();
+				this.triggerEvent("Open");
+				return;
+			} else if (this.isOpen || (this.altInput || this.input).disabled || this.config.inline) {
 				return;
 			} else if (!this.config.static) {
 				this.positionCalendar();
@@ -627,28 +631,23 @@ var Flatpickr = function () {
 
 				if (this.config.parseDate) {
 					date = this.config.parseDate(date);
-				} else if (/^\d\d\d\d\-\d{1,2}\-\d\d$/.test(date)) {
-					// this utc datestring gets parsed, but incorrectly by Date.parse
-					date = new Date(date.replace(/(\d)-(\d)/g, "$1/$2"));
-				} else if (Date.parse(date)) {
-					date = new Date(date);
-				} else if (/^\d\d\d\d\-\d\d\-\d\d/.test(date)) {
-					// disable special utc datestring
-					date = new Date(date.replace(/(\d)-(\d)/g, "$1/$2"));
-				} else if (/^(\d?\d):(\d\d)/.test(date)) {
-					// time-only picker
-					var matches = date.match(/^(\d?\d):(\d\d)(:(\d\d))?/),
-					    seconds = matches[4] !== undefined ? matches[4] : 0;
-
+				} else if (/^\d\d:\d\d/.test(date)) {
+					// time picker
+					var m = date.match(/^(\d{1,2})[:\s]?(\d\d)?[:\s]?(\d\d)?/);
 					date = new Date();
-					date.setHours(matches[1], matches[2], seconds, 0);
-				} else {
-					console.error("flatpickr: invalid date string " + date);
-					console.info(this.element);
+					date.setHours(m[1], m[2] || 0, m[2] || 0);
+				} else if (/Z$/.test(date) || /GMT$/.test(date)) {
+					// datestrings w/ timezone
+					date = new Date(date);
+				} else if (/(\d+)/g.test(date)) {
+					var d = date.match(/(\d+)/g);
+					date = new Date(d[0] + "/" + (d[1] || 1) + "/" + (d[2] || 1) + " " + (d[3] || 0) + ":" + (d[4] || 0) + ":" + (d[5] || 0));
 				}
 			}
 
 			if (!(date instanceof Date) || !date.getTime()) {
+				console.warn("flatpickr: invalid date " + date);
+				console.info(this.element);
 				return null;
 			}
 
@@ -932,18 +931,22 @@ var Flatpickr = function () {
 
 			this.input.parentNode.appendChild(this.mobileInput);
 
-			this.input.addEventListener("focus", function (e) {
+			(this.altInput || this.input).addEventListener("focus", function (e) {
 				e.target.blur();
 				e.preventDefault();
 				setTimeout(function () {
-					_this5.mobileInput.click();
-					_this5.triggerEvent("Open");
+					return _this5.open();
 				}, 0);
 			});
 
 			this.mobileInput.addEventListener("change", function (e) {
+				console.log(e.target.value);
 				_this5.setDate(e.target.value);
 				_this5.triggerEvent("Change");
+			});
+
+			this.mobileInput.addEventListener("blur", function () {
+				_this5.triggerEvent("Close");
 			});
 		}
 	}, {
