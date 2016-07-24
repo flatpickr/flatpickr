@@ -108,10 +108,13 @@ class Flatpickr {
 	}
 
 	bringIntoView(jumpDate) {
-		jumpDate = this.parseDate(
-			jumpDate || this.selectedDateObj || this.config.defaultDate ||
-			this.config.minDate || new Date()
-		);
+		if (jumpDate) {
+			jumpDate = this.parseDate(jumpDate);
+		}
+		else {
+			jumpDate = this.selectedDateObj || this.config.defaultDate ||
+			this.config.minDate || this.now;
+		}
 
 		this.currentYear = jumpDate.getFullYear();
 		this.currentMonth = jumpDate.getMonth();
@@ -377,6 +380,19 @@ class Flatpickr {
 		(this.config.noCalendar ? this.timeContainer : this.days).focus();
 	}
 
+	clear() {
+		this.input.value = "";
+
+		if (this.altInput) {
+			this.altInput.value = "";
+		}
+
+		this.selectedDateObj = null;
+
+		this.triggerChange();
+		this.bringIntoView(this.now);
+	}
+
 	close() {
 		this.isOpen = false;
 		this.calendarContainer.classList.remove("open");
@@ -597,6 +613,7 @@ class Flatpickr {
 	}
 
 	setupDates() {
+		this.now = new Date();
 		if (this.config.defaultDate || this.input.value) {
 			this.selectedDateObj = this.parseDate(this.config.defaultDate || this.input.value);
 		}

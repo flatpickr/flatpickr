@@ -190,7 +190,11 @@ var Flatpickr = function () {
 	}, {
 		key: "bringIntoView",
 		value: function bringIntoView(jumpDate) {
-			jumpDate = this.parseDate(jumpDate || this.selectedDateObj || this.config.defaultDate || this.config.minDate || new Date());
+			if (jumpDate) {
+				jumpDate = this.parseDate(jumpDate);
+			} else {
+				jumpDate = this.selectedDateObj || this.config.defaultDate || this.config.minDate || this.now;
+			}
 
 			this.currentYear = jumpDate.getFullYear();
 			this.currentMonth = jumpDate.getMonth();
@@ -428,6 +432,20 @@ var Flatpickr = function () {
 			(this.config.noCalendar ? this.timeContainer : this.days).focus();
 		}
 	}, {
+		key: "clear",
+		value: function clear() {
+			this.input.value = "";
+
+			if (this.altInput) {
+				this.altInput.value = "";
+			}
+
+			this.selectedDateObj = null;
+
+			this.triggerChange();
+			this.bringIntoView(this.now);
+		}
+	}, {
 		key: "close",
 		value: function close() {
 			this.isOpen = false;
@@ -631,6 +649,7 @@ var Flatpickr = function () {
 	}, {
 		key: "setupDates",
 		value: function setupDates() {
+			this.now = new Date();
 			if (this.config.defaultDate || this.input.value) {
 				this.selectedDateObj = this.parseDate(this.config.defaultDate || this.input.value);
 			}
