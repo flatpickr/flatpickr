@@ -144,12 +144,12 @@ $width = 256px
 .flatpickr-current-month
 	font-size 135%
 	font-weight 300
-	color alpha($months_color, 0.7)
+	color inherit
 	display inline-block
 
 	.cur_month
 		font-weight 700
-		color $months_color
+		color inherit
 
 	.cur_year
 		background transparent
@@ -217,7 +217,10 @@ $width = 256px
 		text-align center
 
 		&.disabled, &.disabled:hover, &.prevMonthDay, &.nextMonthDay
-			color alpha($day_text_color, 0.3)
+			if $disabled_day_color is defined
+				color $disabled_day_color
+			else
+				color alpha($day_text_color, 0.3)
 			background transparent
 			border-color transparent
 			cursor default
