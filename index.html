@@ -85,10 +85,39 @@
 		<div class="example_wrapper">
 
 			<h3>Syntax</h3>
+			<p>There are multiple ways to create a Flatpickr instance. In all cases, config is optional. The return value will be the Flatpickr instance, or an array of instances.</p>
 
 			<pre class='prettyprint lang-js'>
-new Flatpickr('selector', [options]);
+document.getElementById("myID").flatpickr({});
+document.getElementsByClassName("calendar").flatpickr({});
 </pre>
+<hr>
+			<p>Flatpickr is compatible with jQuery.</p>
+			<pre class='prettyprint lang-js'>
+$(".calendar").flatpickr({}); // jQuery
+</pre>
+<hr>
+			<p>Use querySelector/querySelectorAll for more complex selectors.</p>
+			<pre class='prettyprint lang-js'>
+document.querySelectorAll("input:nth-child(n+2)").flatpickr({});
+</pre>
+<hr>
+			<p>Or pass in a node directly.</p>
+			<pre class='prettyprint lang-js'>
+new Flatpickr(HTMLElement, [options]);
+</pre>
+<hr>
+			<p>Hint: if you don't use jQuery, you can use a shortcut for document.querySelector[All].
+			<pre class='prettyprint lang-js'>
+var $ = selector => document.querySelector(selector);
+var $$ = selector => document.querySelectorAll(selector);
+</pre>
+
+			<p>Then:</p>
+			<pre class='prettyprint lang-js'>
+$$(".class").flatpickr();
+</pre>
+
 		</div>
 
 
@@ -96,39 +125,8 @@ new Flatpickr('selector', [options]);
 		<div class="example_wrapper" data-desc="A basic datepicker" id="basic">
 			<h3>Basics</h3>
 			<strong>A basic datepicker</strong>
-
-
-			<pre class='prettyprint lang-js'>new Flatpickr('#flatpickr-tryme')</pre>
-
 			<p>
 				<input id="flatpickr-tryme" placeholder="Try me..">
-			</p>
-
-
-
-
-			<strong>Multiple datetimepickers</strong>
-
-			<p>
-				The selector can be a class as well, turning multiple inputs/fields into calendars.
-			</p>
-			<pre class='prettyprint lang-js'>
-new Flatpickr('.calendar')
-</pre>
-			<pre class="prettyprint lang-html">
-&lt;input class=calendar placeholder="calendar 1"&gt;
-&lt;input class=calendar placeholder="calendar 2"&gt;
-&lt;input class=calendar placeholder="calendar 3"&gt;
-</pre>
-
-			<p>
-				<input class=calendar placeholder="calendar 1">
-			</p>
-			<p>
-				<input class=calendar placeholder="calendar 2">
-			</p>
-			<p>
-				<input class=calendar placeholder="calendar 3">
 			</p>
 
 		</div>
@@ -136,11 +134,10 @@ new Flatpickr('.calendar')
 		<div class="example_wrapper" data-desc="Custom date/time formats" id="format">
 			<h3>Date Formatting</h3>
 			<p>Using <a href=#options>dateFormat</a></p>
-			<pre class='prettyprint lang-js'>
-new Flatpickr('#yourSelector', { dateFormat: 'd-m-Y'});
-new Flatpickr('#yourSelector', { dateFormat: 'm/d/Y'});
-</pre>
+
 			<pre class='prettyprint lang-html'>
+&lt;input class=flatpickr data-date-format="d-m-Y"&gt;
+&lt;input class=flatpickr data-date-format="m/d/Y"&gt;
 &lt;input class=flatpickr data-date-format="l, F j, Y"&gt;
 </pre>
 
@@ -250,8 +247,7 @@ new Flatpickr('#yourSelector', { dateFormat: 'm/d/Y'});
 			<h3>Preload date and time</h3>
 
 			 <p>
-			You may load the calendar with a predefined value, ranging from
-			simple dates, such as "2016-04-10" to full-fledged datetime strings.
+			You may load the calendar with a predefined value, ranging from	simple dates, such as "2016-04-10" to full-fledged datetime strings. To keep the dates in UTC/GMT, see the <a href="#utc">UTC option</a>.
 			</p>
 			<pre class='prettyprint lang-html'>
 &lt;input type=text class=flatpickr data-enable-time=true value="Sun, 24 Jul 2016 05:16:47 GMT"&gt;
@@ -972,7 +968,6 @@ new Flatpickr(".flatpickr")
 	</div>
 
 	<script src="dist/flatpickr.js"></script>
-	<script src="src/flatpickr.l10n.ru.js"></script>
 	<script>
 
 	const $ = selector => document.querySelector(selector);
