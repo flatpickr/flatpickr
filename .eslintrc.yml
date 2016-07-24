@@ -24,6 +24,7 @@
         no-nested-ternary: off
         no-param-reassign: off
         no-return-assign: off
+        no-undef: warn
         no-underscore-dangle: off
         no-unused-expressions: off
 

@@ -21,6 +21,7 @@ class Flatpickr {
 		}
 
 		else {
+			this.bind();
 			this.setupMobile();
 		}
 
@@ -34,11 +35,7 @@ class Flatpickr {
 	}
 
 	bind() {
-		document.addEventListener("keydown", e => this.onKeyDown(e));
-		window.addEventListener("resize", Flatpickr.debounce(() => this.onResize(), 300));
-
 		if (this.config.clickOpens) {
-			(this.altInput || this.input).addEventListener("click", e => this.open(e));
 			(this.altInput || this.input).addEventListener("focus", e => this.open(e));
 		}
 
@@ -60,6 +57,10 @@ class Flatpickr {
 			}
 		}
 
+		if (this.isMobile) {
+			return;
+		}
+
 		if (!this.config.noCalendar) {
 			this.prevMonthNav.addEventListener("click", () => this.changeMonth(-1));
 			this.nextMonthNav.addEventListener("click", () => this.changeMonth(1));
@@ -74,6 +75,9 @@ class Flatpickr {
 
 			this.days.addEventListener("click", e => this.selectDate(e));
 		}
+
+		document.addEventListener("keydown", e => this.onKeyDown(e));
+		window.addEventListener("resize", Flatpickr.debounce(() => this.onResize(), 300));
 
 		document.addEventListener("click", e => this.documentClick(e));
 		document.addEventListener("blur", e => this.documentClick(e), true);
@@ -527,9 +531,15 @@ class Flatpickr {
 		}
 	}
 
-	open() {
+	open(e) {
 		if (this.isMobile) {
-			this.mobileInput.click();
+			e.preventDefault();
+			e.target.blur();
+
+			setTimeout(() => {
+				this.mobileInput.click();
+			}, 0);
+
 			this.triggerEvent("Open");
 			return;
 		}
@@ -842,19 +852,9 @@ class Flatpickr {
 
 		this.input.parentNode.appendChild(this.mobileInput);
 
-		(this.altInput || this.input).addEventListener("focus", e => {
-			e.target.blur();
-			e.preventDefault();
-			setTimeout(() => this.open(), 0);
-		});
-
 		this.mobileInput.addEventListener("change", e => {
-			console.log(e.target.value);
 			this.setDate(e.target.value);
 			this.triggerEvent("Change");
-		});
-
-		this.mobileInput.addEventListener("blur", () => {
 			this.triggerEvent("Close");
 		});
 	}
@@ -1151,6 +1151,16 @@ HTMLCollection.prototype.map = NodeList.prototype.map = Array.prototype.map;
 HTMLCollection.prototype.flatpickr = NodeList.prototype.flatpickr = function (config = {}) {
 	return this.map(element => (element._flatpickr = new Flatpickr(element, config)));
 };
+
+if (typeof jQuery !== "undefined") {
+	jQuery.fn.extend({
+		flatpickr: function (config) {
+			return this.each(function () {
+				this._flatpickr = new Flatpickr(this, config);
+			});
+		},
+	});
+}
 
 HTMLElement.prototype.flatpickr = function (config = {}) {
 	return (this._flatpickr = new Flatpickr(this, config));
