@@ -3,6 +3,9 @@ class Flatpickr {
 		this.element = element;
 		this.instanceConfig = config || {};
 
+		this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
+			.test(navigator.userAgent);
+
 		this.setupFormats();
 		this.setupLocale();
 
@@ -12,8 +15,14 @@ class Flatpickr {
 
 		this.setupHelperFunctions();
 
-		this.build();
-		this.bind();
+		if (!this.isMobile) {
+			this.build();
+			this.bind();
+		}
+
+		else {
+			this.setupMobile();
+		}
 
 		this.updateValue();
 		this.triggerEvent("Ready");
@@ -411,9 +420,9 @@ class Flatpickr {
 		}
 	}
 
-	formatDate(frmt) {
+	formatDate(frmt, dateObj = this.selectedDateObj) {
 		return frmt.split("")
-			.map(c => this.formats[c] ? this.formats[c]() : c !== "\\" ? c : "")
+			.map(c => this.formats[c] ? this.formats[c](dateObj) : c !== "\\" ? c : "")
 			.join("");
 	}
 
@@ -546,12 +555,18 @@ class Flatpickr {
 	}
 
 	parseConfig() {
-		this.config = Object.assign(
-			{},
-			Flatpickr.defaultConfig,
-			this.element.dataset,
-			this.instanceConfig
-		);
+		const userConfig = Object.assign({}, this.element.dataset,	this.instanceConfig);
+		this.config = Object.assign({},	Flatpickr.defaultConfig, userConfig);
+		if (!userConfig.dateFormat && this.config.enableTime) {
+			if (this.config.noCalendar) { // time picker
+				this.config.dateFormat = "H:i";
+				this.config.altFormat = "h:i K";
+			}
+			else {
+				this.config.dateFormat += " H:i" + (this.config.enableSeconds ? ":S" : "");
+				this.config.altFormat = `h:i${this.config.enableSeconds ? ":S" : ""} K`;
+			}
+		}
 	}
 
 	parseDate(date, timeless = false) {
@@ -609,27 +624,6 @@ class Flatpickr {
 		return date;
 	}
 
-	setupDates() {
-		this.now = new Date();
-		if (this.config.defaultDate || this.input.value) {
-			this.selectedDateObj = this.parseDate(this.config.defaultDate || this.input.value);
-		}
-
-		if (this.config.minDate) {
-			this.config.minDate = this.parseDate(this.config.minDate, true);
-		}
-		if (this.config.maxDate) {
-			this.config.maxDate = this.parseDate(this.config.maxDate, true);
-		}
-
-		const initialDate = (this.selectedDateObj || this.config.defaultDate ||
-			this.config.minDate || new Date()
-		);
-
-		this.currentYear = initialDate.getFullYear();
-		this.currentMonth = initialDate.getMonth();
-	}
-
 	positionCalendar() {
 		const calendarHeight = this.calendarContainer.offsetHeight,
 			input = (this.altInput || this.input),
@@ -656,7 +650,7 @@ class Flatpickr {
 	}
 
 	redraw() {
-		if (this.config.noCalendar) {
+		if (this.config.noCalendar || this.isMobile) {
 			return;
 		}
 
@@ -709,6 +703,27 @@ class Flatpickr {
 		}
 	}
 
+	setupDates() {
+		this.now = new Date();
+		if (this.config.defaultDate || this.input.value) {
+			this.selectedDateObj = this.parseDate(this.config.defaultDate || this.input.value);
+		}
+
+		if (this.config.minDate) {
+			this.config.minDate = this.parseDate(this.config.minDate, true);
+		}
+		if (this.config.maxDate) {
+			this.config.maxDate = this.parseDate(this.config.maxDate, true);
+		}
+
+		const initialDate = (this.selectedDateObj || this.config.defaultDate ||
+			this.config.minDate || new Date()
+		);
+
+		this.currentYear = initialDate.getFullYear();
+		this.currentMonth = initialDate.getMonth();
+	}
+
 	setupLocale() {
 		this.l10n = Object.assign({}, Flatpickr.l10n);
 	}
@@ -716,61 +731,61 @@ class Flatpickr {
 	setupFormats() {
 		this.formats = {
 			// weekday name, short, e.g. Thu
-			D: () => this.l10n.weekdays.shorthand[this.formats.w()],
+			D: (date) => this.l10n.weekdays.shorthand[this.formats.w(date)],
 
 			// full month name e.g. January
-			F: () => this.utils.monthToStr(this.formats.n() - 1, false),
+			F: (date) => this.utils.monthToStr(this.formats.n(date) - 1, false),
 
 			// hours with leading zero e.g. 03
-			H: () => Flatpickr.pad(this.selectedDateObj.getHours()),
+			H: (date) => Flatpickr.pad(date.getHours()),
 
 			// day (1-30) with ordinal suffix e.g. 1st, 2nd
-			J: () => this.formats.j() + this.l10n.ordinal(this.formats.j()),
+			J: (date) => this.formats.j(date) + this.l10n.ordinal(this.formats.j()),
 
 			// AM/PM
-			K: () => this.selectedDateObj.getHours() > 11 ? "PM" : "AM",
+			K: (date) => date.getHours() > 11 ? "PM" : "AM",
 
 			// shorthand month e.g. Jan, Sep, Oct, etc
-			M: () => this.utils.monthToStr(this.formats.n() - 1, true),
+			M: (date) => this.utils.monthToStr(this.formats.n(date) - 1, true),
 
 			// seconds 00-59
-			S: () => Flatpickr.pad(this.selectedDateObj.getSeconds()),
+			S: (date) => Flatpickr.pad(date.getSeconds()),
 
 			// unix timestamp
-			U: () => this.selectedDateObj.getTime() / 1000,
+			U: (date) => date.getTime() / 1000,
 
 			// full year e.g. 2016
-			Y: () => this.selectedDateObj.getFullYear(),
+			Y: (date) => date.getFullYear(),
 
 			// day in month, padded (01-30)
-			d: () => Flatpickr.pad(this.formats.j()),
+			d: (date) => Flatpickr.pad(this.formats.j(date)),
 
 			// hour from 1-12 (am/pm)
-			h: () => this.selectedDateObj.getHours() % 12 ? this.selectedDateObj.getHours() % 12 : 12,
+			h: (date) => date.getHours() % 12 ? date.getHours() % 12 : 12,
 
 			// minutes, padded with leading zero e.g. 09
-			i: () => Flatpickr.pad(this.selectedDateObj.getMinutes()),
+			i: (date) => Flatpickr.pad(date.getMinutes()),
 
 			// day in month (1-30)
-			j: () => this.selectedDateObj.getDate(),
+			j: (date) => date.getDate(),
 
 			// weekday name, full, e.g. Thursday
-			l: () => this.l10n.weekdays.longhand[this.formats.w()],
+			l: (date) => this.l10n.weekdays.longhand[this.formats.w(date)],
 
 			// padded month number (01-12)
-			m: () => Flatpickr.pad(this.formats.n()),
+			m: (date) => Flatpickr.pad(this.formats.n(date)),
 
 			// the month number (1-12)
-			n: () => this.selectedDateObj.getMonth() + 1,
+			n: (date) => date.getMonth() + 1,
 
 			// seconds 0-59
-			s: () => this.selectedDateObj.getSeconds(),
+			s: (date) => date.getSeconds(),
 
 			// number of the day of the week
-			w: () => this.selectedDateObj.getDay(),
+			w: (date) => date.getDay(),
 
 			// last two digits of year e.g. 16 for 2016
-			y: () => String(this.formats.Y()).substring(2)
+			y: (date) => String(this.formats.Y(date)).substring(2)
 		};
 	}
 
@@ -799,6 +814,48 @@ class Flatpickr {
 			this.input.type = "hidden";
 			this.input.parentNode.insertBefore(this.altInput, this.input.nextSibling);
 		}
+	}
+
+	setupMobile() {
+		const inputType = this.config.enableTime
+			? (this.config.noCalendar ? "time" : "datetime-local")
+			: "date";
+
+		this.mobileInput = Flatpickr.createElement("input", "flatpickr-mobileInput");
+		this.mobileInput.type = inputType;
+
+		this.mobileInput.tabIndex = -1;
+		this.mobileInput.type = inputType;
+
+		if (this.selectedDateObj) {
+			const formatStr = inputType === "datetime-local" ? "Y-m-d\\TH:i:S" :
+				inputType === "date" ? "Y-m-d" : "H:i:S";
+			this.mobileInput.default = this.formatDate(formatStr);
+		}
+
+		if (this.config.minDate) {
+			this.mobileInput.min = this.formatDate("Y-m-d", this.config.minDate);
+		}
+
+		if (this.config.maxDate) {
+			this.mobileInput.max = this.formatDate("Y-m-d", this.config.maxDate);
+		}
+
+		this.input.parentNode.appendChild(this.mobileInput);
+
+		this.input.addEventListener("focus", e => {
+			e.target.blur();
+			e.preventDefault();
+			setTimeout(() => {
+				this.mobileInput.click();
+				this.triggerEvent("Open");
+			}, 0);
+		});
+
+		this.mobileInput.addEventListener("change", e => {
+			this.setDate(e.target.value);
+			this.triggerEvent("Change");
+		});
 	}
 
 	toggle() {
@@ -832,7 +889,7 @@ class Flatpickr {
 
 		let timeHasChanged;
 
-		if (this.config.enableTime) {
+		if (this.config.enableTime && !this.isMobile) {
 			const previousTimestamp = this.selectedDateObj.getTime();
 
 			// update time
@@ -878,9 +935,7 @@ class Flatpickr {
 			this.triggerEvent("Change");
 		}
 
-		if (this.config.onValueUpdate) {
-			this.config.onValueUpdate(this.selectedDateObj, this.input.value);
-		}
+		this.triggerEvent("ValueUpdate");
 	}
 
 	yearScroll(e) {
