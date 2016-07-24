@@ -240,7 +240,7 @@ class Flatpickr {
 				dayNum % daysInMonth,
 				0, 0, 0, 0, 0
 			),
-				dateIsEnabled = !this.isEnabled(curDate),
+				dateIsEnabled = this.isEnabled(curDate),
 				dayElement = Flatpickr.createElement(
 					"span",
 					dateIsEnabled ? "nextMonthDay flatpickr-day" : "disabled",

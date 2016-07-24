@@ -299,7 +299,7 @@ var Flatpickr = function () {
 			// append days from the next month
 			for (var dayNum = daysInMonth + 1; dayNum <= 42 - firstOfMonth; dayNum++) {
 				var _curDate = new Date(this.currentYear, this.currentMonth + 1, dayNum % daysInMonth, 0, 0, 0, 0, 0),
-				    _dateIsEnabled = !this.isEnabled(_curDate),
+				    _dateIsEnabled = this.isEnabled(_curDate),
 				    _dayElement = Flatpickr.createElement("span", _dateIsEnabled ? "nextMonthDay flatpickr-day" : "disabled", dayNum % daysInMonth);
 
 				if (this.config.weekNumbers && dayNum % 7 === 1) {
