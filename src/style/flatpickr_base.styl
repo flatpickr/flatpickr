@@ -41,6 +41,9 @@ $width = 256px
 	border-radius 3px
 	position absolute
 	visibility hidden
+	opacity 0
+	transform translateY(20px)
+	transition transform ease-out 10ms
 	width $width
 
 	&.hasWeeks
@@ -77,6 +80,7 @@ $width = 256px
 
 
 	&.arrowTop
+		transform translateY(20px)
 		&:before, &:after
 			bottom 100%
 		&:before
@@ -88,6 +92,7 @@ $width = 256px
 				border-bottom-color $calendar_background
 
 	&.arrowBottom
+		transform translateY(-20px)
 		&:before, &:after
 			top 100%
 		&:before
@@ -99,6 +104,9 @@ $width = 256px
 				border-top-color $calendar_background
 
 	&.open, &.inline
+		transition all ease-out 50ms
+		opacity 1
+		transform translateY(0)
 		z-index 99999
 		visibility visible
 
