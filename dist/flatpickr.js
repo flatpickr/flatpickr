@@ -24,9 +24,17 @@ var Flatpickr = function () {
 
 		this.build();
 		this.bind();
+
+		this.updateValue();
 	}
 
 	_createClass(Flatpickr, [{
+		key: "amPMToggle",
+		value: function amPMToggle(e) {
+			e.preventDefault();
+			this.amPM.textContent = ["AM", "PM"][this.amPM.textContent === "AM" | 0];
+		}
+	}, {
 		key: "bind",
 		value: function bind() {
 			var _this = this;
@@ -34,9 +42,9 @@ var Flatpickr = function () {
 			document.addEventListener("keydown", function (e) {
 				return _this.onKeyDown(e);
 			});
-			window.addEventListener("resize", function (e) {
-				return _this.onResize(e);
-			});
+			window.addEventListener("resize", Flatpickr.debounce(function () {
+				return _this.onResize();
+			}, 300));
 
 			if (this.config.clickOpens) {
 				(this.altInput || this.input).addEventListener("click", function (e) {
@@ -81,8 +89,8 @@ var Flatpickr = function () {
 					return _this.changeMonth(1);
 				});
 
-				this.currentYearElement.addEventListener("wheel", function () {
-					return _this.yearScroll;
+				this.currentYearElement.addEventListener("wheel", function (e) {
+					return _this.yearScroll(e);
 				});
 				this.currentYearElement.addEventListener("focus", function () {
 					return _this.currentYearElement.select;
@@ -106,34 +114,70 @@ var Flatpickr = function () {
 			}, true);
 
 			if (this.config.enableTime) {
-				this.hourElement.addEventListener("wheel", this.timeWrapper);
-				this.minuteElement.addEventListener("wheel", this.timeWrapper);
+				this.hourElement.addEventListener("wheel", function (e) {
+					return Flatpickr.timeWrapper(e);
+				});
+				this.minuteElement.addEventListener("wheel", function (e) {
+					return Flatpickr.timeWrapper(e);
+				});
 
-				this.hourElement.addEventListener("input", this.timeWrapper);
-				this.minuteElement.addEventListener("input", this.timeWrapper);
+				this.hourElement.addEventListener("input", function (e) {
+					return Flatpickr.timeWrapper(e);
+				});
+				this.minuteElement.addEventListener("input", function (e) {
+					return Flatpickr.timeWrapper(e);
+				});
 
-				this.hourElement.addEventListener("mouseout", this.updateValue);
-				this.minuteElement.addEventListener("mouseout", this.updateValue);
+				this.hourElement.addEventListener("mouseout", function (e) {
+					return _this.updateValue(e);
+				});
+				this.minuteElement.addEventListener("mouseout", function (e) {
+					return _this.updateValue(e);
+				});
 
-				this.hourElement.addEventListener("change", this.updateValue);
-				this.minuteElement.addEventListener("change", this.updateValue);
+				this.hourElement.addEventListener("change", function (e) {
+					return _this.updateValue(e);
+				});
+				this.minuteElement.addEventListener("change", function (e) {
+					return _this.updateValue(e);
+				});
 
-				this.hourElement.addEventListener("focus", this.hourElement.select);
-				this.minuteElement.addEventListener("focus", this.minuteElement.select);
+				this.hourElement.addEventListener("focus", function (e) {
+					return _this.hourElement.select(e);
+				});
+				this.minuteElement.addEventListener("focus", function (e) {
+					return _this.minuteElement.select(e);
+				});
 
 				if (this.config.enableSeconds) {
-					this.secondElement.addEventListener("wheel", this.timeWrapper);
-					this.secondElement.addEventListener("input", this.timeWrapper);
-					this.secondElement.addEventListener("mouseout", this.updateValue);
-					this.secondElement.addEventListener("change", this.updateValue);
-					this.secondElement.addEventListener("focus", this.secondElement.select);
+					this.secondElement.addEventListener("wheel", function (e) {
+						return Flatpickr.timeWrapper(e);
+					});
+					this.secondElement.addEventListener("input", function (e) {
+						return Flatpickr.timeWrapper(e);
+					});
+					this.secondElement.addEventListener("mouseout", function (e) {
+						return _this.updateValue(e);
+					});
+					this.secondElement.addEventListener("change", function (e) {
+						return _this.updateValue(e);
+					});
+					this.secondElement.addEventListener("focus", function (e) {
+						return _this.secondElement.select(e);
+					});
 				}
 
 				if (!this.config.time_24hr) {
-					this.amPM.addEventListener("click", this.amPMToggle);
+					this.amPM.addEventListener("click", function (e) {
+						return _this.amPMToggle(e);
+					});
 
-					this.amPM.addEventListener("wheel", this.amPMToggle);
-					this.amPM.addEventListener("mouseout", this.updateValue);
+					this.amPM.addEventListener("wheel", function (e) {
+						return _this.amPMToggle(e);
+					});
+					this.amPM.addEventListener("mouseout", function (e) {
+						return _this.updateValue(e);
+					});
 
 					this.amPM.addEventListener("keydown", function (e) {
 						if (e.which === 38 || e.which === 40) {
@@ -158,16 +202,19 @@ var Flatpickr = function () {
 			var fragment = document.createDocumentFragment();
 			this.calendarContainer = Flatpickr.createElement("div", "flatpickr-calendar");
 
-			fragment.appendChild(this.buildMonthNav());
-			fragment.appendChild(this.buildWeekdays());
-			fragment.appendChild(this.buildDays());
+			if (!this.config.noCalendar) {
+				fragment.appendChild(this.buildMonthNav());
+				fragment.appendChild(this.buildWeekdays());
+
+				if (this.config.weekNumbers) {
+					fragment.appendChild(this.buildWeeks());
+				}
+
+				fragment.appendChild(this.buildDays());
+			}
 
 			if (this.config.enableTime) {
 				fragment.appendChild(this.buildTime());
-			}
-
-			if (this.config.weekNumbers) {
-				fragment.appendChild(this.buildWeeks());
 			}
 
 			this.calendarContainer.appendChild(fragment);
@@ -307,7 +354,7 @@ var Flatpickr = function () {
 			this.hourElement.step = this.config.hourIncrement;
 			this.minuteElement.step = this.config.minuteIncrement;
 
-			this.hourElement.min = -this.config.time_24hr;
+			this.hourElement.min = -(this.config.time_24hr ? 1 : 0);
 			this.hourElement.max = this.config.time_24hr ? 24 : 13;
 
 			this.minuteElement.min = -this.minuteElement.step;
@@ -349,12 +396,10 @@ var Flatpickr = function () {
 		value: function buildWeekdays() {
 			this.weekdayContainer = Flatpickr.createElement("div", "flatpickr-weekdays");
 			var firstDayOfWeek = this.l10n.firstDayOfWeek;
-			var weekdays = void 0;
+			var weekdays = this.l10n.weekdays.shorthand.slice();
 
 			if (firstDayOfWeek > 0 && firstDayOfWeek < weekdays.length) {
 				weekdays = [].concat(weekdays.splice(firstDayOfWeek, weekdays.length), weekdays.splice(0, firstDayOfWeek));
-			} else {
-				weekdays = this.l10n.weekdays.shorthand.slice();
 			}
 
 			if (this.config.weekNumbers) {
@@ -453,6 +498,53 @@ var Flatpickr = function () {
 			}
 
 			return !bool;
+		}
+	}, {
+		key: "onKeyDown",
+		value: function onKeyDown(e) {
+			if (!this.isOpen || this.config.enableTime && this.timeContainer.contains(e.target)) {
+				return;
+			}
+
+			switch (e.which) {
+				case 13:
+					this.selectDate(e);
+					break;
+
+				case 27:
+					this.close();
+					break;
+
+				case 37:
+					this.changeMonth(-1);
+					break;
+
+				case 38:
+					e.preventDefault();
+					this.currentYear++;
+					this.redraw();
+					break;
+
+				case 39:
+					this.changeMonth(1);
+					break;
+
+				case 40:
+					e.preventDefault();
+					this.currentYear--;
+					this.redraw();
+					break;
+
+				default:
+					break;
+			}
+		}
+	}, {
+		key: "onResize",
+		value: function onResize() {
+			if (this.isOpen && !this.config.inline && !this.config.static) {
+				this.positionCalendar();
+			}
 		}
 	}, {
 		key: "open",
@@ -597,7 +689,6 @@ var Flatpickr = function () {
 
 			if (this.config.allowInput && e.target === (this.altInput || this.input) && e.which === 13) {
 				this.setDate((this.altInput || this.input).value);
-				this.redraw();
 			} else if (e.target.classList.contains("flatpickr-day")) {
 				var isPrevMonthDay = e.target.classList.contains("prevMonthDay"),
 				    isNextMonthDay = e.target.classList.contains("nextMonthDay"),
@@ -611,6 +702,28 @@ var Flatpickr = function () {
 
 				this.updateValue(e);
 				this.buildDays();
+			}
+		}
+	}, {
+		key: "set",
+		value: function set(config, value) {
+			this.config[config] = value;
+			this.bringIntoView();
+		}
+	}, {
+		key: "setDate",
+		value: function setDate(date, triggerChange) {
+			date = this.parseDate(date);
+			if (date instanceof Date && date.getTime()) {
+				this.selectedDateObj = date;
+				this.bringIntoView(this.selectedDateObj);
+				this.updateValue();
+
+				if (triggerChange) {
+					this.triggerChange();
+				}
+			} else {
+				(this.altInput || this.input).value = "";
 			}
 		}
 	}, {
@@ -748,7 +861,10 @@ var Flatpickr = function () {
 			this.input = this.config.wrap ? this.element.querySelector("[data-input]") : this.element;
 			if (this.config.altInput) {
 				// replicate this.element
-				this.altInput = this.input.cloneNode(false);
+				this.altInput = Flatpickr.createElement(this.input.nodeName, this.config.altInputClass);
+				this.altInput.placeholder = this.input.placeholder;
+				this.altInput.type = "text";
+
 				this.input.type = "hidden";
 				this.input.parentNode.insertBefore(this.altInput, this.input.nextSibling);
 			}
@@ -831,6 +947,15 @@ var Flatpickr = function () {
 				this.config.onValueUpdate(this.selectedDateObj, this.input.value);
 			}
 		}
+	}, {
+		key: "yearScroll",
+		value: function yearScroll(e) {
+			e.preventDefault();
+
+			var delta = Math.max(-1, Math.min(1, e.wheelDelta || -e.deltaY));
+			this.currentYear = e.target.value = parseInt(e.target.value, 10) + delta;
+			this.redraw();
+		}
 	}], [{
 		key: "createElement",
 		value: function createElement(tag) {
@@ -839,8 +964,37 @@ var Flatpickr = function () {
 
 			var e = document.createElement(tag);
 			e.className = className;
-			e.textContent = content;
+
+			if (content) {
+				e.textContent = content;
+			}
+
 			return e;
+		}
+	}, {
+		key: "debounce",
+		value: function debounce(func, wait, immediate) {
+			var timeout = void 0;
+			return function () {
+				for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+					args[_key] = arguments[_key];
+				}
+
+				var context = this;
+
+				var later = function later() {
+					timeout = null;
+					if (!immediate) {
+						func.apply(context, args);
+					}
+				};
+
+				clearTimeout(timeout);
+				timeout = setTimeout(later, wait);
+				if (immediate && !timeout) {
+					func.apply(context, args);
+				}
+			};
 		}
 	}, {
 		key: "equalDates",
@@ -851,6 +1005,30 @@ var Flatpickr = function () {
 		key: "pad",
 		value: function pad(number) {
 			return ("0" + number).slice(-2);
+		}
+	}, {
+		key: "timeWrapper",
+		value: function timeWrapper(e) {
+			e.preventDefault();
+
+			var min = parseInt(e.target.min, 10),
+			    max = parseInt(e.target.max, 10),
+			    step = parseInt(e.target.step, 10),
+			    value = parseInt(e.target.value, 10);
+
+			var newValue = value;
+
+			if (e.type === "wheel") {
+				newValue = value + step * Math.max(-1, Math.min(1, e.wheelDelta || -e.deltaY));
+			}
+
+			if (newValue <= min) {
+				newValue = max - step;
+			} else if (newValue >= max) {
+				newValue = min + step;
+			}
+
+			e.target.value = Flatpickr.pad(newValue);
 		}
 	}]);
 
@@ -889,7 +1067,7 @@ Flatpickr.defaultConfig = {
 	dateFormat: "Y-m-d",
 
 	// altInput - see https://chmln.github.io/flatpickr/#altinput
-	altInput: false,
+	altInput: null,
 
 	// the created altInput element will have this class.
 	altInputClass: "",
@@ -980,15 +1158,19 @@ Flatpickr.l10n = {
 	toggleTitle: "Click to toggle"
 };
 
-HTMLCollection.prototype.map = Array.prototype.map;
-HTMLCollection.prototype.flatpickr = function (config) {
+HTMLCollection.prototype.map = NodeList.prototype.map = Array.prototype.map;
+HTMLCollection.prototype.flatpickr = NodeList.prototype.flatpickr = function () {
+	var config = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
 	return this.map(function (element) {
-		return new Flatpickr(element, config);
+		return element._flatpickr = new Flatpickr(element, config);
 	});
 };
 
-HTMLElement.prototype.flatpickr = function (config) {
-	return new Flatpickr(this, config);
+HTMLElement.prototype.flatpickr = function () {
+	var config = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+	return this._flatpickr = new Flatpickr(this, config);
 };
 
 Date.prototype.fp_incr = function (days) {
@@ -1014,3 +1196,7 @@ Date.prototype.fp_getWeek = function () {
 	// Adjust to Thursday in week 1 and count number of weeks from date to week1.
 	return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
 };
+
+if (typeof module !== "undefined") {
+	module.exports = Flatpickr;
+}

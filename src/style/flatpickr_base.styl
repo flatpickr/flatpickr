@@ -18,11 +18,7 @@ $width = 256px
 		cursor pointer
 		z-index 1
 
-	&.open, &.inline
-		 .flatpickr-calendar
 
-			z-index 99999
-			visibility visible
 
 
 .flatpickr-calendar
@@ -35,8 +31,6 @@ $width = 256px
 	font-size 90%
 	border-radius 3px
 	position absolute
-	top 100%
-	left 0
 	visibility hidden
 	width $width
 
@@ -95,7 +89,9 @@ $width = 256px
 			else
 				border-top-color $calendar_background
 
-
+	&.open, &.inline
+		z-index 99999
+		visibility visible
 
 
 .flatpickr-month
