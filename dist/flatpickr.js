@@ -477,7 +477,7 @@ flatpickr.init = function (element, instanceConfig) {
 
 		var yr = self.currentYear;
 
-		if (month === 1 && yr % 4 === 0 && yr % 100 !== 0 || yr % 400 === 0) {
+		if (month === 1 && (yr % 4 === 0 && yr % 100 !== 0 || yr % 400 === 0)) {
 			return 29;
 		}
 
