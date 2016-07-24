@@ -26,6 +26,7 @@ var Flatpickr = function () {
 		this.bind();
 
 		this.updateValue();
+		this.triggerEvent("Ready");
 	}
 
 	_createClass(Flatpickr, [{
@@ -442,7 +443,7 @@ var Flatpickr = function () {
 
 			this.selectedDateObj = null;
 
-			this.triggerChange();
+			this.triggerEvent("Change");
 			this.bringIntoView(this.now);
 		}
 	}, {
@@ -452,9 +453,7 @@ var Flatpickr = function () {
 			this.calendarContainer.classList.remove("open");
 			(this.altInput || this.input).classList.remove("active");
 
-			if (this.config.onClose) {
-				this.config.onClose(this.selectedDateObj, this.input.value);
-			}
+			this.triggerEvent("Close");
 		}
 	}, {
 		key: "documentClick",
@@ -584,9 +583,7 @@ var Flatpickr = function () {
 
 			(this.altInput || this.input).classList.add("active");
 
-			if (this.config.onOpen) {
-				this.config.onOpen(this.selectedDateObj, this.input.value);
-			}
+			this.triggerEvent("Open");
 		}
 	}, {
 		key: "pad",
@@ -739,7 +736,7 @@ var Flatpickr = function () {
 				this.updateValue();
 
 				if (triggerChange) {
-					this.triggerChange();
+					this.triggerEvent("Change");
 				}
 			} else {
 				(this.altInput || this.input).value = "";
@@ -894,10 +891,10 @@ var Flatpickr = function () {
 			this.isOpen ? this.close() : this.open();
 		}
 	}, {
-		key: "triggerChange",
-		value: function triggerChange() {
-			if (this.config.onChange) {
-				this.config.onChange(this.selectedDateObj, this.input.value);
+		key: "triggerEvent",
+		value: function triggerEvent(event) {
+			if (this.config["on" + event]) {
+				this.config["on" + event](this.selectedDateObj, this.input.value);
 			}
 		}
 	}, {
@@ -959,7 +956,7 @@ var Flatpickr = function () {
 			}
 
 			if (e && (timeHasChanged || e.target.classList.contains("flatpickr-day"))) {
-				this.triggerChange();
+				this.triggerEvent("Change");
 			}
 
 			if (this.config.onValueUpdate) {

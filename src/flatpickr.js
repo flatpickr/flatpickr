@@ -16,6 +16,7 @@ class Flatpickr {
 		this.bind();
 
 		this.updateValue();
+		this.triggerEvent("Ready");
 	}
 
 	amPMToggle(e) {
@@ -389,7 +390,7 @@ class Flatpickr {
 
 		this.selectedDateObj = null;
 
-		this.triggerChange();
+		this.triggerEvent("Change");
 		this.bringIntoView(this.now);
 	}
 
@@ -398,9 +399,7 @@ class Flatpickr {
 		this.calendarContainer.classList.remove("open");
 		(this.altInput || this.input).classList.remove("active");
 
-		if (this.config.onClose) {
-			this.config.onClose(this.selectedDateObj, this.input.value);
-		}
+		this.triggerEvent("Close");
 	}
 
 	documentClick(e) {
@@ -539,9 +538,7 @@ class Flatpickr {
 
 		(this.altInput || this.input).classList.add("active");
 
-		if (this.config.onOpen) {
-			this.config.onOpen(this.selectedDateObj, this.input.value);
-		}
+		this.triggerEvent("Open");
 	}
 
 	pad(number) {
@@ -704,7 +701,7 @@ class Flatpickr {
 			this.updateValue();
 
 			if (triggerChange) {
-				this.triggerChange();
+				this.triggerEvent("Change");
 			}
 		}
 		else {
@@ -808,9 +805,9 @@ class Flatpickr {
 		this.isOpen ? this.close() : this.open();
 	}
 
-	triggerChange() {
-		if (this.config.onChange) {
-			this.config.onChange(this.selectedDateObj, this.input.value);
+	triggerEvent(event) {
+		if (this.config[`on${event}`]) {
+			this.config[`on${event}`](this.selectedDateObj, this.input.value);
 		}
 	}
 
@@ -878,7 +875,7 @@ class Flatpickr {
 		}
 
 		if (e && (timeHasChanged || e.target.classList.contains("flatpickr-day"))) {
-			this.triggerChange();
+			this.triggerEvent("Change");
 		}
 
 		if (this.config.onValueUpdate) {
@@ -1051,6 +1048,9 @@ Flatpickr.defaultConfig = {
 
 	// called every time calendar is closed
 	onClose: null, // function (dateObj, dateStr) {}
+
+	// called after calendar is ready
+	onReady: null, // function (dateObj, dateStr) {}
 
 	onValueUpdate: null
 };
