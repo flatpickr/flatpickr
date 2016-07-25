@@ -167,10 +167,10 @@ $("#myID").flatpickr();
 
 			<h3>DateTime Picker with seconds</h3>
 						<pre class='prettyprint lang-html'>
-&lt;input class=flatpickr data-enable-time=true data-enableseconds data-date-format="Y-m-d h:i:S K"&gt;
+&lt;input class=flatpickr data-enable-time=true data-enable-seconds=true data-date-format="Y-m-d h:i:S K"&gt;
 </pre>
 		<p>
-			<input class=flatpickr data-enable-time=true data-enableseconds data-date-format="Y-m-d h:i:S K" placeholder="Pick date and time">
+			<input class=flatpickr data-enable-time=true data-enable-seconds=true data-date-format="Y-m-d h:i:S K" placeholder="Pick date and time">
 		</p>
 
 		</div>
@@ -506,22 +506,18 @@ check_out.set("onChange", function(d) {
 
 			<pre class='prettyprint lang-js'>
 // use your own arrow icons
-flatpickr.init.prototype.defaultConfig.prevArrow = "&lt;i class='icon i-angle-left'&gt;&lt;/i&gt;";
-flatpickr.init.prototype.defaultConfig.nextArrow = "&lt;i class='icon i-angle-right'&gt;&lt;/i&gt;";
+Flatpickr.defaultConfig.prevArrow = "&lt;i class='icon i-angle-left'&gt;&lt;/i&gt;";
+Flatpickr.defaultConfig.nextArrow = "&lt;i class='icon i-angle-right'&gt;&lt;/i&gt;";
 
 // change the first day of the week to Monday
-flatpickr.init.prototype.l10n.firstDayOfWeek = 1;
+Flatpickr.l10n.firstDayOfWeek = 1;
 
 // then initialize your calendars
-new Flatpickr(".flatpickr")
 ....
 </pre>
 
 
 		</div>
-
-
-		<p></p>
 
 		<div class="example_wrapper" id=options>
 		<h3 data-desc="Options">Options</h3>
