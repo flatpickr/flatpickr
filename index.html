@@ -88,19 +88,11 @@
 			<p>There are multiple ways to create a Flatpickr instance. In all cases, config is optional. The return value will be the Flatpickr instance, or an array of instances.</p>
 
 			<pre class='prettyprint lang-js'>
-document.getElementById("myID").flatpickr({});
-document.getElementsByClassName("calendar").flatpickr({});
+document.getElementsByClassName("myClass").flatpickr({..config});
+document.getElementById("myID").flatpickr();
+$(".calendar").flatpickr(); // jQuery
 </pre>
-<hr>
-			<p>Flatpickr is compatible with jQuery.</p>
-			<pre class='prettyprint lang-js'>
-$(".calendar").flatpickr({}); // jQuery
-</pre>
-<hr>
-			<p>Use querySelector/querySelectorAll for more complex selectors.</p>
-			<pre class='prettyprint lang-js'>
-document.querySelectorAll("input:nth-child(n+2)").flatpickr({});
-</pre>
+
 <hr>
 			<p>Or pass in a node directly.</p>
 			<pre class='prettyprint lang-js'>
@@ -111,12 +103,10 @@ new Flatpickr(HTMLElement, [options]);
 			<pre class='prettyprint lang-js'>
 var $ = selector => document.querySelector(selector);
 var $$ = selector => document.querySelectorAll(selector);
+// then
+$("#myID").flatpickr();
 </pre>
 
-			<p>Then:</p>
-			<pre class='prettyprint lang-js'>
-$$(".class").flatpickr();
-</pre>
 
 		</div>
 
@@ -1063,7 +1053,7 @@ new Flatpickr(".flatpickr")
 	});
 
 	</script>
-	<script async src="assets/prettify.js?skin=none"></script>
+	<script async src="assets/prettify.js?skin=none" onload="prettyPrint()"></script>
 	<script async src="assets/table-of-contents.js"></script>
 	<script async src="assets/themer.js"></script>
 </body>
