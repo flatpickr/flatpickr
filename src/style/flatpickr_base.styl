@@ -13,23 +13,6 @@ $width = 256px
 	box-sizing border-box
 	padding 0
 
-.flatpickr-wrapper
-	position absolute
-	display inline-block
-
-	&.inline, &.static, &.inline .flatpickr-calendar
-		position relative
-
-	&.static .flatpickr-calendar
-		position absolute
-
-	input
-		cursor pointer
-		z-index 1
-
-
-
-
 .flatpickr-calendar
 
 	background $calendar_background
@@ -104,11 +87,15 @@ $width = 256px
 				border-top-color $calendar_background
 
 	&.open, &.inline
-		transition all ease-out 50ms
 		opacity 1
-		transform translateY(0)
 		z-index 99999
 		visibility visible
+		transition all ease-out 50ms
+		transform translateY(0)
+
+	&.inline
+		margin-top 2px
+		position static
 
 
 .flatpickr-month

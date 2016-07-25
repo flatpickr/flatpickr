@@ -118,8 +118,17 @@ class Flatpickr {
 			fragment.appendChild(this.buildTime());
 		}
 
+
 		this.calendarContainer.appendChild(fragment);
-		document.body.appendChild(this.calendarContainer);
+
+		if (this.config.inline) {
+			this.calendarContainer.classList.add("inline");
+			this.positionCalendar();
+			this.element.parentNode.appendChild(this.calendarContainer);
+		}
+		else {
+			document.body.appendChild(this.calendarContainer);
+		}
 	}
 
 	buildDays() {
