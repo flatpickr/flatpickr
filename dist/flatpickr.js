@@ -32,20 +32,30 @@ var Flatpickr = function () {
 			this.setupMobile();
 		}
 
-		this.updateValue();
+		if (this.selectedDateObj) {
+			this.updateValue();
+		}
 		this.triggerEvent("Ready");
 	}
 
 	_createClass(Flatpickr, [{
-		key: "amPMToggle",
-		value: function amPMToggle(e) {
-			e.preventDefault();
-			this.amPM.textContent = ["AM", "PM"][this.amPM.textContent === "AM" | 0];
-		}
-	}, {
 		key: "bind",
 		value: function bind() {
 			var _this = this;
+
+			document.addEventListener("keydown", function (e) {
+				return _this.onKeyDown(e);
+			});
+			window.addEventListener("resize", Flatpickr.debounce(function () {
+				return _this.onResize();
+			}, 300));
+
+			document.addEventListener("click", function (e) {
+				return _this.documentClick(e);
+			});
+			document.addEventListener("blur", function (e) {
+				return _this.documentClick(e);
+			}, true);
 
 			if (this.config.clickOpens) {
 				(this.altInput || this.input).addEventListener("focus", function (e) {
@@ -54,29 +64,15 @@ var Flatpickr = function () {
 			}
 
 			if (this.config.wrap) {
-				if (this.element.querySelector("[data-open]")) {
-					this.element.querySelector("[data-open]").addEventListener("click", function (e) {
-						return _this.open(e);
-					});
-				}
-
-				if (this.element.querySelector("[data-close]")) {
-					this.element.querySelector("[data-close]").addEventListener("click", function (e) {
-						return _this.close(e);
-					});
-				}
-
-				if (this.element.querySelector("[data-toggle]")) {
-					this.element.querySelector("[data-toggle]").addEventListener("click", function (e) {
-						return _this.toggle(e);
-					});
-				}
-
-				if (this.element.querySelector("[data-clear]")) {
-					this.element.querySelector("[data-clear]").addEventListener("click", function (e) {
-						return _this.clear(e);
-					});
-				}
+				["open", "close", "toggle", "clear"].forEach(function (el) {
+					try {
+						_this.element.querySelector("[data-" + el + "]").addEventListener("click", function (evt) {
+							return _this[el](evt);
+						});
+					} catch (e) {
+						//
+					}
+				});
 			}
 
 			if (this.isMobile) {
@@ -94,12 +90,12 @@ var Flatpickr = function () {
 				this.currentYearElement.addEventListener("wheel", function (e) {
 					return _this.yearScroll(e);
 				});
-				this.currentYearElement.addEventListener("focus", function () {
-					return _this.currentYearElement.select;
+				this.currentYearElement.addEventListener("click", function () {
+					return _this.currentYearElement.select();
 				});
 
 				this.currentYearElement.addEventListener("input", function (event) {
-					_this.currentYear = parseInt(event.target.value, 10);
+					_this.currentYear = parseInt(event.target.value, 10) || _this.currentYear;
 					_this.redraw();
 				});
 
@@ -108,92 +104,16 @@ var Flatpickr = function () {
 				});
 			}
 
-			document.addEventListener("keydown", function (e) {
-				return _this.onKeyDown(e);
-			});
-			window.addEventListener("resize", Flatpickr.debounce(function () {
-				return _this.onResize();
-			}, 300));
-
-			document.addEventListener("click", function (e) {
-				return _this.documentClick(e);
-			});
-			document.addEventListener("blur", function (e) {
-				return _this.documentClick(e);
-			}, true);
-
 			if (this.config.enableTime) {
-				this.hourElement.addEventListener("wheel", function (e) {
-					return Flatpickr.timeWrapper(e);
+				this.timeContainer.addEventListener("wheel", function (e) {
+					Flatpickr.timeWrapper(e);_this.updateValue(e);
 				});
-				this.minuteElement.addEventListener("wheel", function (e) {
-					return Flatpickr.timeWrapper(e);
+				this.timeContainer.addEventListener("input", function (e) {
+					Flatpickr.timeWrapper(e);_this.updateValue();
 				});
-
-				this.hourElement.addEventListener("input", function (e) {
-					return Flatpickr.timeWrapper(e);
+				this.timeContainer.addEventListener("click", function (e) {
+					return e.target === _this.amPM ? Flatpickr.timeWrapper(e) : e.target.select();
 				});
-				this.minuteElement.addEventListener("input", function (e) {
-					return Flatpickr.timeWrapper(e);
-				});
-
-				this.hourElement.addEventListener("mouseout", function (e) {
-					return _this.updateValue(e);
-				});
-				this.minuteElement.addEventListener("mouseout", function (e) {
-					return _this.updateValue(e);
-				});
-
-				this.hourElement.addEventListener("change", function (e) {
-					return _this.updateValue(e);
-				});
-				this.minuteElement.addEventListener("change", function (e) {
-					return _this.updateValue(e);
-				});
-
-				this.hourElement.addEventListener("focus", function (e) {
-					return _this.hourElement.select(e);
-				});
-				this.minuteElement.addEventListener("focus", function (e) {
-					return _this.minuteElement.select(e);
-				});
-
-				if (this.config.enableSeconds) {
-					this.secondElement.addEventListener("wheel", function (e) {
-						return Flatpickr.timeWrapper(e);
-					});
-					this.secondElement.addEventListener("input", function (e) {
-						return Flatpickr.timeWrapper(e);
-					});
-					this.secondElement.addEventListener("mouseout", function (e) {
-						return _this.updateValue(e);
-					});
-					this.secondElement.addEventListener("change", function (e) {
-						return _this.updateValue(e);
-					});
-					this.secondElement.addEventListener("focus", function (e) {
-						return _this.secondElement.select(e);
-					});
-				}
-
-				if (!this.config.time_24hr) {
-					this.amPM.addEventListener("click", function (e) {
-						return _this.amPMToggle(e);
-					});
-
-					this.amPM.addEventListener("wheel", function (e) {
-						return _this.amPMToggle(e);
-					});
-					this.amPM.addEventListener("mouseout", function (e) {
-						return _this.updateValue(e);
-					});
-
-					this.amPM.addEventListener("keydown", function (e) {
-						if (e.which === 38 || e.which === 40) {
-							_this.amPMToggle(e);
-						}
-					});
-				}
 			}
 		}
 	}, {
@@ -529,13 +449,17 @@ var Flatpickr = function () {
 	}, {
 		key: "onKeyDown",
 		value: function onKeyDown(e) {
-			if (!this.isOpen || this.config.enableTime && this.timeContainer.contains(e.target)) {
+			if (!this.isOpen) {
 				return;
 			}
 
 			switch (e.which) {
 				case 13:
-					this.selectDate(e);
+					if (this.timeContainer.contains(e.target)) {
+						this.updateValue(e);
+					} else {
+						this.selectDate(e);
+					}
 					break;
 
 				case 27:
@@ -975,7 +899,7 @@ var Flatpickr = function () {
 				return;
 			}
 
-			if (e) {
+			if (e && e.target !== this.hourElement && e.target !== this.minuteElement) {
 				e.target.blur();
 			}
 
@@ -1087,6 +1011,11 @@ var Flatpickr = function () {
 		value: function timeWrapper(e) {
 			e.preventDefault();
 
+			if (e.target.className === "flatpickr-am-pm") {
+				e.target.textContent = ["AM", "PM"][e.target.textContent === "AM" | 0];
+				return;
+			}
+
 			var min = parseInt(e.target.min, 10),
 			    max = parseInt(e.target.max, 10),
 			    step = parseInt(e.target.step, 10),
@@ -1180,8 +1109,8 @@ Flatpickr.defaultConfig = {
 	static: false,
 
 	// code for previous/next icons. this is where you put your custom icon code e.g. fontawesome
-	prevArrow: "&lt;",
-	nextArrow: "&gt;",
+	prevArrow: "<svg class='svg-icon' viewBox='0 0 20 20'><path fill='none' d='M8.388,10.049l4.76-4.873c0.303-0.31,0.297-0.804-0.012-1.105c-0.309-0.304-0.803-0.293-1.105,0.012L6.726,9.516c-0.303,0.31-0.296,0.805,0.012,1.105l5.433,5.307c0.152,0.148,0.35,0.223,0.547,0.223c0.203,0,0.406-0.08,0.559-0.236c0.303-0.309,0.295-0.803-0.012-1.104L8.388,10.049z'></path> </svg>",
+	nextArrow: "<svg class='svg-icon' viewBox='0 0 20 20'><path fill='none' d='M11.611,10.049l-4.76-4.873c-0.303-0.31-0.297-0.804,0.012-1.105c0.309-0.304,0.803-0.293,1.105,0.012l5.306,5.433c0.304,0.31,0.296,0.805-0.012,1.105L7.83,15.928c-0.152,0.148-0.35,0.223-0.547,0.223c-0.203,0-0.406-0.08-0.559-0.236c-0.303-0.309-0.295-0.803,0.012-1.104L11.611,10.049z'></path> </svg>",
 
 	// enables seconds in the time picker
 	enableSeconds: false,

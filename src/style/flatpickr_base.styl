@@ -116,6 +116,7 @@ $width = 256px
 		border-radius 3px 3px 0 0
 	background $months_background
 	color $months_color
+	fill $months_color
 	padding 4px 5px 2px 5px
 	text-align center
 	position relative
@@ -130,16 +131,30 @@ $width = 256px
 	i
 		position relative
 
+	svg
+		width 1.5em
+		height 1.5em
+
+		path
+			fill inherit
+
+		&:hover
+			fill $today_color
+
 	&:hover
 		color $today_color
 
 .flatpickr-prev-month
 	float left
 	left 0.5rem
+	svg
+		margin-left -0.125rem
 
 .flatpickr-next-month
 	float right
 	right 0.5rem
+	svg
+		margin-right -0.125rem
 
 .flatpickr-current-month
 	font-size 135%
@@ -262,7 +277,7 @@ $width = 256px
 	border-top 0
 	outline 0
 
-	input[type='number']
+	input
 		background transparent
 		-webkit-appearance none
 		-moz-appearance textfield

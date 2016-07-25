@@ -25,36 +25,33 @@ class Flatpickr {
 			this.setupMobile();
 		}
 
-		this.updateValue();
+		if (this.selectedDateObj) {
+			this.updateValue();
+		}
 		this.triggerEvent("Ready");
 	}
 
-	amPMToggle(e) {
-		e.preventDefault();
-		this.amPM.textContent = ["AM", "PM"][(this.amPM.textContent === "AM") | 0];
-	}
-
 	bind() {
+		document.addEventListener("keydown", e => this.onKeyDown(e));
+		window.addEventListener("resize", Flatpickr.debounce(() => this.onResize(), 300));
+
+		document.addEventListener("click", e => this.documentClick(e));
+		document.addEventListener("blur", e => this.documentClick(e), true);
+
 		if (this.config.clickOpens) {
 			(this.altInput || this.input).addEventListener("focus", e => this.open(e));
 		}
 
 		if (this.config.wrap) {
-			if (this.element.querySelector("[data-open]")) {
-				this.element.querySelector("[data-open]").addEventListener("click", e => this.open(e));
-			}
-
-			if (this.element.querySelector("[data-close]")) {
-				this.element.querySelector("[data-close]").addEventListener("click", e => this.close(e));
-			}
-
-			if (this.element.querySelector("[data-toggle]")) {
-				this.element.querySelector("[data-toggle]").addEventListener("click", e => this.toggle(e));
-			}
-
-			if (this.element.querySelector("[data-clear]")) {
-				this.element.querySelector("[data-clear]").addEventListener("click", e => this.clear(e));
-			}
+			["open", "close", "toggle", "clear"].forEach(el => {
+				try {
+					this.element.querySelector(`[data-${el}]`)
+						.addEventListener("click", evt => this[el](evt));
+				}
+				catch (e) {
+					//
+				}
+			});
 		}
 
 		if (this.isMobile) {
@@ -66,58 +63,22 @@ class Flatpickr {
 			this.nextMonthNav.addEventListener("click", () => this.changeMonth(1));
 
 			this.currentYearElement.addEventListener("wheel", e => this.yearScroll(e));
-			this.currentYearElement.addEventListener("focus", () => this.currentYearElement.select);
+			this.currentYearElement.addEventListener("click", () => this.currentYearElement.select());
 
 			this.currentYearElement.addEventListener("input", event => {
-				this.currentYear = parseInt(event.target.value, 10);
+				this.currentYear = parseInt(event.target.value, 10)||this.currentYear;
 				this.redraw();
 			});
 
 			this.days.addEventListener("click", e => this.selectDate(e));
 		}
 
-		document.addEventListener("keydown", e => this.onKeyDown(e));
-		window.addEventListener("resize", Flatpickr.debounce(() => this.onResize(), 300));
-
-		document.addEventListener("click", e => this.documentClick(e));
-		document.addEventListener("blur", e => this.documentClick(e), true);
-
 		if (this.config.enableTime) {
-			this.hourElement.addEventListener("wheel", e => Flatpickr.timeWrapper(e));
-			this.minuteElement.addEventListener("wheel", e => Flatpickr.timeWrapper(e));
-
-			this.hourElement.addEventListener("input", e => Flatpickr.timeWrapper(e));
-			this.minuteElement.addEventListener("input", e => Flatpickr.timeWrapper(e));
-
-			this.hourElement.addEventListener("mouseout", e => this.updateValue(e));
-			this.minuteElement.addEventListener("mouseout", e => this.updateValue(e));
-
-			this.hourElement.addEventListener("change", e => this.updateValue(e));
-			this.minuteElement.addEventListener("change", e => this.updateValue(e));
-
-			this.hourElement.addEventListener("focus", e => this.hourElement.select(e));
-			this.minuteElement.addEventListener("focus", e => this.minuteElement.select(e));
-
-			if (this.config.enableSeconds) {
-				this.secondElement.addEventListener("wheel", e => Flatpickr.timeWrapper(e));
-				this.secondElement.addEventListener("input", e => Flatpickr.timeWrapper(e));
-				this.secondElement.addEventListener("mouseout", e => this.updateValue(e));
-				this.secondElement.addEventListener("change", e => this.updateValue(e));
-				this.secondElement.addEventListener("focus", e => this.secondElement.select(e));
-			}
-
-			if (!this.config.time_24hr) {
-				this.amPM.addEventListener("click", e => this.amPMToggle(e));
-
-				this.amPM.addEventListener("wheel", e => this.amPMToggle(e));
-				this.amPM.addEventListener("mouseout", e => this.updateValue(e));
-
-				this.amPM.addEventListener("keydown", e => {
-					if (e.which === 38 || e.which === 40) {
-						this.amPMToggle(e);
-					}
-				});
-			}
+			this.timeContainer.addEventListener("wheel", e => { Flatpickr.timeWrapper(e); this.updateValue(e); });
+			this.timeContainer.addEventListener("input", e => { Flatpickr.timeWrapper(e); this.updateValue(); });
+			this.timeContainer.addEventListener("click", e =>
+				e.target === this.amPM ? Flatpickr.timeWrapper(e) : e.target.select()
+			);
 		}
 	}
 
@@ -488,13 +449,18 @@ class Flatpickr {
 	}
 
 	onKeyDown(e) {
-		if (!this.isOpen || this.config.enableTime && this.timeContainer.contains(e.target)) {
+		if (!this.isOpen) {
 			return;
 		}
 
 		switch (e.which) {
 			case 13:
-				this.selectDate(e);
+				if (this.timeContainer.contains(e.target)) {
+					this.updateValue(e);
+				}
+				else {
+					this.selectDate(e);
+				}
 				break;
 
 			case 27:
@@ -884,7 +850,7 @@ class Flatpickr {
 			return;
 		}
 
-		if (e) {
+		if (e && e.target !== this.hourElement && e.target !== this.minuteElement) {
 			e.target.blur();
 		}
 
@@ -991,6 +957,11 @@ class Flatpickr {
 	static timeWrapper(e) {
 		e.preventDefault();
 
+		if (e.target.className === "flatpickr-am-pm") {
+			e.target.textContent = ["AM", "PM"][(e.target.textContent === "AM") | 0];
+			return;
+		}
+
 		const min = parseInt(e.target.min, 10),
 			max = parseInt(e.target.max, 10),
 			step = parseInt(e.target.step, 10),
@@ -1083,8 +1054,8 @@ Flatpickr.defaultConfig = {
 	static: false,
 
 	// code for previous/next icons. this is where you put your custom icon code e.g. fontawesome
-	prevArrow: "&lt;",
-	nextArrow: "&gt;",
+	prevArrow: "<svg class='svg-icon' viewBox='0 0 20 20'><path fill='none' d='M8.388,10.049l4.76-4.873c0.303-0.31,0.297-0.804-0.012-1.105c-0.309-0.304-0.803-0.293-1.105,0.012L6.726,9.516c-0.303,0.31-0.296,0.805,0.012,1.105l5.433,5.307c0.152,0.148,0.35,0.223,0.547,0.223c0.203,0,0.406-0.08,0.559-0.236c0.303-0.309,0.295-0.803-0.012-1.104L8.388,10.049z'></path> </svg>",
+	nextArrow: "<svg class='svg-icon' viewBox='0 0 20 20'><path fill='none' d='M11.611,10.049l-4.76-4.873c-0.303-0.31-0.297-0.804,0.012-1.105c0.309-0.304,0.803-0.293,1.105,0.012l5.306,5.433c0.304,0.31,0.296,0.805-0.012,1.105L7.83,15.928c-0.152,0.148-0.35,0.223-0.547,0.223c-0.203,0-0.406-0.08-0.559-0.236c-0.303-0.309-0.295-0.803,0.012-1.104L11.611,10.049z'></path> </svg>",
 
 
 	// enables seconds in the time picker
