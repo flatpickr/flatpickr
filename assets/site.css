@@ -159,10 +159,10 @@ input {
     cursor: pointer;
     max-width: 320px;
     outline: none;
-    border: 1px solid #e6e6e6;
-    background: whitesmoke;
+    border: 1px solid #e9e9e9;
+    background: #fbfbfb;
     border-radius: 3px;
-    color: #444;
+    color: rgba(45, 48, 60, 0.87);
     padding: 0 0 0 11px;
     height: 40px;
     width: 100%;
@@ -196,8 +196,8 @@ input {
     float: left;
     border-radius: 0;
     border-left: 0;
-    background-color: #f9f9f9;
-    border-color: #ccc;
+    background-color: white;
+    border-color: #ddd;
 
 }
 
