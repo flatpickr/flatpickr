@@ -475,11 +475,11 @@ check_out.set("onChange", function(d) {
 			<h3>Display week numbers</h3>
 
 			<pre class='prettyprint lang-html'>
-&lt;input class=flatpickr data-weeknumbers placeholder="Enabled week numbers"&gt;
+&lt;input class=flatpickr data-week-numbers=true placeholder="Enabled week numbers"&gt;
 </pre>
 
 			<p>
-				<input class=flatpickr data-weeknumbers placeholder="Enabled week numbers">
+				<input class=flatpickr data-week-numbers=true placeholder="Enabled week numbers">
 			</p>
 
 
@@ -994,9 +994,7 @@ new Flatpickr(".flatpickr")
 
 	$('#disableOddDays').flatpickr({
 		disable: [
-			function(date){ // disable odd days
-				return date.getDate()%2 > 0;
-			}
+			date => date.getDate()%2 // disable odd days
 		]
 	});
 	$('#enableNextSeven').flatpickr({
@@ -1035,23 +1033,18 @@ new Flatpickr(".flatpickr")
 			events.scrollTop = events.offsetTop;
 		}
 	});
-	var check_in = $("#check_in_date").flatpickr({
+	$("#check_in_date").flatpickr({
 		altInput: true,
 		altFormat: "\\C\\h\\e\\c\\k \\i\\n\\: l, F j Y",
-		minDate: new Date()
+		minDate: new Date(),
+		onChange: dateObj => $("#check_out_date")._flatpickr.set("minDate", dateObj.fp_incr(1))
 	});
-	var check_out = $("#check_out_date").flatpickr({
+	$("#check_out_date").flatpickr({
 		altInput: true,
 		altFormat: "\\C\\h\\e\\c\\k \\o\\u\\t: l, F j Y",
-		minDate: new Date()
+		minDate: new Date(),
+		onChange: dateObj => $("#check_in_date")._flatpickr.set("maxDate", dateObj.fp_incr(-1))
 	});
-	check_in.set("onChange", function(d) {
-		check_out.set("minDate", d.fp_incr(1));
-	});
-	check_out.set("onChange", function(d) {
-		check_in.set("maxDate", d.fp_incr(-1));
-	});
-
 	</script>
 	<script async src="assets/prettify.js?skin=none" onload="prettyPrint()"></script>
 	<script async src="assets/table-of-contents.js"></script>

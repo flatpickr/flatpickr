@@ -385,10 +385,22 @@ class Flatpickr {
 		}
 	}
 
-	formatDate(frmt, dateObj = this.selectedDateObj) {
-		return frmt.split("")
-			.map(c => this.formats[c] ? this.formats[c](dateObj) : c !== "\\" ? c : "")
-			.join("");
+	formatDate(frmt, dateObj) {
+		let formattedDate = "";
+		const formatPieces = frmt.split("");
+
+		for (let i = 0; i < formatPieces.length; i++) {
+			const c = formatPieces[i];
+			if (this.formats[c] && formatPieces[i - 1] !== "\\") {
+				formattedDate += this.formats[c](dateObj);
+			}
+
+			else if (c !== "\\") {
+				formattedDate += c;
+			}
+		}
+
+		return formattedDate;
 	}
 
 	handleYearChange() {
@@ -455,7 +467,7 @@ class Flatpickr {
 
 		switch (e.which) {
 			case 13:
-				if (this.timeContainer.contains(e.target)) {
+				if (this.timeContainer && this.timeContainer.contains(e.target)) {
 					this.updateValue(e);
 				}
 				else {
@@ -805,7 +817,7 @@ class Flatpickr {
 		if (this.selectedDateObj) {
 			const formatStr = inputType === "datetime-local" ? "Y-m-d\\TH:i:S" :
 				inputType === "date" ? "Y-m-d" : "H:i:S";
-			this.mobileInput.default = this.formatDate(formatStr);
+			this.mobileInput.default = this.formatDate(formatStr, this.selectedDateObj);
 		}
 
 		if (this.config.minDate) {
@@ -892,10 +904,10 @@ class Flatpickr {
 			timeHasChanged = this.selectedDateObj.getTime() !== previousTimestamp;
 		}
 
-		this.input.value = this.formatDate(this.config.dateFormat);
+		this.input.value = this.formatDate(this.config.dateFormat, this.selectedDateObj);
 
 		if (this.altInput) {
-			this.altInput.value = this.formatDate(this.config.altFormat);
+			this.altInput.value = this.formatDate(this.config.altFormat, this.selectedDateObj);
 		}
 
 		if (e && (timeHasChanged || e.target.classList.contains("flatpickr-day"))) {
@@ -959,6 +971,8 @@ class Flatpickr {
 
 		if (e.target.className === "flatpickr-am-pm") {
 			e.target.textContent = ["AM", "PM"][(e.target.textContent === "AM") | 0];
+			e.target.blur();
+			e.stopPropagation();
 			return;
 		}
 
