@@ -66,7 +66,7 @@ class Flatpickr {
 			this.currentYearElement.addEventListener("click", () => this.currentYearElement.select());
 
 			this.currentYearElement.addEventListener("input", event => {
-				this.currentYear = parseInt(event.target.value, 10)||this.currentYear;
+				this.currentYear = parseInt(event.target.value, 10) || this.currentYear;
 				this.redraw();
 			});
 
@@ -74,8 +74,11 @@ class Flatpickr {
 		}
 
 		if (this.config.enableTime) {
-			this.timeContainer.addEventListener("wheel", e => { Flatpickr.timeWrapper(e); this.updateValue(e); });
-			this.timeContainer.addEventListener("input", e => { Flatpickr.timeWrapper(e); this.updateValue(); });
+			const updateTime = e => {
+				Flatpickr.timeWrapper(e); this.updateValue(e);
+			};
+			this.timeContainer.addEventListener("wheel", updateTime);
+			this.timeContainer.addEventListener("input", updateTime);
 			this.timeContainer.addEventListener("click", e =>
 				e.target === this.amPM ? Flatpickr.timeWrapper(e) : e.target.select()
 			);
@@ -165,8 +168,9 @@ class Flatpickr {
 			currentDate = new Date(this.currentYear, this.currentMonth, dayNumber, 0, 0, 0, 0, 0);
 
 			if (this.config.weekNumbers && dayNumber % 7 === 1) {
-				this.weekNumbers.appendChild(
-					Flatpickr.createElement("span", "disabled flatpickr-day", currentDate.fp_getWeek())
+				this.weekNumbers.insertAdjacentHTML(
+					"beforeend",
+					"<span class='disabled flatpickr-day'>" + currentDate.fp_getWeek() + "</span>"
 				);
 			}
 
@@ -185,7 +189,7 @@ class Flatpickr {
 					dayElement.classList.add("today");
 				}
 
-				if (this.selectedDateObj && Flatpickr.equalDates(currentDate, this.selectedDateObj)) {
+				else if (this.selectedDateObj && Flatpickr.equalDates(currentDate, this.selectedDateObj)) {
 					dayElement.classList.add("selected");
 				}
 			}
@@ -209,8 +213,9 @@ class Flatpickr {
 				);
 
 			if (this.config.weekNumbers && dayNum % 7 === 1) {
-				this.weekNumbers.appendChild(
-					Flatpickr.createElement("span", "disabled", curDate.fp_getWeek())
+				this.weekNumbers.insertAdjacentHTML(
+					"beforeend",
+					"<span class='disabled flatpickr-day'>" + curDate.fp_getWeek() + "</span>"
 				);
 			}
 
@@ -221,7 +226,6 @@ class Flatpickr {
 			days.appendChild(dayElement);
 		}
 		this.days.appendChild(days);
-
 		return this.days;
 	}
 
@@ -418,6 +422,10 @@ class Flatpickr {
 			return false;
 		}
 
+		if (!this.config.enable.length && !this.config.disable.length) {
+			return true;
+		}
+
 		dateToCheck = this.parseDate(dateToCheck, true); // timeless
 
 		const bool = this.config.enable.length > 0,
@@ -432,15 +440,7 @@ class Flatpickr {
 				return bool;
 			}
 
-			else if ( // disabled weekday
-				typeof d === "string" &&
-				/^wkd/.test(d) &&
-				dateToCheck.getDay() === (parseInt(d.slice(-1), 10) + this.l10n.firstDayOfWeek - 1) % 7
-			) {
-				return bool;
-			}
-
-			else if ((d instanceof Date || (typeof d === "string" && !/^wkd/.test(d))) &&
+			else if ((d instanceof Date || (typeof d === "string")) &&
 				this.parseDate(d, true).getTime() === dateToCheck.getTime()
 			) {
 				// disabled by date string
@@ -564,15 +564,15 @@ class Flatpickr {
 	}
 
 	parseDate(date, timeless = false) {
-		if (date === "today") {
-			date = new Date();
-			timeless = true;
-		}
-
-		else if (typeof date === "string") {
+		if (typeof date === "string") {
 			date = date.trim();
 
-			if (this.config.parseDate) {
+			if (date === "today") {
+				date = new Date();
+				timeless = true;
+			}
+
+			else if (this.config.parseDate) {
 				date = this.config.parseDate(date);
 			}
 
@@ -589,7 +589,7 @@ class Flatpickr {
 			else if (/(\d+)/g.test(date)) {
 				const d = date.match(/(\d+)/g);
 				date = new Date(
-					`${d[0]}/${d[1]||1}/${d[2]||1} ${d[3]||0}:${d[4]||0}:${d[5]||0}`
+					`${d[0]}/${d[1] || 1}/${d[2] || 1} ${d[3] || 0}:${d[4] || 0}:${d[5] || 0}`
 				);
 			}
 		}
@@ -1068,8 +1068,15 @@ Flatpickr.defaultConfig = {
 	static: false,
 
 	// code for previous/next icons. this is where you put your custom icon code e.g. fontawesome
-	prevArrow: "<svg class='svg-icon' viewBox='0 0 20 20'><path fill='none' d='M8.388,10.049l4.76-4.873c0.303-0.31,0.297-0.804-0.012-1.105c-0.309-0.304-0.803-0.293-1.105,0.012L6.726,9.516c-0.303,0.31-0.296,0.805,0.012,1.105l5.433,5.307c0.152,0.148,0.35,0.223,0.547,0.223c0.203,0,0.406-0.08,0.559-0.236c0.303-0.309,0.295-0.803-0.012-1.104L8.388,10.049z'></path> </svg>",
-	nextArrow: "<svg class='svg-icon' viewBox='0 0 20 20'><path fill='none' d='M11.611,10.049l-4.76-4.873c-0.303-0.31-0.297-0.804,0.012-1.105c0.309-0.304,0.803-0.293,1.105,0.012l5.306,5.433c0.304,0.31,0.296,0.805-0.012,1.105L7.83,15.928c-0.152,0.148-0.35,0.223-0.547,0.223c-0.203,0-0.406-0.08-0.559-0.236c-0.303-0.309-0.295-0.803,0.012-1.104L11.611,10.049z'></path> </svg>",
+	prevArrow: "<svg class='svg-icon' viewBox='0 0 20 20'><path fill='none' d='M8.388,10.049l4.76"
+		+ "-4.873c0.303-0.31,0.297-0.804-0.012-1.105c-0.309-0.304-0.803-0.293-1.105,0.012L6.726,9.5"
+		+ "16c-0.303,0.31-0.296,0.805,0.012,1.105l5.433,5.307c0.152,0.148,0.35,0.223,0.547,0.223c0.203"
+		+ ",0,0.406-0.08,0.559-0.236c0.303-0.309,0.295-0.803-0.012-1.104L8.388,10.049z'></path></svg>",
+	nextArrow: "<svg class='svg-icon' viewBox='0 0 20 20'><path fill='none' d='M11.611,10.049l-4."
+		+ "76-4.873c-0.303-0.31-0.297-0.804,0.012-1.105c0.309-0.304,0.803-0.293,1.105,0.012l5.306,"
+		+ "5.433c0.304,0.31,0.296,0.805-0.012,1.105L7.83,15.928c-0.152,0.148-0.35,0.223-0.547,0.223"
+		+ "c-0.203,0-0.406-0.08-0.559-0.236c-0.303-0.309-0.295-0.803,0.012-1.104L11.611,10.049z'>"
+		+ "</path> </svg>",
 
 
 	// enables seconds in the time picker
@@ -1131,8 +1138,8 @@ Flatpickr.l10n = {
 };
 
 HTMLCollection.prototype.map = NodeList.prototype.map = Array.prototype.map;
-HTMLCollection.prototype.flatpickr = NodeList.prototype.flatpickr = function (config = {}) {
-	return this.map(element => (element._flatpickr = new Flatpickr(element, config)));
+HTMLCollection.prototype.flatpickr = NodeList.prototype.flatpickr = function (config) {
+	return this.map(element => (element._flatpickr = new Flatpickr(element, config||{})));
 };
 
 if (typeof jQuery !== "undefined") {
