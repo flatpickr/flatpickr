@@ -198,7 +198,7 @@ class Flatpickr {
 					dayElement.classList.add("today");
 				}
 
-				else if (this.selectedDateObj && Flatpickr.equalDates(currentDate, this.selectedDateObj)) {
+				if (this.selectedDateObj && Flatpickr.equalDates(currentDate, this.selectedDateObj)) {
 					dayElement.classList.add("selected");
 				}
 			}
