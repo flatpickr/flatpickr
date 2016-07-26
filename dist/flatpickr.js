@@ -685,6 +685,10 @@ flatpickr.init = function (element, instanceConfig) {
 
 			updateValue(e);
 			buildDays();
+
+			if (!self.config.enableTime) {
+				self.close();
+			}
 		}
 	};
 
