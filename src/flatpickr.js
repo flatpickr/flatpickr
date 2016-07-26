@@ -93,6 +93,7 @@ flatpickr.init = function (element, instanceConfig) {
 		equalDates,
 		pad,
 		monthToStr,
+		getInputType,
 		isEnabled,
 
 		buildMonthNavigation,
@@ -567,6 +568,9 @@ flatpickr.init = function (element, instanceConfig) {
 		return self.l10n.months.longhand[date];
 	};
 
+	getInputType = function () {
+		return navigator.userAgent.toLowerCase().indexOf("msie 9.0") ? "text" : "number";
+	};
 
 	isEnabled = function (dateToCheck) {
 		if (
@@ -744,7 +748,7 @@ flatpickr.init = function (element, instanceConfig) {
 		currentMonthElement = createElement("span", "cur_month");
 
 		currentYearElement = createElement("input", "cur_year");
-		currentYearElement.type = "number";
+		currentYearElement.type = getInputType();
 		currentYearElement.title = self.l10n.scrollTitle;
 
 		nextMonthNav = createElement("span", "flatpickr-next-month");
@@ -904,7 +908,7 @@ flatpickr.init = function (element, instanceConfig) {
 		self.minuteElement = createElement("input", "flatpickr-minute");
 
 		self.hourElement.tabIndex = self.minuteElement.tabIndex = 0;
-		self.hourElement.type = self.minuteElement.type = "number";
+		self.hourElement.type = self.minuteElement.type = getInputType();
 
 		self.hourElement.value =
 			self.selectedDateObj ? pad(self.selectedDateObj.getHours()) : 12;
@@ -932,7 +936,7 @@ flatpickr.init = function (element, instanceConfig) {
 			timeContainer.classList.add("has-seconds");
 
 			self.secondElement = createElement("input", "flatpickr-second");
-			self.secondElement.type = "number";
+			self.secondElement.type = getInputType();
 			self.secondElement.value =
 				self.selectedDateObj ? pad(self.selectedDateObj.getSeconds()) : "00";
 

@@ -99,6 +99,7 @@ flatpickr.init = function (element, instanceConfig) {
 	    equalDates = void 0,
 	    pad = void 0,
 	    monthToStr = void 0,
+	    getInputType = void 0,
 	    isEnabled = void 0,
 	    buildMonthNavigation = void 0,
 	    buildWeekdays = void 0,
@@ -571,6 +572,10 @@ flatpickr.init = function (element, instanceConfig) {
 		return self.l10n.months.longhand[date];
 	};
 
+	getInputType = function getInputType() {
+		return navigator.userAgent.toLowerCase().indexOf("msie 9.0") ? "text" : "number";
+	};
+
 	isEnabled = function isEnabled(dateToCheck) {
 		if (self.config.minDate && dateToCheck < self.config.minDate || self.config.maxDate && dateToCheck > self.config.maxDate) {
 			return false;
@@ -724,7 +729,7 @@ flatpickr.init = function (element, instanceConfig) {
 		currentMonthElement = createElement("span", "cur_month");
 
 		currentYearElement = createElement("input", "cur_year");
-		currentYearElement.type = "number";
+		currentYearElement.type = getInputType();
 		currentYearElement.title = self.l10n.scrollTitle;
 
 		nextMonthNav = createElement("span", "flatpickr-next-month");
@@ -856,7 +861,7 @@ flatpickr.init = function (element, instanceConfig) {
 		self.minuteElement = createElement("input", "flatpickr-minute");
 
 		self.hourElement.tabIndex = self.minuteElement.tabIndex = 0;
-		self.hourElement.type = self.minuteElement.type = "number";
+		self.hourElement.type = self.minuteElement.type = getInputType();
 
 		self.hourElement.value = self.selectedDateObj ? pad(self.selectedDateObj.getHours()) : 12;
 
@@ -881,7 +886,7 @@ flatpickr.init = function (element, instanceConfig) {
 			timeContainer.classList.add("has-seconds");
 
 			self.secondElement = createElement("input", "flatpickr-second");
-			self.secondElement.type = "number";
+			self.secondElement.type = getInputType();
 			self.secondElement.value = self.selectedDateObj ? pad(self.selectedDateObj.getSeconds()) : "00";
 
 			self.secondElement.step = self.minuteElement.step;
@@ -1315,7 +1320,7 @@ if (!("classList" in document.documentElement) && Object.defineProperty && typeo
 					}
 				}),
 				contains: function contains(value) {
-					return !! ~selfElements.className.split(/\s+/).indexOf(value);
+					return !!~selfElements.className.split(/\s+/).indexOf(value);
 				}
 			};
 
