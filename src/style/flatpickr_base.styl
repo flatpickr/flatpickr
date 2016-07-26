@@ -6,7 +6,7 @@ $width = 256px
 
 .flatpickr-wrapper
 	position absolute
-	display inline-block
+	display none
 
 	&.inline, &.static, &.inline .flatpickr-calendar
 		position relative
@@ -19,6 +19,7 @@ $width = 256px
 		z-index 1
 
 	&.open, &.inline
+		display inline-block
 		 .flatpickr-calendar
 
 			z-index 99999
