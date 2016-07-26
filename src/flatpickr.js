@@ -535,7 +535,7 @@ flatpickr.init = function (element, instanceConfig) {
 		}
 
 		if (self.config.onValueUpdate) {
-			self.config.onValueUpdate(self.selectedDateObj, self.input.value);
+			self.config.onValueUpdate(self.selectedDateObj, self.input.value, self);
 		}
 	};
 
@@ -1089,7 +1089,7 @@ flatpickr.init = function (element, instanceConfig) {
 		(self.altInput || self.input).classList.add("active");
 
 		if (self.config.onOpen) {
-			self.config.onOpen(self.selectedDateObj, self.input.value);
+			self.config.onOpen(self.selectedDateObj, self.input.value, self);
 		}
 	};
 
@@ -1135,7 +1135,7 @@ flatpickr.init = function (element, instanceConfig) {
 		(self.altInput || self.input).classList.remove("active");
 
 		if (self.config.onClose) {
-			self.config.onClose(self.selectedDateObj, self.input.value);
+			self.config.onClose(self.selectedDateObj, self.input.value, self);
 		}
 	};
 
@@ -1156,7 +1156,7 @@ flatpickr.init = function (element, instanceConfig) {
 		self.input.dispatchEvent(clickEvt);
 
 		if (self.config.onChange) {
-			self.config.onChange(self.selectedDateObj, self.input.value);
+			self.config.onChange(self.selectedDateObj, self.input.value, self);
 		}
 	};
 
