@@ -675,6 +675,10 @@ class Flatpickr {
 
 			this.updateValue(e);
 			this.buildDays();
+
+			if (!this.config.enableTime) {
+				this.close();
+			}
 		}
 	}
 
@@ -801,6 +805,7 @@ class Flatpickr {
 
 	setupInputs() {
 		this.input = this.config.wrap ? this.element.querySelector("[data-input]") : this.element;
+		this.input.classList.add("flatpickr-input");
 		if (this.config.altInput) {
 			// replicate this.element
 			this.altInput = Flatpickr.createElement(this.input.nodeName, this.config.altInputClass);
