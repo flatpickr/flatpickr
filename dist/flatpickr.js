@@ -648,8 +648,8 @@ flatpickr.init = function (element, instanceConfig) {
 	};
 
 	documentClick = function documentClick(e) {
-		var isCalendarElement = wrapperElement.contains(e.target),
-		    isInput = self.element.contains(e.target) || e.target === self.altInput;
+		var isCalendarElement = wrapperElement.contains(e.relatedTarget || e.target),
+		    isInput = self.element.contains(e.relatedTarget || e.target) || e.relatedTarget || e.target === self.altInput;
 
 		if (self.isOpen && !isCalendarElement && !isInput) {
 			self.close();
@@ -948,8 +948,8 @@ flatpickr.init = function (element, instanceConfig) {
 			calendar.addEventListener("click", selectDate);
 		}
 
-		document.addEventListener("click", documentClick);
-		document.addEventListener("blur", documentClick, true);
+		document.addEventListener("click", documentClick, true);
+		document.addEventListener("focus", documentClick, true);
 
 		if (self.config.enableTime) {
 			self.hourElement.addEventListener("wheel", timeWrapper);
