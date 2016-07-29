@@ -949,27 +949,22 @@ Flatpickr.l10n.firstDayOfWeek = 1;
 	<script src="dist/flatpickr.js"></script>
 	<script>
 
-	const $ = selector => document.querySelector(selector);
-	const $$ = selector => document.querySelectorAll(selector);
-
 	// setting custom defaults
-	Flatpickr.defaultConfig.prevArrow = "<i class='icon icon-angle-left'></i>";
-	Flatpickr.defaultConfig.nextArrow = "<i class='icon icon-angle-right'></i>";
 	Flatpickr.l10n.firstDayOfWeek = 1;
 
 	//Regular flatpickr
 
-	document.getElementById('flatpickr-tryme').flatpickr();
+	document.getElementById("flatpickr-tryme").flatpickr();
 	document.getElementsByClassName("calendar").flatpickr();
 
-	const calendars = document.getElementsByClassName("flatpickr").flatpickr();
+	var calendars = document.getElementsByClassName("flatpickr").flatpickr();
 
 	var real_selection = document.getElementById("realdate");
 	document.getElementById("alt")._flatpickr.config.onChange = function(obj, str){
 		real_selection.textContent = str;
 	}
 
-	$('#disableRange').flatpickr({
+	document.getElementById("disableRange").flatpickr({
 		disable: [
 			{
 				from: "2016-08-16",
@@ -981,12 +976,12 @@ Flatpickr.l10n.firstDayOfWeek = 1;
 		minDate: "today"
 	});
 
-	$('#disableOddDays').flatpickr({
+	document.getElementById("disableOddDays").flatpickr({
 		disable: [
 			date => date.getDate()%2 // disable odd days
 		]
 	});
-	$('#enableNextSeven').flatpickr({
+	document.getElementById("enableNextSeven").flatpickr({
 		enable: [
 			{
 				from: "today",
@@ -994,7 +989,7 @@ Flatpickr.l10n.firstDayOfWeek = 1;
 			}
 		]
 	});
-	$('#enableCustom').flatpickr({
+	document.getElementById("enableCustom").flatpickr({
 		enable: [
 			function(dateObj){
 				return dateObj.getDay() %6 !== 0 && dateObj.getFullYear() === 2016;
@@ -1002,7 +997,7 @@ Flatpickr.l10n.firstDayOfWeek = 1;
 		]
 	});
 	var events = document.getElementById("events");
-	$("#events-api-example").flatpickr({
+	document.getElementById("events-api-example").flatpickr({
 		minDate: "today",
 		enableTime: true,
 		onChange: function(dateObj, dateStr) {
@@ -1022,17 +1017,17 @@ Flatpickr.l10n.firstDayOfWeek = 1;
 			events.scrollTop = events.offsetTop;
 		}
 	});
-	$("#check_in_date").flatpickr({
+	document.getElementById("check_in_date").flatpickr({
 		altInput: true,
 		altFormat: "\\C\\h\\e\\c\\k \\i\\n\\: l, F j Y",
 		minDate: new Date(),
-		onChange: dateObj => $("#check_out_date")._flatpickr.set("minDate", dateObj.fp_incr(1))
+		onChange: dateObj => document.getElementById("check_out_date")._flatpickr.set("minDate", dateObj.fp_incr(1))
 	});
-	$("#check_out_date").flatpickr({
+	document.getElementById("check_out_date").flatpickr({
 		altInput: true,
 		altFormat: "\\C\\h\\e\\c\\k \\o\\u\\t: l, F j Y",
 		minDate: new Date(),
-		onChange: dateObj => $("#check_in_date")._flatpickr.set("maxDate", dateObj.fp_incr(-1))
+		onChange: dateObj => document.getElementById("check_in_date")._flatpickr.set("maxDate", dateObj.fp_incr(-1))
 	});
 	</script>
 	<script async src="assets/prettify.js?skin=none" onload="prettyPrint()"></script>
