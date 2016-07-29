@@ -86,7 +86,8 @@ $width = 256px
 	background $months_background
 	color $months_color
 	fill $months_color
-	padding 4px 5px 2px 5px
+	padding 4px 0 0
+	height 1.625rem
 	text-align center
 	position relative
 
@@ -95,14 +96,13 @@ $width = 256px
 	text-decoration none
 	cursor pointer
 	position absolute
+	top 5px
 
 	i
 		position relative
 
 	svg
-		width 1.5em
-		height 1.5em
-
+		width 0.9rem
 		path
 			fill inherit
 
@@ -114,13 +114,9 @@ $width = 256px
 
 .flatpickr-prev-month
 	left 0.5rem
-	svg
-		margin-left -0.125rem
 
 .flatpickr-next-month
 	right 0.5rem
-	svg
-		margin-right -0.125rem
 
 .flatpickr-current-month
 	font-size 135%
@@ -166,7 +162,6 @@ $width = 256px
 		display inline-block
 		width 14.28%
 		font-weight bold
-
 
 .flatpickr-weeks
 	width 32px
