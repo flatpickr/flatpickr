@@ -1,22 +1,44 @@
 /* Atelier Sulphurpool Light by Bram de Haan (http://atelierbram.github.io/syntax-highlighting/atelier-schemes/sulphurpool) */
 
 /* plain text */
-.pln{color:#4d4d4c}ol.linenums{margin-top:0;margin-bottom:0;color:#8e908c}li.L0,li.L1,li.L2,li.L3,li.L4,li.L5,li.L6,li.L7,li.L8,li.L9{padding-left:1em;background-color:#fff;list-style-type:decimal}@media screen{.str{color:#718c00}.kwd{color:#8959a8}.com{color:#8e908c}.typ{color:#4271ae}.lit{color:#f5871f}.pun{color:#4d4d4c}.opn{color:#4d4d4c}.clo{color:#4d4d4c}.tag{color:#c82829}.atn{color:#f5871f}.atv{color:#3e999f}.dec{color:#f5871f}.var{color:#c82829}.fun{color:#4271ae}}
+.pln{color:#4a4e54}
+ol.linenums{margin-top:0;margin-bottom:0;color:#8e908c}
+li.L0,li.L1,li.L2,li.L3,li.L4,li.L5,li.L6,li.L7,li.L8,li.L9{padding-left:1em;background-color:#fff;list-style-type:decimal}
+@media screen{.str{color:#2ECC71}
+.kwd{color:#8959a8}
+.com{color:#95A5A6}
+.typ{color:#4271ae}
+.lit{color:#f5871f}
+.pun{color:#4d4d4c}
+.opn{color:#4d4d4c}
+.clo{color:#4d4d4c}
+.tag{color:#E74C3C}
+.atn{color:#E67E22}
+.atv{color:#2ECC71}
+.dec{color:#f5871f}
+.var{color:#c82829}
+.fun{color:#4271ae}
+}
+
 /* Style */
 pre.prettyprint {
-  background: #f5f7ff;
-  color: #979db4;
-  line-height: 1.5;
-  padding: 10px;
-  font-size: 14px;
-  tab-size: 4;
+	background: #fafafa;
+	border: 1px solid #f5f5f5;
+	color: #979db4;
+	line-height: 24px;
+	padding: 10px;
+	font-size: 16px;
+  letter-spacing: -0.55px;
+	tab-size: 4;
 }
+
 
 /* Specify class=linenums on a pre to get line numbering */
 ol.linenums {
-  margin-top: 0;
-  margin-bottom: 0;
+	margin-top: 0;
+	margin-bottom: 0;
 }
+
 
 /* IE indents via margin-left */
 li.L0,
@@ -29,8 +51,9 @@ li.L6,
 li.L7,
 li.L8,
 li.L9 {
-  /* */
+	/* */
 }
+
 
 /* Alternate shading for lines */
 li.L1,
@@ -38,5 +61,6 @@ li.L3,
 li.L5,
 li.L7,
 li.L9 {
-  /* */
+	/* */
 }
+
