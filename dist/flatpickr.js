@@ -105,14 +105,20 @@ var Flatpickr = function () {
 			}
 
 			if (this.config.enableTime) {
-				var updateTime = function updateTime(e) {
-					Flatpickr.timeWrapper(e);_this.updateValue(e);
-				};
-				this.timeContainer.addEventListener("wheel", updateTime);
-				this.timeContainer.addEventListener("input", updateTime);
-				this.timeContainer.addEventListener("click", function (e) {
-					return e.target === _this.amPM ? Flatpickr.timeWrapper(e) : e.target.select();
-				});
+				(function () {
+					var updateTime = function updateTime(e) {
+						Flatpickr.timeWrapper(e);
+						_this.updateValue(e);
+					};
+					_this.timeContainer.addEventListener("wheel", updateTime);
+					_this.timeContainer.addEventListener("wheel", Flatpickr.debounce(function (e) {
+						return _this.triggerEvent("Change");
+					}, 1000));
+					_this.timeContainer.addEventListener("input", updateTime);
+					_this.timeContainer.addEventListener("click", function (e) {
+						return e.target === _this.amPM ? updateTime(e) : e.target.select();
+					});
+				})();
 			}
 		}
 	}, {
@@ -662,6 +668,7 @@ var Flatpickr = function () {
 
 				this.updateValue(e);
 				this.buildDays();
+				this.triggerEvent("Change");
 
 				if (!this.config.enableTime) {
 					this.close();
@@ -897,7 +904,7 @@ var Flatpickr = function () {
 		key: "triggerEvent",
 		value: function triggerEvent(event) {
 			if (this.config["on" + event]) {
-				this.config["on" + event](this.selectedDateObj, this.input.value);
+				this.config["on" + event](this.selectedDateObj, this.input.value, this);
 			}
 		}
 	}, {
@@ -920,11 +927,7 @@ var Flatpickr = function () {
 				e.target.blur();
 			}
 
-			var timeHasChanged = void 0;
-
 			if (this.config.enableTime && !this.isMobile) {
-				var previousTimestamp = this.selectedDateObj.getTime();
-
 				// update time
 				var hours = parseInt(this.hourElement.value, 10) || 0,
 				    seconds = void 0;
@@ -948,18 +951,12 @@ var Flatpickr = function () {
 				if (seconds !== undefined) {
 					this.secondElement.value = Flatpickr.pad(seconds);
 				}
-
-				timeHasChanged = this.selectedDateObj.getTime() !== previousTimestamp;
 			}
 
 			this.input.value = this.formatDate(this.config.dateFormat, this.selectedDateObj);
 
 			if (this.altInput) {
 				this.altInput.value = this.formatDate(this.config.altFormat, this.selectedDateObj);
-			}
-
-			if (e && (timeHasChanged || e.target.classList.contains("flatpickr-day"))) {
-				this.triggerEvent("Change");
 			}
 
 			this.triggerEvent("ValueUpdate");
@@ -1128,8 +1125,8 @@ Flatpickr.defaultConfig = {
 	static: false,
 
 	// code for previous/next icons. this is where you put your custom icon code e.g. fontawesome
-	prevArrow: "<svg class='svg-icon' viewBox='0 0 20 20'><path fill='none' d='M8.388,10.049l4.76" + "-4.873c0.303-0.31,0.297-0.804-0.012-1.105c-0.309-0.304-0.803-0.293-1.105,0.012L6.726,9.5" + "16c-0.303,0.31-0.296,0.805,0.012,1.105l5.433,5.307c0.152,0.148,0.35,0.223,0.547,0.223c0.203" + ",0,0.406-0.08,0.559-0.236c0.303-0.309,0.295-0.803-0.012-1.104L8.388,10.049z'></path></svg>",
-	nextArrow: "<svg class='svg-icon' viewBox='0 0 20 20'><path fill='none' d='M11.611,10.049l-4." + "76-4.873c-0.303-0.31-0.297-0.804,0.012-1.105c0.309-0.304,0.803-0.293,1.105,0.012l5.306," + "5.433c0.304,0.31,0.296,0.805-0.012,1.105L7.83,15.928c-0.152,0.148-0.35,0.223-0.547,0.223" + "c-0.203,0-0.406-0.08-0.559-0.236c-0.303-0.309-0.295-0.803,0.012-1.104L11.611,10.049z'>" + "</path> </svg>",
+	prevArrow: '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 17 17"><g></g><path d="M5.207 8.471l7.146 7.147-0.707 0.707-7.853-7.854 7.854-7.853 0.707 0.707-7.147 7.146z" /></svg>',
+	nextArrow: '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 17 17"><g></g><path d="M13.207 8.472l-7.854 7.854-0.707-0.707 7.146-7.146-7.146-7.148 0.707-0.707 7.854 7.854z" fill="#000000" /></svg>',
 
 	// enables seconds in the time picker
 	enableSeconds: false,
