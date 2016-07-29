@@ -1,3 +1,4 @@
+/*! flatpickr v2.0 */
 class Flatpickr {
 	constructor(element, config) {
 		this.element = element;

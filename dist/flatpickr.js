@@ -6,6 +6,8 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/*! flatpickr v2.0 */
+
 var Flatpickr = function () {
 	function Flatpickr(element, config) {
 		_classCallCheck(this, Flatpickr);
