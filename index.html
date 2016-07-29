@@ -426,13 +426,13 @@ document.getElementById("#enableCustom").flatpickr({
 document.getElementById("events-api-example").flatpickr({
 	minDate: "today",
 	enableTime: true,
-	onChange: function(dateObj, dateStr) {
+	onChange: function(dateObj, dateStr, instance) {
 		...
 	},
-	onOpen: function(dateObj, dateStr){
+	onOpen: function(dateObj, dateStr, instance){
 		...
 	},
-	onClose: function(dateObj, dateStr){
+	onClose: function(dateObj, dateStr, instance){
 		...
 	}
 });
