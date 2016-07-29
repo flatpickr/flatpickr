@@ -153,8 +153,8 @@ var Flatpickr = function () {
 
 			this.calendarContainer.appendChild(fragment);
 
-			if (this.config.inline) {
-				this.calendarContainer.classList.add("inline");
+			if (this.config.inline || this.config.static) {
+				this.calendarContainer.classList.add(this.config.inline ? "inline" : "static");
 				this.positionCalendar();
 				this.element.parentNode.appendChild(this.calendarContainer);
 			} else {
