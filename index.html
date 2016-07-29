@@ -1035,7 +1035,7 @@ Flatpickr.l10n.firstDayOfWeek = 1;
 		altFormat: "\\C\\h\\e\\c\\k \\o\\u\\t: l, F j Y",
 		minDate: new Date()
 	});
-	console.log(check_in);
+
 	check_in.config.onChange = function(dateObj) {
 		check_out.set("minDate", dateObj.fp_incr(1));
 	};

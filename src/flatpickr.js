@@ -608,9 +608,8 @@ function Flatpickr(element, config) {
 			}
 		}
 		Object.keys(Flatpickr.defaultConfig).forEach(k =>
-			self.config[k] = self.config[k] || Flatpickr.defaultConfig[k]
+			self.config[k] = typeof self.config[k] !== "undefined" ? self.config[k] : Flatpickr.defaultConfig[k]
 		);
-		console.log(self.config);
 	}
 
 	function parseDate(date, timeless = false) {

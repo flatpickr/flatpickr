@@ -558,9 +558,8 @@ function Flatpickr(element, config) {
 			}
 		}
 		Object.keys(Flatpickr.defaultConfig).forEach(function (k) {
-			return self.config[k] = self.config[k] || Flatpickr.defaultConfig[k];
+			return self.config[k] = typeof self.config[k] !== "undefined" ? self.config[k] : Flatpickr.defaultConfig[k];
 		});
-		console.log(self.config);
 	}
 
 	function parseDate(date) {
