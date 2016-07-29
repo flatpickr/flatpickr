@@ -44,7 +44,7 @@ function init() {
 	table_of_contents = list.querySelectorAll("li");
 
 	onScroll();
-	window.addEventListener("mousewheel", debounce(onScroll, 100));
+	window.addEventListener("mousewheel", debounce(onScroll, 50));
 	list.addEventListener("click", function(){
 		setTimeout(highlightActive, 50);
 	});

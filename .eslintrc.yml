@@ -17,6 +17,7 @@
             - tab
             - { "SwitchCase": 1 }
 
+        max-len: warn
         new-cap: off
         no-confusing-arrow: off
         no-console: off
