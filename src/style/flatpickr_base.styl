@@ -96,14 +96,14 @@ $width = 256px
 .flatpickr-prev-month, .flatpickr-next-month
 	text-decoration none
 	cursor pointer
-	position absolute
-	top 5px
 
 	i
 		position relative
 
 	svg
 		width 0.9rem
+		position absolute
+		top 9px
 		path
 			fill inherit
 
@@ -113,10 +113,10 @@ $width = 256px
 	&:hover
 		color $today_color
 
-.flatpickr-prev-month
+.flatpickr-prev-month svg
 	left 0.5rem
 
-.flatpickr-next-month
+.flatpickr-next-month svg
 	right 0.5rem
 
 .flatpickr-current-month

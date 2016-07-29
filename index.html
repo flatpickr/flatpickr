@@ -986,7 +986,7 @@ Flatpickr.l10n.firstDayOfWeek = 1;
 
 	document.getElementById("disableOddDays").flatpickr({
 		disable: [
-			date => date.getDate()%2 // disable odd days
+			function(date) { return date.getDate()%2; } // disable odd days
 		]
 	});
 	document.getElementById("enableNextSeven").flatpickr({
@@ -1035,8 +1035,12 @@ Flatpickr.l10n.firstDayOfWeek = 1;
 		altFormat: "\\C\\h\\e\\c\\k \\o\\u\\t: l, F j Y",
 		minDate: new Date()
 	});
-	check_in.config.onChange = dateObj => check_out.set("minDate", dateObj.fp_incr(1));
-	check_out.config.onChange = dateObj => check_in.set("maxDate", dateObj.fp_incr(-1));
+	check_in.config.onChange = function(dateObj) {
+		check_out.set("minDate", dateObj.fp_incr(1));
+	};
+	check_out.config.onChange = function(dateObj) {
+		check_in.set("maxDate", dateObj.fp_incr(-1));
+	}
 	</script>
 	<script async src="assets/prettify.js?skin=none" onload="prettyPrint()"></script>
 	<script async src="assets/table-of-contents.js"></script>

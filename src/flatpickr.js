@@ -36,7 +36,7 @@ class Flatpickr {
 		window.addEventListener("resize", Flatpickr.debounce(() => this.onResize(), 300));
 
 		document.addEventListener("click", e => this.documentClick(e));
-		document.addEventListener("blur", e => this.documentClick(e), true);
+		document.addEventListener("blur", e => this.documentClick(e));
 
 		if (this.config.clickOpens) {
 			(this.altInput || this.input).addEventListener("focus", e => this.open(e));
@@ -521,6 +521,7 @@ class Flatpickr {
 	}
 
 	open(e) {
+
 		if (this.isMobile) {
 			e.preventDefault();
 			e.target.blur();
@@ -540,6 +541,8 @@ class Flatpickr {
 		else if (!this.config.static) {
 			this.positionCalendar();
 		}
+
+		e.stopPropagation();
 
 		this.isOpen = true;
 
@@ -572,6 +575,7 @@ class Flatpickr {
 				this.config.altFormat = `h:i${this.config.enableSeconds ? ":S" : ""} K`;
 			}
 		}
+
 	}
 
 	parseDate(date, timeless = false) {
@@ -708,6 +712,7 @@ class Flatpickr {
 
 	setupDates() {
 		this.now = new Date();
+
 		if (this.config.defaultDate || this.input.value) {
 			this.selectedDateObj = this.parseDate(this.config.defaultDate || this.input.value);
 		}
@@ -808,6 +813,9 @@ class Flatpickr {
 
 	setupInputs() {
 		this.input = this.config.wrap ? this.element.querySelector("[data-input]") : this.element;
+		if (!this.config.allowInput) {
+			this.input.setAttribute("readonly", "readonly");
+		}
 		this.input.classList.add("flatpickr-input");
 		if (this.config.altInput) {
 			// replicate this.element
@@ -1139,7 +1147,19 @@ Flatpickr.l10n = {
 
 HTMLCollection.prototype.map = NodeList.prototype.map = Array.prototype.map;
 HTMLCollection.prototype.flatpickr = NodeList.prototype.flatpickr = function (config) {
-	return this.map(element => (element._flatpickr = new Flatpickr(element, config||{})));
+	let instances = [];
+	for(let i = 0; i < this.length; i++) {
+		try {
+			this[i]._flatpickr = new Flatpickr(this[i], config||{});
+			instances.push(this[i]._flatpickr);
+		}
+
+		catch (e) {
+			console.warn(e);
+		}
+
+	}
+	return instances;
 };
 
 if (typeof jQuery !== "undefined") {
@@ -1153,7 +1173,14 @@ if (typeof jQuery !== "undefined") {
 }
 
 HTMLElement.prototype.flatpickr = function (config = {}) {
-	return (this._flatpickr = new Flatpickr(this, config));
+	try {
+		return (this._flatpickr = new Flatpickr(this, config));
+	}
+
+	catch(e) {
+		console.warn(e);
+	}
+
 };
 
 Date.prototype.fp_incr = function (days) {
@@ -1185,6 +1212,69 @@ Date.prototype.fp_getWeek = function () {
 		Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 +
 		(week1.getDay() + 6) % 7) / 7);
 };
+
+if (typeof Object.assign != 'function') {
+	Object.assign = function assign(target, source) {
+		for (var index = 1, key, src; index < arguments.length; ++index) {
+			src = arguments[index];
+
+			for (key in src) {
+				if (Object.prototype.hasOwnProperty.call(src, key)) {
+					target[key] = src[key];
+				}
+			}
+		}
+
+		return target;
+	};
+}
+
+if (!("classList" in document.documentElement) && Object.defineProperty && typeof HTMLElement !== 'undefined') {
+	Object.defineProperty(HTMLElement.prototype, 'classList', {
+		get: function() {
+			var self = this;
+			function update(fn) {
+				return function(value) {
+					var classes = self.className.split(/\s+/),
+						index = classes.indexOf(value);
+
+					fn(classes, index, value);
+					self.className = classes.join(" ");
+				}
+			}
+
+			var ret = {
+				add: update(function(classes, index, value) {
+					~index || classes.push(value);
+				}),
+
+				remove: update(function(classes, index) {
+					~index && classes.splice(index, 1);
+				}),
+
+				toggle: update(function(classes, index, value) {
+					~index ? classes.splice(index, 1) : classes.push(value);
+				}),
+
+				contains: function(value) {
+					return !!~self.className.split(/\s+/).indexOf(value);
+				},
+
+				item: function(i) {
+					return self.className.split(/\s+/)[i] || null;
+				}
+			};
+
+			Object.defineProperty(ret, 'length', {
+				get: function() {
+					return self.className.split(/\s+/).length;
+				}
+			});
+
+			return ret;
+		}
+	});
+}
 
 if (typeof module !== "undefined") {
 	module.exports = Flatpickr;

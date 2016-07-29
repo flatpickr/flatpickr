@@ -55,7 +55,7 @@ var Flatpickr = function () {
 			});
 			document.addEventListener("blur", function (e) {
 				return _this.documentClick(e);
-			}, true);
+			});
 
 			if (this.config.clickOpens) {
 				(this.altInput || this.input).addEventListener("focus", function (e) {
@@ -536,6 +536,8 @@ var Flatpickr = function () {
 				this.positionCalendar();
 			}
 
+			e.stopPropagation();
+
 			this.isOpen = true;
 
 			this.calendarContainer.classList.add("open");
@@ -701,6 +703,7 @@ var Flatpickr = function () {
 		key: "setupDates",
 		value: function setupDates() {
 			this.now = new Date();
+
 			if (this.config.defaultDate || this.input.value) {
 				this.selectedDateObj = this.parseDate(this.config.defaultDate || this.input.value);
 			}
@@ -850,6 +853,9 @@ var Flatpickr = function () {
 		key: "setupInputs",
 		value: function setupInputs() {
 			this.input = this.config.wrap ? this.element.querySelector("[data-input]") : this.element;
+			if (!this.config.allowInput) {
+				this.input.setAttribute("readonly", "readonly");
+			}
 			this.input.classList.add("flatpickr-input");
 			if (this.config.altInput) {
 				// replicate this.element
@@ -1184,9 +1190,16 @@ Flatpickr.l10n = {
 
 HTMLCollection.prototype.map = NodeList.prototype.map = Array.prototype.map;
 HTMLCollection.prototype.flatpickr = NodeList.prototype.flatpickr = function (config) {
-	return this.map(function (element) {
-		return element._flatpickr = new Flatpickr(element, config || {});
-	});
+	var instances = [];
+	for (var i = 0; i < this.length; i++) {
+		try {
+			this[i]._flatpickr = new Flatpickr(this[i], config || {});
+			instances.push(this[i]._flatpickr);
+		} catch (e) {
+			console.warn(e);
+		}
+	}
+	return instances;
 };
 
 if (typeof jQuery !== "undefined") {
@@ -1202,7 +1215,11 @@ if (typeof jQuery !== "undefined") {
 HTMLElement.prototype.flatpickr = function () {
 	var config = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-	return this._flatpickr = new Flatpickr(this, config);
+	try {
+		return this._flatpickr = new Flatpickr(this, config);
+	} catch (e) {
+		console.warn(e);
+	}
 };
 
 Date.prototype.fp_incr = function (days) {
@@ -1228,6 +1245,69 @@ Date.prototype.fp_getWeek = function () {
 	// Adjust to Thursday in week 1 and count number of weeks from date to week1.
 	return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
 };
+
+if (typeof Object.assign != 'function') {
+	Object.assign = function assign(target, source) {
+		for (var index = 1, key, src; index < arguments.length; ++index) {
+			src = arguments[index];
+
+			for (key in src) {
+				if (Object.prototype.hasOwnProperty.call(src, key)) {
+					target[key] = src[key];
+				}
+			}
+		}
+
+		return target;
+	};
+}
+
+if (!("classList" in document.documentElement) && Object.defineProperty && typeof HTMLElement !== 'undefined') {
+	Object.defineProperty(HTMLElement.prototype, 'classList', {
+		get: function get() {
+			var self = this;
+			function update(fn) {
+				return function (value) {
+					var classes = self.className.split(/\s+/),
+					    index = classes.indexOf(value);
+
+					fn(classes, index, value);
+					self.className = classes.join(" ");
+				};
+			}
+
+			var ret = {
+				add: update(function (classes, index, value) {
+					~index || classes.push(value);
+				}),
+
+				remove: update(function (classes, index) {
+					~index && classes.splice(index, 1);
+				}),
+
+				toggle: update(function (classes, index, value) {
+					~index ? classes.splice(index, 1) : classes.push(value);
+				}),
+
+				contains: function contains(value) {
+					return !!~self.className.split(/\s+/).indexOf(value);
+				},
+
+				item: function item(i) {
+					return self.className.split(/\s+/)[i] || null;
+				}
+			};
+
+			Object.defineProperty(ret, 'length', {
+				get: function get() {
+					return self.className.split(/\s+/).length;
+				}
+			});
+
+			return ret;
+		}
+	});
+}
 
 if (typeof module !== "undefined") {
 	module.exports = Flatpickr;
