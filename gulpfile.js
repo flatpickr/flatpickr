@@ -26,7 +26,7 @@ gulp.task('script', function(done){
 	get_script_stream().pipe(gulp.dest('dist'));
 
 	get_script_stream()
-	.pipe(uglify({compress: {hoist_funs: false, hoist_vars: false}}))
+	.pipe(uglify())
 	.pipe(rename({ suffix: '.min'}))
 	.pipe(gulp.dest('dist'))
 	.pipe(livereload());

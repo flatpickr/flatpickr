@@ -24,15 +24,18 @@
         no-extend-native: off
         no-nested-ternary: off
         no-param-reassign: off
+        no-restricted-syntax: off
         no-return-assign: off
         no-undef: warn
         no-underscore-dangle: off
-        no-unused-expressions: off
+        no-unused-expressions: warn
+        no-use-before-define: off
 
         object-shorthand: off
         one-var: off
 
         prefer-const: off
+        prefer-rest-params: off
         prefer-template: off
 
         space-infix-ops: warn
