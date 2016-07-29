@@ -58,13 +58,23 @@
 		<div class="example" data-desc="Install" id=install>
 			<h3>Install</h3>
 
-			<p>
-				Node Package Manager:<br>
-				<code>npm install flatpickr</code>
-			</p>
+			<div class="alert success">
+				<h2>NEW: flatpickr v2.0 beta</h2>
+				<li>Native mobile datetime picker support</li>
+				<li>SVG icons out-of-the-box</li>
+				<li>Compatible with jQuery</li>
+				<li>New datestring parser</li>
+				<li>Improved performance</li>
+				<li>Only 6kb minified &amp; gzipped</li>
+				<li>Not a single dependency</li>
+				<br>
+				<code>npm install flatpickr#next</code>
+
+			</div>
 
 			<p>
-				Bower:<br>
+				<code>npm install flatpickr</code>
+				<br>
 				<code>bower install flatpickr-calendar</code>
 			</p>
 
@@ -291,7 +301,7 @@ new Flatpickr(HTMLElement, [options]);
 			<h3>Disabling dates</h3>
 			<p>Disable a date interval, or a specific date.</p>
 			<pre class='prettyprint lang-js'>
-new Flatpickr('#disableRange', {
+document.getElementById("#disableRange").flatpickr({
 	disable: [
 		{
 			from: "2016-08-16",
@@ -312,7 +322,7 @@ new Flatpickr('#disableRange', {
 
 			<p>Or pass in a custom function and disable dates using any logic you want.</p>
 						<pre class='prettyprint lang-js'>
-new Flatpickr('#disableOddDays', {
+document.getElementById("#disableOddDays").flatpickr({
 	disable: [
 		function(date){ // disable odd days
 			return date.getDate()%2 > 0;
@@ -328,7 +338,7 @@ new Flatpickr('#disableOddDays', {
 
 			<p>Disable <strong>all</strong> dates except the ones you need, by passing in date strings, Date objects, or functions.</p>
 			<pre class='prettyprint lang-js'>
-new Flatpickr('#enableNextSeven', {
+document.getElementById("#enableNextSeven").flatpickr({
 	enable: [
 		{
 			from: "today",
@@ -345,7 +355,7 @@ new Flatpickr('#enableNextSeven', {
 
 			<p>Use custom logic to enable the dates you need. For instance, enable business days of 2016:</p>
 			<pre class='prettyprint lang-js'>
-new Flatpickr('#enableCustom', {
+document.getElementById("#enableCustom").flatpickr({
 	enable: [
 		function(dateObj){
 			return dateObj.getDay() %6 !== 0 &amp;&amp; dateObj.getFullYear() === 2016;
@@ -413,7 +423,7 @@ new Flatpickr('#enableCustom', {
 			<h3>Event API</h3>
 
 			<pre class='prettyprint lang-js'>
-new Flatpickr("#events-api-example", {
+document.getElementById("events-api-example").flatpickr({
 	minDate: "today",
 	enableTime: true,
 	onChange: function(dateObj, dateStr) {
@@ -428,7 +438,7 @@ new Flatpickr("#events-api-example", {
 });
 </pre>
 
-			<p id=events style="height: 60px; overflow-y: auto"></p>
+			<p id=events style="height: 80px; overflow-y: auto"></p>
 			<p>
 				<input id="events-api-example" placeholder="Select date">
 			</p>
@@ -439,23 +449,18 @@ new Flatpickr("#events-api-example", {
 			<h3>Example: check in and check out</h3>
 
 			<pre class='prettyprint lang-js'>
-var check_in = new Flatpickr("#check_in_date", {
+var check_in = document.getElementById("check_in_date").flatpickr({
 	altInput: true,
 	altFormat: "\\C\\h\\e\\c\\k \\i\\n\\: l, F j Y",
 	minDate: new Date()
 });
-var check_out = new Flatpickr("#check_out_date", {
+var check_out = document.getElementById("check_out_date").flatpickr({
 	altInput: true,
 	altFormat: "\\C\\h\\e\\c\\k \\o\\u\\t: l, F j Y",
 	minDate: new Date()
 });
-
-check_in.set("onChange", function(d) {
-	check_out.set("minDate", d.fp_incr(1));
-});
-check_out.set("onChange", function(d) {
-	check_in.set("maxDate", d.fp_incr(-1));
-});
+check_in.config.onChange = dateObj => check_out.set("minDate", dateObj.fp_incr(1));
+check_out.config.onChange = dateObj => check_in.set("maxDate", dateObj.fp_incr(-1));
 </pre>
 
 
@@ -490,7 +495,7 @@ check_out.set("onChange", function(d) {
 </pre>
 
 			<p>
-				<input class=flatpickr data-inline=true placeholder="Pick a date below">
+				<input class=flatpic type=text data-inline=true placeholder="Pick a date below">
 			</p>
 
 
@@ -1020,18 +1025,18 @@ Flatpickr.l10n.firstDayOfWeek = 1;
 			events.scrollTop = events.offsetTop;
 		}
 	});
-	document.getElementById("check_in_date").flatpickr({
+	var check_in = document.getElementById("check_in_date").flatpickr({
 		altInput: true,
 		altFormat: "\\C\\h\\e\\c\\k \\i\\n\\: l, F j Y",
-		minDate: new Date(),
-		onChange: dateObj => document.getElementById("check_out_date")._flatpickr.set("minDate", dateObj.fp_incr(1))
+		minDate: new Date()
 	});
-	document.getElementById("check_out_date").flatpickr({
+	var check_out = document.getElementById("check_out_date").flatpickr({
 		altInput: true,
 		altFormat: "\\C\\h\\e\\c\\k \\o\\u\\t: l, F j Y",
-		minDate: new Date(),
-		onChange: dateObj => document.getElementById("check_in_date")._flatpickr.set("maxDate", dateObj.fp_incr(-1))
+		minDate: new Date()
 	});
+	check_in.config.onChange = dateObj => check_out.set("minDate", dateObj.fp_incr(1));
+	check_out.config.onChange = dateObj => check_in.set("maxDate", dateObj.fp_incr(-1));
 	</script>
 	<script async src="assets/prettify.js?skin=none" onload="prettyPrint()"></script>
 	<script async src="assets/table-of-contents.js"></script>

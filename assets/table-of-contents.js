@@ -1,11 +1,11 @@
 var table = document.querySelector(".c-r div"),
 	list = table.querySelector(".c-r ol"),
 	examples = document.getElementsByClassName("example"),
-	header_height = document.querySelector(".hero").offsetHeight,
+	header_height = document.querySelector(".hero").clientHeight,
 	table_of_contents, table_of_scrolls = [];
 
 function onScroll (e){
-	if (window.pageYOffset > header_height)
+	if (window.pageYOffset > header_height - (e ? e.deltaY||16 : 16))
 		table.classList.add("fixed");
 	else
 		table.classList.remove("fixed");
@@ -14,7 +14,7 @@ function onScroll (e){
 }
 
 function highlightActive() {
-	var currentActive = document.querySelector(".current");
+	var currentActive = document.getElementsByClassName("current")[0];
 	if (currentActive) {
 		currentActive.className = ""
 	}
@@ -44,7 +44,7 @@ function init() {
 	table_of_contents = list.querySelectorAll("li");
 
 	onScroll();
-	window.addEventListener("mousewheel", debounce(onScroll, 30));
+	window.addEventListener("mousewheel", onScroll, {passive: true});
 	list.addEventListener("click", function(){
 		setTimeout(highlightActive, 50);
 	});

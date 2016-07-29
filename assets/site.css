@@ -240,7 +240,7 @@ input:focus, input.active
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 3px;
     color: #444;
-    font-weight: 400;
+    font-weight: 700;
     cursor: pointer;
     display: inline-block;
     margin-right: 0.5rem;
@@ -345,11 +345,42 @@ pre
 }
 
 
-hr {
+.example hr {
+    background: transparent;
     display: block;
     box-sizing: content-box;
     height: 1px;
     border: 0;
     margin: 2rem 0 1rem 0;
     border-top: 1px dotted rgba(0, 0, 0, 0.2);
+}
+
+.alert.success {
+    color: #60ae4d;
+    background-color: rgba(96, 174, 77, 0.15);
+    border: 1px solid rgba(96, 174, 77, 0.15);
+}
+.success {
+    color: #60ae4d;
+}
+.alert {
+    position: relative;
+    padding: 15px 24px;
+    padding-right: 40px;
+    line-height: 20px;
+    font-size: 14px;
+    color: #000;
+    background: #f4f4f4;
+    border: 1px solid #dbdbdb;
+    display: block;
+    font-weight: normal;
+    border-radius: 4px;
+    margin-bottom: 24px;
+}
+
+hr {
+    border: 0;
+    margin: 1em 0;
+    height: 1px;
+    background: #ddd;
 }
