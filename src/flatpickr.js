@@ -32,11 +32,15 @@ class Flatpickr {
 	}
 
 	bind() {
-		document.addEventListener("keydown", e => this.onKeyDown(e));
-		window.addEventListener("resize", Flatpickr.debounce(() => this.onResize(), 300));
+		this.onKeyDown = this.onKeyDown.bind(this);
+		this.documentClick = this.documentClick.bind(this);
+		this.onResize = this.onResize.bind(this);
 
-		document.addEventListener("click", e => this.documentClick(e));
-		document.addEventListener("blur", e => this.documentClick(e));
+		document.addEventListener("keydown", this.onKeyDown);
+		window.addEventListener("resize", this.onResize);
+
+		document.addEventListener("click", this.documentClick);
+		document.addEventListener("blur", this.documentClick);
 
 		if (this.config.clickOpens) {
 			(this.altInput || this.input).addEventListener("focus", e => this.open(e));
@@ -79,7 +83,9 @@ class Flatpickr {
 				this.updateValue(e);
 			};
 			this.timeContainer.addEventListener("wheel", updateTime);
-			this.timeContainer.addEventListener("wheel", Flatpickr.debounce(e => this.triggerEvent("Change"), 1000));
+			this.timeContainer.addEventListener("wheel", Flatpickr.debounce(
+				() => this.triggerEvent("Change"), 1000)
+			);
 			this.timeContainer.addEventListener("input", updateTime);
 			this.timeContainer.addEventListener("click", e =>
 				e.target === this.amPM ? updateTime(e) : e.target.select()
@@ -391,6 +397,21 @@ class Flatpickr {
 		this.triggerEvent("Close");
 	}
 
+	destroy() {
+		this.calendarContainer.parentNode.removeChild(this.calendarContainer);
+		this.input.value = "";
+		if (this.altInput) {
+			this.input.type = "text";
+			this.altInput.parentNode.removeChild(this.altInput);
+		}
+
+		document.removeEventListener("keydown", this.onKeyDown);
+		window.removeEventListener("resize", this.onResize);
+
+		document.removeEventListener("click", this.documentClick);
+		document.removeEventListener("blur", this.documentClick);
+	}
+
 	documentClick(e) {
 		const isCalendarElement = this.calendarContainer.contains(e.target),
 			isInput = this.element.contains(e.target) || e.target === this.altInput;
@@ -515,13 +536,15 @@ class Flatpickr {
 	}
 
 	onResize() {
-		if (this.isOpen && !this.config.inline && !this.config.static) {
-			this.positionCalendar();
-		}
+		return Flatpickr.debounce(() => {
+			if (this.isOpen && !this.config.inline && !this.config.static) {
+				this.positionCalendar();
+			}
+		}, 300);
+
 	}
 
 	open(e) {
-
 		if (this.isMobile) {
 			e.preventDefault();
 			e.target.blur();
@@ -575,7 +598,6 @@ class Flatpickr {
 				this.config.altFormat = `h:i${this.config.enableSeconds ? ":S" : ""} K`;
 			}
 		}
-
 	}
 
 	parseDate(date, timeless = false) {
@@ -1083,8 +1105,8 @@ Flatpickr.defaultConfig = {
 	static: false,
 
 	// code for previous/next icons. this is where you put your custom icon code e.g. fontawesome
-	prevArrow: '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 17 17"><g></g><path d="M5.207 8.471l7.146 7.147-0.707 0.707-7.853-7.854 7.854-7.853 0.707 0.707-7.147 7.146z" /></svg>',
-	nextArrow: '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 17 17"><g></g><path d="M13.207 8.472l-7.854 7.854-0.707-0.707 7.146-7.146-7.146-7.148 0.707-0.707 7.854 7.854z" fill="#000000" /></svg>',
+	prevArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M5.207 8.471l7.146 7.147-0.707 0.707-7.853-7.854 7.854-7.853 0.707 0.707-7.147 7.146z' /></svg>",
+	nextArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M13.207 8.472l-7.854 7.854-0.707-0.707 7.146-7.146-7.146-7.148 0.707-0.707 7.854 7.854z' /></svg>",
 
 
 	// enables seconds in the time picker
@@ -1148,7 +1170,11 @@ Flatpickr.l10n = {
 HTMLCollection.prototype.map = NodeList.prototype.map = Array.prototype.map;
 HTMLCollection.prototype.flatpickr = NodeList.prototype.flatpickr = function (config) {
 	let instances = [];
-	for(let i = 0; i < this.length; i++) {
+	for (let i = 0; i < this.length; i++) {
+		if (this[i]._flatpickr) {
+			this[i]._flatpickr.destroy();
+		}
+
 		try {
 			this[i]._flatpickr = new Flatpickr(this[i], config||{});
 			instances.push(this[i]._flatpickr);
@@ -1157,8 +1183,8 @@ HTMLCollection.prototype.flatpickr = NodeList.prototype.flatpickr = function (co
 		catch (e) {
 			console.warn(e);
 		}
-
 	}
+
 	return instances;
 };
 
@@ -1173,14 +1199,18 @@ if (typeof jQuery !== "undefined") {
 }
 
 HTMLElement.prototype.flatpickr = function (config = {}) {
+	if (this._flatpickr) {
+		this._flatpickr.destroy();
+	}
+
 	try {
 		return (this._flatpickr = new Flatpickr(this, config));
 	}
 
-	catch(e) {
+	catch (e) {
 		console.warn(e);
+		return null;
 	}
-
 };
 
 Date.prototype.fp_incr = function (days) {
@@ -1213,9 +1243,9 @@ Date.prototype.fp_getWeek = function () {
 		(week1.getDay() + 6) % 7) / 7);
 };
 
-if (typeof Object.assign != 'function') {
-	Object.assign = function assign(target, source) {
-		for (var index = 1, key, src; index < arguments.length; ++index) {
+if (typeof Object.assign !== "function") {
+	Object.assign = function assign(target) {
+		for (let index = 1, key, src; index < arguments.length; ++index) {
 			src = arguments[index];
 
 			for (key in src) {
@@ -1229,44 +1259,42 @@ if (typeof Object.assign != 'function') {
 	};
 }
 
-if (!("classList" in document.documentElement) && Object.defineProperty && typeof HTMLElement !== 'undefined') {
-	Object.defineProperty(HTMLElement.prototype, 'classList', {
-		get: function() {
-			var self = this;
+if (!("classList" in document.documentElement) && Object.defineProperty && typeof HTMLElement !== "undefined") {
+	Object.defineProperty(HTMLElement.prototype, "classList", {
+		get: function () {
+			let self = this;
 			function update(fn) {
-				return function(value) {
-					var classes = self.className.split(/\s+/),
+				return function (value) {
+					let classes = self.className.split(/\s+/),
 						index = classes.indexOf(value);
 
 					fn(classes, index, value);
 					self.className = classes.join(" ");
-				}
+				};
 			}
 
-			var ret = {
-				add: update(function(classes, index, value) {
+			let ret = {
+				add: update((classes, index, value) => {
 					~index || classes.push(value);
 				}),
 
-				remove: update(function(classes, index) {
+				remove: update((classes, index) => {
 					~index && classes.splice(index, 1);
 				}),
 
-				toggle: update(function(classes, index, value) {
+				toggle: update((classes, index, value) => {
 					~index ? classes.splice(index, 1) : classes.push(value);
 				}),
 
-				contains: function(value) {
-					return !!~self.className.split(/\s+/).indexOf(value);
-				},
+				contains: value => !!~self.className.split(/\s+/).indexOf(value),
 
-				item: function(i) {
+				item: function (i) {
 					return self.className.split(/\s+/)[i] || null;
 				}
 			};
 
-			Object.defineProperty(ret, 'length', {
-				get: function() {
+			Object.defineProperty(ret, "length", {
+				get: function () {
 					return self.className.split(/\s+/).length;
 				}
 			});

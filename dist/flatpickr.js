@@ -43,19 +43,15 @@ var Flatpickr = function () {
 		value: function bind() {
 			var _this = this;
 
-			document.addEventListener("keydown", function (e) {
-				return _this.onKeyDown(e);
-			});
-			window.addEventListener("resize", Flatpickr.debounce(function () {
-				return _this.onResize();
-			}, 300));
+			this.onKeyDown = this.onKeyDown.bind(this);
+			this.documentClick = this.documentClick.bind(this);
+			this.onResize = this.onResize.bind(this);
 
-			document.addEventListener("click", function (e) {
-				return _this.documentClick(e);
-			});
-			document.addEventListener("blur", function (e) {
-				return _this.documentClick(e);
-			});
+			document.addEventListener("keydown", this.onKeyDown);
+			window.addEventListener("resize", this.onResize);
+
+			document.addEventListener("click", this.documentClick);
+			document.addEventListener("blur", this.documentClick);
 
 			if (this.config.clickOpens) {
 				(this.altInput || this.input).addEventListener("focus", function (e) {
@@ -111,7 +107,7 @@ var Flatpickr = function () {
 						_this.updateValue(e);
 					};
 					_this.timeContainer.addEventListener("wheel", updateTime);
-					_this.timeContainer.addEventListener("wheel", Flatpickr.debounce(function (e) {
+					_this.timeContainer.addEventListener("wheel", Flatpickr.debounce(function () {
 						return _this.triggerEvent("Change");
 					}, 1000));
 					_this.timeContainer.addEventListener("input", updateTime);
@@ -395,6 +391,22 @@ var Flatpickr = function () {
 			this.triggerEvent("Close");
 		}
 	}, {
+		key: "destroy",
+		value: function destroy() {
+			this.calendarContainer.parentNode.removeChild(this.calendarContainer);
+			this.input.value = "";
+			if (this.altInput) {
+				this.input.type = "text";
+				this.altInput.parentNode.removeChild(this.altInput);
+			}
+
+			document.removeEventListener("keydown", this.onKeyDown);
+			window.removeEventListener("resize", this.onResize);
+
+			document.removeEventListener("click", this.documentClick);
+			document.removeEventListener("blur", this.documentClick);
+		}
+	}, {
 		key: "documentClick",
 		value: function documentClick(e) {
 			var isCalendarElement = this.calendarContainer.contains(e.target),
@@ -511,21 +523,25 @@ var Flatpickr = function () {
 	}, {
 		key: "onResize",
 		value: function onResize() {
-			if (this.isOpen && !this.config.inline && !this.config.static) {
-				this.positionCalendar();
-			}
+			var _this2 = this;
+
+			return Flatpickr.debounce(function () {
+				if (_this2.isOpen && !_this2.config.inline && !_this2.config.static) {
+					_this2.positionCalendar();
+				}
+			}, 300);
 		}
 	}, {
 		key: "open",
 		value: function open(e) {
-			var _this2 = this;
+			var _this3 = this;
 
 			if (this.isMobile) {
 				e.preventDefault();
 				e.target.blur();
 
 				setTimeout(function () {
-					_this2.mobileInput.click();
+					_this3.mobileInput.click();
 				}, 0);
 
 				this.triggerEvent("Open");
@@ -728,17 +744,17 @@ var Flatpickr = function () {
 	}, {
 		key: "setupFormats",
 		value: function setupFormats() {
-			var _this3 = this;
+			var _this4 = this;
 
 			this.formats = {
 				// weekday name, short, e.g. Thu
 				D: function D(date) {
-					return _this3.l10n.weekdays.shorthand[_this3.formats.w(date)];
+					return _this4.l10n.weekdays.shorthand[_this4.formats.w(date)];
 				},
 
 				// full month name e.g. January
 				F: function F(date) {
-					return _this3.utils.monthToStr(_this3.formats.n(date) - 1, false);
+					return _this4.utils.monthToStr(_this4.formats.n(date) - 1, false);
 				},
 
 				// hours with leading zero e.g. 03
@@ -748,7 +764,7 @@ var Flatpickr = function () {
 
 				// day (1-30) with ordinal suffix e.g. 1st, 2nd
 				J: function J(date) {
-					return _this3.formats.j(date) + _this3.l10n.ordinal(_this3.formats.j());
+					return _this4.formats.j(date) + _this4.l10n.ordinal(_this4.formats.j());
 				},
 
 				// AM/PM
@@ -758,7 +774,7 @@ var Flatpickr = function () {
 
 				// shorthand month e.g. Jan, Sep, Oct, etc
 				M: function M(date) {
-					return _this3.utils.monthToStr(_this3.formats.n(date) - 1, true);
+					return _this4.utils.monthToStr(_this4.formats.n(date) - 1, true);
 				},
 
 				// seconds 00-59
@@ -778,7 +794,7 @@ var Flatpickr = function () {
 
 				// day in month, padded (01-30)
 				d: function d(date) {
-					return Flatpickr.pad(_this3.formats.j(date));
+					return Flatpickr.pad(_this4.formats.j(date));
 				},
 
 				// hour from 1-12 (am/pm)
@@ -798,12 +814,12 @@ var Flatpickr = function () {
 
 				// weekday name, full, e.g. Thursday
 				l: function l(date) {
-					return _this3.l10n.weekdays.longhand[_this3.formats.w(date)];
+					return _this4.l10n.weekdays.longhand[_this4.formats.w(date)];
 				},
 
 				// padded month number (01-12)
 				m: function m(date) {
-					return Flatpickr.pad(_this3.formats.n(date));
+					return Flatpickr.pad(_this4.formats.n(date));
 				},
 
 				// the month number (1-12)
@@ -823,29 +839,29 @@ var Flatpickr = function () {
 
 				// last two digits of year e.g. 16 for 2016
 				y: function y(date) {
-					return String(_this3.formats.Y(date)).substring(2);
+					return String(_this4.formats.Y(date)).substring(2);
 				}
 			};
 		}
 	}, {
 		key: "setupHelperFunctions",
 		value: function setupHelperFunctions() {
-			var _this4 = this;
+			var _this5 = this;
 
 			this.utils = {
 				getDaysinMonth: function getDaysinMonth() {
-					var month = arguments.length <= 0 || arguments[0] === undefined ? _this4.currentMonth : arguments[0];
-					var yr = arguments.length <= 1 || arguments[1] === undefined ? _this4.currentYear : arguments[1];
+					var month = arguments.length <= 0 || arguments[0] === undefined ? _this5.currentMonth : arguments[0];
+					var yr = arguments.length <= 1 || arguments[1] === undefined ? _this5.currentYear : arguments[1];
 
 					if (month === 1 && yr % 4 === 0 && yr % 100 !== 0 || yr % 400 === 0) {
 						return 29;
 					}
-					return _this4.l10n.daysInMonth[month];
+					return _this5.l10n.daysInMonth[month];
 				},
 
 				monthToStr: function monthToStr(monthNumber) {
-					var short = arguments.length <= 1 || arguments[1] === undefined ? _this4.config.shorthandCurrentMonth : arguments[1];
-					return _this4.l10n.months[(short ? "short" : "long") + "hand"][monthNumber];
+					var short = arguments.length <= 1 || arguments[1] === undefined ? _this5.config.shorthandCurrentMonth : arguments[1];
+					return _this5.l10n.months[(short ? "short" : "long") + "hand"][monthNumber];
 				}
 			};
 		}
@@ -870,7 +886,7 @@ var Flatpickr = function () {
 	}, {
 		key: "setupMobile",
 		value: function setupMobile() {
-			var _this5 = this;
+			var _this6 = this;
 
 			var inputType = this.config.enableTime ? this.config.noCalendar ? "time" : "datetime-local" : "date";
 
@@ -896,9 +912,9 @@ var Flatpickr = function () {
 			this.input.parentNode.appendChild(this.mobileInput);
 
 			this.mobileInput.addEventListener("change", function (e) {
-				_this5.setDate(e.target.value);
-				_this5.triggerEvent("Change");
-				_this5.triggerEvent("Close");
+				_this6.setDate(e.target.value);
+				_this6.triggerEvent("Change");
+				_this6.triggerEvent("Close");
 			});
 		}
 	}, {
@@ -1131,8 +1147,8 @@ Flatpickr.defaultConfig = {
 	static: false,
 
 	// code for previous/next icons. this is where you put your custom icon code e.g. fontawesome
-	prevArrow: '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 17 17"><g></g><path d="M5.207 8.471l7.146 7.147-0.707 0.707-7.853-7.854 7.854-7.853 0.707 0.707-7.147 7.146z" /></svg>',
-	nextArrow: '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 17 17"><g></g><path d="M13.207 8.472l-7.854 7.854-0.707-0.707 7.146-7.146-7.146-7.148 0.707-0.707 7.854 7.854z" fill="#000000" /></svg>',
+	prevArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M5.207 8.471l7.146 7.147-0.707 0.707-7.853-7.854 7.854-7.853 0.707 0.707-7.147 7.146z' /></svg>",
+	nextArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M13.207 8.472l-7.854 7.854-0.707-0.707 7.146-7.146-7.146-7.148 0.707-0.707 7.854 7.854z' /></svg>",
 
 	// enables seconds in the time picker
 	enableSeconds: false,
@@ -1192,6 +1208,10 @@ HTMLCollection.prototype.map = NodeList.prototype.map = Array.prototype.map;
 HTMLCollection.prototype.flatpickr = NodeList.prototype.flatpickr = function (config) {
 	var instances = [];
 	for (var i = 0; i < this.length; i++) {
+		if (this[i]._flatpickr) {
+			this[i]._flatpickr.destroy();
+		}
+
 		try {
 			this[i]._flatpickr = new Flatpickr(this[i], config || {});
 			instances.push(this[i]._flatpickr);
@@ -1199,6 +1219,7 @@ HTMLCollection.prototype.flatpickr = NodeList.prototype.flatpickr = function (co
 			console.warn(e);
 		}
 	}
+
 	return instances;
 };
 
@@ -1215,10 +1236,15 @@ if (typeof jQuery !== "undefined") {
 HTMLElement.prototype.flatpickr = function () {
 	var config = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
+	if (this._flatpickr) {
+		this._flatpickr.destroy();
+	}
+
 	try {
 		return this._flatpickr = new Flatpickr(this, config);
 	} catch (e) {
 		console.warn(e);
+		return null;
 	}
 };
 
@@ -1246,8 +1272,8 @@ Date.prototype.fp_getWeek = function () {
 	return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
 };
 
-if (typeof Object.assign != 'function') {
-	Object.assign = function assign(target, source) {
+if (typeof Object.assign !== "function") {
+	Object.assign = function assign(target) {
 		for (var index = 1, key, src; index < arguments.length; ++index) {
 			src = arguments[index];
 
@@ -1262,8 +1288,8 @@ if (typeof Object.assign != 'function') {
 	};
 }
 
-if (!("classList" in document.documentElement) && Object.defineProperty && typeof HTMLElement !== 'undefined') {
-	Object.defineProperty(HTMLElement.prototype, 'classList', {
+if (!("classList" in document.documentElement) && Object.defineProperty && typeof HTMLElement !== "undefined") {
+	Object.defineProperty(HTMLElement.prototype, "classList", {
 		get: function get() {
 			var self = this;
 			function update(fn) {
@@ -1298,7 +1324,7 @@ if (!("classList" in document.documentElement) && Object.defineProperty && typeo
 				}
 			};
 
-			Object.defineProperty(ret, 'length', {
+			Object.defineProperty(ret, "length", {
 				get: function get() {
 					return self.className.split(/\s+/).length;
 				}
