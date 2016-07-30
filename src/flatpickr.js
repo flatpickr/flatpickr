@@ -37,6 +37,7 @@ function Flatpickr(element, config) {
 		self.clear = clear;
 		self.close = close;
 		self.destroy = destroy;
+		self.formatDate = formatDate;
 		self.open = open;
 		self.parseDate = parseDate;
 		self.redraw = redraw;
