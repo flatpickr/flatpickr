@@ -2,7 +2,7 @@
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
-/*! flatpickr v2.0 */
+/*! flatpickr v2.0, @license MIT */
 function Flatpickr(element, config) {
 	var self = this;
 
@@ -38,6 +38,7 @@ function Flatpickr(element, config) {
 		self.clear = clear;
 		self.close = close;
 		self.destroy = destroy;
+		self.formatDate = formatDate;
 		self.open = open;
 		self.parseDate = parseDate;
 		self.redraw = redraw;
