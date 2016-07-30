@@ -170,19 +170,22 @@ select option {
 }
 
 input {
-    cursor: pointer;
     max-width: 320px;
     outline: none;
     border: 1px solid #ddd;
     background: #fbfbfb;
     border-radius: 3px;
-    color: rgba(45, 48, 60, 0.87);
+    color: rgba(0, 0, 0, 0.87);
     padding: 0 0 0 11px;
     height: 40px;
     width: 100%;
-    font-size: 14px;
     margin-right: 0;
+    margin-bottom: 0.5rem;
+}
 
+input.big {
+    height: 50px;
+    font-size: 1.3em;
 }
 
 .input-group input {

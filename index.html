@@ -722,6 +722,9 @@ Flatpickr.l10n.firstDayOfWeek = 1;
 		<div class="example" id=dateformat>
 		<h3>Date Format Characters</h3>
 
+		<input class="big" id="dateFormatComposer" placeholder="Enter symbols">
+		<span> → <span id="dateFormatOutput"></span></span>
+
 		<table class=table>
 			<thead>
 				<tr>
@@ -961,7 +964,6 @@ Flatpickr.l10n.firstDayOfWeek = 1;
 	Flatpickr.l10n.firstDayOfWeek = 1;
 
 	//Regular flatpickr
-
 	document.getElementById("flatpickr-tryme").flatpickr();
 	document.getElementsByClassName("calendar").flatpickr();
 
@@ -1004,6 +1006,8 @@ Flatpickr.l10n.firstDayOfWeek = 1;
 			}
 		]
 	});
+
+	// Event API
 	var events = document.getElementById("events");
 	document.getElementById("events-api-example").flatpickr({
 		minDate: "today",
@@ -1025,6 +1029,8 @@ Flatpickr.l10n.firstDayOfWeek = 1;
 			events.scrollTop = events.offsetTop;
 		}
 	});
+
+	// Check in/out example
 	var check_in = document.getElementById("check_in_date").flatpickr({
 		altInput: true,
 		altFormat: "\\C\\h\\e\\c\\k \\i\\n\\: l, F j Y",
@@ -1042,6 +1048,14 @@ Flatpickr.l10n.firstDayOfWeek = 1;
 	check_out.config.onChange = function(dateObj) {
 		check_in.set("maxDate", dateObj.fp_incr(-1));
 	}
+
+	// Date format
+	var fpInstance = new Flatpickr(document.createElement("input")),
+		formatOutput = document.getElementById("dateFormatOutput"),
+		now = new Date();
+	document.getElementById("dateFormatComposer").addEventListener("input", function(e){
+		formatOutput.textContent = fpInstance.formatDate(e.target.value, now);
+	});
 	</script>
 	<script async src="assets/prettify.js?skin=none" onload="prettyPrint()"></script>
 	<script async src="assets/table-of-contents.js"></script>
