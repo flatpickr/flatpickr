@@ -410,7 +410,7 @@ function Flatpickr(element, config) {
 				formattedDate += c;
 			}
 		}
-
+		console.log(dateObj, frmt, formattedDate);
 		return formattedDate;
 	}
 
@@ -549,6 +549,7 @@ function Flatpickr(element, config) {
 			return self.config[k] = self.element.dataset[k];
 		});
 		if (!self.config.dateFormat && self.config.enableTime) {
+			self.config.dateFormat = Flatpickr.defaultConfig.dateFormat;
 			if (self.config.noCalendar) {
 				// time picker
 				self.config.dateFormat = "H:i";
@@ -1147,6 +1148,12 @@ Flatpickr.l10n = {
 	weekAbbreviation: "Wk",
 	scrollTitle: "Scroll to increment",
 	toggleTitle: "Click to toggle"
+};
+
+Flatpickr.prototype = {
+	hello: function hello() {
+		alert("hello");
+	}
 };
 
 function _flatpickr(nodeList, config) {
