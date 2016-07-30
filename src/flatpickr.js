@@ -433,21 +433,11 @@ function Flatpickr(element, config) {
 	}
 
 	function formatDate(frmt, dateObj) {
-		let formattedDate = "";
-		const formatPieces = frmt.split("");
-
-		for (let i = 0; i < formatPieces.length; i++) {
-			const c = formatPieces[i];
-			if (self.formats[c] && formatPieces[i - 1] !== "\\") {
-				formattedDate += self.formats[c](dateObj);
-			}
-
-			else if (c !== "\\") {
-				formattedDate += c;
-			}
-		}
-		console.log(dateObj, frmt, formattedDate);
-		return formattedDate;
+		const chars = frmt.split("");
+		return chars.map((c, i) => self.formats[c] && chars[i - 1] !== "\\"
+			? self.formats[c](dateObj)
+			: c !== "\\" ? c : ""
+		).join("");
 	}
 
 	function handleYearChange() {
@@ -1184,10 +1174,6 @@ Flatpickr.l10n = {
 	toggleTitle: "Click to toggle"
 };
 
-Flatpickr.prototype = {
-	hello: function(){ alert("hello"); }
-}
-
 function _flatpickr(nodeList, config) {
 	let instances = [];
 	for (let i = 0; i < nodeList.length; i++) {
@@ -1196,7 +1182,7 @@ function _flatpickr(nodeList, config) {
 		}
 
 		try {
-			nodeList[i]._flatpickr = new Flatpickr(nodeList[i], config||{});
+			nodeList[i]._flatpickr = new Flatpickr(nodeList[i], config || {});
 			instances.push(nodeList[i]._flatpickr);
 		}
 
@@ -1213,7 +1199,7 @@ HTMLCollection.prototype.flatpickr = NodeList.prototype.flatpickr = function (co
 };
 
 HTMLElement.prototype.flatpickr = function (config) {
-	return _flatpickr([this], config || {});
+	return _flatpickr([this], config);
 };
 
 if (typeof jQuery !== "undefined") {

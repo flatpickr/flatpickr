@@ -399,19 +399,10 @@ function Flatpickr(element, config) {
 	}
 
 	function formatDate(frmt, dateObj) {
-		var formattedDate = "";
-		var formatPieces = frmt.split("");
-
-		for (var i = 0; i < formatPieces.length; i++) {
-			var c = formatPieces[i];
-			if (self.formats[c] && formatPieces[i - 1] !== "\\") {
-				formattedDate += self.formats[c](dateObj);
-			} else if (c !== "\\") {
-				formattedDate += c;
-			}
-		}
-		console.log(dateObj, frmt, formattedDate);
-		return formattedDate;
+		var chars = frmt.split("");
+		return chars.map(function (c, i) {
+			return self.formats[c] && chars[i - 1] !== "\\" ? self.formats[c](dateObj) : c !== "\\" ? c : "";
+		}).join("");
 	}
 
 	function handleYearChange() {
@@ -1150,12 +1141,6 @@ Flatpickr.l10n = {
 	toggleTitle: "Click to toggle"
 };
 
-Flatpickr.prototype = {
-	hello: function hello() {
-		alert("hello");
-	}
-};
-
 function _flatpickr(nodeList, config) {
 	var instances = [];
 	for (var i = 0; i < nodeList.length; i++) {
@@ -1179,7 +1164,7 @@ HTMLCollection.prototype.flatpickr = NodeList.prototype.flatpickr = function (co
 };
 
 HTMLElement.prototype.flatpickr = function (config) {
-	return _flatpickr([this], config || {});
+	return _flatpickr([this], config);
 };
 
 if (typeof jQuery !== "undefined") {
