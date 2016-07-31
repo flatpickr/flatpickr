@@ -13,3 +13,5 @@ Flatpickr.l10n.months = {
 Flatpickr.l10n.ordinal = () => {
 	return ".";
 };
+
+Flatpickr.l10n.dayOfMonth = "";
