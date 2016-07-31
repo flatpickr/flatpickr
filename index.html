@@ -95,7 +95,7 @@
 
 		</div>
 
-		<div class="example">
+		<div class="example" id=syntax>
 
 			<h3>Syntax</h3>
 			<p>There are multiple ways to create a Flatpickr instance. In all cases, config is optional. The return value will be the Flatpickr instance, or an array of instances.</p>
@@ -874,7 +874,9 @@ Flatpickr.l10n.firstDayOfWeek = 1;
 
 		<h3 id="locale">Localization</h3>
 
-		<p>flatpickr supports localizing text in a similar way to modifying the methods (above).</p>
+		<p>Flatpickr has been translated to <a href="https://github.com/chmln/flatpickr/tree/gh-pages/src" target="_blank">over 25 languages</a>.</p>
+
+		<p>Localization involves simply overriding objects below, contained in <code>Flatpickr.l10n</code>.</p>
 
 		<table class=table>
 			<thead>
@@ -929,8 +931,8 @@ Flatpickr.l10n.firstDayOfWeek = 1;
 		<p><strong>Example:</strong> weekdays in French:
 
 			<pre class='prettyprint lang-js'><code>&lt;script&gt;
-	flatpickr.init.prototype.l10n.weekdays.longhand = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
-	new Flatpickr('#yourId');
+	Flatpickr.l10n.weekdays.longhand = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
+	document.getElementById('yourId').flatpickr();
 &lt;/script&gt;
 </code></pre>
 
@@ -1053,7 +1055,8 @@ Flatpickr.l10n.firstDayOfWeek = 1;
 	var fpInstance = new Flatpickr(document.createElement("input")),
 		formatOutput = document.getElementById("dateFormatOutput"),
 		now = new Date();
-	document.getElementById("dateFormatComposer").addEventListener("input", function(e){
+
+	document.getElementById("dateFormatComposer").addEventListener("keyup", function(e){
 		formatOutput.textContent = fpInstance.formatDate(e.target.value, now);
 	});
 	</script>

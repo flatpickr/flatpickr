@@ -161,10 +161,11 @@ select {
 }
 
 select:focus {
-    outline: 0
+    border: 1px solid #66afe9;
+    outline: 0;
 }
 
-select option {
+option {
     font-family: "Roboto";
     text-transform: capitalize;
 }
@@ -278,11 +279,10 @@ code {
 
 pre
 {
-    font-weight: 700;
     word-break: break-all;
     white-space: pre-wrap;
     margin: 0.75rem 0;
-    font-family: Consolas,Menlo,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace,sans-serif;
+    font-family: Menlo,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace,sans-serif;
 }
 
 
