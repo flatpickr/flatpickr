@@ -499,7 +499,6 @@ function Flatpickr(element, config) {
 
 	function open(e) {
 		if (self.isMobile) {
-			e.preventDefault();
 			e.target.blur();
 
 			setTimeout(function () {
@@ -510,23 +509,22 @@ function Flatpickr(element, config) {
 			return;
 		} else if (self.isOpen || (self.altInput || self.input).disabled || self.config.inline) {
 			return;
-		} else if (!self.config.static) {
-			positionCalendar();
 		}
-
-		e.stopPropagation();
-
-		self.isOpen = true;
 
 		self.calendarContainer.classList.add("open");
 
+		if (!self.config.static) {
+			positionCalendar();
+		}
+
+		self.isOpen = true;
+
 		if (!self.config.allowInput) {
-			(self.altInput || self.input).blur();
+			e.target.blur();
 			(self.config.noCalendar ? self.timeContainer : self.days).focus();
 		}
 
 		(self.altInput || self.input).classList.add("active");
-
 		triggerEvent("Open");
 	}
 
@@ -820,9 +818,7 @@ function Flatpickr(element, config) {
 
 	function setupInputs() {
 		self.input = self.config.wrap ? self.element.querySelector("[data-input]") : self.element;
-		if (!self.config.allowInput) {
-			self.input.setAttribute("readonly", "readonly");
-		}
+
 		self.input.classList.add("flatpickr-input");
 		if (self.config.altInput) {
 			// replicate self.element
@@ -832,6 +828,10 @@ function Flatpickr(element, config) {
 
 			self.input.type = "hidden";
 			self.input.parentNode.insertBefore(self.altInput, self.input.nextSibling);
+		}
+
+		if (!self.config.allowInput) {
+			(self.altInput || self.input).setAttribute("readonly", "readonly");
 		}
 	}
 
