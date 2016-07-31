@@ -15,3 +15,4 @@ Flatpickr.l10n.ordinal = () => {
 };
 
 Flatpickr.l10n.firstDayOfWeek = 1;
+Flatpickr.l10n.dayOfMonth = "de";

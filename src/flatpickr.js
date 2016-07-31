@@ -819,7 +819,10 @@ function Flatpickr(element, config) {
 			w: date => date.getDay(),
 
 			// last two digits of year e.g. 16 for 2016
-			y: date => String(self.formats.Y(date)).substring(2)
+			y: date => String(self.formats.Y(date)).substring(2),
+
+			// Get day of month e.g. of (1st of November)
+			z: () => self.l10n.dayOfMonth
 		};
 	}
 
@@ -1158,6 +1161,7 @@ Flatpickr.l10n = {
 		]
 	},
 	daysInMonth: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
+	dayOfMonth: "of",
 	firstDayOfWeek: 0,
 	ordinal: (nth) => {
 		const s = nth % 100;
