@@ -719,7 +719,7 @@ function Flatpickr(element, config) {
 
 			// day (1-30) with ordinal suffix e.g. 1st, 2nd
 			J: function J(date) {
-				return self.formats.j(date) + self.l10n.ordinal(self.formats.j());
+				return date.getDate() + self.l10n.ordinal(date.getDate());
 			},
 
 			// AM/PM
@@ -729,7 +729,7 @@ function Flatpickr(element, config) {
 
 			// shorthand month e.g. Jan, Sep, Oct, etc
 			M: function M(date) {
-				return self.utils.monthToStr(self.formats.n(date) - 1, true);
+				return self.utils.monthToStr(date.getMonth(), true);
 			},
 
 			// seconds 00-59

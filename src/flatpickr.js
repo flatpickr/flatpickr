@@ -774,13 +774,13 @@ function Flatpickr(element, config) {
 			H: date => pad(date.getHours()),
 
 			// day (1-30) with ordinal suffix e.g. 1st, 2nd
-			J: date => self.formats.j(date) + self.l10n.ordinal(self.formats.j()),
+			J: date => date.getDate() + self.l10n.ordinal(date.getDate()),
 
 			// AM/PM
 			K: date => date.getHours() > 11 ? "PM" : "AM",
 
 			// shorthand month e.g. Jan, Sep, Oct, etc
-			M: date => self.utils.monthToStr(self.formats.n(date) - 1, true),
+			M: date => self.utils.monthToStr(date.getMonth(), true),
 
 			// seconds 00-59
 			S: date => pad(date.getSeconds()),
