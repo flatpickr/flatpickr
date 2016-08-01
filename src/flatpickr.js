@@ -1201,13 +1201,11 @@ HTMLElement.prototype.flatpickr = function (config) {
 };
 
 if (typeof jQuery !== "undefined") {
-	jQuery.fn.extend({
-		flatpickr: function (config) {
-			return this.each(function () {
-				this._flatpickr = new Flatpickr(this, config);
-			});
-		},
-	});
+	$.fn.flatpickr = function(config) {
+		return this.each(function(){
+			this._flatpickr = new Flatpickr(this, config);
+		});
+	}
 }
 
 Date.prototype.fp_incr = function (days) {
