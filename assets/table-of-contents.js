@@ -44,7 +44,7 @@ function init() {
 	table_of_contents = list.querySelectorAll("li");
 
 	onScroll();
-	window.addEventListener("mousewheel", onScroll, {passive: true});
+	window.addEventListener("wheel", onScroll, {passive: true});
 	list.addEventListener("click", function(e){
 		var currentActive = document.getElementsByClassName("current")[0];
 		if (currentActive) {
