@@ -878,6 +878,17 @@ Flatpickr.l10n.firstDayOfWeek = 1;
 
 		<p>Localization involves simply overriding objects below, contained in <code>Flatpickr.l10n</code>.</p>
 
+		<p>
+			<strong>Locale:</strong>
+			<select id=locales>
+				<option value="">English</option>
+			</select>
+		</p>
+
+		<p>
+			<input id=locale_calendar type="text" class="flatpickr" data-inline="true" data-min-date="today">
+		</p>
+
 		<table class=table>
 			<thead>
 				<tr>
@@ -954,11 +965,13 @@ Flatpickr.l10n.firstDayOfWeek = 1;
 			<select id=themes>
 				<option value="">Default</option>
 			</select>
+
 		</div>
 
 	</div>
 	</div>
 
+<!-- 	<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script> -->
 	<script src="dist/flatpickr.js"></script>
 	<script>
 
@@ -1063,6 +1076,8 @@ Flatpickr.l10n.firstDayOfWeek = 1;
 	<script async src="assets/prettify.js?skin=none" onload="prettyPrint()"></script>
 	<script async src="assets/table-of-contents.js"></script>
 	<script async src="assets/themer.js"></script>
+	<script async id=locale_script></script>
+	<script async src="assets/localizr.js"></script>
 </body>
 
 </html>
