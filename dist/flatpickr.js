@@ -21,6 +21,7 @@ function Flatpickr(element, config) {
 
 		setupHelperFunctions();
 
+		self.changeMonth = changeMonth;
 		self.clear = clear;
 		self.close = close;
 		self.destroy = destroy;
@@ -321,7 +322,9 @@ function Flatpickr(element, config) {
 	}
 
 	function buildWeekdays() {
-		self.weekdayContainer = createElement("div", "flatpickr-weekdays");
+		if (!self.weekdayContainer) {
+			self.weekdayContainer = createElement("div", "flatpickr-weekdays");
+		}
 		var firstDayOfWeek = self.l10n.firstDayOfWeek;
 		var weekdays = self.l10n.weekdays.shorthand.slice();
 
@@ -333,7 +336,7 @@ function Flatpickr(element, config) {
 			self.weekdayContainer.innerHTML = "<span>" + self.l10n.weekAbbreviation + "</span>";
 		}
 
-		self.weekdayContainer.innerHTML += "<span>" + weekdays.join("</span><span>") + "</span>";
+		self.weekdayContainer.innerHTML = "<span>" + weekdays.join("</span><span>") + "</span>";
 
 		return self.weekdayContainer;
 	}
@@ -387,6 +390,8 @@ function Flatpickr(element, config) {
 
 		document.removeEventListener("click", self.documentClick);
 		document.removeEventListener("blur", self.documentClick);
+
+		delete self.input._flatpickr;
 	}
 
 	function documentClick(e) {
@@ -622,7 +627,7 @@ function Flatpickr(element, config) {
 		if (self.config.noCalendar || self.isMobile) {
 			return;
 		}
-
+		buildWeekdays();
 		updateNavigationCurrentMonth();
 		buildDays();
 	}
