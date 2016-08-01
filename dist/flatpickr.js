@@ -21,6 +21,17 @@ function Flatpickr(element, config) {
 
 		setupHelperFunctions();
 
+		self.clear = clear;
+		self.close = close;
+		self.destroy = destroy;
+		self.formatDate = formatDate;
+		self.open = open;
+		self.parseDate = parseDate;
+		self.redraw = redraw;
+		self.set = set;
+		self.setDate = setDate;
+		self.toggle = toggle;
+
 		if (!self.isMobile) {
 			build();
 			bind();
@@ -34,17 +45,6 @@ function Flatpickr(element, config) {
 		}
 
 		triggerEvent("Ready");
-
-		self.clear = clear;
-		self.close = close;
-		self.destroy = destroy;
-		self.formatDate = formatDate;
-		self.open = open;
-		self.parseDate = parseDate;
-		self.redraw = redraw;
-		self.set = set;
-		self.setDate = setDate;
-		self.toggle = toggle;
 	}
 
 	function bind() {
@@ -520,7 +520,7 @@ function Flatpickr(element, config) {
 		self.isOpen = true;
 
 		if (!self.config.allowInput) {
-			e.target.blur();
+			(self.altInput || self.input).blur();
 			(self.config.noCalendar ? self.timeContainer : self.days).focus();
 		}
 
