@@ -1169,9 +1169,7 @@ HTMLElement.prototype.flatpickr = function (config) {
 
 if (typeof jQuery !== "undefined") {
 	$.fn.flatpickr = function (config) {
-		return this.each(function () {
-			this._flatpickr = new Flatpickr(this, config);
-		});
+		return _flatpickr(this, config);
 	};
 }
 
