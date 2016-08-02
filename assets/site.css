@@ -162,7 +162,6 @@ select {
 
 select:focus {
     border: 1px solid #66afe9;
-    outline: 0;
 }
 
 option {
