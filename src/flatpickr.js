@@ -48,12 +48,6 @@ function Flatpickr(element, config) {
 	}
 
 	function bind() {
-		document.addEventListener("keydown", onKeyDown);
-		window.addEventListener("resize", onResize);
-
-		document.addEventListener("click", documentClick);
-		document.addEventListener("blur", documentClick);
-
 		if (self.config.clickOpens) {
 			(self.altInput || self.input).addEventListener("focus", open);
 		}
@@ -73,6 +67,12 @@ function Flatpickr(element, config) {
 		if (self.isMobile) {
 			return;
 		}
+
+		document.addEventListener("keydown", onKeyDown);
+		window.addEventListener("resize", onResize);
+
+		document.addEventListener("click", documentClick);
+		document.addEventListener("blur", documentClick);
 
 		if (!self.config.noCalendar) {
 			self.prevMonthNav.addEventListener("click", () => changeMonth(-1));
