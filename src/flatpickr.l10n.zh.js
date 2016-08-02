@@ -1,4 +1,5 @@
 /* Mandarin locals for flatpickr */
+var Flatpickr = Flatpickr||{l10n: {}};
 
 Flatpickr.l10n.weekdays = {
 	shorthand: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],

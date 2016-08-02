@@ -1,4 +1,5 @@
 /* Japanese locals for flatpickr */
+var Flatpickr = Flatpickr||{l10n: {}};
 
 Flatpickr.l10n.weekdays = {
 	shorthand: ['日', '月', '火', '水', '木', '金', '土'],
@@ -9,3 +10,6 @@ Flatpickr.l10n.months = {
 	shorthand: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
 	longhand: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
 };
+if (typeof module !== "undefined") {
+	module.exports = Flatpickr.l10n;
+}

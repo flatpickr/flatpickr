@@ -1,4 +1,5 @@
 /* Norwegian locals for flatpickr */
+var Flatpickr = Flatpickr||{l10n: {}};
 
 Flatpickr.l10n.weekdays = {
 	shorthand: ['Søn', 'Man', 'Tir', 'Ons', 'Tor', 'Fre', 'Lør'],
@@ -13,3 +14,6 @@ Flatpickr.l10n.months = {
 Flatpickr.l10n.ordinal = () => {
 	return ".";
 };
+if (typeof module !== "undefined") {
+	module.exports = Flatpickr.l10n;
+}

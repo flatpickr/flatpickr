@@ -1,4 +1,5 @@
 /* Malaysian locals for flatpickr */
+var Flatpickr = Flatpickr||{l10n: {}};
 
 Flatpickr.l10n.weekdays = {
 	shorthand: ['Min', 'Isn', 'Sel', 'Rab', 'Kha', 'Jum', 'Sab'],
@@ -15,3 +16,6 @@ Flatpickr.l10n.firstDayOfWeek = 1;
 Flatpickr.l10n.ordinal = () => {
 	return "";
 };
+if (typeof module !== "undefined") {
+	module.exports = Flatpickr.l10n;
+}

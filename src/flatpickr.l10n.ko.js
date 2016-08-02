@@ -1,4 +1,5 @@
 /* Republic of Korea locals for flatpickr */
+var Flatpickr = Flatpickr||{l10n: {}};
 
 Flatpickr.l10n.weekdays = {
 	shorthand: ['일', '월', '화', '수', '목', '금', '토'],
@@ -13,3 +14,6 @@ Flatpickr.l10n.months = {
 Flatpickr.l10n.ordinal = () => {
     return "일";
 };
+if (typeof module !== "undefined") {
+	module.exports = Flatpickr.l10n;
+}

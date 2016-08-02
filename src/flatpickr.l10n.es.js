@@ -1,4 +1,5 @@
 /* Spanish locals for flatpickr */
+var Flatpickr = Flatpickr||{l10n: {}};
 
 Flatpickr.l10n.weekdays = {
 	shorthand: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
@@ -15,3 +16,6 @@ Flatpickr.l10n.ordinal = () => {
 };
 
 Flatpickr.l10n.firstDayOfWeek = 1;
+if (typeof module !== "undefined") {
+	module.exports = Flatpickr.l10n;
+}

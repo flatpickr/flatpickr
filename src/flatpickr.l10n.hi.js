@@ -1,4 +1,5 @@
 /* Hindi locals for flatpickr */
+var Flatpickr = Flatpickr||{l10n: {}};
 
 Flatpickr.l10n.weekdays = {
 	shorthand: ['रवि', 'सोम', 'मंगल', 'बुध', 'गुरु', 'शुक्र', 'शनि'],
@@ -9,3 +10,6 @@ Flatpickr.l10n.months = {
 	shorthand: ['जन', 'फर', 'मार्च', 'अप्रेल', 'मई', 'जून', 'जूलाई', 'अग', 'सित', 'अक्ट', 'नव', 'दि'],
 	longhand: ['जनवरी ','फरवरी','मार्च','अप्रेल','मई','जून', 'जूलाई','अगस्त ','सितम्बर','अक्टूबर','नवम्बर','दिसम्बर']
 };
+if (typeof module !== "undefined") {
+	module.exports = Flatpickr.l10n;
+}
