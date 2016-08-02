@@ -10,7 +10,6 @@ function Flatpickr(element, config) {
 			.test(navigator.userAgent);
 
 		setupFormats();
-		setupLocale();
 
 		parseConfig();
 		setupInputs();
@@ -159,7 +158,7 @@ function Flatpickr(element, config) {
 
 		const firstOfMonth = (
 				new Date(self.currentYear, self.currentMonth, 1).getDay() -
-				self.l10n.firstDayOfWeek + 7
+				Flatpickr.l10n.firstDayOfWeek + 7
 			) % 7,
 			daysInMonth = self.utils.getDaysinMonth(),
 			prevMonthDays = self.utils.getDaysinMonth((self.currentMonth - 1 + 12) % 12),
@@ -269,7 +268,7 @@ function Flatpickr(element, config) {
 
 		self.currentYearElement = createElement("input", "cur_year");
 		self.currentYearElement.type = "number";
-		self.currentYearElement.title = self.l10n.scrollTitle;
+		self.currentYearElement.title = Flatpickr.l10n.scrollTitle;
 
 		self.nextMonthNav = createElement("span", "flatpickr-next-month");
 		self.nextMonthNav.innerHTML = self.config.nextArrow;
@@ -314,7 +313,7 @@ function Flatpickr(element, config) {
 		self.minuteElement.min = -self.minuteElement.step;
 		self.minuteElement.max = 60;
 
-		self.hourElement.title = self.minuteElement.title = self.l10n.scrollTitle;
+		self.hourElement.title = self.minuteElement.title = Flatpickr.l10n.scrollTitle;
 
 		self.timeContainer.appendChild(self.hourElement);
 		self.timeContainer.appendChild(separator);
@@ -344,7 +343,7 @@ function Flatpickr(element, config) {
 				"flatpickr-am-pm",
 				["AM", "PM"][(self.hourElement.value > 11) | 0]
 			);
-			self.amPM.title = self.l10n.toggleTitle;
+			self.amPM.title = Flatpickr.l10n.toggleTitle;
 			self.amPM.tabIndex = 0;
 			self.timeContainer.appendChild(self.amPM);
 		}
@@ -356,8 +355,8 @@ function Flatpickr(element, config) {
 		if (!self.weekdayContainer) {
 			self.weekdayContainer = createElement("div", "flatpickr-weekdays");
 		}
-		const firstDayOfWeek = self.l10n.firstDayOfWeek;
-		let	weekdays = self.l10n.weekdays.shorthand.slice();
+		const firstDayOfWeek = Flatpickr.l10n.firstDayOfWeek;
+		let	weekdays = Flatpickr.l10n.weekdays.shorthand.slice();
 
 		if (firstDayOfWeek > 0 && firstDayOfWeek < weekdays.length) {
 			weekdays = [].concat(
@@ -367,7 +366,7 @@ function Flatpickr(element, config) {
 		}
 
 		if (self.config.weekNumbers) {
-			self.weekdayContainer.innerHTML = `<span>${self.l10n.weekAbbreviation}</span>`;
+			self.weekdayContainer.innerHTML = `<span>${Flatpickr.l10n.weekAbbreviation}</span>`;
 		}
 
 		self.weekdayContainer.innerHTML = `<span>${weekdays.join("</span><span>")}</span>`;
@@ -761,14 +760,10 @@ function Flatpickr(element, config) {
 		self.currentMonth = initialDate.getMonth();
 	}
 
-	function setupLocale() {
-		self.l10n = Object.create(Flatpickr.l10n);
-	}
-
 	function setupFormats() {
 		self.formats = {
 			// weekday name, short, e.g. Thu
-			D: date => self.l10n.weekdays.shorthand[self.formats.w(date)],
+			D: date => Flatpickr.l10n.weekdays.shorthand[self.formats.w(date)],
 
 			// full month name e.g. January
 			F: date => self.utils.monthToStr(self.formats.n(date) - 1, false),
@@ -777,7 +772,7 @@ function Flatpickr(element, config) {
 			H: date => pad(date.getHours()),
 
 			// day (1-30) with ordinal suffix e.g. 1st, 2nd
-			J: date => date.getDate() + self.l10n.ordinal(date.getDate()),
+			J: date => date.getDate() + Flatpickr.l10n.ordinal(date.getDate()),
 
 			// AM/PM
 			K: date => date.getHours() > 11 ? "PM" : "AM",
@@ -807,7 +802,7 @@ function Flatpickr(element, config) {
 			j: date => date.getDate(),
 
 			// weekday name, full, e.g. Thursday
-			l: date => self.l10n.weekdays.longhand[self.formats.w(date)],
+			l: date => Flatpickr.l10n.weekdays.longhand[self.formats.w(date)],
 
 			// padded month number (01-12)
 			m: date => pad(self.formats.n(date)),
@@ -832,11 +827,11 @@ function Flatpickr(element, config) {
 				if (month === 1 && ((yr % 4 === 0) && (yr % 100 !== 0)) || (yr % 400 === 0)) {
 					return 29;
 				}
-				return self.l10n.daysInMonth[month];
+				return Flatpickr.l10n.daysInMonth[month];
 			},
 
 			monthToStr: (monthNumber, short = self.config.shorthandCurrentMonth) =>
-				self.l10n.months[(`${short ? "short" : "long"}hand`)][monthNumber],
+				Flatpickr.l10n.months[(`${short ? "short" : "long"}hand`)][monthNumber],
 		};
 	}
 
@@ -1177,6 +1172,10 @@ Flatpickr.l10n = {
 	weekAbbreviation: "Wk",
 	scrollTitle: "Scroll to increment",
 	toggleTitle: "Click to toggle"
+};
+
+Flatpickr.localize = function (l10n) {
+	Object.keys(l10n).forEach(k => Flatpickr.l10n[k] = l10n[k]);
 };
 
 function _flatpickr(nodeList, config) {
