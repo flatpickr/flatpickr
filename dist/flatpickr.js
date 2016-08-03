@@ -48,10 +48,6 @@ function Flatpickr(element, config) {
 	}
 
 	function bind() {
-		if (self.config.clickOpens) {
-			(self.altInput || self.input).addEventListener("focus", open);
-		}
-
 		if (self.config.wrap) {
 			["open", "close", "toggle", "clear"].forEach(function (el) {
 				try {
@@ -71,6 +67,10 @@ function Flatpickr(element, config) {
 
 		document.addEventListener("click", documentClick);
 		document.addEventListener("blur", documentClick);
+
+		if (self.config.clickOpens) {
+			(self.altInput || self.input).addEventListener("focus", open);
+		}
 
 		if (!self.config.noCalendar) {
 			self.prevMonthNav.addEventListener("click", function () {
@@ -503,6 +503,7 @@ function Flatpickr(element, config) {
 
 	function open(e) {
 		if (self.isMobile) {
+			e.preventDefault();
 			e.target.blur();
 
 			setTimeout(function () {
@@ -838,7 +839,7 @@ function Flatpickr(element, config) {
 	function setupMobile() {
 		var inputType = self.config.enableTime ? self.config.noCalendar ? "time" : "datetime-local" : "date";
 
-		self.mobileInput = createElement("input", "flatpickr-mobileInput");
+		self.mobileInput = createElement("input", "flatpickr-input");
 		self.mobileInput.type = inputType;
 
 		self.mobileInput.tabIndex = -1;
@@ -846,7 +847,8 @@ function Flatpickr(element, config) {
 
 		if (self.selectedDateObj) {
 			var formatStr = inputType === "datetime-local" ? "Y-m-d\\TH:i:S" : inputType === "date" ? "Y-m-d" : "H:i:S";
-			self.mobileInput.default = formatDate(formatStr, self.selectedDateObj);
+			var mobileFormattedDate = formatDate(formatStr, self.selectedDateObj);
+			self.mobileInput.defaultValue = self.mobileInput.value = mobileFormattedDate;
 		}
 
 		if (self.config.minDate) {
@@ -857,7 +859,16 @@ function Flatpickr(element, config) {
 			self.mobileInput.max = formatDate("Y-m-d", self.config.maxDate);
 		}
 
-		self.input.parentNode.appendChild(self.mobileInput);
+		self.input.type = "hidden";
+		if (self.config.altInput) {
+			self.altInput.type = "hidden";
+		}
+
+		try {
+			self.input.parentNode.insertBefore(self.mobileInput, self.input.nextSibling);
+		} catch (e) {
+			//
+		}
 
 		self.mobileInput.addEventListener("change", function (e) {
 			self.setDate(e.target.value);
