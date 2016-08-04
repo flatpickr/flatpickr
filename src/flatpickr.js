@@ -369,7 +369,7 @@ function Flatpickr(element, config) {
 			self.weekdayContainer.innerHTML = `<span>${Flatpickr.l10n.weekAbbreviation}</span>`;
 		}
 
-		self.weekdayContainer.innerHTML = `<span>${weekdays.join("</span><span>")}</span>`;
+		self.weekdayContainer.innerHTML += `<span>${weekdays.join("</span><span>")}</span>`;
 
 		return self.weekdayContainer;
 	}
@@ -841,7 +841,7 @@ function Flatpickr(element, config) {
 		self.input.classList.add("flatpickr-input");
 		if (self.config.altInput) {
 			// replicate self.element
-			self.altInput = createElement(self.input.nodeName, self.config.altInputClass);
+			self.altInput = createElement(self.input.nodeName, "flatpickr-input " + self.config.altInputClass);
 			self.altInput.placeholder = self.input.placeholder;
 			self.altInput.type = "text";
 
