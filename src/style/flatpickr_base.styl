@@ -1,5 +1,3 @@
-$width = 256px
-
 .flatpickr-input
 	cursor pointer
 	z-index 1
@@ -23,7 +21,10 @@ $width = 256px
 	font-size 90%
 	border-radius 3px
 	position absolute
-	width $width
+	max-width 15.6rem
+
+	&.hasWeeks
+		max-width 17.6rem
 
 	&.open, &.inline
 		opacity 1
@@ -34,10 +35,8 @@ $width = 256px
 		margin-top 2px
 		position static
 
-	&.hasWeeks
-		width $width + 32px
-		.flatpickr-weekdays span
-			width 12.5%
+	&.hasWeeks .flatpickr-weekdays span
+		width 12.5%
 
 	&:before, &:after
 		position absolute
@@ -150,7 +149,7 @@ $width = 256px
 .flatpickr-weekdays
 	font-size 90%
 	background $weekdays_background
-	padding 0 0 2px 0
+	padding 1px 0
 	text-align center
 
 	span
@@ -164,12 +163,13 @@ $width = 256px
 		font-weight bold
 
 .flatpickr-weeks
-	width 32px
+	width 2rem
 	float left
 
 .flatpickr-days
 	padding-top 1px
 	outline 0
+	overflow auto
 
 	if $border-calendar-only is defined
 		border 1px solid $calendar_border_color
@@ -184,12 +184,12 @@ $width = 256px
 		box-sizing border-box
 		color $day_text_color
 		cursor pointer
-		display inline-block
+		float left
 		font-weight 300
-		width floor(($width/7 - 2),0)
-		height (@width)
-		line-height (@width - 1px)
-		margin 0 1px 1px 1px
+		width 2.2rem
+		height 2.2rem
+		line-height 2.2rem
+		margin 0
 		text-align center
 
 		&.disabled, &.disabled:hover, &.prevMonthDay, &.nextMonthDay
@@ -201,6 +201,7 @@ $width = 256px
 			border-color transparent
 			cursor default
 
+.flatpickr-days span
 		&, &.prevMonthDay, &.nextMonthDay
 			&:hover, &:focus
 				cursor pointer
@@ -229,6 +230,8 @@ $width = 256px
 
 			border-color $selected_day_background
 
+		&:nth-child(7n+1)
+			clear left
 
 
 .flatpickr-time
