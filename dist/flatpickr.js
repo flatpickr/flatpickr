@@ -25,6 +25,7 @@ function Flatpickr(element, config) {
 		self.close = close;
 		self.destroy = destroy;
 		self.formatDate = formatDate;
+		self.jumpToDate = jumpToDate;
 		self.open = open;
 		self.parseDate = parseDate;
 		self.redraw = redraw;
@@ -111,7 +112,7 @@ function Flatpickr(element, config) {
 		}
 	}
 
-	function bringIntoView(jumpDate) {
+	function jumpToDate(jumpDate) {
 		if (jumpDate) {
 			jumpDate = parseDate(jumpDate);
 		} else {
@@ -363,7 +364,7 @@ function Flatpickr(element, config) {
 		self.selectedDateObj = null;
 
 		triggerEvent("Change");
-		bringIntoView(self.now);
+		jumpToDate(self.now);
 	}
 
 	function close() {
@@ -657,14 +658,14 @@ function Flatpickr(element, config) {
 
 	function set(option, value) {
 		self.config[option] = value;
-		bringIntoView();
+		jumpToDate();
 	}
 
 	function setDate(date, triggerChange) {
 		date = parseDate(date);
 		if (date instanceof Date && date.getTime()) {
 			self.selectedDateObj = date;
-			bringIntoView(self.selectedDateObj);
+			jumpToDate(self.selectedDateObj);
 			updateValue();
 
 			if (triggerChange) {
