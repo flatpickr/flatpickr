@@ -64,7 +64,7 @@ function Flatpickr(element, config) {
 		}
 
 		document.addEventListener("keydown", onKeyDown);
-		window.addEventListener("resize", onResize);
+		window.addEventListener("resize", debounce(onResize, 300));
 
 		document.addEventListener("click", documentClick);
 		document.addEventListener("blur", documentClick);
@@ -418,11 +418,11 @@ function Flatpickr(element, config) {
 			self.altInput.parentNode.removeChild(self.altInput);
 		}
 
-		document.removeEventListener("keydown", self.onKeyDown);
-		window.removeEventListener("resize", self.onResize);
+		document.removeEventListener("keydown", onKeyDown);
+		window.removeEventListener("resize", onResize);
 
-		document.removeEventListener("click", self.documentClick);
-		document.removeEventListener("blur", self.documentClick);
+		document.removeEventListener("click", documentClick);
+		document.removeEventListener("blur", documentClick);
 
 		delete self.input._flatpickr;
 	}
@@ -541,11 +541,10 @@ function Flatpickr(element, config) {
 	}
 
 	function onResize() {
-		return debounce(() => {
-			if (self.isOpen && !self.config.inline && !self.config.static) {
-				positionCalendar();
-			}
-		}, 300);
+		if (self.isOpen && !self.config.inline && !self.config.static) {
+			positionCalendar();
+		}
+
 	}
 
 	function open(e) {
