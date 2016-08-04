@@ -884,7 +884,7 @@ function Flatpickr(element, config) {
 
 	function triggerEvent(event) {
 		if (self.config["on" + event]) {
-			self.config["on" + event](self.selectedDateObj, self.input.value, this);
+			self.config["on" + event](self.selectedDateObj, self.input.value, self);
 		}
 	}
 
