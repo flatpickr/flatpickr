@@ -331,9 +331,7 @@ function Flatpickr(element, config) {
 			weekdays = [].concat(weekdays.splice(firstDayOfWeek, weekdays.length), weekdays.splice(0, firstDayOfWeek));
 		}
 
-		if (self.config.weekNumbers) {
-			self.weekdayContainer.innerHTML = "<span>" + Flatpickr.l10n.weekAbbreviation + "</span>";
-		}
+		self.weekdayContainer.innerHTML = self.config.weekNumbers ? "<span>" + Flatpickr.l10n.weekAbbreviation + "</span>" : "";
 
 		self.weekdayContainer.innerHTML += "<span>" + weekdays.join("</span><span>") + "</span>";
 
