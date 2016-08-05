@@ -21,22 +21,23 @@
 	font-size 90%
 	border-radius 3px
 	position absolute
-	max-width 15.6rem
+	min-width 200px
 
-	&.hasWeeks
-		max-width 17.6rem
-
-	&.open, &.inline
+	&.open
 		opacity 1
 		z-index 99999
-		display block
+		display inline-block
 
 	&.inline
+		max-width 15.6rem
+		display block
 		margin-top 2px
 		position static
 
-	&.hasWeeks .flatpickr-weekdays span
-		width 12.5%
+	&.hasWeeks
+		max-width 17.6rem
+		.flatpickr-weekdays span
+			width 12.5%
 
 	&:before, &:after
 		position absolute
