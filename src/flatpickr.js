@@ -591,8 +591,8 @@ function Flatpickr(element, config) {
 		if (!self.config.dateFormat && self.config.enableTime) {
 			self.config.dateFormat = Flatpickr.defaultConfig.dateFormat;
 			if (self.config.noCalendar) { // time picker
-				self.config.dateFormat = "H:i";
-				self.config.altFormat = "h:i K";
+				self.config.dateFormat = "H:i" + (self.config.enableSeconds ? ":S" : "");
+				self.config.altFormat = "h:i" + (self.config.enableSeconds ? ":S K" : " K");
 			}
 			else {
 				self.config.dateFormat += " H:i" + (self.config.enableSeconds ? ":S" : "");
@@ -909,8 +909,8 @@ function Flatpickr(element, config) {
 	}
 
 	function triggerEvent(event) {
-		if (self.config[`on${event}`]) {
-			self.config[`on${event}`](self.selectedDateObj, self.input.value, self);
+		if (self.config["on" + event]) {
+			self.config["on" + event](self.selectedDateObj, self.input.value, self);
 		}
 	}
 
@@ -1218,7 +1218,7 @@ HTMLElement.prototype.flatpickr = function (config) {
 };
 
 if (typeof jQuery !== "undefined") {
-	$.fn.flatpickr = function (config) {
+	jQuery.fn.flatpickr = function (config) {
 		return _flatpickr(this, config);
 	};
 }

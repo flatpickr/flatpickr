@@ -543,8 +543,8 @@ function Flatpickr(element, config) {
 			self.config.dateFormat = Flatpickr.defaultConfig.dateFormat;
 			if (self.config.noCalendar) {
 				// time picker
-				self.config.dateFormat = "H:i";
-				self.config.altFormat = "h:i K";
+				self.config.dateFormat = "H:i" + (self.config.enableSeconds ? ":S" : "");
+				self.config.altFormat = "h:i" + (self.config.enableSeconds ? ":S K" : " K");
 			} else {
 				self.config.dateFormat += " H:i" + (self.config.enableSeconds ? ":S" : "");
 				self.config.altFormat = "h:i" + (self.config.enableSeconds ? ":S" : "") + " K";
@@ -1182,7 +1182,7 @@ HTMLElement.prototype.flatpickr = function (config) {
 };
 
 if (typeof jQuery !== "undefined") {
-	$.fn.flatpickr = function (config) {
+	jQuery.fn.flatpickr = function (config) {
 		return _flatpickr(this, config);
 	};
 }
