@@ -2,17 +2,125 @@
 <html lang="en">
 
 <head>
-
 	<title>flatpickr - lightweight datetimepicker &amp; calendar</title>
 
 	<meta charset="utf-8">
 	<meta http-equiv="x-ua-compatible" content="ie=edge">
 
-	<link rel="stylesheet" type="text/css" href="assets/site.css">
-	<link rel="stylesheet" id=cal_style type="text/css" href="dist/flatpickr.min.css">
-
 	<link rel="icon" type="image/png" href="favicon.png">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=yes">
+
+
+	<script async>
+	function fp_ready(){
+	// setting custom defaults
+	Flatpickr.l10n.firstDayOfWeek = 1;
+
+	//Regular flatpickr
+	document.getElementById("flatpickr-tryme").flatpickr();
+	document.getElementsByClassName("calendar").flatpickr();
+
+	var calendars = document.getElementsByClassName("flatpickr").flatpickr();
+
+	var real_selection = document.getElementById("realdate");
+	document.getElementById("alt")._flatpickr.config.onChange = function(obj, str){
+		real_selection.textContent = str;
+	}
+
+	document.getElementById("disableRange").flatpickr({
+		disable: [
+			{
+				from: "2016-08-16",
+				to: "2016-08-19"
+			},
+			"2016-08-24",
+			new Date().fp_incr(30) // 30 days from now
+		],
+		minDate: "today"
+	});
+
+	document.getElementById("disableOddDays").flatpickr({
+		disable: [
+			function(date) { return date.getDate()%2; } // disable odd days
+		]
+	});
+	document.getElementById("enableNextSeven").flatpickr({
+		enable: [
+			{
+				from: "today",
+				to: new Date().fp_incr(7)
+			}
+		]
+	});
+	document.getElementById("enableCustom").flatpickr({
+		enable: [
+			function(dateObj){
+				return dateObj.getDay() %6 !== 0 && dateObj.getFullYear() === 2016;
+			}
+		]
+	});
+
+	// Event API
+	var events = document.getElementById("events");
+	document.getElementById("events-api-example").flatpickr({
+		minDate: "today",
+		enableTime: true,
+		onChange: function(dateObj, dateStr) {
+			events.innerHTML += "<b>onChange</b> (<code>" + dateObj + "</code>, <code>" + dateStr + "</code> )<br>";
+			events.scrollTop = events.offsetTop;
+		},
+		onOpen: function(dateObj, dateStr){
+			events.innerHTML += "<b>onOpen</b> (<code>" + dateObj + "</code>, <code>" + dateStr + "</code> )<br>";
+			events.scrollTop = events.offsetTop;
+		},
+		onClose: function(dateObj, dateStr){
+			events.innerHTML += "<b>onClose</b> (<code>" + dateObj + "</code>, <code>" + dateStr + "</code> )<br>";
+			events.scrollTop = events.offsetTop;
+		},
+		onReady: function(dateObj, dateStr){
+			events.innerHTML += "<b>onReady</b> (<code>" + dateObj + "</code>, <code>" + dateStr + "</code> )<br>";
+			events.scrollTop = events.offsetTop;
+		}
+	});
+
+	// Check in/out example
+	var check_in = document.getElementById("check_in_date").flatpickr({
+		altInput: true,
+		altFormat: "\\C\\h\\e\\c\\k \\i\\n\\: l, F j Y",
+		minDate: new Date()
+	});
+	var check_out = document.getElementById("check_out_date").flatpickr({
+		altInput: true,
+		altFormat: "\\C\\h\\e\\c\\k \\o\\u\\t: l, F j Y",
+		minDate: new Date()
+	});
+
+	check_in.config.onChange = function(dateObj) {
+		check_out.set("minDate", dateObj.fp_incr(1));
+	};
+	check_out.config.onChange = function(dateObj) {
+		check_in.set("maxDate", dateObj.fp_incr(-1));
+	}
+
+	// Date format
+	var fpInstance = new Flatpickr(document.createElement("input")),
+		formatOutput = document.getElementById("dateFormatOutput"),
+		now = new Date();
+
+	document.getElementById("dateFormatComposer").addEventListener("keyup", function(e){
+		formatOutput.textContent = fpInstance.formatDate(e.target.value, now);
+	});
+	}
+	</script>
+	<script async src="dist/flatpickr.js" onload="fp_ready()"></script>
+	<script async src="assets/prettify.js?skin=none" onload="prettyPrint()"></script>
+	<script async src="assets/table-of-contents.js"></script>
+	<script async src="assets/themer.js"></script>
+	<script async id="locale_script"></script>
+	<script async src="assets/localizr.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="assets/site.css">
+	<link rel="stylesheet" id=cal_style type="text/css" href="dist/flatpickr.min.css">
 
 </head>
 
@@ -970,114 +1078,5 @@ Flatpickr.l10n.firstDayOfWeek = 1;
 
 	</div>
 	</div>
-
-<!-- 	<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script> -->
-	<script src="dist/flatpickr.js"></script>
-	<script>
-
-	// setting custom defaults
-	Flatpickr.l10n.firstDayOfWeek = 1;
-
-	//Regular flatpickr
-	document.getElementById("flatpickr-tryme").flatpickr();
-	document.getElementsByClassName("calendar").flatpickr();
-
-	var calendars = document.getElementsByClassName("flatpickr").flatpickr();
-
-	var real_selection = document.getElementById("realdate");
-	document.getElementById("alt")._flatpickr.config.onChange = function(obj, str){
-		real_selection.textContent = str;
-	}
-
-	document.getElementById("disableRange").flatpickr({
-		disable: [
-			{
-				from: "2016-08-16",
-				to: "2016-08-19"
-			},
-			"2016-08-24",
-			new Date().fp_incr(30) // 30 days from now
-		],
-		minDate: "today"
-	});
-
-	document.getElementById("disableOddDays").flatpickr({
-		disable: [
-			function(date) { return date.getDate()%2; } // disable odd days
-		]
-	});
-	document.getElementById("enableNextSeven").flatpickr({
-		enable: [
-			{
-				from: "today",
-				to: new Date().fp_incr(7)
-			}
-		]
-	});
-	document.getElementById("enableCustom").flatpickr({
-		enable: [
-			function(dateObj){
-				return dateObj.getDay() %6 !== 0 && dateObj.getFullYear() === 2016;
-			}
-		]
-	});
-
-	// Event API
-	var events = document.getElementById("events");
-	document.getElementById("events-api-example").flatpickr({
-		minDate: "today",
-		enableTime: true,
-		onChange: function(dateObj, dateStr) {
-			events.innerHTML += "<b>onChange</b> (<code>" + dateObj + "</code>, <code>" + dateStr + "</code> )<br>";
-			events.scrollTop = events.offsetTop;
-		},
-		onOpen: function(dateObj, dateStr){
-			events.innerHTML += "<b>onOpen</b> (<code>" + dateObj + "</code>, <code>" + dateStr + "</code> )<br>";
-			events.scrollTop = events.offsetTop;
-		},
-		onClose: function(dateObj, dateStr){
-			events.innerHTML += "<b>onClose</b> (<code>" + dateObj + "</code>, <code>" + dateStr + "</code> )<br>";
-			events.scrollTop = events.offsetTop;
-		},
-		onReady: function(dateObj, dateStr){
-			events.innerHTML += "<b>onReady</b> (<code>" + dateObj + "</code>, <code>" + dateStr + "</code> )<br>";
-			events.scrollTop = events.offsetTop;
-		}
-	});
-
-	// Check in/out example
-	var check_in = document.getElementById("check_in_date").flatpickr({
-		altInput: true,
-		altFormat: "\\C\\h\\e\\c\\k \\i\\n\\: l, F j Y",
-		minDate: new Date()
-	});
-	var check_out = document.getElementById("check_out_date").flatpickr({
-		altInput: true,
-		altFormat: "\\C\\h\\e\\c\\k \\o\\u\\t: l, F j Y",
-		minDate: new Date()
-	});
-
-	check_in.config.onChange = function(dateObj) {
-		check_out.set("minDate", dateObj.fp_incr(1));
-	};
-	check_out.config.onChange = function(dateObj) {
-		check_in.set("maxDate", dateObj.fp_incr(-1));
-	}
-
-	// Date format
-	var fpInstance = new Flatpickr(document.createElement("input")),
-		formatOutput = document.getElementById("dateFormatOutput"),
-		now = new Date();
-
-	document.getElementById("dateFormatComposer").addEventListener("keyup", function(e){
-		formatOutput.textContent = fpInstance.formatDate(e.target.value, now);
-	});
-	</script>
-	<script async src="assets/prettify.js?skin=none" onload="prettyPrint()"></script>
-	<script async src="assets/table-of-contents.js"></script>
-	<script async src="assets/themer.js"></script>
-	<script async id=locale_script></script>
-	<script async src="assets/localizr.js"></script>
-</body>
-
+	</body>
 </html>
