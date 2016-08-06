@@ -82,11 +82,14 @@ function Flatpickr(element, config) {
 			});
 
 			self.currentYearElement.addEventListener("wheel", yearScroll);
-			self.currentYearElement.addEventListener("click", function () {
+			self.currentYearElement.addEventListener("focus", function () {
 				return self.currentYearElement.select();
 			});
 
 			self.currentYearElement.addEventListener("input", function (event) {
+				if (event.target.value.length === 4) {
+					self.currentYearElement.blur();
+				}
 				self.currentYear = parseInt(event.target.value, 10) || self.currentYear;
 				self.redraw();
 			});
