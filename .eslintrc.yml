@@ -10,6 +10,10 @@
             - error
             - only-multiline
 
+        curly:
+            - error
+            - multi-or-nest
+
         func-names: off
 
         indent:
