@@ -147,6 +147,7 @@
 .flatpickr-weekdays
 	background $weekdays_background
 	text-align center
+	overflow hidden
 
 .flatpickr-days
 	padding-top 1px
@@ -155,6 +156,7 @@
 	if $border-calendar-only is defined
 		border 1px solid $calendar_border_color
 		border-top 0
+		border-bottom 0
 		border-radius 0 0 3px 3px
 
 .flatpickr-day
@@ -213,16 +215,20 @@
 
 span.flatpickr-weekday
 	cursor default
-	line-height 1
-	height auto
 	font-size 90%
-	margin 1px 0
-	if $weekdays_color is defined
-		color $weekdays_color
 
-	opacity 0.54
+	if $weekdays_color is defined
+		color alpha($weekdays_color, 0.54)
+	else
+		color alpha(black, 0.54)
+
+	height 24px
+	line-height 24px
+	margin 0
+	background $months_background
 	text-align center
-	display inline-block
+	display block
+	float left
 	width 14.28%
 	font-weight bold
 
@@ -230,18 +236,27 @@ span.flatpickr-weekday
 .flatpickr-weekwrapper
 	display inline-block
 	float left
-	padding-right 0.25rem
-	border-right 1px solid alpha($day_text_color, 0.05)
+
+	.flatpickr-weeks
+		padding 0 0.25rem
+		if $border-calendar-only is defined
+			border-left 1px solid $calendar_border_color
+			border-bottom 1px solid $calendar_border_color
+		border-right 1px solid $calendar_border_color
 
 	.flatpickr-weekday
+		float none
 		width 100%
 
 	span.flatpickr-day
 		display block
+		width 100%
 
 .flatpickr-rContainer
 	display inline-block
 	max-width 249px
+	if $border-calendar-only is defined
+		border-bottom 1px solid $calendar_border_color
 
 .flatpickr-time
 	overflow auto
@@ -288,10 +303,14 @@ span.flatpickr-weekday
 			width 25%
 			min-width 25%
 
-.hasTime .flatpickr-days
-	border-bottom 0
-	border-bottom-right-radius 0
-	border-bottom-left-radius 0
+.hasWeeks, .hasTime
+	.flatpickr-days
+		border-bottom 0
+		border-bottom-right-radius 0
+		border-bottom-left-radius 0
+
+.hasWeeks .flatpickr-days
+	border-left 0
 
 .flatpickr-rContainer + .flatpickr-time
 	if $border-calendar-only is defined
