@@ -589,7 +589,7 @@ function Flatpickr(element, config) {
 		e.preventDefault();
 		e.stopPropagation();
 
-		if (self.config.allowInput && e.target === (self.altInput || self.input) && e.which === 13) self.setDate((self.altInput || self.input).value);else if (e.target.classList.contains("flatpickr-day")) {
+		if (self.config.allowInput && e.target === (self.altInput || self.input) && e.which === 13) self.setDate((self.altInput || self.input).value);else if (e.target.classList.contains("flatpickr-day") && !e.target.classList.contains("disabled")) {
 			var isPrevMonthDay = e.target.classList.contains("prevMonthDay"),
 			    isNextMonthDay = e.target.classList.contains("nextMonthDay"),
 			    monthNum = self.currentMonth - isPrevMonthDay + isNextMonthDay;
