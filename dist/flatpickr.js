@@ -130,11 +130,13 @@ function Flatpickr(element, config) {
 
 		if (!self.config.noCalendar) {
 			fragment.appendChild(buildMonthNav());
-			fragment.appendChild(buildWeekdays());
 
 			if (self.config.weekNumbers) fragment.appendChild(buildWeeks());
 
-			fragment.appendChild(buildDays());
+			self.rContainer = createElement("div", "flatpickr-rContainer");
+			self.rContainer.appendChild(buildWeekdays());
+			self.rContainer.appendChild(buildDays());
+			fragment.appendChild(self.rContainer);
 		}
 
 		if (self.config.enableTime) fragment.appendChild(buildTime());
@@ -171,7 +173,7 @@ function Flatpickr(element, config) {
 		for (; dayNumber <= prevMonthDays; dayNumber++) {
 			var curDate = new Date(self.currentYear, self.currentMonth - 1, dayNumber, 0, 0, 0, 0, 0),
 			    dateIsEnabled = isEnabled(curDate),
-			    dayElem = createElement("span", dateIsEnabled ? "flatpickr-day prevMonthDay" : "disabled", dayNumber);
+			    dayElem = createElement("span", "flatpickr-day " + (dateIsEnabled ? "prevMonthDay" : "disabled"), dayNumber);
 
 			if (dateIsEnabled) dayElem.tabIndex = 0;
 
@@ -183,12 +185,12 @@ function Flatpickr(element, config) {
 			currentDate = new Date(self.currentYear, self.currentMonth, dayNumber, 0, 0, 0, 0, 0);
 
 			if (self.config.weekNumbers && dayNumber % 7 === 1) {
-				self.weekNumbers.insertAdjacentHTML("beforeend", "<span class='disabled flatpickr-day'>" + currentDate.fp_getWeek() + "</span>");
+				self.weekNumbers.insertAdjacentHTML("beforeend", "<span class='disabled flatpickr-day'>" + self.getWeek(currentDate) + "</span>");
 			}
 
 			dateIsDisabled = !isEnabled(currentDate);
 
-			var dayElement = createElement("span", dateIsDisabled ? "disabled" : "flatpickr-day", dayNumber);
+			var dayElement = createElement("span", dateIsDisabled ? "flatpickr-day disabled" : "flatpickr-day", dayNumber);
 
 			if (!dateIsDisabled) {
 				dayElement.tabIndex = 0;
@@ -205,10 +207,10 @@ function Flatpickr(element, config) {
 		for (var dayNum = daysInMonth + 1; dayNum <= 42 - firstOfMonth; dayNum++) {
 			var _curDate = new Date(self.currentYear, self.currentMonth + 1, dayNum % daysInMonth, 0, 0, 0, 0, 0),
 			    _dateIsEnabled = isEnabled(_curDate),
-			    _dayElement = createElement("span", _dateIsEnabled ? "nextMonthDay flatpickr-day" : "disabled", dayNum % daysInMonth);
+			    _dayElement = createElement("span", _dateIsEnabled ? "nextMonthDay flatpickr-day" : "flatpickr-day disabled", dayNum % daysInMonth);
 
 			if (self.config.weekNumbers && dayNum % 7 === 1) {
-				self.weekNumbers.insertAdjacentHTML("beforeend", "<span class='disabled flatpickr-day'>" + _curDate.fp_getWeek() + "</span>");
+				self.weekNumbers.insertAdjacentHTML("beforeend", "<span class='disabled flatpickr-day'>" + self.getWeek(_curDate) + "</span>");
 			}
 
 			if (_dateIsEnabled) _dayElement.tabIndex = 0;
@@ -250,6 +252,7 @@ function Flatpickr(element, config) {
 	}
 
 	function buildTime() {
+		self.calendarContainer.classList.add("hasTime");
 		self.timeContainer = createElement("div", "flatpickr-time");
 		self.timeContainer.tabIndex = -1;
 		var separator = createElement("span", "flatpickr-time-separator", ":");
@@ -315,17 +318,18 @@ function Flatpickr(element, config) {
 			weekdays = [].concat(weekdays.splice(firstDayOfWeek, weekdays.length), weekdays.splice(0, firstDayOfWeek));
 		}
 
-		self.weekdayContainer.innerHTML = self.config.weekNumbers ? "<span>" + Flatpickr.l10n.weekAbbreviation + "</span>" : "";
-
-		self.weekdayContainer.innerHTML += "<span>" + weekdays.join("</span><span>") + "</span>";
+		self.weekdayContainer.innerHTML = "<span class=flatpickr-weekday>" + weekdays.join("</span><span class=flatpickr-weekday>") + "</span>";
 
 		return self.weekdayContainer;
 	}
 
 	function buildWeeks() {
 		self.calendarContainer.classList.add("hasWeeks");
+		self.weekWrapper = createElement("div", "flatpickr-weekwrapper");
+		self.weekWrapper.appendChild(createElement("span", "flatpickr-weekday", Flatpickr.l10n.weekAbbreviation));
 		self.weekNumbers = createElement("div", "flatpickr-weeks");
-		return self.weekNumbers;
+		self.weekWrapper.appendChild(self.weekNumbers);
+		return self.weekWrapper;
 	}
 
 	function changeMonth(offset) {
@@ -567,8 +571,10 @@ function Flatpickr(element, config) {
 			self.calendarContainer.classList.add("arrowTop");
 		}
 
-		self.calendarContainer.style.top = top + "px";
-		self.calendarContainer.style.left = left + "px";
+		if (!self.config.inline) {
+			self.calendarContainer.style.top = top + "px";
+			self.calendarContainer.style.left = left + "px";
+		}
 	}
 
 	function redraw() {
@@ -1092,8 +1098,8 @@ Date.prototype.fp_toUTC = function () {
 	return newDate;
 };
 
-Date.prototype.fp_getWeek = function () {
-	var date = new Date(this.getTime());
+Flatpickr.prototype.getWeek = function (givenDate) {
+	var date = new Date(givenDate.getTime());
 	date.setHours(0, 0, 0, 0);
 
 	// Thursday in current week decides the year.
