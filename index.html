@@ -616,13 +616,37 @@ check_out.config.onChange = dateObj => check_in.set("maxDate", dateObj.fp_incr(-
 
 		<div class="example" id=fiscal-calendar data-desc="Fiscal Calendar" >
 			<h3>Fiscal Calendar</h3>
-
+			<p>
+				You may override the <code>getWeek()</code> function, used for calculating a week number, for various purposes.
+				A fiscal year is used for calculating yearly financial	statements.
+				In this example, we will use override the <code>getWeek()</code> function to display the fiscal term instead of the usual week numbers.
+			</p>
 			<pre class='prettyprint lang-html'>
-&lt;input id="fiscal" data-week-numbers=true placeholder="Enabled week numbers"&gt;
+&lt;input id="fiscal" placeholder="Fiscal Calendar"&gt;
+</pre>
+			<pre class="prettyprint lang-js">
+Flatpickr.prototype.getWeek = function(givenDate){
+	var checkDate = new Date(givenDate.getTime());
+	checkDate.setDate(checkDate.getDate() + 4 - (checkDate.getDay() || 7));
+	var time = checkDate.getTime();
+	checkDate.setMonth(7);
+	checkDate.setDate(28);
+	var week = (Math.floor(Math.round((time - checkDate) / 86400000) / 7) + 2);
+	if (week < 1) {
+		week = 52 + week;
+	}
+	return 'FW'+week;
+}
+
+document.getElementById("fiscal").flatpickr({
+	weekNumbers: true
+});
 </pre>
 
+
+
 			<p>
-				<input id="fiscal" placeholder="Enabled week numbers">
+				<input id="fiscal" placeholder="Calendar w/ fiscal periods">
 			</p>
 
 
