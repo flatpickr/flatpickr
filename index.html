@@ -102,6 +102,25 @@
 		check_in.set("maxDate", dateObj.fp_incr(-1));
 	}
 
+	// Fiscal calendar
+	Flatpickr.prototype.getWeek = function(givenDate){
+		var checkDate = new Date(givenDate.getTime());
+		checkDate.setDate(checkDate.getDate() + 4 - (checkDate.getDay() || 7));
+		var time = checkDate.getTime();
+		checkDate.setMonth(7);
+		checkDate.setDate(28);
+		var week = (Math.floor(Math.round((time - checkDate) / 86400000) / 7) + 2);
+		if (week < 1) {
+			week = 52 + week;
+		}
+		return 'FW'+week;
+	}
+
+	document.getElementById("fiscal").flatpickr({
+		weekNumbers: true
+	});
+
+
 	// Date format
 	var fpInstance = new Flatpickr(document.createElement("input")),
 		formatOutput = document.getElementById("dateFormatOutput"),
@@ -110,6 +129,7 @@
 	document.getElementById("dateFormatComposer").addEventListener("keyup", function(e){
 		formatOutput.textContent = fpInstance.formatDate(e.target.value, now);
 	});
+
 	}
 	</script>
 	<script async src="dist/flatpickr.js" onload="fp_ready()"></script>
@@ -580,7 +600,7 @@ check_out.config.onChange = dateObj => check_in.set("maxDate", dateObj.fp_incr(-
 			</p>
 		</div>
 
-				<div class="example" id=weeknumbers data-desc="Week numbers" >
+		<div class="example" id=weeknumbers data-desc="Week numbers" >
 			<h3>Display week numbers</h3>
 
 			<pre class='prettyprint lang-html'>
@@ -589,6 +609,20 @@ check_out.config.onChange = dateObj => check_in.set("maxDate", dateObj.fp_incr(-
 
 			<p>
 				<input class=flatpickr data-week-numbers=true placeholder="Enabled week numbers">
+			</p>
+
+
+		</div>
+
+		<div class="example" id=fiscal-calendar data-desc="Fiscal Calendar" >
+			<h3>Fiscal Calendar</h3>
+
+			<pre class='prettyprint lang-html'>
+&lt;input id="fiscal" data-week-numbers=true placeholder="Enabled week numbers"&gt;
+</pre>
+
+			<p>
+				<input id="fiscal" placeholder="Enabled week numbers">
 			</p>
 
 
