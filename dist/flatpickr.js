@@ -521,17 +521,29 @@ function Flatpickr(element, config) {
 	function parseDate(date) {
 		var timeless = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
 
+		var timeRegex = /^(\d{1,2})[:\s]?(\d\d)?[:\s]?(\d\d)?\s?(a|p)?/i;
 		if (typeof date === "string") {
 			date = date.trim();
 
 			if (date === "today") {
 				date = new Date();
 				timeless = true;
-			} else if (self.config.parseDate) date = self.config.parseDate(date);else if (/^\d\d:\d\d/.test(date)) {
+			} else if (self.config.parseDate) date = self.config.parseDate(date);else if (timeRegex.test(date)) {
 				// time picker
-				var m = date.match(/^(\d{1,2})[:\s]?(\d\d)?[:\s]?(\d\d)?/);
+				var m = date.match(timeRegex);
+				var hours = void 0;
+
+				//am/pm
+				if (m[4]) {
+					hours = m[1] % 12 + (m[4].toLowerCase() === 'p' ? 12 : 0);
+				} else {
+					//military time, no conversion needed
+					hours = m[1];
+				}
+
+				// const hours = m[4] && m[4].toLowerCase() === 'p' && m[1] <= 12 ? (parseInt(m[1]) + 12) : m[1];
 				date = new Date();
-				date.setHours(m[1], m[2] || 0, m[2] || 0);
+				date.setHours(hours, m[2] || 0, m[3] || 0);
 			} else if (/Z$/.test(date) || /GMT$/.test(date)) // datestrings w/ timezone
 				date = new Date(date);else if (/(\d+)/g.test(date)) {
 				var d = date.match(/(\d+)/g);
