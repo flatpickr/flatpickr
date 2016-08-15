@@ -666,11 +666,12 @@ class Flatpickr {
 
 		else if (e.target.classList.contains("flatpickr-day")) {
 			const isPrevMonthDay = e.target.classList.contains("prevMonthDay"),
-				isNextMonthDay = e.target.classList.contains("nextMonthDay"),
-				monthNum = this.currentMonth - isPrevMonthDay + isNextMonthDay;
+				isNextMonthDay = e.target.classList.contains("nextMonthDay");
+			let monthNum = this.currentMonth - isPrevMonthDay + isNextMonthDay;
 
 			if (isPrevMonthDay || isNextMonthDay) {
 				this.changeMonth(+isNextMonthDay - isPrevMonthDay);
+				monthNum = self.currentMonth;
 			}
 
 			this.selectedDateObj = new Date(this.currentYear, monthNum, e.target.innerHTML);
