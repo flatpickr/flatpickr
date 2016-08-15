@@ -696,7 +696,7 @@ flatpickr.init = function (element, instanceConfig) {
 		else if (e.target.classList.contains("flatpickr-day")) {
 			const isPrevMonthDay = e.target.classList.contains("prevMonthDay"),
 				isNextMonthDay = e.target.classList.contains("nextMonthDay");
-      let monthNum = self.currentMonth - isPrevMonthDay + isNextMonthDay;
+				let monthNum = self.currentMonth - isPrevMonthDay + isNextMonthDay;
 
 			if (isPrevMonthDay || isNextMonthDay) {
 				changeMonth(+isNextMonthDay - isPrevMonthDay);
