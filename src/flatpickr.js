@@ -700,6 +700,7 @@ flatpickr.init = function (element, instanceConfig) {
 
 			if (isPrevMonthDay || isNextMonthDay) {
 				changeMonth(+isNextMonthDay - isPrevMonthDay);
+				monthNum = self.currentMonth;
 			}
 
 			self.selectedDateObj = new Date(self.currentYear, monthNum, e.target.innerHTML);
