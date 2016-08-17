@@ -602,12 +602,11 @@ function Flatpickr(element, config) {
 
 		if (self.config.allowInput && e.target === (self.altInput || self.input) && e.which === 13) self.setDate((self.altInput || self.input).value);else if (e.target.classList.contains("flatpickr-day") && !e.target.classList.contains("disabled")) {
 			var isPrevMonthDay = e.target.classList.contains("prevMonthDay"),
-			    isNextMonthDay = e.target.classList.contains("nextMonthDay"),
-			    monthNum = self.currentMonth - isPrevMonthDay + isNextMonthDay;
+			    isNextMonthDay = e.target.classList.contains("nextMonthDay");
 
 			if (isPrevMonthDay || isNextMonthDay) changeMonth(+isNextMonthDay - isPrevMonthDay);
 
-			self.selectedDateObj = parseDate(new Date(self.currentYear, monthNum, e.target.innerHTML));
+			self.selectedDateObj = parseDate(new Date(self.currentYear, self.currentMonth, e.target.innerHTML));
 
 			updateValue(e);
 			buildDays();
