@@ -65,19 +65,20 @@
 	document.getElementById("events-api-example").flatpickr({
 		minDate: "today",
 		enableTime: true,
-		onChange: function(dateObj, dateStr) {
+		onChange: function(dateObj, dateStr, fp) {
+			console.log(fp.selectedDateObj);
 			events.innerHTML += "<b>onChange</b> (<code>" + dateObj + "</code>, <code>" + dateStr + "</code> )<br>";
 			events.scrollTop = events.offsetTop;
 		},
-		onOpen: function(dateObj, dateStr){
+		onOpen: function(dateObj, dateStr, fp){
 			events.innerHTML += "<b>onOpen</b> (<code>" + dateObj + "</code>, <code>" + dateStr + "</code> )<br>";
 			events.scrollTop = events.offsetTop;
 		},
-		onClose: function(dateObj, dateStr){
+		onClose: function(dateObj, dateStr, fp){
 			events.innerHTML += "<b>onClose</b> (<code>" + dateObj + "</code>, <code>" + dateStr + "</code> )<br>";
 			events.scrollTop = events.offsetTop;
 		},
-		onReady: function(dateObj, dateStr){
+		onReady: function(dateObj, dateStr, fp){
 			events.innerHTML += "<b>onReady</b> (<code>" + dateObj + "</code>, <code>" + dateStr + "</code> )<br>";
 			events.scrollTop = events.offsetTop;
 		}
@@ -102,8 +103,12 @@
 		check_in.set("maxDate", dateObj.fp_incr(-1));
 	}
 
+	var fiscal = document.getElementById("fiscal").flatpickr({
+		weekNumbers: true
+	});
+
 	// Fiscal calendar
-	Flatpickr.prototype.getWeek = function(givenDate){
+	fiscal.getWeek = function(givenDate){
 		var checkDate = new Date(givenDate.getTime());
 		checkDate.setDate(checkDate.getDate() + 4 - (checkDate.getDay() || 7));
 		var time = checkDate.getTime();
@@ -113,12 +118,10 @@
 		if (week < 1) {
 			week = 52 + week;
 		}
-		return 'FW'+week;
+		return 'FW' + ("0" + week).slice(-2);
 	}
 
-	document.getElementById("fiscal").flatpickr({
-		weekNumbers: true
-	});
+	fiscal.redraw();
 
 
 	// Date format
