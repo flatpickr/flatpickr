@@ -182,7 +182,7 @@ function Flatpickr(element, config) {
 				dateIsEnabled = isEnabled(curDate),
 				dayElem = createElement(
 					"span",
-					"flatpickr-day " + (dateIsEnabled ? "prevMonthDay" : "disabled"),
+					"flatpickr-day prevMonthDay" + (dateIsEnabled ? "" : " disabled"),
 					dayNumber
 				);
 
@@ -217,8 +217,10 @@ function Flatpickr(element, config) {
 				if (equalDates(currentDate, new Date()))
 					dayElement.classList.add("today");
 
-				if (self.selectedDateObj && equalDates(currentDate, self.selectedDateObj))
+				if (self.selectedDateObj && equalDates(currentDate, self.selectedDateObj)){
 					dayElement.classList.add("selected");
+					self.selectedDateElem = dayElement;
+				}
 			}
 
 			days.appendChild(dayElement);
@@ -235,7 +237,7 @@ function Flatpickr(element, config) {
 				dateIsEnabled = isEnabled(curDate),
 				dayElement = createElement(
 					"span",
-					dateIsEnabled ? "nextMonthDay flatpickr-day" : "flatpickr-day disabled",
+					"flatpickr-day nextMonthDay" + (dateIsEnabled ? "" : " disabled"),
 					dayNum % daysInMonth
 				);
 
@@ -578,7 +580,11 @@ function Flatpickr(element, config) {
 
 		if (!self.config.allowInput) {
 			(self.altInput || self.input).blur();
-			(self.config.noCalendar ? self.timeContainer : self.days).focus();
+			(self.config.noCalendar
+				? self.timeContainer
+				: self.selectedDateObj
+					? self.selectedDateElem
+					: self.days).focus();
 		}
 
 		(self.altInput || self.input).classList.add("active");
@@ -707,8 +713,6 @@ function Flatpickr(element, config) {
 
 			if (isPrevMonthDay || isNextMonthDay)
 				changeMonth(+isNextMonthDay - isPrevMonthDay);
-			else
-				e.target.tabIndex = 1;
 
 			self.selectedDateObj = parseDate(new Date(self.currentYear, monthNum, e.target.innerHTML));
 
