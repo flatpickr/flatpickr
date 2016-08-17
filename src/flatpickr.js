@@ -30,14 +30,14 @@ function Flatpickr(element, config) {
 		self.setDate = setDate;
 		self.toggle = toggle;
 
-		if (!self.isMobile) {
-			build();
+		if (self.isMobile && !self.config.disableMobile) {
 			bind();
+			setupMobile();
 		}
 
 		else {
+			build();
 			bind();
-			setupMobile();
 		}
 
 		if (self.selectedDateObj)
@@ -217,7 +217,7 @@ function Flatpickr(element, config) {
 				if (equalDates(currentDate, new Date()))
 					dayElement.classList.add("today");
 
-				if (self.selectedDateObj && equalDates(currentDate, self.selectedDateObj)){
+				if (self.selectedDateObj && equalDates(currentDate, self.selectedDateObj)) {
 					dayElement.classList.add("selected");
 					self.selectedDateElem = dayElement;
 				}
@@ -864,8 +864,7 @@ function Flatpickr(element, config) {
 			: "date";
 
 		self.mobileInput = createElement("input", "flatpickr-input");
-		self.mobileInput.type = inputType;
-
+		self.mobileInput.step = "any";
 		self.mobileInput.tabIndex = -1;
 		self.mobileInput.type = inputType;
 
@@ -1118,6 +1117,9 @@ Flatpickr.defaultConfig = {
 
 	// step size used when scrolling/incrementing the minute element
 	minuteIncrement: 5,
+
+	// disable native mobile datetime input support
+	disableMobile: false,
 
 	// onChange callback when user selects a date or time
 	onChange: null, // function (dateObj, dateStr) {}

@@ -33,12 +33,12 @@ function Flatpickr(element, config) {
 		self.setDate = setDate;
 		self.toggle = toggle;
 
-		if (!self.isMobile) {
-			build();
-			bind();
-		} else {
+		if (self.isMobile && !self.config.disableMobile) {
 			bind();
 			setupMobile();
+		} else {
+			build();
+			bind();
 		}
 
 		if (self.selectedDateObj) updateValue();
@@ -785,8 +785,7 @@ function Flatpickr(element, config) {
 		var inputType = self.config.enableTime ? self.config.noCalendar ? "time" : "datetime-local" : "date";
 
 		self.mobileInput = createElement("input", "flatpickr-input");
-		self.mobileInput.type = inputType;
-
+		self.mobileInput.step = "any";
 		self.mobileInput.tabIndex = -1;
 		self.mobileInput.type = inputType;
 
@@ -1014,6 +1013,9 @@ Flatpickr.defaultConfig = {
 
 	// step size used when scrolling/incrementing the minute element
 	minuteIncrement: 5,
+
+	// disable native mobile datetime input support
+	disableMobile: false,
 
 	// onChange callback when user selects a date or time
 	onChange: null, // function (dateObj, dateStr) {}
