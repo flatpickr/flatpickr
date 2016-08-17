@@ -46,6 +46,11 @@ function Flatpickr(element, config) {
 		triggerEvent("Ready");
 	}
 
+	function updateTime(e) {
+		timeWrapper(e);
+		updateValue(e);
+	}
+
 	function bind() {
 		if (self.config.wrap) {
 			["open", "close", "toggle", "clear"].forEach(function (el) {
@@ -77,7 +82,7 @@ function Flatpickr(element, config) {
 
 			self.currentYearElement.addEventListener("wheel", yearScroll);
 			self.currentYearElement.addEventListener("focus", function () {
-				return self.currentYearElement.select();
+				self.currentYearElement.select();
 			});
 
 			self.currentYearElement.addEventListener("input", function (event) {
@@ -91,10 +96,6 @@ function Flatpickr(element, config) {
 		}
 
 		if (self.config.enableTime) {
-			var updateTime = function updateTime(e) {
-				timeWrapper(e);
-				updateValue(e);
-			};
 			self.timeContainer.addEventListener("wheel", updateTime);
 			self.timeContainer.addEventListener("wheel", debounce(function () {
 				return triggerEvent("Change");
@@ -109,7 +110,7 @@ function Flatpickr(element, config) {
 			});
 
 			if (self.secondElement) self.secondElement.addEventListener("focus", function () {
-				return self.minuteElement.select();
+				return self.secondElement.select();
 			});
 
 			if (self.amPM) self.amPM.addEventListener("click", updateTime);
@@ -442,8 +443,12 @@ function Flatpickr(element, config) {
 
 			case 38:
 				e.preventDefault();
-				self.currentYear++;
-				self.redraw();
+
+				if (self.timeContainer.contains(e.target)) updateTime(e);else {
+					self.currentYear++;
+					self.redraw();
+				}
+
 				break;
 
 			case 39:
@@ -452,8 +457,11 @@ function Flatpickr(element, config) {
 
 			case 40:
 				e.preventDefault();
-				self.currentYear--;
-				self.redraw();
+				if (self.timeContainer.contains(e.target)) updateTime(e);else {
+					self.currentYear--;
+					self.redraw();
+				}
+
 				break;
 
 			default:
@@ -594,9 +602,9 @@ function Flatpickr(element, config) {
 			    isNextMonthDay = e.target.classList.contains("nextMonthDay"),
 			    monthNum = self.currentMonth - isPrevMonthDay + isNextMonthDay;
 
-			if (isPrevMonthDay || isNextMonthDay) changeMonth(+isNextMonthDay - isPrevMonthDay);
+			if (isPrevMonthDay || isNextMonthDay) changeMonth(+isNextMonthDay - isPrevMonthDay);else e.target.tabIndex = 1;
 
-			self.selectedDateObj = new Date(self.currentYear, monthNum, e.target.innerHTML);
+			self.selectedDateObj = parseDate(new Date(self.currentYear, monthNum, e.target.innerHTML));
 
 			updateValue(e);
 			buildDays();
@@ -818,12 +826,10 @@ function Flatpickr(element, config) {
 		self.currentYearElement.value = self.currentYear;
 	}
 
-	function updateValue(e) {
+	function updateValue() {
 		if (self.config.noCalendar && !self.selectedDateObj)
 			// picking time only and method triggered from picker
 			self.selectedDateObj = new Date();else if (!self.selectedDateObj) return;
-
-		if (e && e.target !== self.hourElement && e.target !== self.minuteElement) e.target.blur();
 
 		if (self.config.enableTime && !self.isMobile) {
 			// update time
@@ -838,7 +844,7 @@ function Flatpickr(element, config) {
 				// the real number of hours for the date object
 				hours = hours % 12 + 12 * (self.amPM.innerHTML === "PM");
 
-			self.selectedDateObj.setHours(hours, minutes, seconds === undefined ? self.selectedDateObj.getSeconds() : seconds);
+			self.selectedDateObj.setHours(hours, minutes, seconds || 0, 0);
 
 			self.hourElement.value = pad(!self.config.time_24hr ? (12 + hours) % 12 + 12 * (hours % 12 === 0) : hours);
 			self.minuteElement.value = pad(minutes);
@@ -899,9 +905,10 @@ function Flatpickr(element, config) {
 	function timeWrapper(e) {
 		e.preventDefault();
 
+		if (e && e.type !== "keydown") e.target.blur();
+
 		if (e.target.className === "flatpickr-am-pm") {
 			e.target.textContent = ["AM", "PM"][e.target.textContent === "AM" | 0];
-			e.target.blur();
 			e.stopPropagation();
 			return;
 		}
@@ -913,7 +920,7 @@ function Flatpickr(element, config) {
 
 		var newValue = value;
 
-		if (e.type === "wheel") newValue = value + step * Math.max(-1, Math.min(1, e.wheelDelta || -e.deltaY));
+		if (e.type === "wheel") newValue = value + step * Math.max(-1, Math.min(1, e.wheelDelta || -e.deltaY));else if (e.type === "keydown") newValue = value + step * (e.which === 38 ? 1 : -1);
 
 		if (newValue <= min) newValue = max - step;else if (newValue >= max) newValue = min + step;
 
