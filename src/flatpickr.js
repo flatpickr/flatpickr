@@ -597,7 +597,13 @@ function Flatpickr(element, config) {
 
 	function parseConfig() {
 		self.config = self.instanceConfig;
-		Object.keys(self.element.dataset).forEach(k => self.config[k] = self.element.dataset[k]);
+
+		Object.keys(self.element.dataset).forEach(
+			k => self.config[k] = typeof Flatpickr.defaultConfig[k] === "boolean"
+				? self.element.dataset[k] !== "false"
+				: self.element.dataset[k]
+		);
+
 		if (!self.config.dateFormat && self.config.enableTime) {
 			self.config.dateFormat = Flatpickr.defaultConfig.dateFormat;
 			if (self.config.noCalendar) { // time picker
