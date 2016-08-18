@@ -441,7 +441,7 @@ function Flatpickr(element, config) {
 				break;
 
 			case 37:
-				changeMonth(-1);
+				if (e.target !== self.input & e.target !== self.altInput) changeMonth(-1);
 				break;
 
 			case 38:
@@ -455,7 +455,7 @@ function Flatpickr(element, config) {
 				break;
 
 			case 39:
-				changeMonth(1);
+				if (e.target !== self.input & e.target !== self.altInput) changeMonth(1);
 				break;
 
 			case 40:
@@ -602,7 +602,7 @@ function Flatpickr(element, config) {
 		e.preventDefault();
 		e.stopPropagation();
 
-		if (self.config.allowInput && e.target === (self.altInput || self.input) && e.which === 13) self.setDate((self.altInput || self.input).value);else if (e.target.classList.contains("flatpickr-day") && !e.target.classList.contains("disabled")) {
+		if (self.config.allowInput && (e.target === self.altInput || e.target === self.input) && e.which === 13) self.setDate((self.altInput || self.input).value);else if (e.target.classList.contains("flatpickr-day") && !e.target.classList.contains("disabled")) {
 			var isPrevMonthDay = e.target.classList.contains("prevMonthDay"),
 			    isNextMonthDay = e.target.classList.contains("nextMonthDay");
 
@@ -627,8 +627,9 @@ function Flatpickr(element, config) {
 		date = parseDate(date);
 		if (date instanceof Date && date.getTime()) {
 			self.selectedDateObj = date;
+			console.log(self.selectedDateObj);
 			jumpToDate(self.selectedDateObj);
-			updateValue();
+			updateValue(false);
 
 			if (triggerChange) triggerEvent("Change");
 		} else (self.altInput || self.input).value = "";
@@ -830,29 +831,40 @@ function Flatpickr(element, config) {
 	}
 
 	function updateValue() {
+		var readTimeInput = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+
 		if (self.config.noCalendar && !self.selectedDateObj)
 			// picking time only and method triggered from picker
 			self.selectedDateObj = new Date();else if (!self.selectedDateObj) return;
 
 		if (self.config.enableTime && !self.isMobile) {
-			// update time
-			var hours = parseInt(self.hourElement.value, 10) || 0,
+			var hours = void 0,
+			    minutes = void 0,
 			    seconds = void 0;
 
-			var minutes = (60 + (parseInt(self.minuteElement.value, 10) || 0)) % 60;
+			if (readTimeInput) {
+				// update time
+				hours = parseInt(self.hourElement.value, 10) || 0;
 
-			if (self.config.enableSeconds) seconds = (60 + parseInt(self.secondElement.value, 10) || 0) % 60;
+				minutes = (60 + (parseInt(self.minuteElement.value, 10) || 0)) % 60;
 
-			if (!self.config.time_24hr)
-				// the real number of hours for the date object
-				hours = hours % 12 + 12 * (self.amPM.innerHTML === "PM");
+				if (self.config.enableSeconds) seconds = (60 + parseInt(self.secondElement.value, 10) || 0) % 60;
 
-			self.selectedDateObj.setHours(hours, minutes, seconds || 0, 0);
+				if (!self.config.time_24hr)
+					// the real number of hours for the date object
+					hours = hours % 12 + 12 * (self.amPM.innerHTML === "PM");
+
+				self.selectedDateObj.setHours(hours, minutes, seconds || 0, 0);
+			} else {
+				hours = self.selectedDateObj.getHours();
+				minutes = self.selectedDateObj.getMinutes();
+				seconds = self.selectedDateObj.getSeconds();
+			}
 
 			self.hourElement.value = pad(!self.config.time_24hr ? (12 + hours) % 12 + 12 * (hours % 12 === 0) : hours);
 			self.minuteElement.value = pad(minutes);
 
-			if (seconds !== undefined) self.secondElement.value = pad(seconds);
+			if (self.secondElement !== undefined) self.secondElement.value = pad(seconds);
 		}
 
 		self.input.value = formatDate(self.config.dateFormat, self.selectedDateObj);
