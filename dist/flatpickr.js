@@ -627,7 +627,6 @@ function Flatpickr(element, config) {
 		date = parseDate(date);
 		if (date instanceof Date && date.getTime()) {
 			self.selectedDateObj = date;
-			console.log(self.selectedDateObj);
 			jumpToDate(self.selectedDateObj);
 			updateValue(false);
 

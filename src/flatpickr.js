@@ -743,7 +743,6 @@ function Flatpickr(element, config) {
 		date = parseDate(date);
 		if (date instanceof Date && date.getTime()) {
 			self.selectedDateObj = date;
-			console.log(self.selectedDateObj);
 			jumpToDate(self.selectedDateObj);
 			updateValue(false);
 
@@ -934,7 +933,9 @@ function Flatpickr(element, config) {
 			return;
 
 		if (self.config.enableTime && !self.isMobile) {
-			let hours, minutes, seconds;
+			let hours,
+				minutes,
+				seconds;
 
 			if (readTimeInput) {
 				// update time
