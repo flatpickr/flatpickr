@@ -640,7 +640,7 @@ function Flatpickr(element, config) {
 
 	function parseDate(date, timeless = false) {
 		const dateTimeRegex = /(\d+)/g,
-			timeRegex = /^(\d{1,2})[:\s]?(\d\d)?[:\s]?(\d\d)?\s?(a|p)?/i;
+			timeRegex = /^(\d{1,2})[:\s](\d\d)?[:\s](\d\d)?\s?(a|p)?/i;
 
 		if (typeof date === "string") {
 			date = date.trim();
@@ -683,10 +683,8 @@ function Flatpickr(element, config) {
 		if (self.config.utc && !date.fp_isUTC)
 			date = date.fp_toUTC();
 
-
 		if (timeless)
 			date.setHours(0, 0, 0, 0);
-
 
 		return date;
 	}

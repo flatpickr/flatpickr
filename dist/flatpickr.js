@@ -537,7 +537,7 @@ function Flatpickr(element, config) {
 		var timeless = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
 
 		var dateTimeRegex = /(\d+)/g,
-		    timeRegex = /^(\d{1,2})[:\s]?(\d\d)?[:\s]?(\d\d)?\s?(a|p)?/i;
+		    timeRegex = /^(\d{1,2})[:\s](\d\d)?[:\s](\d\d)?\s?(a|p)?/i;
 
 		if (typeof date === "string") {
 			date = date.trim();
