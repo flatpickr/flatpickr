@@ -10,8 +10,6 @@ function Flatpickr(element, config) {
 		self.element = element;
 		self.instanceConfig = config || {};
 
-		self.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
 		setupFormats();
 
 		parseConfig();
@@ -33,7 +31,9 @@ function Flatpickr(element, config) {
 		self.setDate = setDate;
 		self.toggle = toggle;
 
-		if (self.isMobile && !self.config.disableMobile) {
+		self.isMobile = !self.config.disableMobile && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+		if (self.isMobile) {
 			bind();
 			setupMobile();
 		} else {
@@ -103,15 +103,17 @@ function Flatpickr(element, config) {
 			self.timeContainer.addEventListener("input", updateTime);
 
 			self.hourElement.addEventListener("focus", function () {
-				return self.hourElement.select();
+				self.hourElement.select();
 			});
 			self.minuteElement.addEventListener("focus", function () {
-				return self.minuteElement.select();
+				self.minuteElement.select();
 			});
 
-			if (self.secondElement) self.secondElement.addEventListener("focus", function () {
-				return self.secondElement.select();
-			});
+			if (self.secondElement) {
+				self.secondElement.addEventListener("focus", function () {
+					self.secondElement.select();
+				});
+			}
 
 			if (self.amPM) self.amPM.addEventListener("click", updateTime);
 		}
@@ -322,7 +324,7 @@ function Flatpickr(element, config) {
 			weekdays = [].concat(weekdays.splice(firstDayOfWeek, weekdays.length), weekdays.splice(0, firstDayOfWeek));
 		}
 
-		self.weekdayContainer.innerHTML = "<span class=flatpickr-weekday>" + weekdays.join("</span><span class=flatpickr-weekday>") + "</span>";
+		self.weekdayContainer.innerHTML = "\n\t\t<span class=flatpickr-weekday>\n\t\t\t" + weekdays.join("</span><span class=flatpickr-weekday>") + "\n\t\t</span>\n\t\t";
 
 		return self.weekdayContainer;
 	}
@@ -602,7 +604,7 @@ function Flatpickr(element, config) {
 		e.preventDefault();
 		e.stopPropagation();
 
-		if (self.config.allowInput && (e.target === self.altInput || e.target === self.input) && e.which === 13) self.setDate((self.altInput || self.input).value);else if (e.target.classList.contains("flatpickr-day") && !e.target.classList.contains("disabled")) {
+		if (self.config.allowInput && e.which === 13 && (e.target === self.altInput || e.target === self.input)) self.setDate((self.altInput || self.input).value);else if (e.target.classList.contains("flatpickr-day") && !e.target.classList.contains("disabled")) {
 			var isPrevMonthDay = e.target.classList.contains("prevMonthDay"),
 			    isNextMonthDay = e.target.classList.contains("nextMonthDay");
 
@@ -1151,15 +1153,15 @@ if (!("classList" in document.documentElement) && Object.defineProperty && typeo
 
 			var ret = {
 				add: update(function (classes, index, value) {
-					~index || classes.push(value);
+					if (!~index) classes.push(value);
 				}),
 
 				remove: update(function (classes, index) {
-					~index && classes.splice(index, 1);
+					if (~index) classes.splice(index, 1);
 				}),
 
 				toggle: update(function (classes, index, value) {
-					~index ? classes.splice(index, 1) : classes.push(value);
+					if (~index) classes.splice(index, 1);else classes.push(value);
 				}),
 
 				contains: function contains(value) {

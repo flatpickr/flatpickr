@@ -6,9 +6,6 @@ function Flatpickr(element, config) {
 		self.element = element;
 		self.instanceConfig = config || {};
 
-		self.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
-			.test(navigator.userAgent);
-
 		setupFormats();
 
 		parseConfig();
@@ -30,7 +27,12 @@ function Flatpickr(element, config) {
 		self.setDate = setDate;
 		self.toggle = toggle;
 
-		if (self.isMobile && !self.config.disableMobile) {
+		self.isMobile = (
+			!self.config.disableMobile &&
+			/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+		);
+
+		if (self.isMobile) {
 			bind();
 			setupMobile();
 		}
@@ -101,11 +103,18 @@ function Flatpickr(element, config) {
 			self.timeContainer.addEventListener("wheel", debounce(() => triggerEvent("Change"), 1000));
 			self.timeContainer.addEventListener("input", updateTime);
 
-			self.hourElement.addEventListener("focus", () => self.hourElement.select());
-			self.minuteElement.addEventListener("focus", () => self.minuteElement.select());
+			self.hourElement.addEventListener("focus", () => {
+				self.hourElement.select();
+			});
+			self.minuteElement.addEventListener("focus", () => {
+				self.minuteElement.select();
+			});
 
-			if (self.secondElement)
-				self.secondElement.addEventListener("focus", () => self.secondElement.select());
+			if (self.secondElement) {
+				self.secondElement.addEventListener("focus", () => {
+					self.secondElement.select();
+				});
+			}
 
 			if (self.amPM)
 				self.amPM.addEventListener("click", updateTime);
@@ -366,7 +375,11 @@ function Flatpickr(element, config) {
 			);
 		}
 
-		self.weekdayContainer.innerHTML = `<span class=flatpickr-weekday>${weekdays.join("</span><span class=flatpickr-weekday>")}</span>`;
+		self.weekdayContainer.innerHTML = `
+		<span class=flatpickr-weekday>
+			${weekdays.join("</span><span class=flatpickr-weekday>")}
+		</span>
+		`;
 
 		return self.weekdayContainer;
 	}
@@ -712,17 +725,26 @@ function Flatpickr(element, config) {
 		e.preventDefault();
 		e.stopPropagation();
 
-		if (self.config.allowInput && (e.target === self.altInput || e.target === self.input) && e.which === 13)
+		if (
+			self.config.allowInput &&
+			e.which === 13 &&
+			(e.target === self.altInput || e.target === self.input)
+		)
 			self.setDate((self.altInput || self.input).value);
 
-		else if (e.target.classList.contains("flatpickr-day") && !e.target.classList.contains("disabled")) {
+		else if (
+			e.target.classList.contains("flatpickr-day") &&
+			!e.target.classList.contains("disabled")
+		) {
 			const isPrevMonthDay = e.target.classList.contains("prevMonthDay"),
 				isNextMonthDay = e.target.classList.contains("nextMonthDay");
 
 			if (isPrevMonthDay || isNextMonthDay)
 				changeMonth(+isNextMonthDay - isPrevMonthDay);
 
-			self.selectedDateObj = parseDate(new Date(self.currentYear, self.currentMonth, e.target.innerHTML));
+			self.selectedDateObj = parseDate(
+				new Date(self.currentYear, self.currentMonth, e.target.innerHTML)
+			);
 
 			updateValue(e);
 			buildDays();
@@ -854,7 +876,10 @@ function Flatpickr(element, config) {
 		self.input.classList.add("flatpickr-input");
 		if (self.config.altInput) {
 			// replicate self.element
-			self.altInput = createElement(self.input.nodeName, "flatpickr-input " + self.config.altInputClass);
+			self.altInput = createElement(
+				self.input.nodeName,
+				"flatpickr-input " + self.config.altInputClass
+			);
 			self.altInput.placeholder = self.input.placeholder;
 			self.altInput.type = "text";
 
@@ -1257,7 +1282,10 @@ Flatpickr.prototype.getWeek = function (givenDate) {
 };
 
 // IE9 classList polyfill
-if (!("classList" in document.documentElement) && Object.defineProperty && typeof HTMLElement !== "undefined") {
+if (
+	!("classList" in document.documentElement) &&
+	Object.defineProperty && typeof HTMLElement !== "undefined"
+) {
 	Object.defineProperty(HTMLElement.prototype, "classList", {
 		get: function () {
 			let self = this;
@@ -1273,15 +1301,20 @@ if (!("classList" in document.documentElement) && Object.defineProperty && typeo
 
 			let ret = {
 				add: update((classes, index, value) => {
-					~index || classes.push(value);
+					if (!(~index))
+						classes.push(value);
 				}),
 
 				remove: update((classes, index) => {
-					~index && classes.splice(index, 1);
+					if (~index)
+						classes.splice(index, 1);
 				}),
 
 				toggle: update((classes, index, value) => {
-					~index ? classes.splice(index, 1) : classes.push(value);
+					if (~index)
+						classes.splice(index, 1);
+					else
+						classes.push(value);
 				}),
 
 				contains: value => !!~self.className.split(/\s+/).indexOf(value),
