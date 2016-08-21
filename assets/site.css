@@ -172,6 +172,7 @@ option {
 
 input {
     max-width: 320px;
+    display: block;
     outline: none;
     border: 1px solid #ddd;
     background: #fbfbfb;
@@ -282,7 +283,7 @@ pre
     word-break: break-all;
     white-space: pre-wrap;
     margin: 0.75rem 0;
-    font-family: Menlo,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace,sans-serif;
+    font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
 }
 
 
