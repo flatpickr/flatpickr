@@ -1,47 +1,112 @@
-describe("flatpickr", function() {
+describe('flatpickr', () => {
 
-	var calendar;
+	const container = document.querySelector('.container');
+	let elem;
 
-	describe("uDate: parsing in local timezone mode", function() {
+	const init = () => {
+		container.innerHTML = '<input type="text" class="flatpickr" style="display:none;" />';
+		elem = container.querySelector('.flatpickr');
+	};
+	
+	describe('parsing time only in [h:mm A] format', () => {
 
-		beforeEach(function() {
-			calendar = flatpickr(".flatpickr").calendars[0];
+		it('should parse "11:59 PM"', () => {
+			init();
+			elem.value = '11:59 PM';
+			const fp = elem.flatpickr({
+				allowInput: true,
+				enableTime: true,
+				noCalendar: true,
+			});
+
+			expect(fp.selectedDateObj).toBeDefined();
+			expect(fp.selectedDateObj.getHours()).toBe(23);
+			expect(fp.selectedDateObj.getMinutes()).toBe(59);
+			expect(fp.selectedDateObj.getSeconds()).toBe(0);
+
+			const amPmElement = fp.amPM;
+			
+			expect(amPmElement).toBeDefined();
+			expect(amPmElement.innerHTML).toBe('PM');
 		});
 
-		it("should parse a time string", function() {
-			expect(calendar.uDate("09:00")).toEqual(jasmine.any(Date));
+		it('should parse "3:05:03 PM"', () => {
+			init();
+			elem.value = '3:05:03 PM';
+			const fp = elem.flatpickr({
+				allowInput: true,
+				enableTime: true,
+				noCalendar: true,
+			});
+
+			expect(fp.selectedDateObj).toBeDefined();
+			expect(fp.selectedDateObj.getHours()).toBe(15);
+			expect(fp.selectedDateObj.getMinutes()).toBe(5);
+			expect(fp.selectedDateObj.getSeconds()).toBe(3);
+
+			const amPmElement = fp.amPM;
+
+			expect(amPmElement).toBeDefined();
+			expect(amPmElement.innerHTML).toBe('PM');
 		});
 
-		it("should parse a datetime string", function() {
+		it('should parse "12:05am"', () => {
+			init();
+			elem.value = '12:05am';
+			const fp = elem.flatpickr({
+				allowInput: true,
+				enableTime: true,
+				noCalendar: true,
+			});
 
-			let parsed = calendar.uDate("2016-06-09 09:00");
+			debugger;
+			expect(fp.selectedDateObj).toBeDefined();
+			expect(fp.selectedDateObj.getHours()).toBe(0);
+			expect(fp.selectedDateObj.getMinutes()).toBe(5);
+			expect(fp.selectedDateObj.getSeconds()).toBe(0);
 
-			expect(parsed).toEqual(jasmine.any(Date));
-			expect(parsed.getMinutes()).toEqual(0);
-			expect(parsed.getHours()).toEqual(9);
-		 	expect(parsed.getDate()).toEqual(9);
-		 	expect(parsed.getMonth()).toEqual(5);
-		 	expect(parsed.getFullYear()).toEqual(2016);
+			const amPmElement = fp.amPM;
+
+			expect(amPmElement).toBeDefined();
+			expect(amPmElement.innerHTML).toBe('AM');
 		});
-
 	});
 
-	describe("uDate: parsing in utc mode", function() {
 
-		beforeEach(function() {
-			calendar = flatpickr(".flatpickr", {utc: true}).calendars[0];
+	it('should parse "12:05pm"', () => {
+		init();
+		elem.value = '12:05pm';
+		const fp = elem.flatpickr({
+			allowInput: true,
+			enableTime: true,
+			noCalendar: true,
 		});
 
-		it("should parse a datetime string", function() {
+		debugger;
+		expect(fp.selectedDateObj).toBeDefined();
+		expect(fp.selectedDateObj.getHours()).toBe(12);
+		expect(fp.selectedDateObj.getMinutes()).toBe(5);
+		expect(fp.selectedDateObj.getSeconds()).toBe(0);
 
-			let parsed = calendar.uDate("Mon Jun 06 2016 00:14:45");
+		const amPmElement = fp.amPM;
 
-			expect(parsed.getMinutes()).toEqual(14);
-			expect(parsed.getHours()).toEqual(4);
-		 	expect(parsed.getDate()).toEqual(6);
-
-		});
-
+		expect(amPmElement).toBeDefined();
+		expect(amPmElement.innerHTML).toBe('PM');
 	});
 
+	describe('parsing time only in [hh:mm:ss] format', () => {
+
+		it('should properly extract seconds.', () => {
+			init();
+			elem.value = '10:11:12';
+			const fp = elem.flatpickr({
+				allowInput: true,
+				enableTime: true,
+				noCalendar: true,
+			});
+
+			expect(fp.selectedDateObj).toBeDefined();
+			expect(fp.selectedDateObj.getSeconds()).toEqual(12);
+		});
+	});
 });
