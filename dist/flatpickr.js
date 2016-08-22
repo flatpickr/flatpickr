@@ -1124,9 +1124,9 @@ Date.prototype.fp_incr = function (days) {
 
 Date.prototype.fp_isUTC = false;
 Date.prototype.fp_toUTC = function () {
-	var newDate = new Date(this.getTime() + this.getTimezoneOffset() * 60000);
-	newDate.fp_isUTC = true;
+	var newDate = new Date(this.getUTCFullYear(), this.getUTCMonth(), this.getUTCDate(), this.getUTCHours(), this.getUTCMinutes(), this.getUTCSeconds());
 
+	newDate.fp_isUTC = true;
 	return newDate;
 };
 

@@ -1,6 +1,11 @@
 ---
     extends: airbnb/base
 
+    env:
+        browser: true
+        commonjs: true
+        es6: true
+
     rules:
         brace-style:
             - error
@@ -26,12 +31,16 @@
         no-confusing-arrow: off
         no-console: off
         no-extend-native: off
+        no-global-assign: warn
+        no-mixed-operators: off
         no-nested-ternary: off
         no-param-reassign: off
+        no-prototype-builtins: warn
         no-restricted-syntax: off
         no-return-assign: off
         no-undef: warn
         no-underscore-dangle: off
+        no-unsafe-negation: warn
         no-unused-expressions: warn
         no-use-before-define: off
 

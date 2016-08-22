@@ -1265,9 +1265,16 @@ Date.prototype.fp_incr = function (days) {
 
 Date.prototype.fp_isUTC = false;
 Date.prototype.fp_toUTC = function () {
-	const newDate = new Date(this.getTime() + this.getTimezoneOffset() * 60000);
-	newDate.fp_isUTC = true;
+	const newDate = new Date(
+		this.getUTCFullYear(),
+		this.getUTCMonth(),
+		this.getUTCDate(),
+		this.getUTCHours(),
+		this.getUTCMinutes(),
+		this.getUTCSeconds()
+	);
 
+	newDate.fp_isUTC = true;
 	return newDate;
 };
 
@@ -1280,8 +1287,7 @@ Flatpickr.prototype.getWeek = function (givenDate) {
 	// January 4 is always in week 1.
 	const week1 = new Date(date.getFullYear(), 0, 4);
 	// Adjust to Thursday in week 1 and count number of weeks from date to week1.
-	return 1 +
-		Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 +
+	return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 +
 		(week1.getDay() + 6) % 7) / 7);
 };
 
