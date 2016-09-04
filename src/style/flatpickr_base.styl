@@ -23,6 +23,7 @@
 	font-size 90%
 	border-radius 3px
 	position absolute
+	max-width 256px
 	min-width 200px
 
 	&.open
@@ -31,10 +32,13 @@
 		display inline-block
 
 	&.inline
-		max-width 19rem
+		max-width 288px
 		display table
 		margin-top 2px
 		position relative
+
+	&.hasWeeks
+		max-width 300px
 
 	&:before, &:after
 		position absolute
