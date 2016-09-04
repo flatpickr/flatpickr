@@ -746,9 +746,7 @@ function Flatpickr(element, config) {
 			if (isPrevMonthDay || isNextMonthDay)
 				changeMonth(+isNextMonthDay - isPrevMonthDay);
 
-			self.selectedDateObj = parseDate(
-				new Date(self.currentYear, self.currentMonth, e.target.innerHTML)
-			);
+			self.selectedDateObj = new Date(self.currentYear, self.currentMonth, e.target.innerHTML);
 
 			updateValue(e);
 			buildDays();

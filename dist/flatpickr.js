@@ -1,5 +1,3 @@
-"use strict";
-
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 /*! flatpickr v2.0, @license MIT */
@@ -616,7 +614,7 @@ function Flatpickr(element, config) {
 
 			if (isPrevMonthDay || isNextMonthDay) changeMonth(+isNextMonthDay - isPrevMonthDay);
 
-			self.selectedDateObj = parseDate(new Date(self.currentYear, self.currentMonth, e.target.innerHTML));
+			self.selectedDateObj = new Date(self.currentYear, self.currentMonth, e.target.innerHTML);
 
 			updateValue(e);
 			buildDays();
