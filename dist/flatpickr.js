@@ -934,7 +934,7 @@ function Flatpickr(element, config) {
 
 	function timeWrapper(e) {
 		e.preventDefault();
-		if (e && (e.target.value.length >= 2 || e.type !== "keydown" && e.type !== "input")) e.target.blur();
+		if (e && ((e.target.value || e.target.textContent).length >= 2 || e.type !== "keydown" && e.type !== "input")) e.target.blur();
 
 		if (e.target.className === "flatpickr-am-pm") {
 			e.target.textContent = ["AM", "PM"][e.target.textContent === "AM" | 0];
@@ -1118,6 +1118,10 @@ HTMLCollection.prototype.flatpickr = NodeList.prototype.flatpickr = function (co
 HTMLElement.prototype.flatpickr = function (config) {
 	return _flatpickr([this], config);
 };
+
+function flatpickr(selector, config) {
+	return _flatpickr(document.querySelectorAll(selector), config);
+}
 
 if (typeof jQuery !== "undefined") {
 	jQuery.fn.flatpickr = function (config) {

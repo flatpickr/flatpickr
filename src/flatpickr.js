@@ -676,7 +676,6 @@ function Flatpickr(element, config) {
 
 			else // fallback
 				date = new Date(date);
-
 		}
 
 		if (!(date instanceof Date) || !date.getTime()) {
@@ -970,7 +969,6 @@ function Flatpickr(element, config) {
 
 			self.nextMonthNav.style.display = hideNextMonthArrow ? "none" : "block";
 		}
-
 	}
 
 	function updateValue(readTimeInput = true) {
@@ -1068,7 +1066,10 @@ function Flatpickr(element, config) {
 
 	function timeWrapper(e) {
 		e.preventDefault();
-		if (e && (e.target.value.length >= 2 || (e.type !== "keydown" && e.type !== "input" )))
+		if (e && (
+			(e.target.value || e.target.textContent).length >= 2 ||
+			(e.type !== "keydown" && e.type !== "input")
+		))
 			e.target.blur();
 
 		if (e.target.className === "flatpickr-am-pm") {
@@ -1267,6 +1268,10 @@ HTMLCollection.prototype.flatpickr = NodeList.prototype.flatpickr = function (co
 HTMLElement.prototype.flatpickr = function (config) {
 	return _flatpickr([this], config);
 };
+
+function flatpickr(selector, config) {
+	return _flatpickr(document.querySelectorAll(selector), config);
+}
 
 if (typeof jQuery !== "undefined") {
 	jQuery.fn.flatpickr = function (config) {
