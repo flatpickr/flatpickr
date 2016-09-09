@@ -531,7 +531,7 @@ function Flatpickr(element, config) {
 	function parseDate(date) {
 		var timeless = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
 
-		var dateTimeRegex = /^(\d+)/g,
+		var dateTimeRegex = /(\d+)/g,
 		    timeRegex = /^(\d{1,2})[:\s](\d\d)?[:\s](\d\d)?\s?(a|p)?/i;
 
 		if (typeof date === "string") {
@@ -549,7 +549,7 @@ function Flatpickr(element, config) {
 				date = new Date();
 				date.setHours(hours, m[2] || 0, m[3] || 0);
 			} else if (/Z$/.test(date) || /GMT$/.test(date)) // datestrings w/ timezone
-				date = new Date(date);else if (dateTimeRegex.test(date)) {
+				date = new Date(date);else if (dateTimeRegex.test(date) && /^[0-9]/.test(date)) {
 				var d = date.match(dateTimeRegex);
 				date = new Date(d[0] + "/" + (d[1] || 1) + "/" + (d[2] || 1) + " " + (d[3] || 0) + ":" + (d[4] || 0) + ":" + (d[5] || 0));
 			} else // fallback
@@ -831,6 +831,18 @@ function Flatpickr(element, config) {
 	function updateNavigationCurrentMonth() {
 		self.currentMonthElement.textContent = self.utils.monthToStr(self.currentMonth) + " ";
 		self.currentYearElement.value = self.currentYear;
+
+		if (self.config.minDate) {
+			var hidePrevMonthArrow = self.currentYear === self.config.minDate.getFullYear() ? (self.currentMonth + 11) % 12 < self.config.minDate.getMonth() : self.currentYear < self.config.minDate.getFullYear();
+
+			self.prevMonthNav.style.display = hidePrevMonthArrow ? "none" : "block";
+		}
+
+		if (self.config.maxDate) {
+			var hideNextMonthArrow = self.currentYear === self.config.maxDate.getFullYear() ? self.currentMonth + 1 > self.config.maxDate.getMonth() : self.currentYear > self.config.maxDate.getFullYear();
+
+			self.nextMonthNav.style.display = hideNextMonthArrow ? "none" : "block";
+		}
 	}
 
 	function updateValue() {
