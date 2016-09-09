@@ -531,7 +531,7 @@ function Flatpickr(element, config) {
 	function parseDate(date) {
 		var timeless = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
 
-		var dateTimeRegex = /(\d+)/g,
+		var dateTimeRegex = /^(\d+)/g,
 		    timeRegex = /^(\d{1,2})[:\s](\d\d)?[:\s](\d\d)?\s?(a|p)?/i;
 
 		if (typeof date === "string") {
@@ -552,7 +552,8 @@ function Flatpickr(element, config) {
 				date = new Date(date);else if (dateTimeRegex.test(date)) {
 				var d = date.match(dateTimeRegex);
 				date = new Date(d[0] + "/" + (d[1] || 1) + "/" + (d[2] || 1) + " " + (d[3] || 0) + ":" + (d[4] || 0) + ":" + (d[5] || 0));
-			}
+			} else // fallback
+				date = new Date(date);
 		}
 
 		if (!(date instanceof Date) || !date.getTime()) {
