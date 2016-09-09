@@ -50,7 +50,7 @@ function Flatpickr(element, config) {
 
 	function updateTime(e) {
 		timeWrapper(e);
-		updateValue(e);
+		updateValue();
 	}
 
 	function bind() {
@@ -514,7 +514,7 @@ function Flatpickr(element, config) {
 		switch (e.which) {
 			case 13:
 				if (self.timeContainer && self.timeContainer.contains(e.target))
-					updateValue(e);
+					updateValue();
 
 				else
 					selectDate(e);
@@ -748,7 +748,7 @@ function Flatpickr(element, config) {
 
 			self.selectedDateObj = new Date(self.currentYear, self.currentMonth, e.target.innerHTML);
 
-			updateValue(e);
+			updateValue();
 			buildDays();
 			triggerEvent("Change");
 
@@ -1046,8 +1046,7 @@ function Flatpickr(element, config) {
 
 	function timeWrapper(e) {
 		e.preventDefault();
-
-		if (e && e.type !== "keydown")
+		if (e && (e.target.value.length >= 2 || (e.type !== "keydown" && e.type !== "input" )))
 			e.target.blur();
 
 		if (e.target.className === "flatpickr-am-pm") {
