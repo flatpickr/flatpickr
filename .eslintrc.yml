@@ -17,42 +17,41 @@
             - error
             - multi-or-nest
 
-        func-names: off
 
         indent:
             - error
             - tab
             - { "SwitchCase": 1 }
 
-        new-cap: off
-        no-confusing-arrow: off
-        no-console: off
-        no-extend-native: off
         no-global-assign: warn
-        no-mixed-operators: off
-        no-nested-ternary: off
-        no-param-reassign: off
         no-prototype-builtins: warn
-        no-restricted-syntax: off
-        no-return-assign: off
         no-undef: warn
-        no-underscore-dangle: off
         no-unsafe-negation: warn
         no-unused-expressions: warn
-        no-use-before-define: off
 
-        object-shorthand: off
-        one-var: off
-
-        prefer-const: off
-        prefer-rest-params: off
-        prefer-template: off
+        no-constant-condition: 2
+        no-dupe-keys: 2
+        no-duplicate-case: 2
+        no-ex-assign: 2
+        no-extra-boolean-cast: 1
+        no-extra-semi: 2
+        no-invalid-regexp: 1
+        no-sparse-arrays: 2
+        no-unreachable: 2
+        valid-typeof: 2
+        no-caller: 2
+        no-eq-null: 1
+        no-extra-bind: 2
+        no-fallthrough: 2
+        no-redeclare: 2
+        no-mixed-spaces-and-tabs: 2
+        space-in-parens: 1
 
         space-infix-ops: warn
 
         quotes:
-            - error
-            - double
+        - error
+        - double
 
 
 
