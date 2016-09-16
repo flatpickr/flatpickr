@@ -29,5 +29,6 @@ CDNJS: https://cdnjs.com/libraries/flatpickr
 Demos and documentation: https://chmln.github.io/flatpickr
 
 See also:
+* [Vue.js Component](https://github.com/jrainlau/vue-flatpickr)
 * [ember-flatpickr addon](https://www.npmjs.com/package/ember-flatpickr)
 * [angular-flatpickr addon](https://www.npmjs.com/package/angular-flatpickr)
