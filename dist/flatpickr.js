@@ -520,7 +520,7 @@ function Flatpickr(element, config) {
 		}
 
 		if (self.config.altInput && self.config.enableTime && !self.config.altFormat) {
-			self.config.altFormat = self.config.noCalendar ? "h:i" + (self.config.enableSeconds ? ":S K" : " K") : Flatpickr.defaultConfig.altFormat + ("h:i" + (self.config.enableSeconds ? ":S" : "") + " K");
+			self.config.altFormat = self.config.noCalendar ? "h:i" + (self.config.enableSeconds ? ":S K" : " K") : Flatpickr.defaultConfig.altFormat + (" h:i" + (self.config.enableSeconds ? ":S" : "") + " K");
 		}
 
 		Object.keys(Flatpickr.defaultConfig).forEach(function (k) {
