@@ -8,6 +8,7 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "babel-plugin-transform-object-assign": "^6.8.0",
     "babel-preset-es2015": "^6.9.0",
     "babel-register": "^6.11.6",
     "eslint-config-airbnb": "^9.0.1",
