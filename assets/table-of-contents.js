@@ -20,7 +20,7 @@ function highlightActive(e) {
 	}
 
 	for (var i = table_of_scrolls.length - 1; i >=0; --i) {
-		if (window.pageYOffset + (e ? e.deltaY : 0) >= table_of_scrolls[i]) {
+		if (window.pageYOffset >= table_of_scrolls[i]) {
 			table_of_contents[i].classList.add("current");
 			break;
 		}
@@ -38,7 +38,7 @@ function init() {
 		link.innerText=examples[i].getElementsByTagName("h3")[0].innerText||examples[i].getElementsByTagName("h2")[0].innerText;
 		item.appendChild(link);
 		list.appendChild(item);
-		table_of_scrolls.push(window.pageYOffset + examples[i].getBoundingClientRect().top);
+		table_of_scrolls.push(5 * Math.round(examples[i].offsetTop / 5));
 	}
 
 	table_of_contents = list.querySelectorAll("li");
