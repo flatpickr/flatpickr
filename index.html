@@ -11,132 +11,133 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=yes">
 
 
-	<script async>
+	<script>
 	function fp_ready(){
-	// setting custom defaults
-	Flatpickr.l10n.firstDayOfWeek = 1;
+		// setting custom defaults
+		Flatpickr.l10n.firstDayOfWeek = 1;
 
-	//Regular flatpickr
-	document.getElementById("flatpickr-tryme").flatpickr();
-	document.getElementsByClassName("calendar").flatpickr();
 
-	var calendars = document.getElementsByClassName("flatpickr").flatpickr();
+			//Regular flatpickr
+			document.getElementById("flatpickr-tryme").flatpickr();
+			document.getElementsByClassName("calendar").flatpickr();
 
-	var real_selection = document.getElementById("realdate");
-	document.getElementById("alt")._flatpickr.config.onChange = function(obj, str){
-		real_selection.textContent = str;
-	}
+			var calendars = document.getElementsByClassName("flatpickr").flatpickr();
 
-	document.getElementById("disableRange").flatpickr({
-		disable: [
-			{
-				from: "2016-08-16",
-				to: "2016-08-19"
-			},
-			"2016-08-24",
-			new Date().fp_incr(30) // 30 days from now
-		],
-		minDate: "today"
-	});
-
-	document.getElementById("disableOddDays").flatpickr({
-		disable: [
-			function(date) { return date.getDate()%2; } // disable odd days
-		]
-	});
-	document.getElementById("enableNextSeven").flatpickr({
-		enable: [
-			{
-				from: "today",
-				to: new Date().fp_incr(7)
+			var real_selection = document.getElementById("realdate");
+			document.getElementById("alt")._flatpickr.config.onChange = function(obj, str){
+				real_selection.textContent = str;
 			}
-		]
-	});
-	document.getElementById("enableCustom").flatpickr({
-		enable: [
-			function(dateObj){
-				return dateObj.getDay() %6 !== 0 && dateObj.getFullYear() === 2016;
+
+			document.getElementById("disableRange").flatpickr({
+				disable: [
+					{
+						from: "2016-08-16",
+						to: "2016-08-19"
+					},
+					"2016-08-24",
+					new Date().fp_incr(30) // 30 days from now
+				],
+				minDate: "today"
+			});
+
+			document.getElementById("disableOddDays").flatpickr({
+				disable: [
+					function(date) { return date.getDate()%2; } // disable odd days
+				]
+			});
+			document.getElementById("enableNextSeven").flatpickr({
+				enable: [
+					{
+						from: "today",
+						to: new Date().fp_incr(7)
+					}
+				]
+			});
+			document.getElementById("enableCustom").flatpickr({
+				enable: [
+					function(dateObj){
+						return dateObj.getDay() %6 !== 0 && dateObj.getFullYear() === 2016;
+					}
+				]
+			});
+
+			// Event API
+			var events = document.getElementById("events");
+			document.getElementById("events-api-example").flatpickr({
+				minDate: "today",
+				enableTime: true,
+				onChange: function(dateObj, dateStr, fp) {
+					console.log(fp.selectedDateObj);
+					events.innerHTML += "<b>onChange</b> (<code>" + dateObj + "</code>, <code>" + dateStr + "</code> )<br>";
+					events.scrollTop = events.offsetTop;
+				},
+				onOpen: function(dateObj, dateStr, fp){
+					events.innerHTML += "<b>onOpen</b> (<code>" + dateObj + "</code>, <code>" + dateStr + "</code> )<br>";
+					events.scrollTop = events.offsetTop;
+				},
+				onClose: function(dateObj, dateStr, fp){
+					events.innerHTML += "<b>onClose</b> (<code>" + dateObj + "</code>, <code>" + dateStr + "</code> )<br>";
+					events.scrollTop = events.offsetTop;
+				},
+				onReady: function(dateObj, dateStr, fp){
+					events.innerHTML += "<b>onReady</b> (<code>" + dateObj + "</code>, <code>" + dateStr + "</code> )<br>";
+					events.scrollTop = events.offsetTop;
+				}
+			});
+
+			// Check in/out example
+			var check_in = document.getElementById("check_in_date").flatpickr({
+				altInput: true,
+				altFormat: "\\C\\h\\e\\c\\k \\i\\n\\: l, F j Y",
+				minDate: new Date()
+			});
+			var check_out = document.getElementById("check_out_date").flatpickr({
+				altInput: true,
+				altFormat: "\\C\\h\\e\\c\\k \\o\\u\\t: l, F j Y",
+				minDate: new Date()
+			});
+
+			check_in.config.onChange = function(dateObj) {
+				check_out.set("minDate", dateObj.fp_incr(1));
+			};
+			check_out.config.onChange = function(dateObj) {
+				check_in.set("maxDate", dateObj.fp_incr(-1));
 			}
-		]
-	});
 
-	// Event API
-	var events = document.getElementById("events");
-	document.getElementById("events-api-example").flatpickr({
-		minDate: "today",
-		enableTime: true,
-		onChange: function(dateObj, dateStr, fp) {
-			console.log(fp.selectedDateObj);
-			events.innerHTML += "<b>onChange</b> (<code>" + dateObj + "</code>, <code>" + dateStr + "</code> )<br>";
-			events.scrollTop = events.offsetTop;
-		},
-		onOpen: function(dateObj, dateStr, fp){
-			events.innerHTML += "<b>onOpen</b> (<code>" + dateObj + "</code>, <code>" + dateStr + "</code> )<br>";
-			events.scrollTop = events.offsetTop;
-		},
-		onClose: function(dateObj, dateStr, fp){
-			events.innerHTML += "<b>onClose</b> (<code>" + dateObj + "</code>, <code>" + dateStr + "</code> )<br>";
-			events.scrollTop = events.offsetTop;
-		},
-		onReady: function(dateObj, dateStr, fp){
-			events.innerHTML += "<b>onReady</b> (<code>" + dateObj + "</code>, <code>" + dateStr + "</code> )<br>";
-			events.scrollTop = events.offsetTop;
-		}
-	});
+			var fiscal = document.getElementById("fiscal").flatpickr({
+				weekNumbers: true
+			});
 
-	// Check in/out example
-	var check_in = document.getElementById("check_in_date").flatpickr({
-		altInput: true,
-		altFormat: "\\C\\h\\e\\c\\k \\i\\n\\: l, F j Y",
-		minDate: new Date()
-	});
-	var check_out = document.getElementById("check_out_date").flatpickr({
-		altInput: true,
-		altFormat: "\\C\\h\\e\\c\\k \\o\\u\\t: l, F j Y",
-		minDate: new Date()
-	});
+			// Fiscal calendar
+			fiscal.getWeek = function(givenDate){
+				var checkDate = new Date(givenDate.getTime());
+				checkDate.setDate(checkDate.getDate() + 4 - (checkDate.getDay() || 7));
+				var time = checkDate.getTime();
+				checkDate.setMonth(7);
+				checkDate.setDate(28);
+				var week = (Math.floor(Math.round((time - checkDate) / 86400000) / 7) + 2);
+				if (week < 1) {
+					week = 52 + week;
+				}
+				return 'FW' + ("0" + week).slice(-2);
+			}
 
-	check_in.config.onChange = function(dateObj) {
-		check_out.set("minDate", dateObj.fp_incr(1));
-	};
-	check_out.config.onChange = function(dateObj) {
-		check_in.set("maxDate", dateObj.fp_incr(-1));
-	}
-
-	var fiscal = document.getElementById("fiscal").flatpickr({
-		weekNumbers: true
-	});
-
-	// Fiscal calendar
-	fiscal.getWeek = function(givenDate){
-		var checkDate = new Date(givenDate.getTime());
-		checkDate.setDate(checkDate.getDate() + 4 - (checkDate.getDay() || 7));
-		var time = checkDate.getTime();
-		checkDate.setMonth(7);
-		checkDate.setDate(28);
-		var week = (Math.floor(Math.round((time - checkDate) / 86400000) / 7) + 2);
-		if (week < 1) {
-			week = 52 + week;
-		}
-		return 'FW' + ("0" + week).slice(-2);
-	}
-
-	fiscal.redraw();
+			fiscal.redraw();
 
 
-	// Date format
-	var fpInstance = new Flatpickr(document.createElement("input")),
-		formatOutput = document.getElementById("dateFormatOutput"),
-		now = new Date();
+			// Date format
+			var fpInstance = new Flatpickr(document.createElement("input")),
+				formatOutput = document.getElementById("dateFormatOutput"),
+				now = new Date();
 
-	document.getElementById("dateFormatComposer").addEventListener("keyup", function(e){
-		formatOutput.textContent = fpInstance.formatDate(e.target.value, now);
-	});
+			document.getElementById("dateFormatComposer").addEventListener("keyup", function(e){
+				formatOutput.textContent = fpInstance.formatDate(e.target.value, now);
+			});
 
 	}
 	</script>
-	<script async src="dist/flatpickr.js" onload="fp_ready()"></script>
-	<script async src="assets/prettify.js?skin=none" onload="prettyPrint()"></script>
+	<script async src="dist/flatpickr.js"></script>
+	<script async src="assets/prettify.js?skin=none"></script>
 	<script async src="assets/table-of-contents.js"></script>
 	<script async src="assets/themer.js"></script>
 	<script async id="locale_script"></script>
@@ -397,7 +398,7 @@ new Flatpickr(HTMLElement, [options]);
 
 		</div>
 
-				<div class="example" id="strap">
+		<div class="example" id="strap">
 			<h3>Custom elements and input groups</h3>
 
 			<p>flatpickr can parse an input group of textboxes and buttons, common in <strong>Bootstrap</strong> and other frameworks.</p>
@@ -531,12 +532,12 @@ document.getElementById("#enableCustom").flatpickr({
 			</p>
 
 			<pre class='prettyprint lang-html'>
-&lt;input class=flatpickr data-utc=true data-default-date="1994-11-05 09:15:30 GMT" data-enable-time=true&gt;
+&lt;input class=flatpickr data-utc=true data-default-date="Wed, 21 Sep 2016 18:33:47 GMT" data-enable-time=true&gt;
 </pre>
 
 
 			<p>
-				<input class=flatpickr data-utc=true data-default-date="1994-11-05 09:15:30 GMT" data-enable-time=true>
+				<input class=flatpickr data-utc=true data-default-date="Wed, 21 Sep 2016 18:33:47 GMT" data-enable-time=true>
 			</p>
 
 			<br>
@@ -1142,5 +1143,9 @@ Flatpickr.l10n.firstDayOfWeek = 1;
 
 	</div>
 	</div>
+
+		<script async>
+			fp_ready();
+		</script>
 	</body>
 </html>
