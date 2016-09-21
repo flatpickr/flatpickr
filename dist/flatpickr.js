@@ -1,5 +1,7 @@
 "use strict";
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -557,8 +559,8 @@ var Flatpickr = function () {
 	}, {
 		key: "parseConfig",
 		value: function parseConfig() {
-			var userConfig = Object.assign({}, this.element.dataset, this.instanceConfig);
-			this.config = Object.assign({}, Flatpickr.defaultConfig, userConfig);
+			var userConfig = _extends({}, this.element.dataset, this.instanceConfig);
+			this.config = _extends({}, Flatpickr.defaultConfig, userConfig);
 			if (!userConfig.dateFormat && this.config.enableTime) {
 				if (this.config.noCalendar) {
 					// time picker
@@ -720,7 +722,7 @@ var Flatpickr = function () {
 	}, {
 		key: "setupLocale",
 		value: function setupLocale() {
-			this.l10n = Object.assign({}, Flatpickr.l10n);
+			this.l10n = _extends({}, Flatpickr.l10n);
 		}
 	}, {
 		key: "setupFormats",
