@@ -291,9 +291,9 @@ var Flatpickr = function () {
 			this.hourElement.tabIndex = this.minuteElement.tabIndex = 0;
 			this.hourElement.type = this.minuteElement.type = "number";
 
-			this.hourElement.value = this.selectedDateObj ? Flatpickr.pad(this.selectedDateObj.getHours()) : 12;
+			this.hourElement.value = this.selectedDateObj ? Flatpickr.pad(this.selectedDateObj.getHours()) : this.config.defaultHour;
 
-			this.minuteElement.value = this.selectedDateObj ? Flatpickr.pad(this.selectedDateObj.getMinutes()) : "00";
+			this.minuteElement.value = this.selectedDateObj ? Flatpickr.pad(this.selectedDateObj.getMinutes()) : this.config.defaultMinutes;
 
 			this.hourElement.step = this.config.hourIncrement;
 			this.minuteElement.step = this.config.minuteIncrement;
@@ -315,7 +315,7 @@ var Flatpickr = function () {
 
 				this.secondElement = Flatpickr.createElement("input", "flatpickr-second");
 				this.secondElement.type = "number";
-				this.secondElement.value = this.selectedDateObj ? Flatpickr.pad(this.selectedDateObj.getSeconds()) : "00";
+				this.secondElement.value = this.selectedDateObj ? Flatpickr.pad(this.selectedDateObj.getSeconds()) : this.config.defaultSeconds;
 
 				this.secondElement.step = this.minuteElement.step;
 				this.secondElement.min = this.minuteElement.min;
@@ -328,6 +328,9 @@ var Flatpickr = function () {
 			if (!this.config.time_24hr) {
 				// add this.amPM if appropriate
 				this.amPM = Flatpickr.createElement("span", "flatpickr-am-pm", ["AM", "PM"][this.hourElement.value > 11 | 0]);
+
+				this.hourElement.value = this.hourElement.value % 12 == 0 ? "12" : Flatpickr.pad(this.hourElement.value % 12);
+
 				this.amPM.title = this.l10n.toggleTitle;
 				this.amPM.tabIndex = 0;
 				this.timeContainer.appendChild(this.amPM);
@@ -1149,7 +1152,16 @@ Flatpickr.defaultConfig = {
 	// called after calendar is ready
 	onReady: null, // function (dateObj, dateStr) {}
 
-	onValueUpdate: null
+	onValueUpdate: null,
+
+	// set default hour for new fields
+	defaultHour: "12",
+
+	// set default hour for new fields
+	defaultMinutes: "00",
+
+	// set default hour for new fields
+	defaultSeconds: "00"
 };
 
 Flatpickr.l10n = {
