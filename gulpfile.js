@@ -19,7 +19,7 @@ function get_script_stream(){
 	.pipe(plumber())
 	.pipe(lint())
 	.pipe(lint.format())
-	.pipe(babel({presets: ['es2015']}));
+	.pipe(babel());
 }
 
 gulp.task('script', function(done){
