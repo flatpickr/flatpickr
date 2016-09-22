@@ -3,6 +3,7 @@
         browser: true
         commonjs: true
         es6: true
+        jquery: true
 
     rules:
         brace-style:
