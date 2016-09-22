@@ -523,9 +523,9 @@ function Flatpickr(element, config) {
 			self.config.altFormat = self.config.noCalendar ? "h:i" + (self.config.enableSeconds ? ":S K" : " K") : Flatpickr.defaultConfig.altFormat + (" h:i" + (self.config.enableSeconds ? ":S" : "") + " K");
 		}
 
-		Object.keys(Flatpickr.defaultConfig).forEach(function (k) {
-			return self.config[k] = typeof self.config[k] !== "undefined" ? self.config[k] : Flatpickr.defaultConfig[k];
-		});
+		for (var _k in Flatpickr.defaultConfig) {
+			self.config[_k] = typeof self.config[_k] !== "undefined" ? self.config[_k] : Flatpickr.defaultConfig[_k];
+		}
 	}
 
 	function parseDate(date) {
@@ -623,7 +623,11 @@ function Flatpickr(element, config) {
 	}
 
 	function set(option, value) {
-		self.config[option] = value;
+		if (option === "minDate" || option === "maxDate") {
+			self.config[option] = parseDate(value);
+			self.redraw();
+		} else self.config[option] = value;
+
 		jumpToDate();
 	}
 
