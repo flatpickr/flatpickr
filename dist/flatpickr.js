@@ -421,7 +421,7 @@ function Flatpickr(element, config) {
 				return bool;else if ((d instanceof Date || typeof d === "string") && parseDate(d, true).getTime() === dateToCheck.getTime())
 				// disabled by date string
 				return bool;else if ( // disabled by range
-			(typeof d === "undefined" ? "undefined" : _typeof(d)) === "object" && d.hasOwnProperty("from") && dateToCheck >= parseDate(d.from) && dateToCheck <= parseDate(d.to)) return bool;
+			(typeof d === "undefined" ? "undefined" : _typeof(d)) === "object" && d.from && d.to && dateToCheck >= parseDate(d.from) && dateToCheck <= parseDate(d.to)) return bool;
 		}
 
 		return !bool;
@@ -511,9 +511,9 @@ function Flatpickr(element, config) {
 	function parseConfig() {
 		self.config = self.instanceConfig;
 
-		Object.keys(self.element.dataset).forEach(function (k) {
-			return self.config[k] = typeof Flatpickr.defaultConfig[k] === "boolean" ? self.element.dataset[k] !== "false" : self.element.dataset[k];
-		});
+		for (var k in self.element.dataset || {}) {
+			self.config[k] = typeof Flatpickr.defaultConfig[k] === "boolean" ? self.element.dataset[k] !== "false" : self.element.dataset[k];
+		}
 
 		if (!self.config.dateFormat && self.config.enableTime) {
 			self.config.dateFormat = self.config.noCalendar ? "H:i" + (self.config.enableSeconds ? ":S" : "") : Flatpickr.defaultConfig.dateFormat + " H:i" + (self.config.enableSeconds ? ":S" : "");

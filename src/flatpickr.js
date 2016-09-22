@@ -496,10 +496,8 @@ function Flatpickr(element, config) {
 				return bool;
 
 			else if ( // disabled by range
-				typeof d === "object" &&
-				d.hasOwnProperty("from") &&
-				dateToCheck >= parseDate(d.from) &&
-				dateToCheck <= parseDate(d.to)
+				typeof d === "object" && d.from && d.to &&
+				dateToCheck >= parseDate(d.from) &&	dateToCheck <= parseDate(d.to)
 			)
 				return bool;
 		}
@@ -614,11 +612,11 @@ function Flatpickr(element, config) {
 	function parseConfig() {
 		self.config = self.instanceConfig;
 
-		Object.keys(self.element.dataset).forEach(
-			k => self.config[k] = typeof Flatpickr.defaultConfig[k] === "boolean"
+		for (let k in self.element.dataset || {}) {
+			self.config[k] = typeof Flatpickr.defaultConfig[k] === "boolean"
 				? self.element.dataset[k] !== "false"
 				: self.element.dataset[k]
-		);
+		}
 
 		if (!self.config.dateFormat && self.config.enableTime) {
 			self.config.dateFormat = self.config.noCalendar
@@ -658,7 +656,7 @@ function Flatpickr(element, config) {
 				const m = date.match(timeRegex),
 					hours = !m[4]
 						? m[1]  // military time, no conversion needed
-						: (m[1]%12) + (m[4].toLowerCase() === "p" ? 12 : 0); // am/pm
+						: (m[1] % 12) + (m[4].toLowerCase() === "p" ? 12 : 0); // am/pm
 
 				date = new Date();
 				date.setHours(hours, m[2] || 0, m[3] || 0);
@@ -956,7 +954,7 @@ function Flatpickr(element, config) {
 
 		if (self.config.minDate) {
 			const hidePrevMonthArrow = self.currentYear === self.config.minDate.getFullYear()
-				? (self.currentMonth+11) % 12 < self.config.minDate.getMonth()
+				? (self.currentMonth + 11) % 12 < self.config.minDate.getMonth()
 				: self.currentYear < self.config.minDate.getFullYear();
 
 			self.prevMonthNav.style.display = hidePrevMonthArrow ? "none" : "block";
@@ -964,7 +962,7 @@ function Flatpickr(element, config) {
 
 		if (self.config.maxDate) {
 			const hideNextMonthArrow = self.currentYear === self.config.maxDate.getFullYear()
-				? self.currentMonth+1 > self.config.maxDate.getMonth()
+				? self.currentMonth + 1 > self.config.maxDate.getMonth()
 				: self.currentYear > self.config.maxDate.getFullYear();
 
 			self.nextMonthNav.style.display = hideNextMonthArrow ? "none" : "block";
