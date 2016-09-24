@@ -126,6 +126,11 @@ function Flatpickr(element, config) {
 		self.redraw();
 	}
 
+	function getInputType() {
+		if (navigator.userAgent.indexOf("MSIE 9.0") > 0) return "text";
+		return "number";
+	}
+
 	function build() {
 		var fragment = document.createDocumentFragment();
 		self.calendarContainer = createElement("div", "flatpickr-calendar");
@@ -238,7 +243,7 @@ function Flatpickr(element, config) {
 		self.currentMonthElement = createElement("span", "cur_month");
 
 		self.currentYearElement = createElement("input", "cur_year");
-		self.currentYearElement.type = "number";
+		self.currentYearElement.type = getInputType();
 		self.currentYearElement.title = Flatpickr.l10n.scrollTitle;
 
 		self.nextMonthNav = createElement("span", "flatpickr-next-month");
@@ -268,7 +273,7 @@ function Flatpickr(element, config) {
 		self.minuteElement = createElement("input", "flatpickr-minute");
 
 		self.hourElement.tabIndex = self.minuteElement.tabIndex = 0;
-		self.hourElement.type = self.minuteElement.type = "number";
+		self.hourElement.type = self.minuteElement.type = getInputType();
 
 		self.hourElement.value = self.selectedDateObj ? pad(self.selectedDateObj.getHours()) : 12;
 
@@ -293,7 +298,7 @@ function Flatpickr(element, config) {
 			self.timeContainer.classList.add("has-seconds");
 
 			self.secondElement = createElement("input", "flatpickr-second");
-			self.secondElement.type = "number";
+			self.secondElement.type = getInputType();
 			self.secondElement.value = self.selectedDateObj ? pad(self.selectedDateObj.getSeconds()) : "00";
 
 			self.secondElement.step = self.minuteElement.step;
