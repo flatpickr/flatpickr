@@ -174,11 +174,12 @@ function Flatpickr(element, config) {
 		for (; dayNumber <= prevMonthDays; dayNumber++) {
 			var curDate = new Date(self.currentYear, self.currentMonth - 1, dayNumber, 0, 0, 0, 0, 0),
 			    dateIsEnabled = isEnabled(curDate),
-			    dayElem = createElement("span", "flatpickr-day prevMonthDay" + (dateIsEnabled ? "" : " disabled"), dayNumber);
+			    dayElement = createElement("span", "flatpickr-day prevMonthDay" + (dateIsEnabled ? "" : " disabled"), dayNumber);
 
-			if (dateIsEnabled) dayElem.tabIndex = 0;
+			if (dateIsEnabled) dayElement.tabIndex = 0;
 
-			days.appendChild(dayElem);
+			triggerEvent("DayCreate", dayElement);
+			days.appendChild(dayElement);
 		}
 
 		// Start at 1 since there is no 0th day
@@ -191,35 +192,36 @@ function Flatpickr(element, config) {
 
 			dateIsDisabled = !isEnabled(currentDate);
 
-			var dayElement = createElement("span", dateIsDisabled ? "flatpickr-day disabled" : "flatpickr-day", dayNumber);
+			var _dayElement = createElement("span", dateIsDisabled ? "flatpickr-day disabled" : "flatpickr-day", dayNumber);
 
 			if (!dateIsDisabled) {
-				dayElement.tabIndex = 0;
+				_dayElement.tabIndex = 0;
 
-				if (equalDates(currentDate, new Date())) dayElement.classList.add("today");
+				if (equalDates(currentDate, new Date())) _dayElement.classList.add("today");
 
 				if (self.selectedDateObj && equalDates(currentDate, self.selectedDateObj)) {
-					dayElement.classList.add("selected");
-					self.selectedDateElem = dayElement;
+					_dayElement.classList.add("selected");
+					self.selectedDateElem = _dayElement;
 				}
 			}
-
-			days.appendChild(dayElement);
+			triggerEvent("DayCreate", _dayElement);
+			days.appendChild(_dayElement);
 		}
 
 		// append days from the next month
 		for (var dayNum = daysInMonth + 1; dayNum <= 42 - firstOfMonth; dayNum++) {
 			var _curDate = new Date(self.currentYear, self.currentMonth + 1, dayNum % daysInMonth, 0, 0, 0, 0, 0),
 			    _dateIsEnabled = isEnabled(_curDate),
-			    _dayElement = createElement("span", "flatpickr-day nextMonthDay" + (_dateIsEnabled ? "" : " disabled"), dayNum % daysInMonth);
+			    _dayElement2 = createElement("span", "flatpickr-day nextMonthDay" + (_dateIsEnabled ? "" : " disabled"), dayNum % daysInMonth);
 
 			if (self.config.weekNumbers && dayNum % 7 === 1) {
 				self.weekNumbers.insertAdjacentHTML("beforeend", "<span class='disabled flatpickr-day'>" + self.getWeek(_curDate) + "</span>");
 			}
 
-			if (_dateIsEnabled) _dayElement.tabIndex = 0;
+			if (_dateIsEnabled) _dayElement2.tabIndex = 0;
 
-			days.appendChild(_dayElement);
+			triggerEvent("DayCreate", _dayElement2);
+			days.appendChild(_dayElement2);
 		}
 		self.days.appendChild(days);
 		return self.days;
@@ -834,8 +836,14 @@ function Flatpickr(element, config) {
 		if (self.isOpen) self.close();else self.open();
 	}
 
-	function triggerEvent(event) {
-		if (self.config["on" + event]) self.config["on" + event](self.selectedDateObj, self.input.value, self);
+	function triggerEvent(event, data) {
+		if (self.config["on" + event]) {
+			var hooks = Array.isArray(self.config["on" + event]) ? self.config["on" + event] : [self.config["on" + event]];
+
+			for (var i = 0; i < hooks.length; i++) {
+				hooks[i](self.selectedDateObj, self.input.value, self, data);
+			}
+		}
 	}
 
 	function updateNavigationCurrentMonth() {
@@ -1066,7 +1074,9 @@ Flatpickr.defaultConfig = {
 	// called after calendar is ready
 	onReady: null, // function (dateObj, dateStr) {}
 
-	onValueUpdate: null
+	onValueUpdate: null,
+
+	onDayCreate: null
 };
 
 Flatpickr.l10n = {
