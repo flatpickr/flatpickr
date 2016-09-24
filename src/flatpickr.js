@@ -69,8 +69,9 @@ function Flatpickr(element, config) {
 		if (self.isMobile)
 			return;
 
+		self.debouncedResize = debounce(onResize, 100);
 		document.addEventListener("keydown", onKeyDown);
-		window.addEventListener("resize", debounce(onResize, 300));
+		window.addEventListener("resize", self.debouncedResize);
 
 		document.addEventListener("click", documentClick);
 		document.addEventListener("blur", documentClick);
@@ -440,7 +441,7 @@ function Flatpickr(element, config) {
 		self.input.removeAttribute("readonly");
 
 		document.removeEventListener("keydown", onKeyDown);
-		window.removeEventListener("resize", onResize);
+		window.removeEventListener("resize", self.debouncedResize);
 
 		document.removeEventListener("click", documentClick);
 		document.removeEventListener("blur", documentClick);
