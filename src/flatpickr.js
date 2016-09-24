@@ -427,10 +427,15 @@ function Flatpickr(element, config) {
 	function destroy() {
 		self.calendarContainer.parentNode.removeChild(self.calendarContainer);
 		self.input.value = "";
+
 		if (self.altInput) {
 			self.input.type = "text";
 			self.altInput.parentNode.removeChild(self.altInput);
 		}
+
+		self.input.classList.remove("flatpickr-input");
+		self.input.removeEventListener("focus", open);
+		self.input.removeAttribute("readonly");
 
 		document.removeEventListener("keydown", onKeyDown);
 		window.removeEventListener("resize", onResize);
@@ -439,6 +444,7 @@ function Flatpickr(element, config) {
 		document.removeEventListener("blur", documentClick);
 
 		delete self.input._flatpickr;
+		delete self.input;
 	}
 
 	function documentClick(e) {
@@ -506,60 +512,58 @@ function Flatpickr(element, config) {
 	}
 
 	function onKeyDown(e) {
-		if (!self.isOpen)
-			return;
+		if (self.isOpen) {
+			switch (e.which) {
+				case 13:
+					if (self.timeContainer && self.timeContainer.contains(e.target))
+						updateValue();
 
-		switch (e.which) {
-			case 13:
-				if (self.timeContainer && self.timeContainer.contains(e.target))
-					updateValue();
+					else
+						selectDate(e);
 
-				else
-					selectDate(e);
+					break;
 
+				case 27:
+					self.close();
+					break;
 
-				break;
+				case 37:
+					if (e.target !== self.input & e.target !== self.altInput)
+						changeMonth(-1);
+					break;
 
-			case 27:
-				self.close();
-				break;
+				case 38:
+					e.preventDefault();
 
-			case 37:
-				if (e.target !== self.input & e.target !== self.altInput)
-					changeMonth(-1);
-				break;
+					if (self.timeContainer.contains(e.target))
+						updateTime(e);
 
-			case 38:
-				e.preventDefault();
+					else {
+						self.currentYear++;
+						self.redraw();
+					}
 
-				if (self.timeContainer.contains(e.target))
-					updateTime(e);
+					break;
 
-				else {
-					self.currentYear++;
-					self.redraw();
-				}
+				case 39:
+					if (e.target !== self.input & e.target !== self.altInput)
+						changeMonth(1);
+					break;
 
-				break;
+				case 40:
+					e.preventDefault();
+					if (self.timeContainer.contains(e.target))
+						updateTime(e);
 
-			case 39:
-				if (e.target !== self.input & e.target !== self.altInput)
-					changeMonth(1);
-				break;
+					else {
+						self.currentYear--;
+						self.redraw();
+					}
 
-			case 40:
-				e.preventDefault();
-				if (self.timeContainer.contains(e.target))
-					updateTime(e);
+					break;
 
-				else {
-					self.currentYear--;
-					self.redraw();
-				}
-
-				break;
-
-			default: break;
+				default: break;
+			}
 		}
 	}
 
