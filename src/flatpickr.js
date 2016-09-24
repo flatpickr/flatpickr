@@ -155,7 +155,7 @@ function Flatpickr(element, config) {
 		if (self.config.inline || self.config.static) {
 			self.calendarContainer.classList.add(self.config.inline ? "inline" : "static");
 			positionCalendar();
-			self.element.parentNode.appendChild(self.calendarContainer);
+			self.element.parentNode.insertBefore(self.calendarContainer, self.element.nextSibling);
 		}
 		else
 			document.body.appendChild(self.calendarContainer);
