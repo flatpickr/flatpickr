@@ -350,7 +350,7 @@ function Flatpickr(element, config) {
 		handleYearChange();
 		updateNavigationCurrentMonth();
 		buildDays();
-		(self.config.noCalendar ? self.timeContainer : self.days).focus();
+		if (!self.config.noCalendar) self.days.focus();
 	}
 
 	function clear() {
