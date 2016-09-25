@@ -1053,7 +1053,7 @@ function Flatpickr(element, config) {
 
 Flatpickr.defaultConfig = {
 
-	mode: "range",
+	mode: "single",
 
 	/* if true, dates will be parsed, formatted, and displayed in UTC.
  preloading date strings w/ timezones is recommended but not necessary */
