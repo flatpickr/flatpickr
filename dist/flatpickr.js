@@ -603,10 +603,10 @@ function Flatpickr(element, config) {
 			self.calendarContainer.classList.add("arrowTop");
 		}
 
-		if (!self.config.inline) {
+		if (!self.config.inline && !self.config.static) {
 			self.calendarContainer.style.top = top + "px";
 			self.calendarContainer.style.left = left + "px";
-		}
+		} else self.calendarContainer.style.top = input.offsetHeight + "px";
 	}
 
 	function redraw() {
