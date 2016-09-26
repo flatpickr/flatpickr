@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", function() {
 			"material_blue", "material_red", "material_orange", "material_green",
 			"dark",
 			"confetti",
-			"grapefruit",
 			"base16_flat"
 		];
 
