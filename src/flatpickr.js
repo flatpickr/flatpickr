@@ -545,7 +545,7 @@ function Flatpickr(element, config) {
 				case 38:
 					e.preventDefault();
 
-					if (self.timeContainer.contains(e.target))
+					if (self.timeContainer && self.timeContainer.contains(e.target))
 						updateTime(e);
 
 					else {
@@ -562,7 +562,7 @@ function Flatpickr(element, config) {
 
 				case 40:
 					e.preventDefault();
-					if (self.timeContainer.contains(e.target))
+					if (self.timeContainer && self.timeContainer.contains(e.target))
 						updateTime(e);
 
 					else {

@@ -460,7 +460,7 @@ function Flatpickr(element, config) {
 				case 38:
 					e.preventDefault();
 
-					if (self.timeContainer.contains(e.target)) updateTime(e);else {
+					if (self.timeContainer && self.timeContainer.contains(e.target)) updateTime(e);else {
 						self.currentYear++;
 						self.redraw();
 					}
@@ -473,7 +473,7 @@ function Flatpickr(element, config) {
 
 				case 40:
 					e.preventDefault();
-					if (self.timeContainer.contains(e.target)) updateTime(e);else {
+					if (self.timeContainer && self.timeContainer.contains(e.target)) updateTime(e);else {
 						self.currentYear--;
 						self.redraw();
 					}
