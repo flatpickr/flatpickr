@@ -523,9 +523,10 @@ function Flatpickr(element, config) {
 	}
 
 	function parseConfig() {
-		self.config = self.instanceConfig;
-
-		for (var k in self.element.dataset || {}) {
+		self.config = {};
+		for (var _config in self.instanceConfig) {
+			self.config[_config] = self.instanceConfig[_config];
+		}for (var k in self.element.dataset || {}) {
 			self.config[k] = typeof Flatpickr.defaultConfig[k] === "boolean" ? self.element.dataset[k] !== "false" : self.element.dataset[k];
 		}
 
