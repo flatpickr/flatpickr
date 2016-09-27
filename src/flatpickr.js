@@ -284,10 +284,10 @@ class Flatpickr {
 		this.hourElement.type = this.minuteElement.type = "number";
 
 		this.hourElement.value =
-			this.selectedDateObj ? Flatpickr.pad(this.selectedDateObj.getHours()) : 12;
+			this.selectedDateObj ? Flatpickr.pad(this.selectedDateObj.getHours()) : this.config.defaultHour;
 
 		this.minuteElement.value =
-			this.selectedDateObj ? Flatpickr.pad(this.selectedDateObj.getMinutes()) : "00";
+			this.selectedDateObj ? Flatpickr.pad(this.selectedDateObj.getMinutes()) : this.config.defaultMinutes;
 
 		this.hourElement.step = this.config.hourIncrement;
 		this.minuteElement.step = this.config.minuteIncrement;
@@ -310,7 +310,7 @@ class Flatpickr {
 			this.secondElement = Flatpickr.createElement("input", "flatpickr-second");
 			this.secondElement.type = "number";
 			this.secondElement.value =
-				this.selectedDateObj ? Flatpickr.pad(this.selectedDateObj.getSeconds()) : "00";
+				this.selectedDateObj ? Flatpickr.pad(this.selectedDateObj.getSeconds()) : this.config.defaultSeconds;
 
 			this.secondElement.step = this.minuteElement.step;
 			this.secondElement.min = this.minuteElement.min;
@@ -328,6 +328,10 @@ class Flatpickr {
 				"flatpickr-am-pm",
 				["AM", "PM"][(this.hourElement.value > 11) | 0]
 			);
+
+			this.hourElement.value =
+				this.hourElement.value % 12 == 0 ? "12" : Flatpickr.pad(this.hourElement.value % 12);
+
 			this.amPM.title = this.l10n.toggleTitle;
 			this.amPM.tabIndex = 0;
 			this.timeContainer.appendChild(this.amPM);
