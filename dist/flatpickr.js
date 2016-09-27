@@ -12,6 +12,7 @@ var Flatpickr = function () {
 
 		this.element = element;
 		this.instanceConfig = config || {};
+		this.calendarParent = null;
 
 		this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
@@ -162,7 +163,8 @@ var Flatpickr = function () {
 				this.positionCalendar();
 				this.element.parentNode.appendChild(this.calendarContainer);
 			} else {
-				document.body.appendChild(this.calendarContainer);
+				this.calendarParent = this.config.calendarParent ? this.config.calendarParent : document.body;
+				this.calendarParent.appendChild(this.calendarContainer);
 			}
 		}
 	}, {
@@ -618,18 +620,16 @@ var Flatpickr = function () {
 		value: function positionCalendar() {
 			var calendarHeight = this.calendarContainer.offsetHeight,
 			    input = this.altInput || this.input,
-			    inputBounds = input.getBoundingClientRect(),
-			    distanceFromBottom = window.innerHeight - inputBounds.bottom + input.offsetHeight;
+			    inputBounds = input.getBoundingClientRect();
 
-			var top = void 0,
+			var top = inputBounds.bottom - this.calendarParent.getBoundingClientRect().top + 4,
 			    left = window.pageXOffset + inputBounds.left;
 
-			if (distanceFromBottom < calendarHeight) {
-				top = window.pageYOffset - calendarHeight + inputBounds.top - 2;
+			if (inputBounds.top > calendarHeight + input.offsetHeight) {
+				top = top - calendarHeight - input.offsetHeight - 4;
 				this.calendarContainer.classList.remove("arrowTop");
 				this.calendarContainer.classList.add("arrowBottom");
 			} else {
-				top = window.pageYOffset + input.offsetHeight + inputBounds.top + 2;
 				this.calendarContainer.classList.remove("arrowBottom");
 				this.calendarContainer.classList.add("arrowTop");
 			}
@@ -1149,7 +1149,18 @@ Flatpickr.defaultConfig = {
 	// called after calendar is ready
 	onReady: null, // function (dateObj, dateStr) {}
 
-	onValueUpdate: null
+	onValueUpdate: null,
+
+	// set default hour for new fields
+	defaultHour: "12",
+
+	// set default hour for new fields
+	defaultMinutes: "00",
+
+	// set default hour for new fields
+	defaultSeconds: "00",
+
+	calendarParent: null
 };
 
 Flatpickr.l10n = {
