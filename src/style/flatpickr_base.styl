@@ -15,7 +15,11 @@ $width = 256px
 
 .flatpickr-calendar
 	background $calendar_background
-	display none
+	display block
+	visibility hidden
+	left 0
+	top 0
+	z-index -999999
 
 	unless $border-calendar-only is defined
 		border 1px solid $calendar_border_color
@@ -29,6 +33,7 @@ $width = 256px
 		opacity 1
 		z-index 99999
 		display block
+		visibility visible
 
 	&.inline
 		margin-top 2px
