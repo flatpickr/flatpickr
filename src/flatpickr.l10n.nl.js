@@ -1,19 +1,20 @@
 /* Dutch locals for flatpickr */
-var Flatpickr = Flatpickr||{l10n: {}};
+var Flatpickr = Flatpickr||{l10ns: {}};
+Flatpickr.l10ns.nl = {};
 
-Flatpickr.l10n.weekdays = {
+Flatpickr.l10ns.nl.weekdays = {
 	shorthand: ['Zo', 'Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za'],
 	longhand: ['Zondag', 'Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag']
 };
 
-Flatpickr.l10n.months = {
+Flatpickr.l10ns.nl.months = {
 	shorthand: ['Jan', 'Feb', 'Maa', 'Apr', 'Mei', 'Jun', 'Jul', 'Aug', 'Sept', 'Okt', 'Nov', 'Dec'],
 	longhand: ['Januari', 'Februari', 'Maart', 'April', 'Mei', 'Juni', 'Juli', 'Augustus', 'September', 'Oktober', 'November', 'December']
 };
 
-Flatpickr.l10n.firstDayOfWeek = 1;
+Flatpickr.l10ns.nl.firstDayOfWeek = 1;
 
-Flatpickr.l10n.ordinal = nth => {
+Flatpickr.l10ns.nl.ordinal = nth => {
 	if (nth === 1 || nth === 8 || nth >= 20) {
 		return "ste";
 	}
@@ -21,5 +22,5 @@ Flatpickr.l10n.ordinal = nth => {
 	return "de";
 };
 if (typeof module !== "undefined") {
-	module.exports = Flatpickr.l10n;
+	module.exports = Flatpickr.l10ns;
 }

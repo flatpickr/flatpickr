@@ -1,26 +1,27 @@
 /* Hungarian locals for flatpickr */
-var Flatpickr = Flatpickr||{l10n: {}};
+var Flatpickr = Flatpickr||{l10ns: {}};
+Flatpickr.l10ns.hu = {};
 
-Flatpickr.l10n.firstDayOfWeek = 1;
+Flatpickr.l10ns.hu.firstDayOfWeek = 1;
 
-Flatpickr.l10n.weekdays = {
+Flatpickr.l10ns.hu.weekdays = {
 	shorthand: ['V', 'H', 'K', 'Sz', 'Cs', 'P', 'Szo'],
 	longhand: ['Vasárnap', 'Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek', 'Szombat']
 };
 
-Flatpickr.l10n.months = {
+Flatpickr.l10ns.hu.months = {
 	shorthand: ['Jan', 'Feb', 'Már', 'Ápr', 'Máj', 'Jún', 'Júl', 'Aug', 'Szep', 'Okt', 'Nov', 'Dec'],
 	longhand: ['Január', 'Február', 'Március', 'Április', 'Május', 'Június', 'Július', 'Augusztus', 'Szeptember', 'Október', 'November', 'December']
 };
 
-Flatpickr.l10n.ordinal = function() {
+Flatpickr.l10ns.hu.ordinal = function() {
 	return ".";
 };
 
-Flatpickr.l10n.weekAbbreviation = "Hét";
-Flatpickr.l10n.scrollTitle = "Görgessen";
-Flatpickr.l10n.toggleTitle = "Kattintson a váltáshoz";
+Flatpickr.l10ns.hu.weekAbbreviation = "Hét";
+Flatpickr.l10ns.hu.scrollTitle = "Görgessen";
+Flatpickr.l10ns.hu.toggleTitle = "Kattintson a váltáshoz";
 
 if (typeof module !== "undefined") {
-	module.exports = Flatpickr.l10n;
+	module.exports = Flatpickr.l10ns;
 }
