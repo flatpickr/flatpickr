@@ -1102,7 +1102,10 @@ function Flatpickr(element, config) {
 			);
 			self.minuteElement.value = pad(minutes);
 
-			if (self.secondElement !== undefined)
+			if (!self.config.time_24hr)
+				self.amPM.textContent = hours >= 12 ? "PM" : "AM";
+
+			if (self.config.enableSeconds)
 				self.secondElement.value = pad(seconds);
 		}
 
