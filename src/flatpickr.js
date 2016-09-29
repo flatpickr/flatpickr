@@ -1209,9 +1209,16 @@ function Flatpickr(element, config) {
 		self.input.classList.add("flatpickr-input");
 		if (self.config.altInput) {
 			// replicate self.element
+			var inputClasses = "";
+			if (self.config.altInputClassAutoCopy)
+				inputClasses += self.input.getAttribute("class");
+			else
+				inputClasses += "flatpickr-input";
+			if (self.config.altInputClass != "")
+				inputClasses += " " + self.config.altInputClass
 			self.altInput = createElement(
 				self.input.nodeName,
-				"flatpickr-input " + " " + self.config.altInputClass
+				inputClasses
 			);
 			self.altInput.placeholder = self.input.placeholder;
 			self.altInput.type = "text";
@@ -1526,6 +1533,9 @@ Flatpickr.defaultConfig = {
 
 	// the created altInput element will have this class.
 	altInputClass: "",
+
+	// the created altInput element will have this class.
+	altInputClassAutoCopy: false,
 
 	// same as dateFormat, but for altInput
 	altFormat: "F j, Y", // defaults to e.g. June 10, 2016
