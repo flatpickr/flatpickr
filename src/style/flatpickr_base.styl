@@ -31,16 +31,18 @@
 		z-index 99999
 		display inline-block
 
+
 	&.inline
-		max-width 288px
 		display table
+		max-width 288px
 		margin-top 2px
 		position relative
 
 	&.static
-		margin-top 2px
-		top 0
-		left 0
+		position relative
+
+		&.open
+			display block
 
 	&.hasWeeks
 		max-width 300px
@@ -149,6 +151,8 @@
 		line-height inherit
 		height initial
 		border 0
+		border-radius: 0;
+		vertical-align: initial;
 
 		&:hover
 			background rgba(0,0,0,0.05)

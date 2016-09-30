@@ -153,7 +153,7 @@ function Flatpickr(element, config) {
 		if (self.config.inline || self.config.static) {
 			self.calendarContainer.classList.add(self.config.inline ? "inline" : "static");
 			positionCalendar();
-			self.element.parentNode.insertBefore(self.calendarContainer, self.element.nextSibling);
+			self.element.parentNode.insertBefore(self.calendarContainer, (self.altInput || self.input).nextSibling);
 		} else document.body.appendChild(self.calendarContainer);
 	}
 
@@ -606,7 +606,7 @@ function Flatpickr(element, config) {
 		if (!self.config.inline && !self.config.static) {
 			self.calendarContainer.style.top = top + "px";
 			self.calendarContainer.style.left = left + "px";
-		} else self.calendarContainer.style.top = input.offsetHeight + "px";
+		}
 	}
 
 	function redraw() {
@@ -630,7 +630,7 @@ function Flatpickr(element, config) {
 
 		if (isPrevMonthDay || isNextMonthDay) changeMonth(+isNextMonthDay - isPrevMonthDay);
 
-		var selectedDate = new Date(self.currentYear, self.currentMonth, e.target.innerHTML);
+		var selectedDate = new Date(self.currentYear, self.currentMonth, e.target.textContent);
 
 		if (self.config.mode === "single") self.selectedDates = [selectedDate];else if (self.config.mode === "multiple") {
 			var selectedIndex = isDateSelected(selectedDate);
