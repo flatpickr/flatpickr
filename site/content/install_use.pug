@@ -1,0 +1,34 @@
+.section.bg-orange
+	.wrapper
+		.row
+			.col.col-6
+				h2 Install
+				p
+					code npm install flatpickr
+					br
+
+					code bower install flatpickr-calendar
+				p
+					| Otherwise:
+					br
+					a.btn(href='https://github.com/chmln/flatpickr/archive/gh-pages.zip', type='white', outline)
+						span Download&nbsp;
+						i.icon-angle-double-down
+				p.nomargin
+					| Then
+					code require(&apos;flatpickr&apos;)
+					| , use wiredep, or otherwise load the necessary files.
+
+			.col.col-6
+				h2 Use
+				p
+					| There are multiple ways to create a Flatpickr instance. In all cases, config is optional. The return value will be the Flatpickr instance, or an array of instances.
+				pre.prettyprint.lang-js.
+					flatpickr(".selector", {});
+					document.getElementById("myID").flatpickr({});
+					$(".calendar").flatpickr({}); // jQuery
+
+
+				p Or pass in a node directly.
+				pre.prettyprint.lang-js.
+					new Flatpickr(HTMLElement, [options]);

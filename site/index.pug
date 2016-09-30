@@ -1,0 +1,35 @@
+doctype html
+html(lang='en')
+    head
+        title flatpickr - lightweight datetimepicker &amp; calendar
+        meta(charset='utf-8')
+        meta(http-equiv='x-ua-compatible', content='ie=edge')
+        link(rel='icon', type='image/png', href='favicon.png')
+        meta(name='viewport', content='width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=yes')
+        script(async, src='assets/js/examples.js')
+        script(async, src='dist/flatpickr.js', onload='fp_ready()')
+        script(async, src='assets/js/prettify.js?skin=none')
+        script(async, src='assets/js/table-of-contents.js')
+        script(async, src='assets/js/themer.js')
+        script#locale_script(async='').
+        script(async='', src='assets/js/localizr.js')
+        link(rel='stylesheet', type='text/css', href='assets/style.min.css')
+        link#cal_style(rel='stylesheet', type='text/css', href='dist/flatpickr.min.css')
+    body
+        header#hero.section
+            .wrapper
+                h1 flatpickr
+                h3.subheading.muted A lightweight &amp; powerful datetimepicker
+
+
+        include content/install_use
+        include content/discover
+
+        .section
+            .wrapper
+                include content/examples
+
+
+        //include content/themes
+        include content/options
+

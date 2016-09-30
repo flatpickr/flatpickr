@@ -1,0 +1,214 @@
+.padding-y-s
+    .wrapper
+        h2 Options
+
+        p
+            strong Protip:
+
+            u all
+            |  of the string/boolean config options can also be supplied using data attributes, e.g. data-min-date, data-default-date, data-date-format etc.
+
+        div(style="max-height: 60vh; overflow-y: auto")
+            table.options
+                thead
+                    tr
+                        th Config Option
+                        th Type
+                        th Default
+                        th Description
+                tbody
+                    tr
+                        td altFormat
+                        td string
+                        td &quot;F j, Y&quot;
+                        td Exactly the same as date format, but for the altInput field
+                    tr
+                        td altInput
+                        td Boolean
+                        td false
+                        td
+                            | Show the user a readable date (as per altFormat), but return something totally different to the server.
+                    tr
+                        td altInputClass
+                        td String
+                        td &quot;&quot;
+                        td
+                            | This class will be added to the input element created by the altInput option. Helpful if input elements are styled using classes. Bootstrap users will want to specify
+                            code form-control
+                            | here.
+                    tr
+                        td allowInput
+                        td boolean
+                        td false
+                        td
+                            | Allows the user to enter a date directly input the input field. By default, direct entry is disabled.
+                    tr
+                        td clickOpens
+                        td boolean
+                        td true
+                        td
+                            | Clicking on the input opens the date (time) picker. Disable this if you wish to open the calendar manually with
+                            code .open()
+                    tr
+                        td dateFormat
+                        td string
+                        td &quot;Y-m-d&quot;
+                        td
+                            | A string of characters which are used to define how the date will be displayed in the input box. The supported characters are defined in the table below.
+                    tr
+                        td defaultDate
+                        td String/Date
+                        td null
+                        td
+                            | Set the initial selected date. Same as preloading a date string into an input&apos;s value attribute, but can also handle a Date object.
+                    tr
+                        td disable
+                        td array
+                        td []
+                        td See&nbsp;
+                            a(href="#disable") Disabling dates
+
+                    tr
+                        td enable
+                        td array
+                        td []
+                        td See&nbsp;
+                            a(href="#enable") Enabling dates
+
+                    tr
+                        td enableTime
+                        td boolean
+                        td false
+                        td Enables time picker
+                    tr
+                        td enableSeconds
+                        td boolean
+                        td false
+                        td Enables seconds in the time picker.
+
+                    tr
+                        td hourIncrement
+                        td integer
+                        td 1
+                        td Adjusts the step for the hour input (incl. scrolling)
+
+                    tr
+                        td inline
+                        td boolean
+                        td false
+                        td Displays the calendar inline
+
+                    tr
+                        td maxDate
+                        td String/Date
+                        td null
+                        td The maximum date that a user can pick to.
+
+                    tr
+                        td minDate
+                        td String/Date
+                        td null
+                        td The minimum date that a user can start picking from.
+
+
+                    tr
+                        td minuteIncrement
+                        td integer
+                        td 5
+                        td Adjusts the step for the minute input (incl. scrolling)
+
+                    tr
+                        td nextArrow
+                        td string
+                        td
+                            code &gt;
+                        td Code for the arrow icon, used to switch months.
+
+                    tr
+                        td noCalendar
+                        td boolean
+                        td false
+                        td Hides the calendar. For use along with enableTime.
+
+                    tr
+                        td onChange
+                        td function, [functions]
+                        td null
+                        td Function(s) to trigger on every date selection. See&nbsp;
+                            a(href="#eventsAPI") Events API
+
+                    tr
+                        td onClose
+                        td function, [functions]
+                        td null
+                        td Function(s) to trigger on every time the calendar is closed. See&nbsp;
+                            a(href="#eventsAPI") Events API
+
+                    tr
+                        td onOpen
+                        td function, [functions]
+                        td null
+                        td Function(s) to trigger on every time the calendar is opened. See&nbsp;
+                            a(href="#eventsAPI") Events API
+
+                    tr
+                        td onReady
+                        td function, [functions]
+                        td null
+                        td Function to trigger when the calendar is ready. See&nbsp;
+                            a(href="#eventsAPI") Events API
+
+
+                    tr
+                        td parseDate
+                        td function
+                        td false
+                        td Function that expects a date string and must return a Date object
+
+                    tr
+                        td prevArrow
+                        td string
+                        td
+                            code &lt;
+                        td Code for the left arrow icon.
+
+                    tr
+                        td shorthandCurrentMonth
+                        td boolean
+                        td false
+                        td Show the month using the shorthand version (ie, Sep instead of September).
+
+                    tr
+                        td static
+                        td boolean
+                        td false
+                        td
+                            | Position the calendar inside the wrapper and next to the input element. (Leave
+                            code false
+                            | unless you know what you&apos;re doing.
+
+                    tr
+                        td time_24hr
+                        td boolean
+                        td false
+                        td Displays time picker in 24 hour mode without AM/PM selection when enabled.
+
+                    tr
+                        td utc
+                        td boolean
+                        td false
+                        td
+                            | When true, dates will parsed, formatted, and displayed in UTC. It&apos;s recommended that date strings contain the timezone, but not necessary.
+
+                    tr
+                        td weekNumbers
+                        td boolean
+                        td false
+                        td Enables display of week numbers in calendar.
+
+                    tr
+                        td wrap
+                        td Boolean
+                        td false
+                        td
+                            a(href='https://chmln.github.io/flatpickr/#strap') Custom elements and input groups

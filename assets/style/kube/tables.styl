@@ -1,0 +1,121 @@
+/* =Tables   ========================================================================== */
+
+table
+	max-width 100%
+	width 100%
+	empty-cells show
+
+	caption
+		text-transform uppercase
+		padding 0
+		color #000
+		font-size 11px
+		font-weight bold
+
+	th, td
+		border-bottom 1px solid rgba(0, 0, 0, 0.03)
+		padding 16px 16px 15px 16px
+		vertical-align middle
+
+		&:first-child
+			padding-left 0
+		&:last-child
+			padding-right 0
+
+	tfoot
+		th, td
+			color rgba(0, 0, 0, 0.5)
+
+
+	&.table-bordered
+		margin-top -1px
+		td, th
+			border 1px solid rgba(0, 0, 0, 0.03)
+
+		caption, td:first-child
+			padding-left 16px
+
+
+	// &.table-stripped td:first-child, &.table-bordered th:first-child, &.table-stripped th:first-child
+	// 	padding-left 16px
+
+	// &.table-bordered td:last-child, &.table-stripped td:last-child, &.table-bordered th:last-child, &.table-stripped th:last-child
+	// 	padding-right 16px
+
+	&.table-simple
+		td, th, caption
+			border none
+			padding-left 0
+
+		td, th
+			padding-bottom 16px
+
+	&.table-flat
+		margin-bottom 0
+		td, th, caption
+			border none
+			padding 0
+
+	&.table-stroked
+		td, th
+			border-bottom 1px solid rgba(0, 0, 0, 0.03)
+
+	&.table-stripped tbody tr:nth-child(odd) td
+		background #f8f8f8
+
+	// &.slim td
+	// 	padding 12px 8px
+
+	&.narrow td
+		padding 8px 8px 7px 0
+
+	&.supernarrow td
+		padding 4px 4px 3px 0
+
+	tbody tr
+		&.clickable
+			cursor pointer
+
+		&:hover
+			background rgba(0,0,0,0.03)
+
+
+
+@media (max-width 768px)
+	table.table-responsive
+		border 0
+		thead
+			display none
+
+		tr
+			display block
+			border-bottom 2px solid rgba(0, 0, 0, 0.1)
+
+		td
+			display block
+			text-align right
+			padding 10px
+
+			&:last-child, &:first-child
+				display block
+				text-align right
+				padding 10px
+
+
+		&.table-flat td
+			padding 0
+
+		&.table-bordered td:last-child
+			border-bottom 0
+
+		td
+			&:last-child
+				border-bottom 0
+
+			&:before
+				content attr(data-label)
+				float left
+				text-transform uppercase
+				font-size 86%
+				font-weight bold
+				line-height 2

@@ -1,0 +1,40 @@
+$yellow = #FFCB52
+$orange = #ffa557
+$red = #CD5C5C
+$maroon = #B04C6A
+$darkblue = #363B4A
+$blue = #0074D9
+
+$primary = $blue
+
+$colors = {
+
+	'yellow': $yellow,
+	'orange': $orange,
+	'red': $red,
+
+	'maroon': $maroon,
+	'darkblue': $darkblue,
+
+	'white': #fff,
+	'black': #474d5b
+
+}
+
+for color in $colors
+	.bg-{color}
+		background: $colors[color]
+
+		h1, h2, h3
+			color black
+			opacity 0.7
+		p
+			if dark($colors[color])
+				color alpha(white, 0.7)
+			else
+				color alpha(black, 0.7)
+
+
+	.color-{color}
+		color: $colors[color]
+

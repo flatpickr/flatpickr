@@ -1,0 +1,58 @@
+#local.example
+    h3#locale Localization
+    p
+        | Flatpickr has been translated to
+        a(href='https://github.com/chmln/flatpickr/tree/gh-pages/src', target='_blank') over 25 languages
+        | .
+    p
+        | Localization involves simply overriding objects below, contained in
+        code Flatpickr.l10n
+        | .
+    p
+        strong Locale:
+
+        select#locales
+            option(value='') English
+    p
+        input#locale_calendar.flatpickr(type='text', data-inline='true', data-min-date='today')
+    table.table
+        thead
+            tr
+                th Property
+                th Type
+                th Default
+                th Description
+        tbody
+            tr
+                td l10n.weekdays.shorthand
+                td array
+                td [&apos;Sun&apos;, &apos;Mon&apos;, &apos;Tue&apos;, &apos;Wed&apos;, &apos;Thu&apos;, &apos;Fri&apos;, &apos;Sat&apos;]
+                td The shortened version of each weekday, starting with Sunday
+            tr
+                td l10n.weekdays.longhand
+                td array
+                td [&apos;Sunday&apos;, &apos;Monday&apos;, &apos;Tuesday&apos;, &apos;Wednesday&apos;, &apos;Thursday&apos;, &apos;Friday&apos;, &apos;Saturday&apos;]
+                td The long version of each weekday, starting with Sunday
+            tr
+                td l10n.months.shorthand
+                td array
+                td
+                    | [&apos;Jan&apos;, &apos;Feb&apos;, &apos;Mar&apos;, &apos;Apr&apos;, &apos;May&apos;, &apos;Jun&apos;, &apos;Jul&apos;, &apos;Aug&apos;, &apos;Sep&apos;, &apos;Oct&apos;, &apos;Nov&apos;, &apos;Dec&apos;]
+                td Shortened version of each month, starting with January
+            tr
+                td l10n.months.longhand
+                td array
+                td
+                    | [&apos;January&apos;, &apos;February&apos;, &apos;March&apos;, &apos;April&apos;, &apos;May&apos;, &apos;June&apos;, &apos;July&apos;, &apos;August&apos;, &apos;September&apos;, &apos;October&apos;, &apos;November&apos;, &apos;December&apos;]
+                td Long version of each month, starting with January
+            tr
+                td l10n.daysInMonth
+                td array
+                td [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+                td How many days in each month, starting with January
+            tr
+                td l10n.firstDayOfWeek
+                td integer
+                td 0
+                td
+                    | Start the calendar on a different weekday (0 = Sunday, 1 = Monday, 2 = Tuesday, etc.)

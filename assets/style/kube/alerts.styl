@@ -1,0 +1,116 @@
+/* =Messages
+-----------------------------------------------------------------------------*/
+
+.message
+	border-radius 2px;
+	display none;
+	position fixed;
+	z-index 2000;
+	top 16px;
+	right 16px;
+	max-width 360px;
+	line-height 1.45;
+	font-size 94%;
+	padding 24px 36px;
+	color rgba(0, 0, 0, 0.9);
+	&.message-line
+		top 0;
+		right 0;
+		left 0;
+		width 100%;
+		padding-right 200px;
+		max-width none;
+		border-radius 0;
+		footer
+			position absolute;
+			top 0;
+			right 2rem;
+
+
+	ul, ol
+		margin-top 8px;
+		margin-bottom 0;
+
+	footer
+		margin-top 8px;
+
+	a
+		font-weight bold;
+
+	&.message-primary, &.message-error, &.message-success, &.message-primary a, &.message-error a, &.message-success a
+		color rgba(255, 255, 255, 0.9);
+
+	&.message-primary a:hover, &.message-error a:hover, &.message-success a:hover
+		color rgba(255, 255, 255, 0.7);
+
+	&.message-primary
+		background $color-primary;
+
+	&.message-error
+		background #d11149;
+
+	&.message-warning
+		background #f4d31e;
+
+	&.message-success
+		background #0a8754;
+
+
+
+/* =Alerts
+-----------------------------------------------------------------------------*/
+
+.alert
+	position relative;
+	padding 12px 24px;
+	padding-right 32px;
+	line-height 24px;
+	font-size 94%;
+	color #000000;
+	display block;
+	font-weight normal;
+	border-radius 2px;
+	margin-bottom 24px;
+	&.alert-primary
+		color $color-primary;
+		background-color rgba(47, 119, 209, 0.15);
+		a, h5
+			color $color-primary;
+
+
+	&.alert-error
+		color #d11149;
+		background-color rgba(209, 17, 73, 0.15);
+		a, h5
+			color #d11149;
+
+
+	&.alert-warning
+		color #bca109;
+		background-color rgba(244, 211, 30, 0.23);
+		a, h5
+			color #bca109;
+
+
+	&.alert-success
+		color #0a8754;
+		background-color rgba(10, 135, 84, 0.13);
+		a, h5
+			color #0a8754;
+
+
+	a
+		font-weight bold;
+		&:hover
+			color #000;
+
+
+	span.close
+		position absolute;
+		top 0;
+		right 0;
+		padding .5rem 1rem;
+		opacity .6;
+		cursor pointer;
+		&:hover
+			opacity 1;

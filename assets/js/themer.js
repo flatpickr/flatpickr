@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function() {
+
 	var theme_sel = document.getElementById("themes"),
 		stylesheet = document.getElementById("cal_style"),
 		themes = [
@@ -20,4 +20,3 @@ document.addEventListener("DOMContentLoaded", function() {
 		theme_sel.blur();
 	});
 
-});

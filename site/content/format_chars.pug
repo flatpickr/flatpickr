@@ -1,0 +1,120 @@
+#dateformat.example
+    h3 Date Format Characters
+
+    input#dateFormatComposer.big(placeholder='Enter symbols', type='text')
+
+    span
+        | &rarr;
+        span#dateFormatOutput
+    table.table
+        thead
+            tr
+                th Character
+                th Description
+                th Example
+        tbody
+            tr
+                td d
+                td Day of the month, 2 digits with leading zeros
+                td 01 to 31
+            tr
+                td D
+                td A textual representation of a day
+                td Mon through Sun
+            tr
+                td l (lowercase &apos;L&apos;)
+                td A full textual representation of the day of the week
+                td Sunday through Saturday
+            tr
+                td j
+                td Day of the month without leading zeros
+                td 1 to 31
+            tr
+                td J
+                td Day of the month without leading zeros and ordinal suffix
+                td 1st, 2nd, to 31st
+            tr
+                td w
+                td Numeric representation of the day of the week
+                td 0 (for Sunday) through 6 (for Saturday)
+            tr
+                td F
+                td A full textual representation of a month
+                td January through December
+            tr
+                td m
+                td Numeric representation of a month, with leading zero
+                td 01 through 12
+            tr
+                td n
+                td Numeric representation of a month, without leading zeros
+                td 1 through 12
+            tr
+                td M
+                td A short textual representation of a month
+                td Jan through Dec
+            tr
+                td U
+                td The number of seconds since the Unix Epoch
+                td 1413704993
+            tr
+                td y
+                td A two digit representation of a year
+                td 99 or 03
+            tr
+                td Y
+                td A full numeric representation of a year, 4 digits
+                td 1999 or 2003
+#timeformat.example
+    h3 Time Format Characters
+    table.table
+        thead
+            tr
+                th Character
+                th Description
+                th Example
+        tbody
+            tr
+                td H
+                td Hours (24 hours)
+                td 00 to 23
+            tr
+                td h
+                td Hours
+                td 1 to 12
+            tr
+                td i
+                td Minutes
+                td 00 to 59
+            tr
+                td S
+                td Seconds, 2 digits
+                td 00 to 59
+            tr
+                td s
+                td Seconds
+                td 0, 1 to 59
+            tr
+                td K
+                td AM/PM
+                td AM or PM
+    p
+    h3 Escaping date format characters
+    p
+    p
+        | To escape a character (if you need to use one of the reserved format characters above) use a double backslash:
+        code \\
+    p Example:
+    pre.prettyprint.
+
+    p To get something like:
+    p
+        strong Day picked: 2013/02/12
+    p
+        | If you do not escape the characters you would end up with something like this instead:
+    p
+        strong Tuea13 picke12: 2013/02/12
+    p Which is probably not what you want...
+    p
+        em Note:
+        | It&apos;s recommended that you escape all characters that you don&apos;t want accidentally converted to format characters in the future as others are added.
