@@ -22,9 +22,7 @@ function toggleConfig(e) {
 			: e.target.value;
 
 
-	config[option] = typeof Flatpickr.defaultConfig[option] === "boolean"
-			? !config[option]
-			: e.target.value;
+	config[option] = userConfig[option];
 
 	if (config.enableTime) {
 		config.dateFormat = config.noCalendar
