@@ -246,6 +246,10 @@ function Flatpickr(element, config) {
 		self.currentYearElement.type = getInputType();
 		self.currentYearElement.title = Flatpickr.l10n.scrollTitle;
 
+		if (self.config.minDate) self.currentYearElement.min = self.config.minDate.getFullYear();
+
+		if (self.config.maxDate) self.currentYearElement.max = self.config.minDate.getFullYear();
+
 		self.nextMonthNav = createElement("span", "flatpickr-next-month");
 		self.nextMonthNav.innerHTML = self.config.nextArrow;
 
@@ -650,9 +654,13 @@ function Flatpickr(element, config) {
 	}
 
 	function set(option, value) {
-		if (option === "minDate" || option === "maxDate") {
+		if ((option === "minDate" || option === "maxDate") && parseDate(value)) {
 			self.config[option] = parseDate(value);
 			self.redraw();
+
+			if (self.config.minDate) self.currentYearElement.min = self.config.minDate.getFullYear();else self.currentYearElement.removeAttribute("min");
+
+			if (self.config.maxDate) self.currentYearElement.max = self.config.minDate.getFullYear();else self.currentYearElement.removeAttribute("max");
 		} else self.config[option] = value;
 
 		jumpToDate();
