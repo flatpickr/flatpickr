@@ -45,12 +45,20 @@ function Flatpickr(element, config) {
 		if (self.selectedDates.length)
 			updateValue();
 
+		self.debouncedChange = debounce(() => {
+			triggerEvent("Change");
+		}, 1000);
+
 		triggerEvent("Ready");
 	}
 
 	function updateTime(e) {
 		timeWrapper(e);
 		updateValue();
+		if (e.type === "wheel") 
+			self.debouncedChange();
+		else
+			triggerEvent("Change");
 	}
 
 	function bind() {
@@ -101,7 +109,6 @@ function Flatpickr(element, config) {
 
 		if (self.config.enableTime) {
 			self.timeContainer.addEventListener("wheel", updateTime);
-			self.timeContainer.addEventListener("wheel", debounce(() => triggerEvent("Change"), 1000));
 			self.timeContainer.addEventListener("input", updateTime);
 
 			self.hourElement.addEventListener("focus", () => {
