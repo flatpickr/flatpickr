@@ -29,6 +29,8 @@ function Flatpickr(element, config) {
 
 		self.isMobile = (
 			!self.config.disableMobile &&
+			!self.config.disable.length &&
+			!self.config.enable.length &&
 			/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 		);
 
@@ -994,10 +996,11 @@ function Flatpickr(element, config) {
 		self.mobileInput.type = inputType;
 
 		if (self.selectedDates.length) {
-			const formatStr = inputType === "datetime-local" ? "Y-m-d\\TH:i:S" :
+			self.mobileFormatStr = inputType === "datetime-local" ? "Y-m-d\\TH:i:S" :
 				inputType === "date" ? "Y-m-d" : "H:i:S";
-			const mobileFormattedDate = formatDate(formatStr, self.selectedDates[0]);
-			self.mobileInput.defaultValue = self.mobileInput.value = mobileFormattedDate;
+			self.mobileInput.defaultValue =
+			self.mobileInput.value =
+			formatDate(self.mobileFormatStr, self.selectedDates[0]);
 		}
 
 		if (self.config.minDate)
@@ -1125,6 +1128,9 @@ function Flatpickr(element, config) {
 			if (self.config.enableSeconds)
 				self.secondElement.value = pad(seconds);
 		}
+
+		if (self.isMobile)
+			self.mobileInput.value = formatDate(self.mobileFormatStr, selectedDateObj());
 
 		switch (self.config.mode) {
 			case "single":
