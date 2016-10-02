@@ -47,12 +47,20 @@ function Flatpickr(element, config) {
 		if (self.selectedDates.length)
 			updateValue();
 
+		self.debouncedChange = debounce(() => {
+			triggerEvent("Change");
+		}, 1000);
+
 		triggerEvent("Ready");
 	}
 
 	function updateTime(e) {
 		timeWrapper(e);
 		updateValue();
+		if (e.type === "wheel") 
+			self.debouncedChange();
+		else
+			triggerEvent("Change");
 	}
 
 	function bind() {
