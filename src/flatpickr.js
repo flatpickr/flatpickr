@@ -71,6 +71,14 @@ function Flatpickr(element, config) {
 		if (self.isMobile)
 			return;
 
+		if (typeof Event !== "undefined")
+			self.changeEvent = new Event("change", { "bubbles": true });
+
+		else {
+			self.changeEvent = document.createEvent("HTMLEvents");
+			self.changeEvent.initEvent("change", true, false);
+		}
+
 		self.debouncedResize = debounce(onResize, 100);
 		self.triggerChange = () => triggerEvent("Change");
 		self.debouncedChange = debounce(self.triggerChange, 1000);
@@ -1048,6 +1056,9 @@ function Flatpickr(element, config) {
 			for (var i = 0; i < hooks.length; i++)
 				hooks[i](self.selectedDates, self.input.value, self, data);
 		}
+
+		if (event === "Change")
+			self.input.dispatchEvent(self.changeEvent);
 	}
 
 	function selectedDateObj() {
