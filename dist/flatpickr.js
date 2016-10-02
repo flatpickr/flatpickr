@@ -63,6 +63,11 @@ function Flatpickr(element, config) {
 		if (self.isMobile) return;
 
 		self.debouncedResize = debounce(onResize, 100);
+		self.triggerChange = function () {
+			return triggerEvent("Change");
+		};
+		self.debouncedChange = debounce(self.triggerChange, 1000);
+
 		document.addEventListener("keydown", onKeyDown);
 		window.addEventListener("resize", self.debouncedResize);
 
@@ -96,10 +101,10 @@ function Flatpickr(element, config) {
 
 		if (self.config.enableTime) {
 			self.timeContainer.addEventListener("wheel", updateTime);
-			self.timeContainer.addEventListener("wheel", debounce(function () {
-				return triggerEvent("Change");
-			}, 1000));
 			self.timeContainer.addEventListener("input", updateTime);
+
+			self.timeContainer.addEventListener("wheel", self.debouncedChange);
+			self.timeContainer.addEventListener("input", self.triggerChange);
 
 			self.hourElement.addEventListener("focus", function () {
 				self.hourElement.select();
