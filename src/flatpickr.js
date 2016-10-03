@@ -1134,8 +1134,12 @@ function Flatpickr(element, config) {
 			// picking time only and method triggered from picker
 			self.selectedDates = [self.now];
 
-		else if (!self.selectedDates.length)
+		else if (!self.selectedDates.length) {
+			self.input.value = "";
+			if (self.altInput)
+				self.altInput.value = "";
 			return;
+		}
 
 		if (self.config.enableTime && !self.isMobile) {
 			let hours,
