@@ -1,5 +1,4 @@
 var playgroundCalendar, playground_json, userConfig = {
-	mode: "single",
 	inline: true
 };
 
@@ -50,9 +49,7 @@ function toggleConfig(e) {
 }
 
 function setupPlayground() {
-	playgroundCalendar = flatpickr("#playground_calendar", {
-		inline: true
-	});
+	playgroundCalendar = flatpickr("#playground_calendar", userConfig);
 
 	var fragment = document.createDocumentFragment(),
 		keys = [

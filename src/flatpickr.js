@@ -79,6 +79,10 @@ function Flatpickr(element, config) {
 		self.triggerChange = () => triggerEvent("Change");
 		self.debouncedChange = debounce(self.triggerChange, 1000);
 
+
+		if (self.config.mode === "range")
+			self.days.addEventListener("mouseover", onMouseOver);
+
 		document.addEventListener("keydown", onKeyDown);
 		window.addEventListener("resize", self.debouncedResize);
 
@@ -188,15 +192,17 @@ function Flatpickr(element, config) {
 			self.days.tabIndex = -1;
 		}
 
-		const firstOfMonth = (
+		self.firstOfMonth = (
 				new Date(self.currentYear, self.currentMonth, 1).getDay() -
 				Flatpickr.l10n.firstDayOfWeek + 7
-			) % 7,
-			daysInMonth = self.utils.getDaysinMonth(),
-			prevMonthDays = self.utils.getDaysinMonth((self.currentMonth - 1 + 12) % 12),
+			) % 7;
+
+		self.prevMonthDays = self.utils.getDaysinMonth((self.currentMonth - 1 + 12) % 12);
+
+		const daysInMonth = self.utils.getDaysinMonth(),
 			days = document.createDocumentFragment();
 
-		let	dayNumber = prevMonthDays + 1 - firstOfMonth,
+		let	dayNumber = self.prevMonthDays + 1 - self.firstOfMonth,
 			currentDate,
 			dateIsDisabled;
 
@@ -207,7 +213,7 @@ function Flatpickr(element, config) {
 		self.days.innerHTML = "";
 
 		// prepend days from the ending of previous month
-		for (; dayNumber <= prevMonthDays; dayNumber++) {
+		for (; dayNumber <= self.prevMonthDays; dayNumber++) {
 			const curDate = new Date(self.currentYear, self.currentMonth - 1, dayNumber, 0, 0, 0, 0, 0),
 				dateIsEnabled = isEnabled(curDate),
 				dayElement = createElement(
@@ -258,7 +264,7 @@ function Flatpickr(element, config) {
 		}
 
 		// append days from the next month
-		for (let dayNum = daysInMonth + 1; dayNum <= 42 - firstOfMonth; dayNum++) {
+		for (let dayNum = daysInMonth + 1; dayNum <= 42 - self.firstOfMonth; dayNum++) {
 			const curDate = new Date(
 				self.currentYear,
 				self.currentMonth + 1,
@@ -601,6 +607,23 @@ function Flatpickr(element, config) {
 		}
 	}
 
+	function onMouseOver(e) {
+		if (self.selectedDates.length !== 1 || !e.target.classList.contains("flatpickr-day"))
+			return;
+
+		const firstDayIndex = !isPrevMonthDay*(self.firstOfMonth - 1),
+			isPrevMonthDay = e.target.classList.contains("prevMonthDay"),
+			isNextMonthDay = e.target.classList.contains("nextMonthDay"),
+			selectedDate = self.selectedDates[0].getDate(),
+			targetIndex = parseInt(e.target.textContent, 10) + self.utils.getDaysinMonth()*isNextMonthDay - self.prevMonthDays*isPrevMonthDay,
+			startIndex = firstDayIndex + Math.min(targetIndex, selectedDate),
+			endIndex = firstDayIndex + Math.max(targetIndex, selectedDate);
+
+		for (let i = 0; i < self.days.childNodes.length; self.days.childNodes[i].classList[
+			(i < startIndex || i > endIndex) ? "remove" : "add"]("inRange"), i++
+		);
+	}
+
 	function onResize() {
 		if (self.isOpen && !self.config.inline && !self.config.static)
 			positionCalendar();
@@ -803,8 +826,10 @@ function Flatpickr(element, config) {
 		}
 
 		else if (self.config.mode === "range") {
-			if (self.selectedDates.length < 2)
+			if (self.selectedDates.length < 2) {
 				self.selectedDates.push(selectedDate);
+				self.selectedDates.sort((a,b) => a.getTime() - b.getTime());
+			}
 			else {
 				const closerDateIndex = Math.abs(
 					self.selectedDates[0].getTime() - selectedDate.getTime()
