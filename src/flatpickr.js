@@ -218,7 +218,7 @@ function Flatpickr(element, config) {
 				dateIsEnabled = isEnabled(curDate),
 				dayElement = createElement(
 					"span",
-					"flatpickr-day prevMonthDay" + (dateIsEnabled ? "" : " disabled"),
+					"flatpickr-day prevMonthDay" + " disabled".repeat(dateIsEnabled) + " inRange".repeat(isDateInRange(curDate)),
 					dayNumber
 				);
 
@@ -244,7 +244,7 @@ function Flatpickr(element, config) {
 
 			const dayElement = createElement(
 				"span",
-				dateIsDisabled ? "flatpickr-day disabled" : "flatpickr-day",
+				dateIsDisabled ? "flatpickr-day disabled" : "flatpickr-day" + " inRange".repeat(isDateInRange(currentDate)),
 				dayNumber
 			);
 
@@ -274,7 +274,7 @@ function Flatpickr(element, config) {
 				dateIsEnabled = isEnabled(curDate),
 				dayElement = createElement(
 					"span",
-					"flatpickr-day nextMonthDay" + (dateIsEnabled ? "" : " disabled"),
+					"flatpickr-day nextMonthDay" + (dateIsEnabled ? "" : " disabled") + " inRange".repeat(isDateInRange(curDate)),
 					dayNum % daysInMonth
 				);
 
@@ -1094,6 +1094,12 @@ function Flatpickr(element, config) {
 			}
 		}
 		return false;
+	}
+
+	function isDateInRange(date){
+		if (self.config.mode !== "range" || self.selectedDates.length < 2)
+			return false;
+		return date > self.selectedDates[0] && date < self.selectedDates[1];
 	}
 
 	function updateNavigationCurrentMonth() {
