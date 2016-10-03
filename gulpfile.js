@@ -25,7 +25,9 @@ function get_script_stream(){
 }
 
 gulp.task('script', function(done){
-	get_script_stream().pipe(gulp.dest('dist'));
+	get_script_stream()
+	.pipe(gulp.dest('dist'))
+	.pipe(livereload());
 
 	get_script_stream()
 	.pipe(uglify({preserveComments: 'license'}))
