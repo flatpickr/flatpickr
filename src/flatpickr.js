@@ -310,7 +310,7 @@ function Flatpickr(element, config) {
 			self.currentYearElement.min = self.config.minDate.getFullYear();
 
 		if (self.config.maxDate)
-			self.currentYearElement.max = self.config.minDate.getFullYear();
+			self.currentYearElement.max = self.config.maxDate.getFullYear();
 
 		self.nextMonthNav = createElement("span", "flatpickr-next-month");
 		self.nextMonthNav.innerHTML = self.config.nextArrow;
