@@ -14,6 +14,7 @@ function Flatpickr(element, config) {
 
 		setupHelperFunctions();
 
+		self.isOpen = self.config.inline;
 		self.changeMonth = changeMonth;
 		self.clear = clear;
 		self.close = close;
@@ -34,15 +35,10 @@ function Flatpickr(element, config) {
 			/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 		);
 
-		if (self.isMobile) {
-			bind();
-			setupMobile();
-		}
-
-		else {
+		if (!self.isMobile)
 			build();
-			bind();
-		}
+
+		bind();
 
 		if (self.selectedDates.length)
 			updateValue();
@@ -69,7 +65,7 @@ function Flatpickr(element, config) {
 		}
 
 		if (self.isMobile)
-			return;
+			return setupMobile();
 
 		if (typeof Event !== "undefined")
 			self.changeEvent = new Event("change", { "bubbles": true });
@@ -140,7 +136,7 @@ function Flatpickr(element, config) {
 	function jumpToDate(jumpDate) {
 		jumpDate = jumpDate
 			? parseDate(jumpDate)
-			: selectedDateObj() || self.config.defaultDate || self.config.minDate || self.now;
+			: latestSelectedDateObj() || self.config.defaultDate || self.config.minDate || self.now;
 
 		self.currentYear = jumpDate.getFullYear();
 		self.currentMonth = jumpDate.getMonth();
@@ -341,11 +337,15 @@ function Flatpickr(element, config) {
 		self.hourElement.tabIndex = self.minuteElement.tabIndex = 0;
 		self.hourElement.type = self.minuteElement.type = getInputType();
 
-		self.hourElement.value =
-			selectedDateObj() ? pad(selectedDateObj().getHours()) : 12;
+		self.hourElement.value = pad(latestSelectedDateObj()
+			? latestSelectedDateObj().getHours()
+			: self.config.defaultHour
+		);
 
-		self.minuteElement.value =
-			selectedDateObj() ? pad(selectedDateObj().getMinutes()) : "00";
+		self.minuteElement.value = pad(latestSelectedDateObj()
+			? latestSelectedDateObj().getMinutes()
+			: self.config.defaultMinute
+		);
 
 		self.hourElement.step = self.config.hourIncrement;
 		self.minuteElement.step = self.config.minuteIncrement;
@@ -368,7 +368,7 @@ function Flatpickr(element, config) {
 			self.secondElement = createElement("input", "flatpickr-second");
 			self.secondElement.type = getInputType();
 			self.secondElement.value =
-				selectedDateObj() ? pad(selectedDateObj().getSeconds()) : "00";
+				latestSelectedDateObj() ? pad(latestSelectedDateObj().getSeconds()) : "00";
 
 			self.secondElement.step = self.minuteElement.step;
 			self.secondElement.min = self.minuteElement.min;
@@ -678,6 +678,9 @@ function Flatpickr(element, config) {
 	}
 
 	function parseDate(date, timeless = false) {
+		if (!date)
+			return null;
+
 		const dateTimeRegex = /(\d+)/g,
 			timeRegex = /^(\d{1,2})[:\s](\d\d)?[:\s](\d\d)?\s?(a|p)?/i;
 
@@ -825,17 +828,8 @@ function Flatpickr(element, config) {
 		if ((option === "minDate" || option === "maxDate") && parseDate(value)) {
 			self.config[option] = parseDate(value);
 			self.redraw();
-
-			if (self.config.minDate)
-				self.currentYearElement.min = self.config.minDate.getFullYear();
-			else
-				self.currentYearElement.removeAttribute("min");
-
-			if (self.config.maxDate)
-				self.currentYearElement.max = self.config.minDate.getFullYear();
-			else
-				self.currentYearElement.removeAttribute("max");
 		}
+
 		else
 			self.config[option] = value;
 
@@ -849,7 +843,7 @@ function Flatpickr(element, config) {
 		else if (Array.isArray(date)) {
 			for (let i = 0; i < date.length; i++) {
 				date[i] = parseDate(date[i]);
-				if (!(date instanceof Date && date.getTime()))
+				if (!date[i])
 					return;
 			}
 		}
@@ -870,7 +864,7 @@ function Flatpickr(element, config) {
 		if (Array.isArray(inputDate))
 			self.selectedDates = inputDate.map(parseDate);
 
-		else if (inputDate && typeof inputDate === "string" && inputDate.length) {
+		else if (inputDate && parseDate(inputDate)) {
 			switch (self.config.mode) {
 				case "single":
 					self.selectedDates = [parseDate(inputDate)];
@@ -1061,7 +1055,7 @@ function Flatpickr(element, config) {
 			self.input.dispatchEvent(self.changeEvent);
 	}
 
-	function selectedDateObj() {
+	function latestSelectedDateObj() {
 		if (self.selectedDates.length)
 			return self.selectedDates[self.selectedDates.length - 1];
 		return null;
@@ -1082,11 +1076,17 @@ function Flatpickr(element, config) {
 		self.currentYearElement.value = self.currentYear;
 
 		if (self.config.minDate) {
+			self.currentYearElement.min = self.config.minDate.getFullYear();
 			const hidePrevMonthArrow = self.currentYear === self.config.minDate.getFullYear()
 				? (self.currentMonth + 11) % 12 < self.config.minDate.getMonth()
 				: self.currentYear < self.config.minDate.getFullYear();
 
 			self.prevMonthNav.style.display = hidePrevMonthArrow ? "none" : "block";
+		}
+
+		else {
+			self.currentYearElement.removeAttribute("min");
+			self.prevMonthNav.style.display = "block";
 		}
 
 		if (self.config.maxDate) {
@@ -1095,6 +1095,12 @@ function Flatpickr(element, config) {
 				: self.currentYear > self.config.maxDate.getFullYear();
 
 			self.nextMonthNav.style.display = hideNextMonthArrow ? "none" : "block";
+			self.currentYearElement.max = self.config.maxDate.getFullYear();
+		}
+
+		else {
+			self.currentYearElement.removeAttribute("max");
+			self.nextMonthNav.style.display = "block";
 		}
 	}
 
@@ -1128,9 +1134,9 @@ function Flatpickr(element, config) {
 			}
 
 			else {
-				hours = selectedDateObj().getHours();
-				minutes = selectedDateObj().getMinutes();
-				seconds = selectedDateObj().getSeconds();
+				hours = latestSelectedDateObj().getHours();
+				minutes = latestSelectedDateObj().getMinutes();
+				seconds = latestSelectedDateObj().getSeconds();
 			}
 
 			self.hourElement.value = pad(
@@ -1146,13 +1152,13 @@ function Flatpickr(element, config) {
 		}
 
 		if (self.isMobile)
-			self.mobileInput.value = formatDate(self.mobileFormatStr, selectedDateObj());
+			self.mobileInput.value = formatDate(self.mobileFormatStr, latestSelectedDateObj());
 
 		switch (self.config.mode) {
 			case "single":
-				self.input.value = formatDate(self.config.dateFormat, selectedDateObj());
+				self.input.value = formatDate(self.config.dateFormat, latestSelectedDateObj());
 				if (self.altInput)
-					self.altInput.value = formatDate(self.config.altFormat, selectedDateObj());
+					self.altInput.value = formatDate(self.config.altFormat, latestSelectedDateObj());
 				break;
 
 			case "multiple":
@@ -1166,7 +1172,7 @@ function Flatpickr(element, config) {
 					(self.altInput || self.input).value = self.selectedDates.map(dObj => formatDate(self.config.dateFormat, dObj)).join(" to ");
 
 				else
-					(self.altInput || self.input).value = formatDate(self.config.dateFormat, selectedDateObj());
+					(self.altInput || self.input).value = formatDate(self.config.dateFormat, latestSelectedDateObj());
 				break;
 		}
 
@@ -1339,6 +1345,12 @@ Flatpickr.defaultConfig = {
 
 	// step size used when scrolling/incrementing the minute element
 	minuteIncrement: 5,
+
+	// initial value in the hour element
+	defaultHour: 12,
+
+	// initial value in the minute element
+	defaultMinute: 0,
 
 	// disable native mobile datetime input support
 	disableMobile: false,
