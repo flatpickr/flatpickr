@@ -296,9 +296,9 @@ function Flatpickr(element, config) {
 		self.prevMonthNav = createElement("span", "flatpickr-prev-month");
 		self.prevMonthNav.innerHTML = self.config.prevArrow;
 
-		self.currentMonthElement = createElement("span", "cur_month");
+		self.currentMonthElement = createElement("span", "cur-month");
 
-		self.currentYearElement = createElement("input", "cur_year");
+		self.currentYearElement = createElement("input", "cur-year");
 		self.currentYearElement.type = getInputType();
 		self.currentYearElement.title = Flatpickr.l10n.scrollTitle;
 
