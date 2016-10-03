@@ -52,7 +52,10 @@ function toggleConfig(e) {
 function setupPlayground() {
 	playgroundCalendar = flatpickr("#playground_calendar", { inline: true });
 	var fragment = document.createDocumentFragment(),
-		keys = ["altInput", "enableTime", "enableSeconds", "inline", "noCalendar", "time_24hr", "utc"],
+		keys = [
+			"altInput", "allowInput", "enableTime", "enableSeconds",
+			"inline", "noCalendar", "time_24hr", "utc"
+		],
 		li, label, checkbox, span;
 
 

@@ -267,12 +267,28 @@
 
 
 @media (max-width 768px)
+	body, p
+		font-weight 400
+
 	.blocks
 		display block
 		margin-left 0
 		&.col-2 > div, &.col-3 > div, &.col-4 > div, &.col-5 > div, &.col-6 > div
 			width 100%
 			margin-left 0
+
+	.row .col
+		width 100%
+		margin-right 0
+		&:nth-child(n+1)
+			margin-top 2rem
+
+	table
+		tr td, thead th
+			padding 8px
+			font-size 1.4rem
+
+
 
 
 .flex
