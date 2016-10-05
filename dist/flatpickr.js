@@ -688,6 +688,7 @@ function Flatpickr(element, config) {
 		if (isPrevMonthDay || isNextMonthDay) changeMonth(+isNextMonthDay - isPrevMonthDay);
 
 		var selectedDate = new Date(self.currentYear, self.currentMonth, e.target.textContent);
+		self.selectedDateElem = e.target;
 
 		if (self.config.mode === "single") self.selectedDates = [selectedDate];else if (self.config.mode === "multiple") {
 			var selectedIndex = isDateSelected(selectedDate);
