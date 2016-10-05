@@ -1276,14 +1276,16 @@ function _flatpickr(nodeList, config) {
 
 	return instances.length === 1 ? instances[0] : instances;
 }
+if (typeof HTMLElement !== "undefined") {
+	// browser env
+	HTMLCollection.prototype.flatpickr = NodeList.prototype.flatpickr = function (config) {
+		return _flatpickr(this, config);
+	};
 
-HTMLCollection.prototype.flatpickr = NodeList.prototype.flatpickr = function (config) {
-	return _flatpickr(this, config);
-};
-
-HTMLElement.prototype.flatpickr = function (config) {
-	return _flatpickr([this], config);
-};
+	HTMLElement.prototype.flatpickr = function (config) {
+		return _flatpickr([this], config);
+	};
+}
 
 function flatpickr(selector, config) {
 	return _flatpickr(document.querySelectorAll(selector), config);
