@@ -1030,9 +1030,13 @@ function Flatpickr(element, config) {
 		self.mobileInput.tabIndex = -1;
 		self.mobileInput.type = inputType;
 
+		self.mobileFormatStr = inputType === "datetime-local"
+			? "Y-m-d\\TH:i:S"
+			: inputType === "date"
+				? "Y-m-d"
+				: "H:i:S";
+
 		if (self.selectedDates.length) {
-			self.mobileFormatStr = inputType === "datetime-local" ? "Y-m-d\\TH:i:S" :
-				inputType === "date" ? "Y-m-d" : "H:i:S";
 			self.mobileInput.defaultValue =
 			self.mobileInput.value =
 			formatDate(self.mobileFormatStr, self.selectedDates[0]);
