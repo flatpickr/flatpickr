@@ -120,5 +120,18 @@ describe('flatpickr', () => {
 
 
 	describe("API", () => {
-		init();
+		it("set date using setDate", () => {
+			init();
+			const fp = new Flatpickr(elem);
+			fp.setDate("2016-10-20");
+
+			expect(fp.selectedDates[0]).toBeDefined();
+			expect(fp.selectedDates[0].getFullYear()).toEqual(2016);
+			expect(fp.selectedDates[0].getMonth()).toEqual(9);
+			expect(fp.selectedDates[0].getDate()).toEqual(20);
+
+			fp.setDate("");
+			expect(fp.selectedDates[0]).not.toBeDefined();
+		});
+	});
 });
