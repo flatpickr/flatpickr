@@ -18,9 +18,9 @@ describe('flatpickr', () => {
 					defaultDate: "2016-10"
 				});
 
-				expect(fp.selectedDateObj).toBeDefined();
-				expect(fp.selectedDateObj.getFullYear()).toEqual(2016);
-				expect(fp.selectedDateObj.getMonth()).toEqual(9);
+				expect(fp.selectedDates[0]).toBeDefined();
+				expect(fp.selectedDates[0].getFullYear()).toEqual(2016);
+				expect(fp.selectedDates[0].getMonth()).toEqual(9);
 			});
 
 			it('should parse "2016-10-20 3:30"', () => {
@@ -29,12 +29,12 @@ describe('flatpickr', () => {
 					defaultDate: "2016-10-20 3:30"
 				});
 
-				expect(fp.selectedDateObj).toBeDefined();
-				expect(fp.selectedDateObj.getFullYear()).toEqual(2016);
-				expect(fp.selectedDateObj.getMonth()).toEqual(9);
-				expect(fp.selectedDateObj.getDate()).toEqual(20);
-				expect(fp.selectedDateObj.getHours()).toEqual(3);
-				expect(fp.selectedDateObj.getMinutes()).toEqual(30);
+				expect(fp.selectedDates[0]).toBeDefined();
+				expect(fp.selectedDates[0].getFullYear()).toEqual(2016);
+				expect(fp.selectedDates[0].getMonth()).toEqual(9);
+				expect(fp.selectedDates[0].getDate()).toEqual(20);
+				expect(fp.selectedDates[0].getHours()).toEqual(3);
+				expect(fp.selectedDates[0].getMinutes()).toEqual(30);
 			});
 
 			it('should parse ISO8601', () => {
@@ -45,13 +45,13 @@ describe('flatpickr', () => {
 					enableSeconds: true
 				});
 
-				expect(fp.selectedDateObj).toBeDefined();
-				expect(fp.selectedDateObj.getFullYear()).toEqual(2007);
-				expect(fp.selectedDateObj.getMonth()).toEqual(2);
-				expect(fp.selectedDateObj.getDate()).toEqual(4);
-				expect(fp.selectedDateObj.getHours()).toEqual(21);
-				expect(fp.selectedDateObj.getMinutes()).toEqual(8);
-				expect(fp.selectedDateObj.getSeconds()).toEqual(12);
+				expect(fp.selectedDates[0]).toBeDefined();
+				expect(fp.selectedDates[0].getFullYear()).toEqual(2007);
+				expect(fp.selectedDates[0].getMonth()).toEqual(2);
+				expect(fp.selectedDates[0].getDate()).toEqual(4);
+				expect(fp.selectedDates[0].getHours()).toEqual(21);
+				expect(fp.selectedDates[0].getMinutes()).toEqual(8);
+				expect(fp.selectedDates[0].getSeconds()).toEqual(12);
 			});
 
 		});
@@ -67,10 +67,10 @@ describe('flatpickr', () => {
 					noCalendar: true,
 				});
 
-				expect(fp.selectedDateObj).toBeDefined();
-				expect(fp.selectedDateObj.getHours()).toEqual(21);
-				expect(fp.selectedDateObj.getMinutes()).toEqual(11);
-				expect(fp.selectedDateObj.getSeconds()).toEqual(12);
+				expect(fp.selectedDates[0]).toBeDefined();
+				expect(fp.selectedDates[0].getHours()).toEqual(21);
+				expect(fp.selectedDates[0].getMinutes()).toEqual(11);
+				expect(fp.selectedDates[0].getSeconds()).toEqual(12);
 			});
 
 			it('should parse "11:59 PM"', () => {
@@ -82,10 +82,10 @@ describe('flatpickr', () => {
 					noCalendar: true,
 				});
 
-				expect(fp.selectedDateObj).toBeDefined();
-				expect(fp.selectedDateObj.getHours()).toBe(23);
-				expect(fp.selectedDateObj.getMinutes()).toBe(59);
-				expect(fp.selectedDateObj.getSeconds()).toBe(0);
+				expect(fp.selectedDates[0]).toBeDefined();
+				expect(fp.selectedDates[0].getHours()).toBe(23);
+				expect(fp.selectedDates[0].getMinutes()).toBe(59);
+				expect(fp.selectedDates[0].getSeconds()).toBe(0);
 
 				const amPmElement = fp.amPM;
 
@@ -103,10 +103,10 @@ describe('flatpickr', () => {
 					noCalendar: true,
 				});
 
-				expect(fp.selectedDateObj).toBeDefined();
-				expect(fp.selectedDateObj.getHours()).toBe(15);
-				expect(fp.selectedDateObj.getMinutes()).toBe(5);
-				expect(fp.selectedDateObj.getSeconds()).toBe(3);
+				expect(fp.selectedDates[0]).toBeDefined();
+				expect(fp.selectedDates[0].getHours()).toBe(15);
+				expect(fp.selectedDates[0].getMinutes()).toBe(5);
+				expect(fp.selectedDates[0].getSeconds()).toBe(3);
 
 				const amPmElement = fp.amPM;
 
@@ -117,4 +117,8 @@ describe('flatpickr', () => {
 		});
 
 	});
+
+
+	describe("API", () => {
+		init();
 });
