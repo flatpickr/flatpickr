@@ -172,6 +172,8 @@ function Flatpickr(element, config) {
 			self.days.tabIndex = -1;
 		}
 
+		self.disabledMonthIndexes = [];
+
 		self.firstOfMonth = (new Date(self.currentYear, self.currentMonth, 1).getDay() - Flatpickr.l10n.firstDayOfWeek + 7) % 7;
 
 		self.prevMonthDays = self.utils.getDaysinMonth((self.currentMonth - 1 + 12) % 12);
@@ -188,12 +190,12 @@ function Flatpickr(element, config) {
 		self.days.innerHTML = "";
 
 		// prepend days from the ending of previous month
-		for (; dayNumber <= self.prevMonthDays; dayNumber++) {
+		for (var i = 0; dayNumber <= self.prevMonthDays; i++, dayNumber++) {
 			var curDate = new Date(self.currentYear, self.currentMonth - 1, dayNumber, 0, 0, 0, 0, 0),
 			    dateIsEnabled = isEnabled(curDate),
 			    dayElement = createElement("span", "flatpickr-day prevMonthDay" + " disabled".repeat(!dateIsEnabled) + " inRange".repeat(isDateInRange(curDate)), dayNumber);
 
-			if (dateIsEnabled) dayElement.tabIndex = 0;
+			if (dateIsEnabled) dayElement.tabIndex = 0;else self.disabledMonthIndexes.push(i);
 
 			triggerEvent("DayCreate", dayElement);
 			days.appendChild(dayElement);
@@ -218,9 +220,13 @@ function Flatpickr(element, config) {
 
 				if (isDateSelected(currentDate)) {
 					_dayElement.classList.add("selected");
-					self.selectedDateElem = _dayElement;
+
+					if (self.config.mode === "range") {
+						_dayElement.className += equalDates(currentDate, self.selectedDates[0]) ? " startRange" : self.selectedDates.length > 1 ? " endRange" : "";
+					}
 				}
-			}
+			} else self.disabledMonthIndexes.push(dayNumber + self.firstOfMonth - 1);
+
 			triggerEvent("DayCreate", _dayElement);
 			days.appendChild(_dayElement);
 		}
@@ -235,7 +241,7 @@ function Flatpickr(element, config) {
 				self.weekNumbers.insertAdjacentHTML("beforeend", "<span class='disabled flatpickr-day'>" + self.getWeek(_curDate) + "</span>");
 			}
 
-			if (_dateIsEnabled) _dayElement2.tabIndex = 0;
+			if (_dateIsEnabled) _dayElement2.tabIndex = 0;else self.disabledMonthIndexes.push(dayNum + self.firstOfMonth);
 
 			triggerEvent("DayCreate", _dayElement2);
 			days.appendChild(_dayElement2);
@@ -414,7 +420,14 @@ function Flatpickr(element, config) {
 		var isCalendarElement = self.calendarContainer.contains(e.target),
 		    isInput = self.element.contains(e.target) || e.target === self.altInput;
 
-		if (self.isOpen && !isCalendarElement && !isInput) self.close();
+		if (self.isOpen && !isCalendarElement && !isInput) {
+			self.close();
+
+			if (self.config.mode === "range" && self.selectedDates.length === 1) {
+				self.selectedDates = [];
+				self.redraw();
+			}
+		}
 	}
 
 	function formatDate(frmt, dateObj) {
@@ -508,15 +521,23 @@ function Flatpickr(element, config) {
 		    isPrevMonthDay = e.target.classList.contains("prevMonthDay"),
 		    isNextMonthDay = e.target.classList.contains("nextMonthDay"),
 		    selectedDate = self.selectedDates[0].getDate(),
+		    selectedDateIndex = firstDayIndex + selectedDate,
+		    minIndex = null,
 		    targetIndex = parseInt(e.target.textContent, 10) + self.utils.getDaysinMonth() * isNextMonthDay - self.prevMonthDays * isPrevMonthDay,
 		    startIndex = firstDayIndex + Math.min(targetIndex, selectedDate),
 		    endIndex = firstDayIndex + Math.max(targetIndex, selectedDate);
 
-		var disabledIndex = null;
+		if (self.disabledMonthIndexes.length) {
+			for (var i = 0; i < self.disabledMonthIndexes.length; i++) {
+				if (self.disabledMonthIndexes[i] > minIndex && self.disabledMonthIndexes[i] < selectedDateIndex) minIndex = self.disabledMonthIndexes[i];
+			}
+		}
 
-		for (var i = 0; i < self.days.childNodes.length; i++) {
-			if (i >= startIndex && self.days.childNodes[i].classList.contains("disabled")) disabledIndex = i;
-			self.days.childNodes[i].classList[disabledIndex > startIndex || disabledIndex < endIndex || i < startIndex || i > endIndex ? "remove" : "add"]("inRange");
+		for (var _i = 0; _i < self.days.childNodes.length; _i++) {
+			if (minIndex && _i < minIndex) self.days.childNodes[_i].classList.add("notAllowed");else {
+				self.days.childNodes[_i].classList.remove("notAllowed");
+				self.days.childNodes[_i].classList[_i < startIndex || _i > endIndex ? "remove" : "add"]("inRange");
+			}
 		}
 	}
 
@@ -686,6 +707,8 @@ function Flatpickr(element, config) {
 		updateValue();
 		buildDays();
 		triggerEvent("Change");
+
+		if (self.selectedDates.length === 1) onMouseOver(e);
 
 		if (self.config.mode === "single" && !self.config.enableTime) self.close();
 	}
@@ -1083,6 +1106,7 @@ function Flatpickr(element, config) {
 	}
 
 	function equalDates(date1, date2) {
+		if (!date1 || !date2) return false;
 		return date1.getDate() === date2.getDate() && date1.getMonth() === date2.getMonth() && date1.getFullYear() === date2.getFullYear();
 	}
 
