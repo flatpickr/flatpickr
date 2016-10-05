@@ -730,7 +730,7 @@ function Flatpickr(element, config) {
 				if (!date[i]) return;
 			}
 		}
-		console.log(date);
+
 		self.selectedDates = date;
 		self.redraw();
 		jumpToDate();
@@ -1044,7 +1044,6 @@ function Flatpickr(element, config) {
 		}
 
 		if (self.isMobile) {
-			console.log(self.selectedDates);
 			self.mobileInput.value = self.selectedDates.length ? formatDate(self.mobileFormatStr, latestSelectedDateObj()) : "";
 		}
 

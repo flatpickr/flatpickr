@@ -272,7 +272,7 @@ function Flatpickr(element, config) {
 			}
 
 			else
-				self.disabledMonthIndexes.push(dayNumber + self.firstOfMonth-1);
+				self.disabledMonthIndexes.push(dayNumber + self.firstOfMonth - 1);
 
 			triggerEvent("DayCreate", dayElement);
 			days.appendChild(dayElement);
@@ -918,7 +918,7 @@ function Flatpickr(element, config) {
 					return;
 			}
 		}
-		console.log(date);
+
 		self.selectedDates = date;
 		self.redraw();
 		jumpToDate();
@@ -1238,7 +1238,6 @@ function Flatpickr(element, config) {
 		}
 
 		if (self.isMobile) {
-			console.log(self.selectedDates);
 			self.mobileInput.value = self.selectedDates.length
 			? formatDate(self.mobileFormatStr, latestSelectedDateObj())
 			: "";
