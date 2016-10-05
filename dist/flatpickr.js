@@ -709,7 +709,7 @@ function Flatpickr(element, config) {
 		buildDays();
 		triggerEvent("Change");
 
-		if (self.selectedDates.length === 1) onMouseOver(e);
+		if (self.config.mode === "range" && self.selectedDates.length === 1) onMouseOver(e);
 
 		if (self.config.mode === "single" && !self.config.enableTime) self.close();
 	}
