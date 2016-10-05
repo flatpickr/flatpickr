@@ -30,7 +30,7 @@ function Flatpickr(element, config) {
 		self.setDate = setDate;
 		self.toggle = toggle;
 
-		self.isMobile = !self.config.disableMobile && !self.config.disable.length && !self.config.enable.length && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+		self.isMobile = !self.config.disableMobile && self.config.mode === "single" && !self.config.disable.length && !self.config.enable.length && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
 		if (!self.isMobile) build();
 
@@ -57,12 +57,12 @@ function Flatpickr(element, config) {
 			});
 		}
 
-		if (self.isMobile) return setupMobile();
-
 		if (typeof Event !== "undefined") self.changeEvent = new Event("change", { "bubbles": true });else {
 			self.changeEvent = document.createEvent("HTMLEvents");
 			self.changeEvent.initEvent("change", true, false);
 		}
+
+		if (self.isMobile) return setupMobile();
 
 		self.debouncedResize = debounce(onResize, 100);
 		self.triggerChange = function () {
@@ -191,7 +191,7 @@ function Flatpickr(element, config) {
 		for (; dayNumber <= self.prevMonthDays; dayNumber++) {
 			var curDate = new Date(self.currentYear, self.currentMonth - 1, dayNumber, 0, 0, 0, 0, 0),
 			    dateIsEnabled = isEnabled(curDate),
-			    dayElement = createElement("span", "flatpickr-day prevMonthDay" + " disabled".repeat(dateIsEnabled) + " inRange".repeat(isDateInRange(curDate)), dayNumber);
+			    dayElement = createElement("span", "flatpickr-day prevMonthDay" + " disabled".repeat(!dateIsEnabled) + " inRange".repeat(isDateInRange(curDate)), dayNumber);
 
 			if (dateIsEnabled) dayElement.tabIndex = 0;
 
@@ -502,7 +502,7 @@ function Flatpickr(element, config) {
 	}
 
 	function onMouseOver(e) {
-		if (self.selectedDates.length !== 1 || !e.target.classList.contains("flatpickr-day")) return;
+		if (self.selectedDates.length !== 1 || !e.target.classList.contains("flatpickr-day") || e.target.classList.contains("disabled")) return;
 
 		var firstDayIndex = !isPrevMonthDay * (self.firstOfMonth - 1),
 		    isPrevMonthDay = e.target.classList.contains("prevMonthDay"),
@@ -512,7 +512,12 @@ function Flatpickr(element, config) {
 		    startIndex = firstDayIndex + Math.min(targetIndex, selectedDate),
 		    endIndex = firstDayIndex + Math.max(targetIndex, selectedDate);
 
-		for (var i = 0; i < self.days.childNodes.length; self.days.childNodes[i].classList[i < startIndex || i > endIndex ? "remove" : "add"]("inRange"), i++) {}
+		var disabledIndex = null;
+
+		for (var i = 0; i < self.days.childNodes.length; i++) {
+			if (i >= startIndex && self.days.childNodes[i].classList.contains("disabled")) disabledIndex = i;
+			self.days.childNodes[i].classList[disabledIndex > startIndex || disabledIndex < endIndex || i < startIndex || i > endIndex ? "remove" : "add"]("inRange");
+		}
 	}
 
 	function onResize() {
@@ -686,11 +691,9 @@ function Flatpickr(element, config) {
 	}
 
 	function set(option, value) {
-		if ((option === "minDate" || option === "maxDate") && parseDate(value)) {
-			self.config[option] = parseDate(value);
-			self.redraw();
-		} else self.config[option] = value;
-
+		var isDateOpt = option === "minDate" || option === "maxDate" || option === "defaultDate";
+		self.config[option] = isDateOpt ? parseDate(value) : value;
+		self.redraw();
 		jumpToDate();
 	}
 
