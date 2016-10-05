@@ -723,11 +723,11 @@ function Flatpickr(element, config) {
 	function setDate(date, triggerChange) {
 		if (self.config.mode === "single") {
 			date = [parseDate(date)];
-			if (!date[0]) return;
+			if (!date[0]) return self.clear();
 		} else if (Array.isArray(date)) {
 			for (var i = 0; i < date.length; i++) {
 				date[i] = parseDate(date[i]);
-				if (!date[i]) return;
+				if (!date[i]) return self.clear();
 			}
 		}
 

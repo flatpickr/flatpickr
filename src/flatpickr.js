@@ -908,14 +908,14 @@ function Flatpickr(element, config) {
 		if (self.config.mode === "single") {
 			date = [parseDate(date)];
 			if (!date[0])
-				return;
+				return self.clear();
 		}
 
 		else if (Array.isArray(date)) {
 			for (let i = 0; i < date.length; i++) {
 				date[i] = parseDate(date[i]);
 				if (!date[i])
-					return;
+					return self.clear();
 			}
 		}
 
