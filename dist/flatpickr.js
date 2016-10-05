@@ -721,15 +721,19 @@ function Flatpickr(element, config) {
 	}
 
 	function setDate(date, triggerChange) {
-		if (self.config.mode === "single") date = [parseDate(date)];else if (Array.isArray(date)) {
+		if (self.config.mode === "single") {
+			date = [parseDate(date)];
+			if (!date[0]) return;
+		} else if (Array.isArray(date)) {
 			for (var i = 0; i < date.length; i++) {
 				date[i] = parseDate(date[i]);
 				if (!date[i]) return;
 			}
 		}
-
+		console.log(date);
 		self.selectedDates = date;
-		jumpToDate(self.selectedDates[0]);
+		self.redraw();
+		jumpToDate();
 		updateValue(false);
 
 		if (triggerChange) triggerEvent("Change");
@@ -1039,7 +1043,10 @@ function Flatpickr(element, config) {
 			if (self.config.enableSeconds) self.secondElement.value = pad(seconds);
 		}
 
-		if (self.isMobile) self.mobileInput.value = formatDate(self.mobileFormatStr, latestSelectedDateObj());
+		if (self.isMobile) {
+			console.log(self.selectedDates);
+			self.mobileInput.value = self.selectedDates.length ? formatDate(self.mobileFormatStr, latestSelectedDateObj()) : "";
+		}
 
 		switch (self.config.mode) {
 			case "single":
@@ -1106,7 +1113,7 @@ function Flatpickr(element, config) {
 	}
 
 	function equalDates(date1, date2) {
-		if (!date1 || !date2) return false;
+		if (!(date1 instanceof Date) || !(date2 instanceof Date)) return false;
 		return date1.getDate() === date2.getDate() && date1.getMonth() === date2.getMonth() && date1.getFullYear() === date2.getFullYear();
 	}
 
