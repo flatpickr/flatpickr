@@ -709,7 +709,7 @@ function Flatpickr(element, config) {
 			(self.altInput || self.input).blur();
 			(self.config.noCalendar
 				? self.timeContainer
-				: self.selectedDates.length
+				: self.selectedDateElem
 					? self.selectedDateElem
 					: self.days).focus();
 		}
