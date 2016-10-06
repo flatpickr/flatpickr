@@ -4,6 +4,7 @@ var theme_sel = document.getElementById("themes"),
 	themes = [
 		"material_blue", "material_red", "material_orange", "material_green",
 		"dark",
+		"airbnb",
 		"confetti",
 		"base16_flat"
 	];

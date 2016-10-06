@@ -1,0 +1,39 @@
+$calendar_background = #fff
+$calendar_border_color = #e3e3e3
+
+$months_color = #3c3f40
+$months_background = transparent
+
+$weekdays_background = transparent
+$weekdays_color = #757575
+
+$day_text_color = #404848
+$day_hover_background_color = #f3f3f3
+
+$disabled_day_color = alpha(black, 0.15)
+
+$today_color = #ffa0a0
+$today_fg_color = #fff
+
+$selected_day_background =  #4f99ff
+
+$selected_day_color = #fff
+
+@import "../flatpickr_base"
+
+.flatpickr-rContainer
+	max-width 238px
+
+.flatpickr-day
+	border-radius 0
+	border 1px solid #eee
+	margin -1px 0px 0 -1px
+
+	&:nth-child(7n)
+		border-right 0
+
+	&:nth-child(n+36)
+		border-bottom 0
+
+	&.today, &.selected
+		z-index 2

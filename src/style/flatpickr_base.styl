@@ -23,7 +23,7 @@
 	font-size 14px
 	border-radius 3px
 	position absolute
-	max-width 256px
+	max-width 247px
 	min-width 200px
 
 	&.open
@@ -165,6 +165,7 @@
 .flatpickr-days
 	padding-top 1px
 	outline 0
+	text-align left
 
 	if $border-calendar-only is defined
 		border 1px solid $calendar_border_color
@@ -173,57 +174,57 @@
 		border-radius 0 0 3px 3px
 
 .flatpickr-day
-		background none
-		border 1px solid transparent
-		border-radius 150px
-		box-sizing border-box
-		color $day_text_color
-		cursor pointer
-		display inline-block
-		position relative
-		font-weight 300
-		width 35px
-		height 35px
-		line-height 35px
-		margin 0
-		text-align center
+	background none
+	border 1px solid transparent
+	border-radius 150px
+	box-sizing border-box
+	color $day_text_color
+	cursor pointer
+	display inline-block
+	position relative
+	font-weight 300
+	width 35px
+	height 35px
+	line-height 35px
+	margin 0
+	text-align center
 
-		&, &.prevMonthDay, &.nextMonthDay
-			&.inRange, &:hover, &:focus
-				cursor pointer
-				outline 0
-				background $day_hover_background_color
-				border-color $day_hover_background_color
+	&, &.prevMonthDay, &.nextMonthDay
+		&.inRange, &:hover, &:focus
+			cursor pointer
+			outline 0
+			background $day_hover_background_color
+			border-color $day_hover_background_color
 
-		&.today
+	&.today
+		border-color $today_color
+
+		&:hover, &:focus
 			border-color $today_color
-
-			&:hover, &:focus
-				border-color $today_color
-				background $today_color
-				if $today_fg_color is defined
-					color $today_fg_color
-				else
-					color white
-
-		&.selected, &.selected:hover, &.selected:focus
-			background $selected_day_background
-
-			if $selected_day_color is defined
-				color $selected_day_color
+			background $today_color
+			if $today_fg_color is defined
+				color $today_fg_color
 			else
 				color white
 
-			border-color $selected_day_background
+	&.selected, &.selected:hover, &.selected:focus
+		background $selected_day_background
 
-		&.disabled, &.disabled:hover, &.prevMonthDay, &.nextMonthDay, &.notAllowed
-			if $disabled_day_color is defined
-				color $disabled_day_color
-			else
-				color alpha($day_text_color, 0.3)
-			background transparent
-			border-color transparent
-			cursor default
+		if $selected_day_color is defined
+			color $selected_day_color
+		else
+			color white
+
+		border-color $selected_day_background
+
+	&.disabled, &.disabled:hover, &.prevMonthDay, &.nextMonthDay, &.notAllowed
+		if $disabled_day_color is defined
+			color $disabled_day_color
+		else
+			color alpha($day_text_color, 0.3)
+		background transparent
+		border-color transparent
+		cursor default
 
 
 
@@ -268,7 +269,7 @@ span.flatpickr-weekday
 
 .flatpickr-rContainer
 	display inline-block
-	max-width 249px
+	max-width 247px
 	if $border-calendar-only is defined
 		border-bottom 1px solid $calendar_border_color
 
