@@ -193,7 +193,7 @@ function Flatpickr(element, config) {
 		for (var i = 0; dayNumber <= self.prevMonthDays; i++, dayNumber++) {
 			var curDate = new Date(self.currentYear, self.currentMonth - 1, dayNumber, 0, 0, 0, 0, 0),
 			    dateIsEnabled = isEnabled(curDate),
-			    dayElement = createElement("span", "flatpickr-day prevMonthDay" + " disabled".repeat(!dateIsEnabled) + " inRange".repeat(isDateInRange(curDate)), dayNumber);
+			    dayElement = createElement("span", "flatpickr-day prevMonthDay" + " disabled".repeat(!dateIsEnabled) + " inRange".repeat(isDateInRange(curDate)) + " selected".repeat(isDateSelected(curDate) !== false), dayNumber);
 
 			if (dateIsEnabled) dayElement.tabIndex = 0;else self.disabledMonthIndexes.push(i);
 
@@ -220,6 +220,7 @@ function Flatpickr(element, config) {
 
 				if (isDateSelected(currentDate)) {
 					_dayElement.classList.add("selected");
+					self.selectedDateElem = _dayElement;
 
 					if (self.config.mode === "range") {
 						_dayElement.className += equalDates(currentDate, self.selectedDates[0]) ? " startRange" : self.selectedDates.length > 1 ? " endRange" : "";
@@ -235,7 +236,7 @@ function Flatpickr(element, config) {
 		for (var dayNum = daysInMonth + 1; dayNum <= 42 - self.firstOfMonth; dayNum++) {
 			var _curDate = new Date(self.currentYear, self.currentMonth + 1, dayNum % daysInMonth, 0, 0, 0, 0, 0),
 			    _dateIsEnabled = isEnabled(_curDate),
-			    _dayElement2 = createElement("span", "flatpickr-day nextMonthDay" + (_dateIsEnabled ? "" : " disabled") + " inRange".repeat(isDateInRange(_curDate)), dayNum % daysInMonth);
+			    _dayElement2 = createElement("span", "flatpickr-day nextMonthDay" + " disabled".repeat(!_dateIsEnabled) + " inRange".repeat(isDateInRange(_curDate)) + " selected".repeat(isDateSelected(_curDate) !== false), dayNum % daysInMonth);
 
 			if (self.config.weekNumbers && dayNum % 7 === 1) {
 				self.weekNumbers.insertAdjacentHTML("beforeend", "<span class='disabled flatpickr-day'>" + self.getWeek(_curDate) + "</span>");

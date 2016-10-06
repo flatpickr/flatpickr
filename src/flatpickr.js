@@ -220,7 +220,10 @@ function Flatpickr(element, config) {
 				dateIsEnabled = isEnabled(curDate),
 				dayElement = createElement(
 					"span",
-					"flatpickr-day prevMonthDay" + " disabled".repeat(!dateIsEnabled) + " inRange".repeat(isDateInRange(curDate)),
+					"flatpickr-day prevMonthDay"
+					+ " disabled".repeat(!dateIsEnabled)
+					+ " inRange".repeat(isDateInRange(curDate))
+					+ " selected".repeat(isDateSelected(curDate) !== false),
 					dayNumber
 				);
 
@@ -260,6 +263,7 @@ function Flatpickr(element, config) {
 
 				if (isDateSelected(currentDate)){
 					dayElement.classList.add("selected");
+					self.selectedDateElem = dayElement;
 
 					if (self.config.mode === "range") {
 						dayElement.className +=	equalDates(currentDate, self.selectedDates[0])
@@ -290,8 +294,9 @@ function Flatpickr(element, config) {
 				dayElement = createElement(
 					"span",
 					"flatpickr-day nextMonthDay"
-						+ (dateIsEnabled ? "" : " disabled")
-						+ " inRange".repeat(isDateInRange(curDate)),
+					+ " disabled".repeat(!dateIsEnabled)
+					+ " inRange".repeat(isDateInRange(curDate))
+					+ " selected".repeat(isDateSelected(curDate) !== false),
 					dayNum % daysInMonth
 				);
 
