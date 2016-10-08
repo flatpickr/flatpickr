@@ -120,7 +120,30 @@ describe('flatpickr', () => {
 
 
 	describe("API", () => {
-		it("set date using setDate", () => {
+		it("set (option, value)", () => {
+			init();
+			const fp = new Flatpickr(elem);
+			fp.set("minDate", "2016-10-20");
+
+			expect(fp.config.minDate).toBeDefined();
+			expect(fp.currentYearElement.min).toEqual("2016");
+
+			fp.set("minDate", null);
+			expect(fp.currentYearElement.hasAttribute("min")).toEqual(false);
+
+			fp.set("maxDate", "2016-10-20");
+
+			expect(fp.config.maxDate).toBeDefined();
+			expect(fp.currentYearElement.max).toEqual("2016");
+
+			fp.set("maxDate", null);
+			expect(fp.currentYearElement.hasAttribute("max")).toEqual(false);
+
+			fp.set("mode", "range");
+			expect(fp.config.mode).toEqual("range");
+		});
+
+		it("setDate (date)", () => {
 			init();
 			const fp = new Flatpickr(elem);
 			fp.setDate("2016-10-20");
