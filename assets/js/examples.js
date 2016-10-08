@@ -1,5 +1,6 @@
 var playgroundCalendar, playground_json, userConfig = {
-	inline: true
+	inline: true,
+	enableTime: true
 };
 
 function toggleConfig(e) {
