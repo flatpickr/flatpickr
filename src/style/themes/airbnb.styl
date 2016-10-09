@@ -1,5 +1,5 @@
 $calendar_background = #fff
-$calendar_border_color = #e3e3e3
+$calendar_border_color = #eee
 
 $months_color = #3c3f40
 $months_background = transparent
@@ -8,11 +8,11 @@ $weekdays_background = transparent
 $weekdays_color = #757575
 
 $day_text_color = #404848
-$day_hover_background_color = #f3f3f3
+$day_hover_background_color = #eee
 
 $disabled_day_color = alpha(black, 0.15)
 
-$today_color = #ffa0a0
+$today_color = #F64747
 $today_fg_color = #fff
 
 $selected_day_background =  #4f99ff
@@ -34,6 +34,10 @@ $selected_day_color = #fff
 
 	&:nth-child(n+36)
 		border-bottom 0
+
+	&.today
+		border-color transparent
+		border-bottom 1px solid $today_color
 
 	&.today, &.selected
 		z-index 2

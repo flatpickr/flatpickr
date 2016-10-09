@@ -132,6 +132,7 @@
 	color inherit
 	position relative
 	display inline-block
+	line-height 1
 
 	.cur-month
 		font-weight 700
@@ -188,6 +189,7 @@
 	line-height 35px
 	margin 0
 	text-align center
+	transition 50ms all ease-out
 
 	&, &.prevMonthDay, &.nextMonthDay
 		&.inRange, &:hover, &:focus
@@ -313,7 +315,7 @@ span.flatpickr-weekday
 
 		&:hover, &:focus
 			-moz-appearance: number-input
-			background lighten($day_hover_background_color, 4)
+			background $day_hover_background_color
 
 	&.has-seconds
 		input[type='number']
