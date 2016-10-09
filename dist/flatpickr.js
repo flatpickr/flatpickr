@@ -690,7 +690,7 @@ function Flatpickr(element, config) {
 
 		var isPrevMonthDay = e.target.classList.contains("prevMonthDay"),
 		    isNextMonthDay = e.target.classList.contains("nextMonthDay"),
-		    selectedDate = new Date(self.currentYear, self.currentMonth, e.target.textContent);
+		    selectedDate = new Date(self.currentYear, self.currentMonth + isNextMonthDay - isPrevMonthDay, e.target.textContent);
 
 		self.selectedDateElem = e.target;
 
@@ -728,11 +728,9 @@ function Flatpickr(element, config) {
 	function setDate(date, triggerChange) {
 		if (!date) return self.clear();
 
-		date = (Array.isArray(date) ? date.map(parseDate) : [parseDate(date)]).filter(function (d) {
+		self.selectedDates = (Array.isArray(date) ? date.map(parseDate) : [parseDate(date)]).filter(function (d) {
 			return d instanceof Date;
 		});
-
-		self.selectedDates = date;
 		self.redraw();
 		jumpToDate();
 		updateValue(false);
