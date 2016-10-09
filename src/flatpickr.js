@@ -763,7 +763,8 @@ function Flatpickr(element, config) {
 			return null;
 
 		const dateTimeRegex = /(\d+)/g,
-			timeRegex = /^(\d{1,2})[:\s](\d\d)?[:\s](\d\d)?\s?(a|p)?/i;
+			timeRegex = /^(\d{1,2})[:\s](\d\d)?[:\s](\d\d)?\s?(a|p)?/i,
+			date_orig = date;
 
 		if (typeof date === "string") {
 			date = date.trim();
@@ -801,7 +802,7 @@ function Flatpickr(element, config) {
 		}
 
 		if (!(date instanceof Date) || !date.getTime()) {
-			console.warn(`flatpickr: invalid date ${date}`);
+			console.warn(`flatpickr: invalid date ${date_orig}`);
 			console.info(self.element);
 			return null;
 		}
@@ -911,19 +912,12 @@ function Flatpickr(element, config) {
 	}
 
 	function setDate(date, triggerChange) {
-		if (self.config.mode === "single") {
-			date = [parseDate(date)];
-			if (!date[0])
-				return self.clear();
-		}
+		if (!date)
+			return self.clear();
 
-		else if (Array.isArray(date)) {
-			for (let i = 0; i < date.length; i++) {
-				date[i] = parseDate(date[i]);
-				if (!date[i])
-					return self.clear();
-			}
-		}
+		date = (Array.isArray(date) ? date.map(parseDate) : [parseDate(date)]).filter(
+			d => d instanceof Date
+		);
 
 		self.selectedDates = date;
 		self.redraw();
@@ -942,7 +936,7 @@ function Flatpickr(element, config) {
 		if (Array.isArray(inputDate))
 			self.selectedDates = inputDate.map(parseDate);
 
-		else if (inputDate && parseDate(inputDate)) {
+		else if (inputDate) {
 			switch (self.config.mode) {
 				case "single":
 					self.selectedDates = [parseDate(inputDate)];
@@ -958,7 +952,11 @@ function Flatpickr(element, config) {
 
 				default: break;
 			}
+
+			self.selectedDates = self.selectedDates.filter(d => d instanceof Date);
 		}
+
+
 
 		if (self.config.minDate)
 			self.config.minDate = parseDate(self.config.minDate, true);
