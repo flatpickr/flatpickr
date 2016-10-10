@@ -44,14 +44,14 @@ function Flatpickr(element, config) {
 		if (self.selectedDates.length)
 			updateValue();
 
-		if (self.config.noCalendar && !self.selectedDates.length)
-			// picking time only and method triggered from picker
-			self.selectedDates = [self.now];
-
 		triggerEvent("Ready");
 	}
 
 	function updateTime(e) {
+		if (self.config.noCalendar && !self.selectedDates.length)
+			// picking time only
+			self.selectedDates = [self.now];
+
 		timeWrapper(e);
 		updateValue();
 	}
@@ -144,17 +144,19 @@ function Flatpickr(element, config) {
 	function jumpToDate(jumpDate) {
 		jumpDate = jumpDate
 			? parseDate(jumpDate)
-			: latestSelectedDateObj() || self.config.defaultDate || self.config.minDate || self.now;
+			: latestSelectedDateObj() || self.config.minDate || self.now;
 
 		try {
 			self.currentYear = jumpDate.getFullYear();
 			self.currentMonth = jumpDate.getMonth();
-			self.redraw();
 		}
 
 		catch (e) {
-			console.warn("Invalid date supplied: " + jumpDate);
+			console.error(e.stack);
+			console.warn("Invalid date supplied: " + jumpDate, jumpDate instanceof Date);
 		}
+
+		self.redraw();
 	}
 
 	function build() {
@@ -214,7 +216,7 @@ function Flatpickr(element, config) {
 		if (self.config.weekNumbers)
 			self.weekNumbers.innerHTML = "";
 
-		if (self.config.mode === "range"  ) {
+		if (self.config.mode === "range") {
 			const dateLimits = self.config.enable.length || self.config.disable.length || self.config.mixDate || self.config.maxDate;
 			if (!dateLimits || !self.minRangeDate || !self.maxRangeDate) {
 				self.minRangeDate = new Date(self.currentYear, self.currentMonth - 1, dayNumber);
@@ -527,8 +529,9 @@ function Flatpickr(element, config) {
 	}
 
 	function destroy() {
-		self.calendarContainer.parentNode.removeChild(self.calendarContainer);
 		self.clear();
+		self.calendarContainer.parentNode.removeChild(self.calendarContainer);
+
 
 		if (self.altInput) {
 			self.input.type = "text";
@@ -771,33 +774,53 @@ function Flatpickr(element, config) {
 	}
 
 	function parseConfig() {
-		self.config = {};
-		for (let config in self.instanceConfig)
-			self.config[config] = self.instanceConfig[config];
+		var boolOpts = [
+			"altInput", "allowInput", "enableTime", "enableSeconds",
+			"inline", "noCalendar", "time_24hr", "utc"
+		];
+		self.config = Object.create(Flatpickr.defaultConfig);
+		let userConfig = Object.assign({}, self.instanceConfig, self.element.dataset || {});
 
-		for (let k in self.element.dataset || {}) {
-			self.config[k] = typeof Flatpickr.defaultConfig[k] === "boolean"
-				? self.element.dataset[k] !== "false"
-				: self.element.dataset[k]
-		}
+		Object.defineProperty(self.config, "minDate", {
+			get: function() {
+				return this._minDate;
+			},
+			set: function(date) {
+				this._minDate = parseDate(date);
+				if(self.days)
+					redraw();
+			}
+		});
 
-		if (!self.config.dateFormat && self.config.enableTime) {
+		Object.defineProperty(self.config, "maxDate", {
+			get: function() {
+				return this._maxDate;
+			},
+			set: function(date) {
+				this._maxDate = parseDate(date);
+				if(self.days)
+					redraw();
+			}
+		});
+
+		Object.assign(self.config, userConfig);
+
+		for (var i = 0; i < boolOpts.length; i++)
+			self.config[boolOpts[i]] = self.config[boolOpts[i]] === true || self.config[boolOpts[i]] === "true";
+
+
+		if (!userConfig.dateFormat && userConfig.enableTime) {
 			self.config.dateFormat = self.config.noCalendar
 				? "H:i" + (self.config.enableSeconds ? ":S" : "")
 				: Flatpickr.defaultConfig.dateFormat + " H:i" + (self.config.enableSeconds ? ":S" : "");
 		}
 
-		if (self.config.altInput && self.config.enableTime && !self.config.altFormat) {
+		if (userConfig.altInput && userConfig.enableTime && !userConfig.altFormat) {
 			self.config.altFormat = self.config.noCalendar
 				? "h:i" + (self.config.enableSeconds ? ":S K" : " K")
 				: Flatpickr.defaultConfig.altFormat + ` h:i${self.config.enableSeconds ? ":S" : ""} K`;
 		}
 
-		for(let k in Flatpickr.defaultConfig) {
-			self.config[k] = typeof self.config[k] !== "undefined"
-				? self.config[k]
-				: Flatpickr.defaultConfig[k];
-		}
 	}
 
 	function parseDate(date, timeless = false) {
@@ -843,7 +866,7 @@ function Flatpickr(element, config) {
 				date = new Date(date);
 		}
 
-		if (!(date instanceof Date) || !date.getTime()) {
+		if (!(date instanceof Date)) {
 			console.warn(`flatpickr: invalid date ${date_orig}`);
 			console.info(self.element);
 			return null;
@@ -899,10 +922,12 @@ function Flatpickr(element, config) {
 		e.preventDefault();
 		e.stopPropagation();
 
-		if (self.config.allowInput && e.which === 13 &&
-			(e.target === self.altInput || e.target === self.input)
+		if (
+			self.config.allowInput && e.which === 13 &&
+			(e.target === self.altInput || self.input)
 		)
-			return self.setDate((self.altInput || self.input).value);
+			return self.setDate((self.altInput || self.input).value), e.target.blur();
+
 
 		if (
 			!e.target.classList.contains("flatpickr-day") ||
@@ -948,8 +973,7 @@ function Flatpickr(element, config) {
 	}
 
 	function set(option, value) {
-		const isDateOpt = (option === "minDate" || option === "maxDate" || option === "defaultDate");
-		self.config[option] = isDateOpt ? parseDate(value) : value;
+		self.config[option] = value;
 		self.redraw();
 		jumpToDate();
 	}
@@ -998,16 +1022,9 @@ function Flatpickr(element, config) {
 		}
 
 
-
-		if (self.config.minDate)
-			self.config.minDate = parseDate(self.config.minDate, true);
-
-		if (self.config.maxDate)
-			self.config.maxDate = parseDate(self.config.maxDate, true);
-
 		const initialDate = (self.selectedDates.length
 			? self.selectedDates[0]
-			: (self.config.defaultDate || self.config.minDate || self.now)
+			: (self.config.minDate || self.now)
 		);
 
 		self.currentYear = initialDate.getFullYear();
@@ -1202,10 +1219,13 @@ function Flatpickr(element, config) {
 	}
 
 	function updateNavigationCurrentMonth() {
+		if (self.config.noCalendar || self.isMobile || !self.monthNav)
+			return;
+
 		self.currentMonthElement.textContent = self.utils.monthToStr(self.currentMonth) + " ";
 		self.currentYearElement.value = self.currentYear;
 
-		if (self.config.minDate instanceof Date) {
+		if (self.config.minDate) {
 			self.currentYearElement.min = self.config.minDate.getFullYear();
 			const hidePrevMonthArrow = self.currentYear === self.config.minDate.getFullYear()
 				? (self.currentMonth + 11) % 12 < self.config.minDate.getMonth()
@@ -1219,7 +1239,7 @@ function Flatpickr(element, config) {
 			self.prevMonthNav.style.display = "block";
 		}
 
-		if (self.config.maxDate instanceof Date) {
+		if (self.config.maxDate) {
 			const hideNextMonthArrow = self.currentYear === self.config.maxDate.getFullYear()
 				? self.currentMonth + 1 > self.config.maxDate.getMonth()
 				: self.currentYear > self.config.maxDate.getFullYear();
@@ -1427,7 +1447,7 @@ Flatpickr.defaultConfig = {
 	dateFormat: "Y-m-d",
 
 	// altInput - see https://chmln.github.io/flatpickr/#altinput
-	altInput: null,
+	altInput: false,
 
 	// the created altInput element will have this class.
 	altInputClass: "",

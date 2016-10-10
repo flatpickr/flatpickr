@@ -8,7 +8,8 @@ $weekdays_background = transparent
 $weekdays_color = #757575
 
 $day_text_color = #404848
-$day_hover_background_color = #eee
+$day_hover_background_color = #efefef
+$disabled_border_color = $day_hover_background_color
 
 $disabled_day_color = alpha(black, 0.15)
 
@@ -16,7 +17,6 @@ $today_color = #F64747
 $today_fg_color = #fff
 
 $selected_day_background =  #4f99ff
-
 $selected_day_color = #fff
 
 @import "../flatpickr_base"
@@ -26,7 +26,7 @@ $selected_day_color = #fff
 
 .flatpickr-day
 	border-radius 0
-	border 1px solid #eee
+	border 1px solid $day_hover_background_color
 	margin -1px 0px 0 -1px
 
 	&:nth-child(7n)
@@ -35,7 +35,7 @@ $selected_day_color = #fff
 	&:nth-child(n+36)
 		border-bottom 0
 
-	&.today
+	&.today:not(.selected)
 		border-color transparent
 		border-bottom 1px solid $today_color
 

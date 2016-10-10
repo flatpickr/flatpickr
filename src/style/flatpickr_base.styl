@@ -227,7 +227,10 @@
 		else
 			color alpha($day_text_color, 0.3)
 		background transparent
-		border-color transparent
+		if $disabled_border_color is defined
+			border-color $disabled_border_color
+		else
+			border-color transparent
 		cursor default
 
 
