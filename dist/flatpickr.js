@@ -141,7 +141,7 @@ function Flatpickr(element, config) {
 			self.currentMonth = jumpDate.getMonth();
 		} catch (e) {
 			console.error(e.stack);
-			console.warn("Invalid date supplied: " + jumpDate, jumpDate instanceof Date);
+			console.warn("Invalid date supplied: " + jumpDate);
 		}
 
 		self.redraw();
