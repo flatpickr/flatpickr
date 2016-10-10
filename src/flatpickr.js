@@ -630,6 +630,7 @@ function Flatpickr(element, config) {
 					break;
 
 				case 27:
+					self.clear();
 					self.close();
 					break;
 
