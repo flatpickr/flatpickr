@@ -197,8 +197,6 @@ function Flatpickr(element, config) {
 			self.days.tabIndex = -1;
 		}
 
-		self.disabledMonthIndexes = [];
-
 		self.firstOfMonth = (
 				new Date(self.currentYear, self.currentMonth, 1).getDay() -
 				Flatpickr.l10n.firstDayOfWeek + 7
@@ -216,6 +214,18 @@ function Flatpickr(element, config) {
 		if (self.config.weekNumbers)
 			self.weekNumbers.innerHTML = "";
 
+		if (self.config.mode === "range"  ) {
+			const dateLimits = self.config.enable.length || self.config.disable.length || self.config.mixDate || self.config.maxDate;
+			if (!dateLimits || !self.minRangeDate || !self.maxRangeDate) {
+				self.minRangeDate = new Date(self.currentYear, self.currentMonth - 1, dayNumber);
+				self.maxRangeDate = new Date(
+					self.currentYear,
+					self.currentMonth + 1,
+					(42 - self.firstOfMonth) % daysInMonth
+				);
+			}
+
+		}
 
 		self.days.innerHTML = "";
 
@@ -228,14 +238,20 @@ function Flatpickr(element, config) {
 					"flatpickr-day prevMonthDay"
 					+ " disabled".repeat(!dateIsEnabled)
 					+ " inRange".repeat(isDateInRange(curDate))
+					+ " notAllowed".repeat(self.selectedDates.length === 1 && (curDate < self.minRangeDate || curDate > self.maxRangeDate))
 					+ " selected".repeat(isDateSelected(curDate) !== false),
 					dayNumber
 				);
 
 			if (dateIsEnabled)
 				dayElement.tabIndex = 0;
-			else
-				self.disabledMonthIndexes.push(i);
+
+			else if (self.selectedDates[0] && curDate > self.minRangeDate && curDate < self.selectedDates[0])
+				self.minRangeDate = curDate;
+
+			else if (self.selectedDates[0] && curDate < self.maxRangeDate && curDate > self.selectedDates[0])
+				self.maxRangeDate = curDate;
+
 
 			triggerEvent("DayCreate", dayElement);
 			days.appendChild(dayElement);
@@ -256,7 +272,11 @@ function Flatpickr(element, config) {
 
 			const dayElement = createElement(
 				"span",
-				dateIsDisabled ? "flatpickr-day disabled" : "flatpickr-day" + " inRange".repeat(isDateInRange(currentDate)),
+				dateIsDisabled
+					? "flatpickr-day disabled"
+					: "flatpickr-day"
+						+ " inRange".repeat(isDateInRange(currentDate))
+						+ " notAllowed".repeat(self.selectedDates.length === 1 && (currentDate < self.minRangeDate || currentDate > self.maxRangeDate)),
 				dayNumber
 			);
 
@@ -280,8 +300,12 @@ function Flatpickr(element, config) {
 				}
 			}
 
-			else
-				self.disabledMonthIndexes.push(dayNumber + self.firstOfMonth - 1);
+			else if (self.selectedDates[0] && currentDate > self.minRangeDate && currentDate < self.selectedDates[0])
+				self.minRangeDate = currentDate;
+
+			else if (self.selectedDates[0] && currentDate < self.maxRangeDate && currentDate > self.selectedDates[0])
+				self.maxRangeDate = currentDate;
+
 
 			triggerEvent("DayCreate", dayElement);
 			days.appendChild(dayElement);
@@ -301,6 +325,7 @@ function Flatpickr(element, config) {
 					"flatpickr-day nextMonthDay"
 					+ " disabled".repeat(!dateIsEnabled)
 					+ " inRange".repeat(isDateInRange(curDate))
+					+ " notAllowed".repeat(self.selectedDates.length === 1 && (curDate < self.minRangeDate || curDate > self.maxRangeDate))
 					+ " selected".repeat(isDateSelected(curDate) !== false),
 					dayNum % daysInMonth
 				);
@@ -314,8 +339,13 @@ function Flatpickr(element, config) {
 
 			if (dateIsEnabled)
 				dayElement.tabIndex = 0;
-			else
-				self.disabledMonthIndexes.push(dayNum + self.firstOfMonth);
+
+			else if (self.selectedDates[0] && curDate > self.minRangeDate && curDate < self.selectedDates[0])
+				self.minRangeDate = curDate;
+
+			else if (self.selectedDates[0] && curDate < self.maxRangeDate && curDate > self.selectedDates[0])
+				self.maxRangeDate = curDate;
+
 
 			triggerEvent("DayCreate", dayElement);
 			days.appendChild(dayElement);
@@ -527,7 +557,7 @@ function Flatpickr(element, config) {
 			self.close();
 
 			if (self.config.mode === "range" && self.selectedDates.length === 1) {
-				self.selectedDates = [];
+				self.clear();
 				self.redraw();
 			}
 		}
@@ -643,43 +673,54 @@ function Flatpickr(element, config) {
 		}
 	}
 
+	function getDateFromElement(el) {
+		return new Date(
+			self.currentYear,
+			self.currentMonth
+				+ el.classList.contains("nextMonthDay")
+				- el.classList.contains("prevMonthDay"),
+			el.textContent
+		);
+	}
+
 	function onMouseOver(e) {
-		if (self.selectedDates.length !== 1 || !e.target.classList.contains("flatpickr-day") || e.target.classList.contains("disabled"))
+		if (self.selectedDates.length !== 1 || !e.target.classList.contains("flatpickr-day"))
 			return;
 
-		let firstDayIndex = !isPrevMonthDay * (self.firstOfMonth - 1),
-			isPrevMonthDay = e.target.classList.contains("prevMonthDay"),
-			isNextMonthDay = e.target.classList.contains("nextMonthDay"),
-			selectedDate = self.selectedDates[0].getDate(),
-			selectedDateIndex = firstDayIndex + selectedDate,
-			minIndex = null,
-			targetIndex = parseInt(e.target.textContent, 10)
-				+ self.utils.getDaysinMonth() * isNextMonthDay
-				- self.prevMonthDays * isPrevMonthDay,
-			startIndex = firstDayIndex + Math.min(targetIndex, selectedDate),
-			endIndex = firstDayIndex + Math.max(targetIndex, selectedDate);
+		let hoverDate = getDateFromElement(e.target),
+			rangeStartDate = Math.min(hoverDate.getTime(), self.selectedDates[0].getTime()),
+			rangeEndDate = Math.max(hoverDate.getTime(), self.selectedDates[0].getTime()),
+			containsDisabled = false;
 
-		if (self.disabledMonthIndexes.length) {
-			for (let i = 0; i < self.disabledMonthIndexes.length; i++) {
-				if (
-					self.disabledMonthIndexes[i] > minIndex &&
-					self.disabledMonthIndexes[i] < selectedDateIndex
-				)
-					minIndex = self.disabledMonthIndexes[i];
+		for (let t = rangeStartDate; t < rangeEndDate; t += self.utils.duration.DAY) {
+			if (!isEnabled(new Date(t))) {
+				containsDisabled = true;
+				break;
 			}
 		}
 
-		for (let i = 0; i < self.days.childNodes.length; i++) {
-			if (minIndex && i < minIndex)
+		for (
+			let timestamp = getDateFromElement(self.days.childNodes[0]).getTime(), i = 0;
+			i < 42;
+			i++, timestamp += self.utils.duration.DAY
+		) {
+			if (timestamp < self.minRangeDate.getTime() || timestamp > self.maxRangeDate.getTime()) {
 				self.days.childNodes[i].classList.add("notAllowed");
-			else {
-				self.days.childNodes[i].classList.remove("notAllowed");
-				self.days.childNodes[i].classList[
-					(i < startIndex || i > endIndex) ? "remove" : "add"
-				]("inRange");
+				self.days.childNodes[i].classList.remove("inRange");
 			}
 
+
+			else if (
+				!containsDisabled &&
+				timestamp > Math.max(self.minRangeDate.getTime(), rangeStartDate) &&
+				timestamp < Math.min(self.maxRangeDate.getTime(), rangeEndDate)
+			)
+				self.days.childNodes[i].classList.add("inRange");
+			else
+				self.days.childNodes[i].classList.remove("inRange");
 		}
+
+
 	}
 
 	function onResize() {
@@ -862,17 +903,18 @@ function Flatpickr(element, config) {
 		)
 			return self.setDate((self.altInput || self.input).value);
 
-		if (!e.target.classList.contains("flatpickr-day") || e.target.classList.contains("disabled"))
+		if (
+			!e.target.classList.contains("flatpickr-day") ||
+			e.target.classList.contains("disabled") ||
+			e.target.classList.contains("notAllowed")
+		)
 			return;
 
-		const isPrevMonthDay = e.target.classList.contains("prevMonthDay"),
-			isNextMonthDay = e.target.classList.contains("nextMonthDay"),
-			selectedDate = new Date(self.currentYear, self.currentMonth + isNextMonthDay - isPrevMonthDay, e.target.textContent);
-
+		const selectedDate = getDateFromElement(e.target);
 		self.selectedDateElem = e.target;
 
-		if (isPrevMonthDay || isNextMonthDay)
-			changeMonth(+isNextMonthDay - isPrevMonthDay);
+		if (selectedDate.getMonth() !== self.currentMonth)
+			changeMonth(selectedDate.getMonth() - self.currentMonth);
 
 		if (self.config.mode === "single") {
 			self.selectedDates = [selectedDate];
@@ -894,14 +936,14 @@ function Flatpickr(element, config) {
 
 			self.selectedDates.push(selectedDate);
 			self.selectedDates.sort((a,b) => a.getTime() - b.getTime());
-
-			if (self.selectedDates.length === 1)
-				onMouseOver(e);
 		}
 
 		updateValue();
 		buildDays();
 		triggerEvent("Change");
+
+		if (self.config.mode === "range" && self.selectedDates.length === 1)
+			onMouseOver(e);
 	}
 
 	function set(option, value) {
@@ -1034,6 +1076,9 @@ function Flatpickr(element, config) {
 
 	function setupHelperFunctions() {
 		self.utils = {
+			duration: {
+				DAY: 86400000,
+			},
 			getDaysinMonth: (month = self.currentMonth, yr = self.currentYear) => {
 				if (month === 1 && ((yr % 4 === 0) && (yr % 100 !== 0)) || (yr % 400 === 0))
 					return 29;

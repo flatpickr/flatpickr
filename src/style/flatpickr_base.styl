@@ -219,7 +219,9 @@
 
 		border-color $selected_day_background
 
-	&.disabled, &.disabled:hover, &.prevMonthDay, &.nextMonthDay, &.notAllowed
+	&.disabled, &.disabled:hover,
+	&.prevMonthDay, &.nextMonthDay,
+	&.notAllowed, &.notAllowed.prevMonthDay, &.notAllowed.nextMonthDay
 		if $disabled_day_color is defined
 			color $disabled_day_color
 		else
