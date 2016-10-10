@@ -63,9 +63,9 @@ function Flatpickr(element, config) {
 			});
 		}
 
-		if (typeof Event !== "undefined") self.changeEvent = new Event("change", { "bubbles": true });else {
+		if ("createEvent" in document) {
 			self.changeEvent = document.createEvent("HTMLEvents");
-			self.changeEvent.initEvent("change", true, false);
+			self.changeEvent.initEvent("change", false, true);
 		}
 
 		if (self.isMobile) return setupMobile();
@@ -207,7 +207,7 @@ function Flatpickr(element, config) {
 		for (var i = 0; dayNumber <= self.prevMonthDays; i++, dayNumber++) {
 			var curDate = new Date(self.currentYear, self.currentMonth - 1, dayNumber, 0, 0, 0, 0, 0),
 			    dateIsEnabled = isEnabled(curDate),
-			    dayElement = createElement("span", "flatpickr-day prevMonthDay" + " disabled".repeat(!dateIsEnabled) + " inRange".repeat(isDateInRange(curDate)) + " notAllowed".repeat(self.selectedDates.length === 1 && (curDate < self.minRangeDate || curDate > self.maxRangeDate)) + " selected".repeat(isDateSelected(curDate) !== false), dayNumber);
+			    dayElement = createElement("span", "flatpickr-day prevMonthDay" + (!dateIsEnabled ? " disabled" : "") + (isDateInRange(curDate) ? " inRange" : "") + (self.selectedDates.length === 1 && (curDate < self.minRangeDate || curDate > self.maxRangeDate) ? " notAllowed" : "") + (isDateSelected(curDate) !== false ? " selected" : ""), dayNumber);
 
 			if (dateIsEnabled) dayElement.tabIndex = 0;else if (self.selectedDates[0] && curDate > self.minRangeDate && curDate < self.selectedDates[0]) self.minRangeDate = curDate;else if (self.selectedDates[0] && curDate < self.maxRangeDate && curDate > self.selectedDates[0]) self.maxRangeDate = curDate;
 
@@ -225,7 +225,7 @@ function Flatpickr(element, config) {
 
 			dateIsDisabled = !isEnabled(currentDate);
 
-			var _dayElement = createElement("span", dateIsDisabled ? "flatpickr-day disabled" : "flatpickr-day" + " inRange".repeat(isDateInRange(currentDate)) + " notAllowed".repeat(self.selectedDates.length === 1 && (currentDate < self.minRangeDate || currentDate > self.maxRangeDate)), dayNumber);
+			var _dayElement = createElement("span", dateIsDisabled ? "flatpickr-day disabled" : "flatpickr-day" + (isDateInRange(currentDate) ? " inRange" : "") + (self.selectedDates.length === 1 && (currentDate < self.minRangeDate || currentDate > self.maxRangeDate) ? " notAllowed" : ""), dayNumber);
 
 			if (!dateIsDisabled) {
 				_dayElement.tabIndex = 0;
@@ -250,7 +250,7 @@ function Flatpickr(element, config) {
 		for (var dayNum = daysInMonth + 1; dayNum <= 42 - self.firstOfMonth; dayNum++) {
 			var _curDate = new Date(self.currentYear, self.currentMonth + 1, dayNum % daysInMonth, 0, 0, 0, 0, 0),
 			    _dateIsEnabled = isEnabled(_curDate),
-			    _dayElement2 = createElement("span", "flatpickr-day nextMonthDay" + " disabled".repeat(!_dateIsEnabled) + " inRange".repeat(isDateInRange(_curDate)) + " notAllowed".repeat(self.selectedDates.length === 1 && (_curDate < self.minRangeDate || _curDate > self.maxRangeDate)) + " selected".repeat(isDateSelected(_curDate) !== false), dayNum % daysInMonth);
+			    _dayElement2 = createElement("span", "flatpickr-day nextMonthDay" + (!_dateIsEnabled ? " disabled" : "") + (isDateInRange(_curDate) ? " inRange" : "") + (self.selectedDates.length === 1 && (_curDate < self.minRangeDate || _curDate > self.maxRangeDate) ? " notAllowed" : "") + (isDateSelected(_curDate) !== false ? " selected" : ""), dayNum % daysInMonth);
 
 			if (self.config.weekNumbers && dayNum % 7 === 1) {
 				self.weekNumbers.insertAdjacentHTML("beforeend", "<span class='disabled flatpickr-day'>" + self.getWeek(_curDate) + "</span>");
@@ -632,7 +632,7 @@ function Flatpickr(element, config) {
 	}
 
 	function parseDate(date) {
-		var timeless = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+		var timeless = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
 		if (!date) return null;
 
@@ -901,15 +901,15 @@ function Flatpickr(element, config) {
 				DAY: 86400000
 			},
 			getDaysinMonth: function getDaysinMonth() {
-				var month = arguments.length <= 0 || arguments[0] === undefined ? self.currentMonth : arguments[0];
-				var yr = arguments.length <= 1 || arguments[1] === undefined ? self.currentYear : arguments[1];
+				var month = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : self.currentMonth;
+				var yr = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : self.currentYear;
 
 				if (month === 1 && yr % 4 === 0 && yr % 100 !== 0 || yr % 400 === 0) return 29;
 				return Flatpickr.l10n.daysInMonth[month];
 			},
 
 			monthToStr: function monthToStr(monthNumber) {
-				var short = arguments.length <= 1 || arguments[1] === undefined ? self.config.shorthandCurrentMonth : arguments[1];
+				var short = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : self.config.shorthandCurrentMonth;
 				return Flatpickr.l10n.months[(short ? "short" : "long") + "hand"][monthNumber];
 			}
 		};
@@ -979,7 +979,15 @@ function Flatpickr(element, config) {
 			}
 		}
 
-		if (event === "Change") self.input.dispatchEvent(self.changeEvent);
+		if (event === "Change") {
+			try {
+				self.input.dispatchEvent(new Event("change", { "bubbles": true }));
+			} catch (e) {
+				if ("createEvent" in document) return self.input.dispatchEvent(self.changeEvent);
+
+				self.input.fireEvent("onchange");
+			}
+		}
 	}
 
 	function latestSelectedDateObj() {
@@ -1029,7 +1037,7 @@ function Flatpickr(element, config) {
 	}
 
 	function updateValue() {
-		var readTimeInput = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+		var readTimeInput = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
 
 		if (!self.selectedDates.length) return self.clear();
 
@@ -1103,8 +1111,8 @@ function Flatpickr(element, config) {
 	}
 
 	function createElement(tag) {
-		var className = arguments.length <= 1 || arguments[1] === undefined ? "" : arguments[1];
-		var content = arguments.length <= 2 || arguments[2] === undefined ? "" : arguments[2];
+		var className = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
+		var content = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "";
 
 		var e = document.createElement(tag);
 		e.className = className;

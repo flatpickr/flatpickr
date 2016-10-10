@@ -69,13 +69,11 @@ function Flatpickr(element, config) {
 			});
 		}
 
-		if (typeof Event !== "undefined")
-			self.changeEvent = new Event("change", { "bubbles": true });
-
-		else {
+		if ("createEvent" in document) {
 			self.changeEvent = document.createEvent("HTMLEvents");
-			self.changeEvent.initEvent("change", true, false);
+			self.changeEvent.initEvent("change", false, true);
 		}
+
 
 		if (self.isMobile)
 			return setupMobile();
@@ -238,10 +236,15 @@ function Flatpickr(element, config) {
 				dayElement = createElement(
 					"span",
 					"flatpickr-day prevMonthDay"
-					+ " disabled".repeat(!dateIsEnabled)
-					+ " inRange".repeat(isDateInRange(curDate))
-					+ " notAllowed".repeat(self.selectedDates.length === 1 && (curDate < self.minRangeDate || curDate > self.maxRangeDate))
-					+ " selected".repeat(isDateSelected(curDate) !== false),
+						+ (!dateIsEnabled ? " disabled" : "")
+						+ (isDateInRange(curDate) ? " inRange" : "")
+						+ (
+							(
+								self.selectedDates.length === 1 &&
+								(curDate < self.minRangeDate || curDate > self.maxRangeDate)
+							) ? " notAllowed" : ""
+						)
+						+ (isDateSelected(curDate) !== false ? " selected" : ""),
 					dayNumber
 				);
 
@@ -277,8 +280,8 @@ function Flatpickr(element, config) {
 				dateIsDisabled
 					? "flatpickr-day disabled"
 					: "flatpickr-day"
-						+ " inRange".repeat(isDateInRange(currentDate))
-						+ " notAllowed".repeat(self.selectedDates.length === 1 && (currentDate < self.minRangeDate || currentDate > self.maxRangeDate)),
+						+ (isDateInRange(currentDate) ? " inRange" : "")
+						+ (self.selectedDates.length === 1 && (currentDate < self.minRangeDate || currentDate > self.maxRangeDate) ? " notAllowed" : ""),
 				dayNumber
 			);
 
@@ -325,10 +328,15 @@ function Flatpickr(element, config) {
 				dayElement = createElement(
 					"span",
 					"flatpickr-day nextMonthDay"
-					+ " disabled".repeat(!dateIsEnabled)
-					+ " inRange".repeat(isDateInRange(curDate))
-					+ " notAllowed".repeat(self.selectedDates.length === 1 && (curDate < self.minRangeDate || curDate > self.maxRangeDate))
-					+ " selected".repeat(isDateSelected(curDate) !== false),
+						+ (!dateIsEnabled ? " disabled" : "")
+						+ (isDateInRange(curDate) ? " inRange" : "")
+						+ (
+							(
+								self.selectedDates.length === 1 &&
+								(curDate < self.minRangeDate || curDate > self.maxRangeDate)
+							) ? " notAllowed" : ""
+						)
+						+ (isDateSelected(curDate) !== false ? " selected" : ""),
 					dayNum % daysInMonth
 				);
 
@@ -1192,8 +1200,19 @@ function Flatpickr(element, config) {
 				hooks[i](self.selectedDates, self.input.value, self, data);
 		}
 
-		if (event === "Change")
-			self.input.dispatchEvent(self.changeEvent);
+		if (event === "Change") {
+			try {
+				self.input.dispatchEvent(new Event("change", { "bubbles": true }));
+			}
+
+			catch(e) {
+				if ("createEvent" in document)
+					return self.input.dispatchEvent(self.changeEvent);
+
+				self.input.fireEvent("onchange");
+			}
+
+		}
 	}
 
 	function latestSelectedDateObj() {
