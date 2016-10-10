@@ -1,4 +1,3 @@
-
 var theme_sel = document.getElementById("themes"),
 	stylesheet = document.getElementById("cal_style"),
 	themes = [
@@ -9,10 +8,16 @@ var theme_sel = document.getElementById("themes"),
 		"base16_flat"
 	];
 
+theme_sel.href = "dist/flatpickr" + themes[Math.floor(Math.random()*themes.length)] + ".min.css";
+
 for(var i = 0; i < themes.length; i++){
 	var opt = document.createElement("option");
 	opt.value = "." + themes[i];
 	opt.innerText = themes[i].replace(/_/g," ");
+
+	if (stylesheet.href.indexOf(opt.value +".min.css") > -1)
+		opt.setAttribute("selected", "");
+
 	theme_sel.appendChild(opt);
 }
 
