@@ -94,6 +94,7 @@
 	color $months_color
 	fill $months_color
 	padding 4px 0 0
+	padding unquote('0px\9')
 	text-align center
 	position relative
 
@@ -110,6 +111,8 @@
 		width 14px
 		position absolute
 		top 9px
+		top unquote('0px\9')
+
 		path
 			fill inherit
 
@@ -363,3 +366,7 @@ span.flatpickr-weekday
 @media all and (-ms-high-contrast: none)
 	.flatpickr-month
 		padding 0
+		svg
+			top 0 !important
+
+
