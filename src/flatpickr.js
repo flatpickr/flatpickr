@@ -785,8 +785,7 @@ function Flatpickr(element, config) {
 
 	function parseConfig() {
 		var boolOpts = [
-			"altInput", "allowInput", "enableTime", "enableSeconds",
-			"inline", "noCalendar", "time_24hr", "utc"
+			"utc", "wrap", "weekNumbers", "allowInput", "clickOpens", "time_24hr", "enableTime", "noCalendar", "altInput", "shorthandCurrentMonth", "inline", "static", "enableSeconds", "disableMobile"
 		];
 		self.config = Object.create(Flatpickr.defaultConfig);
 		let userConfig = Object.assign({}, self.instanceConfig, self.element.dataset || {});
@@ -816,8 +815,7 @@ function Flatpickr(element, config) {
 		Object.assign(self.config, userConfig);
 
 		for (var i = 0; i < boolOpts.length; i++)
-			self.config[boolOpts[i]] = self.config[boolOpts[i]] === true || self.config[boolOpts[i]] === "true";
-
+			self.config[boolOpts[i]] = (self.config[boolOpts[i]] === true) || self.config[boolOpts[i]] === "true";
 
 		if (!userConfig.dateFormat && userConfig.enableTime) {
 			self.config.dateFormat = self.config.noCalendar
@@ -947,7 +945,6 @@ function Flatpickr(element, config) {
 			return;
 
 		const selectedDate = getDateFromElement(e.target);
-		console.info(selectedDate, e.target);
 		self.selectedDateElem = e.target;
 
 		if (self.config.mode === "single") {
