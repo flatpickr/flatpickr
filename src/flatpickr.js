@@ -503,8 +503,10 @@ function Flatpickr(element, config) {
 		return self.weekWrapper;
 	}
 
-	function changeMonth(offset) {
-		self.currentMonth += offset;
+	function changeMonth(value, is_offset) {
+		self.currentMonth = (typeof is_offset === "undefined" || is_offset)
+			? (self.currentMonth + value + 12) % 12
+			: value;
 
 		handleYearChange();
 		updateNavigationCurrentMonth();
@@ -945,10 +947,8 @@ function Flatpickr(element, config) {
 			return;
 
 		const selectedDate = getDateFromElement(e.target);
+		console.info(selectedDate, e.target);
 		self.selectedDateElem = e.target;
-
-		if (selectedDate.getMonth() !== self.currentMonth)
-			changeMonth(selectedDate.getMonth() - self.currentMonth);
 
 		if (self.config.mode === "single") {
 			self.selectedDates = [selectedDate];
@@ -971,6 +971,9 @@ function Flatpickr(element, config) {
 			self.selectedDates.push(selectedDate);
 			self.selectedDates.sort((a,b) => a.getTime() - b.getTime());
 		}
+
+		if (selectedDate.getMonth() !== self.currentMonth)
+			changeMonth(selectedDate.getMonth(), false);
 
 		updateValue();
 		buildDays();
