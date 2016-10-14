@@ -17,6 +17,10 @@ Flatpickr.l10n.ordinal = function() {
 	return ".";
 };
 
+Flatpickr.l10n.weekAbbreviation = "Hét";
+Flatpickr.l10n.scrollTitle = "Görgessen";
+Flatpickr.l10n.toggleTitle = "Kattintson a váltáshoz";
+
 if (typeof module !== "undefined") {
 	module.exports = Flatpickr.l10n;
 }
