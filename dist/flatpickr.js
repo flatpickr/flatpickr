@@ -603,7 +603,7 @@ function Flatpickr(element, config) {
 				return this._minDate;
 			},
 			set: function set(date) {
-				this._minDate = parseDate(date);
+				this._minDate = parseDate(date, true);
 				if (self.days) redraw();
 			}
 		});
@@ -613,7 +613,7 @@ function Flatpickr(element, config) {
 				return this._maxDate;
 			},
 			set: function set(date) {
-				this._maxDate = parseDate(date);
+				this._maxDate = parseDate(date, true);
 				if (self.days) redraw();
 			}
 		});
