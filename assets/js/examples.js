@@ -152,7 +152,6 @@ function fp_ready(){
 		minDate: "today",
 		enableTime: true,
 		onChange: function(dateObj, dateStr, fp) {
-			console.log(fp.selectedDateObj);
 			events.innerHTML += "<b>onChange</b> (<code>" + dateObj + "</code>, <code>" + dateStr + "</code> )<br>";
 			events.scrollTop = events.offsetTop;
 		},
@@ -205,9 +204,9 @@ function fp_ready(){
 		formatOutput = document.getElementById("dateFormatOutput"),
 		now = new Date();
 
-	// document.getElementById("dateFormatComposer").addEventListener("keyup", function(e){
-	// 	formatOutput.textContent = fpInstance.formatDate(e.target.value, now);
-	// });
+	document.getElementById("dateFormatComposer").addEventListener("keyup", function(e){
+		formatOutput.textContent = fpInstance.formatDate(e.target.value, now);
+	});
 
 	setupPlayground();
 
