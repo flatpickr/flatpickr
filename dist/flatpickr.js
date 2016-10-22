@@ -961,6 +961,7 @@ function Flatpickr(element, config) {
 				self.selectedDates.splice(selectedIndex, 1);
 			else
 				self.selectedDates.push(selectedDate);
+			self.selectedDates.sort(function (a,b) { return a.getTime() - b.getTime(); });
 		}
 
 		else if (self.config.mode === "range") {
@@ -974,7 +975,7 @@ function Flatpickr(element, config) {
 		if (selectedDate.getMonth() !== self.currentMonth)
 			changeMonth(selectedDate.getMonth(), false);
 
-		updateValue();
+		updateValue(self.config.mode === "single");
 		buildDays();
 		triggerEvent("Change");
 
