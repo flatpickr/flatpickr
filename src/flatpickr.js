@@ -6,8 +6,6 @@ function Flatpickr(element, config) {
 		self.element = element;
 		self.instanceConfig = config || {};
 
-		setupFormats();
-
 		parseConfig();
 		setupInputs();
 		setupDates();
@@ -412,12 +410,12 @@ function Flatpickr(element, config) {
 		self.hourElement.tabIndex = self.minuteElement.tabIndex = 0;
 		self.hourElement.type = self.minuteElement.type = self.numInputType;
 
-		self.hourElement.value = pad(latestSelectedDateObj()
+		self.hourElement.value = self.pad(latestSelectedDateObj()
 			? latestSelectedDateObj().getHours()
 			: self.config.defaultHour
 		);
 
-		self.minuteElement.value = pad(latestSelectedDateObj()
+		self.minuteElement.value = self.pad(latestSelectedDateObj()
 			? latestSelectedDateObj().getMinutes()
 			: self.config.defaultMinute
 		);
@@ -443,7 +441,7 @@ function Flatpickr(element, config) {
 			self.secondElement = createElement("input", "flatpickr-second");
 			self.secondElement.type = self.numInputType;
 			self.secondElement.value =
-				latestSelectedDateObj() ? pad(latestSelectedDateObj().getSeconds()) : "00";
+				latestSelectedDateObj() ? self.pad(latestSelectedDateObj().getSeconds()) : "00";
 
 			self.secondElement.step = self.minuteElement.step;
 			self.secondElement.min = self.minuteElement.min;
@@ -505,8 +503,10 @@ function Flatpickr(element, config) {
 
 	function changeMonth(value, is_offset) {
 		self.currentMonth = (typeof is_offset === "undefined" || is_offset)
-			? (self.currentMonth + value + 12) % 12
+			? self.currentMonth + value
 			: value;
+
+		console.log(typeof is_offset === "undefined" || is_offset, self.currentMonth);
 
 		handleYearChange();
 		updateNavigationCurrentMonth();
@@ -778,11 +778,6 @@ function Flatpickr(element, config) {
 		(self.altInput || self.input).classList.add("active");
 		triggerEvent("Open");
 	}
-
-	function pad(number) {
-		return `0${number}`.slice(-2);
-	}
-
 	function parseConfig() {
 		var boolOpts = [
 			"utc", "wrap", "weekNumbers", "allowInput", "clickOpens", "time_24hr", "enableTime", "noCalendar", "altInput", "shorthandCurrentMonth", "inline", "static", "enableSeconds", "disableMobile"
@@ -1039,67 +1034,6 @@ function Flatpickr(element, config) {
 		self.currentMonth = initialDate.getMonth();
 	}
 
-	function setupFormats() {
-		self.formats = {
-			// weekday name, short, e.g. Thu
-			D: date => Flatpickr.l10n.weekdays.shorthand[self.formats.w(date)],
-
-			// full month name e.g. January
-			F: date => self.utils.monthToStr(self.formats.n(date) - 1, false),
-
-			// hours with leading zero e.g. 03
-			H: date => pad(date.getHours()),
-
-			// day (1-30) with ordinal suffix e.g. 1st, 2nd
-			J: date => date.getDate() + Flatpickr.l10n.ordinal(date.getDate()),
-
-			// AM/PM
-			K: date => date.getHours() > 11 ? "PM" : "AM",
-
-			// shorthand month e.g. Jan, Sep, Oct, etc
-			M: date => self.utils.monthToStr(date.getMonth(), true),
-
-			// seconds 00-59
-			S: date => pad(date.getSeconds()),
-
-			// unix timestamp
-			U: date => date.getTime() / 1000,
-
-			// full year e.g. 2016
-			Y: date => date.getFullYear(),
-
-			// day in month, padded (01-30)
-			d: date => pad(self.formats.j(date)),
-
-			// hour from 1-12 (am/pm)
-			h: date => date.getHours() % 12 ? date.getHours() % 12 : 12,
-
-			// minutes, padded with leading zero e.g. 09
-			i: date => pad(date.getMinutes()),
-
-			// day in month (1-30)
-			j: date => date.getDate(),
-
-			// weekday name, full, e.g. Thursday
-			l: date => Flatpickr.l10n.weekdays.longhand[self.formats.w(date)],
-
-			// padded month number (01-12)
-			m: date => pad(self.formats.n(date)),
-
-			// the month number (1-12)
-			n: date => date.getMonth() + 1,
-
-			// seconds 0-59
-			s: date => date.getSeconds(),
-
-			// number of the day of the week
-			w: date => date.getDay(),
-
-			// last two digits of year e.g. 16 for 2016
-			y: date => String(self.formats.Y(date)).substring(2)
-		};
-	}
-
 	function setupHelperFunctions() {
 		self.utils = {
 			duration: {
@@ -1304,16 +1238,16 @@ function Flatpickr(element, config) {
 				seconds = latestSelectedDateObj().getSeconds();
 			}
 
-			self.hourElement.value = pad(
+			self.hourElement.value = self.pad(
 				!self.config.time_24hr ? (12 + hours) % 12 + 12 * (hours % 12 === 0) : hours
 			);
-			self.minuteElement.value = pad(minutes);
+			self.minuteElement.value = self.pad(minutes);
 
 			if (!self.config.time_24hr)
 				self.amPM.textContent = hours >= 12 ? "PM" : "AM";
 
 			if (self.config.enableSeconds)
-				self.secondElement.value = pad(seconds);
+				self.secondElement.value = self.pad(seconds);
 		}
 
 		if (self.isMobile) {
@@ -1423,7 +1357,7 @@ function Flatpickr(element, config) {
 		else if (newValue >= max)
 			newValue = min + step;
 
-		e.target.value = pad(newValue);
+		e.target.value = self.pad(newValue);
 	}
 
 	init();
@@ -1578,6 +1512,71 @@ Flatpickr.l10n = {
 
 Flatpickr.localize = function (l10n) {
 	Object.keys(l10n).forEach(k => Flatpickr.l10n[k] = l10n[k]);
+};
+
+Flatpickr.prototype = {
+	pad: function(number) {
+		return `0${number}`.slice(-2);
+	},
+
+	formats: {
+		// weekday name, short, e.g. Thu
+		D: date => Flatpickr.l10n.weekdays.shorthand[Flatpickr.prototype.formats.w(date)],
+
+		// full month name e.g. January
+		F: date => self.utils.monthToStr(Flatpickr.prototype.formats.n(date) - 1, false),
+
+		// hours with leading zero e.g. 03
+		H: date => Flatpickr.prototype.pad(date.getHours()),
+
+		// day (1-30) with ordinal suffix e.g. 1st, 2nd
+		J: date => date.getDate() + Flatpickr.l10n.ordinal(date.getDate()),
+
+		// AM/PM
+		K: date => date.getHours() > 11 ? "PM" : "AM",
+
+		// shorthand month e.g. Jan, Sep, Oct, etc
+		M: date => self.utils.monthToStr(date.getMonth(), true),
+
+		// seconds 00-59
+		S: date => Flatpickr.prototype.pad(date.getSeconds()),
+
+		// unix timestamp
+		U: date => date.getTime() / 1000,
+
+		// full year e.g. 2016
+		Y: date => date.getFullYear(),
+
+		// day in month, padded (01-30)
+		d: date => Flatpickr.prototype.pad(Flatpickr.prototype.formats.j(date)),
+
+		// hour from 1-12 (am/pm)
+		h: date => date.getHours() % 12 ? date.getHours() % 12 : 12,
+
+		// minutes, padded with leading zero e.g. 09
+		i: date => Flatpickr.prototype.pad(date.getMinutes()),
+
+		// day in month (1-30)
+		j: date => date.getDate(),
+
+		// weekday name, full, e.g. Thursday
+		l: date => Flatpickr.l10n.weekdays.longhand[Flatpickr.prototype.formats.w(date)],
+
+		// padded month number (01-12)
+		m: date => Flatpickr.prototype.pad(Flatpickr.prototype.formats.n(date)),
+
+		// the month number (1-12)
+		n: date => date.getMonth() + 1,
+
+		// seconds 0-59
+		s: date => date.getSeconds(),
+
+		// number of the day of the week
+		w: date => date.getDay(),
+
+		// last two digits of year e.g. 16 for 2016
+		y: date => String(Flatpickr.prototype.formats.Y(date)).substring(2)
+	}
 };
 
 function _flatpickr(nodeList, config) {

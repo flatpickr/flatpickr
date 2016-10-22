@@ -157,4 +157,23 @@ describe('flatpickr', () => {
 			expect(fp.selectedDates[0]).not.toBeDefined();
 		});
 	});
+
+
+	describe("Internals", () => {
+		it("updateNavigationCurrentMonth()", () => {
+			init();
+			const fp = new Flatpickr(elem, {
+				defaultDate: "2016-12-20"
+			});
+
+			fp.changeMonth(1);
+			expect(fp.currentYear).toEqual(2017);
+
+			fp.changeMonth(-1);
+			expect(fp.currentYear).toEqual(2016);
+
+			fp.changeMonth(2);
+			expect(fp.currentMonth).toEqual(1);
+		});
+	});
 });
