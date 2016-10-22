@@ -6,6 +6,8 @@ function Flatpickr(element, config) {
 		self.element = element;
 		self.instanceConfig = config || {};
 
+		setupFormats();
+
 		parseConfig();
 		setupInputs();
 		setupDates();
@@ -1064,6 +1066,67 @@ function Flatpickr(element, config) {
 		};
 	}
 
+	function setupFormats() {
+		self.formats = {
+			// weekday name, short, e.g. Thu
+			D: function (date) { return Flatpickr.l10n.weekdays.shorthand[self.formats.w(date)]; },
+
+			// full month name e.g. January
+			F: function (date) { return self.utils.monthToStr(self.formats.n(date) - 1, false); },
+
+			// hours with leading zero e.g. 03
+			H: function (date) { return Flatpickr.prototype.pad(date.getHours()); },
+
+			// day (1-30) with ordinal suffix e.g. 1st, 2nd
+			J: function (date) { return date.getDate() + Flatpickr.l10n.ordinal(date.getDate()); },
+
+			// AM/PM
+			K: function (date) { return date.getHours() > 11 ? "PM" : "AM"; },
+
+			// shorthand month e.g. Jan, Sep, Oct, etc
+			M: function (date) { return self.utils.monthToStr(date.getMonth(), true); },
+
+			// seconds 00-59
+			S: function (date) { return Flatpickr.prototype.pad(date.getSeconds()); },
+
+			// unix timestamp
+			U: function (date) { return date.getTime() / 1000; },
+
+			// full year e.g. 2016
+			Y: function (date) { return date.getFullYear(); },
+
+			// day in month, padded (01-30)
+			d: function (date) { return Flatpickr.prototype.pad(self.formats.j(date)); },
+
+			// hour from 1-12 (am/pm)
+			h: function (date) { return date.getHours() % 12 ? date.getHours() % 12 : 12; },
+
+			// minutes, padded with leading zero e.g. 09
+			i: function (date) { return Flatpickr.prototype.pad(date.getMinutes()); },
+
+			// day in month (1-30)
+			j: function (date) { return date.getDate(); },
+
+			// weekday name, full, e.g. Thursday
+			l: function (date) { return Flatpickr.l10n.weekdays.longhand[self.formats.w(date)]; },
+
+			// padded month number (01-12)
+			m: function (date) { return Flatpickr.prototype.pad(self.formats.n(date)); },
+
+			// the month number (1-12)
+			n: function (date) { return date.getMonth() + 1; },
+
+			// seconds 0-59
+			s: function (date) { return date.getSeconds(); },
+
+			// number of the day of the week
+			w: function (date) { return date.getDay(); },
+
+			// last two digits of year e.g. 16 for 2016
+			y: function (date) { return String(self.formats.Y(date)).substring(2); }
+		};
+	}
+
 	function setupInputs() {
 		self.input = self.config.wrap ? self.element.querySelector("[data-input]") : self.element;
 
@@ -1542,65 +1605,6 @@ Flatpickr.localize = function (l10n) {
 Flatpickr.prototype = {
 	pad: function(number) {
 		return ("0" + number).slice(-2);
-	},
-
-	formats: {
-		// weekday name, short, e.g. Thu
-		D: function (date) { return Flatpickr.l10n.weekdays.shorthand[Flatpickr.prototype.formats.w(date)]; },
-
-		// full month name e.g. January
-		F: function (date) { return self.utils.monthToStr(Flatpickr.prototype.formats.n(date) - 1, false); },
-
-		// hours with leading zero e.g. 03
-		H: function (date) { return Flatpickr.prototype.pad(date.getHours()); },
-
-		// day (1-30) with ordinal suffix e.g. 1st, 2nd
-		J: function (date) { return date.getDate() + Flatpickr.l10n.ordinal(date.getDate()); },
-
-		// AM/PM
-		K: function (date) { return date.getHours() > 11 ? "PM" : "AM"; },
-
-		// shorthand month e.g. Jan, Sep, Oct, etc
-		M: function (date) { return self.utils.monthToStr(date.getMonth(), true); },
-
-		// seconds 00-59
-		S: function (date) { return Flatpickr.prototype.pad(date.getSeconds()); },
-
-		// unix timestamp
-		U: function (date) { return date.getTime() / 1000; },
-
-		// full year e.g. 2016
-		Y: function (date) { return date.getFullYear(); },
-
-		// day in month, padded (01-30)
-		d: function (date) { return Flatpickr.prototype.pad(Flatpickr.prototype.formats.j(date)); },
-
-		// hour from 1-12 (am/pm)
-		h: function (date) { return date.getHours() % 12 ? date.getHours() % 12 : 12; },
-
-		// minutes, padded with leading zero e.g. 09
-		i: function (date) { return Flatpickr.prototype.pad(date.getMinutes()); },
-
-		// day in month (1-30)
-		j: function (date) { return date.getDate(); },
-
-		// weekday name, full, e.g. Thursday
-		l: function (date) { return Flatpickr.l10n.weekdays.longhand[Flatpickr.prototype.formats.w(date)]; },
-
-		// padded month number (01-12)
-		m: function (date) { return Flatpickr.prototype.pad(Flatpickr.prototype.formats.n(date)); },
-
-		// the month number (1-12)
-		n: function (date) { return date.getMonth() + 1; },
-
-		// seconds 0-59
-		s: function (date) { return date.getSeconds(); },
-
-		// number of the day of the week
-		w: function (date) { return date.getDay(); },
-
-		// last two digits of year e.g. 16 for 2016
-		y: function (date) { return String(Flatpickr.prototype.formats.Y(date)).substring(2); }
 	}
 };
 
