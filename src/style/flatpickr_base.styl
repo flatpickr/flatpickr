@@ -211,15 +211,16 @@
 			else
 				color white
 
-	&.selected, &.selected:hover, &.selected:focus
-		background $selected_day_background
+	&.selected
+		&, &:focus, &:hover, &.prevMonthDay, &.nextMonthDay
+			background $selected_day_background
 
-		if $selected_day_color is defined
-			color $selected_day_color
-		else
-			color white
+			if $selected_day_color is defined
+				color $selected_day_color
+			else
+				color white
 
-		border-color $selected_day_background
+			border-color $selected_day_background
 
 	&.disabled, &.disabled:hover,
 	&.prevMonthDay, &.nextMonthDay,

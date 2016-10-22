@@ -974,7 +974,7 @@ function Flatpickr(element, config) {
 			self.selectedDates.sort(function (a,b) { return a.getTime() - b.getTime(); });
 		}
 
-		if (selectedDate.getMonth() !== self.currentMonth)
+		if (selectedDate.getMonth() !== self.currentMonth && self.config.mode !== "range")
 			changeMonth(selectedDate.getMonth(), false);
 
 		updateValue(self.config.mode === "single");
