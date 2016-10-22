@@ -184,11 +184,13 @@ function Flatpickr(element, config) {
 			if (self.config.appendTo && self.config.appendTo.nodeType)
 				self.config.appendTo.appendChild(self.calendarContainer);
 
-			else
+			else {
 				self.element.parentNode.insertBefore(
 					self.calendarContainer,
 					(self.altInput || self.input).nextSibling
 				);
+			}
+
 		}
 		else
 			document.body.appendChild(self.calendarContainer);
@@ -835,9 +837,14 @@ function Flatpickr(element, config) {
 
 		const dateTimeRegex = /(\d+)/g,
 			timeRegex = /^(\d{1,2})[:\s](\d\d)?[:\s](\d\d)?\s?(a|p)?/i,
+			timestamp = /^(\d+)$/g,
 			date_orig = date;
 
-		if (typeof date === "string") {
+		if (date.toFixed) // timestamp
+			date = new Date(date);
+
+
+		else if (typeof date === "string") {
 			date = date.trim();
 
 			if (date === "today") {
