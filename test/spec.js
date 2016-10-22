@@ -158,12 +158,13 @@ describe('flatpickr', () => {
 		it("setDate (date)", () => {
 			init();
 			const fp = new Flatpickr(elem);
-			fp.setDate("2016-10-20");
+			fp.setDate("2016-10-20 03:00");
 
 			expect(fp.selectedDates[0]).toBeDefined();
 			expect(fp.selectedDates[0].getFullYear()).toEqual(2016);
 			expect(fp.selectedDates[0].getMonth()).toEqual(9);
 			expect(fp.selectedDates[0].getDate()).toEqual(20);
+			expect(fp.selectedDates[0].getHours()).toEqual(3);
 
 			fp.setDate("");
 			expect(fp.selectedDates[0]).not.toBeDefined();
