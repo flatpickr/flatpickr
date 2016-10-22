@@ -180,10 +180,15 @@ function Flatpickr(element, config) {
 		if (self.config.inline || self.config.static) {
 			self.calendarContainer.classList.add(self.config.inline ? "inline" : "static");
 			positionCalendar();
-			self.element.parentNode.insertBefore(
-				self.calendarContainer,
-				(self.altInput || self.input).nextSibling
-			);
+
+			if (self.config.appendTo && self.config.appendTo.nodeType)
+				self.config.appendTo.appendChild(self.calendarContainer);
+
+			else
+				self.element.parentNode.insertBefore(
+					self.calendarContainer,
+					(self.altInput || self.input).nextSibling
+				);
 		}
 		else
 			document.body.appendChild(self.calendarContainer);
@@ -922,10 +927,9 @@ function Flatpickr(element, config) {
 		if (
 			self.config.allowInput && e.which === 13 &&
 			(e.target === (self.altInput || self.input))
-		) {
-			console.log("return");
+		)
 			return self.setDate((self.altInput || self.input).value), e.target.blur();
-		}
+
 
 
 		if (
@@ -1445,6 +1449,9 @@ Flatpickr.defaultConfig = {
 	// position calendar inside wrapper and next to the input element
 	// leave at false unless you know what you"re doing
 	static: false,
+
+	// DOM node to append the calendar to in *static* mode
+	appendTo: null,
 
 	// code for previous/next icons. this is where you put your custom icon code e.g. fontawesome
 	prevArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M5.207 8.471l7.146 7.147-0.707 0.707-7.853-7.854 7.854-7.853 0.707 0.707-7.147 7.146z' /></svg>",
