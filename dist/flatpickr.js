@@ -502,8 +502,6 @@ function Flatpickr(element, config) {
 			? self.currentMonth + value
 			: value;
 
-		console.log(typeof is_offset === "undefined" || is_offset, self.currentMonth);
-
 		handleYearChange();
 		updateNavigationCurrentMonth();
 		buildDays();
@@ -920,14 +918,14 @@ function Flatpickr(element, config) {
 	}
 
 	function selectDate(e) {
-		e.preventDefault();
-		e.stopPropagation();
 
 		if (
 			self.config.allowInput && e.which === 13 &&
-			(e.target === self.altInput || self.input)
-		)
+			(e.target === (self.altInput || self.input))
+		) {
+			console.log("return");
 			return self.setDate((self.altInput || self.input).value), e.target.blur();
+		}
 
 
 		if (
