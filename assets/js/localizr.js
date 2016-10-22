@@ -1,7 +1,7 @@
 
 var locale_select = document.getElementById("locales"),
     locale_script = document.getElementById("locale_script"),
-    locales = ["ar", "bg", "bn", "cat", "cs", "da", "de", "es", "fa", "fi", "fr", "he", "hi", "id", "ja", "ko", "my", "nl", "no", "pa", "pl", "pt", "ru", "si", "sq", "tr", "zh"];
+    locales = ["ar", "bg", "bn", "cat", "cs", "da", "de", "es", "fa", "fi", "fr", "he", "hi", "id", "ja", "ko", "my", "nl", "no", "pa", "pl", "pt", "ro", "ru", "si", "sq", "tr", "zh"];
 
 for(var i = 0; i < locales.length; i++){
     var opt = document.createElement("option");
