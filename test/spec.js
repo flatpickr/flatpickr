@@ -12,6 +12,18 @@ describe('flatpickr', () => {
 
 		describe("date string parser", () => {
 
+			it('should parse timestamp', () => {
+				init();
+				const fp = elem.flatpickr({
+					defaultDate: 1477111633771
+				});
+
+				expect(fp.selectedDates[0]).toBeDefined();
+				expect(fp.selectedDates[0].getFullYear()).toEqual(2016);
+				expect(fp.selectedDates[0].getMonth()).toEqual(9);
+
+			});
+
 			it('should parse "2016-10"', () => {
 				init();
 				const fp = elem.flatpickr({
