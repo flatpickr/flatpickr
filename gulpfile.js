@@ -1,5 +1,5 @@
 const gulp = require("gulp"),
-	babel = require("gulp-babel"),
+	buble = require("gulp-buble"),
 	cssmin = require("gulp-cssmin"),
 	lint = require("gulp-eslint"),
 	livereload = require("gulp-livereload"),
@@ -21,7 +21,7 @@ function get_script_stream(){
 	return gulp.src(paths.script)
 		.pipe(plumber())
 		.pipe(lint()).pipe(lint.format())
-		.pipe(babel());
+		.pipe(buble());
 }
 
 gulp.task('script', function(done){

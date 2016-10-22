@@ -200,12 +200,11 @@ function fp_ready(){
 	}
 	fiscal.redraw();
 	// Date format
-	var fpInstance = new Flatpickr(document.createElement("input")),
-		formatOutput = document.getElementById("dateFormatOutput"),
+	var formatOutput = document.getElementById("dateFormatOutput"),
 		now = new Date();
 
 	document.getElementById("dateFormatComposer").addEventListener("keyup", function(e){
-		formatOutput.textContent = fpInstance.formatDate(e.target.value, now);
+		formatOutput.textContent = Flatpickr.prototype.formatDate(e.target.value, now);
 	});
 
 	setupPlayground();
