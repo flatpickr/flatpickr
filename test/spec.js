@@ -239,21 +239,26 @@ describe('flatpickr', () => {
 			expect(fp.currentMonth).toEqual(1);
 		});
 
-		it("selectDate() through GUI", () => {
+		it("selectDate() + onChange() through GUI", () => {
+			const verifySelected = date => {
+				expect(date).toBeDefined();
+
+				expect(date.getFullYear()).toEqual(2016);
+				expect(date.getMonth()).toEqual(9);
+				expect(date.getDate()).toEqual(10);
+			};
 			const fp = createInstance({
 				enableTime: true,
-				minDate: "2016-10-01"
+				minDate: "2016-10-01",
+				onChange: (dates, datestr) => {
+					verifySelected(dates[0]);
+				}
 			});
 
 			fp.open();
 			fp.days.childNodes[15].click(); // oct 10
 
-			expect(fp.selectedDates[0]).toBeDefined();
-
-			expect(fp.selectedDates[0].getFullYear()).toEqual(2016);
-			expect(fp.selectedDates[0].getMonth()).toEqual(9);
-			expect(fp.selectedDates[0].getDate()).toEqual(10);
-
+			verifySelected(fp.selectedDates[0]);
 		});
 	});
 });
