@@ -3,6 +3,11 @@ function Flatpickr(element, config) {
 	const self = this;
 
 	function init() {
+		if (element._flatpickr)
+			destroy(element._flatpickr);
+
+		element._flatpickr = self;
+
 		self.element = element;
 		self.instanceConfig = config || {};
 
@@ -35,6 +40,8 @@ function Flatpickr(element, config) {
 			!self.config.enable.length &&
 			/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 		);
+
+
 
 		if (!self.isMobile)
 			build();
@@ -73,14 +80,14 @@ function Flatpickr(element, config) {
 
 	function setHoursFromDate(dateObj){
 		setHours(
-			(dateObj||latestSelectedDateObj()).getHours(),
-			(dateObj||latestSelectedDateObj()).getMinutes(),
-			(dateObj||latestSelectedDateObj()).getSeconds()
+			(dateObj || latestSelectedDateObj()).getHours(),
+			(dateObj || latestSelectedDateObj()).getMinutes(),
+			(dateObj || latestSelectedDateObj()).getSeconds()
 		);
 	}
 
 	function setHours(hours, minutes, seconds) {
-		self.selectedDates[self.selectedDates.length - 1].setHours(hours, minutes, seconds || 0, 0);
+		self.selectedDates[self.selectedDates.length - 1].setHours(hours % 24, minutes, seconds || 0, 0);
 
 		self.hourElement.value = self.pad(
 			!self.config.time_24hr ? (12 + hours) % 12 + 12 * (hours % 12 === 0) : hours
@@ -584,28 +591,30 @@ function Flatpickr(element, config) {
 		triggerEvent("Close");
 	}
 
-	function destroy() {
-		self.clear();
-		self.calendarContainer.parentNode.removeChild(self.calendarContainer);
-
-
-		if (self.altInput) {
-			self.input.type = "text";
-			self.altInput.parentNode.removeChild(self.altInput);
-		}
-
-		self.input.classList.remove("flatpickr-input");
-		self.input.removeEventListener("focus", open);
-		self.input.removeAttribute("readonly");
+	function destroy(instance) {
+		instance = instance || self;
+		instance.clear();
 
 		document.removeEventListener("keydown", onKeyDown);
-		window.removeEventListener("resize", self.debouncedResize);
+		window.removeEventListener("resize", instance.debouncedResize);
 
 		document.removeEventListener("click", documentClick);
 		document.removeEventListener("blur", documentClick);
 
-		delete self.input._flatpickr;
-		delete self.input;
+		if (instance.calendarContainer.parentNode)
+			instance.calendarContainer.parentNode.removeChild(instance.calendarContainer);
+
+
+		if (instance.altInput) {
+			instance.input.type = "text";
+			instance.altInput.parentNode.removeChild(instance.altInput);
+		}
+
+		instance.input.classList.remove("flatpickr-input");
+		instance.input.removeEventListener("focus", open);
+		instance.input.removeAttribute("readonly");
+
+
 	}
 
 	function documentClick(e) {
@@ -986,6 +995,7 @@ function Flatpickr(element, config) {
 			return;
 
 		const selectedDate = getDateFromElement(e.target);
+
 		self.selectedDateElem = e.target;
 
 		if (self.config.mode === "single") {
@@ -1011,10 +1021,13 @@ function Flatpickr(element, config) {
 			self.selectedDates.sort((a,b) => a.getTime() - b.getTime());
 		}
 
+		if (self.config.enableTime)
+			setHoursFromInputs();
+
 		if (selectedDate.getMonth() !== self.currentMonth && self.config.mode !== "range")
 			changeMonth(selectedDate.getMonth(), false);
 
-		setHoursFromDate(selectedDate);
+
 		updateValue();
 		buildDays();
 		triggerEvent("Change");
@@ -1169,7 +1182,7 @@ function Flatpickr(element, config) {
 			// replicate self.element
 			self.altInput = createElement(
 				self.input.nodeName,
-				"flatpickr-input " + self.config.altInputClass
+				"flatpickr-input " + self.input.className + self.config.altInputClass
 			);
 			self.altInput.placeholder = self.input.placeholder;
 			self.altInput.type = "text";
