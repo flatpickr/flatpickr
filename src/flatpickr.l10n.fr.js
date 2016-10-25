@@ -1,6 +1,8 @@
 /* French locals for flatpickr */
 var Flatpickr = Flatpickr||{l10n: {}};
 
+Flatpickr.l10n.firstDayOfWeek = 1;
+
 Flatpickr.l10n.weekdays = {
 	shorthand: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
 	longhand: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']
