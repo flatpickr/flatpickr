@@ -3,17 +3,20 @@ describe('flatpickr', () => {
 	const container = document.querySelector('.container');
 	let elem;
 
-	const init = () => {
-		container.innerHTML = '<input type="text" class="flatpickr" style="display:none;" />';
-		elem = container.querySelector('.flatpickr');
-	};
+	beforeEach(() => {
+		elem = document.createElement("input");
+	});
+
+	function createInstance(config) {
+		return new Flatpickr(elem, config);
+	}
 
 	describe("datetimestring parser", () => {
 
 		describe("date string parser", () => {
 
 			it('should parse timestamp', () => {
-				init();
+
 				const fp = elem.flatpickr({
 					defaultDate: 1477111633771
 				});
@@ -25,7 +28,7 @@ describe('flatpickr', () => {
 			});
 
 			it('should parse "2016-10"', () => {
-				init();
+
 				const fp = elem.flatpickr({
 					defaultDate: "2016-10"
 				});
@@ -36,7 +39,7 @@ describe('flatpickr', () => {
 			});
 
 			it('should parse "2016-10-20 3:30"', () => {
-				init();
+
 				const fp = elem.flatpickr({
 					defaultDate: "2016-10-20 3:30"
 				});
@@ -50,7 +53,7 @@ describe('flatpickr', () => {
 			});
 
 			it('should parse ISO8601', () => {
-				init();
+
 				const fp = elem.flatpickr({
 					defaultDate: "2007-03-04T21:08:12",
 					enableTime: true,
@@ -70,7 +73,7 @@ describe('flatpickr', () => {
 
 		describe("time string parser", () => {
 			it('should parse "21:11:12"', () => {
-				init();
+
 				elem.value = '21:11:12';
 				const fp = elem.flatpickr({
 					allowInput: true,
@@ -86,7 +89,7 @@ describe('flatpickr', () => {
 			});
 
 			it('should parse "11:59 PM"', () => {
-				init();
+
 				elem.value = '11:59 PM';
 				const fp = elem.flatpickr({
 					allowInput: true,
@@ -106,7 +109,7 @@ describe('flatpickr', () => {
 			});
 
 			it('should parse "3:05:03 PM"', () => {
-				init();
+
 				elem.value = '3:05:03 PM';
 				const fp = elem.flatpickr({
 					allowInput: true,
@@ -133,7 +136,7 @@ describe('flatpickr', () => {
 
 	describe("API", () => {
 		it("set (option, value)", () => {
-			init();
+
 			const fp = new Flatpickr(elem);
 			fp.set("minDate", "2016-10-20");
 
@@ -156,7 +159,7 @@ describe('flatpickr', () => {
 		});
 
 		it("setDate (date)", () => {
-			init();
+
 			const fp = new Flatpickr(elem);
 			fp.setDate("2016-10-20 03:00");
 
@@ -174,7 +177,7 @@ describe('flatpickr', () => {
 
 	describe("Internals", () => {
 		it("updateNavigationCurrentMonth()", () => {
-			init();
+
 			const fp = new Flatpickr(elem, {
 				defaultDate: "2016-12-20"
 			});
