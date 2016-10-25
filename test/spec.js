@@ -11,10 +11,45 @@ describe('flatpickr', () => {
 		return new Flatpickr(elem, config);
 	}
 
+	describe("init", () => {
+		it("should parse defaultDate", () => {
+			const fp = createInstance({
+				defaultDate: "2016-12-27T16:16:22.585Z",
+			});
+
+			expect(fp.days.querySelector(".selected").textContent).toEqual("27");
+		});
+
+		it("shouldn't parse out-of-bounds defaultDate", () => {
+			let fp = createInstance({
+				minDate: "2016-12-28T16:16:22.585Z",
+				defaultDate: "2016-12-27T16:16:22.585Z",
+			});
+
+			expect(fp.days.querySelector(".selected")).toEqual(null);
+
+			fp = createInstance({
+				defaultDate: '2016-12-27T16:16:22.585Z',
+				enableTime: true
+			});
+
+			fp.set('maxDate', '2016-12-25T16:16:22.585Z');
+			fp.set('minDate', '2016-12-24T16:16:22.585Z');
+
+			expect(fp.currentMonth).toEqual(11);
+			expect(fp.days.querySelector(".selected")).toEqual(null);
+
+			let enabledDays = fp.days.querySelectorAll(":not(.disabled)");
+
+			expect(enabledDays.length).toEqual(2);
+			expect(enabledDays[0].textContent).toEqual("24");
+			expect(enabledDays[1].textContent).toEqual("25");
+		});
+	});
+
 	describe("datetimestring parser", () => {
 
 		describe("date string parser", () => {
-
 			it('should parse timestamp', () => {
 
 				const fp = elem.flatpickr({
@@ -176,6 +211,7 @@ describe('flatpickr', () => {
 
 
 	describe("Internals", () => {
+
 		it("updateNavigationCurrentMonth()", () => {
 
 			const fp = new Flatpickr(elem, {
