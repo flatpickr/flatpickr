@@ -1083,10 +1083,9 @@ function Flatpickr(element, config) {
 
 				default: break;
 			}
-
-			self.selectedDates = self.selectedDates.filter(d => d instanceof Date);
 		}
 
+		self.selectedDates = self.selectedDates.filter(d => d instanceof Date && isEnabled(d));
 
 		const initialDate = (self.selectedDates.length
 			? self.selectedDates[0]
