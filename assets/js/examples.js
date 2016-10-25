@@ -27,10 +27,7 @@ function toggleConfig(e) {
 		config.defaultDate = selectedDates;
 
 	playground_json.textContent = JSON.stringify(userConfig, null, 4);
-
-	playgroundCalendar.destroy();
 	playgroundCalendar = new Flatpickr(element, config);
-
 }
 
 function setupPlayground() {
