@@ -69,6 +69,9 @@ function Flatpickr(element, config) {
 	}
 
 	function setHoursFromInputs(){
+		if (!self.config.enableTime)
+			return;
+
 		var hours = (parseInt(self.hourElement.value, 10) || 0) + 12 * (!self.config.time_24hr && self.amPM.innerHTML === "PM"),
 			minutes = (60 + (parseInt(self.minuteElement.value, 10) || 0)) % 60,
 			seconds = self.config.enableSeconds
@@ -89,6 +92,8 @@ function Flatpickr(element, config) {
 	function setHours(hours, minutes, seconds) {
 		self.selectedDates[self.selectedDates.length - 1].setHours(hours % 24, minutes, seconds || 0, 0);
 
+		if (!self.config.enableTime)
+			return;
 		self.hourElement.value = self.pad(
 			!self.config.time_24hr ? (12 + hours) % 12 + 12 * (hours % 12 === 0) : hours
 		);
@@ -1019,8 +1024,7 @@ function Flatpickr(element, config) {
 			self.selectedDates.sort(function (a,b) { return a.getTime() - b.getTime(); });
 		}
 
-		if (self.config.enableTime)
-			setHoursFromInputs();
+		setHoursFromInputs();
 
 		if (selectedDate.getMonth() !== self.currentMonth && self.config.mode !== "range")
 			changeMonth(selectedDate.getMonth(), false);
