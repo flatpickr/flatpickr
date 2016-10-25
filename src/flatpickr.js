@@ -1182,7 +1182,7 @@ function Flatpickr(element, config) {
 			// replicate self.element
 			self.altInput = createElement(
 				self.input.nodeName,
-				"flatpickr-input " + self.input.className + self.config.altInputClass
+				"flatpickr-input " + self.input.className + " " + self.config.altInputClass
 			);
 			self.altInput.placeholder = self.input.placeholder;
 			self.altInput.type = "text";
