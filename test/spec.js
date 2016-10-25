@@ -5,6 +5,11 @@ describe('flatpickr', () => {
 
 	beforeEach(() => {
 		elem = document.createElement("input");
+		document.body.appendChild(elem);
+	});
+
+	afterEach(() => {
+		elem.parentNode.removeChild(elem);
 	});
 
 	function createInstance(config) {
@@ -12,6 +17,14 @@ describe('flatpickr', () => {
 	}
 
 	describe("init", () => {
+		it("should parse minDate", () => {
+			const fp = createInstance({
+				minDate: "2016-02-27T16:16:22.585Z",
+			});
+
+			expect(fp.currentMonth).toEqual(1);
+		});
+
 		it("should parse defaultDate", () => {
 			const fp = createInstance({
 				defaultDate: "2016-12-27T16:16:22.585Z",
@@ -211,9 +224,7 @@ describe('flatpickr', () => {
 
 
 	describe("Internals", () => {
-
 		it("updateNavigationCurrentMonth()", () => {
-
 			const fp = new Flatpickr(elem, {
 				defaultDate: "2016-12-20"
 			});
@@ -226,6 +237,23 @@ describe('flatpickr', () => {
 
 			fp.changeMonth(2);
 			expect(fp.currentMonth).toEqual(1);
+		});
+
+		it("selectDate() through GUI", () => {
+			const fp = createInstance({
+				enableTime: true,
+				minDate: "2016-10-01"
+			});
+
+			fp.open();
+			fp.days.childNodes[15].click(); // oct 10
+
+			expect(fp.selectedDates[0]).toBeDefined();
+
+			expect(fp.selectedDates[0].getFullYear()).toEqual(2016);
+			expect(fp.selectedDates[0].getMonth()).toEqual(9);
+			expect(fp.selectedDates[0].getDate()).toEqual(10);
+
 		});
 	});
 });
