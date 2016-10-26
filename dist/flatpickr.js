@@ -823,7 +823,7 @@ function Flatpickr(element, config) {
 		}
 
 		self.selectedDates = self.selectedDates.filter(function (d) {
-			return d instanceof Date && isEnabled(d);
+			return d instanceof Date && d.getTime() && isEnabled(d);
 		});
 
 		var initialDate = self.selectedDates.length ? self.selectedDates[0] : self.config.minDate || self.now;
