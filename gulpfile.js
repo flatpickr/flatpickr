@@ -1,5 +1,5 @@
 const gulp = require("gulp"),
-	buble = require("gulp-buble"),
+	buble = require("gulp-babel"),
 	cssmin = require("gulp-cssmin"),
 	lint = require("gulp-eslint"),
 	livereload = require("gulp-livereload"),
