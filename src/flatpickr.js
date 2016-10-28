@@ -306,6 +306,8 @@ function Flatpickr(element, config) {
 					dayNumber
 				);
 
+			dayElement.dateObj = curDate;
+
 			if (dateIsEnabled)
 				dayElement.tabIndex = 0;
 
@@ -342,6 +344,8 @@ function Flatpickr(element, config) {
 						+ (self.selectedDates.length === 1 && (currentDate < self.minRangeDate || currentDate > self.maxRangeDate) ? " notAllowed" : ""),
 				dayNumber
 			);
+
+			dayElement.dateObj = currentDate;
 
 			if (!dateIsDisabled) {
 				dayElement.tabIndex = 0;
@@ -397,6 +401,8 @@ function Flatpickr(element, config) {
 						+ (isDateSelected(curDate) !== false ? " selected" : ""),
 					dayNum % daysInMonth
 				);
+
+			dayElement.dateObj = curDate;
 
 			if (self.config.weekNumbers && dayNum % 7 === 1) {
 				self.weekNumbers.insertAdjacentHTML(
@@ -622,11 +628,21 @@ function Flatpickr(element, config) {
 
 	}
 
-	function documentClick(e) {
-		const isCalendarElement = self.calendarContainer.contains(e.target),
-			isInput = self.element.contains(e.target) || e.target === self.altInput;
+	function isCalendarElem(elem) {
+		let e = elem;
+		while (e) {
+			if (/flatpickr-day|flatpickr-calendar/.test(e.className))
+				return true;
+			e = e.parentNode;
+		}
 
-		if (self.isOpen && !isCalendarElement && !isInput) {
+		return false;
+	}
+
+	function documentClick(e) {
+		const isInput = self.element.contains(e.target) || e.target === self.input || e.target === self.altInput;
+
+		if (self.isOpen && !isCalendarElem(e.target) && !isInput) {
 			self.close();
 
 			if (self.config.mode === "range" && self.selectedDates.length === 1) {
@@ -747,21 +763,11 @@ function Flatpickr(element, config) {
 		}
 	}
 
-	function getDateFromElement(el) {
-		return new Date(
-			self.currentYear,
-			self.currentMonth
-				+ el.classList.contains("nextMonthDay")
-				- el.classList.contains("prevMonthDay"),
-			el.textContent
-		);
-	}
-
 	function onMouseOver(e) {
 		if (self.selectedDates.length !== 1 || !e.target.classList.contains("flatpickr-day"))
 			return;
 
-		let hoverDate = getDateFromElement(e.target),
+		let hoverDate = e.target.dateObj,
 			rangeStartDate = Math.min(hoverDate.getTime(), self.selectedDates[0].getTime()),
 			rangeEndDate = Math.max(hoverDate.getTime(), self.selectedDates[0].getTime()),
 			containsDisabled = false;
@@ -774,7 +780,7 @@ function Flatpickr(element, config) {
 		}
 
 		for (
-			let timestamp = getDateFromElement(self.days.childNodes[0]).getTime(), i = 0;
+			let timestamp = self.days.childNodes[0].dateObj.getTime(), i = 0;
 			i < 42;
 			i++, timestamp += self.utils.duration.DAY
 		) {
@@ -999,14 +1005,18 @@ function Flatpickr(element, config) {
 		)
 			return;
 
-		const selectedDate = getDateFromElement(e.target);
+		const selectedDate = e.target.dateObj;
 
 		self.selectedDateElem = e.target;
 
+		e.target.classList.add("selected");
+
+
 		if (self.config.mode === "single") {
 			self.selectedDates = [selectedDate];
-			if (!self.config.enableTime)
+			if (!self.config.enableTime){
 				self.close();
+			}
 		}
 
 		else if (self.config.mode === "multiple") {
@@ -1033,7 +1043,7 @@ function Flatpickr(element, config) {
 
 
 		updateValue();
-		buildDays();
+		//buildDays();
 		triggerEvent("Change");
 
 		if (self.config.mode === "range" && self.selectedDates.length === 1)
@@ -1187,7 +1197,7 @@ function Flatpickr(element, config) {
 			// replicate self.element
 			self.altInput = createElement(
 				self.input.nodeName,
-				"flatpickr-input " + self.input.className + " " + self.config.altInputClass
+				"flatpickr-input " + " " + self.config.altInputClass
 			);
 			self.altInput.placeholder = self.input.placeholder;
 			self.altInput.type = "text";
@@ -1287,8 +1297,9 @@ function Flatpickr(element, config) {
 	function isDateSelected(date) {
 		if (self.selectedDates.length) {
 			for (var i = 0; i < self.selectedDates.length; i++) {
-				if (equalDates(self.selectedDates[i], date))
+				if (equalDates(self.selectedDates[i], date)){
 					return "" + i;
+				}
 			}
 		}
 		return false;
@@ -1352,9 +1363,11 @@ function Flatpickr(element, config) {
 		switch (self.config.mode) {
 			case "single":
 				self.input.value = formatDate(self.config.dateFormat, latestSelectedDateObj());
-				if (self.altInput)
+
+				if (self.config.altInput)
 					self.altInput.value = formatDate(self.config.altFormat, latestSelectedDateObj());
-				break;
+
+			break;
 
 			case "multiple":
 				self.input.value = self.selectedDates.map(dObj => formatDate(self.config.dateFormat, dObj)).join("; ");
