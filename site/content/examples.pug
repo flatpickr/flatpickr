@@ -73,6 +73,34 @@ section#example-minMaxDate
         data-max-date="2016-12-20"
     )
 
+section#example-preload
+    h4 Preloading Dates
+    p Flatpickr can work with existing date strings, or date objects.
+    p Input values get parsed automatically.
+    p
+        pre
+            code.
+                &lt;input type="text", value="2016-10-20"&gt;
+
+        input.flatpickr(type="text", value="2016-10-20")
+
+    p To preload a Date object, timestamp, or otherwise supply a date string, use the
+        code defaultDate
+        |&nbsp;option.
+        br
+        .light.muted Timestamps are recommended due to their lack of ambiguity in parsing.
+
+
+    p
+        pre
+            code.js.
+                flatpickr("#example-defaultDate", {
+                    defaultDate: 1477697199863, // Date objects and date strings are also accepted
+                    enableTime: true
+                });
+
+        input#example-defaultDate(type="text")
+
 section#example-strap
     h4 Custom elements and input groups
 
@@ -187,6 +215,11 @@ section#enable.example(data-desc='Disabling dates')
 
     p
         input#enableCustom(type='text', placeholder='Select date')
+
+
+
+
+
 
 section#utc
     h4 UTC mode

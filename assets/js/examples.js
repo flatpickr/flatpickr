@@ -187,6 +187,10 @@ function fp_ready(){
 
 	//setupPlayground();
 
+	flatpickr("#example-defaultDate", {
+		enableTime: true,
+		defaultDate: 1477697199863
+	});
 }
 
 function initCode() {
