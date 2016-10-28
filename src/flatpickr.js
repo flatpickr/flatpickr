@@ -48,8 +48,11 @@ function Flatpickr(element, config) {
 
 		bind();
 
-		if (self.selectedDates.length)
+		if (self.selectedDates.length) {
+			if (self.config.enableTime)
+				setHoursFromDate();
 			updateValue();
+		}
 
 		triggerEvent("Ready");
 	}
@@ -94,6 +97,7 @@ function Flatpickr(element, config) {
 
 		if (!self.config.enableTime)
 			return;
+
 		self.hourElement.value = self.pad(
 			!self.config.time_24hr ? (12 + hours) % 12 + 12 * (hours % 12 === 0) : hours
 		);
