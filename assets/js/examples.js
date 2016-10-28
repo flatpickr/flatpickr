@@ -178,10 +178,11 @@ function fp_ready(){
 	fiscal.redraw();
 	// Date format
 	var formatOutput = document.getElementById("dateFormatOutput"),
+		fp = new Flatpickr(document.createElement("input")),
 		now = new Date();
 
 	document.getElementById("dateFormatComposer").addEventListener("keyup", function(e){
-		formatOutput.textContent = Flatpickr.prototype.formatDate(e.target.value, now);
+		formatOutput.textContent = fp.formatDate(e.target.value, now);
 	});
 
 	//setupPlayground();
