@@ -759,10 +759,7 @@ function Flatpickr(element, config) {
 		if (!e.target.classList.contains("flatpickr-day") || e.target.classList.contains("disabled") || e.target.classList.contains("notAllowed")) return;
 
 		var selectedDate = e.target.dateObj;
-
 		self.selectedDateElem = e.target;
-
-		e.target.classList.add("selected");
 
 		if (self.config.mode === "single") {
 			self.selectedDates = [selectedDate];
@@ -786,7 +783,7 @@ function Flatpickr(element, config) {
 		if (selectedDate.getMonth() !== self.currentMonth && self.config.mode !== "range") changeMonth(selectedDate.getMonth(), false);
 
 		updateValue();
-		//buildDays();
+		buildDays();
 		triggerEvent("Change");
 
 		if (self.config.mode === "range" && self.selectedDates.length === 1) onMouseOver(e);

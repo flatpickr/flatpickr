@@ -1006,11 +1006,7 @@ function Flatpickr(element, config) {
 			return;
 
 		const selectedDate = e.target.dateObj;
-
 		self.selectedDateElem = e.target;
-
-		e.target.classList.add("selected");
-
 
 		if (self.config.mode === "single") {
 			self.selectedDates = [selectedDate];
@@ -1043,7 +1039,7 @@ function Flatpickr(element, config) {
 
 
 		updateValue();
-		//buildDays();
+		buildDays();
 		triggerEvent("Change");
 
 		if (self.config.mode === "range" && self.selectedDates.length === 1)
