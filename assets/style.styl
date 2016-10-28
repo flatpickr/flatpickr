@@ -1,34 +1,83 @@
 @import "https://fonts.googleapis.com/css?family=Roboto:200,300,400,500,700"
-
+@import "./highlight/styles/atom-one-dark"
 @require "./style/colors"
 @require "./style/reset"
 @require "./icons/icons"
-@require "./style/prettify"
+
 @require "./style/kube/_kube"
 
+
 body
-    font 400 1.5rem "Roboto"
+    font 400 1.6rem "Roboto"
     line-height 24px
     color rgba(0,0,0,0.9)
     overflow-x hidden
+    background white
 
 a
-    color $red
-
-header
-    background #FFCB52
-
-
-    h1
-        font-family Consolas,Monaco,"Courier New",monospace
-
-.section
-    padding 4rem 0
+    color $primary
 
 .wrapper
-    max-width 1000px
-    width 96%
-    margin 0 auto
+    max-width 800px
+    width 100%
+
+
+
+.col.content
+    padding-top 2rem
+    margin-left 25%
+
+    section
+        &:after
+            display block
+            margin 4.5rem 0
+            font 2rem monospace
+            content: "***"
+
+        section
+            margin-bottom 4.5rem
+            &:after
+                display none
+
+.sidebar
+    background #1c1f23
+    border-right 1px solid lighten(#1c1f23, 20%)
+    color white
+    height 100vh
+    overflow-y auto
+    position fixed
+
+    #logo
+        padding 2rem 0 2rem 3.2766%
+        font-family monospace
+        border-bottom 1px solid alpha(white, 0.1)
+        h5
+            margin 0
+
+
+    #nav
+        section
+            padding-top 1rem
+            border-bottom 1px solid alpha(white, 0.05)
+        h2
+            padding-left 3.2766%
+            font-weight 400
+            color white
+            a
+                color inherit
+
+        a
+            display block
+            padding: 1rem 0 1rem 3.2766%;
+            color #f6f6f6
+            font-weight 300
+            text-decoration none
+            text-transform capitalize
+
+            &:hover
+                background alpha(black, 0.2)
+
+
 
 .input-group
     &:after
@@ -101,8 +150,8 @@ code
 hr
     height: 1px;
     border: 0;
-    margin 12px 0
-    background: rgba(0,0,0,0.14);
+    margin 0
+    background: rgba(0,0,0,0.08);
 
 #playground
     li
@@ -121,3 +170,28 @@ table.options
 
 #themes
     text-transform capitalize
+
+@keyframes octocat-wave
+    0%,100%
+        transform rotate(0)
+
+    20%,60%
+        transform rotate(-25deg)
+
+    40%,80%
+        transform rotate(10deg)
+
+@media (max-width:500px)
+    .github-corner, .github-corner:hover .octo-arm
+        animation:none
+
+
+
+.github-corner
+    position fixed
+    top 0
+    right 0
+    opacity 0.5
+    &:hover
+        .octo-arm
+            animation octocat-wave 560ms ease-in-out

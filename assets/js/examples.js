@@ -204,6 +204,10 @@ function fp_ready(){
 		formatOutput.textContent = Flatpickr.prototype.formatDate(e.target.value, now);
 	});
 
-	setupPlayground();
+	//setupPlayground();
 
+}
+
+function initCode() {
+	hljs.initHighlighting();
 }

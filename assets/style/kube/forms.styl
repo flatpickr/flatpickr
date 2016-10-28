@@ -75,6 +75,7 @@ for color in $colors
 		else
 			color rgba(0, 0, 0, 0.9)
 		background: $colors[color]
+		border: 1px solid darken($colors[color], 12%)
 
 		&:hover
 			if dark(darken($colors[color], 30%))

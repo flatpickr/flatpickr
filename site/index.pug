@@ -14,26 +14,26 @@ html(lang='en')
         link#cal_style(rel='stylesheet', type='text/css', href='dist/flatpickr.airbnb.min.css')
 
     body
-        header#hero.section
-            .wrapper
-                h1 flatpickr
-                h3.subheading.muted A lightweight &amp; powerful datetimepicker
+        .row
+            .col.col-3.sidebar
 
 
-        include content/install_use
-        include content/discover
+                include sidebar
 
-        .section
-            .wrapper
-                include content/examples
+            .col.col-9.content
 
+                .wrapper
+                    //include content/intro
+                    include content/install_use
+                    //include content/discover
+                    include content/examples
 
-        //include content/themes
-        include content/options
-        include content/format_chars
+                    include content/options
+                    include content/format_chars
 
+        include forkme
         script(src='assets/js/examples.js')
         script(async, src='dist/flatpickr.js', onload='fp_ready()')
-        script(async, src='assets/js/prettify.js?skin=none')
-        script(async, src='assets/js/themer.js')
+        //script(async, src='assets/js/themer.js')
+        script(async, src='assets/highlight/highlight.pack.js', onload="initCode()")
 
