@@ -144,27 +144,7 @@ function fp_ready(){
 	});
 
 	// Event API
-	var events = document.getElementById("events");
-	document.getElementById("events-api-example").flatpickr({
-		minDate: "today",
-		enableTime: true,
-		onChange: function(dateObj, dateStr, fp) {
-			events.innerHTML += "<b>onChange</b> (<code>" + dateObj + "</code>, <code>" + dateStr + "</code> )<br>";
-			events.scrollTop = events.offsetTop;
-		},
-		onOpen: function(dateObj, dateStr, fp){
-			events.innerHTML += "<b>onOpen</b> (<code>" + dateObj + "</code>, <code>" + dateStr + "</code> )<br>";
-			events.scrollTop = events.offsetTop;
-		},
-		onClose: function(dateObj, dateStr, fp){
-			events.innerHTML += "<b>onClose</b> (<code>" + dateObj + "</code>, <code>" + dateStr + "</code> )<br>";
-			events.scrollTop = events.offsetTop;
-		},
-		onReady: function(dateObj, dateStr, fp){
-			events.innerHTML += "<b>onReady</b> (<code>" + dateObj + "</code>, <code>" + dateStr + "</code> )<br>";
-			events.scrollTop = events.offsetTop;
-		}
-	});
+
 
 	flatpickr("#dayCreate", {
 		onDayCreate: function(dObj, dStr, fp, dayElem){

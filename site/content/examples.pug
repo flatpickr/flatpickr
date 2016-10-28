@@ -43,6 +43,36 @@ section#example-altInput
         data-alt-format="F j, Y h:i K"
     )
 
+section#example-minMaxDate
+    h4 Limit the range of available dates with&nbsp;
+        code minDate
+        | and&nbsp;
+        code maxDate
+
+    p minDate and maxDate accept Date objects, date strings, timestamps, and the shortcut&nbsp;
+        code "today"
+    pre
+        code.js.
+            flatpickr(".flatpickr". {
+                minDate: new Date(), // "today" / "2016-12-20" / 1477673788975
+                maxDate: "2016-12-20",
+                enableTime: true,
+
+                // create an extra input solely for display purposes
+                altInput: true,
+                altFormat: "F j, Y h:i K"
+            });
+
+    input.flatpickr(
+        type="text",
+        placeholder="Select Date..",
+        data-alt-input="true",
+        data-enable-time="true",
+        data-alt-format="F j, Y h:i K",
+        data-min-date="today",
+        data-max-date="2016-12-20"
+    )
+
 section#example-strap
     h4 Custom elements and input groups
 
@@ -178,22 +208,23 @@ section#utc
 
 hr
 
-#eventsAPI.example(data-desc='Events API')
+section#eventsAPI
     h2 Events
-    pre.prettyprint.lang-js.
-        document.getElementById("events-api-example").flatpickr({
-            minDate: "today",
-            enableTime: true,
-            onChange: function(dateObj, dateStr, instance) {
-                ...
-            },
-            onOpen: function(dateObj, dateStr, instance){
-                ...
-            },
-            onClose: function(dateObj, dateStr, instance){
-                ...
-            }
-        });
+    pre
+        code.
+            document.getElementById("events-api-example").flatpickr({
+                minDate: "today",
+                enableTime: true,
+                onChange: function(dateObj, dateStr, instance) {
+                    ...
+                },
+                onOpen: function(dateObj, dateStr, instance){
+                    ...
+                },
+                onClose: function(dateObj, dateStr, instance){
+                    ...
+                }
+            });
 
     p#events(style='height: 80px; overflow-y: auto')
     p
@@ -204,17 +235,18 @@ hr
         | Take full control of every date cell with the
         code onDayCreate()
         | hook.
-    pre.prettyprint.lang-js.
-        flatpickr("#dayCreate", {
-            onDayCreate: function(dObj, dStr, fp, dayElem){
-                // utilize fp.currentYear, fp.currentMonth, dayElem.textContent
-                if (Math.random() &lt; 0.15)
-                    dayElem.innerHTML += "&lt;span class='event'&gt;&lt;/span&gt;";
+    pre
+        code.js.
+            flatpickr("#dayCreate", {
+                onDayCreate: function(dObj, dStr, fp, dayElem){
+                    // utilize fp.currentYear, fp.currentMonth, dayElem.textContent
+                    if (Math.random() &lt; 0.15)
+                        dayElem.innerHTML += "&lt;span class='event'&gt;&lt;/span&gt;";
 
-                else if (Math.random() &gt; 0.85)
-                    dayElem.innerHTML += "&lt;span class='event busy'&gt;&lt;/span&gt;";
-            }
-        });
+                    else if (Math.random() &gt; 0.85)
+                        dayElem.innerHTML += "&lt;span class='event busy'&gt;&lt;/span&gt;";
+                }
+            });
 
     p
         input#dayCreate(type='text', placeholder='Select date')
@@ -228,26 +260,28 @@ hr
         | function, used for calculating a week number, for various purposes. A fiscal year is used for calculating yearly financial statements. In this example, we will use override the
         code getWeek()
         | function to display the fiscal term instead of the usual week numbers.
-    pre.prettyprint.lang-html.
-        &lt;input type='text' id="fiscal" placeholder="Fiscal Calendar"&gt;
+    pre
+        code.
+            &lt;input type='text' id="fiscal" placeholder="Fiscal Calendar"&gt;
 
-    pre.prettyprint.lang-js.
-        Flatpickr.prototype.getWeek = function(givenDate){
-            var checkDate = new Date(givenDate.getTime());
-            checkDate.setDate(checkDate.getDate() + 4 - (checkDate.getDay() || 7));
-            var time = checkDate.getTime();
-            checkDate.setMonth(7);
-            checkDate.setDate(28);
-            var week = (Math.floor(Math.round((time - checkDate) / 86400000) / 7) + 2);
-            if (week &lt; 1) {
-                week = 52 + week;
+    pre
+        code.
+            Flatpickr.prototype.getWeek = function(givenDate){
+                var checkDate = new Date(givenDate.getTime());
+                checkDate.setDate(checkDate.getDate() + 4 - (checkDate.getDay() || 7));
+                var time = checkDate.getTime();
+                checkDate.setMonth(7);
+                checkDate.setDate(28);
+                var week = (Math.floor(Math.round((time - checkDate) / 86400000) / 7) + 2);
+                if (week &lt; 1) {
+                    week = 52 + week;
+                }
+                return 'FW'+week;
             }
-            return 'FW'+week;
-        }
 
-        document.getElementById("fiscal").flatpickr({
-            weekNumbers: true
-        });
+            document.getElementById("fiscal").flatpickr({
+                weekNumbers: true
+            });
 
     p
         input#fiscal(type='text', placeholder='Calendar w/ fiscal periods')

@@ -1,5 +1,5 @@
 @import "https://fonts.googleapis.com/css?family=Roboto:200,300,400,500,700"
-@import "./highlight/styles/atom-one-dark"
+@import "./highlight/styles/paraiso-dark"
 @require "./style/colors"
 @require "./style/reset"
 @require "./icons/icons"
@@ -10,7 +10,7 @@
 body
     font 400 1.6rem "Roboto"
     line-height 24px
-    color rgba(0,0,0,0.9)
+    color rgba(0,0,0,0.8)
     overflow-x hidden
     background white
 
@@ -40,17 +40,20 @@ a
                 display none
 
 .sidebar
-    background #1c1f23
-    border-right 1px solid lighten(#1c1f23, 20%)
-    color white
+    $padding = 5.2766%
+    $sidebarBG = #f6f6f6
+    $sidebarFG = invert($sidebarBG)
+    background $sidebarBG
+    border-right 1px solid darken($sidebarBG, 5%)
+    color black
     height 100vh
     overflow-y auto
     position fixed
 
     #logo
-        padding 2rem 0 2rem 3.2766%
+        padding 2rem 0 2rem $padding
         font-family monospace
-        border-bottom 1px solid alpha(white, 0.1)
+        border-bottom 1px solid alpha(black, 0.1)
         h5
             margin 0
 
@@ -58,24 +61,22 @@ a
     #nav
         section
             padding-top 1rem
-            border-bottom 1px solid alpha(white, 0.05)
+            border-bottom 1px solid alpha($sidebarFG, 0.06)
         h2
-            padding-left 3.2766%
-            font-weight 400
-            color white
-            a
-                color inherit
+            padding-left $padding
+            font-weight 300
+            color alpha($sidebarFG, 0.85)
 
         a
             display block
-            padding: 1rem 0 1rem 3.2766%;
-            color #f6f6f6
-            font-weight 300
+            padding: 1rem 0 1rem $padding;
+            color alpha($sidebarFG, 0.7)
+            font-weight 400
             text-decoration none
             text-transform capitalize
 
             &:hover
-                background alpha(black, 0.2)
+                background alpha($sidebarFG, 0.06)
 
 
 
@@ -101,16 +102,14 @@ a
     white-space nowrap
     vertical-align middle
     cursor pointer
-    -webkit-user-select none
     user-select none
-    border 1px solid transparent
-    border-radius 4px
+    border 1px solid #ddd
     color #373a3c
     float left
     border-radius 0
     border-left 0
-    background-color white
-    border-color #ddd
+    background white
+
 
     &.last
         border-right 1px solid #ccc
@@ -122,10 +121,6 @@ a
     &:active
         background-color #ddd
 
-
-.example
-
-    margin-bottom 4rem
 
 
 
@@ -184,8 +179,6 @@ table.options
 @media (max-width:500px)
     .github-corner, .github-corner:hover .octo-arm
         animation:none
-
-
 
 .github-corner
     position fixed
