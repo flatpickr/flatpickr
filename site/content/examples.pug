@@ -101,6 +101,23 @@ section#example-preload
 
         input#example-defaultDate(type="text")
 
+    hr
+
+
+    h4.light UTC mode
+    p By default, all dates in javascript are converted to a local time. However, you can choose to leave the dates in UTC. flatpickr can convert any given dates to UTC and select a datetime in UTC with a simple switch.
+
+    pre
+        code.js.
+            flatpickr("#utc", {
+                utc: true,
+                defaultDate: "2016-12-27T16:16:22.585Z",
+                enableTime: true,
+            });
+
+    p
+        input.flatpickr(type='text', data-utc='true', data-default-date='2016-12-27T16:16:22.585Z', data-enable-time='true')
+
 section#example-strap
     h4 Custom elements and input groups
 
@@ -217,75 +234,7 @@ section#enable.example(data-desc='Disabling dates')
         input#enableCustom(type='text', placeholder='Select date')
 
 
-
-
-
-
-section#utc
-    h4 UTC mode
-    p
-        | By default, JavaScript&apos;s Date converts all dates to a local time. However, locale-agnostic databases often store dates in UTC. flatpickr can convert any given dates to UTC and select a datetime in UTC with a simple switch. Here are the previous examples with UTC mode enabled.
-    pre
-        code.
-            &lt;input type='text' class='flatpickr' data-utc=true data-default-date="Wed, 21 Sep 2016 18:33:47 GMT" data-enable-time=true&gt;
-
-    p
-        input.flatpickr(type='text', data-utc='true', data-default-date='Wed, 21 Sep 2016 18:33:47 GMT', data-enable-time='true')
-    br
-    pre
-        code.
-            &lt;input type='text' class='flatpickr' data-default-date="2016-12-27T16:16:22.585Z" data-utc=true data-enable-time=true&gt;
-
-    p
-        input.flatpickr(type='text', data-default-date='2016-12-27T16:16:22.585Z', data-utc='true', data-enable-time='true')
-
-hr
-
-section#eventsAPI
-    h2 Events
-    pre
-        code.
-            document.getElementById("events-api-example").flatpickr({
-                minDate: "today",
-                enableTime: true,
-                onChange: function(dateObj, dateStr, instance) {
-                    ...
-                },
-                onOpen: function(dateObj, dateStr, instance){
-                    ...
-                },
-                onClose: function(dateObj, dateStr, instance){
-                    ...
-                }
-            });
-
-    p#events(style='height: 80px; overflow-y: auto')
-    p
-        input#events-api-example(type='text', placeholder='Select date')
-    hr
-    h4#onDayCreate onDayCreate()
-    p
-        | Take full control of every date cell with the
-        code onDayCreate()
-        | hook.
-    pre
-        code.js.
-            flatpickr("#dayCreate", {
-                onDayCreate: function(dObj, dStr, fp, dayElem){
-                    // utilize fp.currentYear, fp.currentMonth, dayElem.textContent
-                    if (Math.random() &lt; 0.15)
-                        dayElem.innerHTML += "&lt;span class='event'&gt;&lt;/span&gt;";
-
-                    else if (Math.random() &gt; 0.85)
-                        dayElem.innerHTML += "&lt;span class='event busy'&gt;&lt;/span&gt;";
-                }
-            });
-
-    p
-        input#dayCreate(type='text', placeholder='Select date')
-    hr
-
-#fiscal-calendar.example(data-desc='Fiscal Calendar')
+section#fiscal
     h4 Fiscal Calendar
     p
         | You may override the
