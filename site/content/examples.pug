@@ -235,14 +235,18 @@ section#enable.example(data-desc='Disabling dates')
 
 section#example-inline
     h4 Inline Calendar
-    p Show the calendar inline with the
-        code inline
-        | &nbsp;option.
+
+    pre
+        code.js.
+            flatpickr("#inline", {
+                inline: true, // show the calendar inline
+                weekNumbers: true // show week numbers
+            })
 
     p
-        input.flatpickr(type='text', data-inline="true", placeholder='Select date')
+        input.flatpickr(type='text', data-inline="true", data-week-numbers="true",  placeholder='Select date')
 
-section#fiscal
+section#example-fiscal
     h4 Fiscal Calendar
     p
         | You may override the
