@@ -264,7 +264,7 @@ function Flatpickr(element, config) {
 			currentDate = new Date(self.currentYear, self.currentMonth, dayNumber, 0, 0, 0, 0, 0);
 
 			if (self.config.weekNumbers && dayNumber % 7 === 1) {
-				self.weekNumbers.insertAdjacentHTML("beforeend", "<span class='disabled flatpickr-day'>" + self.getWeek(currentDate) + "</span>");
+				self.weekNumbers.insertAdjacentHTML("beforeend", "<span class='disabled flatpickr-day'>" + self.config.getWeek(currentDate) + "</span>");
 			}
 
 			dateIsDisabled = !isEnabled(currentDate);
@@ -301,7 +301,7 @@ function Flatpickr(element, config) {
 			_dayElement2.dateObj = _curDate;
 
 			if (self.config.weekNumbers && dayNum % 7 === 1) {
-				self.weekNumbers.insertAdjacentHTML("beforeend", "<span class='disabled flatpickr-day'>" + self.getWeek(_curDate) + "</span>");
+				self.weekNumbers.insertAdjacentHTML("beforeend", "<span class='disabled flatpickr-day'>" + self.config.getWeek(_curDate) + "</span>");
 			}
 
 			if (_dateIsEnabled) _dayElement2.tabIndex = 0;else if (self.selectedDates[0] && _curDate > self.minRangeDate && _curDate < self.selectedDates[0]) self.minRangeDate = _curDate;else if (self.selectedDates[0] && _curDate < self.maxRangeDate && _curDate > self.selectedDates[0]) self.maxRangeDate = _curDate;
@@ -767,9 +767,8 @@ function Flatpickr(element, config) {
 
 		if (self.config.mode === "single") {
 			self.selectedDates = [selectedDate];
-			if (!self.config.enableTime) {
-				self.close();
-			}
+
+			if (!self.config.enableTime) self.close();
 		} else if (self.config.mode === "multiple") {
 			var selectedIndex = isDateSelected(selectedDate);
 			if (selectedIndex) self.selectedDates.splice(selectedIndex, 1);else self.selectedDates.push(selectedDate);
@@ -1048,13 +1047,10 @@ function Flatpickr(element, config) {
 	}
 
 	function isDateSelected(date) {
-		if (self.selectedDates.length) {
-			for (var i = 0; i < self.selectedDates.length; i++) {
-				if (equalDates(self.selectedDates[i], date)) {
-					return "" + i;
-				}
-			}
+		for (var i = 0; i < self.selectedDates.length; i++) {
+			if (equalDates(self.selectedDates[i], date)) return "" + i;
 		}
+
 		return false;
 	}
 
@@ -1100,7 +1096,6 @@ function Flatpickr(element, config) {
 		switch (self.config.mode) {
 			case "single":
 				self.input.value = formatDate(self.config.dateFormat, latestSelectedDateObj());
-
 				if (self.config.altInput) self.altInput.value = formatDate(self.config.altFormat, latestSelectedDateObj());
 
 				break;
@@ -1251,6 +1246,18 @@ Flatpickr.defaultConfig = {
 	// dateparser that transforms a given string to a date object
 	parseDate: null,
 
+	getWeek: function getWeek(givenDate) {
+		var date = new Date(givenDate.getTime());
+		date.setHours(0, 0, 0, 0);
+
+		// Thursday in current week decides the year.
+		date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
+		// January 4 is always in week 1.
+		var week1 = new Date(date.getFullYear(), 0, 4);
+		// Adjust to Thursday in week 1 and count number of weeks from date to week1.
+		return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
+	},
+
 	// see https://chmln.github.io/flatpickr/#disable
 	enable: [],
 
@@ -1397,18 +1404,6 @@ Date.prototype.fp_toUTC = function () {
 
 	newDate.fp_isUTC = true;
 	return newDate;
-};
-
-Flatpickr.prototype.getWeek = function (givenDate) {
-	var date = new Date(givenDate.getTime());
-	date.setHours(0, 0, 0, 0);
-
-	// Thursday in current week decides the year.
-	date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
-	// January 4 is always in week 1.
-	var week1 = new Date(date.getFullYear(), 0, 4);
-	// Adjust to Thursday in week 1 and count number of weeks from date to week1.
-	return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
 };
 
 // IE9 classList polyfill
