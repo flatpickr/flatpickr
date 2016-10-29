@@ -82,21 +82,22 @@ new Flatpickr(element, config);</code></pre></p></section></section><h2>Examples
     weekNumbers: true // show week numbers
 })
 </code></pre><p><input class="flatpickr" type="text" data-inline="true" data-week-numbers="true" placeholder="Select date"></p></section><section id="example-fiscal"><h4>Fiscal Calendar</h4><p>You may override the<code>getWeek()</code>function, used for calculating a week number, for various purposes. A fiscal year is used for calculating yearly financial statements. In this example, we will use override the<code>getWeek()</code>function to display the fiscal term instead of the usual week numbers.</p><pre><code>&lt;input type='text' id="fiscal" placeholder="Fiscal Calendar"&gt;
-</code></pre><pre><code>Flatpickr.prototype.getWeek = function(givenDate){
-    var checkDate = new Date(givenDate.getTime());
-    checkDate.setDate(checkDate.getDate() + 4 - (checkDate.getDay() || 7));
-    var time = checkDate.getTime();
-    checkDate.setMonth(7);
-    checkDate.setDate(28);
-    var week = (Math.floor(Math.round((time - checkDate) / 86400000) / 7) + 2);
-    if (week &lt; 1) {
-        week = 52 + week;
-    }
-    return 'FW'+week;
-}
+</code></pre><pre><code>document.getElementById("fiscal").flatpickr({
+    weekNumbers: true,
+    getWeek: function(givenDate){
+        var checkDate = new Date(givenDate.getTime());
+        checkDate.setDate(checkDate.getDate() + 4 - (checkDate.getDay() || 7));
+        var time = checkDate.getTime();
+        checkDate.setMonth(7);
+        checkDate.setDate(28);
 
-document.getElementById("fiscal").flatpickr({
-    weekNumbers: true
+        var week = (Math.floor(Math.round((time - checkDate) / 86400000) / 7) + 2);
+        if (week < 1) {
+            week = 52 + week;
+        }
+
+        return 'FW' + ("0" + week).slice(-2);
+    }
 });
 </code></pre><p><input id="fiscal" type="text" placeholder="Calendar w/ fiscal periods"></p></section><hr><section id="eventsAPI"><h2>Events</h2><p>Flatpickr has 5 event hooks for the most common and useful actions. For each hook, you may specify a single function, or an array of functions. Callback arguments are explained below.</p><p><code>selectedDates</code>&nbsp;is an array of Date objects selected by the user. When there are no dates selected, the array is empty.</p><p><code>dateStr</code>&nbsp;is a string representation of the latest selected Date object by the user. The string is formatted as per the<code>dateFormat</code>option.</p><p><code>instance</code>&nbsp;is the Flatpickr object, containing various methods and properties.</p><h4 class="light">Hooks</h4><p id="event-onChange"><h4><code>onChange</code></h4><p>onChange gets triggered when the user selects a date, or changes the time on a selected date.</p></p><p id="event-onOpen"><h4><code>onOpen</code></h4><p>onOpen gets triggered when the calendar is opened.</p></p><p id="event-onClose"><h4><code>onClose</code></h4><p>onClose gets triggered when the calendar is closed.</p></p><pre><code>document.getElementById("events-api-example").flatpickr({
     onChange: function(selectedDates, dateStr, instance) {

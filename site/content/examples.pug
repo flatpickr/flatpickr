@@ -260,21 +260,22 @@ section#example-fiscal
 
     pre
         code.
-            Flatpickr.prototype.getWeek = function(givenDate){
-                var checkDate = new Date(givenDate.getTime());
-                checkDate.setDate(checkDate.getDate() + 4 - (checkDate.getDay() || 7));
-                var time = checkDate.getTime();
-                checkDate.setMonth(7);
-                checkDate.setDate(28);
-                var week = (Math.floor(Math.round((time - checkDate) / 86400000) / 7) + 2);
-                if (week &lt; 1) {
-                    week = 52 + week;
-                }
-                return 'FW'+week;
-            }
-
             document.getElementById("fiscal").flatpickr({
-                weekNumbers: true
+                weekNumbers: true,
+                getWeek: function(givenDate){
+                    var checkDate = new Date(givenDate.getTime());
+                    checkDate.setDate(checkDate.getDate() + 4 - (checkDate.getDay() || 7));
+                    var time = checkDate.getTime();
+                    checkDate.setMonth(7);
+                    checkDate.setDate(28);
+
+                    var week = (Math.floor(Math.round((time - checkDate) / 86400000) / 7) + 2);
+                    if (week < 1) {
+                        week = 52 + week;
+                    }
+
+                    return 'FW' + ("0" + week).slice(-2);
+                }
             });
 
     p
