@@ -29,8 +29,11 @@ section#getting-started
 		p Then,
 			pre
 				code.
-					flatpickr(".selector", {});
-					document.getElementById("myID").flatpickr({});
+					flatpickr(".selector", {}); // [Flatpickr, Flatpickr, ...]
+					document.getElementById("myID").flatpickr(config); // Flatpickr
+					let calendar = new Flatpickr(element, config); // Flatpickr
+
+
 					$(".selector").flatpickr({}); // jQuery
 
 	section

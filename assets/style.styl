@@ -41,13 +41,13 @@ a
 
 .sidebar
     $padding = 5.2766%
-    $sidebarBG = #f6f6f6
+    $sidebarBG = #fafafa
     $sidebarFG = invert($sidebarBG)
     background $sidebarBG
     border-right 1px solid darken($sidebarBG, 5%)
     color black
     height 100vh
-    overflow-y auto
+    overflow-y scroll
     position fixed
 
     #logo
@@ -70,12 +70,37 @@ a
         a
             display block
             padding: 1rem 0 1rem $padding;
-            color alpha($sidebarFG, 0.7)
+            color alpha($sidebarFG, 0.85)
             font-weight 400
             text-decoration none
+            position relative
+
+            &.current:before
+                content ""
+                width 3px
+                background #2f1e2e
+                opacity 0.77
+                position absolute
+                left 1px
+                top 0
+                height 100%
 
             &.current, &:hover
-                background alpha($sidebarFG, 0.09)
+
+                background alpha(black, 0.07)
+
+    &::-webkit-scrollbar
+        width 5px
+
+    &::-webkit-scrollbar-thumb
+        background #999
+        &:hover
+            background #555
+        &:active
+            background #333
+        cursor grab
+
+
 
 @media (max-width: 1000px)
     body
