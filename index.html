@@ -11,17 +11,17 @@ $(".selector").flatpickr({}); // jQuery
 </code></pre></p></section><section><h3 id="env-bundle">Flatpickr as a module</h3><p><pre><code>const Flatpickr = require("flatpickr");
 // ...
 new Flatpickr(element, config);</code></pre></p></section></section><h2>Examples</h2><section id="example-basic"><h4>Basic</h4><p><pre><code>&lt;input class="flatpickr" type="text" placeholder="Select Date.."&gt;
-</code></pre><pre><code class="js">flatpickr(".flatpickr");</code></pre></p><input class="flatpickr" type="text" placeholder="Select Date.."></section><section id="example-datetime"><h4>Make it a datetime picker</h4><pre><code class="js">flatpickr(".flatpickr". {
+</code></pre><pre><code class="js">flatpickr(".flatpickr");</code></pre></p><input class="flatpickr" type="text" placeholder="Select Date.."></section><section id="example-datetime"><h4>Make it a datetime picker</h4><pre><code class="js">flatpickr(".flatpickr", {
     enableTime: true
 });
-</code></pre><input class="flatpickr" type="text" placeholder="Select Date.." data-enable-time="true"></section><section id="example-altInput"><h4>Display a human-readable date</h4><pre><code class="js">flatpickr(".flatpickr". {
+</code></pre><input class="flatpickr" type="text" placeholder="Select Date.." data-enable-time="true"></section><section id="example-altInput"><h4>Display a human-readable date</h4><pre><code class="js">flatpickr(".flatpickr", {
     enableTime: true,
 
     // create an extra input solely for display purposes
     altInput: true,
     altFormat: "F j, Y h:i K"
 });
-</code></pre><input class="flatpickr" type="text" placeholder="Select Date.." data-alt-input="true" data-enable-time="true" data-alt-format="F j, Y h:i K"></section><section id="example-minMaxDate"><h4>Limit the range of available dates with&nbsp;<code>minDate</code>and&nbsp;<code>maxDate</code></h4><p>minDate and maxDate accept Date objects, date strings, timestamps, and the shortcut&nbsp;<code>"today"</code></p><pre><code class="js">flatpickr(".flatpickr". {
+</code></pre><input class="flatpickr" type="text" placeholder="Select Date.." data-alt-input="true" data-enable-time="true" data-alt-format="F j, Y h:i K"></section><section id="example-minMaxDate"><h4>Limit the range of available dates with&nbsp;<code>minDate</code>and&nbsp;<code>maxDate</code></h4><p>minDate and maxDate accept Date objects, date strings, timestamps, and the shortcut&nbsp;<code>"today"</code></p><pre><code class="js">flatpickr(".flatpickr", {
     minDate: new Date(), // "today" / "2016-12-20" / 1477673788975
     maxDate: "2016-12-20",
     enableTime: true,
@@ -46,7 +46,7 @@ new Flatpickr(element, config);</code></pre></p></section></section><h2>Examples
     &lt;a class="input-button" data-toggle&gt;&lt;i class="icon-calendar"&gt;&lt;/i&gt;&lt;/a&gt;
     &lt;a class="input-button" data-clear&gt;&lt;i class="icon-close"&gt;&lt;/i&gt;&lt;/a&gt;
 &lt;/p&gt;
-</code></pre><pre><code class="js">flatpickr(".flatpickr". {
+</code></pre><pre><code class="js">flatpickr(".flatpickr", {
     wrap: true,
     clickOpens: false // disable opening calendar by clicking on input
 });

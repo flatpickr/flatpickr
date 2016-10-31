@@ -16,7 +16,7 @@ section#example-datetime
     h4 Make it a datetime picker
     pre
         code.js.
-            flatpickr(".flatpickr". {
+            flatpickr(".flatpickr", {
                 enableTime: true
             });
 
@@ -27,7 +27,7 @@ section#example-altInput
     h4 Display a human-readable date
     pre
         code.js.
-            flatpickr(".flatpickr". {
+            flatpickr(".flatpickr", {
                 enableTime: true,
 
                 // create an extra input solely for display purposes
@@ -53,7 +53,7 @@ section#example-minMaxDate
         code "today"
     pre
         code.js.
-            flatpickr(".flatpickr". {
+            flatpickr(".flatpickr", {
                 minDate: new Date(), // "today" / "2016-12-20" / 1477673788975
                 maxDate: "2016-12-20",
                 enableTime: true,
@@ -150,7 +150,7 @@ section#example-strap
 
     pre
         code.js.
-            flatpickr(".flatpickr". {
+            flatpickr(".flatpickr", {
                 wrap: true,
                 clickOpens: false // disable opening calendar by clicking on input
             });
