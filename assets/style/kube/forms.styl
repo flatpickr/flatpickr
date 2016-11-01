@@ -7,7 +7,7 @@ form
 input:focus
 	outline 0
 
-input[type=text], input[type=search], input[type=password], input[type=email], input[type=number], select, textarea
+input[type=text], input[type=search], input[type=password], input[type=email], input[type=number], input[type*="date"], select, textarea
 	font-family inherit
 	font-size 1.4rem
 	padding 0rem 0.5rem
@@ -22,7 +22,7 @@ input[type=text], input[type=search], input[type=password], input[type=email], i
 	display block
 	transition all 200ms ease-out
 
-	&:focus
+	&:focus, &.active
 		outline 0
 		background #fff
 		border 1px solid alpha($primary, 0.7)
@@ -75,6 +75,7 @@ for color in $colors
 		else
 			color rgba(0, 0, 0, 0.9)
 		background: $colors[color]
+		border: 1px solid darken($colors[color], 12%)
 
 		&:hover
 			if dark(darken($colors[color], 30%))
@@ -216,7 +217,6 @@ form, .forms
 
 .desc
 	text-transform none
-	margin-top 4px
 	color inherit
 	opacity 0.625
 	font-size 12px

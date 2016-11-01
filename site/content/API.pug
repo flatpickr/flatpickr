@@ -1,0 +1,109 @@
+#API
+	h2 API
+	p These methods are exposed on every Flatpickr instance, letting you control the calendar programmatically.
+
+section#api-changeMonth
+	h4
+		code changeMonth(monthNum, is_offset = true)
+
+	p Changes the current month.
+	pre
+		code.js.
+			let calendar = new Flatpickr(yourElement, config);
+			calendar.changeMonth(1); // go a month ahead
+			calendar.changeMonth(-2); // go two months back
+
+			calendar.changeMonth(0, false); // go to January
+
+section#api-clear
+	h4
+		code clear()
+
+	p Resets the selected dates (if any) and clears the input.
+
+section#api-close
+	h4
+		code close()
+
+	p Closes the calendar.
+
+section#api-destroy
+	h4
+		code destroy()
+
+	p Destroys the Flatpickr instance, cleans up - removes event listeners, restores inputs, etc.
+
+section#api-formatDate
+	h4
+		code formatDate(formatStr, dateObj)
+
+	p
+		code formatStr
+		| &nbsp; is a string consisting of formatting tokens, and&nbsp;
+		code dateObj
+		|&nbsp; is a Date.
+
+	h5.light Return Value
+	p A string representation of
+		code dateObj
+		|,&nbsp; formatted as per&nbsp;
+		code formatStr
+
+section#api-jumpToDate
+	h4
+		code jumpToDate(date)
+
+	p Sets the calendar view to the year and month of
+		code date
+		|, which  can be a date string, a Date, or nothing.
+
+	p If
+		code date
+		| is undefined, the view is set to the latest selected date, the&nbsp;
+		code minDate
+		|, or today's date
+
+section#api-open
+	h4
+		code open()
+
+	p Shows/opens the calendar.
+
+section#api-parseDate
+	h4
+		code parseDate(date)
+
+	p Parses a date string or a timestamp, and returns a Date.
+
+section#api-redraw
+	h4
+		code redraw()
+
+	p Redraws the calendar. Shouldn't be necessary in most cases.
+
+section#api-set
+	h4
+		code set(option, value)
+
+	p Sets a config option&nbsp;
+		code option
+		| to&nbsp;
+		code value
+		|, redrawing the calendar and updating the current view, if necessary.
+
+
+section#api-setDate
+	h4
+		code setDate(date)
+
+	p Sets the current selected date(s) to
+		code date
+		|, which can be a date string, a Date, or an
+		code Array
+		| &nbsp;of the aforementioned
+
+section#api-toggle
+	h4
+		code toggle()
+
+	p Shows/opens the calendar if its closed, hides/closes it otherwise

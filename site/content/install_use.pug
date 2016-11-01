@@ -1,34 +1,47 @@
-.section.bg-orange
-	.wrapper
+section#getting-started
+	section
+		h2 Getting Started
 		.row
-			.col.col-6
-				h2 Install
-				p
-					code npm install flatpickr
-					br
+			.col
+				code npm install flatpickr
+				br
 
-					code bower install flatpickr-calendar
-				p
-					| Otherwise:
-					br
-					a.btn(href='https://github.com/chmln/flatpickr/archive/gh-pages.zip', type='white', outline)
-						span Download&nbsp;
-						i.icon-angle-double-down
-				p.nomargin
-					| Then
-					code require(&apos;flatpickr&apos;)
-					| , use wiredep, or otherwise load the necessary files.
+				code bower install flatpickr-calendar
 
-			.col.col-6
-				h2 Use
-				p
-					| There are multiple ways to create a Flatpickr instance. In all cases, config is optional. The return value will be the Flatpickr instance, or an array of instances.
-				pre.prettyprint.lang-js.
-					flatpickr(".selector", {});
-					document.getElementById("myID").flatpickr({});
-					$(".calendar").flatpickr({}); // jQuery
+			.col.text-right
+				a.btn(href='https://github.com/chmln/flatpickr/archive/gh-pages.zip', type='success')
+					span Download&nbsp;
+					i.icon-angle-double-down
+	section
+		h3#env-browser Flatpickr in browsers
+		p
+			pre
+				code.
+					&lt;link rel="stylesheet" href=".../flatpickr.min.css"&gt;
+					&lt;script src=".../flatpickr.min.js"&gt;&lt;/script&gt;
+
+		p The latest version of Flatpickr can also be loaded from a CDN
+		pre
+			code.
+					&lt;link rel="stylesheet" href="https://unpkg.com/flatpickr/dist/flatpickr.min.css"&gt;
+					&lt;script src="https://unpkg.com/flatpickr"&gt;&lt;/script&gt;
+
+		p Then,
+			pre
+				code.
+					flatpickr(".selector", {}); // [Flatpickr, Flatpickr, ...]
+					document.getElementById("myID").flatpickr(config); // Flatpickr
+					let calendar = new Flatpickr(element, config); // Flatpickr
 
 
-				p Or pass in a node directly.
-				pre.prettyprint.lang-js.
-					new Flatpickr(HTMLElement, [options]);
+					$(".selector").flatpickr({}); // jQuery
+
+	section
+		h3#env-bundle Flatpickr as a module
+		p
+			pre
+				code.
+					const Flatpickr = require("flatpickr");
+					// ...
+					new Flatpickr(element, config);
+

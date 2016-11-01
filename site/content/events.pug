@@ -1,0 +1,92 @@
+section#eventsAPI
+    h2 Events
+    p Flatpickr has 5 event hooks for the most common and useful actions. For each hook, you may specify a single function, or an array of functions. Callback arguments are explained below.
+    p
+        code selectedDates
+        |&nbsp;is an array of Date objects selected by the user. When there are no dates selected, the array is empty.
+
+    p
+        code dateStr
+        |&nbsp;is a string representation of the latest selected Date object by the user. The string is formatted as per the
+        code dateFormat
+        | option.
+
+    p
+        code instance
+        |&nbsp;is the Flatpickr object, containing various methods and properties.
+
+
+    h4.light Hooks
+
+    p#event-onChange
+        h4
+            code onChange
+
+        p onChange gets triggered when the user selects a date, or changes the time on a selected date.
+
+    p#event-onOpen
+        h4
+            code onOpen
+
+        p onOpen gets triggered when the calendar is opened.
+
+    p#event-onClose
+        h4
+            code onClose
+
+        p onClose gets triggered when the calendar is closed.
+
+
+
+    pre
+        code.
+            document.getElementById("events-api-example").flatpickr({
+                onChange: function(selectedDates, dateStr, instance) {
+                    ...
+                },
+                onOpen: function(selectedDates, dateStr, instance){
+                    ...
+                },
+                onClose: function(selectedDates, dateStr, instance){
+                    ...
+                }
+            });
+
+    p#events(style='height: 80px; overflow-y: auto')
+    p
+        input#events-api-example(type='text', placeholder='Select date')
+    hr
+
+    p#event-onReady
+        h4
+            code onReady
+
+        p onReady gets triggered once the calendar is in a ready state.
+
+    p#event-onValueUpdate
+        h4
+            code onValueUpdate
+
+        p onValueUpdate gets triggered when the input value is updated with a new date string.
+
+    h4#event-onDayCreate onDayCreate()
+    p
+        | Take full control of every date cell with the
+        code onDayCreate()
+        | hook.
+    pre
+        code.js.
+            flatpickr("#dayCreate", {
+                onDayCreate: function(dObj, dStr, fp, dayElem){
+                    // utilize fp.currentYear, fp.currentMonth, dayElem.textContent
+                    if (Math.random() &lt; 0.15)
+                        dayElem.innerHTML += "&lt;span class='event'&gt;&lt;/span&gt;";
+
+                    else if (Math.random() &gt; 0.85)
+                        dayElem.innerHTML += "&lt;span class='event busy'&gt;&lt;/span&gt;";
+                }
+            });
+
+    p
+        input#dayCreate(type='text', placeholder='Select date')
+    hr

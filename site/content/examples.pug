@@ -1,197 +1,284 @@
 h2 Examples
-#strap.example
-	h4 Custom elements and input groups
-	p
-		| flatpickr can parse an input group of textboxes and buttons, common in&nbsp;
-		strong Bootstrap
-		|  and other frameworks.
-	p
-		| This permits additional markup, as well as custom elements to trigger the state of the calendar.
-	p
-		| Mark your input element with
-		code data-input
-		| (mandatory), and any additional buttons with
-		code data-toggle
-		| ,
-		code data-open
-		| ,
-		code data-close
-		| , or
-		code data-clear
-		| .
-	pre.prettyprint.lang-html.
-		&lt;p class="flatpickr" data-wrap="true" data-click-opens="false"&gt;
-			&lt;input placeholder="Pick date" data-input&gt;
+section#example-basic
+    h4 Basic
+    p
+        pre
+            code.
+                &lt;input class="flatpickr" type="text" placeholder="Select Date.."&gt;
 
-			&lt;a class="input-button" data-toggle&gt;&lt;i class="icon-calendar"&gt;&lt;/i&gt;&lt;/a&gt;
-			&lt;a class="input-button" data-clear&gt;&lt;i class="icon-close"&gt;&lt;/i&gt;&lt;/a&gt;
-		&lt;/p&gt;
+        pre
+            code.js.
+                flatpickr(".flatpickr");
+    input.flatpickr(type="text", placeholder="Select Date..")
 
-	p.flatpickr.input-group(data-allow-input='true', data-wrap='true', data-click-opens='false')
-		input(type="text", data-input='', placeholder='Pick date')
-		a.input-btn(data-toggle='')
-			i.icon-calendar
-		a.input-btn(data-clear='')
-			i.icon-close
-		div(style='clear:both;')
 
-#disable.example(data-desc='Disabling dates')
-	h4 Disabling dates
-	.row
-		.col.col-6
-			p Disable a date interval, or a specific date.
-			pre.prettyprint.lang-js.
-				document.getElementById("#disableRange").flatpickr({
-					disable: [
-						{ from: "2016-08-16", to: "2016-08-19" },
-						"2016-08-24",
-						new Date().fp_incr(30) // 30 days from now
-					]
-				});
+section#example-datetime
+    h4 Make it a datetime picker
+    pre
+        code.js.
+            flatpickr(".flatpickr", {
+                enableTime: true
+            });
 
-			p
-				input#disableRange(type='text', placeholder='Select date')
+    input.flatpickr(type="text", placeholder="Select Date..", data-enable-time="true")
 
-		.col.col-6
-			p Or pass in a custom function and disable dates using any logic you want.
-			pre.prettyprint.lang-js.
-				document.getElementById("#disableOddDays").flatpickr({
-					disable: [
-						function(date){ // disable odd days
-							return date.getDate()%2 &gt; 0;
-						}
-					]
-				});
 
-			p
-				input#disableOddDays(type='text', placeholder='Select date')
+section#example-altInput
+    h4 Display a human-readable date
+    pre
+        code.js.
+            flatpickr(".flatpickr", {
+                enableTime: true,
 
-#enable.example(data-desc='Disabling dates')
-	h4 Enabling dates
-	p Use the&nbsp;
-		code enable[]
-		| &nbsp;option to disable all dates except the ones you specify.
-	.row
-		.col.col-6
-			p Pass in date strings, Date objects, or functions.
-			pre.prettyprint.lang-js.
-				document.getElementById("#enableNextSeven").flatpickr({
-					enable: [
-						{
-							from: "today",
-							to: new Date().fp_incr(7) // 7 days from now
-						}
-					]
-				});
+                // create an extra input solely for display purposes
+                altInput: true,
+                altFormat: "F j, Y h:i K"
+            });
 
-			p
-				input#enableNextSeven(type='text', placeholder='Select date')
-		.col.col-6
-			p
-				| For instance, to enable only business days of 2016:
-			pre.prettyprint.lang-js.
-				document.getElementById("#enableCustom").flatpickr({
-					enable: [
-						function(dateObj){
-							// dateObj is a JavaScript Date
-							return dateObj.getDay() %6 !== 0 && dateObj.getFullYear() === 2016;
-						}
-					]
-				});
+    input.flatpickr(
+        type="text",
+        placeholder="Select Date..",
+        data-alt-input="true",
+        data-enable-time="true",
+        data-alt-format="F j, Y h:i K"
+    )
 
-			p
-				input#enableCustom(type='text', placeholder='Select date')
+section#example-minMaxDate
+    h4 Limit the range of available dates with&nbsp;
+        code minDate
+        | and&nbsp;
+        code maxDate
 
-#utc.example(data-desc='Timezones & UTC')
-	h4 UTC mode
-	p
-		| By default, JavaScript&apos;s Date converts all dates to a local time. However, locale-agnostic databases often store dates in UTC. flatpickr can convert any given dates to UTC and select a datetime in UTC with a simple switch. Here are the previous examples with UTC mode enabled.
-	pre.prettyprint.lang-html.
-		&lt;input type='text' class='flatpickr' data-utc=true data-default-date="Wed, 21 Sep 2016 18:33:47 GMT" data-enable-time=true&gt;
+    p minDate and maxDate accept Date objects, date strings, timestamps, and the shortcut&nbsp;
+        code "today"
+    pre
+        code.js.
+            flatpickr(".flatpickr", {
+                minDate: new Date(), // "today" / "2016-12-20" / 1477673788975
+                maxDate: "2016-12-20",
+                enableTime: true,
 
-	p
-		input.flatpickr(type='text', data-utc='true', data-default-date='Wed, 21 Sep 2016 18:33:47 GMT', data-enable-time='true')
-	br
-	pre.prettyprint.lang-html.
-		&lt;input type='text' class='flatpickr' data-default-date="2016-12-27T16:16:22.585Z" data-utc=true data-enable-time=true&gt;
+                // create an extra input solely for display purposes
+                altInput: true,
+                altFormat: "F j, Y h:i K"
+            });
 
-	p
-		input.flatpickr(type='text', data-default-date='2016-12-27T16:16:22.585Z', data-utc='true', data-enable-time='true')
+    input.flatpickr(
+        type="text",
+        placeholder="Select Date..",
+        data-alt-input="true",
+        data-enable-time="true",
+        data-alt-format="F j, Y h:i K",
+        data-min-date="today",
+        data-max-date="2016-12-20"
+    )
 
-hr
+section#example-preload
+    h4 Preloading Dates
+    p Flatpickr can work with existing date strings, or date objects.
+    p Input values get parsed automatically.
+    p
+        pre
+            code.
+                &lt;input type="text", value="2016-10-20"&gt;
 
-#eventsAPI.example(data-desc='Events API')
-	h2 Events
-	pre.prettyprint.lang-js.
-		document.getElementById("events-api-example").flatpickr({
-			minDate: "today",
-			enableTime: true,
-			onChange: function(dateObj, dateStr, instance) {
-				...
-			},
-			onOpen: function(dateObj, dateStr, instance){
-				...
-			},
-			onClose: function(dateObj, dateStr, instance){
-				...
-			}
-		});
+        input.flatpickr(type="text", value="2016-10-20")
 
-	p#events(style='height: 80px; overflow-y: auto')
-	p
-		input#events-api-example(type='text', placeholder='Select date')
-	hr
-	h4#onDayCreate onDayCreate()
-	p
-		| Take full control of every date cell with the
-		code onDayCreate()
-		| hook.
-	pre.prettyprint.lang-js.
-		flatpickr("#dayCreate", {
-			onDayCreate: function(dObj, dStr, fp, dayElem){
-				// utilize fp.currentYear, fp.currentMonth, dayElem.textContent
-				if (Math.random() &lt; 0.15)
-					dayElem.innerHTML += "&lt;span class='event'&gt;&lt;/span&gt;";
+    p To preload a Date object, timestamp, or otherwise supply a date string, use the
+        code defaultDate
+        |&nbsp;option.
+        br
+        .light.muted Timestamps are recommended due to their lack of ambiguity in parsing.
 
-				else if (Math.random() &gt; 0.85)
-					dayElem.innerHTML += "&lt;span class='event busy'&gt;&lt;/span&gt;";
-			}
-		});
 
-	p
-		input#dayCreate(type='text', placeholder='Select date')
-	hr
+    p
+        pre
+            code.js.
+                flatpickr("#example-defaultDate", {
+                    defaultDate: 1477697199863, // Date objects and date strings are also accepted
+                    enableTime: true
+                });
 
-#fiscal-calendar.example(data-desc='Fiscal Calendar')
-	h4 Fiscal Calendar
-	p
-		| You may override the
-		code getWeek()
-		| function, used for calculating a week number, for various purposes. A fiscal year is used for calculating yearly financial statements. In this example, we will use override the
-		code getWeek()
-		| function to display the fiscal term instead of the usual week numbers.
-	pre.prettyprint.lang-html.
-		&lt;input type='text' id="fiscal" placeholder="Fiscal Calendar"&gt;
+        input#example-defaultDate(type="text")
 
-	pre.prettyprint.lang-js.
-		Flatpickr.prototype.getWeek = function(givenDate){
-			var checkDate = new Date(givenDate.getTime());
-			checkDate.setDate(checkDate.getDate() + 4 - (checkDate.getDay() || 7));
-			var time = checkDate.getTime();
-			checkDate.setMonth(7);
-			checkDate.setDate(28);
-			var week = (Math.floor(Math.round((time - checkDate) / 86400000) / 7) + 2);
-			if (week &lt; 1) {
-				week = 52 + week;
-			}
-			return 'FW'+week;
-		}
+    hr
 
-		document.getElementById("fiscal").flatpickr({
-			weekNumbers: true
-		});
 
-	p
-		input#fiscal(type='text', placeholder='Calendar w/ fiscal periods')
+    h4.light UTC mode
+    p By default, all dates in javascript are converted to a local time. However, you can choose to leave the dates in UTC. flatpickr can convert any given dates to UTC and select a datetime in UTC with a simple switch.
+
+    pre
+        code.js.
+            flatpickr("#utc", {
+                utc: true,
+                defaultDate: "2016-12-27T16:16:22.585Z",
+                enableTime: true,
+            });
+
+    p
+        input.flatpickr(type='text', data-utc='true', data-default-date='2016-12-27T16:16:22.585Z', data-enable-time='true')
+
+section#example-strap
+    h4 Custom elements and input groups
+
+    p flatpickr can parse an input group of textboxes and buttons, common in&nbsp;
+        strong Bootstrap
+        |  and other frameworks.
+
+    p This permits additional markup, as well as custom elements to trigger the state of the calendar.
+
+    p Mark your input element with
+        code data-input
+        | (mandatory), and any additional buttons with
+        code data-toggle
+        | ,
+        code data-open
+        | ,
+        code data-close
+        | , or
+        code data-clear
+        | .
+
+    pre
+        code.
+            &lt;p class="flatpickr"&gt;
+                &lt;input placeholder="Pick date" data-input&gt;
+
+                &lt;a class="input-button" data-toggle&gt;&lt;i class="icon-calendar"&gt;&lt;/i&gt;&lt;/a&gt;
+                &lt;a class="input-button" data-clear&gt;&lt;i class="icon-close"&gt;&lt;/i&gt;&lt;/a&gt;
+            &lt;/p&gt;
+
+    pre
+        code.js.
+            flatpickr(".flatpickr", {
+                wrap: true,
+                clickOpens: false // disable opening calendar by clicking on input
+            });
+
+    p.flatpickr.input-group(data-wrap='true', data-click-opens='false')
+        input(type="text", data-input='', placeholder='Pick date')
+        a.input-btn(data-toggle='')
+            i.icon-calendar
+        a.input-btn(data-clear='')
+            i.icon-close
+        div(style='clear:both;')
+
+section#disable
+    h4 Disabling dates
+
+    p Disable a date interval, or a specific date.
+    pre
+        code.
+            document.getElementById("#disableRange").flatpickr({
+                disable: [
+                    { from: "2016-08-16", to: "2016-08-19" },
+                    "2016-08-24",
+                    new Date().fp_incr(30) // 30 days from now
+                ]
+            });
+
+    p
+        input#disableRange(type='text', placeholder='Select date')
+
+    p Boolean functions are also supported. This allows fine-grained control over every single date, flexible enough for any use-case.
+    pre
+        code.
+            document.getElementById("#disableOddDays").flatpickr({
+                disable: [
+                    function(date){ // disable odd days
+                        return date.getDate()%2 &gt; 0;
+                    }
+                ]
+            });
+
+    p
+        input#disableOddDays(type='text', placeholder='Select date')
+
+section#enable.example(data-desc='Disabling dates')
+    h4 Enabling dates
+    p Use the&nbsp;
+        code enable[]
+        | &nbsp;option to disable all dates except the ones you specify.
+
+    p Similar to&nbsp;
+        code disable[]
+        |, accepts date strings, intervals, Date objects, or functions.
+    pre
+        code.js.
+            document.getElementById("#enableNextSeven").flatpickr({
+                enable: [
+                    {
+                        from: "today",
+                        to: new Date().fp_incr(7) // 7 days from now
+                    }
+                ]
+            });
+
+    p
+        input#enableNextSeven(type='text', placeholder='Select date')
+
+    p
+        | For instance, to enable only business days of 2016:
+    pre
+        code.js.
+            document.getElementById("#enableCustom").flatpickr({
+                enable: [
+                    function(dateObj){
+                        // dateObj is a JavaScript Date
+                        return dateObj.getDay() %6 !== 0 && dateObj.getFullYear() === 2016;
+                    }
+                ]
+            });
+
+    p
+        input#enableCustom(type='text', placeholder='Select date')
+
+section#example-inline
+    h4 Inline Calendar
+
+    pre
+        code.js.
+            flatpickr("#inline", {
+                inline: true, // show the calendar inline
+                weekNumbers: true // show week numbers
+            })
+
+    p
+        input.flatpickr(type='text', data-inline="true", data-week-numbers="true",  placeholder='Select date')
+
+section#example-fiscal
+    h4 Fiscal Calendar
+    p
+        | You may override the
+        code getWeek()
+        | function, used for calculating a week number, for various purposes. A fiscal year is used for calculating yearly financial statements. In this example, we will use override the
+        code getWeek()
+        | function to display the fiscal term instead of the usual week numbers.
+    pre
+        code.
+            &lt;input type='text' id="fiscal" placeholder="Fiscal Calendar"&gt;
+
+    pre
+        code.
+            document.getElementById("fiscal").flatpickr({
+                weekNumbers: true,
+                getWeek: function(givenDate){
+                    var checkDate = new Date(givenDate.getTime());
+                    checkDate.setDate(checkDate.getDate() + 4 - (checkDate.getDay() || 7));
+                    var time = checkDate.getTime();
+                    checkDate.setMonth(7);
+                    checkDate.setDate(28);
+
+                    var week = (Math.floor(Math.round((time - checkDate) / 86400000) / 7) + 2);
+                    if (week < 1) {
+                        week = 52 + week;
+                    }
+
+                    return 'FW' + ("0" + week).slice(-2);
+                }
+            });
+
+    p
+        input#fiscal(type='text', placeholder='Calendar w/ fiscal periods')
 
 hr
