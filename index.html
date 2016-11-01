@@ -11,10 +11,10 @@ $(".selector").flatpickr({}); // jQuery
 </code></pre></p></section><section><h3 id="env-bundle">Flatpickr as a module</h3><p><pre><code>const Flatpickr = require("flatpickr");
 // ...
 new Flatpickr(element, config);</code></pre></p></section></section><h2>Examples</h2><section id="example-basic"><h4>Basic</h4><p><pre><code>&lt;input class="flatpickr" type="text" placeholder="Select Date.."&gt;
-</code></pre><pre><code class="js">flatpickr(".flatpickr");</code></pre></p><input class="flatpickr" type="text" placeholder="Select Date.." data-force-up="true"></section><section id="example-datetime"><h4>Make it a datetime picker</h4><pre><code class="js">flatpickr(".flatpickr", {
+</code></pre><pre><code class="js">flatpickr(".flatpickr");</code></pre></p><input class="flatpickr" type="text" placeholder="Select Date.."></section><section id="example-datetime"><h4>Make it a datetime picker</h4><pre><code class="js">flatpickr(".flatpickr", {
     enableTime: true
 });
-</code></pre><input class="flatpickr" type="text" placeholder="Select Date.." data-enable-time="true" data-force-down="true"></section><section id="example-altInput"><h4>Display a human-readable date</h4><pre><code class="js">flatpickr(".flatpickr", {
+</code></pre><input class="flatpickr" type="text" placeholder="Select Date.." data-enable-time="true"></section><section id="example-altInput"><h4>Display a human-readable date</h4><pre><code class="js">flatpickr(".flatpickr", {
     enableTime: true,
 
     // create an extra input solely for display purposes
