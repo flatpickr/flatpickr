@@ -1,10 +1,6 @@
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-<<<<<<< HEAD
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-=======
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
->>>>>>> chmln/gh-pages
 
 /*! flatpickr v2.0, @license MIT */
 function Flatpickr(element, config) {
@@ -46,14 +42,10 @@ function Flatpickr(element, config) {
 
 		bind();
 
-<<<<<<< HEAD
-		if (self.selectedDates.length) updateValue();
-=======
 		if (self.selectedDates.length) {
 			if (self.config.enableTime) setHoursFromDate();
 			updateValue();
 		}
->>>>>>> chmln/gh-pages
 
 		triggerEvent("Ready");
 	}
@@ -89,10 +81,7 @@ function Flatpickr(element, config) {
 		self.selectedDates[self.selectedDates.length - 1].setHours(hours % 24, minutes, seconds || 0, 0);
 
 		if (!self.config.enableTime) return;
-<<<<<<< HEAD
-=======
 
->>>>>>> chmln/gh-pages
 		self.hourElement.value = self.pad(!self.config.time_24hr ? (12 + hours) % 12 + 12 * (hours % 12 === 0) : hours);
 
 		self.minuteElement.value = self.pad(minutes);
@@ -261,11 +250,8 @@ function Flatpickr(element, config) {
 			var curDate = new Date(self.currentYear, self.currentMonth - 1, dayNumber, 0, 0, 0, 0, 0),
 			    dateIsEnabled = isEnabled(curDate),
 			    dayElement = createElement("span", "flatpickr-day prevMonthDay" + (!dateIsEnabled ? " disabled" : "") + (isDateInRange(curDate) ? " inRange" : "") + (self.selectedDates.length === 1 && (curDate < self.minRangeDate || curDate > self.maxRangeDate) ? " notAllowed" : "") + (isDateSelected(curDate) !== false ? " selected" : ""), dayNumber);
-<<<<<<< HEAD
-=======
 
 			dayElement.dateObj = curDate;
->>>>>>> chmln/gh-pages
 
 			if (dateIsEnabled) dayElement.tabIndex = 0;else if (self.selectedDates[0] && curDate > self.minRangeDate && curDate < self.selectedDates[0]) self.minRangeDate = curDate;else if (self.selectedDates[0] && curDate < self.maxRangeDate && curDate > self.selectedDates[0]) self.maxRangeDate = curDate;
 
@@ -278,21 +264,14 @@ function Flatpickr(element, config) {
 			currentDate = new Date(self.currentYear, self.currentMonth, dayNumber, 0, 0, 0, 0, 0);
 
 			if (self.config.weekNumbers && dayNumber % 7 === 1) {
-<<<<<<< HEAD
-				self.weekNumbers.insertAdjacentHTML("beforeend", "<span class='disabled flatpickr-day'>" + self.getWeek(currentDate) + "</span>");
-=======
 				self.weekNumbers.insertAdjacentHTML("beforeend", "<span class='disabled flatpickr-day'>" + self.config.getWeek(currentDate) + "</span>");
->>>>>>> chmln/gh-pages
 			}
 
 			dateIsDisabled = !isEnabled(currentDate);
 
 			var _dayElement = createElement("span", dateIsDisabled ? "flatpickr-day disabled" : "flatpickr-day" + (isDateInRange(currentDate) ? " inRange" : "") + (self.selectedDates.length === 1 && (currentDate < self.minRangeDate || currentDate > self.maxRangeDate) ? " notAllowed" : ""), dayNumber);
-<<<<<<< HEAD
-=======
 
 			_dayElement.dateObj = currentDate;
->>>>>>> chmln/gh-pages
 
 			if (!dateIsDisabled) {
 				_dayElement.tabIndex = 0;
@@ -318,17 +297,11 @@ function Flatpickr(element, config) {
 			var _curDate = new Date(self.currentYear, self.currentMonth + 1, dayNum % daysInMonth, 0, 0, 0, 0, 0),
 			    _dateIsEnabled = isEnabled(_curDate),
 			    _dayElement2 = createElement("span", "flatpickr-day nextMonthDay" + (!_dateIsEnabled ? " disabled" : "") + (isDateInRange(_curDate) ? " inRange" : "") + (self.selectedDates.length === 1 && (_curDate < self.minRangeDate || _curDate > self.maxRangeDate) ? " notAllowed" : "") + (isDateSelected(_curDate) !== false ? " selected" : ""), dayNum % daysInMonth);
-<<<<<<< HEAD
-
-			if (self.config.weekNumbers && dayNum % 7 === 1) {
-				self.weekNumbers.insertAdjacentHTML("beforeend", "<span class='disabled flatpickr-day'>" + self.getWeek(_curDate) + "</span>");
-=======
 
 			_dayElement2.dateObj = _curDate;
 
 			if (self.config.weekNumbers && dayNum % 7 === 1) {
 				self.weekNumbers.insertAdjacentHTML("beforeend", "<span class='disabled flatpickr-day'>" + self.config.getWeek(_curDate) + "</span>");
->>>>>>> chmln/gh-pages
 			}
 
 			if (_dateIsEnabled) _dayElement2.tabIndex = 0;else if (self.selectedDates[0] && _curDate > self.minRangeDate && _curDate < self.selectedDates[0]) self.minRangeDate = _curDate;else if (self.selectedDates[0] && _curDate < self.maxRangeDate && _curDate > self.selectedDates[0]) self.maxRangeDate = _curDate;
@@ -505,13 +478,6 @@ function Flatpickr(element, config) {
 		instance.input.classList.remove("flatpickr-input");
 		instance.input.removeEventListener("focus", open);
 		instance.input.removeAttribute("readonly");
-<<<<<<< HEAD
-	}
-
-	function documentClick(e) {
-		var isCalendarElement = self.calendarContainer.contains(e.target),
-		    isInput = self.element.contains(e.target) || e.target === self.altInput;
-=======
 	}
 
 	function isCalendarElem(elem) {
@@ -526,7 +492,6 @@ function Flatpickr(element, config) {
 
 	function documentClick(e) {
 		var isInput = self.element.contains(e.target) || e.target === self.input || e.target === self.altInput;
->>>>>>> chmln/gh-pages
 
 		if (self.isOpen && !isCalendarElem(e.target) && !isInput) {
 			self.close();
@@ -621,21 +586,10 @@ function Flatpickr(element, config) {
 		}
 	}
 
-<<<<<<< HEAD
-	function getDateFromElement(el) {
-		return new Date(self.currentYear, self.currentMonth + el.classList.contains("nextMonthDay") - el.classList.contains("prevMonthDay"), el.textContent);
-	}
-
-	function onMouseOver(e) {
-		if (self.selectedDates.length !== 1 || !e.target.classList.contains("flatpickr-day")) return;
-
-		var hoverDate = getDateFromElement(e.target),
-=======
 	function onMouseOver(e) {
 		if (self.selectedDates.length !== 1 || !e.target.classList.contains("flatpickr-day")) return;
 
 		var hoverDate = e.target.dateObj,
->>>>>>> chmln/gh-pages
 		    rangeStartDate = Math.min(hoverDate.getTime(), self.selectedDates[0].getTime()),
 		    rangeEndDate = Math.max(hoverDate.getTime(), self.selectedDates[0].getTime()),
 		    containsDisabled = false;
@@ -647,11 +601,7 @@ function Flatpickr(element, config) {
 			}
 		}
 
-<<<<<<< HEAD
-		for (var timestamp = getDateFromElement(self.days.childNodes[0]).getTime(), i = 0; i < 42; i++, timestamp += self.utils.duration.DAY) {
-=======
 		for (var timestamp = self.days.childNodes[0].dateObj.getTime(), i = 0; i < 42; i++, timestamp += self.utils.duration.DAY) {
->>>>>>> chmln/gh-pages
 			if (timestamp < self.minRangeDate.getTime() || timestamp > self.maxRangeDate.getTime()) {
 				self.days.childNodes[i].classList.add("notAllowed");
 				self.days.childNodes[i].classList.remove("inRange");
@@ -691,7 +641,7 @@ function Flatpickr(element, config) {
 		triggerEvent("Open");
 	}
 	function parseConfig() {
-		var boolOpts = ["utc", "wrap", "weekNumbers", "allowInput", "clickOpens", "time_24hr", "enableTime", "noCalendar", "altInput", "shorthandCurrentMonth", "inline", "static", "enableSeconds", "disableMobile"];
+		var boolOpts = ["utc", "wrap", "weekNumbers", "allowInput", "clickOpens", "time_24hr", "enableTime", "noCalendar", "altInput", "shorthandCurrentMonth", "inline", "static", "enableSeconds", "disableMobile", "forceUp", "forceDown"];
 		self.config = Object.create(Flatpickr.defaultConfig);
 		var userConfig = _extends({}, self.instanceConfig, self.element.dataset || {});
 
@@ -775,6 +725,7 @@ function Flatpickr(element, config) {
 	}
 
 	function positionCalendar() {
+
 		var calendarHeight = self.calendarContainer.offsetHeight,
 		    input = self.altInput || self.input,
 		    inputBounds = input.getBoundingClientRect(),
@@ -783,7 +734,7 @@ function Flatpickr(element, config) {
 		var top = void 0,
 		    left = window.pageXOffset + inputBounds.left;
 
-		if (distanceFromBottom < calendarHeight) {
+		if ((distanceFromBottom < calendarHeight || self.config.forceUp) && !self.config.forceDown) {
 			top = window.pageYOffset - calendarHeight + inputBounds.top - 2;
 			self.calendarContainer.classList.remove("arrowTop");
 			self.calendarContainer.classList.add("arrowBottom");
@@ -809,11 +760,6 @@ function Flatpickr(element, config) {
 
 	function selectDate(e) {
 		if (self.config.allowInput && e.which === 13 && e.target === (self.altInput || self.input)) return self.setDate((self.altInput || self.input).value), e.target.blur();
-<<<<<<< HEAD
-
-		if (!e.target.classList.contains("flatpickr-day") || e.target.classList.contains("disabled") || e.target.classList.contains("notAllowed")) return;
-=======
->>>>>>> chmln/gh-pages
 
 		if (!e.target.classList.contains("flatpickr-day") || e.target.classList.contains("disabled") || e.target.classList.contains("notAllowed")) return;
 
@@ -822,10 +768,7 @@ function Flatpickr(element, config) {
 
 		if (self.config.mode === "single") {
 			self.selectedDates = [selectedDate];
-<<<<<<< HEAD
-=======
 
->>>>>>> chmln/gh-pages
 			if (!self.config.enableTime) self.close();
 		} else if (self.config.mode === "multiple") {
 			var selectedIndex = isDateSelected(selectedDate);
@@ -896,11 +839,7 @@ function Flatpickr(element, config) {
 		}
 
 		self.selectedDates = self.selectedDates.filter(function (d) {
-<<<<<<< HEAD
-			return d instanceof Date && isEnabled(d);
-=======
 			return d instanceof Date && d.getTime() && isEnabled(d);
->>>>>>> chmln/gh-pages
 		});
 
 		var initialDate = self.selectedDates.length ? self.selectedDates[0] : self.config.minDate || self.now;
@@ -1034,11 +973,7 @@ function Flatpickr(element, config) {
 		self.input.classList.add("flatpickr-input");
 		if (self.config.altInput) {
 			// replicate self.element
-<<<<<<< HEAD
-			self.altInput = createElement(self.input.nodeName, "flatpickr-input " + self.input.className + " " + self.config.altInputClass);
-=======
 			self.altInput = createElement(self.input.nodeName, "flatpickr-input " + " " + self.config.altInputClass);
->>>>>>> chmln/gh-pages
 			self.altInput.placeholder = self.input.placeholder;
 			self.altInput.type = "text";
 
@@ -1113,15 +1048,8 @@ function Flatpickr(element, config) {
 	}
 
 	function isDateSelected(date) {
-<<<<<<< HEAD
-		if (self.selectedDates.length) {
-			for (var i = 0; i < self.selectedDates.length; i++) {
-				if (equalDates(self.selectedDates[i], date)) return "" + i;
-			}
-=======
 		for (var i = 0; i < self.selectedDates.length; i++) {
 			if (equalDates(self.selectedDates[i], date)) return "" + i;
->>>>>>> chmln/gh-pages
 		}
 
 		return false;
@@ -1169,12 +1097,8 @@ function Flatpickr(element, config) {
 		switch (self.config.mode) {
 			case "single":
 				self.input.value = formatDate(self.config.dateFormat, latestSelectedDateObj());
-<<<<<<< HEAD
-				if (self.altInput) self.altInput.value = formatDate(self.config.altFormat, latestSelectedDateObj());
-=======
 				if (self.config.altInput) self.altInput.value = formatDate(self.config.altFormat, latestSelectedDateObj());
 
->>>>>>> chmln/gh-pages
 				break;
 
 			case "multiple":
@@ -1483,21 +1407,6 @@ Date.prototype.fp_toUTC = function () {
 	return newDate;
 };
 
-<<<<<<< HEAD
-Flatpickr.prototype.getWeek = function (givenDate) {
-	var date = new Date(givenDate.getTime());
-	date.setHours(0, 0, 0, 0);
-
-	// Thursday in current week decides the year.
-	date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
-	// January 4 is always in week 1.
-	var week1 = new Date(date.getFullYear(), 0, 4);
-	// Adjust to Thursday in week 1 and count number of weeks from date to week1.
-	return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
-};
-
-=======
->>>>>>> chmln/gh-pages
 // IE9 classList polyfill
 if (!("classList" in document.documentElement) && Object.defineProperty && typeof HTMLElement !== "undefined") {
 	Object.defineProperty(HTMLElement.prototype, "classList", {

@@ -850,7 +850,7 @@ function Flatpickr(element, config) {
 	}
 	function parseConfig() {
 		var boolOpts = [
-			"utc", "wrap", "weekNumbers", "allowInput", "clickOpens", "time_24hr", "enableTime", "noCalendar", "altInput", "shorthandCurrentMonth", "inline", "static", "enableSeconds", "disableMobile"
+			"utc", "wrap", "weekNumbers", "allowInput", "clickOpens", "time_24hr", "enableTime", "noCalendar", "altInput", "shorthandCurrentMonth", "inline", "static", "enableSeconds", "disableMobile", "forceUp", "forceDown"
 		];
 		self.config = Object.create(Flatpickr.defaultConfig);
 		let userConfig = Object.assign({}, self.instanceConfig, self.element.dataset || {});
@@ -960,6 +960,7 @@ function Flatpickr(element, config) {
 	}
 
 	function positionCalendar() {
+
 		const calendarHeight = self.calendarContainer.offsetHeight,
 			input = (self.altInput || self.input),
 			inputBounds = input.getBoundingClientRect(),
@@ -968,7 +969,7 @@ function Flatpickr(element, config) {
 		let top,
 			left = (window.pageXOffset + inputBounds.left);
 
-		if (distanceFromBottom < calendarHeight) {
+		if (((distanceFromBottom < calendarHeight) || self.config.forceUp) && !self.config.forceDown) {
 			top = (window.pageYOffset - calendarHeight + inputBounds.top) - 2;
 			self.calendarContainer.classList.remove("arrowTop");
 			self.calendarContainer.classList.add("arrowBottom");
