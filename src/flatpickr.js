@@ -1276,6 +1276,7 @@ function Flatpickr(element, config) {
 		if (event === "Change") {
 			try {
 				self.input.dispatchEvent(new Event("change", { "bubbles": true }));
+				self.input.dispatchEvent(new Event("input", { "bubbles": true }));
 			}
 
 			catch(e) {
