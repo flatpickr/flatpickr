@@ -249,6 +249,9 @@ function Flatpickr(element, config) {
 			}
 
 		}
+		else if (self.config.appendTo && self.config.appendTo.nodeType)
+			self.config.appendTo.appendChild(self.calendarContainer);
+
 		else
 			document.body.appendChild(self.calendarContainer);
 	}
@@ -981,7 +984,7 @@ function Flatpickr(element, config) {
 			self.calendarContainer.classList.add("arrowTop");
 		}
 
-		if (!self.config.inline && !self.config.static) {
+		if (!self.config.inline && !self.config.static && !self.config.appendTo) {
 			self.calendarContainer.style.top = `${top}px`;
 			self.calendarContainer.style.left = `${left}px`;
 		}
