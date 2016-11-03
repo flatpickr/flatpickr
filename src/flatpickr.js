@@ -713,7 +713,8 @@ function Flatpickr(element, config) {
 	function onKeyDown(e) {
 		if (self.isOpen) {
 			switch (e.which) {
-				case 13:
+				case 9: // tab
+				case 13: // return
 					if (self.timeContainer && self.timeContainer.contains(e.target))
 						updateValue();
 
@@ -722,17 +723,17 @@ function Flatpickr(element, config) {
 
 					break;
 
-				case 27:
+				case 27: // escape
 					self.clear();
 					self.close();
 					break;
 
-				case 37:
+				case 37: // left
 					if (e.target !== self.input & e.target !== self.altInput)
 						changeMonth(-1);
 					break;
 
-				case 38:
+				case 38: // up
 					e.preventDefault();
 
 					if (self.timeContainer && self.timeContainer.contains(e.target))
@@ -745,12 +746,12 @@ function Flatpickr(element, config) {
 
 					break;
 
-				case 39:
+				case 39: // right
 					if (e.target !== self.input & e.target !== self.altInput)
 						changeMonth(1);
 					break;
 
-				case 40:
+				case 40: // down
 					e.preventDefault();
 					if (self.timeContainer && self.timeContainer.contains(e.target))
 						updateTime(e);
@@ -998,7 +999,7 @@ function Flatpickr(element, config) {
 
 	function selectDate(e) {
 		if (
-			self.config.allowInput && e.which === 13 &&	(e.target === (self.altInput || self.input))
+			self.config.allowInput && ((e.which === 13) || (e.which === 9)) &&	(e.target === (self.altInput || self.input))
 		)
 			return self.setDate((self.altInput || self.input).value), e.target.blur();
 
