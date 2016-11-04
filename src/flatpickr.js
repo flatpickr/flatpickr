@@ -72,7 +72,7 @@ function Flatpickr(element, config) {
 	}
 
 	function setHoursFromInputs(){
-		if (!self.config.enableTime || !self.selectedDates.length)
+		if (!self.config.enableTime)
 			return;
 
 		let hours = (parseInt(self.hourElement.value, 10) || 0),
@@ -81,7 +81,8 @@ function Flatpickr(element, config) {
 				? (60 + (parseInt(self.secondElement.value, 10)) || 0) % 60
 				: 0;
 
-		if (self.amPM) hours = (hours % 12) + (12 * (self.amPM.innerHTML === "PM"));
+		if (self.amPM)
+			hours = (hours % 12) + 12 * (hours === 12) + (12 * (self.amPM.innerHTML === "PM"));
 
 		setHours(hours, minutes, seconds);
 	}
@@ -95,7 +96,8 @@ function Flatpickr(element, config) {
 	}
 
 	function setHours(hours, minutes, seconds) {
-		self.selectedDates[self.selectedDates.length - 1].setHours(hours % 24, minutes, seconds || 0, 0);
+		if (self.selectedDates.length)
+			self.selectedDates[self.selectedDates.length - 1].setHours(hours % 24, minutes, seconds || 0, 0);
 
 		if (!self.config.enableTime)
 			return;
