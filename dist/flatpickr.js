@@ -70,7 +70,7 @@ function Flatpickr(element, config) {
 		    minutes = (60 + (parseInt(self.minuteElement.value, 10) || 0)) % 60,
 		    seconds = self.config.enableSeconds ? (60 + parseInt(self.secondElement.value, 10) || 0) % 60 : 0;
 
-		if (self.amPM) hours = hours % 12 + 12 * (hours === 12) + 12 * (self.amPM.innerHTML === "PM");
+		if (self.amPM) hours = hours % 12 + 12 * (self.amPM.innerHTML === "PM");
 
 		setHours(hours, minutes, seconds);
 	}
@@ -1188,6 +1188,8 @@ function Flatpickr(element, config) {
 		if (e.type === "wheel") newValue = value + step * Math.max(-1, Math.min(1, e.wheelDelta || -e.deltaY));else if (e.type === "keydown") newValue = value + step * (e.which === 38 ? 1 : -1);
 
 		if (newValue <= min) newValue = max - step;else if (newValue >= max) newValue = min + step;
+
+		if (self.amPM && (value === 11 && newValue === 12 || value === 12 && newValue === 11)) self.amPM.textContent = self.amPM.innerHTML === "PM" ? "AM" : "PM";
 
 		e.target.value = self.pad(newValue);
 	}

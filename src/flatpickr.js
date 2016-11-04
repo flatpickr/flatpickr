@@ -82,7 +82,7 @@ function Flatpickr(element, config) {
 				: 0;
 
 		if (self.amPM)
-			hours = (hours % 12) + 12 * (hours === 12) + (12 * (self.amPM.innerHTML === "PM"));
+			hours = (hours % 12) + (12 * (self.amPM.innerHTML === "PM"));
 
 		setHours(hours, minutes, seconds);
 	}
@@ -1469,6 +1469,9 @@ function Flatpickr(element, config) {
 
 		else if (newValue >= max)
 			newValue = min + step;
+
+		if (self.amPM && ((value === 11 && newValue === 12) || (value === 12 && newValue === 11)))
+			self.amPM.textContent = self.amPM.innerHTML === "PM" ? "AM" : "PM";
 
 		e.target.value = self.pad(newValue);
 	}
