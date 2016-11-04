@@ -1,6 +1,6 @@
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 /*! flatpickr v2.0, @license MIT */
 function Flatpickr(element, config) {
@@ -66,9 +66,11 @@ function Flatpickr(element, config) {
 	function setHoursFromInputs() {
 		if (!self.config.enableTime) return;
 
-		var hours = (parseInt(self.hourElement.value, 10) || 0) + 12 * (!self.config.time_24hr && self.amPM.innerHTML === "PM"),
+		var hours = parseInt(self.hourElement.value, 10) || 0,
 		    minutes = (60 + (parseInt(self.minuteElement.value, 10) || 0)) % 60,
 		    seconds = self.config.enableSeconds ? (60 + parseInt(self.secondElement.value, 10) || 0) % 60 : 0;
+
+		if (self.amPM) hours = hours % 12 + 12 * (self.amPM.innerHTML === "PM");
 
 		setHours(hours, minutes, seconds);
 	}
