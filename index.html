@@ -1,138 +1,55 @@
-<!DOCTYPE html><html lang="en"><head><title>flatpickr - lightweight datetimepicker &amp; calendar</title><meta charset="utf-8"><meta http-equiv="x-ua-compatible" content="ie=edge"><link rel="icon" type="image/png" href="favicon.png"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=yes"><script src="dist/flatpickr.js"></script><script>Flatpickr.l10n.firstDayOfWeek = 1;</script><link rel="stylesheet" type="text/css" href="assets/style.min.css"><link id="cal_style" rel="stylesheet" type="text/css" href="dist/flatpickr.min.css"></head><body><div class="row"><div class="col col-3 sidebar"><div class="sidebar-inner"><section id="logo"><h1>flatpickr</h1><h5 class="light">A lightweight &amp; powerful datetimepicker</h5></section><section id="nav"><section><h2>Getting Started</h2><a href="#getting-started">Installing</a><a href="#env-browser">Using in a browser</a><a href="#env-bundle">Using with Webpack/Browserify/etc</a></section><section><h2>Examples</h2><a href="#example-basic">Basic</a><a href="#example-datetime">Datetime Picker</a><a href="#example-altInput">Human-readable Dates</a><a href="#example-minMaxDate">minDate and maxDate<div class="desc">limit the range of available dates</div></a><a href="#example-preload">Preloading Dates<div class="desc">working with existing dates</div></a><a href="#example-strap">Custom elements and input groups</a><a href="#disable">Disabling Dates<div class="desc">incl. by intervals and functions</div></a><a href="#enable">Enabling dates<div class="desc">disables all except the ones you specify</div></a><a href="#example-inline">Inline Calendar</a><a href="#example-fiscal">Fiscal Calendar</a></section><section><h2>Events API</h2><a href="#event-onChange"><code>onChange</code></a><a href="#event-onClose"><code>onClose</code></a><a href="#event-onOpen"><code>onOpen</code></a><a href="#event-onValueUpdate"><code>onValueUpdate</code></a><a href="#event-onDayCreate"><code>onDayCreate</code></a></section><section><h2>API</h2><a href="#api-changeMonth"><code>changeMonth()</code><div class="desc">Changes the current month.</div></a><a href="#api-clear"><code>clear()</code></a><a href="#api-close"><code>close()</code></a><a href="#api-destroy"><code>destroy()</code></a><a href="#api-formatDate"><code>formatDate(formatStr, dateObj)</code></a><a href="#api-jumpToDate"><code>jumpToDate(date)</code></a><a href="#api-open"><code>open()</code></a><a href="#api-parseDate"><code>parseDate()</code></a><a href="#api-redraw"><code>redraw()</code></a><a href="#api-set"><code>set()</code></a><a href="#api-setDate"><code>setDate(date)</code></a><a href="#api-toggle"><code>toggle()</code></a></section><section><h2>Options</h2><a href="#options">Options</a></section><section><h2>Date/Time Format Characters</h2><a href="#formatChars">Date/Time Format Characters</a></section></section></div></div><div class="col col-9 content"><div class="wrapper"><section><h1>Meet Flatpickr</h1><p class="light big">The last datetime picker you'll ever need.</p><input class="intros" type="text" style="display:none"></section><section id="getting-started"><section><h2>Getting Started</h2><div class="row"><div class="col"><code>npm install flatpickr</code><br><code>bower install flatpickr-calendar</code></div><div class="col text-right"><a class="btn" href="https://github.com/chmln/flatpickr/archive/gh-pages.zip" type="success"><span>Download&nbsp;</span><i class="icon-angle-double-down"></i></a></div></div></section><section><h3 id="env-browser">Flatpickr in browsers</h3><p><pre><code>&lt;link rel="stylesheet" href=".../flatpickr.min.css"&gt;
-&lt;script src=".../flatpickr.min.js"&gt;&lt;/script&gt;
-</code></pre></p><p>The latest version of Flatpickr can also be loaded from a CDN</p><pre><code>&lt;link rel="stylesheet" href="https://unpkg.com/flatpickr/dist/flatpickr.min.css"&gt;
-&lt;script src="https://unpkg.com/flatpickr"&gt;&lt;/script&gt;
-</code></pre><p>Then,<pre><code>flatpickr(".selector", {}); // [Flatpickr, Flatpickr, ...]
-document.getElementById("myID").flatpickr(config); // Flatpickr
-let calendar = new Flatpickr(element, config); // Flatpickr
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Flatpickr</title>
+	<link rel="stylesheet" href="dist/flatpickr.min.css">
+	<script src="dist/flatpickr.js"></script>
+	<style>
 
+.Aligner {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    height: 50vh;
 
-$(".selector").flatpickr({}); // jQuery
-</code></pre></p></section><section><h3 id="env-bundle">Flatpickr as a module</h3><p><pre><code>const Flatpickr = require("flatpickr");
-// ...
-new Flatpickr(element, config);</code></pre></p></section></section><h2>Examples</h2><section id="example-basic"><h4>Basic</h4><p><pre><code>&lt;input class="flatpickr" type="text" placeholder="Select Date.."&gt;
-</code></pre><pre><code class="js">flatpickr(".flatpickr");</code></pre></p><input class="flatpickr" type="text" placeholder="Select Date.."></section><section id="example-datetime"><h4>Make it a datetime picker</h4><pre><code class="js">flatpickr(".flatpickr", {
-    enableTime: true
-});
-</code></pre><input class="flatpickr" type="text" placeholder="Select Date.." data-enable-time="true"></section><section id="example-altInput"><h4>Display a human-readable date</h4><pre><code class="js">flatpickr(".flatpickr", {
-    enableTime: true,
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center
+}
 
-    // create an extra input solely for display purposes
-    altInput: true,
-    altFormat: "F j, Y h:i K"
-});
-</code></pre><input class="flatpickr" type="text" placeholder="Select Date.." data-alt-input="true" data-enable-time="true" data-alt-format="F j, Y h:i K"></section><section id="example-minMaxDate"><h4>Limit the range of available dates with&nbsp;<code>minDate</code>and&nbsp;<code>maxDate</code></h4><p>minDate and maxDate accept Date objects, date strings, timestamps, and the shortcut&nbsp;<code>"today"</code></p><pre><code class="js">flatpickr(".flatpickr", {
-    minDate: new Date(), // "today" / "2016-12-20" / 1477673788975
-    maxDate: "2016-12-20",
-    enableTime: true,
+.Aligner-item {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    margin-left: -250px;
+}
 
-    // create an extra input solely for display purposes
-    altInput: true,
-    altFormat: "F j, Y h:i K"
-});
-</code></pre><input class="flatpickr" type="text" placeholder="Select Date.." data-alt-input="true" data-enable-time="true" data-alt-format="F j, Y h:i K" data-min-date="today" data-max-date="2016-12-20"></section><section id="example-preload"><h4>Preloading Dates</h4><p>Flatpickr can work with existing date strings, or date objects.</p><p>Input values get parsed automatically.</p><p><pre><code>&lt;input type="text", value="2016-10-20"&gt;
-</code></pre><input class="flatpickr" type="text" value="2016-10-20"></p><p>To preload a Date object, timestamp, or otherwise supply a date string, use the<code>defaultDate</code>&nbsp;option.<br><div class="light muted">Timestamps are recommended due to their lack of ambiguity in parsing.</div></p><p><pre><code class="js">flatpickr("#example-defaultDate", {
-    defaultDate: 1477697199863, // Date objects and date strings are also accepted
-    enableTime: true
-});
-</code></pre><input id="example-defaultDate" type="text"></p><hr><h4 class="light">UTC mode</h4><p>By default, all dates in javascript are converted to a local time. However, you can choose to leave the dates in UTC. flatpickr can convert any given dates to UTC and select a datetime in UTC with a simple switch.</p><pre><code class="js">flatpickr("#utc", {
-    utc: true,
-    defaultDate: "2016-12-27T16:16:22.585Z",
-    enableTime: true,
-});
-</code></pre><p><input class="flatpickr" type="text" data-utc="true" data-default-date="2016-12-27T16:16:22.585Z" data-enable-time="true"></p></section><section id="example-strap"><h4>Custom elements and input groups</h4><p>flatpickr can parse an input group of textboxes and buttons, common in&nbsp;<strong>Bootstrap</strong> and other frameworks.</p><p>This permits additional markup, as well as custom elements to trigger the state of the calendar.</p><p>Mark your input element with<code>data-input</code>(mandatory), and any additional buttons with<code>data-toggle</code>,<code>data-open</code>,<code>data-close</code>, or<code>data-clear</code>.</p><pre><code>&lt;p class="flatpickr"&gt;
-    &lt;input placeholder="Pick date" data-input&gt;
+	</style>
+</head>
+<body>
 
-    &lt;a class="input-button" data-toggle&gt;&lt;i class="icon-calendar"&gt;&lt;/i&gt;&lt;/a&gt;
-    &lt;a class="input-button" data-clear&gt;&lt;i class="icon-close"&gt;&lt;/i&gt;&lt;/a&gt;
-&lt;/p&gt;
-</code></pre><pre><code class="js">flatpickr(".flatpickr", {
-    wrap: true,
-    clickOpens: false // disable opening calendar by clicking on input
-});
-</code></pre><p class="flatpickr input-group" data-wrap="true" data-click-opens="false"><input type="text" data-input="" placeholder="Pick date"><a class="input-btn" data-toggle=""><i class="icon-calendar"></i></a><a class="input-btn" data-clear=""><i class="icon-close"></i></a><div style="clear:both"></div></p></section><section id="disable"><h4>Disabling dates</h4><p>Disable a date interval, or a specific date.</p><pre><code>document.getElementById("#disableRange").flatpickr({
-    disable: [
-        { from: "2016-08-16", to: "2016-08-19" },
-        "2016-08-24",
-        new Date().fp_incr(30) // 30 days from now
-    ]
-});
-</code></pre><p><input id="disableRange" type="text" placeholder="Select date"></p><p>Boolean functions are also supported. This allows fine-grained control over every single date, flexible enough for any use-case.</p><pre><code>document.getElementById("#disableOddDays").flatpickr({
-    disable: [
-        function(date){ // disable odd days
-            return date.getDate()%2 &gt; 0;
-        }
-    ]
-});
-</code></pre><p><input id="disableOddDays" type="text" placeholder="Select date"></p></section><section class="example" id="enable" data-desc="Disabling dates"><h4>Enabling dates</h4><p>Use the&nbsp;<code>enable[]</code>&nbsp;option to disable all dates except the ones you specify.</p><p>Similar to&nbsp;<code>disable[]</code>, accepts date strings, intervals, Date objects, or functions.</p><pre><code class="js">document.getElementById("#enableNextSeven").flatpickr({
-    enable: [
-        {
-            from: "today",
-            to: new Date().fp_incr(7) // 7 days from now
-        }
-    ]
-});
-</code></pre><p><input id="enableNextSeven" type="text" placeholder="Select date"></p><p>For instance, to enable only business days of 2016:</p><pre><code class="js">document.getElementById("#enableCustom").flatpickr({
-    enable: [
-        function(dateObj){
-            // dateObj is a JavaScript Date
-            return dateObj.getDay() %6 !== 0 && dateObj.getFullYear() === 2016;
-        }
-    ]
-});
-</code></pre><p><input id="enableCustom" type="text" placeholder="Select date"></p></section><section id="example-inline"><h4>Inline Calendar</h4><pre><code class="js">flatpickr("#inline", {
-    inline: true, // show the calendar inline
-    weekNumbers: true // show week numbers
-})
-</code></pre><p><input class="flatpickr" type="text" data-inline="true" data-week-numbers="true" placeholder="Select date"></p></section><section id="example-fiscal"><h4>Fiscal Calendar</h4><p>You may override the<code>getWeek()</code>function, used for calculating a week number, for various purposes. A fiscal year is used for calculating yearly financial statements. In this example, we will use override the<code>getWeek()</code>function to display the fiscal term instead of the usual week numbers.</p><pre><code>&lt;input type='text' id="fiscal" placeholder="Fiscal Calendar"&gt;
-</code></pre><pre><code>document.getElementById("fiscal").flatpickr({
-    weekNumbers: true,
-    getWeek: function(givenDate){
-        var checkDate = new Date(givenDate.getTime());
-        checkDate.setDate(checkDate.getDate() + 4 - (checkDate.getDay() || 7));
-        var time = checkDate.getTime();
-        checkDate.setMonth(7);
-        checkDate.setDate(28);
+	<div class=Aligner>
+		<div class=Aligner-item>
+			<input type="text" placeholder="Select Date.." id=playground>
+		</div>
+	</div>
 
-        var week = (Math.floor(Math.round((time - checkDate) / 86400000) / 7) + 2);
-        if (week < 1) {
-            week = 52 + week;
-        }
+	<script>
+		var config = {
 
-        return 'FW' + ("0" + week).slice(-2);
-    }
-});
-</code></pre><p><input id="fiscal" type="text" placeholder="Calendar w/ fiscal periods"></p></section><hr><section id="eventsAPI"><h2>Events</h2><p>Flatpickr has 5 event hooks for the most common and useful actions. For each hook, you may specify a single function, or an array of functions. Callback arguments are explained below.</p><p><code>selectedDates</code>&nbsp;is an array of Date objects selected by the user. When there are no dates selected, the array is empty.</p><p><code>dateStr</code>&nbsp;is a string representation of the latest selected Date object by the user. The string is formatted as per the<code>dateFormat</code>option.</p><p><code>instance</code>&nbsp;is the Flatpickr object, containing various methods and properties.</p><h4 class="light">Hooks</h4><p id="event-onChange"><h4><code>onChange</code></h4><p>onChange gets triggered when the user selects a date, or changes the time on a selected date.</p></p><p id="event-onOpen"><h4><code>onOpen</code></h4><p>onOpen gets triggered when the calendar is opened.</p></p><p id="event-onClose"><h4><code>onClose</code></h4><p>onClose gets triggered when the calendar is closed.</p></p><pre><code>document.getElementById("events-api-example").flatpickr({
-    onChange: function(selectedDates, dateStr, instance) {
-        ...
-    },
-    onOpen: function(selectedDates, dateStr, instance){
-        ...
-    },
-    onClose: function(selectedDates, dateStr, instance){
-        ...
-    }
-});
-</code></pre><p id="events" style="height: 80px; overflow-y: auto"></p><p><input id="events-api-example" type="text" placeholder="Select date"></p><hr><p id="event-onReady"><h4><code>onReady</code></h4><p>onReady gets triggered once the calendar is in a ready state.</p></p><p id="event-onValueUpdate"><h4><code>onValueUpdate</code></h4><p>onValueUpdate gets triggered when the input value is updated with a new date string.</p></p><h4 id="event-onDayCreate">onDayCreate()</h4><p>Take full control of every date cell with the<code>onDayCreate()</code>hook.</p><pre><code class="js">flatpickr("#dayCreate", {
-    onDayCreate: function(dObj, dStr, fp, dayElem){
-        // utilize fp.currentYear, fp.currentMonth, dayElem.textContent
-        if (Math.random() &lt; 0.15)
-            dayElem.innerHTML += "&lt;span class='event'&gt;&lt;/span&gt;";
+		};
 
-        else if (Math.random() &gt; 0.85)
-            dayElem.innerHTML += "&lt;span class='event busy'&gt;&lt;/span&gt;";
-    }
-});
-</code></pre><p><input id="dayCreate" type="text" placeholder="Select date"></p><hr></section><div id="API"><h2>API</h2><p>These methods are exposed on every Flatpickr instance, letting you control the calendar programmatically.</p></div><section id="api-changeMonth"><h4><code>changeMonth(monthNum, is_offset = true)</code></h4><p>Changes the current month.</p><pre><code class="js">let calendar = new Flatpickr(yourElement, config);
-calendar.changeMonth(1); // go a month ahead
-calendar.changeMonth(-2); // go two months back
-
-calendar.changeMonth(0, false); // go to January
-</code></pre></section><section id="api-clear"><h4><code>clear()</code></h4><p>Resets the selected dates (if any) and clears the input.</p></section><section id="api-close"><h4><code>close()</code></h4><p>Closes the calendar.</p></section><section id="api-destroy"><h4><code>destroy()</code></h4><p>Destroys the Flatpickr instance, cleans up - removes event listeners, restores inputs, etc.</p></section><section id="api-formatDate"><h4><code>formatDate(formatStr, dateObj)</code></h4><p><code>formatStr</code>&nbsp; is a string consisting of formatting tokens, and&nbsp;<code>dateObj</code>&nbsp; is a Date.</p><h5 class="light">Return Value</h5><p>A string representation of<code>dateObj</code>,&nbsp; formatted as per&nbsp;<code>formatStr</code></p></section><section id="api-jumpToDate"><h4><code>jumpToDate(date)</code></h4><p>Sets the calendar view to the year and month of<code>date</code>, which  can be a date string, a Date, or nothing.</p><p>If<code>date</code>is undefined, the view is set to the latest selected date, the&nbsp;<code>minDate</code>, or today's date</p></section><section id="api-open"><h4><code>open()</code></h4><p>Shows/opens the calendar.</p></section><section id="api-parseDate"><h4><code>parseDate(date)</code></h4><p>Parses a date string or a timestamp, and returns a Date.</p></section><section id="api-redraw"><h4><code>redraw()</code></h4><p>Redraws the calendar. Shouldn't be necessary in most cases.</p></section><section id="api-set"><h4><code>set(option, value)</code></h4><p>Sets a config option&nbsp;<code>option</code>to&nbsp;<code>value</code>, redrawing the calendar and updating the current view, if necessary.</p></section><section id="api-setDate"><h4><code>setDate(date)</code></h4><p>Sets the current selected date(s) to<code>date</code>, which can be a date string, a Date, or an<code>Array</code>&nbsp;of the aforementioned</p></section><section id="api-toggle"><h4><code>toggle()</code></h4><p>Shows/opens the calendar if its closed, hides/closes it otherwise</p></section><section id="options"><h2>Options</h2><p><strong>Protip:</strong><u>all</u> of the string/boolean config options can also be supplied using data attributes, e.g. data-min-date, data-default-date, data-date-format etc.</p><table class="options"><thead><tr><th>Config Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td>altFormat</td><td>string</td><td>&quot;F j, Y&quot;</td><td>Exactly the same as date format, but for the altInput field</td></tr><tr><td>altInput</td><td>Boolean</td><td>false</td><td>Show the user a readable date (as per altFormat), but return something totally different to the server.</td></tr><tr><td>altInputClass</td><td>String</td><td>&quot;&quot;</td><td>This class will be added to the input element created by the altInput option. Helpful if input elements are styled using classes. Bootstrap users will want to specify<code>form-control</code>here.</td></tr><tr><td>allowInput</td><td>boolean</td><td>false</td><td>Allows the user to enter a date directly input the input field. By default, direct entry is disabled.</td></tr><tr><td>clickOpens</td><td>boolean</td><td>true</td><td>Clicking on the input opens the date (time) picker. Disable this if you wish to open the calendar manually with<code>.open()</code></td></tr><tr><td>dateFormat</td><td>string</td><td>&quot;Y-m-d&quot;</td><td>A string of characters which are used to define how the date will be displayed in the input box. The supported characters are defined in the table below.</td></tr><tr><td>defaultDate</td><td>String/Date</td><td>null</td><td>Set the initial selected date. Same as preloading a date string into an input&apos;s value attribute, but can also handle a Date object.</td></tr><tr><td>disable</td><td>array</td><td>[]</td><td>See&nbsp;<a href="#disable">Disabling dates</a></td></tr><tr><td>enable</td><td>array</td><td>[]</td><td>See&nbsp;<a href="#enable">Enabling dates</a></td></tr><tr><td>enableTime</td><td>boolean</td><td>false</td><td>Enables time picker</td></tr><tr><td>enableSeconds</td><td>boolean</td><td>false</td><td>Enables seconds in the time picker.</td></tr><tr><td>hourIncrement</td><td>integer</td><td>1</td><td>Adjusts the step for the hour input (incl. scrolling)</td></tr><tr><td>inline</td><td>boolean</td><td>false</td><td>Displays the calendar inline</td></tr><tr><td>maxDate</td><td>String/Date</td><td>null</td><td>The maximum date that a user can pick to.</td></tr><tr><td>minDate</td><td>String/Date</td><td>null</td><td>The minimum date that a user can start picking from.</td></tr><tr><td>minuteIncrement</td><td>integer</td><td>5</td><td>Adjusts the step for the minute input (incl. scrolling)</td></tr><tr><td>nextArrow</td><td>string</td><td><code>&gt;</code></td><td>Code for the arrow icon, used to switch months.</td></tr><tr><td>noCalendar</td><td>boolean</td><td>false</td><td>Hides the calendar. For use along with enableTime.</td></tr><tr><td>onChange</td><td>function, [functions]</td><td>null</td><td>Function(s) to trigger on every date selection. See&nbsp;<a href="#eventsAPI">Events API</a></td></tr><tr><td>onClose</td><td>function, [functions]</td><td>null</td><td>Function(s) to trigger on every time the calendar is closed. See&nbsp;<a href="#eventsAPI">Events API</a></td></tr><tr><td>onOpen</td><td>function, [functions]</td><td>null</td><td>Function(s) to trigger on every time the calendar is opened. See&nbsp;<a href="#eventsAPI">Events API</a></td></tr><tr><td>onReady</td><td>function, [functions]</td><td>null</td><td>Function to trigger when the calendar is ready. See&nbsp;<a href="#eventsAPI">Events API</a></td></tr><tr><td>parseDate</td><td>function</td><td>false</td><td>Function that expects a date string and must return a Date object</td></tr><tr><td>prevArrow</td><td>string</td><td><code>&lt;</code></td><td>Code for the left arrow icon.</td></tr><tr><td>shorthandCurrentMonth</td><td>boolean</td><td>false</td><td>Show the month using the shorthand version (ie, Sep instead of September).</td></tr><tr><td>static</td><td>boolean</td><td>false</td><td>Position the calendar inside the wrapper and next to the input element. (Leave<code>false</code>unless you know what you&apos;re doing.</td></tr><tr><td>time_24hr</td><td>boolean</td><td>false</td><td>Displays time picker in 24 hour mode without AM/PM selection when enabled.</td></tr><tr><td>utc</td><td>boolean</td><td>false</td><td>When true, dates will parsed, formatted, and displayed in UTC. It&apos;s recommended that date strings contain the timezone, but not necessary.</td></tr><tr><td>weekNumbers</td><td>boolean</td><td>false</td><td>Enables display of week numbers in calendar.</td></tr><tr><td>wrap</td><td>Boolean</td><td>false</td><td><a href="https://chmln.github.io/flatpickr/#strap">Custom elements and input groups</a></td></tr></tbody></table></section><section id="formatChars"><h2>Date Format Characters</h2><input class="big" id="dateFormatComposer" placeholder="Enter symbols" type="text"><span>&rarr;<span id="dateFormatOutput"></span></span><table class="table"><thead><tr><th>Character</th><th>Description</th><th>Example</th></tr></thead><tbody><tr><td>d</td><td>Day of the month, 2 digits with leading zeros</td><td>01 to 31</td></tr><tr><td>D</td><td>A textual representation of a day</td><td>Mon through Sun</td></tr><tr><td>l (lowercase &apos;L&apos;)</td><td>A full textual representation of the day of the week</td><td>Sunday through Saturday</td></tr><tr><td>j</td><td>Day of the month without leading zeros</td><td>1 to 31</td></tr><tr><td>J</td><td>Day of the month without leading zeros and ordinal suffix</td><td>1st, 2nd, to 31st</td></tr><tr><td>w</td><td>Numeric representation of the day of the week</td><td>0 (for Sunday) through 6 (for Saturday)</td></tr><tr><td>F</td><td>A full textual representation of a month</td><td>January through December</td></tr><tr><td>m</td><td>Numeric representation of a month, with leading zero</td><td>01 through 12</td></tr><tr><td>n</td><td>Numeric representation of a month, without leading zeros</td><td>1 through 12</td></tr><tr><td>M</td><td>A short textual representation of a month</td><td>Jan through Dec</td></tr><tr><td>U</td><td>The number of seconds since the Unix Epoch</td><td>1413704993</td></tr><tr><td>y</td><td>A two digit representation of a year</td><td>99 or 03</td></tr><tr><td>Y</td><td>A full numeric representation of a year, 4 digits</td><td>1999 or 2003</td></tr></tbody></table><h2>Time Format Characters</h2><table class="table"><thead><tr><th>Character</th><th>Description</th><th>Example</th></tr></thead><tbody><tr><td>H</td><td>Hours (24 hours)</td><td>00 to 23</td></tr><tr><td>h</td><td>Hours</td><td>1 to 12</td></tr><tr><td>i</td><td>Minutes</td><td>00 to 59</td></tr><tr><td>S</td><td>Seconds, 2 digits</td><td>00 to 59</td></tr><tr><td>s</td><td>Seconds</td><td>0, 1 to 59</td></tr><tr><td>K</td><td>AM/PM</td><td>AM or PM</td></tr></tbody></table><p></p><h3>Escaping date format characters</h3><p></p><p>To escape a character (if you need to use one of the reserved format characters above) use a double backslash:<code>\\</code></p><p>Example:</p><pre class="prettyprint">\\D\\a\\y \\p\\i\\c\\k\\e\\d: Y/m/d</pre><p>To get something like:</p><p><strong>Day picked: 2013/02/12</strong></p><p>If you do not escape the characters you would end up with something like this instead:</p><p><strong>Tuea13 picke12: 2013/02/12</strong></p><p>Which is probably not what you want...</p><p>Note:
-It&apos;s recommended that you escape all characters that you don&apos;t want accidentally converted to format characters in the future as others are added.</p></section></div></div></div><a href="https://github.com/chmln/flatpickr" target="_blank" class="github-corner" aria-label="View source on Github">
-<svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
-<path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
-<path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
-<path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path>
-</svg>
-</a><script src="assets/js/site.js"></script><script src="assets/highlight/highlight.pack.js" onload="initCode()"></script><script src="assets/js/table-of-contents.js"></script></body></html>
+		var calendar = flatpickr("#playground", config);
+		calendar.open();
+	</script>
+</body>
+</html>

@@ -1,24 +1,27 @@
 describe('flatpickr', () => {
 
 	const container = document.querySelector('.container');
-	let elem;
+	let elem, fp;
 
 	beforeEach(() => {
+		if (elem)
+			elem.parentNode.removeChild(elem);
+
+		if (fp)
+			fp.destroy();
+
 		elem = document.createElement("input");
 		document.body.appendChild(elem);
 	});
 
-	afterEach(() => {
-		elem.parentNode.removeChild(elem);
-	});
-
 	function createInstance(config) {
-		return new Flatpickr(elem, config);
+		fp = new Flatpickr(elem, config);
+		return fp;
 	}
 
 	describe("init", () => {
 		it("should parse minDate", () => {
-			const fp = createInstance({
+			createInstance({
 				minDate: "2016-02-27T16:16:22.585Z",
 			});
 
@@ -26,7 +29,7 @@ describe('flatpickr', () => {
 		});
 
 		it("should parse defaultDate", () => {
-			const fp = createInstance({
+			createInstance({
 				defaultDate: "2016-12-27T16:16:22.585Z",
 			});
 
@@ -65,7 +68,7 @@ describe('flatpickr', () => {
 		describe("date string parser", () => {
 			it('should parse timestamp', () => {
 
-				const fp = elem.flatpickr({
+				createInstance({
 					defaultDate: 1477111633771
 				});
 
@@ -77,7 +80,7 @@ describe('flatpickr', () => {
 
 			it('should parse "2016-10"', () => {
 
-				const fp = elem.flatpickr({
+				createInstance({
 					defaultDate: "2016-10"
 				});
 
@@ -88,7 +91,7 @@ describe('flatpickr', () => {
 
 			it('should parse "2016-10-20 3:30"', () => {
 
-				const fp = elem.flatpickr({
+				createInstance({
 					defaultDate: "2016-10-20 3:30"
 				});
 
@@ -102,7 +105,7 @@ describe('flatpickr', () => {
 
 			it('should parse ISO8601', () => {
 
-				const fp = elem.flatpickr({
+				createInstance({
 					defaultDate: "2007-03-04T21:08:12",
 					enableTime: true,
 					enableSeconds: true
@@ -123,7 +126,7 @@ describe('flatpickr', () => {
 			it('should parse "21:11:12"', () => {
 
 				elem.value = '21:11:12';
-				const fp = elem.flatpickr({
+				createInstance({
 					allowInput: true,
 					enableTime: true,
 					enableSeconds: true,
@@ -139,7 +142,7 @@ describe('flatpickr', () => {
 			it('should parse "11:59 PM"', () => {
 
 				elem.value = '11:59 PM';
-				const fp = elem.flatpickr({
+				createInstance({
 					allowInput: true,
 					enableTime: true,
 					noCalendar: true,
@@ -159,7 +162,7 @@ describe('flatpickr', () => {
 			it('should parse "3:05:03 PM"', () => {
 
 				elem.value = '3:05:03 PM';
-				const fp = elem.flatpickr({
+				createInstance({
 					allowInput: true,
 					enableTime: true,
 					enableSeconds: true,
@@ -184,8 +187,7 @@ describe('flatpickr', () => {
 
 	describe("API", () => {
 		it("set (option, value)", () => {
-
-			const fp = new Flatpickr(elem);
+			createInstance();
 			fp.set("minDate", "2016-10-20");
 
 			expect(fp.config.minDate).toBeDefined();
@@ -208,7 +210,7 @@ describe('flatpickr', () => {
 
 		it("setDate (date)", () => {
 
-			const fp = new Flatpickr(elem);
+			createInstance();
 			fp.setDate("2016-10-20 03:00");
 
 			expect(fp.selectedDates[0]).toBeDefined();
@@ -225,7 +227,7 @@ describe('flatpickr', () => {
 
 	describe("Internals", () => {
 		it("updateNavigationCurrentMonth()", () => {
-			const fp = new Flatpickr(elem, {
+			createInstance({
 				defaultDate: "2016-12-20"
 			});
 
@@ -240,18 +242,22 @@ describe('flatpickr', () => {
 		});
 
 		it("selectDate() + onChange() through GUI", () => {
-			const verifySelected = date => {
+			function verifySelected (date) {
+
 				expect(date).toBeDefined();
+
 
 				expect(date.getFullYear()).toEqual(2016);
 				expect(date.getMonth()).toEqual(9);
 				expect(date.getDate()).toEqual(10);
 			};
-			const fp = createInstance({
+
+			createInstance({
 				enableTime: true,
 				minDate: "2016-10-01",
 				onChange: (dates, datestr) => {
-					verifySelected(dates[0]);
+					if (dates.length)
+						verifySelected(dates[0]);
 				}
 			});
 
@@ -261,4 +267,10 @@ describe('flatpickr', () => {
 			verifySelected(fp.selectedDates[0]);
 		});
 	});
+
+	afterAll(() => {
+		fp.destroy();
+		elem.parentNode.removeChild(elem);
+	});
+
 });

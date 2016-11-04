@@ -12,9 +12,7 @@ const gulp = require("gulp"),
 const paths = {
 	style: "./src/style/flatpickr.styl",
 	script: "./src/flatpickr.js",
-	themes: "./src/style/themes/*.styl",
-	site_style: "./assets/style.styl",
-	site: "./site/index.pug"
+	themes: "./src/style/themes/*.styl"
 };
 
 function get_script_stream(){
@@ -62,34 +60,10 @@ gulp.task('themes', function(done){
 	done();
 });
 
-gulp.task('site_style', function(done){
-	gulp.src(paths.site_style)
-	.pipe(plumber())
-	.pipe(stylus())
-	.pipe(cssmin()).on('error', errorHandler)
-	.pipe(rename({ suffix: '.min'}))
-	.pipe(gulp.dest('assets'))
-	.pipe(livereload());
-
-	done();
-});
-
-gulp.task("site", function(done){
-	gulp.src(paths.site)
-		.pipe(plumber())
-		.pipe(pug())
-		.pipe(gulp.dest('./'))
-		.pipe(livereload());
-
-	done();
-});
-
 gulp.task('watch', function(done) {
 	livereload.listen();
 	gulp.watch('./src/style/**/*.styl', gulp.parallel('style', 'themes'));
 	gulp.watch(paths.script, gulp.series('script'));
-	gulp.watch(['./assets/**/*.styl'], gulp.series('site_style'));
-	gulp.watch('./site/**/*.pug', gulp.series("site"));
 	done();
 });
 
@@ -98,4 +72,4 @@ function errorHandler (error) {
 	console.log(error.toString());
 }
 
-gulp.task('default', gulp.parallel('script', 'style', 'themes', 'site', 'site_style', 'watch'));
+gulp.task('default', gulp.parallel('script', 'style', 'themes', 'watch'));
