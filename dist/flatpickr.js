@@ -170,7 +170,12 @@ function Flatpickr(element, config) {
 				});
 			}
 
-			if (self.amPM) self.amPM.addEventListener("click", updateTime);
+			if (self.amPM) {
+				self.amPM.addEventListener("click", function (e) {
+					updateTime(e);
+					self.triggerChange(e);
+				});
+			}
 		}
 	}
 
