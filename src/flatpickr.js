@@ -75,11 +75,13 @@ function Flatpickr(element, config) {
 		if (!self.config.enableTime || !self.selectedDates.length)
 			return;
 
-		let hours = (parseInt(self.hourElement.value, 10) || 0) + 12 * (!self.config.time_24hr && self.amPM.innerHTML === "PM"),
+		let hours = (parseInt(self.hourElement.value, 10) || 0),
 			minutes = (60 + (parseInt(self.minuteElement.value, 10) || 0)) % 60,
 			seconds = self.config.enableSeconds
 				? (60 + (parseInt(self.secondElement.value, 10)) || 0) % 60
 				: 0;
+
+		if (self.amPM) hours = (hours % 12) + (12 * (self.amPM.innerHTML === "PM"));
 
 		setHours(hours, minutes, seconds);
 	}
