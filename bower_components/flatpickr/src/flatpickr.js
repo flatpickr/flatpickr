@@ -1,4 +1,4 @@
-/*! flatpickr v2.0, @license MIT */
+/*! flatpickr v2.0.8, @license MIT */
 function Flatpickr(element, config) {
 	const self = this;
 
@@ -75,11 +75,14 @@ function Flatpickr(element, config) {
 		if (!self.config.enableTime)
 			return;
 
-		let hours = (parseInt(self.hourElement.value, 10) || 0) + 12 * (!self.config.time_24hr && self.amPM.innerHTML === "PM"),
+		let hours = (parseInt(self.hourElement.value, 10) || 0),
 			minutes = (60 + (parseInt(self.minuteElement.value, 10) || 0)) % 60,
 			seconds = self.config.enableSeconds
 				? (60 + (parseInt(self.secondElement.value, 10)) || 0) % 60
 				: 0;
+
+		if (self.amPM)
+			hours = (hours % 12) + (12 * (self.amPM.innerHTML === "PM"));
 
 		setHours(hours, minutes, seconds);
 	}
@@ -93,7 +96,8 @@ function Flatpickr(element, config) {
 	}
 
 	function setHours(hours, minutes, seconds) {
-		self.selectedDates[self.selectedDates.length - 1].setHours(hours % 24, minutes, seconds || 0, 0);
+		if (self.selectedDates.length)
+			self.selectedDates[self.selectedDates.length - 1].setHours(hours % 24, minutes, seconds || 0, 0);
 
 		if (!self.config.enableTime)
 			return;
@@ -104,7 +108,7 @@ function Flatpickr(element, config) {
 
 		self.minuteElement.value = self.pad(minutes);
 
-		if (!self.config.time_24hr)
+		if (!self.config.time_24hr && self.selectedDates.length)
 			self.amPM.textContent = latestSelectedDateObj().getHours() >= 12 ? "PM" : "AM";
 
 		if (self.config.enableSeconds)
@@ -189,8 +193,12 @@ function Flatpickr(element, config) {
 				});
 			}
 
-			if (self.amPM)
-				self.amPM.addEventListener("click", updateTime);
+			if (self.amPM) {
+				self.amPM.addEventListener("click", (e) => {
+					updateTime(e);
+					self.triggerChange(e);
+				});
+			}
 		}
 	}
 
@@ -595,7 +603,6 @@ function Flatpickr(element, config) {
 		self.selectedDates = [];
 
 		triggerEvent("Change");
-		jumpToDate(self.now);
 	}
 
 	function close() {
@@ -901,7 +908,7 @@ function Flatpickr(element, config) {
 			return null;
 
 		const dateTimeRegex = /(\d+)/g,
-			timeRegex = /^(\d{1,2})[:\s](\d\d)?[:\s](\d\d)?\s?(a|p)?/i,
+			timeRegex = /^(\d{1,2})[:\s](\d\d)?[:\s]?(\d\d)?\s?(a|p)?/i,
 			timestamp = /^(\d+)$/g,
 			date_orig = date;
 
@@ -1038,8 +1045,15 @@ function Flatpickr(element, config) {
 
 		setHoursFromInputs();
 
-		if (selectedDate.getMonth() !== self.currentMonth && self.config.mode !== "range")
-			changeMonth(selectedDate.getMonth(), false);
+
+		if (
+			selectedDate.getMonth() !== self.currentMonth &&
+			self.config.mode !== "range"
+		) {
+			self.currentYear = selectedDate.getFullYear();
+			self.currentMonth = selectedDate.getMonth();
+			updateNavigationCurrentMonth();
+		}
 
 
 		updateValue();
@@ -1219,6 +1233,8 @@ function Flatpickr(element, config) {
 		self.mobileInput.step = "any";
 		self.mobileInput.tabIndex = -1;
 		self.mobileInput.type = inputType;
+		self.mobileInput.disabled = self.input.disabled;
+
 
 		self.mobileFormatStr = inputType === "datetime-local"
 			? "Y-m-d\\TH:i:S"
@@ -1459,6 +1475,9 @@ function Flatpickr(element, config) {
 
 		else if (newValue >= max)
 			newValue = min + step;
+
+		if (self.amPM && ((value === 11 && newValue === 12) || (value === 12 && newValue === 11)))
+			self.amPM.textContent = self.amPM.innerHTML === "PM" ? "AM" : "PM";
 
 		e.target.value = self.pad(newValue);
 	}

@@ -1,6 +1,8 @@
 /* Swedish locals for flatpickr */
 var Flatpickr = Flatpickr||{l10n: {}};
 
+Flatpickr.l10n.firstDayOfWeek = 1;
+
 Flatpickr.l10n.weekdays = {
 	shorthand: ['Sön', 'Mån', 'Tis', 'Ons', 'Tor', 'Fre', 'Lör'],
 	longhand: ['Söndag', 'Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag']

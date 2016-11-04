@@ -6,10 +6,7 @@
     "start": "parallelshell \"http-server -o --silent\" \"gulp\""
   },
   "dependencies": {
-    "brunch": "^2.9.1",
-    "flatpickr": "github:chmln/flatpickr#gh-pages",
-    "global": "^4.3.1",
-    "gulp-cssmin": "^0.1.7"
+    "flatpickr": "github:chmln/flatpickr#master",
   },
   "devDependencies": {
     "gulp": "github:gulpjs/gulp#4.0",
