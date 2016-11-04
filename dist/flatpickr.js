@@ -449,7 +449,6 @@ function Flatpickr(element, config) {
 		self.selectedDates = [];
 
 		triggerEvent("Change");
-		jumpToDate(self.now);
 	}
 
 	function close() {
@@ -785,7 +784,11 @@ function Flatpickr(element, config) {
 
 		setHoursFromInputs();
 
-		if (selectedDate.getMonth() !== self.currentMonth && self.config.mode !== "range") changeMonth(selectedDate.getMonth(), false);
+		if (selectedDate.getMonth() !== self.currentMonth && self.config.mode !== "range") {
+			self.currentYear = selectedDate.getFullYear();
+			self.currentMonth = selectedDate.getMonth();
+			updateNavigationCurrentMonth();
+		}
 
 		updateValue();
 		buildDays();
