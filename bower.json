@@ -1,20 +1,16 @@
 {
-  "name": "flatpickr",
-  "description": "Super lightweight date picker with no dependencies",
+  "name": "flatpickr-docs",
+  "description": "A lightweight, powerful javascript datetime picker",
   "main": "",
   "authors": [
-    "Gregory <gregory.mkv@gmail.com>"
+    "Gregory <gregory.petrosyan@mail.utoronto.ca>"
   ],
+  "dependencies": {
+    "flatpickr": "git://github.com/chmln/flatpickr.git#master"
+  },
   "license": "MIT",
-  "keywords": [
-    "date",
-    "picker",
-    "ligthweight",
-    "javascript"
-  ],
   "homepage": "https://github.com/chmln/flatpickr",
-  "main": ["dist/flatpickr.min.js","dist/flatpickr.min.css"],
-  "moduleType": [],
+  "private": true,
   "ignore": [
     "**/.*",
     "node_modules",
