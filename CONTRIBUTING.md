@@ -15,7 +15,7 @@ Then, `npm start`to launch the dev environment.
 1. `index.html` is where you can experiment with various options. 
 2. Ensure there are no linting errors in the terminal
 3. Ensure that all the tests under `/test` pass.
-4. Only the changes to the `src` directory should be committed
+4. **Only the changes to `src` and `test` (if applicable) should be committed**
 
 
 ## License
