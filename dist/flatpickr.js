@@ -88,7 +88,7 @@ function Flatpickr(element, config) {
 
 		self.minuteElement.value = self.pad(minutes);
 
-		if (!self.config.time_24hr) self.amPM.textContent = latestSelectedDateObj().getHours() >= 12 ? "PM" : "AM";
+		if (!self.config.time_24hr && self.selectedDates.length) self.amPM.textContent = latestSelectedDateObj().getHours() >= 12 ? "PM" : "AM";
 
 		if (self.config.enableSeconds) self.secondElement.value = self.pad(seconds);
 	}
