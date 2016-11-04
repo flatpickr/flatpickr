@@ -908,7 +908,7 @@ function Flatpickr(element, config) {
 			return null;
 
 		const dateTimeRegex = /(\d+)/g,
-			timeRegex = /^(\d{1,2})[:\s](\d\d)?([:\s]\d\d)?\s?(a|p)?/i,
+			timeRegex = /^(\d{1,2})[:\s](\d\d)?[:\s]?(\d\d)?\s?(a|p)?/i,
 			timestamp = /^(\d+)$/g,
 			date_orig = date;
 

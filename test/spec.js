@@ -123,6 +123,20 @@ describe('flatpickr', () => {
 		});
 
 		describe("time string parser", () => {
+			it('should parse "21:11"', () => {
+
+				elem.value = '21:11';
+				createInstance({
+					allowInput: true,
+					enableTime: true,
+					noCalendar: true,
+				});
+
+				expect(fp.selectedDates[0]).toBeDefined();
+				expect(fp.selectedDates[0].getHours()).toEqual(21);
+				expect(fp.selectedDates[0].getMinutes()).toEqual(11);
+			});
+
 			it('should parse "21:11:12"', () => {
 
 				elem.value = '21:11:12';
