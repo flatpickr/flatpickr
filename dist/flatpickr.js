@@ -64,7 +64,7 @@ function Flatpickr(element, config) {
 	}
 
 	function setHoursFromInputs() {
-		if (!self.config.enableTime) return;
+		if (!self.config.enableTime || !self.selectedDates.length) return;
 
 		var hours = (parseInt(self.hourElement.value, 10) || 0) + 12 * (!self.config.time_24hr && self.amPM.innerHTML === "PM"),
 		    minutes = (60 + (parseInt(self.minuteElement.value, 10) || 0)) % 60,
