@@ -124,9 +124,8 @@ describe('flatpickr', () => {
 
 		describe("time string parser", () => {
 			it('should parse "21:11"', () => {
-
-				elem.value = '21:11';
 				createInstance({
+					defaultDate: '21:11',
 					allowInput: true,
 					enableTime: true,
 					noCalendar: true,
@@ -279,6 +278,27 @@ describe('flatpickr', () => {
 			fp.days.childNodes[15].click(); // oct 10
 
 			verifySelected(fp.selectedDates[0]);
+		});
+	});
+
+	describe("Localization", () => {
+		it("By locale config option", () => {
+			createInstance({
+				locale: "ru"
+			});
+
+			expect(fp.l10n.months.longhand[0]).toEqual("Январь");
+
+			createInstance();
+			expect(fp.l10n.months.longhand[0]).toEqual("January");
+		});
+
+		it("By overriding default locale", () => {
+			Flatpickr.localize(Flatpickr.l10ns.ru);
+			expect(Flatpickr.l10ns.default.months.longhand[0]).toEqual("Январь");
+
+			createInstance();
+			expect(fp.l10n.months.longhand[0]).toEqual("Январь");
 		});
 	});
 
