@@ -133,7 +133,8 @@ function Flatpickr(element, config) {
 				return changeMonth(1);
 			});
 
-			self.currentYearElement.addEventListener("wheel", yearScroll);
+			if (!self.config.noYearScroll) self.currentYearElement.addEventListener("wheel", yearScroll);
+
 			self.currentYearElement.addEventListener("focus", function () {
 				self.currentYearElement.select();
 			});
@@ -1222,6 +1223,9 @@ Flatpickr.defaultConfig = {
 
 	// noCalendar: true will hide the calendar. use for a time picker along w/ enableTime
 	noCalendar: false,
+
+	// noYearScroll: true will disable year change on mousewheel
+	noYearScroll: false,
 
 	// more date format chars at https://chmln.github.io/flatpickr/#dateformat
 	dateFormat: "Y-m-d",
