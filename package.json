@@ -30,14 +30,14 @@
   "main": "dist/flatpickr.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/chmln/flatpickr.git"
+    "url": "git+https://github.com/SchipholRedesign/flatpickr.git"
   },
   "author": "Gregory",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/chmln/flatpickr/issues"
+    "url": "https://github.com/SchipholRedesign/flatpickr/issues"
   },
-  "homepage": "https://chmln.github.io/flatpickr",
+  "homepage": "https://github.com/SchipholRedesign/flatpickr",
   "keywords": [
     "javascript",
     "datetimepicker",
