@@ -109,7 +109,7 @@
     svg
         width 14px
         position absolute
-        top 9px
+        top 8px
         top unquote('0px\9')
 
         path
@@ -280,7 +280,6 @@ span.flatpickr-weekday
     .flatpickr-weeks
         if $border-calendar-only is defined
             border-left 1px solid $calendar_border_color
-            border-bottom 1px solid $calendar_border_color
         border-right 1px solid $calendar_border_color
 
     .flatpickr-weekday
@@ -324,8 +323,6 @@ span.flatpickr-weekday
         border-radius 0
         display inline-block
         flex 1
-        width 40%
-        min-width 40%
         text-align center
         margin 0
         padding 0
@@ -335,11 +332,7 @@ span.flatpickr-weekday
         font-weight bold
         color $day_text_color
 
-        &.flatpickr-minute
-            width 26%
-            font-weight 300
-
-        &.flatpickr-second
+        &.flatpickr-minute, &.flatpickr-second
             font-weight 300
 
         &:focus
@@ -350,10 +343,22 @@ span.flatpickr-weekday
             -moz-appearance: number-input
             background $day_hover_background_color
 
-    &.has-seconds
-        input[type='number']
-            width 25%
-            min-width 25%
+    .flatpickr-time-separator, .flatpickr-am-pm
+        height 38px
+        display inline-block
+        line-height 38px
+        color $day_text_color
+
+    .flatpickr-am-pm
+        outline 0
+        width 18%
+        cursor pointer
+        text-align center
+        font-weight 300
+
+        &:hover, &:focus
+            background lighten($day_hover_background_color, 4)
+
 
 .hasWeeks, .hasTime
     .flatpickr-days
@@ -367,26 +372,12 @@ span.flatpickr-weekday
 .flatpickr-innerContainer + .flatpickr-time
     if $border-calendar-only is defined
         border 1px solid $calendar_border_color
+        border-top 0
 
     else
         border-top 1px solid $calendar_border_color
 
-.flatpickr-time-separator, .flatpickr-am-pm
-    height 38px
-    display inline-block
-    line-height 38px
-    color $day_text_color
 
-.flatpickr-am-pm
-    outline 0
-    width 16%
-    padding 0 2%
-    cursor pointer
-    text-align center
-    font-weight 300
-
-    &:hover, &:focus
-        background lighten($day_hover_background_color, 4)
 
 
 @media all and (-ms-high-contrast: none)
