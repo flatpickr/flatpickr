@@ -1,21 +1,22 @@
 /* Swedish locals for flatpickr */
-var Flatpickr = Flatpickr||{l10n: {}};
+var Flatpickr = Flatpickr||{l10ns: {}};
+Flatpickr.l10ns.sv = {};
 
-Flatpickr.l10n.firstDayOfWeek = 1;
+Flatpickr.l10ns.sv.firstDayOfWeek = 1;
 
-Flatpickr.l10n.weekdays = {
+Flatpickr.l10ns.sv.weekdays = {
 	shorthand: ['Sön', 'Mån', 'Tis', 'Ons', 'Tor', 'Fre', 'Lör'],
 	longhand: ['Söndag', 'Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag']
 };
 
-Flatpickr.l10n.months = {
+Flatpickr.l10ns.sv.months = {
 	shorthand: ['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'],
 	longhand: ['Januari', 'Februari', 'Mars', 'April', 'Maj', 'Juni', 'Juli', 'Augusti', 'September', 'Oktober', 'November', 'December']
 };
 
-Flatpickr.l10n.ordinal = () => {
+Flatpickr.l10ns.sv.ordinal = () => {
 	return ".";
 };
 if (typeof module !== "undefined") {
-	module.exports = Flatpickr.l10n;
+	module.exports = Flatpickr.l10ns;
 }

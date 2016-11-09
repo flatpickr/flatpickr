@@ -1,4 +1,4 @@
-Flatpickr.l10n.firstDayOfWeek = 1;
+Flatpickr.l10ns.default.firstDayOfWeek = 1;
 //Regular flatpickr
 
 var calendars = document.getElementsByClassName("flatpickr").flatpickr();
