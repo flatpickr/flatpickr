@@ -201,13 +201,15 @@ function Flatpickr(element, config) {
 
 		if (!self.config.noCalendar) {
 			fragment.appendChild(buildMonthNav());
+			self.innerContainer = createElement("div", "flatpickr-innerContainer");
 
-			if (self.config.weekNumbers) fragment.appendChild(buildWeeks());
+			if (self.config.weekNumbers) self.innerContainer.appendChild(buildWeeks());
 
 			self.rContainer = createElement("div", "flatpickr-rContainer");
 			self.rContainer.appendChild(buildWeekdays());
 			self.rContainer.appendChild(buildDays());
-			fragment.appendChild(self.rContainer);
+			self.innerContainer.appendChild(self.rContainer);
+			fragment.appendChild(self.innerContainer);
 		}
 
 		if (self.config.enableTime) fragment.appendChild(buildTime());
