@@ -43,7 +43,7 @@
             display block
 
     &.hasWeeks
-        max-width 300px
+        max-width 320px
 
     &:before, &:after
         position absolute
@@ -278,7 +278,6 @@ span.flatpickr-weekday
     float left
 
     .flatpickr-weeks
-        padding 0 1rem
         if $border-calendar-only is defined
             border-left 1px solid $calendar_border_color
             border-bottom 1px solid $calendar_border_color
@@ -291,12 +290,23 @@ span.flatpickr-weekday
     span.flatpickr-day
         display block
         width 100%
+        margin-right 1rem
+
+.flatpickr-innerContainer
+    display block
+    display flex
+    if $border-calendar-only is defined
+        border-bottom 1px solid $calendar_border_color
+
+    &:after
+        display inline-block
+        content ""
+        clear both
 
 .flatpickr-rContainer
     display inline-block
     max-width 247px
-    if $border-calendar-only is defined
-        border-bottom 1px solid $calendar_border_color
+
 
 .flatpickr-time
     overflow auto
@@ -314,8 +324,8 @@ span.flatpickr-weekday
         border-radius 0
         display inline-block
         flex 1
-        width 33%
-        min-width 33%
+        width 40%
+        min-width 40%
         text-align center
         margin 0
         padding 0
@@ -354,7 +364,7 @@ span.flatpickr-weekday
 .hasWeeks .flatpickr-days
     border-left 0
 
-.flatpickr-rContainer + .flatpickr-time
+.flatpickr-innerContainer + .flatpickr-time
     if $border-calendar-only is defined
         border 1px solid $calendar_border_color
 
@@ -369,10 +379,10 @@ span.flatpickr-weekday
 
 .flatpickr-am-pm
     outline 0
-    width 21%
+    width 16%
     padding 0 2%
     cursor pointer
-    text-align left
+    text-align center
     font-weight 300
 
     &:hover, &:focus
