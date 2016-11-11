@@ -18,6 +18,7 @@
     "gulp-eslint": "^3.0.1",
     "gulp-livereload": "^3.8.1",
     "gulp-plumber": "^1.1.0",
+    "gulp-pug": "3.1.0",
     "gulp-rename": "^1.2.2",
     "gulp-stylus": "^2.5.0",
     "gulp-uglify": "^2.0.0",
