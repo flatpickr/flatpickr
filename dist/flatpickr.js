@@ -1,6 +1,6 @@
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 /*! flatpickr v2.0.8, @license MIT */
 function Flatpickr(element, config) {
@@ -551,6 +551,23 @@ function Flatpickr(element, config) {
 	function onKeyDown(e) {
 		if (self.isOpen) {
 			switch (e.which) {
+				case 9:
+					var days = document.querySelector("div.flatpickr-days");
+					var firstDay = document.querySelector("span.flatpickr-day:not(.prevMonthDay)");
+					var lastDay = document.querySelector("span.flatpickr-day.nextMonthDay").previousSibling;
+
+					if (e.target === days) {
+						e.preventDefault();
+						firstDay.focus();
+					} else if (e.target === firstDay && e.shiftKey) {
+						e.preventDefault();
+						lastDay.focus();
+					} else if (e.target === lastDay && !e.shiftKey) {
+						e.preventDefault();
+						firstDay.focus();
+					}
+					break;
+
 				case 13:
 					if (self.timeContainer && self.timeContainer.contains(e.target)) updateValue();else selectDate(e);
 
