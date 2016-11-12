@@ -164,12 +164,10 @@ function Flatpickr(element, config) {
 			});
 
 			self.currentYearElement.addEventListener("input", event => {
-				if (event.target.value.length === 4)
+				if (event.target.value.length === 4) {
 					self.currentYearElement.blur();
-
-				self.currentYear = parseInt(event.target.value, 10) || self.currentYear;
-				self.redraw();
-				triggerEvent("YearChange");
+					handleYearChange(event.target.value);
+				}
 			});
 
 			self.days.addEventListener("click", selectDate);
@@ -681,10 +679,27 @@ function Flatpickr(element, config) {
 		).join("");
 	}
 
-	function handleYearChange() {
+	function handleYearChange(newYear) {
 		if (self.currentMonth < 0 || self.currentMonth > 11) {
 			self.currentYear += self.currentMonth % 11;
 			self.currentMonth = (self.currentMonth + 12) % 12;
+			triggerEvent("YearChange");
+		}
+
+		else if (
+			newYear
+			&& (!self.currentYearElement.min || newYear >= self.currentYearElement.min)
+			&&(!self.currentYearElement.max || newYear <= self.currentYearElement.max)
+		) {
+			self.currentYear = parseInt(newYear, 10) || self.currentYear;
+
+			if (self.config.maxDate && self.currentYear === self.config.maxDate.getFullYear())
+				self.currentMonth = Math.min(self.config.maxDate.getMonth(), self.currentMonth);
+
+			else if (self.config.minDate && self.currentYear === self.config.minDate.getFullYear())
+				self.currentMonth = Math.max(self.config.minDate.getMonth(), self.currentMonth);
+
+			self.redraw();
 			triggerEvent("YearChange");
 		}
 	}
@@ -1445,15 +1460,8 @@ function Flatpickr(element, config) {
 		const delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.deltaY))),
 			newYear = parseInt(e.target.value, 10) + delta;
 
-		if (
-			(!e.target.min || newYear >= e.target.min) &&
-			(!e.target.max || newYear <= e.target.max)
-		) {
-			self.currentYear = e.target.value = newYear;
-			self.redraw();
-
-			triggerEvent("YearChange");
-		}
+		handleYearChange(newYear);
+		e.target.value = self.currentYear;
 	}
 
 	function createElement(tag, className = "", content = "") {
