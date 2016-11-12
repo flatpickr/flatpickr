@@ -462,6 +462,7 @@ function Flatpickr(element, config) {
 
 		if (self.config.minDate)
 			self.currentYearElement.min = self.config.minDate.getFullYear();
+
 		if (self.config.maxDate)
 			self.currentYearElement.max = self.config.maxDate.getFullYear();
 
@@ -881,6 +882,14 @@ function Flatpickr(element, config) {
 				this._minDate = parseDate(date, true);
 				if(self.days)
 					redraw();
+
+				if (!self.currentYearElement)
+					return;
+
+				if (date && this._minDate instanceof Date)
+					self.currentYearElement.min = this._minDate.getFullYear();
+				else
+					self.currentYearElement.removeAttribute("min");
 			}
 		});
 
@@ -892,6 +901,14 @@ function Flatpickr(element, config) {
 				this._maxDate = parseDate(date, true);
 				if(self.days)
 					redraw();
+
+				if (!self.currentYearElement)
+					return;
+
+				if (date && this._maxDate instanceof Date)
+					self.currentYearElement.max = this._maxDate.getFullYear();
+				else
+					self.currentYearElement.removeAttribute("max");
 			}
 		});
 
@@ -1359,7 +1376,6 @@ function Flatpickr(element, config) {
 		self.currentYearElement.value = self.currentYear;
 
 		if (self.config.minDate) {
-			self.currentYearElement.min = self.config.minDate.getFullYear();
 			const hidePrevMonthArrow = self.currentYear === self.config.minDate.getFullYear()
 				? (self.currentMonth + 11) % 12 < self.config.minDate.getMonth()
 				: self.currentYear < self.config.minDate.getFullYear();
@@ -1367,10 +1383,9 @@ function Flatpickr(element, config) {
 			self.prevMonthNav.style.display = hidePrevMonthArrow ? "none" : "block";
 		}
 
-		else {
-			self.currentYearElement.removeAttribute("min");
+		else
 			self.prevMonthNav.style.display = "block";
-		}
+
 
 		if (self.config.maxDate) {
 			const hideNextMonthArrow = self.currentYear === self.config.maxDate.getFullYear()
@@ -1378,13 +1393,11 @@ function Flatpickr(element, config) {
 				: self.currentYear > self.config.maxDate.getFullYear();
 
 			self.nextMonthNav.style.display = hideNextMonthArrow ? "none" : "block";
-			self.currentYearElement.max = self.config.maxDate.getFullYear();
 		}
 
-		else {
-			self.currentYearElement.removeAttribute("max");
+		else
 			self.nextMonthNav.style.display = "block";
-		}
+
 	}
 
 
