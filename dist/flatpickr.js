@@ -136,7 +136,7 @@ function Flatpickr(element, config) {
 				return changeMonth(1);
 			});
 
-			self.currentYearElement.addEventListener("wheel", yearScroll);
+			self.currentYearElement.addEventListener("wheel", debounce(yearScroll, 50));
 			self.currentYearElement.addEventListener("focus", function () {
 				self.currentYearElement.select();
 			});
@@ -146,13 +146,14 @@ function Flatpickr(element, config) {
 
 				self.currentYear = parseInt(event.target.value, 10) || self.currentYear;
 				self.redraw();
+				triggerEvent("YearChange");
 			});
 
 			self.days.addEventListener("click", selectDate);
 		}
 
 		if (self.config.enableTime) {
-			self.timeContainer.addEventListener("wheel", updateTime);
+			self.timeContainer.addEventListener("wheel", debounce(updateTime, 50));
 			self.timeContainer.addEventListener("input", updateTime);
 
 			self.timeContainer.addEventListener("wheel", self.debouncedChange);
@@ -443,7 +444,10 @@ function Flatpickr(element, config) {
 		handleYearChange();
 		updateNavigationCurrentMonth();
 		buildDays();
+
 		if (!self.config.noCalendar) self.days.focus();
+
+		triggerEvent("MonthChange");
 	}
 
 	function clear() {
@@ -522,6 +526,7 @@ function Flatpickr(element, config) {
 		if (self.currentMonth < 0 || self.currentMonth > 11) {
 			self.currentYear += self.currentMonth % 11;
 			self.currentMonth = (self.currentMonth + 12) % 12;
+			triggerEvent("YearChange");
 		}
 	}
 
@@ -1053,6 +1058,8 @@ function Flatpickr(element, config) {
 		if (event === "Change") {
 			try {
 				self.input.dispatchEvent(new Event("change", { "bubbles": true }));
+
+				// many front-end frameworks bind to the input event
 				self.input.dispatchEvent(new Event("input", { "bubbles": true }));
 			} catch (e) {
 				if ("createEvent" in document) return self.input.dispatchEvent(self.changeEvent);
@@ -1146,6 +1153,8 @@ function Flatpickr(element, config) {
 		var delta = Math.max(-1, Math.min(1, e.wheelDelta || -e.deltaY));
 		self.currentYear = e.target.value = parseInt(e.target.value, 10) + delta;
 		self.redraw();
+
+		triggerEvent("YearChange");
 	}
 
 	function createElement(tag) {
