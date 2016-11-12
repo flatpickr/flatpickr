@@ -158,7 +158,7 @@ function Flatpickr(element, config) {
 			self.prevMonthNav.addEventListener("click", () => changeMonth(-1));
 			self.nextMonthNav.addEventListener("click", () => changeMonth(1));
 
-			self.currentYearElement.addEventListener("wheel", yearScroll);
+			self.currentYearElement.addEventListener("wheel", debounce(yearScroll, 50));
 			self.currentYearElement.addEventListener("focus", () => {
 				self.currentYearElement.select();
 			});
@@ -176,7 +176,7 @@ function Flatpickr(element, config) {
 		}
 
 		if (self.config.enableTime) {
-			self.timeContainer.addEventListener("wheel", updateTime);
+			self.timeContainer.addEventListener("wheel", debounce(updateTime, 50));
 			self.timeContainer.addEventListener("input", updateTime);
 
 			self.timeContainer.addEventListener("wheel", self.debouncedChange);
