@@ -167,6 +167,7 @@ function Flatpickr(element, config) {
 				if (event.target.value.length === 4) {
 					self.currentYearElement.blur();
 					handleYearChange(event.target.value);
+					event.target.value = self.currentYear;
 				}
 			});
 
