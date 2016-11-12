@@ -3,7 +3,7 @@
   "description": "Super lightweight date picker with no dependencies",
   "main": [
     "dist/flatpickr.js",
-    "dist/style/flatpickr.css"
+    "dist/flatpickr.css"
   ],
   "authors": [
     "Gregory <gregory.mkv@gmail.com>"
