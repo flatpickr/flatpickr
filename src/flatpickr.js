@@ -207,7 +207,10 @@ function Flatpickr(element, config) {
 	function jumpToDate(jumpDate) {
 		jumpDate = jumpDate
 			? parseDate(jumpDate)
-			: latestSelectedDateObj() || self.config.minDate || self.now;
+			: latestSelectedDateObj() || (self.config.minDate > self.now
+				? self.config.minDate
+				: self.now
+			);
 
 		try {
 			self.currentYear = jumpDate.getFullYear();
@@ -1139,7 +1142,7 @@ function Flatpickr(element, config) {
 
 		const initialDate = (self.selectedDates.length
 			? self.selectedDates[0]
-			: (self.config.minDate || self.now)
+			: (self.config.minDate > self.now ? self.config.minDate : self.now)
 		);
 
 		self.currentYear = initialDate.getFullYear();
@@ -1426,11 +1429,18 @@ function Flatpickr(element, config) {
 	function yearScroll(e) {
 		e.preventDefault();
 
-		const delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.deltaY)));
-		self.currentYear = e.target.value = parseInt(e.target.value, 10) + delta;
-		self.redraw();
+		const delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.deltaY))),
+			newYear = parseInt(e.target.value, 10) + delta;
 
-		triggerEvent("YearChange");
+		if (
+			(!e.target.min || newYear >= e.target.min) &&
+			(!e.target.max || newYear <= e.target.max)
+		) {
+			self.currentYear = e.target.value = newYear;
+			self.redraw();
+
+			triggerEvent("YearChange");
+		}
 	}
 
 	function createElement(tag, className = "", content = "") {
