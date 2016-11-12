@@ -158,24 +158,24 @@ function Flatpickr(element, config) {
 			self.prevMonthNav.addEventListener("click", () => changeMonth(-1));
 			self.nextMonthNav.addEventListener("click", () => changeMonth(1));
 
-			self.currentYearElement.addEventListener("wheel", yearScroll);
+			self.currentYearElement.addEventListener("wheel", debounce(yearScroll, 50));
 			self.currentYearElement.addEventListener("focus", () => {
 				self.currentYearElement.select();
 			});
 
 			self.currentYearElement.addEventListener("input", event => {
-				if (event.target.value.length === 4)
+				if (event.target.value.length === 4) {
 					self.currentYearElement.blur();
-
-				self.currentYear = parseInt(event.target.value, 10) || self.currentYear;
-				self.redraw();
+					handleYearChange(event.target.value);
+					event.target.value = self.currentYear;
+				}
 			});
 
 			self.days.addEventListener("click", selectDate);
 		}
 
 		if (self.config.enableTime) {
-			self.timeContainer.addEventListener("wheel", updateTime);
+			self.timeContainer.addEventListener("wheel", debounce(updateTime, 5));
 			self.timeContainer.addEventListener("input", updateTime);
 
 			self.timeContainer.addEventListener("wheel", self.debouncedChange);
@@ -206,7 +206,10 @@ function Flatpickr(element, config) {
 	function jumpToDate(jumpDate) {
 		jumpDate = jumpDate
 			? parseDate(jumpDate)
-			: latestSelectedDateObj() || self.config.minDate || self.now;
+			: latestSelectedDateObj() || (self.config.minDate > self.now
+				? self.config.minDate
+				: self.now
+			);
 
 		try {
 			self.currentYear = jumpDate.getFullYear();
@@ -458,6 +461,7 @@ function Flatpickr(element, config) {
 
 		if (self.config.minDate)
 			self.currentYearElement.min = self.config.minDate.getFullYear();
+
 		if (self.config.maxDate)
 			self.currentYearElement.max = self.config.maxDate.getFullYear();
 
@@ -589,8 +593,11 @@ function Flatpickr(element, config) {
 		handleYearChange();
 		updateNavigationCurrentMonth();
 		buildDays();
+
 		if (!(self.config.noCalendar))
 			self.days.focus();
+
+		triggerEvent("MonthChange");
 	}
 
 	function clear() {
@@ -673,10 +680,28 @@ function Flatpickr(element, config) {
 		).join("");
 	}
 
-	function handleYearChange() {
+	function handleYearChange(newYear) {
 		if (self.currentMonth < 0 || self.currentMonth > 11) {
 			self.currentYear += self.currentMonth % 11;
 			self.currentMonth = (self.currentMonth + 12) % 12;
+			triggerEvent("YearChange");
+		}
+
+		else if (
+			newYear
+			&& (!self.currentYearElement.min || newYear >= self.currentYearElement.min)
+			&&(!self.currentYearElement.max || newYear <= self.currentYearElement.max)
+		) {
+			self.currentYear = parseInt(newYear, 10) || self.currentYear;
+
+			if (self.config.maxDate && self.currentYear === self.config.maxDate.getFullYear())
+				self.currentMonth = Math.min(self.config.maxDate.getMonth(), self.currentMonth);
+
+			else if (self.config.minDate && self.currentYear === self.config.minDate.getFullYear())
+				self.currentMonth = Math.max(self.config.minDate.getMonth(), self.currentMonth);
+
+			self.redraw();
+			triggerEvent("YearChange");
 		}
 	}
 
@@ -873,6 +898,14 @@ function Flatpickr(element, config) {
 				this._minDate = parseDate(date, true);
 				if(self.days)
 					redraw();
+
+				if (!self.currentYearElement)
+					return;
+
+				if (date && this._minDate instanceof Date)
+					self.currentYearElement.min = this._minDate.getFullYear();
+				else
+					self.currentYearElement.removeAttribute("min");
 			}
 		});
 
@@ -884,6 +917,14 @@ function Flatpickr(element, config) {
 				this._maxDate = parseDate(date, true);
 				if(self.days)
 					redraw();
+
+				if (!self.currentYearElement)
+					return;
+
+				if (date && this._maxDate instanceof Date)
+					self.currentYearElement.max = this._maxDate.getFullYear();
+				else
+					self.currentYearElement.removeAttribute("max");
 			}
 		});
 
@@ -1134,7 +1175,7 @@ function Flatpickr(element, config) {
 
 		const initialDate = (self.selectedDates.length
 			? self.selectedDates[0]
-			: (self.config.minDate || self.now)
+			: (self.config.minDate > self.now ? self.config.minDate : self.now)
 		);
 
 		self.currentYear = initialDate.getFullYear();
@@ -1307,6 +1348,8 @@ function Flatpickr(element, config) {
 		if (event === "Change") {
 			try {
 				self.input.dispatchEvent(new Event("change", { "bubbles": true }));
+
+				// many front-end frameworks bind to the input event
 				self.input.dispatchEvent(new Event("input", { "bubbles": true }));
 			}
 
@@ -1349,7 +1392,6 @@ function Flatpickr(element, config) {
 		self.currentYearElement.value = self.currentYear;
 
 		if (self.config.minDate) {
-			self.currentYearElement.min = self.config.minDate.getFullYear();
 			const hidePrevMonthArrow = self.currentYear === self.config.minDate.getFullYear()
 				? (self.currentMonth + 11) % 12 < self.config.minDate.getMonth()
 				: self.currentYear < self.config.minDate.getFullYear();
@@ -1357,10 +1399,9 @@ function Flatpickr(element, config) {
 			self.prevMonthNav.style.display = hidePrevMonthArrow ? "none" : "block";
 		}
 
-		else {
-			self.currentYearElement.removeAttribute("min");
+		else
 			self.prevMonthNav.style.display = "block";
-		}
+
 
 		if (self.config.maxDate) {
 			const hideNextMonthArrow = self.currentYear === self.config.maxDate.getFullYear()
@@ -1368,13 +1409,11 @@ function Flatpickr(element, config) {
 				: self.currentYear > self.config.maxDate.getFullYear();
 
 			self.nextMonthNav.style.display = hideNextMonthArrow ? "none" : "block";
-			self.currentYearElement.max = self.config.maxDate.getFullYear();
 		}
 
-		else {
-			self.currentYearElement.removeAttribute("max");
+		else
 			self.nextMonthNav.style.display = "block";
-		}
+
 	}
 
 
@@ -1419,9 +1458,11 @@ function Flatpickr(element, config) {
 	function yearScroll(e) {
 		e.preventDefault();
 
-		const delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.deltaY)));
-		self.currentYear = e.target.value = parseInt(e.target.value, 10) + delta;
-		self.redraw();
+		const delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.deltaY))),
+			newYear = parseInt(e.target.value, 10) + delta;
+
+		handleYearChange(newYear);
+		e.target.value = self.currentYear;
 	}
 
 	function createElement(tag, className = "", content = "") {

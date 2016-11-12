@@ -78,7 +78,9 @@ section#eventsAPI
         code.js.
             flatpickr("#dayCreate", {
                 onDayCreate: function(dObj, dStr, fp, dayElem){
-                    // utilize fp.currentYear, fp.currentMonth, dayElem.textContent
+                    // Utilize dayElem.dateObj, which is the corresponding Date
+
+                    // dummy logic
                     if (Math.random() &lt; 0.15)
                         dayElem.innerHTML += "&lt;span class='event'&gt;&lt;/span&gt;";
 
