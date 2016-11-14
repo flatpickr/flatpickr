@@ -485,7 +485,7 @@ function Flatpickr(element, config) {
 
 		if (instance.altInput) {
 			instance.input.type = "text";
-			instance.altInput.parentNode.removeChild(instance.altInput);
+			if (instance.altInput.parentNode) instance.altInput.parentNode.removeChild(instance.altInput);
 		}
 
 		instance.input.classList.remove("flatpickr-input");
@@ -1012,12 +1012,12 @@ function Flatpickr(element, config) {
 		self.input.classList.add("flatpickr-input");
 		if (self.config.altInput) {
 			// replicate self.element
-			self.altInput = createElement(self.input.nodeName, "flatpickr-input " + " " + self.input.className + " " + self.config.altInputClass);
+			self.altInput = createElement(self.input.nodeName, self.input.className + " " + self.config.altInputClass);
 			self.altInput.placeholder = self.input.placeholder;
 			self.altInput.type = "text";
 
 			self.input.type = "hidden";
-			self.input.parentNode.insertBefore(self.altInput, self.input.nextSibling);
+			if (self.input.parentNode) self.input.parentNode.insertBefore(self.altInput, self.input.nextSibling);
 		}
 
 		if (!self.config.allowInput) (self.altInput || self.input).setAttribute("readonly", "readonly");
