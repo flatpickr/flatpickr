@@ -20,19 +20,13 @@ describe('flatpickr', () => {
 	}
 
 	describe("init", () => {
-		it("should parse minDate", () => {
-			createInstance({
-				minDate: "2016-02-27T16:16:22.585Z",
-			});
-
-			expect(fp.currentMonth).toEqual(1);
-		});
-
 		it("should parse defaultDate", () => {
 			createInstance({
 				defaultDate: "2016-12-27T16:16:22.585Z",
 			});
 
+			expect(fp.currentYear).toEqual(2016);
+			expect(fp.currentMonth).toEqual(11);
 			expect(fp.days.querySelector(".selected").textContent).toEqual("27");
 		});
 
@@ -256,9 +250,7 @@ describe('flatpickr', () => {
 
 		it("selectDate() + onChange() through GUI", () => {
 			function verifySelected (date) {
-
 				expect(date).toBeDefined();
-
 
 				expect(date.getFullYear()).toEqual(2016);
 				expect(date.getMonth()).toEqual(9);
@@ -267,7 +259,7 @@ describe('flatpickr', () => {
 
 			createInstance({
 				enableTime: true,
-				minDate: "2016-10-01",
+				defaultDate: "2016-10-01",
 				onChange: (dates, datestr) => {
 					if (dates.length)
 						verifySelected(dates[0]);
