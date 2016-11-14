@@ -564,6 +564,22 @@ function Flatpickr(element, config) {
 	function onKeyDown(e) {
 		if (self.isOpen) {
 			switch (e.which) {
+				case 9:
+					var firstDay = self.days.querySelector("span.flatpickr-day:not(.prevMonthDay)");
+					var lastDay = self.days.querySelector("span.flatpickr-day.nextMonthDay").previousSibling;
+
+					if (e.target === self.days) {
+						e.preventDefault();
+						firstDay.focus();
+					} else if (e.target === firstDay && e.shiftKey) {
+						e.preventDefault();
+						lastDay.focus();
+					} else if (e.target === lastDay && !e.shiftKey) {
+						e.preventDefault();
+						firstDay.focus();
+					}
+					break;
+
 				case 13:
 					if (self.timeContainer && self.timeContainer.contains(e.target)) updateValue();else selectDate(e);
 
