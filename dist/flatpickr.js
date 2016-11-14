@@ -1012,7 +1012,7 @@ function Flatpickr(element, config) {
 		self.input.classList.add("flatpickr-input");
 		if (self.config.altInput) {
 			// replicate self.element
-			self.altInput = createElement(self.input.nodeName, "flatpickr-input " + " " + self.config.altInputClass);
+			self.altInput = createElement(self.input.nodeName, "flatpickr-input " + " " + self.input.className + " " + self.config.altInputClass);
 			self.altInput.placeholder = self.input.placeholder;
 			self.altInput.type = "text";
 
@@ -1129,27 +1129,16 @@ function Flatpickr(element, config) {
 			self.mobileInput.value = self.selectedDates.length ? formatDate(self.mobileFormatStr, latestSelectedDateObj()) : "";
 		}
 
-		switch (self.config.mode) {
-			case "single":
-				self.input.value = formatDate(self.config.dateFormat, latestSelectedDateObj());
-				if (self.config.altInput) self.altInput.value = formatDate(self.config.altFormat, latestSelectedDateObj());
+		var joinChar = self.config.mode !== "range" ? "; " : " to ";
 
-				break;
+		self.input.value = self.selectedDates.map(function (dObj) {
+			return formatDate(self.config.dateFormat, dObj);
+		}).join(joinChar);
 
-			case "multiple":
-				self.input.value = self.selectedDates.map(function (dObj) {
-					return formatDate(self.config.dateFormat, dObj);
-				}).join("; ");
-				if (self.altInput) self.altInput.value = self.selectedDates.map(function (dObj) {
-					return formatDate(self.config.altFormat, dObj);
-				}).join("; ");
-				break;
-
-			case "range":
-				if (self.selectedDates.length === 2) (self.altInput || self.input).value = self.selectedDates.map(function (dObj) {
-					return formatDate(self.config.dateFormat, dObj);
-				}).join(" to ");else (self.altInput || self.input).value = formatDate(self.config.dateFormat, latestSelectedDateObj());
-				break;
+		if (self.config.altInput) {
+			self.altInput.value = self.selectedDates.map(function (dObj) {
+				return formatDate(self.config.altFormat, dObj);
+			}).join(joinChar);
 		}
 
 		triggerEvent("ValueUpdate");
