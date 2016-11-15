@@ -175,7 +175,7 @@ function Flatpickr(element, config) {
 		}
 
 		if (self.config.enableTime) {
-			self.timeContainer.addEventListener("wheel", debounce(updateTime, 5));
+			self.timeContainer.addEventListener("wheel", e => debounce(updateTime(e), 5));
 			self.timeContainer.addEventListener("input", updateTime);
 
 			self.timeContainer.addEventListener("wheel", self.debouncedChange);
