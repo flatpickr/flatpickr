@@ -1,6 +1,6 @@
 {
   "name": "flatpickr",
-  "version": "2.0.9",
+  "version": "2.1.0",
   "description": "A lightweight, powerful javascript datetime picker",
   "scripts": {
     "build": "parallelshell 'npm run build-all-scripts' 'npm run build-all-styles'",
@@ -9,7 +9,7 @@
     "build-script": "babel src/flatpickr.js --out-file dist/flatpickr.js",
     "build-min-script": "babel src/flatpickr.js | uglifyjs --screw-ie8 --compress --comments --mangle > dist/flatpickr.min.js",
     "build-l10n": "babel src/l10n --out-dir dist/l10n",
-    "build-style": "stylus --out dist --compress src/style/flatpickr.styl",
+    "build-style": "stylus --compress --include src/style < ./src/style/flatpickr.styl > ./dist/flatpickr.min.css",
     "build-themes": "stylus --out dist/themes --compress src/style/themes",
     "dev-script": "parallelshell 'npm run build-script -- --watch'",
     "dev-style": "parallelshell 'npm run build-style -- --watch' 'npm run build-themes -- --watch'",
