@@ -44,6 +44,14 @@
                     Flatpickr.localize(Russian); // default locale is now Russian
                     new Flatpickr(myElem);
 
+    section
+        p You may also wish to modify only certain values of locale.
+        p For instance, to set the first day of the week to Monday:
+        pre
+            code.
+                Flatpickr.l10ns.default.firstDayOfWeek = 1; // Monday
+                flatpickr("mySelector");
+                new Flatpickr(myElem);
 
     table.table
         thead
