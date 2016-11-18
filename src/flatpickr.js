@@ -158,7 +158,7 @@ function Flatpickr(element, config) {
 			self.prevMonthNav.addEventListener("click", () => changeMonth(-1));
 			self.nextMonthNav.addEventListener("click", () => changeMonth(1));
 
-			self.currentYearElement.addEventListener("wheel", debounce(yearScroll, 50));
+			self.currentYearElement.addEventListener("wheel", e => debounce(yearScroll(e), 50));
 			self.currentYearElement.addEventListener("focus", () => {
 				self.currentYearElement.select();
 			});
