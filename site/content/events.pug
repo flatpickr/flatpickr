@@ -36,7 +36,17 @@ section#eventsAPI
 
         p onClose gets triggered when the calendar is closed.
 
+    p#event-onMonthChange
+        h4
+            code onMonthChange
 
+        p onMonthChange gets triggered when the month is changed, either by the user or programmatically.
+
+    p#event-onYearChange
+        h4
+            code onYearChange
+
+        p onMonthChange gets triggered when the year is changed, either by the user or programmatically.
 
     pre
         code.
@@ -44,9 +54,14 @@ section#eventsAPI
                 onChange: function(selectedDates, dateStr, instance) {
                     ...
                 },
-                onOpen: function(selectedDates, dateStr, instance){
-                    ...
-                },
+                onOpen: [
+                    function(selectedDates, dateStr, instance){
+                        ...
+                    },
+                    function(selectedDates, dateStr, instance){
+                        ...
+                    }
+                ],
                 onClose: function(selectedDates, dateStr, instance){
                     ...
                 }

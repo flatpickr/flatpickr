@@ -44,25 +44,21 @@ document.getElementById("enableCustom").flatpickr({
 
 // Event API
 var events = document.getElementById("events");
+function showHook(name) {
+	return function(dateObj, dateStr, fp) {
+		events.innerHTML += "<b>" + name + "</b> (<code>" + dateObj + "</code>, <code>" + dateStr + "</code> )<br>";
+		events.scrollTop = events.offsetTop;
+	}
+}
 document.getElementById("events-api-example").flatpickr({
 	minDate: "today",
 	enableTime: true,
-	onChange: function(dateObj, dateStr, fp) {
-		events.innerHTML += "<b>onChange</b> (<code>" + dateObj + "</code>, <code>" + dateStr + "</code> )<br>";
-		events.scrollTop = events.offsetTop;
-	},
-	onOpen: function(dateObj, dateStr, fp){
-		events.innerHTML += "<b>onOpen</b> (<code>" + dateObj + "</code>, <code>" + dateStr + "</code> )<br>";
-		events.scrollTop = events.offsetTop;
-	},
-	onClose: function(dateObj, dateStr, fp){
-		events.innerHTML += "<b>onClose</b> (<code>" + dateObj + "</code>, <code>" + dateStr + "</code> )<br>";
-		events.scrollTop = events.offsetTop;
-	},
-	onReady: function(dateObj, dateStr, fp){
-		events.innerHTML += "<b>onReady</b> (<code>" + dateObj + "</code>, <code>" + dateStr + "</code> )<br>";
-		events.scrollTop = events.offsetTop;
-	}
+	onChange: showHook("onChange"),
+	onOpen: showHook("onOpen"),
+	onClose: showHook("onClose"),
+	onMonthChange: showHook("onMonthChange"),
+	onYearChange: showHook("onYearChange"),
+	onReady: showHook("onReady"),
 });
 
 flatpickr("#dayCreate", {
