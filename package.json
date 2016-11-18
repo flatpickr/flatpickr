@@ -11,14 +11,16 @@
     "build-l10n": "babel src/l10n --out-dir dist/l10n",
     "build-style": "stylus --compress --include src/style < ./src/style/flatpickr.styl > ./dist/flatpickr.min.css",
     "build-themes": "stylus --out dist/themes --compress src/style/themes",
-    "dev-script": "parallelshell \"npm run build-script -- --watch\"",
+    "dev-script": "onchange \"src/flatpickr.js\" -- npm run build-script",
     "dev-style": "parallelshell \"stylus --compress --watch --include src/style < ./src/style/flatpickr.styl > ./dist/flatpickr.min.css\" \"npm run build-themes -- --watch\"",
     "dev": "parallelshell \"npm run dev-script\" \"npm run dev-style\"",
     "livereload": "livereload \"dist\"",
     "serve": "parallelshell \"http-server -o --silent\" \"npm run livereload\"",
     "start": "parallelshell \"npm run dev\" \"npm run serve\""
   },
-  "dependencies": {},
+  "dependencies": {
+    "onchange": "^3.0.2"
+  },
   "devDependencies": {
     "babel-cli": "^6.18.0",
     "babel-plugin-transform-object-assign": "^6.8.0",
