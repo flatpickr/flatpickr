@@ -42,6 +42,12 @@ document.getElementById("enableCustom").flatpickr({
 	]
 });
 
+flatpickr("#range-disabled", {
+    "mode": "range",
+    disable: [date => date.getDate() %6 === 0]
+});
+
+
 // Event API
 var events = document.getElementById("events");
 function showHook(name) {

@@ -233,6 +233,45 @@ section#enable.example(data-desc='Disabling dates')
     p
         input#enableCustom(type='text', placeholder='Select date')
 
+section#example-range
+    h4 Selecting a Range of Dates
+
+    pre
+        code.js.
+            flatpickr("#range", {
+                "mode": "range"
+            });
+
+    p
+        input.flatpickr(type='text', data-mode="range", placeholder='Select date')
+
+    .padding-y-s
+
+    p Note: disabled dates won't be allowed to intersect the selection
+
+    pre
+        code.js.
+            flatpickr("#range-disabled", {
+                "mode": "range",
+                disable: [date => date.getDate() %6 === 0]
+            });
+
+    p
+        input#range-disabled(type='text', placeholder='Select date')
+
+section#example-multiple
+    h4 Selecting Multiple Dates
+
+    pre
+        code.js.
+            flatpickr("#multiple", {
+                "mode": "multiple"
+            });
+
+    p
+        input.flatpickr(type='text', data-mode="multiple",  placeholder='Select date')
+
+
 section#example-inline
     h4 Inline Calendar
 
