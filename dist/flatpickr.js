@@ -2,7 +2,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-/*! flatpickr v2.1.0, @license MIT */
+/*! flatpickr v2.1.1, @license MIT */
 function Flatpickr(element, config) {
 	var self = this;
 
@@ -136,7 +136,9 @@ function Flatpickr(element, config) {
 				return changeMonth(1);
 			});
 
-			self.currentYearElement.addEventListener("wheel", debounce(yearScroll, 50));
+			self.currentYearElement.addEventListener("wheel", function (e) {
+				return debounce(yearScroll(e), 50);
+			});
 			self.currentYearElement.addEventListener("focus", function () {
 				self.currentYearElement.select();
 			});
