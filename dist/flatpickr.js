@@ -286,10 +286,10 @@ function Flatpickr(element, config) {
 
 			_dayElement.dateObj = currentDate;
 
+			if (equalDates(currentDate, self.now)) _dayElement.classList.add("today");
+
 			if (!dateIsDisabled) {
 				_dayElement.tabIndex = 0;
-
-				if (equalDates(currentDate, self.now)) _dayElement.classList.add("today");
 
 				if (isDateSelected(currentDate)) {
 					_dayElement.classList.add("selected");
@@ -712,9 +712,9 @@ function Flatpickr(element, config) {
 	}
 
 	function setupLocale() {
-		if (typeof Flatpickr.l10ns[self.config.locale] === "undefined") console.warn("flatpickr: locale " + self.config.locale + " undefined");
+		if (_typeof(self.config.locale) !== "object" && typeof Flatpickr.l10ns[self.config.locale] === "undefined") console.warn("flatpickr: invalid locale " + self.config.locale);
 
-		self.l10n = _extends(Object.create(Flatpickr.l10ns.default), self.config.locale !== "default" ? Flatpickr.l10ns[self.config.locale] || {} : {});
+		self.l10n = _extends(Object.create(Flatpickr.l10ns.default), _typeof(self.config.locale) === "object" ? self.config.locale : self.config.locale !== "default" ? Flatpickr.l10ns[self.config.locale] || {} : {});
 	}
 
 	function parseDate(date) {
