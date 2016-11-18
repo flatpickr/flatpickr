@@ -365,11 +365,11 @@ function Flatpickr(element, config) {
 
 			dayElement.dateObj = currentDate;
 
+			if (equalDates(currentDate, self.now))
+				dayElement.classList.add("today");
+
 			if (!dateIsDisabled) {
 				dayElement.tabIndex = 0;
-
-				if (equalDates(currentDate, self.now))
-					dayElement.classList.add("today");
 
 				if (isDateSelected(currentDate)){
 					dayElement.classList.add("selected");
