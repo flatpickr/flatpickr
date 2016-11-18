@@ -250,10 +250,8 @@ function Flatpickr(element, config) {
 
 		if (self.config.mode === "range") {
 			var dateLimits = self.config.enable.length || self.config.disable.length || self.config.mixDate || self.config.maxDate;
-			if (!dateLimits || !self.minRangeDate || !self.maxRangeDate) {
-				self.minRangeDate = new Date(self.currentYear, self.currentMonth - 1, dayNumber);
-				self.maxRangeDate = new Date(self.currentYear, self.currentMonth + 1, (42 - self.firstOfMonth) % daysInMonth);
-			}
+			self.minRangeDate = new Date(self.currentYear, self.currentMonth - 1, dayNumber);
+			self.maxRangeDate = new Date(self.currentYear, self.currentMonth + 1, (42 - self.firstOfMonth) % daysInMonth);
 		}
 
 		self.days.innerHTML = "";
@@ -572,7 +570,9 @@ function Flatpickr(element, config) {
 					break;
 
 				case 27:
+					// escape
 					self.clear();
+					self.redraw();
 					self.close();
 					break;
 
