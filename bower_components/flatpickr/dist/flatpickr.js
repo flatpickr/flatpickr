@@ -250,10 +250,8 @@ function Flatpickr(element, config) {
 
 		if (self.config.mode === "range") {
 			var dateLimits = self.config.enable.length || self.config.disable.length || self.config.mixDate || self.config.maxDate;
-			if (!dateLimits || !self.minRangeDate || !self.maxRangeDate) {
-				self.minRangeDate = new Date(self.currentYear, self.currentMonth - 1, dayNumber);
-				self.maxRangeDate = new Date(self.currentYear, self.currentMonth + 1, (42 - self.firstOfMonth) % daysInMonth);
-			}
+			self.minRangeDate = new Date(self.currentYear, self.currentMonth - 1, dayNumber);
+			self.maxRangeDate = new Date(self.currentYear, self.currentMonth + 1, (42 - self.firstOfMonth) % daysInMonth);
 		}
 
 		self.days.innerHTML = "";
@@ -286,10 +284,10 @@ function Flatpickr(element, config) {
 
 			_dayElement.dateObj = currentDate;
 
+			if (equalDates(currentDate, self.now)) _dayElement.classList.add("today");
+
 			if (!dateIsDisabled) {
 				_dayElement.tabIndex = 0;
-
-				if (equalDates(currentDate, self.now)) _dayElement.classList.add("today");
 
 				if (isDateSelected(currentDate)) {
 					_dayElement.classList.add("selected");
@@ -341,7 +339,11 @@ function Flatpickr(element, config) {
 
 		if (self.config.minDate) self.currentYearElement.min = self.config.minDate.getFullYear();
 
-		if (self.config.maxDate) self.currentYearElement.max = self.config.maxDate.getFullYear();
+		if (self.config.maxDate) {
+			self.currentYearElement.max = self.config.maxDate.getFullYear();
+
+			self.currentYearElement.disabled = self.config.minDate && self.config.minDate.getFullYear() === self.config.maxDate.getFullYear();
+		}
 
 		self.nextMonthNav = createElement("span", "flatpickr-next-month");
 		self.nextMonthNav.innerHTML = self.config.nextArrow;
@@ -371,6 +373,7 @@ function Flatpickr(element, config) {
 
 		self.hourElement.tabIndex = self.minuteElement.tabIndex = 0;
 		self.hourElement.type = self.minuteElement.type = self.numInputType;
+		self.hourElement.pattern = self.minuteElement.pattern = "\d*";
 
 		self.hourElement.value = self.pad(latestSelectedDateObj() ? latestSelectedDateObj().getHours() : self.config.defaultHour);
 
@@ -396,6 +399,7 @@ function Flatpickr(element, config) {
 
 			self.secondElement = createElement("input", "flatpickr-second");
 			self.secondElement.type = self.numInputType;
+			self.secondElement.pattern = self.hourElement.pattern;
 			self.secondElement.value = latestSelectedDateObj() ? self.pad(latestSelectedDateObj().getSeconds()) : "00";
 
 			self.secondElement.step = self.minuteElement.step;
@@ -483,7 +487,7 @@ function Flatpickr(element, config) {
 		document.removeEventListener("click", documentClick);
 		document.removeEventListener("blur", documentClick);
 
-		if (instance.calendarContainer.parentNode) instance.calendarContainer.parentNode.removeChild(instance.calendarContainer);
+		if (instance.isMobile && instance.mobileInput && instance.mobileInput.parentNode) instance.mobileInput.parentNode.removeChild(instance.mobileInput);else if (instance.calendarContainer && instance.calendarContainer.parentNode) instance.calendarContainer.parentNode.removeChild(instance.calendarContainer);
 
 		if (instance.altInput) {
 			instance.input.type = "text";
@@ -572,7 +576,9 @@ function Flatpickr(element, config) {
 					break;
 
 				case 27:
+					// escape
 					self.clear();
+					self.redraw();
 					self.close();
 					break;
 
@@ -679,7 +685,11 @@ function Flatpickr(element, config) {
 
 				if (!self.currentYearElement) return;
 
-				if (date && this._minDate instanceof Date) self.currentYearElement.min = this._minDate.getFullYear();else self.currentYearElement.removeAttribute("min");
+				if (date && this._minDate instanceof Date) self.currentYearElement.min = this._minDate.getFullYear();else {
+					self.currentYearElement.removeAttribute("min");
+				}
+
+				self.currentYearElement.disabled = this._maxDate && this._minDate && this._maxDate.getFullYear() === this._minDate.getFullYear();
 			}
 		});
 
@@ -695,6 +705,8 @@ function Flatpickr(element, config) {
 				if (!self.currentYearElement) return;
 
 				if (date && this._maxDate instanceof Date) self.currentYearElement.max = this._maxDate.getFullYear();else self.currentYearElement.removeAttribute("max");
+
+				self.currentYearElement.disabled = this._maxDate && this._minDate && this._maxDate.getFullYear() === this._minDate.getFullYear();
 			}
 		});
 
@@ -712,9 +724,9 @@ function Flatpickr(element, config) {
 	}
 
 	function setupLocale() {
-		if (typeof Flatpickr.l10ns[self.config.locale] === "undefined") console.warn("flatpickr: locale " + self.config.locale + " undefined");
+		if (_typeof(self.config.locale) !== "object" && typeof Flatpickr.l10ns[self.config.locale] === "undefined") console.warn("flatpickr: invalid locale " + self.config.locale);
 
-		self.l10n = _extends(Object.create(Flatpickr.l10ns.default), self.config.locale !== "default" ? Flatpickr.l10ns[self.config.locale] || {} : {});
+		self.l10n = _extends(Object.create(Flatpickr.l10ns.default), _typeof(self.config.locale) === "object" ? self.config.locale : self.config.locale !== "default" ? Flatpickr.l10ns[self.config.locale] || {} : {});
 	}
 
 	function parseDate(date) {

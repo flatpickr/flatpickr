@@ -136,11 +136,13 @@
     display inline-block
     line-height 1
 
-    .cur-month
+
+    span.cur-month
+        font-family inherit
         font-weight 700
         color inherit
 
-    .cur-year
+    input.cur-year
         background transparent
         box-sizing border-box
         color inherit
@@ -150,6 +152,7 @@
         width 3.2em
         display inline
         font-size inherit
+        font-family inherit
         font-weight 300
         line-height inherit
         height initial
@@ -159,6 +162,12 @@
 
         &:hover
             background rgba(0,0,0,0.05)
+
+        &[disabled], &[disabled]:hover
+            font-size 100%
+            color alpha($months_color, 0.5)
+            background transparent
+            pointer-events none
 
 .flatpickr-weekdays
     background $weekdays_background
@@ -212,7 +221,7 @@
     transition 50ms all ease-out
 
     &, &.prevMonthDay, &.nextMonthDay
-        &.inRange, &:hover, &:focus
+        &.inRange, &.today.inRange,  &:hover, &:focus
             cursor pointer
             outline 0
             background $day_hover_background_color
