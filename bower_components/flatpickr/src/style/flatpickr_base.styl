@@ -24,6 +24,7 @@
     border-radius 3px
     position absolute
     min-width 200px
+    max-width: unquote('247px\9')
 
     &.open
         opacity 1
@@ -174,6 +175,7 @@
     -webkit-flex-wrap: wrap;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
+    max-width 100%
 
     if $border-calendar-only is defined
         border 1px solid $calendar_border_color
@@ -192,6 +194,7 @@
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
+    display: unquote('inline-block\9')
     position: relative;
     -webkit-align-items: center;
     -ms-flex-align: center;
@@ -315,6 +318,7 @@ span.flatpickr-weekday
     display block
     display flex
 
+
     input
         -moz-appearance textfield
         background transparent
@@ -331,6 +335,8 @@ span.flatpickr-weekday
         cursor pointer
         font-weight bold
         color $day_text_color
+        font-size 14px
+        width: unquote('40%\9')
 
         &.flatpickr-minute, &.flatpickr-second
             font-weight 300
@@ -381,6 +387,9 @@ span.flatpickr-weekday
 
 
 @media all and (-ms-high-contrast: none)
+    .flatpickr-days
+        width 247px
+
     .flatpickr-month
         padding 0
         svg

@@ -2,7 +2,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-/*! flatpickr v2.0.9, @license MIT */
+/*! flatpickr v2.1.0, @license MIT */
 function Flatpickr(element, config) {
 	var self = this;
 
@@ -688,7 +688,8 @@ function Flatpickr(element, config) {
 				return this._maxDate;
 			},
 			set: function set(date) {
-				this._maxDate = parseDate(date, true);
+				this._maxDate = parseDate(date);
+				this._maxDate instanceof Date && this._maxDate.setHours(23, 59, 59, 999);
 				if (self.days) redraw();
 
 				if (!self.currentYearElement) return;
