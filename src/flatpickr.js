@@ -461,8 +461,12 @@ function Flatpickr(element, config) {
 		if (self.config.minDate)
 			self.currentYearElement.min = self.config.minDate.getFullYear();
 
-		if (self.config.maxDate)
+		if (self.config.maxDate) {
 			self.currentYearElement.max = self.config.maxDate.getFullYear();
+
+			self.currentYearElement.disabled = self.config.minDate	&&
+				self.config.minDate.getFullYear() === self.config.maxDate.getFullYear();
+		}
 
 		self.nextMonthNav = createElement("span", "flatpickr-next-month");
 		self.nextMonthNav.innerHTML = self.config.nextArrow;
@@ -910,8 +914,13 @@ function Flatpickr(element, config) {
 
 				if (date && this._minDate instanceof Date)
 					self.currentYearElement.min = this._minDate.getFullYear();
-				else
+
+				else {
 					self.currentYearElement.removeAttribute("min");
+				}
+
+				self.currentYearElement.disabled = this._maxDate && this._minDate &&
+					this._maxDate.getFullYear() === this._minDate.getFullYear();
 			}
 		});
 
@@ -932,6 +941,9 @@ function Flatpickr(element, config) {
 					self.currentYearElement.max = this._maxDate.getFullYear();
 				else
 					self.currentYearElement.removeAttribute("max");
+
+				self.currentYearElement.disabled = this._maxDate && this._minDate &&
+					this._maxDate.getFullYear() === this._minDate.getFullYear();
 			}
 		});
 
