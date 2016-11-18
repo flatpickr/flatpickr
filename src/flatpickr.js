@@ -950,14 +950,18 @@ function Flatpickr(element, config) {
 	}
 
 	function setupLocale() {
-		if (typeof Flatpickr.l10ns[self.config.locale] === "undefined")
-			console.warn(`flatpickr: locale ${self.config.locale} undefined`);
+		if (typeof self.config.locale !== "object" &&
+			typeof Flatpickr.l10ns[self.config.locale] === "undefined"
+		)
+			console.warn(`flatpickr: invalid locale ${self.config.locale}`);
 
 		self.l10n = Object.assign(
 			Object.create(Flatpickr.l10ns.default),
-			self.config.locale !== "default"
-				? Flatpickr.l10ns[self.config.locale] || {}
-				: {}
+			typeof self.config.locale === "object"
+				? self.config.locale
+				: self.config.locale !== "default"
+					? Flatpickr.l10ns[self.config.locale] || {}
+					: {}
 		);
 	}
 
