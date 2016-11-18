@@ -915,7 +915,8 @@ function Flatpickr(element, config) {
 				return this._maxDate;
 			},
 			set: function(date) {
-				this._maxDate = parseDate(date, true);
+				this._maxDate = parseDate(date);
+				this._maxDate instanceof Date && (this._maxDate.setHours(23, 59, 59, 999));
 				if(self.days)
 					redraw();
 
