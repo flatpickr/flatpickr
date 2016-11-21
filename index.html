@@ -153,12 +153,14 @@ It&apos;s recommended that you escape all characters that you don&apos;t want ac
 </code></pre></p><p><div class="padding-y-s">Localize globally:</div><pre><code>Flatpickr.localize(Flatpickr.l10ns.ru);
 flatpickr("mySelector");
 </code></pre></p></p></section><section><h4>Localization in a Module Environment</h4><p><pre><code>const Flatpickr = require("flatpickr");
-const Russian = require("flatpickr/dist/l10n/ru.js");
+const Russian = require("flatpickr/dist/l10n/ru.js").ru;
+// or.. import {ru} from "flatpickr/dist/l10n/ru.js"
 
 new Flatpickr(myElem, {
     "locale": Russian
 });
-</code></pre>Localize globally:<pre><code class="js">Flatpickr.localize(Russian); // default locale is now Russian
+</code></pre>Localize globally:<pre><code class="js">const Russian = require("flatpickr/dist/l10n/ru.js");
+Flatpickr.localize(Russian); // default locale is now Russian
 new Flatpickr(myElem);
 </code></pre></p></section><section><p>You may also wish to modify only certain values of locale.</p><p>For instance, to set the first day of the week to Monday:</p><pre><code>Flatpickr.l10ns.default.firstDayOfWeek = 1; // Monday
 flatpickr("mySelector");

@@ -32,7 +32,8 @@
             pre
                 code.
                     const Flatpickr = require("flatpickr");
-                    const Russian = require("flatpickr/dist/l10n/ru.js");
+                    const Russian = require("flatpickr/dist/l10n/ru.js").ru;
+                    // or.. import {ru} from "flatpickr/dist/l10n/ru.js"
 
                     new Flatpickr(myElem, {
                         "locale": Russian
@@ -41,6 +42,7 @@
             | Localize globally:
             pre
                 code.js.
+                    const Russian = require("flatpickr/dist/l10n/ru.js");
                     Flatpickr.localize(Russian); // default locale is now Russian
                     new Flatpickr(myElem);
 
