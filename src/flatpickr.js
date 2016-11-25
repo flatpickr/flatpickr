@@ -49,13 +49,14 @@ function Flatpickr(element, config) {
 
 		self.dateIsPicked = self.selectedDates.length > 0;
 
-		Object.defineProperty(self, "dateIsPicked", {
-			set: function(bool) {
-				if (bool)
-					return self.calendarContainer.classList.add("dateIsPicked");
-				self.calendarContainer.classList.remove("dateIsPicked");
-			}
-		})
+		if (!self.isMobile)
+			Object.defineProperty(self, "dateIsPicked", {
+				set: function(bool) {
+					if (bool)
+						return self.calendarContainer.classList.add("dateIsPicked");
+					self.calendarContainer.classList.remove("dateIsPicked");
+				}
+			});
 
 		if (self.selectedDates.length) {
 			if (self.config.enableTime)
@@ -108,7 +109,7 @@ function Flatpickr(element, config) {
 		if (self.selectedDates.length)
 			self.selectedDates[self.selectedDates.length - 1].setHours(hours % 24, minutes, seconds || 0, 0);
 
-		if (!self.config.enableTime)
+		if (!self.config.enableTime || self.isMobile)
 			return;
 
 		self.hourElement.value = self.pad(
@@ -660,8 +661,11 @@ function Flatpickr(element, config) {
 
 	function close() {
 		self.isOpen = false;
-		self.calendarContainer.classList.remove("open");
-		(self.altInput || self.input).classList.remove("active");
+
+		if (!self.isMobile) {
+			self.calendarContainer.classList.remove("open");
+			(self.altInput || self.input).classList.remove("active");
+		}
 
 		triggerEvent("Close");
 	}
@@ -897,8 +901,10 @@ function Flatpickr(element, config) {
 
 	function open(e) {
 		if (self.isMobile) {
-			e.preventDefault();
-			e.target.blur();
+			if (e) {
+				e.preventDefault();
+				e.target.blur();
+			}
 
 			setTimeout(() => {
 				self.mobileInput.click();
@@ -1366,9 +1372,9 @@ function Flatpickr(element, config) {
 				: "H:i:S";
 
 		if (self.selectedDates.length) {
-			self.mobileInput.defaultValue =
-			self.mobileInput.value =
-			formatDate(self.mobileFormatStr, self.selectedDates[0]);
+			self.mobileInput.defaultValue
+			= self.mobileInput.value
+			= formatDate(self.mobileFormatStr, self.selectedDates[0]);
 		}
 
 		if (self.config.minDate)
