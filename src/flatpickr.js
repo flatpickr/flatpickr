@@ -1222,7 +1222,7 @@ function Flatpickr(element, config) {
 		}
 
 		updateValue();
-		setTimeout(() => self.dateIsPicked = true, 50);
+		self.dateIsPicked = true;
 
 		if (self.config.mode === "range" && self.selectedDates.length === 1)
 			onMouseOver(e);
