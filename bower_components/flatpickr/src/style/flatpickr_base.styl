@@ -1,3 +1,14 @@
+$bezier = cubic-bezier(0, 1, 0.5, 1)
+@keyframes fadeInDown
+    from
+        opacity: 0;
+        transform: translate3d(0, -20px, 0);
+
+    to
+        opacity: 1;
+        transform: none;
+
+
 .flatpickr-input
     cursor pointer
     z-index 1
@@ -13,31 +24,43 @@
 
 .flatpickr-calendar
     background $calendar_background
-    display none
+    display inline-block
+    max-height 0
+    opacity 0
+    visibility hidden
     text-align center
     padding 0
+    animation none
+    direction ltr
 
     unless $border-calendar-only is defined
         border 1px solid $calendar_border_color
 
     font-size 14px
-    border-radius 3px
+    border-radius 5px
     position absolute
     min-width 200px
-    max-width: unquote('247px\9')
+    max-width 256px
+    box-sizing border-box
 
     &.open
         opacity 1
+        visibility visible
+        max-height 320px
         z-index 99999
-        display inline-block
 
+        animation fadeInDown 0.5s $bezier
 
     &.inline
-        display inline-block
         margin-top 2px
         position relative
+        opacity 1
+        visibility visible
+        max-height 320px
+        display block
 
     &.static
+        display none
         position relative
 
         &.open
@@ -45,6 +68,10 @@
 
     &.hasWeeks
         max-width 320px
+
+    &.dateIsPicked.hasTime
+        .flatpickr-time
+            height 38px
 
     &:before, &:after
         position absolute
@@ -89,67 +116,165 @@
 
 .flatpickr-month
     if $border-calendar-only is defined
-        border-radius 3px 3px 0 0
+        border-radius 5px 5px 0 0
+
     background $months_background
     color $months_color
     fill $months_color
-    padding 4px 0 0
-    padding unquote('0px\9')
+    height 26px
     text-align center
     position relative
-
 
 
 .flatpickr-prev-month, .flatpickr-next-month
     text-decoration none
     cursor pointer
+    position absolute
+    top 8px
+    height 16px
 
     i
         position relative
 
+    &.flatpickr-prev-month
+        /*!
+        /*rtl:begin:ignore*//*
+        */
+        left 5px
+        /*!
+        /*rtl:end:ignore*//*
+        */
+
+
+    &.flatpickr-next-month
+        /*!
+        /*rtl:begin:ignore*//*
+        */
+        right 5px
+        /*!
+        /*rtl:end:ignore*//*
+        */
+
     svg
         width 14px
-        position absolute
-        top 8px
-        top unquote('0px\9')
 
         path
+            transition fill 0.1s
             fill inherit
 
         &:hover
-            fill $today_color
+            if $arrow_hover_color is defined
+                fill $arrow_hover_color
+
+            else
+                fill $today_color
 
     &:hover
         color $today_color
 
-.flatpickr-prev-month svg
-    left 5px
+.numInputWrapper
+    position relative
+    height auto
 
-.flatpickr-next-month svg
-    right 5px
+    input, span
+        display inline-block
+
+    input
+        width 100%
+
+    span
+        position absolute
+        right 0
+        width: 14px;
+        padding: 0 4px 0 2px;
+        height 50%
+        line-height 50%
+        opacity 0
+        z-index 9
+        cursor pointer
+        border 1px solid alpha($months_color, 0.05);
+        box-sizing border-box
+
+        &:hover
+            background alpha(black, 0.1)
+
+        &:active
+            background alpha(black, 0.2)
+
+        &:after
+            display block
+            content ""
+            position absolute
+            top 33%
+
+        &.arrowUp
+            top 0
+            border-bottom 0
+
+            &:after
+                border-left: 4px solid transparent;
+                border-right: 4px solid transparent;
+                border-bottom: 4px solid alpha($months_color, 0.6);
+
+        &.arrowDown
+            top 50%
+
+            &:after
+                border-left: 4px solid transparent;
+                border-right: 4px solid transparent;
+                border-top: 4px solid alpha($months_color, 0.6);
+
+        svg
+            width inherit
+            height: auto;
+            path
+                fill alpha($months_color, 0.5)
+
+    &:hover
+        background rgba(0,0,0,0.05)
+
+        span
+            opacity 1
+
+
+
+
 
 .flatpickr-current-month
     font-size 135%
+    line-height 1.35
     font-weight 300
     color inherit
-    position relative
+    position absolute
+    width: 75%;
+    left: 12.5%;
+    top: 4px;
     display inline-block
-    line-height 1
+    text-align center
 
 
     span.cur-month
         font-family inherit
         font-weight 700
         color inherit
+        display inline-block
+        margin-right 4px
+
+
+    .numInputWrapper
+        width: 6ch;
+        width: unquote("7ch\0")
+        display inline-block
+
 
     input.cur-year
         background transparent
         box-sizing border-box
         color inherit
         cursor default
-        padding 0
+        padding 0 0 0 0.5ch
         margin 0
-        width 3.2em
+
         display inline
         font-size inherit
         font-family inherit
@@ -160,8 +285,9 @@
         border-radius: 0;
         vertical-align: initial;
 
-        &:hover
-            background rgba(0,0,0,0.05)
+        &:focus
+            outline 0
+
 
         &[disabled], &[disabled]:hover
             font-size 100%
@@ -175,7 +301,7 @@
     overflow hidden
 
 .flatpickr-days
-    padding-top 1px
+    padding 1px
     outline 0
     text-align left
     display: -webkit-flex;
@@ -316,60 +442,76 @@ span.flatpickr-weekday
 
 .flatpickr-rContainer
     display inline-block
-    max-width 247px
+    // max-width 256px
+
 
 
 .flatpickr-time
-    overflow auto
     text-align center
     border-top 0
     outline 0
     display block
-    display flex
+    height 0 // hide initially
+    line-height 38px
+    max-height 38px
+    box-sizing border-box
+    overflow hidden
+    transition height 0.33s $bezier
 
+    &:after
+        content ""
+        display table
+        clear both
+
+    .numInputWrapper
+        width: 40%
+        height inherit
+        float left
+
+    &.hasSeconds .numInputWrapper
+        width 26%
 
     input
-        -moz-appearance textfield
         background transparent
         box-shadow none
         border 0
         border-radius 0
-        display inline-block
-        flex 1
         text-align center
         margin 0
         padding 0
-        height 38px
-        line-height 38px
+        height inherit
+        line-height inherit
         cursor pointer
-        font-weight bold
         color $day_text_color
         font-size 14px
-        width: unquote('40%\9')
+        position relative
+        box-sizing border-box
+
+        &.flatpickr-hour
+            font-weight bold
 
         &.flatpickr-minute, &.flatpickr-second
-            font-weight 300
+            font-weight 400
 
         &:focus
             outline 0
             border 0
 
-        &:hover, &:focus
-            -moz-appearance: number-input
-            background $day_hover_background_color
-
     .flatpickr-time-separator, .flatpickr-am-pm
-        height 38px
+        height inherit
         display inline-block
-        line-height 38px
+        float left
+        line-height inherit
         color $day_text_color
+        font-weight bold
+        width 2%
 
     .flatpickr-am-pm
         outline 0
         width 18%
         cursor pointer
         text-align center
-        font-weight 300
+        font-weight 400
 
         &:hover, &:focus
             background lighten($day_hover_background_color, 4)
@@ -384,7 +526,7 @@ span.flatpickr-weekday
 .hasWeeks .flatpickr-days
     border-left 0
 
-.flatpickr-innerContainer + .flatpickr-time
+.dateIsPicked .flatpickr-innerContainer + .flatpickr-time
     if $border-calendar-only is defined
         border 1px solid $calendar_border_color
         border-top 0
@@ -397,7 +539,7 @@ span.flatpickr-weekday
 
 @media all and (-ms-high-contrast: none)
     .flatpickr-days
-        width 247px
+        width 256px
 
     .flatpickr-month
         padding 0
