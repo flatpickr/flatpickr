@@ -31,6 +31,7 @@ $bezier = cubic-bezier(0, 1, 0.5, 1)
     text-align center
     padding 0
     animation none
+    direction ltr
 
     unless $border-calendar-only is defined
         border 1px solid $calendar_border_color
@@ -132,15 +133,27 @@ $bezier = cubic-bezier(0, 1, 0.5, 1)
     top 8px
     height 16px
 
-
     i
         position relative
 
     &.flatpickr-prev-month
+        /*!
+        /*rtl:begin:ignore*//*
+        */
         left 5px
+        /*!
+        /*rtl:end:ignore*//*
+        */
+
 
     &.flatpickr-next-month
+        /*!
+        /*rtl:begin:ignore*//*
+        */
         right 5px
+        /*!
+        /*rtl:end:ignore*//*
+        */
 
     svg
         width 14px
