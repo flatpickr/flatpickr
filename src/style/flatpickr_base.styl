@@ -44,16 +44,22 @@ $bezier = cubic-bezier(0, 1, 0.5, 1)
 
     &.open
         opacity 1
-        z-index 99999
         visibility visible
         max-height 320px
+        z-index 99999
+
         animation fadeInDown 0.5s $bezier
 
     &.inline
         margin-top 2px
         position relative
+        opacity 1
+        visibility visible
+        max-height 320px
+        display block
 
     &.static
+        display none
         position relative
 
         &.open
