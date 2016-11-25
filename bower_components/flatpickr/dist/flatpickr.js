@@ -2,7 +2,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-/*! flatpickr v2.2, @license MIT */
+/*! flatpickr v2.2.1, @license MIT */
 function Flatpickr(element, config) {
 	var self = this;
 
@@ -43,7 +43,6 @@ function Flatpickr(element, config) {
 
 		bind();
 
-		self.dateIsPicked = self.selectedDates.length > 0;
 		self.minDateHasTime = self.config.minDate && (self.config.minDate.getHours() || self.config.minDate.getMinutes() || self.config.minDate.getSeconds());
 
 		self.maxDateHasTime = self.config.maxDate && (self.config.maxDate.getHours() || self.config.maxDate.getMinutes() || self.config.maxDate.getSeconds());
@@ -54,6 +53,8 @@ function Flatpickr(element, config) {
 				self.calendarContainer.classList.remove("dateIsPicked");
 			}
 		});
+
+		self.dateIsPicked = self.selectedDates.length > 0;
 
 		if (self.selectedDates.length) {
 			if (self.config.enableTime) setHoursFromDate();
@@ -527,6 +528,7 @@ function Flatpickr(element, config) {
 		self.selectedDates = [];
 		self.dateIsPicked = false;
 
+		self.redraw();
 		triggerEvent("Change");
 	}
 
