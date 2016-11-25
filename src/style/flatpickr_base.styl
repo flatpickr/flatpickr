@@ -44,16 +44,22 @@ $bezier = cubic-bezier(0, 1, 0.5, 1)
 
     &.open
         opacity 1
-        z-index 99999
         visibility visible
         max-height 320px
+        z-index 99999
+
         animation fadeInDown 0.5s $bezier
 
     &.inline
         margin-top 2px
         position relative
+        opacity 1
+        visibility visible
+        max-height 320px
+        display block
 
     &.static
+        display none
         position relative
 
         &.open
@@ -124,6 +130,7 @@ $bezier = cubic-bezier(0, 1, 0.5, 1)
     cursor pointer
     position absolute
     top 8px
+    height 16px
 
 
     i
@@ -222,6 +229,7 @@ $bezier = cubic-bezier(0, 1, 0.5, 1)
 
 .flatpickr-current-month
     font-size 135%
+    line-height 1.35
     font-weight 300
     color inherit
     position absolute
@@ -242,6 +250,7 @@ $bezier = cubic-bezier(0, 1, 0.5, 1)
 
     .numInputWrapper
         width: 6ch;
+        width: unquote("7ch\0")
         display inline-block
 
 
