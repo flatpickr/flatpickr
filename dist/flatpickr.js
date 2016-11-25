@@ -2,7 +2,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-/*! flatpickr v2.1.1, @license MIT */
+/*! flatpickr v2.2, @license MIT */
 function Flatpickr(element, config) {
 	var self = this;
 
@@ -44,6 +44,9 @@ function Flatpickr(element, config) {
 		bind();
 
 		self.dateIsPicked = self.selectedDates.length > 0;
+		self.minDateHasTime = self.config.minDate && (self.config.minDate.getHours() || self.config.minDate.getMinutes() || self.config.minDate.getSeconds());
+
+		self.maxDateHasTime = self.config.maxDate && (self.config.maxDate.getHours() || self.config.maxDate.getMinutes() || self.config.maxDate.getSeconds());
 
 		if (!self.isMobile) Object.defineProperty(self, "dateIsPicked", {
 			set: function set(bool) {
@@ -82,11 +85,21 @@ function Flatpickr(element, config) {
 
 		if (self.amPM) hours = hours % 12 + 12 * (self.amPM.innerHTML === "PM");
 
+		if (self.minDateHasTime && compareDates(latestSelectedDateObj(), self.config.minDate) === 0) {
+			hours = Math.max(hours, self.config.minDate.getHours());
+			if (hours === self.config.minDate.getHours()) minutes = Math.max(minutes, self.config.minDate.getMinutes());
+		} else if (self.maxDateHasTime && compareDates(latestSelectedDateObj(), self.config.maxDate) === 0) {
+			hours = Math.min(hours, self.config.maxDate.getHours());
+			if (hours === self.config.maxDate.getHours()) minutes = Math.min(minutes, self.config.maxDate.getMinutes());
+		}
+
 		setHours(hours, minutes, seconds);
 	}
 
 	function setHoursFromDate(dateObj) {
-		setHours((dateObj || latestSelectedDateObj()).getHours(), (dateObj || latestSelectedDateObj()).getMinutes(), (dateObj || latestSelectedDateObj()).getSeconds());
+		var date = dateObj || latestSelectedDateObj();
+
+		if (date) setHours(date.getHours(), date.getMinutes(), date.getSeconds());
 	}
 
 	function setHours(hours, minutes, seconds) {
@@ -328,7 +341,7 @@ function Flatpickr(element, config) {
 
 			_dayElement.dateObj = currentDate;
 
-			if (equalDates(currentDate, self.now)) _dayElement.classList.add("today");
+			if (compareDates(currentDate, self.now) === 0) _dayElement.classList.add("today");
 
 			if (!dateIsDisabled) {
 				_dayElement.tabIndex = 0;
@@ -338,7 +351,7 @@ function Flatpickr(element, config) {
 					self.selectedDateElem = _dayElement;
 
 					if (self.config.mode === "range") {
-						_dayElement.className += equalDates(currentDate, self.selectedDates[0]) ? " startRange" : self.selectedDates.length > 1 ? " endRange" : "";
+						_dayElement.className += compareDates(currentDate, self.selectedDates[0]) === 0 ? " startRange" : self.selectedDates.length > 1 ? " endRange" : "";
 					}
 				}
 			} else if (self.selectedDates[0] && currentDate > self.minRangeDate && currentDate < self.selectedDates[0]) self.minRangeDate = currentDate;else if (self.selectedDates[0] && currentDate < self.maxRangeDate && currentDate > self.selectedDates[0]) self.maxRangeDate = currentDate;
@@ -596,7 +609,7 @@ function Flatpickr(element, config) {
 	}
 
 	function isEnabled(dateToCheck) {
-		if (self.config.minDate && dateToCheck < self.config.minDate || self.config.maxDate && dateToCheck > self.config.maxDate) return false;
+		if (self.config.minDate && compareDates(dateToCheck, self.config.minDate) === -1 || self.config.maxDate && compareDates(dateToCheck, self.config.maxDate) === 1) return false;
 
 		if (!self.config.enable.length && !self.config.disable.length) return true;
 
@@ -733,12 +746,17 @@ function Flatpickr(element, config) {
 				return this._minDate;
 			},
 			set: function set(date) {
-				this._minDate = parseDate(date, true);
+				this._minDate = parseDate(date);
+
 				if (self.days) redraw();
 
 				if (!self.currentYearElement) return;
 
-				if (date && this._minDate instanceof Date) self.currentYearElement.min = this._minDate.getFullYear();else {
+				if (date && this._minDate instanceof Date) {
+					self.minDateHasTime = this._minDate.getHours() || this._minDate.getMinutes() || this._minDate.getSeconds();
+
+					self.currentYearElement.min = this._minDate.getFullYear();
+				} else {
 					self.currentYearElement.removeAttribute("min");
 				}
 
@@ -752,12 +770,14 @@ function Flatpickr(element, config) {
 			},
 			set: function set(date) {
 				this._maxDate = parseDate(date);
-				this._maxDate instanceof Date && this._maxDate.setHours(23, 59, 59, 999);
 				if (self.days) redraw();
 
 				if (!self.currentYearElement) return;
 
-				if (date && this._maxDate instanceof Date) self.currentYearElement.max = this._maxDate.getFullYear();else self.currentYearElement.removeAttribute("max");
+				if (date && this._maxDate instanceof Date) {
+					self.currentYearElement.max = this._maxDate.getFullYear();
+					self.maxDateHasTime = this._maxDate.getHours() || this._maxDate.getMinutes() || this._maxDate.getSeconds();
+				} else self.currentYearElement.removeAttribute("max");
 
 				self.currentYearElement.disabled = this._maxDate && this._minDate && this._maxDate.getFullYear() === this._minDate.getFullYear();
 			}
@@ -893,15 +913,20 @@ function Flatpickr(element, config) {
 			updateNavigationCurrentMonth();
 		}
 
-		updateValue();
 		buildDays();
-		triggerEvent("Change");
 
+		if (self.minDateHasTime && self.config.enableTime && compareDates(selectedDate, self.config.minDate) === 0) {
+			setHoursFromDate(self.config.minDate);
+		}
+
+		updateValue();
 		setTimeout(function () {
 			return self.dateIsPicked = true;
 		}, 50);
 
 		if (self.config.mode === "range" && self.selectedDates.length === 1) onMouseOver(e);
+
+		triggerEvent("Change");
 	}
 
 	function set(option, value) {
@@ -914,7 +939,7 @@ function Flatpickr(element, config) {
 		if (!date) return self.clear();
 
 		self.selectedDates = (Array.isArray(date) ? date.map(parseDate) : [parseDate(date)]).filter(function (d) {
-			return d instanceof Date;
+			return d instanceof Date && isEnabled(d);
 		});
 		self.redraw();
 		jumpToDate();
@@ -1166,7 +1191,7 @@ function Flatpickr(element, config) {
 
 	function isDateSelected(date) {
 		for (var i = 0; i < self.selectedDates.length; i++) {
-			if (equalDates(self.selectedDates[i], date)) return "" + i;
+			if (compareDates(self.selectedDates[i], date) === 0) return "" + i;
 		}
 
 		return false;
@@ -1259,9 +1284,11 @@ function Flatpickr(element, config) {
 		};
 	}
 
-	function equalDates(date1, date2) {
+	function compareDates(date1, date2) {
 		if (!(date1 instanceof Date) || !(date2 instanceof Date)) return false;
-		return date1.getDate() === date2.getDate() && date1.getMonth() === date2.getMonth() && date1.getFullYear() === date2.getFullYear();
+
+		return Math.sign(date1.getDate() - date2.getDate() + 99 * (date1.getMonth() - date2.getMonth()) + // amplify year/month diff
+		999 * (date1.getFullYear() - date2.getFullYear()));
 	}
 
 	function timeWrapper(e) {
