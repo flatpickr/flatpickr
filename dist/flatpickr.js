@@ -43,6 +43,15 @@ function Flatpickr(element, config) {
 
 		bind();
 
+		self.dateIsPicked = self.selectedDates.length > 0;
+
+		Object.defineProperty(self, "dateIsPicked", {
+			set: function set(bool) {
+				if (bool) return self.calendarContainer.classList.add("dateIsPicked");
+				self.calendarContainer.classList.remove("dateIsPicked");
+			}
+		});
+
 		if (self.selectedDates.length) {
 			if (self.config.enableTime) setHoursFromDate();
 			updateValue();
@@ -199,6 +208,35 @@ function Flatpickr(element, config) {
 		self.redraw();
 	}
 
+	function incrementNumInput(e, delta) {
+		var input = e.target.parentNode.childNodes[0];
+		input.value = parseInt(input.value, 10) + delta * (input.step || 1);
+
+		try {
+			input.dispatchEvent(new Event("input", { "bubbles": true }));
+		} catch (e) {}
+	}
+
+	function createNumberInput(inputClassName) {
+		var wrapper = createElement("div", "numInputWrapper"),
+		    numInput = createElement("input", "numInput " + inputClassName),
+		    arrowUp = createElement("span", "arrowUp"),
+		    arrowDown = createElement("span", "arrowDown");
+
+		numInput.type = "text";
+		wrapper.appendChild(numInput);
+		wrapper.appendChild(arrowUp);
+		wrapper.appendChild(arrowDown);
+
+		arrowUp.addEventListener("click", function (e) {
+			return incrementNumInput(e, 1);
+		});
+		arrowDown.addEventListener("click", function (e) {
+			return incrementNumInput(e, -1);
+		});
+		return wrapper;
+	}
+
 	function build() {
 		var fragment = document.createDocumentFragment();
 		self.calendarContainer = createElement("div", "flatpickr-calendar");
@@ -335,8 +373,8 @@ function Flatpickr(element, config) {
 
 		self.currentMonthElement = createElement("span", "cur-month");
 
-		self.currentYearElement = createElement("input", "cur-year");
-		self.currentYearElement.type = self.numInputType;
+		var yearInput = createNumberInput("cur-year");
+		self.currentYearElement = yearInput.childNodes[0];
 		self.currentYearElement.title = self.l10n.scrollTitle;
 
 		if (self.config.minDate) self.currentYearElement.min = self.config.minDate.getFullYear();
@@ -352,7 +390,7 @@ function Flatpickr(element, config) {
 
 		self.navigationCurrentMonth = createElement("span", "flatpickr-current-month");
 		self.navigationCurrentMonth.appendChild(self.currentMonthElement);
-		self.navigationCurrentMonth.appendChild(self.currentYearElement);
+		self.navigationCurrentMonth.appendChild(yearInput);
 
 		monthNavFragment.appendChild(self.prevMonthNav);
 		monthNavFragment.appendChild(self.navigationCurrentMonth);
@@ -370,11 +408,13 @@ function Flatpickr(element, config) {
 		self.timeContainer.tabIndex = -1;
 		var separator = createElement("span", "flatpickr-time-separator", ":");
 
-		self.hourElement = createElement("input", "flatpickr-hour");
-		self.minuteElement = createElement("input", "flatpickr-minute");
+		var hourInput = createNumberInput("flatpickr-hour");
+		self.hourElement = hourInput.childNodes[0];
+
+		var minuteInput = createNumberInput("flatpickr-minute");
+		self.minuteElement = minuteInput.childNodes[0];
 
 		self.hourElement.tabIndex = self.minuteElement.tabIndex = 0;
-		self.hourElement.type = self.minuteElement.type = self.numInputType;
 		self.hourElement.pattern = self.minuteElement.pattern = "\d*";
 
 		self.hourElement.value = self.pad(latestSelectedDateObj() ? latestSelectedDateObj().getHours() : self.config.defaultHour);
@@ -392,15 +432,16 @@ function Flatpickr(element, config) {
 
 		self.hourElement.title = self.minuteElement.title = self.l10n.scrollTitle;
 
-		self.timeContainer.appendChild(self.hourElement);
+		self.timeContainer.appendChild(hourInput);
 		self.timeContainer.appendChild(separator);
-		self.timeContainer.appendChild(self.minuteElement);
+		self.timeContainer.appendChild(minuteInput);
 
 		if (self.config.enableSeconds) {
-			self.timeContainer.classList.add("has-seconds");
+			self.timeContainer.classList.add("hasSeconds");
 
-			self.secondElement = createElement("input", "flatpickr-second");
-			self.secondElement.type = self.numInputType;
+			var secondInput = createNumberInput("flatpickr-second");
+			self.secondElement = secondInput.childNodes[0];
+
 			self.secondElement.pattern = self.hourElement.pattern;
 			self.secondElement.value = latestSelectedDateObj() ? self.pad(latestSelectedDateObj().getSeconds()) : "00";
 
@@ -409,7 +450,7 @@ function Flatpickr(element, config) {
 			self.secondElement.max = self.minuteElement.max;
 
 			self.timeContainer.appendChild(createElement("span", "flatpickr-time-separator", ":"));
-			self.timeContainer.appendChild(self.secondElement);
+			self.timeContainer.appendChild(secondInput);
 		}
 
 		if (!self.config.time_24hr) {
@@ -467,6 +508,7 @@ function Flatpickr(element, config) {
 		if (self.mobileInput) self.mobileInput.value = "";
 
 		self.selectedDates = [];
+		self.dateIsPicked = false;
 
 		triggerEvent("Change");
 	}
@@ -846,6 +888,10 @@ function Flatpickr(element, config) {
 		buildDays();
 		triggerEvent("Change");
 
+		setTimeout(function () {
+			return self.dateIsPicked = true;
+		}, 50);
+
 		if (self.config.mode === "range" && self.selectedDates.length === 1) onMouseOver(e);
 	}
 
@@ -866,6 +912,8 @@ function Flatpickr(element, config) {
 
 		setHoursFromDate();
 		updateValue();
+
+		self.dateIsPicked = self.selectedDates.length > 0;
 
 		if (triggerChange) triggerEvent("Change");
 	}
@@ -1178,7 +1226,7 @@ function Flatpickr(element, config) {
 		var e = document.createElement(tag);
 		e.className = className;
 
-		if (content) e.textContent = content;
+		if (content) e.innerHTML = content;
 
 		return e;
 	}
