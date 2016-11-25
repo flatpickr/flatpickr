@@ -683,6 +683,7 @@ function Flatpickr(element, config) {
 		self.selectedDates = [];
 		self.dateIsPicked = false;
 
+		self.redraw();
 		triggerEvent("Change");
 	}
 
