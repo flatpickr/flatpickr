@@ -43,7 +43,6 @@ function Flatpickr(element, config) {
 
 		bind();
 
-		self.dateIsPicked = self.selectedDates.length > 0;
 		self.minDateHasTime = self.config.minDate && (self.config.minDate.getHours() || self.config.minDate.getMinutes() || self.config.minDate.getSeconds());
 
 		self.maxDateHasTime = self.config.maxDate && (self.config.maxDate.getHours() || self.config.maxDate.getMinutes() || self.config.maxDate.getSeconds());
@@ -54,6 +53,8 @@ function Flatpickr(element, config) {
 				self.calendarContainer.classList.remove("dateIsPicked");
 			}
 		});
+
+		self.dateIsPicked = self.selectedDates.length > 0;
 
 		if (self.selectedDates.length) {
 			if (self.config.enableTime) setHoursFromDate();

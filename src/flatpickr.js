@@ -47,7 +47,6 @@ function Flatpickr(element, config) {
 
 		bind();
 
-		self.dateIsPicked = self.selectedDates.length > 0;
 		self.minDateHasTime = self.config.minDate && (
 			self.config.minDate.getHours()
 			|| self.config.minDate.getMinutes()
@@ -68,6 +67,8 @@ function Flatpickr(element, config) {
 					self.calendarContainer.classList.remove("dateIsPicked");
 				}
 			});
+
+		self.dateIsPicked = self.selectedDates.length > 0;
 
 		if (self.selectedDates.length) {
 			if (self.config.enableTime)
