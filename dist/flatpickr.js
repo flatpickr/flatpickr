@@ -920,7 +920,9 @@ function Flatpickr(element, config) {
 		}
 
 		updateValue();
-		self.dateIsPicked = true;
+		setTimeout(function () {
+			return self.dateIsPicked = true;
+		}, 50);
 
 		if (self.config.mode === "range" && self.selectedDates.length === 1) onMouseOver(e);
 
