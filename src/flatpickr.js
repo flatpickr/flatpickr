@@ -48,6 +48,17 @@ function Flatpickr(element, config) {
 		bind();
 
 		self.dateIsPicked = self.selectedDates.length > 0;
+		self.minDateHasTime = self.config.minDate && (
+			self.config.minDate.getHours()
+			|| self.config.minDate.getMinutes()
+			|| self.config.minDate.getSeconds()
+		);
+
+		self.maxDateHasTime = self.config.maxDate && (
+			self.config.maxDate.getHours()
+			|| self.config.maxDate.getMinutes()
+			|| self.config.maxDate.getSeconds()
+		);
 
 		if (!self.isMobile)
 			Object.defineProperty(self, "dateIsPicked", {
@@ -94,15 +105,26 @@ function Flatpickr(element, config) {
 		if (self.amPM)
 			hours = (hours % 12) + (12 * (self.amPM.innerHTML === "PM"));
 
+		if (self.minDateHasTime && compareDates(latestSelectedDateObj(), self.config.minDate) === 0) {
+			hours = Math.max(hours, self.config.minDate.getHours());
+			if (hours === self.config.minDate.getHours())
+				minutes = Math.max(minutes, self.config.minDate.getMinutes());
+		}
+
+		else if (self.maxDateHasTime && compareDates(latestSelectedDateObj(), self.config.maxDate) === 0) {
+			hours = Math.min(hours, self.config.maxDate.getHours());
+			if (hours === self.config.maxDate.getHours())
+				minutes = Math.min(minutes, self.config.maxDate.getMinutes());
+		}
+
 		setHours(hours, minutes, seconds);
 	}
 
 	function setHoursFromDate(dateObj){
-		setHours(
-			(dateObj || latestSelectedDateObj()).getHours(),
-			(dateObj || latestSelectedDateObj()).getMinutes(),
-			(dateObj || latestSelectedDateObj()).getSeconds()
-		);
+		const date = dateObj || latestSelectedDateObj();
+
+		if (date)
+			setHours(date.getHours(), date.getMinutes(), date.getSeconds());
 	}
 
 	function setHours(hours, minutes, seconds) {
@@ -405,7 +427,7 @@ function Flatpickr(element, config) {
 
 			dayElement.dateObj = currentDate;
 
-			if (equalDates(currentDate, self.now))
+			if (compareDates(currentDate, self.now) === 0)
 				dayElement.classList.add("today");
 
 			if (!dateIsDisabled) {
@@ -416,7 +438,7 @@ function Flatpickr(element, config) {
 					self.selectedDateElem = dayElement;
 
 					if (self.config.mode === "range") {
-						dayElement.className +=	equalDates(currentDate, self.selectedDates[0])
+						dayElement.className +=	compareDates(currentDate, self.selectedDates[0]) === 0
 							? " startRange"
 							: self.selectedDates.length > 1
 								? " endRange"
@@ -764,8 +786,8 @@ function Flatpickr(element, config) {
 
 	function isEnabled(dateToCheck) {
 		if (
-			(self.config.minDate && dateToCheck < self.config.minDate) ||
-			(self.config.maxDate && dateToCheck > self.config.maxDate)
+			(self.config.minDate && compareDates(dateToCheck, self.config.minDate) === -1) ||
+			(self.config.maxDate && compareDates(dateToCheck, self.config.maxDate) === 1)
 		)
 			return false;
 
@@ -955,15 +977,21 @@ function Flatpickr(element, config) {
 				return this._minDate;
 			},
 			set: function(date) {
-				this._minDate = parseDate(date, true);
+				this._minDate = parseDate(date);
+
 				if(self.days)
 					redraw();
 
 				if (!self.currentYearElement)
 					return;
 
-				if (date && this._minDate instanceof Date)
+				if (date && this._minDate instanceof Date) {
+					self.minDateHasTime = this._minDate.getHours()
+						|| this._minDate.getMinutes()
+						|| this._minDate.getSeconds();
+
 					self.currentYearElement.min = this._minDate.getFullYear();
+				}
 
 				else {
 					self.currentYearElement.removeAttribute("min");
@@ -980,15 +1008,19 @@ function Flatpickr(element, config) {
 			},
 			set: function(date) {
 				this._maxDate = parseDate(date);
-				this._maxDate instanceof Date && (this._maxDate.setHours(23, 59, 59, 999));
 				if(self.days)
 					redraw();
 
 				if (!self.currentYearElement)
 					return;
 
-				if (date && this._maxDate instanceof Date)
+				if (date && this._maxDate instanceof Date) {
 					self.currentYearElement.max = this._maxDate.getFullYear();
+					self.maxDateHasTime = this._maxDate.getHours()
+						|| this._maxDate.getMinutes()
+						|| this._maxDate.getSeconds();
+				}
+
 				else
 					self.currentYearElement.removeAttribute("max");
 
@@ -1175,24 +1207,27 @@ function Flatpickr(element, config) {
 		setHoursFromInputs();
 
 
-		if (
-			selectedDate.getMonth() !== self.currentMonth &&
-			self.config.mode !== "range"
-		) {
+		if (selectedDate.getMonth() !== self.currentMonth && self.config.mode !== "range") {
 			self.currentYear = selectedDate.getFullYear();
 			self.currentMonth = selectedDate.getMonth();
 			updateNavigationCurrentMonth();
 		}
 
+		buildDays();
+
+		if (self.minDateHasTime	&& self.config.enableTime
+			&& compareDates(selectedDate, self.config.minDate) === 0
+		) {
+			setHoursFromDate(self.config.minDate);
+		}
 
 		updateValue();
-		buildDays();
-		triggerEvent("Change");
-
 		setTimeout(() => self.dateIsPicked = true, 50);
 
 		if (self.config.mode === "range" && self.selectedDates.length === 1)
 			onMouseOver(e);
+
+		triggerEvent("Change");
 	}
 
 	function set(option, value) {
@@ -1206,7 +1241,7 @@ function Flatpickr(element, config) {
 			return self.clear();
 
 		self.selectedDates = (Array.isArray(date) ? date.map(parseDate) : [parseDate(date)]).filter(
-			d => d instanceof Date
+			d => d instanceof Date && isEnabled(d)
 		);
 		self.redraw();
 		jumpToDate();
@@ -1449,7 +1484,7 @@ function Flatpickr(element, config) {
 
 	function isDateSelected(date) {
 		for (var i = 0; i < self.selectedDates.length; i++) {
-			if (equalDates(self.selectedDates[i], date))
+			if (compareDates(self.selectedDates[i], date) === 0)
 				return "" + i;
 		}
 
@@ -1558,12 +1593,15 @@ function Flatpickr(element, config) {
 		};
 	}
 
-	function equalDates(date1, date2) {
+	function compareDates(date1, date2) {
 		if (!(date1 instanceof Date) || !(date2 instanceof Date))
 			return false;
-		return date1.getDate() === date2.getDate() &&
-		date1.getMonth() === date2.getMonth() &&
-		date1.getFullYear() === date2.getFullYear();
+
+		return Math.sign(
+			date1.getDate() - date2.getDate() +
+			99*(date1.getMonth() - date2.getMonth()) + // amplify year/month diff
+			999*(date1.getFullYear() - date2.getFullYear())
+		);
 	}
 
 	function timeWrapper(e) {
