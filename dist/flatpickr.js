@@ -45,7 +45,7 @@ function Flatpickr(element, config) {
 
 		self.dateIsPicked = self.selectedDates.length > 0;
 
-		Object.defineProperty(self, "dateIsPicked", {
+		if (!self.isMobile) Object.defineProperty(self, "dateIsPicked", {
 			set: function set(bool) {
 				if (bool) return self.calendarContainer.classList.add("dateIsPicked");
 				self.calendarContainer.classList.remove("dateIsPicked");
@@ -92,7 +92,7 @@ function Flatpickr(element, config) {
 	function setHours(hours, minutes, seconds) {
 		if (self.selectedDates.length) self.selectedDates[self.selectedDates.length - 1].setHours(hours % 24, minutes, seconds || 0, 0);
 
-		if (!self.config.enableTime) return;
+		if (!self.config.enableTime || self.isMobile) return;
 
 		self.hourElement.value = self.pad(!self.config.time_24hr ? (12 + hours) % 12 + 12 * (hours % 12 === 0) : hours);
 
@@ -515,8 +515,11 @@ function Flatpickr(element, config) {
 
 	function close() {
 		self.isOpen = false;
-		self.calendarContainer.classList.remove("open");
-		(self.altInput || self.input).classList.remove("active");
+
+		if (!self.isMobile) {
+			self.calendarContainer.classList.remove("open");
+			(self.altInput || self.input).classList.remove("active");
+		}
 
 		triggerEvent("Close");
 	}
@@ -688,8 +691,10 @@ function Flatpickr(element, config) {
 
 	function open(e) {
 		if (self.isMobile) {
-			e.preventDefault();
-			e.target.blur();
+			if (e) {
+				e.preventDefault();
+				e.target.blur();
+			}
 
 			setTimeout(function () {
 				self.mobileInput.click();
