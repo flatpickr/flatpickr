@@ -214,7 +214,11 @@ function Flatpickr(element, config) {
 
 		try {
 			input.dispatchEvent(new Event("input", { "bubbles": true }));
-		} catch (e) {}
+		} catch (e) {
+			var ev = document.createEvent('CustomEvent');
+			ev.initCustomEvent('input', true, true, {});
+			input.dispatchEvent(ev);
+		}
 	}
 
 	function createNumberInput(inputClassName) {
