@@ -12,7 +12,7 @@
     "build-style": "stylus --compress --include src/style < ./src/style/flatpickr.styl > ./dist/flatpickr.min.css",
     "build-themes": "stylus --out dist/themes --compress src/style/themes",
     "dev-script": "onchange \"src/flatpickr.js\" -- npm run build-script",
-    "dev-style": "parallelshell \"onchange \"src/style/flatpickr_base.styl\" -- npm run build-style\" \"npm run build-themes -- --watch\"",
+    "dev-style": "parallelshell \"onchange \"src/style/flatpickr_base.styl\" \"src/style/flatpickr.styl\" -- npm run build-style\" \"npm run build-themes -- --watch\"",
     "dev": "parallelshell \"npm run dev-script\" \"npm run dev-style\"",
     "livereload": "livereload \"dist\"",
     "serve": "parallelshell \"http-server -o --silent\" \"npm run livereload\"",
