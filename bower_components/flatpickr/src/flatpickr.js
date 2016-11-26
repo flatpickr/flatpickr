@@ -1,4 +1,4 @@
-/*! flatpickr v2.2.1, @license MIT */
+/*! flatpickr v2.2.2, @license MIT */
 function Flatpickr(element, config) {
 	const self = this;
 
@@ -788,8 +788,8 @@ function Flatpickr(element, config) {
 
 	function isEnabled(dateToCheck) {
 		if (
-			(self.config.minDate && compareDates(dateToCheck, self.config.minDate) === -1) ||
-			(self.config.maxDate && compareDates(dateToCheck, self.config.maxDate) === 1)
+			(self.config.minDate && compareDates(dateToCheck, self.config.minDate) < 0) ||
+			(self.config.maxDate && compareDates(dateToCheck, self.config.maxDate) > 0)
 		)
 			return false;
 
@@ -1599,11 +1599,9 @@ function Flatpickr(element, config) {
 		if (!(date1 instanceof Date) || !(date2 instanceof Date))
 			return false;
 
-		return Math.sign(
-			date1.getDate() - date2.getDate() +
+		return date1.getDate() - date2.getDate() +
 			99*(date1.getMonth() - date2.getMonth()) + // amplify year/month diff
-			999*(date1.getFullYear() - date2.getFullYear())
-		);
+			999*(date1.getFullYear() - date2.getFullYear());
 	}
 
 	function timeWrapper(e) {

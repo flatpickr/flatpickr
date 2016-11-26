@@ -2,7 +2,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-/*! flatpickr v2.2.1, @license MIT */
+/*! flatpickr v2.2.2, @license MIT */
 function Flatpickr(element, config) {
 	var self = this;
 
@@ -611,7 +611,7 @@ function Flatpickr(element, config) {
 	}
 
 	function isEnabled(dateToCheck) {
-		if (self.config.minDate && compareDates(dateToCheck, self.config.minDate) === -1 || self.config.maxDate && compareDates(dateToCheck, self.config.maxDate) === 1) return false;
+		if (self.config.minDate && compareDates(dateToCheck, self.config.minDate) < 0 || self.config.maxDate && compareDates(dateToCheck, self.config.maxDate) > 0) return false;
 
 		if (!self.config.enable.length && !self.config.disable.length) return true;
 
@@ -1289,8 +1289,8 @@ function Flatpickr(element, config) {
 	function compareDates(date1, date2) {
 		if (!(date1 instanceof Date) || !(date2 instanceof Date)) return false;
 
-		return Math.sign(date1.getDate() - date2.getDate() + 99 * (date1.getMonth() - date2.getMonth()) + // amplify year/month diff
-		999 * (date1.getFullYear() - date2.getFullYear()));
+		return date1.getDate() - date2.getDate() + 99 * (date1.getMonth() - date2.getMonth()) + // amplify year/month diff
+		999 * (date1.getFullYear() - date2.getFullYear());
 	}
 
 	function timeWrapper(e) {
