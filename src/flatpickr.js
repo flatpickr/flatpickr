@@ -1598,10 +1598,8 @@ function Flatpickr(element, config) {
 	function compareDates(date1, date2) {
 		if (!(date1 instanceof Date) || !(date2 instanceof Date))
 			return false;
-
-		return date1.getDate() - date2.getDate() +
-			99*(date1.getMonth() - date2.getMonth()) + // amplify year/month diff
-			999*(date1.getFullYear() - date2.getFullYear());
+		
+		return new Date(date1.getTime()).setHours(0,0,0,0) - new Date(date2.getTime()).setHours(0,0,0,0);
 	}
 
 	function timeWrapper(e) {
