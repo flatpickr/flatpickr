@@ -755,6 +755,9 @@ function Flatpickr(element, config) {
 	}
 
 	function formatDate(frmt, dateObj) {
+		if (self.config.formatDate)
+			return self.config.formatDate(frmt, dateObj);
+
 		const chars = frmt.split("");
 		return chars.map((c, i) => self.formats[c] && chars[i - 1] !== "\\"
 			? self.formats[c](dateObj)
@@ -1702,6 +1705,9 @@ Flatpickr.defaultConfig = {
 
 	// dateparser that transforms a given string to a date object
 	parseDate: null,
+
+	// dateformatter that transforms a given date object to a string, according to passed format
+	formatDate: null,
 
 	getWeek: function (givenDate) {
 		const date = new Date(givenDate.getTime());

@@ -191,6 +191,70 @@ describe('flatpickr', () => {
 
 	});
 
+	describe('date formatting', () => {
+		const DATE_STR = '2016-10-20 09:19:59';
+
+		describe('default formatter', () => {
+			const
+				DFEAULT_FORMAT_1 = 'd.m.y H:i:S',
+				DFEAULT_FORMAT_2 = 'D j F, \'y';
+
+			it(`should format the date with the pattern "${DFEAULT_FORMAT_1}"`, () => {
+				const RESULT = '20.10.16 09:19:59';
+				createInstance({
+					dateFormat: DFEAULT_FORMAT_1
+				});
+
+				fp.setDate(DATE_STR);
+				expect(fp.input.value).toEqual(RESULT);
+				fp.setDate('2015-11-21 19:29:49');
+				expect(fp.input.value).not.toEqual(RESULT);
+			});
+
+			it(`should format the date with the pattern "${DFEAULT_FORMAT_2}"`, () => {
+				const RESULT = 'Thu 20 October, \'16';
+				createInstance({
+					dateFormat: DFEAULT_FORMAT_2
+				});
+
+				fp.setDate(DATE_STR);
+				expect(fp.input.value).toEqual(RESULT);
+				fp.setDate('2015-11-21 19:29:49');
+				expect(fp.input.value).not.toEqual(RESULT);
+			});
+		});
+		describe('custom formatter', () => {
+			it('should format the date using the custom formatter', () => {
+				const RESULT = 'MAAAGIC.*^*.2016.*^*.20.*^*.10';
+				createInstance({
+					dateFormat: 'YEAR-DAYOFMONTH-MONTH',
+					formatDate(formatStr, date) {
+						let segs = formatStr.split('-');
+						return 'MAAAGIC.*^*.' + segs.map(seg => {
+								let mapped = null;
+								switch (seg) {
+									case 'DAYOFMONTH':
+										mapped = date.getDate();
+										break;
+									case 'MONTH':
+										mapped = date.getMonth() + 1;
+										break;
+									case 'YEAR':
+										mapped = date.getFullYear();
+										break;
+								}
+								return '' + mapped;
+							}).join('.*^*.');
+					}
+				});
+
+				fp.setDate(DATE_STR);
+				expect(fp.input.value).toEqual(RESULT);
+				fp.setDate('2015-11-21 19:29:49');
+				expect(fp.input.value).not.toEqual(RESULT);
+			});
+		});
+	});
 
 	describe("API", () => {
 		it("set (option, value)", () => {
