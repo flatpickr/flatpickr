@@ -144,7 +144,8 @@ function Flatpickr(element, config) {
 		window.addEventListener("resize", self.debouncedResize);
 
 		document.addEventListener("click", documentClick);
-		document.addEventListener("blur", documentClick);
+		// This causes race conditions when openening the calendar:
+		// document.addEventListener("blur", documentClick);
 
 		if (self.config.clickOpens)
 			(self.altInput || self.input).addEventListener("focus", open);
