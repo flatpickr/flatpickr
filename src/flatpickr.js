@@ -36,6 +36,7 @@ function Flatpickr(element, config) {
 
 		self.isMobile = (
 			!self.config.disableMobile &&
+			!self.config.inline &&
 			self.config.mode === "single" &&
 			!self.config.disable.length &&
 			!self.config.enable.length &&
