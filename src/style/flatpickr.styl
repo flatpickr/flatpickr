@@ -1,4 +1,5 @@
 $bezier = cubic-bezier(0, 1, 0.5, 1)
+$daySize = 36px
 $calendar_background ?= #ffffff
 $calendar_border_color ?= #e6e6e6
 
@@ -57,8 +58,7 @@ $selected_day_background ?= #569FF7
     line-height 24px
     border-radius 5px
     position absolute
-    min-width 200px
-    max-width 248px
+    width ($daySize*7 + 4px)
     box-sizing border-box
 
     &.open
@@ -84,7 +84,7 @@ $selected_day_background ?= #569FF7
             display block
 
     &.hasWeeks
-        max-width 320px
+        width auto
 
     &.dateIsPicked.hasTime
         .flatpickr-time
@@ -326,8 +326,11 @@ $selected_day_background ?= #569FF7
     padding 1px
     outline 0
     text-align left
-    width 100%
+    width ($daySize*7 + 2)
     box-sizing border-box
+    display inline-block
+    display flex
+    flex-wrap wrap
 
     if $border-calendar-only is defined
         border 1px solid $calendar_border_color
@@ -343,7 +346,6 @@ $selected_day_background ?= #569FF7
     color $day_text_color
     cursor pointer
     display inline-block
-
     display: unquote('inline-block\9')
     position: relative;
     -webkit-justify-content: center;
@@ -352,11 +354,10 @@ $selected_day_background ?= #569FF7
 
     font-weight 300
     width: 14.2857143%;
-    height: 0;
-    line-height: 0;
-    margin: 0;
-    padding-top: calc(7.14285715% - 1px);
-    padding-bottom: calc(7.14285715% - 1px);
+    flex-basis 14.2857143%;
+    max-width $daySize
+    height: $daySize
+    line-height $daySize
     margin 0
     text-align center
     transition 50ms all ease-out
@@ -442,8 +443,8 @@ span.flatpickr-weekday
     span.flatpickr-day
         display block
         width 100%
-        margin-right 1rem
-        padding: 71.428% 0;
+        margin-right 24px
+
 
 .flatpickr-innerContainer
     display block
@@ -473,6 +474,7 @@ span.flatpickr-weekday
     box-sizing border-box
     overflow hidden
     transition height 0.33s $bezier
+    display flex
 
     &:after
         content ""
@@ -480,7 +482,8 @@ span.flatpickr-weekday
         clear both
 
     .numInputWrapper
-        width: 40%
+        flex 1
+        width 40%
         height 36px
         float left
 
@@ -492,6 +495,9 @@ span.flatpickr-weekday
 
     &.hasSeconds .numInputWrapper
         width 26%
+
+    &.time24hr .numInputWrapper
+        width 49%
 
     input
         background transparent
