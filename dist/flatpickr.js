@@ -61,6 +61,10 @@ function Flatpickr(element, config) {
 			updateValue();
 		}
 
+		if (self.config.weekNumbers) {
+			self.calendarContainer.style.width = self.days.offsetWidth + self.weekWrapper.offsetWidth + 2 + "px";
+		}
+
 		triggerEvent("Ready");
 	}
 
@@ -454,6 +458,8 @@ function Flatpickr(element, config) {
 		self.timeContainer.appendChild(separator);
 		self.timeContainer.appendChild(minuteInput);
 
+		if (self.config.time_24hr) self.timeContainer.classList.add("time24hr");
+
 		if (self.config.enableSeconds) {
 			self.timeContainer.classList.add("hasSeconds");
 
@@ -503,6 +509,7 @@ function Flatpickr(element, config) {
 		self.weekWrapper.appendChild(createElement("span", "flatpickr-weekday", self.l10n.weekAbbreviation));
 		self.weekNumbers = createElement("div", "flatpickr-weeks");
 		self.weekWrapper.appendChild(self.weekNumbers);
+
 		return self.weekWrapper;
 	}
 
