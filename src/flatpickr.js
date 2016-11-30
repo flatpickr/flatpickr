@@ -1302,7 +1302,7 @@ function Flatpickr(element, config) {
 				DAY: 86400000,
 			},
 			getDaysinMonth: (month = self.currentMonth, yr = self.currentYear) => {
-				if (month === 1 && ((yr % 4 === 0) && (yr % 100 !== 0)) || (yr % 400 === 0))
+				if (month === 1 && (((yr % 4 === 0) && (yr % 100 !== 0)) || (yr % 400 === 0)))
 					return 29;
 				return self.l10n.daysInMonth[month];
 			},
@@ -1598,7 +1598,7 @@ function Flatpickr(element, config) {
 	function compareDates(date1, date2) {
 		if (!(date1 instanceof Date) || !(date2 instanceof Date))
 			return false;
-		
+
 		return new Date(date1.getTime()).setHours(0,0,0,0) - new Date(date2.getTime()).setHours(0,0,0,0);
 	}
 
