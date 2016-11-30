@@ -1,4 +1,4 @@
-/*! flatpickr v2.2.2, @license MIT */
+/*! flatpickr v2.2.3, @license MIT */
 function Flatpickr(element, config) {
 	const self = this;
 
@@ -36,6 +36,7 @@ function Flatpickr(element, config) {
 
 		self.isMobile = (
 			!self.config.disableMobile &&
+			!self.config.inline &&
 			self.config.mode === "single" &&
 			!self.config.disable.length &&
 			!self.config.enable.length &&
@@ -68,12 +69,16 @@ function Flatpickr(element, config) {
 				}
 			});
 
-		self.dateIsPicked = self.selectedDates.length > 0;
+		self.dateIsPicked = self.selectedDates.length > 0 || self.config.noCalendar;
 
 		if (self.selectedDates.length) {
 			if (self.config.enableTime)
 				setHoursFromDate();
 			updateValue();
+		}
+
+		if (self.config.weekNumbers) {
+			self.calendarContainer.style.width = self.days.offsetWidth + self.weekWrapper.offsetWidth + 2 + "px";
 		}
 
 		triggerEvent("Ready");
@@ -98,9 +103,9 @@ function Flatpickr(element, config) {
 			return;
 
 		let hours = (parseInt(self.hourElement.value, 10) || 0),
-			minutes = (60 + (parseInt(self.minuteElement.value, 10) || 0)) % 60,
+			minutes = (parseInt(self.minuteElement.value, 10) || 0),
 			seconds = self.config.enableSeconds
-				? (60 + (parseInt(self.secondElement.value, 10)) || 0) % 60
+				? (parseInt(self.secondElement.value, 10) || 0)
 				: 0;
 
 		if (self.amPM)
@@ -170,7 +175,7 @@ function Flatpickr(element, config) {
 		if (self.isMobile)
 			return setupMobile();
 
-		self.debouncedResize = debounce(onResize, 100);
+		self.debouncedResize = debounce(onResize, 50);
 		self.triggerChange = () => triggerEvent("Change");
 		self.debouncedChange = debounce(self.triggerChange, 1000);
 
@@ -577,17 +582,20 @@ function Flatpickr(element, config) {
 		self.hourElement.step = self.config.hourIncrement;
 		self.minuteElement.step = self.config.minuteIncrement;
 
-		self.hourElement.min = -(self.config.time_24hr ? 1 : 0);
-		self.hourElement.max = self.config.time_24hr ? 24 : 13;
+		self.hourElement.min = self.config.time_24hr ? 0 : 1;
+		self.hourElement.max = self.config.time_24hr ? 23 : 12;
 
-		self.minuteElement.min = -self.minuteElement.step;
-		self.minuteElement.max = 60;
+		self.minuteElement.min = 0;
+		self.minuteElement.max = 59;
 
 		self.hourElement.title = self.minuteElement.title = self.l10n.scrollTitle;
 
 		self.timeContainer.appendChild(hourInput);
 		self.timeContainer.appendChild(separator);
 		self.timeContainer.appendChild(minuteInput);
+
+		if (self.config.time_24hr)
+			self.timeContainer.classList.add("time24hr");
 
 		if (self.config.enableSeconds) {
 			self.timeContainer.classList.add("hasSeconds");
@@ -654,6 +662,7 @@ function Flatpickr(element, config) {
 		);
 		self.weekNumbers = createElement("div", "flatpickr-weeks");
 		self.weekWrapper.appendChild(self.weekNumbers);
+
 		return self.weekWrapper;
 	}
 
@@ -754,6 +763,9 @@ function Flatpickr(element, config) {
 	}
 
 	function formatDate(frmt, dateObj) {
+		if (self.config.formatDate)
+			return self.config.formatDate(frmt, dateObj);
+
 		const chars = frmt.split("");
 		return chars.map((c, i) => self.formats[c] && chars[i - 1] !== "\\"
 			? self.formats[c](dateObj)
@@ -924,7 +936,7 @@ function Flatpickr(element, config) {
 	}
 
 	function onResize() {
-		if (self.isOpen && !self.config.inline && !self.config.static)
+		if (self.isOpen && !self.config.static && !self.config.inline)
 			positionCalendar();
 	}
 
@@ -948,7 +960,7 @@ function Flatpickr(element, config) {
 
 		self.calendarContainer.classList.add("open");
 
-		if (!self.config.static)
+		if (!self.config.static && !self.config.inline)
 			positionCalendar();
 
 
@@ -1150,7 +1162,7 @@ function Flatpickr(element, config) {
 			self.calendarContainer.classList.add("arrowTop");
 		}
 
-		if (!self.config.inline && !self.config.static) {
+		if (!self.config.static && !self.config.inline) {
 			self.calendarContainer.style.top = `${top}px`;
 			self.calendarContainer.style.left = `${left}px`;
 		}
@@ -1302,7 +1314,7 @@ function Flatpickr(element, config) {
 				DAY: 86400000,
 			},
 			getDaysinMonth: (month = self.currentMonth, yr = self.currentYear) => {
-				if (month === 1 && ((yr % 4 === 0) && (yr % 100 !== 0)) || (yr % 400 === 0))
+				if (month === 1 && (((yr % 4 === 0) && (yr % 100 !== 0)) || (yr % 400 === 0)))
 					return 29;
 				return self.l10n.daysInMonth[month];
 			},
@@ -1599,49 +1611,48 @@ function Flatpickr(element, config) {
 		if (!(date1 instanceof Date) || !(date2 instanceof Date))
 			return false;
 
-		return date1.getDate() - date2.getDate() +
-			99*(date1.getMonth() - date2.getMonth()) + // amplify year/month diff
-			999*(date1.getFullYear() - date2.getFullYear());
+		return new Date(date1.getTime()).setHours(0,0,0,0) - new Date(date2.getTime()).setHours(0,0,0,0);
 	}
 
 	function timeWrapper(e) {
 		e.preventDefault();
 		if (e && (
-			(e.target.value || e.target.textContent).length >= 2 ||
-			(e.type !== "keydown" && e.type !== "input")
+			(e.target.value || e.target.textContent).length >= 2 || // typed two digits
+			(e.type !== "keydown" && e.type !== "input") // scroll event
 		))
 			e.target.blur();
 
-		if (e.target.className === "flatpickr-am-pm") {
-			e.target.textContent = ["AM", "PM"][(e.target.textContent === "AM") | 0];
-			return;
-		}
+		if (self.amPM && e.target === self.amPM)
+			return e.target.textContent = ["AM", "PM"][(e.target.textContent === "AM") | 0];
 
-		const min = parseInt(e.target.min, 10),
-			max = parseInt(e.target.max, 10),
-			step = parseInt(e.target.step, 10),
-			value = parseInt(e.target.value, 10);
+		const min = Number(e.target.min),
+			max = Number(e.target.max),
+			step = Number(e.target.step),
+			curValue = parseInt(e.target.value, 10),
+			delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.deltaY)));
 
-		let newValue = value;
+		let newValue = Number(curValue);
 
 		if (e.type === "wheel")
-			newValue = value + step * (Math.max(-1, Math.min(1, (e.wheelDelta || -e.deltaY))));
+			newValue = curValue + step * delta;
 
 		else if (e.type === "keydown")
-			newValue = value + step * (e.which === 38 ? 1 : -1);
+			newValue = curValue + step * (e.which === 38 ? 1 : -1);
 
-		if (newValue <= min)
-			newValue = max - step;
+		if (newValue < min)
+			newValue = max + newValue + (e.target !== self.hourElement) + (e.target === self.hourElement && !self.amPM);
 
-		else if (newValue >= max)
-			newValue = min + step;
+		else if (newValue > max)
+			newValue = e.target === self.hourElement ? newValue - max - (!self.amPM) : min;
 
-		if (self.amPM && ((value === 11 && newValue === 12) || (value === 12 && newValue === 11)))
+		if (
+			self.amPM && e.target === self.hourElement &&
+			(step === 1 ? newValue + curValue === 23 : Math.abs(newValue - curValue) > step)
+		)
 			self.amPM.textContent = self.amPM.innerHTML === "PM" ? "AM" : "PM";
 
 		e.target.value = self.pad(newValue);
 	}
-
 
 	init();
 	return self;
@@ -1702,6 +1713,9 @@ Flatpickr.defaultConfig = {
 
 	// dateparser that transforms a given string to a date object
 	parseDate: null,
+
+	// dateformatter that transforms a given date object to a string, according to passed format
+	formatDate: null,
 
 	getWeek: function (givenDate) {
 		const date = new Date(givenDate.getTime());
