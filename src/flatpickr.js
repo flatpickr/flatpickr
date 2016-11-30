@@ -99,9 +99,9 @@ function Flatpickr(element, config) {
 			return;
 
 		let hours = (parseInt(self.hourElement.value, 10) || 0),
-			minutes = (60 + (parseInt(self.minuteElement.value, 10) || 0)) % 60,
+			minutes = (parseInt(self.minuteElement.value, 10) || 0),
 			seconds = self.config.enableSeconds
-				? (60 + (parseInt(self.secondElement.value, 10)) || 0) % 60
+				? (parseInt(self.secondElement.value, 10) || 0)
 				: 0;
 
 		if (self.amPM)
@@ -578,11 +578,11 @@ function Flatpickr(element, config) {
 		self.hourElement.step = self.config.hourIncrement;
 		self.minuteElement.step = self.config.minuteIncrement;
 
-		self.hourElement.min = -(self.config.time_24hr ? 1 : 0);
-		self.hourElement.max = self.config.time_24hr ? 24 : 13;
+		self.hourElement.min = self.config.time_24hr ? 0 : 1;
+		self.hourElement.max = self.config.time_24hr ? 23 : 12;
 
-		self.minuteElement.min = -self.minuteElement.step;
-		self.minuteElement.max = 60;
+		self.minuteElement.min = 0;
+		self.minuteElement.max = 59;
 
 		self.hourElement.title = self.minuteElement.title = self.l10n.scrollTitle;
 
@@ -1606,41 +1606,42 @@ function Flatpickr(element, config) {
 	function timeWrapper(e) {
 		e.preventDefault();
 		if (e && (
-			(e.target.value || e.target.textContent).length >= 2 ||
-			(e.type !== "keydown" && e.type !== "input")
+			(e.target.value || e.target.textContent).length >= 2 || // typed two digits
+			(e.type !== "keydown" && e.type !== "input") // scroll event
 		))
 			e.target.blur();
 
-		if (e.target.className === "flatpickr-am-pm") {
-			e.target.textContent = ["AM", "PM"][(e.target.textContent === "AM") | 0];
-			return;
-		}
+		if (self.amPM && e.target === self.amPM)
+			return e.target.textContent = ["AM", "PM"][(e.target.textContent === "AM") | 0];
 
-		const min = parseInt(e.target.min, 10),
-			max = parseInt(e.target.max, 10),
-			step = parseInt(e.target.step, 10),
-			value = parseInt(e.target.value, 10);
+		const min = Number(e.target.min),
+			max = Number(e.target.max),
+			step = Number(e.target.step),
+			curValue = parseInt(e.target.value, 10),
+			delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.deltaY)));
 
-		let newValue = value;
+		let newValue = Number(curValue);
 
 		if (e.type === "wheel")
-			newValue = value + step * (Math.max(-1, Math.min(1, (e.wheelDelta || -e.deltaY))));
+			newValue = curValue + step * delta;
 
 		else if (e.type === "keydown")
-			newValue = value + step * (e.which === 38 ? 1 : -1);
+			newValue = curValue + step * (e.which === 38 ? 1 : -1);
 
-		if (newValue <= min)
-			newValue = max - step;
+		if (newValue < min)
+			newValue = max + newValue + (e.target !== self.hourElement) + (e.target === self.hourElement && !self.amPM);
 
-		else if (newValue >= max)
-			newValue = min + step;
+		else if (newValue > max)
+			newValue = e.target === self.hourElement ? newValue - max - (!self.amPM) : min;
 
-		if (self.amPM && ((value === 11 && newValue === 12) || (value === 12 && newValue === 11)))
+		if (
+			self.amPM && e.target === self.hourElement &&
+			(step === 1 ? newValue + curValue === 23 : Math.abs(newValue - curValue) > step)
+		)
 			self.amPM.textContent = self.amPM.innerHTML === "PM" ? "AM" : "PM";
 
 		e.target.value = self.pad(newValue);
 	}
-
 
 	init();
 	return self;
