@@ -1,6 +1,3 @@
-Flatpickr.l10ns.default.firstDayOfWeek = 1;
-//Regular flatpickr
-
 var calendars = document.getElementsByClassName("flatpickr").flatpickr();
 
 flatpickr("#example-defaultDate", {
@@ -107,8 +104,4 @@ document.getElementById("dateFormatComposer").addEventListener("keyup", function
 });
 
 
-
-
-function initCode() {
-	hljs.initHighlighting();
-}
+hljs.initHighlighting();
