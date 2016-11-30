@@ -37,7 +37,7 @@ function Flatpickr(element, config) {
 		self.setDate = setDate;
 		self.toggle = toggle;
 
-		self.isMobile = !self.config.disableMobile && self.config.mode === "single" && !self.config.disable.length && !self.config.enable.length && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+		self.isMobile = !self.config.disableMobile && !self.config.inline && self.config.mode === "single" && !self.config.disable.length && !self.config.enable.length && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
 		if (!self.isMobile) build();
 
@@ -54,7 +54,7 @@ function Flatpickr(element, config) {
 			}
 		});
 
-		self.dateIsPicked = self.selectedDates.length > 0;
+		self.dateIsPicked = self.selectedDates.length > 0 || self.config.noCalendar;
 
 		if (self.selectedDates.length) {
 			if (self.config.enableTime) setHoursFromDate();
@@ -81,8 +81,8 @@ function Flatpickr(element, config) {
 		if (!self.config.enableTime) return;
 
 		var hours = parseInt(self.hourElement.value, 10) || 0,
-		    minutes = (60 + (parseInt(self.minuteElement.value, 10) || 0)) % 60,
-		    seconds = self.config.enableSeconds ? (60 + parseInt(self.secondElement.value, 10) || 0) % 60 : 0;
+		    minutes = parseInt(self.minuteElement.value, 10) || 0,
+		    seconds = self.config.enableSeconds ? parseInt(self.secondElement.value, 10) || 0 : 0;
 
 		if (self.amPM) hours = hours % 12 + 12 * (self.amPM.innerHTML === "PM");
 
@@ -135,7 +135,7 @@ function Flatpickr(element, config) {
 
 		if (self.isMobile) return setupMobile();
 
-		self.debouncedResize = debounce(onResize, 100);
+		self.debouncedResize = debounce(onResize, 50);
 		self.triggerChange = function () {
 			return triggerEvent("Change");
 		};
@@ -442,11 +442,11 @@ function Flatpickr(element, config) {
 		self.hourElement.step = self.config.hourIncrement;
 		self.minuteElement.step = self.config.minuteIncrement;
 
-		self.hourElement.min = -(self.config.time_24hr ? 1 : 0);
-		self.hourElement.max = self.config.time_24hr ? 24 : 13;
+		self.hourElement.min = self.config.time_24hr ? 0 : 1;
+		self.hourElement.max = self.config.time_24hr ? 23 : 12;
 
-		self.minuteElement.min = -self.minuteElement.step;
-		self.minuteElement.max = 60;
+		self.minuteElement.min = 0;
+		self.minuteElement.max = 59;
 
 		self.hourElement.title = self.minuteElement.title = self.l10n.scrollTitle;
 
@@ -705,7 +705,7 @@ function Flatpickr(element, config) {
 	}
 
 	function onResize() {
-		if (self.isOpen && !self.config.inline && !self.config.static) positionCalendar();
+		if (self.isOpen && !self.config.static && !self.config.inline) positionCalendar();
 	}
 
 	function open(e) {
@@ -725,7 +725,7 @@ function Flatpickr(element, config) {
 
 		self.calendarContainer.classList.add("open");
 
-		if (!self.config.static) positionCalendar();
+		if (!self.config.static && !self.config.inline) positionCalendar();
 
 		self.isOpen = true;
 
@@ -869,7 +869,7 @@ function Flatpickr(element, config) {
 			self.calendarContainer.classList.add("arrowTop");
 		}
 
-		if (!self.config.inline && !self.config.static) {
+		if (!self.config.static && !self.config.inline) {
 			self.calendarContainer.style.top = top + "px";
 			self.calendarContainer.style.left = left + "px";
 		}
@@ -997,7 +997,7 @@ function Flatpickr(element, config) {
 				var month = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : self.currentMonth;
 				var yr = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : self.currentYear;
 
-				if (month === 1 && yr % 4 === 0 && yr % 100 !== 0 || yr % 400 === 0) return 29;
+				if (month === 1 && (yr % 4 === 0 && yr % 100 !== 0 || yr % 400 === 0)) return 29;
 				return self.l10n.daysInMonth[month];
 			},
 
@@ -1294,25 +1294,25 @@ function Flatpickr(element, config) {
 
 	function timeWrapper(e) {
 		e.preventDefault();
-		if (e && ((e.target.value || e.target.textContent).length >= 2 || e.type !== "keydown" && e.type !== "input")) e.target.blur();
+		if (e && ((e.target.value || e.target.textContent).length >= 2 || // typed two digits
+		e.type !== "keydown" && e.type !== "input" // scroll event
+		)) e.target.blur();
 
-		if (e.target.className === "flatpickr-am-pm") {
-			e.target.textContent = ["AM", "PM"][e.target.textContent === "AM" | 0];
-			return;
-		}
+		if (self.amPM && e.target === self.amPM) return e.target.textContent = ["AM", "PM"][e.target.textContent === "AM" | 0];
 
-		var min = parseInt(e.target.min, 10),
-		    max = parseInt(e.target.max, 10),
-		    step = parseInt(e.target.step, 10),
-		    value = parseInt(e.target.value, 10);
+		var min = Number(e.target.min),
+		    max = Number(e.target.max),
+		    step = Number(e.target.step),
+		    curValue = parseInt(e.target.value, 10),
+		    delta = Math.max(-1, Math.min(1, e.wheelDelta || -e.deltaY));
 
-		var newValue = value;
+		var newValue = Number(curValue);
 
-		if (e.type === "wheel") newValue = value + step * Math.max(-1, Math.min(1, e.wheelDelta || -e.deltaY));else if (e.type === "keydown") newValue = value + step * (e.which === 38 ? 1 : -1);
+		if (e.type === "wheel") newValue = curValue + step * delta;else if (e.type === "keydown") newValue = curValue + step * (e.which === 38 ? 1 : -1);
 
-		if (newValue <= min) newValue = max - step;else if (newValue >= max) newValue = min + step;
+		if (newValue < min) newValue = max + newValue + (e.target !== self.hourElement) + (e.target === self.hourElement && !self.amPM);else if (newValue > max) newValue = e.target === self.hourElement ? newValue - max - !self.amPM : min;
 
-		if (self.amPM && (value === 11 && newValue === 12 || value === 12 && newValue === 11)) self.amPM.textContent = self.amPM.innerHTML === "PM" ? "AM" : "PM";
+		if (self.amPM && e.target === self.hourElement && (step === 1 ? newValue + curValue === 23 : Math.abs(newValue - curValue) > step)) self.amPM.textContent = self.amPM.innerHTML === "PM" ? "AM" : "PM";
 
 		e.target.value = self.pad(newValue);
 	}
