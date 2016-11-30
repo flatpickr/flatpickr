@@ -69,7 +69,7 @@ function Flatpickr(element, config) {
 				}
 			});
 
-		self.dateIsPicked = self.selectedDates.length > 0;
+		self.dateIsPicked = self.selectedDates.length > 0 || self.config.noCalendar;
 
 		if (self.selectedDates.length) {
 			if (self.config.enableTime)
