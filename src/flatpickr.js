@@ -171,7 +171,7 @@ function Flatpickr(element, config) {
 		if (self.isMobile)
 			return setupMobile();
 
-		self.debouncedResize = debounce(onResize, 100);
+		self.debouncedResize = debounce(onResize, 50);
 		self.triggerChange = () => triggerEvent("Change");
 		self.debouncedChange = debounce(self.triggerChange, 1000);
 
@@ -925,7 +925,7 @@ function Flatpickr(element, config) {
 	}
 
 	function onResize() {
-		if (self.isOpen && !self.config.inline && !self.config.static)
+		if (self.isOpen && !self.config.static && !self.config.inline)
 			positionCalendar();
 	}
 
@@ -949,7 +949,7 @@ function Flatpickr(element, config) {
 
 		self.calendarContainer.classList.add("open");
 
-		if (!self.config.static)
+		if (!self.config.static && !self.config.inline)
 			positionCalendar();
 
 
@@ -1151,7 +1151,7 @@ function Flatpickr(element, config) {
 			self.calendarContainer.classList.add("arrowTop");
 		}
 
-		if (!self.config.inline && !self.config.static) {
+		if (!self.config.static && !self.config.inline) {
 			self.calendarContainer.style.top = `${top}px`;
 			self.calendarContainer.style.left = `${left}px`;
 		}
