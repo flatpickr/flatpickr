@@ -179,8 +179,7 @@ function Flatpickr(element, config) {
 		self.triggerChange = () => triggerEvent("Change");
 		self.debouncedChange = debounce(self.triggerChange, 1000);
 
-		if (self.config.mode === "range")
-			self.days.addEventListener("mouseover", onMouseOver);
+		setupMouseOver();
 
 		document.addEventListener("keydown", onKeyDown);
 		window.addEventListener("resize", self.debouncedResize);
@@ -238,6 +237,14 @@ function Flatpickr(element, config) {
 				});
 			}
 		}
+	}
+
+	function setupMouseOver() {
+		if(!self.days) return;
+		if (self.config.mode === "range")
+			self.days.addEventListener("mouseover", onMouseOver);
+		else
+			self.days.removeEventListener("mouseover", onMouseOver);
 	}
 
 	function jumpToDate(jumpDate) {
@@ -1176,6 +1183,7 @@ function Flatpickr(element, config) {
 		buildWeekdays();
 		updateNavigationCurrentMonth();
 		buildDays();
+		setupMouseOver();
 	}
 
 	function selectDate(e) {
