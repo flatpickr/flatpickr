@@ -1288,7 +1288,7 @@ function Flatpickr(element, config) {
 					break;
 
 				case "range":
-					self.selectedDates = inputDate.split(" to ").map(parseDate);
+					self.selectedDates = inputDate.split(self.l10n.rangeSeparator).map(parseDate);
 					break;
 
 				default: break;
@@ -1555,7 +1555,7 @@ function Flatpickr(element, config) {
 				: "";
 		}
 
-		const joinChar = self.config.mode !== "range" ? "; " : " to ";
+		const joinChar = self.config.mode !== "range" ? "; " : self.l10n.rangeSeparator;
 
 		self.input.value = self.selectedDates
 			.map(dObj => formatDate(self.config.dateFormat, dObj))
@@ -1821,6 +1821,7 @@ Flatpickr.l10ns = {
 				default: return "th";
 			}
 		},
+		rangeSeparator: " to ",
 		weekAbbreviation: "Wk",
 		scrollTitle: "Scroll to increment",
 		toggleTitle: "Click to toggle"
