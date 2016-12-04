@@ -1,5 +1,5 @@
 $bezier = cubic-bezier(0, 1, 0.5, 1)
-$daySize = 36px
+$daySize = 34px
 $calendar_background ?= #ffffff
 $calendar_border_color ?= #e6e6e6
 
@@ -358,7 +358,7 @@ $selected_day_background ?= #569FF7
     max-width $daySize
     height $daySize
     line-height $daySize
-    margin 0
+    margin 1px 0 0 0
     text-align center
     transition 50ms all ease-out
 
@@ -380,7 +380,7 @@ $selected_day_background ?= #569FF7
             else
                 color white
 
-    &.selected
+    &.selected, &.startRange, &.endRange
         &, &:focus, &:hover, &.prevMonthDay, &.nextMonthDay
             background $selected_day_background
 
@@ -391,14 +391,16 @@ $selected_day_background ?= #569FF7
 
             border-color $selected_day_background
 
-    &.startRange
-        border-radius 50px 0 0 50px
+        &.startRange
+            border-radius 50px 0 0 50px
+
+        &.endRange
+            border-radius 0 50px 50px 0
 
     &.inRange
         border-radius 0
 
-    &.endRange
-        border-radius 0 50px 50px 0
+
 
     &.disabled, &.disabled:hover,
     &.prevMonthDay, &.nextMonthDay,
@@ -470,8 +472,6 @@ span.flatpickr-weekday
 
 .flatpickr-rContainer
     display inline-block
-    // max-width 256px
-
 
 
 .flatpickr-time

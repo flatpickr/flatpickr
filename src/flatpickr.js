@@ -848,6 +848,7 @@ function Flatpickr(element, config) {
 			return;
 
 		let hoverDate = e.target.dateObj,
+			initialDate = parseDate(self.selectedDates[0], true),
 			rangeStartDate = Math.min(hoverDate.getTime(), self.selectedDates[0].getTime()),
 			rangeEndDate = Math.max(hoverDate.getTime(), self.selectedDates[0].getTime()),
 			containsDisabled = false;
@@ -864,23 +865,34 @@ function Flatpickr(element, config) {
 			i < 42;
 			i++, timestamp += self.utils.duration.DAY
 		) {
-			if (timestamp < self.minRangeDate.getTime() || timestamp > self.maxRangeDate.getTime()) {
+			const outOfRange = timestamp < self.minRangeDate.getTime() || timestamp > self.maxRangeDate.getTime();
+
+			if (outOfRange) {
 				self.days.childNodes[i].classList.add("notAllowed");
-				self.days.childNodes[i].classList.remove("inRange");
+				self.days.childNodes[i].classList.remove("inRange", "startRange", "endRange");
+				continue;
 			}
 
+			else if (containsDisabled && !outOfRange) {
+				continue;
+			}
 
-			else if (
-				!containsDisabled &&
-				timestamp > Math.max(self.minRangeDate.getTime(), rangeStartDate) &&
-				timestamp < Math.min(self.maxRangeDate.getTime(), rangeEndDate)
-			)
+			self.days.childNodes[i].classList.remove("startRange", "inRange", "endRange", "notAllowed");
+
+			const minRangeDate = Math.max(self.minRangeDate.getTime(), rangeStartDate),
+				maxRangeDate = Math.min(self.maxRangeDate.getTime(), rangeEndDate);
+
+			e.target.classList.add(hoverDate < self.selectedDates[0] ? "startRange" : "endRange");
+
+			if (initialDate > hoverDate && timestamp === initialDate.getTime())
+				self.days.childNodes[i].classList.add("endRange");
+
+			else if (initialDate < hoverDate && timestamp === initialDate.getTime())
+				self.days.childNodes[i].classList.add("startRange");
+
+			else if (timestamp > minRangeDate && timestamp < maxRangeDate)
 				self.days.childNodes[i].classList.add("inRange");
-			else
-				self.days.childNodes[i].classList.remove("inRange");
 		}
-
-
 	}
 
 	function onResize() {
@@ -1456,7 +1468,7 @@ function Flatpickr(element, config) {
 	function isDateInRange(date){
 		if (self.config.mode !== "range" || self.selectedDates.length < 2)
 			return false;
-		return date > self.selectedDates[0] && date < self.selectedDates[1];
+		return compareDates(date,self.selectedDates[0]) >= 0 && compareDates(date,self.selectedDates[1]) <= 0;
 	}
 
 	function updateNavigationCurrentMonth() {
