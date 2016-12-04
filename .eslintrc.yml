@@ -24,6 +24,15 @@
             - tab
             - { "SwitchCase": 1 }
 
+        max-len:
+            - error
+            - 95
+            - {
+                "ignoreStrings": true,
+                "ignoreComments": true,
+                "ignoreRegExpLiterals": true
+            }
+
         no-global-assign: warn
         no-prototype-builtins: warn
         no-undef: warn
