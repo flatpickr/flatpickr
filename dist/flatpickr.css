@@ -511,6 +511,7 @@ span.flatpickr-weekday {
   margin: 0 0 0 8px;
   vertical-align: top;
   padding: 0;
+  line-height: normal;
 }
 .flatpickr-ok:hover {
   background: #f0f0f0
