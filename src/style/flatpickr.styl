@@ -42,7 +42,7 @@ $selected_day_background ?= #569FF7
 
 .flatpickr-calendar
     background $calendar_background
-    display inline-block
+    display none
     max-height 0
     opacity 0
     visibility hidden
@@ -62,6 +62,7 @@ $selected_day_background ?= #569FF7
     box-sizing border-box
 
     &.open
+        display inline-block
         opacity 1
         visibility visible
         max-height 320px
