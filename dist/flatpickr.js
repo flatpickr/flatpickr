@@ -211,12 +211,12 @@ function Flatpickr(element, config) {
 					self.triggerChange(e);
 				});
 			}
+		}
 
-			if (self.okButton) {
-				self.okButton.addEventListener("click", function (e) {
-					self.close();
-				});
-			}
+		if (self.okButton) {
+			self.okButton.addEventListener("click", function (e) {
+				self.close();
+			});
 		}
 	}
 
@@ -285,7 +285,17 @@ function Flatpickr(element, config) {
 			fragment.appendChild(self.innerContainer);
 		}
 
-		if (self.config.enableTime) fragment.appendChild(buildTime());
+		if (self.config.enableTime) {
+			fragment.appendChild(buildTime());
+		} else if (self.config.mode == "multiple" || self.config.mode == "range") {
+			self.buttonsContainer = createElement("div", "flatpickr-buttons", "");
+			self.okButton = createElement("button", "flatpickr-ok", "");
+			self.okTick = createElement("span");
+			self.okTick.innerHTML = self.config.okTick;
+			self.buttonsContainer.appendChild(self.okButton)
+			self.okButton.appendChild(self.okTick)
+			fragment.appendChild(self.buttonsContainer)
+		}
 
 		self.calendarContainer.appendChild(fragment);
 

@@ -504,14 +504,36 @@ span.flatpickr-weekday {
   outline: 0;
   border: 0;
 }
+.flatpickr-buttons {
+  display: flex;
+  text-align: center;
+  border-top: 0;
+  outline: 0;
+  display: block;
+  height: 38px;
+  box-sizing: border-box;
+  overflow: hidden;
+  border-top: 1px solid #e6e6e6;
+}
+.flatpickr-buttons:after {
+  content: "";
+  display: table;
+  clear: both;
+}
 .flatpickr-ok {
-  width: 16%;
+  min-width: 38px;
   background: transparent;
   border: none;
   margin: 0 0 0 8px;
   vertical-align: top;
   padding: 0;
   line-height: normal;
+}
+.flatpickr-buttons .flatpickr-ok {
+  flex-grow: 1;
+  margin: 0;
+  justify-content: center;
+  align-items: center;
 }
 .flatpickr-ok:hover {
   background: #f0f0f0
