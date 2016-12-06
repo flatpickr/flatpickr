@@ -517,6 +517,8 @@ function Flatpickr(element, config) {
 	}
 
 	function clear() {
+		var triggerChangeEvent = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+
 		self.input.value = "";
 
 		if (self.altInput) self.altInput.value = "";
@@ -527,7 +529,10 @@ function Flatpickr(element, config) {
 		self.dateIsPicked = false;
 
 		self.redraw();
-		triggerEvent("Change");
+
+		if (triggerChangeEvent !== false)
+			// triggerChangeEvent is true (default) or an Event
+			triggerEvent("Change");
 	}
 
 	function close() {
@@ -543,7 +548,7 @@ function Flatpickr(element, config) {
 
 	function destroy(instance) {
 		instance = instance || self;
-		instance.clear();
+		instance.clear(false);
 
 		document.removeEventListener("keydown", onKeyDown);
 		window.removeEventListener("resize", instance.debouncedResize);
