@@ -653,7 +653,7 @@ function Flatpickr(element, config) {
 		triggerEvent("MonthChange");
 	}
 
-	function clear() {
+	function clear(triggerChangeEvent = true) {
 		self.input.value = "";
 
 		if (self.altInput)
@@ -666,7 +666,10 @@ function Flatpickr(element, config) {
 		self.dateIsPicked = false;
 
 		self.redraw();
-		triggerEvent("Change");
+
+		if (triggerChangeEvent !== false)
+			// triggerChangeEvent is true (default) or an Event
+			triggerEvent("Change");
 	}
 
 	function close() {
@@ -682,7 +685,7 @@ function Flatpickr(element, config) {
 
 	function destroy(instance) {
 		instance = instance || self;
-		instance.clear();
+		instance.clear(false);
 
 		document.removeEventListener("keydown", onKeyDown);
 		window.removeEventListener("resize", instance.debouncedResize);
