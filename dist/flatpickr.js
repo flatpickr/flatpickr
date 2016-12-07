@@ -214,6 +214,12 @@ function Flatpickr(element, config) {
 				});
 			}
 		}
+
+		if (self.okButton) {
+			self.okButton.addEventListener("click", function (e) {
+				self.close();
+			});
+		}
 	}
 
 	function jumpToDate(jumpDate) {
@@ -281,7 +287,17 @@ function Flatpickr(element, config) {
 			fragment.appendChild(self.innerContainer);
 		}
 
-		if (self.config.enableTime) fragment.appendChild(buildTime());
+		if (self.config.enableTime) {
+			fragment.appendChild(buildTime());
+		} else if (self.config.mode == "multiple" || self.config.mode == "range") {
+			self.buttonsContainer = createElement("div", "flatpickr-buttons", "");
+			self.okButton = createElement("button", "flatpickr-ok", "");
+			self.okTick = createElement("span");
+			self.okTick.innerHTML = self.config.okTick;
+			self.buttonsContainer.appendChild(self.okButton)
+			self.okButton.appendChild(self.okTick)
+			fragment.appendChild(self.buttonsContainer)
+		}
 
 		self.calendarContainer.appendChild(fragment);
 
@@ -475,6 +491,12 @@ function Flatpickr(element, config) {
 			self.amPM.tabIndex = 0;
 			self.timeContainer.appendChild(self.amPM);
 		}
+
+		self.okButton = createElement("button", "flatpickr-ok", "");
+		self.okTick = createElement("span");
+		self.okTick.innerHTML = self.config.okTick;
+		self.okButton.appendChild(self.okTick)
+		self.timeContainer.appendChild(self.okButton);
 
 		return self.timeContainer;
 	}
@@ -1437,6 +1459,7 @@ Flatpickr.defaultConfig = {
 	// code for previous/next icons. this is where you put your custom icon code e.g. fontawesome
 	prevArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M5.207 8.471l7.146 7.147-0.707 0.707-7.853-7.854 7.854-7.853 0.707 0.707-7.147 7.146z' /></svg>",
 	nextArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M13.207 8.472l-7.854 7.854-0.707-0.707 7.146-7.146-7.146-7.148 0.707-0.707 7.854 7.854z' /></svg>",
+	okTick: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 32 32' width='22' height='22'><path id='check' d='M4,16 L12,24 L28,8' fill='none' stroke-width='3.5' /></svg>",
 
 	// enables seconds in the time picker
 	enableSeconds: false,
