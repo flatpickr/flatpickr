@@ -507,9 +507,7 @@ span.flatpickr-weekday {
 .flatpickr-buttons {
   display: flex;
   text-align: center;
-  border-top: 0;
   outline: 0;
-  display: block;
   height: 38px;
   box-sizing: border-box;
   overflow: hidden;
