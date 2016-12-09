@@ -838,7 +838,7 @@ function Flatpickr(element, config) {
 		    timestamp = /^(\d+)$/g,
 		    date_orig = date;
 
-		if (date.toFixed) // timestamp
+		if (date.toFixed || timestamp.test(date)) // timestamp
 			date = new Date(date);else if (typeof date === "string") {
 			date = date.trim();
 
@@ -869,7 +869,7 @@ function Flatpickr(element, config) {
 
 		if (self.config.utc && !date.fp_isUTC) date = date.fp_toUTC();
 
-		if (timeless) date.setHours(0, 0, 0, 0);
+		if (timeless === true) date.setHours(0, 0, 0, 0);
 
 		return date;
 	}
