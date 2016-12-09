@@ -80,7 +80,7 @@ function Flatpickr(element, config) {
 
 		if (self.config.weekNumbers) {
 			self.calendarContainer.style.width = self.days.offsetWidth
-				+ self.weekWrapper.offsetWidth + 2 + "px";
+				+ self.weekWrapper.offsetWidth + "px";
 		}
 
 

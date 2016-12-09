@@ -4,6 +4,7 @@ $daySize = 38px
 $padding = ($daySize/16)
 $dayMargin = 1.5px
 $daysWidth = ($daySize*7 + $dayMargin*14 + $padding*2 + 2)
+$timeHeight = 40px
 
 $calendarWidth = ($daysWidth + 2)
 
@@ -57,24 +58,20 @@ $selected_day_background ?= #569FF7
     padding 0
     animation none
     direction ltr
-
+    border 0
     font-size 14px
     line-height 24px
     border-radius 5px
     position absolute
     width $calendarWidth
     box-sizing border-box
+    box-shadow 0 4px 12px alpha(black, 0.1)
 
     &.open, &.inline
         opacity 1
         visibility visible
         overflow visible
         max-height 640px
-
-        if $border-calendar-only is defined
-            border 1px solid transparent
-        else
-            border 1px solid $calendar_border_color
 
     &.open
         display inline-block
@@ -97,7 +94,7 @@ $selected_day_background ?= #569FF7
 
     &.dateIsPicked.hasTime
         .flatpickr-time
-            height 38px
+            height $timeHeight
 
     &:before, &:after
         position absolute
@@ -473,11 +470,19 @@ span.flatpickr-weekday
 
     box-sizing border-box
 
+    unless $border-calendar-only is defined
+        &:after
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            right: -1px;
+            bottom: -1px;
+            border 1px solid $calendar_border_color
+            border-radius 5px
+            z-index -1
 
-    &:after
-        display inline-block
-        content ""
-        clear both
+
 
 .flatpickr-rContainer
     display inline-block
@@ -492,8 +497,8 @@ span.flatpickr-weekday
     outline 0
     display block
     height 0 // hide initially
-    line-height 36px
-    max-height 36px
+    line-height $timeHeight
+    max-height $timeHeight
     box-sizing border-box
     overflow hidden
     transition height 0.33s $bezier
@@ -513,7 +518,7 @@ span.flatpickr-weekday
     .numInputWrapper
         flex 1
         width 40%
-        height 36px
+        height $timeHeight
         float left
 
         span.arrowUp:after
