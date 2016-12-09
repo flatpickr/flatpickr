@@ -21,14 +21,17 @@ $selected_day_color = #fff
 
 @require "../flatpickr"
 
-.flatpickr-rContainer, .flatpickr-calendar
-	max-width 240px
+.flatpickr-days
+	padding 0
 
 .flatpickr-day
 	border-radius 0
 	border 1px solid $day_hover_background_color
 	margin -1px 0px 0 -1px
 	width calc(14.28571% + 1px)
+	flex-basis calc(14.28571% + 1px)
+	max-width none
+	font-weight 400
 
 	&:nth-child(7n)
 		border-right 0
@@ -42,3 +45,10 @@ $selected_day_color = #fff
 
 	&.today, &.selected
 		z-index 2
+
+.flatpickr-weekwrapper span.flatpickr-day
+	border 0
+	margin-top -1px
+
+.hasWeeks .flatpickr-days
+	border-right 0
