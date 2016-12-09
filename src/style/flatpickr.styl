@@ -141,6 +141,8 @@ $selected_day_background ?= #569FF7
 
 
 .flatpickr-month
+    if $border-calendar-only is defined
+        border-radius 5px 5px 0 0
     background $months_background
     color $months_color
     fill $months_color
