@@ -25,7 +25,7 @@
   line-height: 24px;
   border-radius: 5px;
   position: absolute;
-  width: 310px;
+  width: 295.75px;
   box-sizing: border-box;
 }
 .flatpickr-calendar.open,
@@ -106,7 +106,7 @@
   text-align: center;
   position: relative;
   user-select: none;
-  padding-bottom: 3.333333333333333px;
+  padding-bottom: 3.166666666666667px;
 }
 .flatpickr-prev-month,
 .flatpickr-next-month {
@@ -299,10 +299,10 @@
   overflow: hidden;
 }
 .flatpickr-days {
-  padding: 0 2.5px;
+  padding: 0 2.375px;
   outline: 0;
   text-align: left;
-  width: 308px;
+  width: 293.75px;
   box-sizing: border-box;
   display: inline-block;
   display: flex;
@@ -325,9 +325,9 @@
   font-weight: 300;
   width: 14.2857143%;
   flex-basis: 14.2857143%;
-  max-width: 40px;
-  height: 40px;
-  line-height: 40px;
+  max-width: 38px;
+  height: 38px;
+  line-height: 38px;
   margin: 0px 1.5px;
   text-align: center;
 }
