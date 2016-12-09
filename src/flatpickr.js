@@ -331,6 +331,9 @@ function Flatpickr(element, config) {
 		if (self.config.enableTime)
 			fragment.appendChild(buildTime());
 
+		if (self.config.mode === "range")
+			self.calendarContainer.classList.add("rangeMode");
+
 		self.calendarContainer.appendChild(fragment);
 
 		if (self.config.inline || self.config.static) {
@@ -1062,7 +1065,6 @@ function Flatpickr(element, config) {
 				? "h:i" + (self.config.enableSeconds ? ":S K" : " K")
 				: Flatpickr.defaultConfig.altFormat + ` h:i${self.config.enableSeconds ? ":S" : ""} K`;
 		}
-
 	}
 
 	function setupLocale() {

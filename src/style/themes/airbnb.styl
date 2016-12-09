@@ -21,11 +21,15 @@ $selected_day_color = #fff
 
 @require "../flatpickr"
 
+.flatpickr-calendar
+	width $daysWidth
+
 .flatpickr-days
 	padding 0
+	border-right 0
 
-.flatpickr-day
-	border-radius 0
+span.flatpickr-day
+	border-radius 0 !important
 	border 1px solid $day_hover_background_color
 	margin -1px 0px 0 -1px
 	width calc(14.28571% + 1px)
@@ -35,6 +39,7 @@ $selected_day_color = #fff
 
 	&:nth-child(7n)
 		border-right 0
+
 
 	&:nth-child(n+36)
 		border-bottom 0
