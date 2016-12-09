@@ -1,11 +1,6 @@
 .DS_Store
 /node_modules/
-.gitignore
-Project.sublime-project
-Project.sublime-workspace
-flatpickr.sublime-project
-flatpickr.sublime-workspace
+*.sublime-project
+*.sublime-workspace
 .idea/index.html
-yarn.lock
 index.html
-version
