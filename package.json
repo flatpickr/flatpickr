@@ -22,7 +22,7 @@
     "livereload": "livereload \"dist\"",
     "serve": "parallelshell \"http-server -o --silent\" \"npm run livereload\"",
     "start": "parallelshell \"npm run dev\" \"npm run serve\" \"npm run lint\"",
-    "test": "jest"
+    "test": "jest --bail"
   },
   "dependencies": {},
   "devDependencies": {
