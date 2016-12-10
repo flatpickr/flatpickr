@@ -141,9 +141,7 @@ class Flatpickr {
 					return;
 
 				self.hourElement.value = self.pad(
-					!self.config.time_24hr
-						? (12 + hours) % 12 + 12 * (hours % 12 === 0)
-						: hours
+					!self.config.time_24hr ? (12 + hours) % 12 + 12 * (hours % 12 === 0) : hours
 				);
 
 				self.minuteElement.value = self.pad(minutes);
@@ -409,9 +407,7 @@ class Flatpickr {
 						self.l10n.firstDayOfWeek + 7
 					) % 7;
 
-				self.prevMonthDays = self._fp.utils.getDaysinMonth(
-					(self.currentMonth - 1 + 12) % 12
-				);
+				self.prevMonthDays = self._fp.utils.getDaysinMonth((self.currentMonth - 1 + 12) % 12);
 
 				const daysInMonth = self._fp.utils.getDaysinMonth(),
 					days = document.createDocumentFragment();
@@ -423,12 +419,7 @@ class Flatpickr {
 
 				if (self.config.mode === "range") {
 					// const dateLimits = self.config.enable.length || self.config.disable.length || self.config.mixDate || self.config.maxDate;
-					self.minRangeDate = new Date(
-						self.currentYear,
-						self.currentMonth - 1,
-						dayNumber
-					);
-
+					self.minRangeDate = new Date(self.currentYear, self.currentMonth - 1, dayNumber);
 					self.maxRangeDate = new Date(
 						self.currentYear,
 						self.currentMonth + 1,
@@ -448,28 +439,17 @@ class Flatpickr {
 				// Start at 1 since there is no 0th day
 				for (dayNumber = 1; dayNumber <= daysInMonth; dayNumber++) {
 					days.appendChild(
-						self._fp.createDay(
-							"",
-							new Date(self.currentYear, self.currentMonth, dayNumber),
-							dayNumber
-						)
+						self._fp.createDay("", new Date(self.currentYear, self.currentMonth, dayNumber), dayNumber)
 					);
 				}
 
+
 				// append days from the next month
-				for (
-					let dayNum = daysInMonth + 1;
-					dayNum <= 42 - self.firstOfMonth;
-					dayNum++
-				) {
+				for (let dayNum = daysInMonth + 1; dayNum <= 42 - self.firstOfMonth; dayNum++) {
 					days.appendChild(
 						self._fp.createDay(
 							"nextMonthDay",
-							new Date(
-								self.currentYear,
-								self.currentMonth + 1,
-								dayNum % daysInMonth
-							),
+							new Date(self.currentYear, self.currentMonth + 1, dayNum % daysInMonth),
 							dayNum
 						)
 					);
@@ -499,8 +479,7 @@ class Flatpickr {
 					self.currentYearElement.max = self.config.maxDate.getFullYear();
 
 					self.currentYearElement.disabled = self.config.minDate	&&
-						self.config.minDate.getFullYear()
-						=== self.config.maxDate.getFullYear();
+						self.config.minDate.getFullYear() === self.config.maxDate.getFullYear();
 				}
 
 				self.nextMonthNav = self._fp.createElement("span", "flatpickr-next-month");
@@ -736,21 +715,11 @@ class Flatpickr {
 
 				let hoverDate = e.target.dateObj,
 					initialDate = self.parseDate(self.selectedDates[0], true),
-					rangeStartDate = Math.min(
-						hoverDate.getTime(),
-						self.selectedDates[0].getTime()
-					),
-					rangeEndDate = Math.max(
-						hoverDate.getTime(),
-						self.selectedDates[0].getTime()
-					),
+					rangeStartDate = Math.min(hoverDate.getTime(), self.selectedDates[0].getTime()),
+					rangeEndDate = Math.max(hoverDate.getTime(), self.selectedDates[0].getTime()),
 					containsDisabled = false;
 
-				for (
-					let t = rangeStartDate;
-					t < rangeEndDate;
-					t += self._fp.utils.duration.DAY
-				) {
+				for (let t = rangeStartDate; t < rangeEndDate; t += self._fp.utils.duration.DAY) {
 					if (!self.isEnabled(new Date(t))) {
 						containsDisabled = true;
 						break;
@@ -802,11 +771,7 @@ class Flatpickr {
 					"utc", "wrap", "weekNumbers", "allowInput", "clickOpens", "time_24hr", "enableTime", "noCalendar", "altInput", "shorthandCurrentMonth", "inline", "static", "enableSeconds", "disableMobile"
 				];
 				self.config = Object.create(Flatpickr.defaultConfig);
-				let userConfig = Object.assign(
-					{},
-					self.instanceConfig,
-					self.element.dataset || {}
-				);
+				let userConfig = Object.assign({}, self.instanceConfig, self.element.dataset || {});
 
 				Object.defineProperty(self.config, "minDate", {
 					get: function() {
@@ -1021,12 +986,8 @@ class Flatpickr {
 					self.altInput.type = "text";
 
 					self.input.type = "hidden";
-					if (self.input.parentNode) {
-						self.input.parentNode.insertBefore(
-							self.altInput,
-							self.input.nextSibling
-						);
-					}
+					if (self.input.parentNode)
+						self.input.parentNode.insertBefore(self.altInput, self.input.nextSibling);
 				}
 
 				if (!self.config.allowInput)
@@ -1068,10 +1029,7 @@ class Flatpickr {
 					self.altInput.type = "hidden";
 
 				try {
-					self.input.parentNode.insertBefore(
-						self.mobileInput,
-						self.input.nextSibling
-					);
+					self.input.parentNode.insertBefore(self.mobileInput, self.input.nextSibling);
 				}
 				catch (e) {
 					//
@@ -1092,8 +1050,7 @@ class Flatpickr {
 				self.currentYearElement.value = self.currentYear;
 
 				if (self.config.minDate) {
-					const hidePrevMonthArrow = self.currentYear
-					=== self.config.minDate.getFullYear()
+					const hidePrevMonthArrow = self.currentYear === self.config.minDate.getFullYear()
 						? (self.currentMonth + 11) % 12 < self.config.minDate.getMonth()
 						: self.currentYear < self.config.minDate.getFullYear();
 
@@ -1105,8 +1062,7 @@ class Flatpickr {
 
 
 				if (self.config.maxDate) {
-					const hideNextMonthArrow = self.currentYear
-					=== self.config.maxDate.getFullYear()
+					const hideNextMonthArrow = self.currentYear === self.config.maxDate.getFullYear()
 						? self.currentMonth + 1 > self.config.maxDate.getMonth()
 						: self.currentYear > self.config.maxDate.getFullYear();
 
@@ -1669,14 +1625,10 @@ class Flatpickr {
 		if (!date)
 			return self.clear();
 
-		self.selectedDates = (
-			Array.isArray(date)
-				? date.map(self.parseDate)
-				: [self.parseDate(date)]
-		).filter(
+		self.selectedDates = (Array.isArray(date) ? date.map(self.parseDate) : [self.parseDate(date)])
+		.filter(
 			d => d instanceof Date && self.isEnabled(d)
 		);
-
 		self.redraw();
 		self.jumpToDate();
 
