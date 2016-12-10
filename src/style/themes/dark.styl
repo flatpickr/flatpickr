@@ -1,5 +1,5 @@
-$calendar_background = rgba(35, 40, 60, 0.95)
-$calendar_border_color = rgb(35,40,60)
+$calendar_background = alpha(#23283c, 0.95)
+$calendar_border_color = #23283c
 
 $months_color = #fff
 $months_background = transparent
@@ -8,7 +8,7 @@ $weekdays_background = transparent
 $weekdays_color = #fff
 
 $day_text_color = alpha(white, 0.95)
-$day_hover_background_color = #4e545a
+$day_hover_background_color = lighten($calendar_background, 25%)
 
 $today_color = #eee
 $today_fg_color = rgb(35,40,60)
