@@ -40,8 +40,12 @@ document.getElementById("enableCustom").flatpickr({
 });
 
 flatpickr("#range-disabled", {
-    "mode": "range",
-    disable: [date => date.getDate() %6 === 0]
+	"mode": "range",
+	disable: [
+		function(date) {
+			return date.getDate() %6 === 0;
+		}
+	]
 });
 
 

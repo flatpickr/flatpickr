@@ -2,7 +2,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-/*! flatpickr v2.2.3, @license MIT */
+/*! flatpickr v2.2.5, @license MIT */
 function Flatpickr(element, config) {
 	var self = this;
 
@@ -63,7 +63,9 @@ function Flatpickr(element, config) {
 			updateValue();
 		}
 
-		if (self.config.weekNumbers) self.calendarContainer.style.width = self.days.offsetWidth + self.weekWrapper.offsetWidth + 2 + "px";
+		if (self.config.weekNumbers) {
+			self.calendarContainer.style.width = self.days.offsetWidth + self.weekWrapper.offsetWidth + "px";
+		}
 
 		triggerEvent("Ready");
 	}
@@ -152,7 +154,9 @@ function Flatpickr(element, config) {
 		document.addEventListener("keydown", onKeyDown);
 		window.addEventListener("resize", self.debouncedResize);
 
-		document.addEventListener("click", documentClick);
+		var clickEvent = typeof window.ontouchstart !== "undefined" ? "touchstart" : "click";
+
+		document.addEventListener(clickEvent, documentClick);
 		document.addEventListener("blur", documentClick);
 
 		if (self.config.clickOpens) (self.altInput || self.input).addEventListener("focus", open);
@@ -280,6 +284,8 @@ function Flatpickr(element, config) {
 		}
 
 		if (self.config.enableTime) fragment.appendChild(buildTime());
+
+		if (self.config.mode === "range") self.calendarContainer.classList.add("rangeMode");
 
 		self.calendarContainer.appendChild(fragment);
 
@@ -515,6 +521,8 @@ function Flatpickr(element, config) {
 	}
 
 	function clear() {
+		var triggerChangeEvent = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+
 		self.input.value = "";
 
 		if (self.altInput) self.altInput.value = "";
@@ -525,7 +533,10 @@ function Flatpickr(element, config) {
 		self.dateIsPicked = false;
 
 		self.redraw();
-		triggerEvent("Change");
+
+		if (triggerChangeEvent !== false)
+			// triggerChangeEvent is true (default) or an Event
+			triggerEvent("Change");
 	}
 
 	function close() {
@@ -541,7 +552,7 @@ function Flatpickr(element, config) {
 
 	function destroy(instance) {
 		instance = instance || self;
-		instance.clear();
+		instance.clear(false);
 
 		document.removeEventListener("keydown", onKeyDown);
 		window.removeEventListener("resize", instance.debouncedResize);
@@ -549,7 +560,7 @@ function Flatpickr(element, config) {
 		document.removeEventListener("click", documentClick);
 		document.removeEventListener("blur", documentClick);
 
-		if (instance.isMobile && instance.mobileInput && instance.mobileInput.parentNode) instance.mobileInput.parentNode.removeChild(instance.mobileInput);else if (instance.calendarContainer && instance.calendarContainer.parentNode) instance.calendarContainer.parentNode.removeChild(instance.calendarContainer);
+		if (instance.mobileInput && instance.mobileInput.parentNode) instance.mobileInput.parentNode.removeChild(instance.mobileInput);else if (instance.calendarContainer && instance.calendarContainer.parentNode) instance.calendarContainer.parentNode.removeChild(instance.calendarContainer);
 
 		if (instance.altInput) {
 			instance.input.type = "text";
@@ -559,6 +570,8 @@ function Flatpickr(element, config) {
 		instance.input.classList.remove("flatpickr-input");
 		instance.input.removeEventListener("focus", open);
 		instance.input.removeAttribute("readonly");
+
+		delete instance.input._flatpickr;
 	}
 
 	function isCalendarElem(elem) {
@@ -827,7 +840,7 @@ function Flatpickr(element, config) {
 		    timestamp = /^(\d+)$/g,
 		    date_orig = date;
 
-		if (date.toFixed) // timestamp
+		if (date.toFixed || timestamp.test(date)) // timestamp
 			date = new Date(date);else if (typeof date === "string") {
 			date = date.trim();
 
@@ -858,7 +871,7 @@ function Flatpickr(element, config) {
 
 		if (self.config.utc && !date.fp_isUTC) date = date.fp_toUTC();
 
-		if (timeless) date.setHours(0, 0, 0, 0);
+		if (timeless === true) date.setHours(0, 0, 0, 0);
 
 		return date;
 	}
@@ -1376,7 +1389,7 @@ Flatpickr.defaultConfig = {
 	altInput: false,
 
 	// the created altInput element will have this class.
-	altInputClass: "form-control input",
+	altInputClass: "flatpickr-input form-control input",
 
 	// same as dateFormat, but for altInput
 	altFormat: "F j, Y", // defaults to e.g. June 10, 2016
