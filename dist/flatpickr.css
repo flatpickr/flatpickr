@@ -12,7 +12,7 @@
   padding: 0;
 }
 .flatpickr-calendar {
-  background: #fff;
+  background: transparent;
   overflow: hidden;
   max-height: 0;
   opacity: 0;
@@ -26,7 +26,7 @@
   line-height: 24px;
   border-radius: 5px;
   position: absolute;
-  width: 295.75px;
+  width: 293.75px;
   box-sizing: border-box;
   box-shadow: 0 3px 13px rgba(0,0,0,0.08);
 }
@@ -450,6 +450,7 @@ span.flatpickr-weekday {
   border: 1px solid #e6e6e6;
   border-radius: 5px;
   z-index: -1;
+  background: #fff;
 }
 .flatpickr-rContainer {
   display: inline-block;
