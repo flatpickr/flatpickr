@@ -377,6 +377,7 @@ $invertedBg = invert($calendarBackground)
             background $dayHoverBackground
             border-color $dayHoverBackground
 
+
     &.today
         border-color $todayColor
 
@@ -407,6 +408,7 @@ $invertedBg = invert($calendarBackground)
 
     &.inRange
         border-radius 0
+        box-shadow: (-2.5*$dayMargin) 0 0 $dayHoverBackground, (2.5*$dayMargin) 0 0 $dayHoverBackground
 
 
 
@@ -444,6 +446,8 @@ span.flatpickr-weekday
     font-weight bold
     margin 0
 
+.rangeMode .flatpickr-day
+    margin-top 1px
 
 .flatpickr-weekwrapper
     display inline-block
