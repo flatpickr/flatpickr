@@ -5,26 +5,27 @@ $padding = ($daySize/16)
 $dayMargin = 1.5px
 $daysWidth = ($daySize*7 + $dayMargin*14 + $padding*2 + 2)
 $timeHeight = 40px
-
 $calendarWidth = ($daysWidth)
 
-$calendar_background ?= #ffffff
-$calendar_border_color ?= #e6e6e6
+// Colors
 
-$months_color ?= alpha(black, 0.9)
+$calendarBackground ?= #ffffff
+$calendarBorderColor ?= #e6e6e6
+
+$monthForeground ?= alpha(black, 0.9)
 $arrow_hover_color ?= #f64747
 
-$months_background ?= transparent
+$monthBackground ?= transparent
 
-$weekdays_background ?= transparent
+$weekdaysBackground ?= transparent
 
-$day_text_color ?= #393939
-$day_hover_background_color ?= #e6e6e6
+$dayForeground ?= #393939
+$dayHoverBackground ?= #e6e6e6
 
-$today_color ?= #959ea9
-$selected_day_background ?= #569FF7
+$todayColor ?= #959ea9
+$selectedDayBackground ?= #569FF7
 
-$invertedBg = invert($calendar_background)
+$invertedBg = invert($calendarBackground)
 
 
 @keyframes flatpickrFadeInDown
@@ -120,31 +121,31 @@ $invertedBg = invert($calendar_background)
         &:before, &:after
             bottom 100%
         &:before
-            border-bottom-color $calendar_border_color
+            border-bottom-color $calendarBorderColor
         &:after
-            if $border-calendar-only is defined
-                border-bottom-color $months_background
+            if $noCalendarBorder is defined
+                border-bottom-color $monthBackground
             else
-                border-bottom-color $calendar_background
+                border-bottom-color $calendarBackground
 
     &.arrowBottom
         &:before, &:after
             top 100%
         &:before
-            border-top-color $calendar_border_color
+            border-top-color $calendarBorderColor
         &:after
-            if $border-calendar-only is defined
-                border-top-color $months_background
+            if $noCalendarBorder is defined
+                border-top-color $monthBackground
             else
-                border-top-color $calendar_background
+                border-top-color $calendarBackground
 
 
 .flatpickr-month
-    if $border-calendar-only is defined
+    if $noCalendarBorder is defined
         border-radius 5px 5px 0 0
-    background $months_background
-    color $months_color
-    fill $months_color
+    background $monthBackground
+    color $monthForeground
+    fill $monthForeground
     height 28px
     line-height 24px
     text-align center
@@ -195,10 +196,10 @@ $invertedBg = invert($calendar_background)
                 fill $arrow_hover_color
 
             else
-                fill $today_color
+                fill $todayColor
 
     &:hover
-        color $today_color
+        color $todayColor
 
 .numInputWrapper
     position relative
@@ -220,7 +221,7 @@ $invertedBg = invert($calendar_background)
         opacity 0
         z-index 9
         cursor pointer
-        border 1px solid alpha($day_text_color, 0.05)
+        border 1px solid alpha($dayForeground, 0.05)
         box-sizing border-box
 
         &:hover
@@ -242,7 +243,7 @@ $invertedBg = invert($calendar_background)
             &:after
                 border-left 4px solid transparent
                 border-right 4px solid transparent
-                border-bottom 4px solid alpha($day_text_color, 0.6)
+                border-bottom 4px solid alpha($dayForeground, 0.6)
 
         &.arrowDown
             top 50%
@@ -250,13 +251,13 @@ $invertedBg = invert($calendar_background)
             &:after
                 border-left 4px solid transparent
                 border-right 4px solid transparent
-                border-top 4px solid alpha($day_text_color, 0.6)
+                border-top 4px solid alpha($dayForeground, 0.6)
 
         svg
             width inherit
             height auto
             path
-                fill alpha($months_color, 0.5)
+                fill alpha($monthForeground, 0.5)
 
     &:hover
         background: alpha($invertedBg, 0.05)
@@ -291,10 +292,10 @@ $invertedBg = invert($calendar_background)
         display inline-block
 
         span.arrowUp:after
-            border-bottom-color $months_color
+            border-bottom-color $monthForeground
 
         span.arrowDown:after
-            border-top-color $months_color
+            border-top-color $monthForeground
 
 
     input.cur-year
@@ -321,12 +322,12 @@ $invertedBg = invert($calendar_background)
 
         &[disabled], &[disabled]:hover
             font-size 100%
-            color alpha($months_color, 0.5)
+            color alpha($monthForeground, 0.5)
             background transparent
             pointer-events none
 
 .flatpickr-weekdays
-    background $weekdays_background
+    background $weekdaysBackground
     text-align center
     overflow hidden
 
@@ -340,9 +341,9 @@ $invertedBg = invert($calendar_background)
     display flex
     flex-wrap wrap
 
-    if $border-calendar-only is defined
-        border-right 1px solid $calendar_border_color
-        border-left 1px solid $calendar_border_color
+    if $noCalendarBorder is defined
+        border-right 1px solid $calendarBorderColor
+        border-left 1px solid $calendarBorderColor
     else
         border-right 1px solid transparent
 
@@ -351,7 +352,7 @@ $invertedBg = invert($calendar_background)
     border 1px solid transparent
     border-radius 150px
     box-sizing border-box
-    color $day_text_color
+    color $dayForeground
     cursor pointer
     display inline-block
     display unquote('inline-block\9')
@@ -373,15 +374,15 @@ $invertedBg = invert($calendar_background)
         &.inRange, &.today.inRange,  &:hover, &:focus
             cursor pointer
             outline 0
-            background $day_hover_background_color
-            border-color $day_hover_background_color
+            background $dayHoverBackground
+            border-color $dayHoverBackground
 
     &.today
-        border-color $today_color
+        border-color $todayColor
 
         &:hover, &:focus
-            border-color $today_color
-            background $today_color
+            border-color $todayColor
+            background $todayColor
             if $today_fg_color is defined
                 color $today_fg_color
             else
@@ -389,14 +390,14 @@ $invertedBg = invert($calendar_background)
 
     &.selected, &.startRange, &.endRange
         &, &:focus, &:hover, &.prevMonthDay, &.nextMonthDay
-            background $selected_day_background
+            background $selectedDayBackground
 
-            if $selected_day_color is defined
-                color $selected_day_color
+            if $selectedDayForeground is defined
+                color $selectedDayForeground
             else
                 color white
 
-            border-color $selected_day_background
+            border-color $selectedDayBackground
 
         &.startRange
             border-radius 50px 0 0 50px
@@ -415,7 +416,7 @@ $invertedBg = invert($calendar_background)
         if $disabled_day_color is defined
             color $disabled_day_color
         else
-            color alpha($day_text_color, 0.3)
+            color alpha($dayForeground, 0.3)
         background transparent
         if $disabled_border_color is defined
             border-color $disabled_border_color
@@ -435,7 +436,7 @@ span.flatpickr-weekday
     height 24px
     line-height 24px
     margin 0
-    background $months_background
+    background $monthBackground
     text-align center
     display block
     float left
@@ -450,9 +451,9 @@ span.flatpickr-weekday
 
     .flatpickr-weeks
         padding 0 12px
-        if $border-calendar-only is defined
-            border-left 1px solid $calendar_border_color
-        border-right 1px solid $calendar_border_color
+        if $noCalendarBorder is defined
+            border-left 1px solid $calendarBorderColor
+        border-right 1px solid $calendarBorderColor
 
     .flatpickr-weekday
         float none
@@ -472,7 +473,7 @@ span.flatpickr-weekday
 
     box-sizing border-box
 
-    unless $border-calendar-only is defined
+    unless $noCalendarBorder is defined
         &:after
             content: '';
             position: absolute;
@@ -480,10 +481,10 @@ span.flatpickr-weekday
             left: -1px;
             right: -1px;
             bottom: -1px;
-            border 1px solid $calendar_border_color
+            border 1px solid $calendarBorderColor
             border-radius 5px
             z-index -1
-            background $calendar_background
+            background $calendarBackground
 
 
 
@@ -507,9 +508,9 @@ span.flatpickr-weekday
     transition height 0.33s $bezier
     display flex
 
-    if $border-calendar-only is defined
+    if $noCalendarBorder is defined
         border-radius 0 0 5px  5px
-        border 1px solid $calendar_border_color
+        border 1px solid $calendarBorderColor
         border-top 0
 
 
@@ -525,10 +526,10 @@ span.flatpickr-weekday
         float left
 
         span.arrowUp:after
-            border-bottom-color $day_text_color
+            border-bottom-color $dayForeground
 
         span.arrowDown:after
-            border-top-color $day_text_color
+            border-top-color $dayForeground
 
     &.hasSeconds .numInputWrapper
         width 26%
@@ -547,7 +548,7 @@ span.flatpickr-weekday
         height inherit
         line-height inherit
         cursor pointer
-        color $day_text_color
+        color $dayForeground
         font-size 14px
         position relative
         box-sizing border-box
@@ -567,7 +568,7 @@ span.flatpickr-weekday
         display inline-block
         float left
         line-height inherit
-        color $day_text_color
+        color $dayForeground
         font-weight bold
         width 2%
 
@@ -579,7 +580,7 @@ span.flatpickr-weekday
         font-weight 400
 
         &:hover, &:focus
-            background lighten($day_hover_background_color, 4)
+            background lighten($dayHoverBackground, 4)
 
 
 .hasWeeks, .hasTime
@@ -588,12 +589,12 @@ span.flatpickr-weekday
         border-bottom-right-radius 0
         border-bottom-left-radius 0
 
-if $border-calendar-only
+if $noCalendarBorder
     .hasWeeks .flatpickr-days
         border-left 0
 
 .dateIsPicked .flatpickr-innerContainer + .flatpickr-time
-    border-top 1px solid $calendar_border_color
+    border-top 1px solid $calendarBorderColor
 
 
 
