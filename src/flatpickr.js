@@ -699,7 +699,7 @@ function Flatpickr(element, config) {
 		document.removeEventListener("click", documentClick);
 		document.removeEventListener("blur", documentClick);
 
-		if (instance.isMobile && instance.mobileInput && instance.mobileInput.parentNode)
+		if (instance.mobileInput && instance.mobileInput.parentNode)
 			instance.mobileInput.parentNode.removeChild(instance.mobileInput);
 
 		else if (instance.calendarContainer && instance.calendarContainer.parentNode)
@@ -715,7 +715,7 @@ function Flatpickr(element, config) {
 		instance.input.removeEventListener("focus", open);
 		instance.input.removeAttribute("readonly");
 
-
+		delete instance.input._flatpickr;
 	}
 
 	function isCalendarElem(elem) {
