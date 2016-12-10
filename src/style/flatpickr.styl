@@ -6,7 +6,7 @@ $dayMargin = 1.5px
 $daysWidth = ($daySize*7 + $dayMargin*14 + $padding*2 + 2)
 $timeHeight = 40px
 
-$calendarWidth = ($daysWidth + 2)
+$calendarWidth = ($daysWidth)
 
 $calendar_background ?= #ffffff
 $calendar_border_color ?= #e6e6e6
@@ -23,6 +23,8 @@ $day_hover_background_color ?= #e6e6e6
 
 $today_color ?= #959ea9
 $selected_day_background ?= #569FF7
+
+$invertedBg = invert($calendar_background)
 
 
 @keyframes flatpickrFadeInDown
@@ -49,7 +51,7 @@ $selected_day_background ?= #569FF7
     padding 0
 
 .flatpickr-calendar
-    background $calendar_background
+    background transparent
     overflow hidden
     max-height 0
     opacity 0
@@ -222,10 +224,10 @@ $selected_day_background ?= #569FF7
         box-sizing border-box
 
         &:hover
-            background alpha(black, 0.1)
+            background: alpha($invertedBg, 0.1)
 
         &:active
-            background alpha(black, 0.2)
+            background: alpha($invertedBg, 0.2)
 
         &:after
             display block
@@ -257,7 +259,7 @@ $selected_day_background ?= #569FF7
                 fill alpha($months_color, 0.5)
 
     &:hover
-        background rgba(0,0,0,0.05)
+        background: alpha($invertedBg, 0.05)
 
         span
             opacity 1
@@ -481,6 +483,7 @@ span.flatpickr-weekday
             border 1px solid $calendar_border_color
             border-radius 5px
             z-index -1
+            background $calendar_background
 
 
 
