@@ -389,6 +389,7 @@
 }
 .flatpickr-day.inRange {
   border-radius: 0;
+  box-shadow: -3.75px 0 0 #e6e6e6, 3.75px 0 0 #e6e6e6;
 }
 .flatpickr-day.disabled,
 .flatpickr-day.disabled:hover,
@@ -416,6 +417,9 @@ span.flatpickr-weekday {
   width: 14.28%;
   font-weight: bold;
   margin: 0;
+}
+.rangeMode .flatpickr-day {
+  margin-top: 1px;
 }
 .flatpickr-weekwrapper {
   display: inline-block;
