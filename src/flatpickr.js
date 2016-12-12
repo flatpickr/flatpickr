@@ -794,18 +794,19 @@ function Flatpickr(element, config) {
 		}
 	}
 
-	function isEnabled(dateToCheck) {
+	function isEnabled(date) {
 		if (
-			(self.config.minDate && compareDates(dateToCheck, self.config.minDate) < 0) ||
-			(self.config.maxDate && compareDates(dateToCheck, self.config.maxDate) > 0)
+			(self.config.minDate && compareDates(date, self.config.minDate) < 0) ||
+			(self.config.maxDate && compareDates(date, self.config.maxDate) > 0)
 		)
 			return false;
+
 
 		if (!self.config.enable.length && !self.config.disable.length)
 			return true;
 
 
-		dateToCheck = parseDate(dateToCheck, true); // timeless
+		const dateToCheck = parseDate(date, true); // timeless
 
 		const bool = self.config.enable.length > 0,
 			array = bool ? self.config.enable : self.config.disable;
@@ -1129,6 +1130,9 @@ function Flatpickr(element, config) {
 			else // fallback
 				date = new Date(date);
 		}
+
+		else if (date instanceof Date)
+			date = new Date(date.getTime()); // create a copy
 
 		if (!(date instanceof Date)) {
 			console.warn(`flatpickr: invalid date ${date_orig}`);
