@@ -497,6 +497,7 @@ function Flatpickr(element, config) {
 		return self.weekdayContainer;
 	}
 
+	/* istanbul ignore next */
 	function buildWeeks() {
 		self.calendarContainer.classList.add("hasWeeks");
 		self.weekWrapper = createElement("div", "flatpickr-weekwrapper");
@@ -1003,6 +1004,7 @@ function Flatpickr(element, config) {
 		};
 	}
 
+	/* istanbul ignore next */
 	function setupFormats() {
 		self.formats = {
 			// weekday name, short, e.g. Thu
@@ -1262,6 +1264,7 @@ function Flatpickr(element, config) {
 		return e;
 	}
 
+	/* istanbul ignore next */
 	function debounce(func, wait, immediate) {
 		var timeout = void 0;
 		return function () {
@@ -1320,6 +1323,7 @@ function Flatpickr(element, config) {
 	return self;
 }
 
+/* istanbul ignore next */
 Flatpickr.defaultConfig = {
 
 	mode: "single",
@@ -1452,6 +1456,7 @@ Flatpickr.defaultConfig = {
 	onDayCreate: null
 };
 
+/* istanbul ignore next */
 Flatpickr.l10ns = {
 	en: {
 		weekdays: {
@@ -1589,6 +1594,7 @@ Date.prototype.fp_toUTC = function () {
 };
 
 // IE9 classList polyfill
+/* istanbul ignore next */
 if (!("classList" in document.documentElement) && Object.defineProperty && typeof HTMLElement !== "undefined") {
 	Object.defineProperty(HTMLElement.prototype, "classList", {
 		get: function get() {

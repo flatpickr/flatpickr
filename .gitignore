@@ -4,3 +4,4 @@
 *.sublime-workspace
 .idea/index.html
 index.html
+coverage
