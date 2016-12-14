@@ -88,6 +88,7 @@ $invertedBg = invert($calendarBackground)
     &.static
         display none
         position relative
+        top 2px
 
         &.open
             display block
@@ -184,6 +185,15 @@ $invertedBg = invert($calendarBackground)
         /*rtl:end:ignore*//*
         */
 
+    &:hover
+        color $todayColor
+        svg
+            if $arrow_hover_color is defined
+                fill $arrow_hover_color
+
+            else
+                fill $todayColor
+
     svg
         width 14px
 
@@ -191,15 +201,6 @@ $invertedBg = invert($calendarBackground)
             transition fill 0.1s
             fill inherit
 
-        &:hover
-            if $arrow_hover_color is defined
-                fill $arrow_hover_color
-
-            else
-                fill $todayColor
-
-    &:hover
-        color $todayColor
 
 .numInputWrapper
     position relative
@@ -354,6 +355,14 @@ $invertedBg = invert($calendarBackground)
     box-sizing border-box
     color $dayForeground
     cursor pointer
+
+    width 14.2857143%
+    flex-basis 14.2857143%
+    max-width $daySize
+    height $daySize
+    line-height $daySize
+    margin 0px $dayMargin
+
     display inline-block
     display unquote('inline-block\9')
     position relative
@@ -362,12 +371,6 @@ $invertedBg = invert($calendarBackground)
     justify-content center
 
     font-weight 300
-    width 14.2857143%
-    flex-basis 14.2857143%
-    max-width $daySize
-    height $daySize
-    line-height $daySize
-    margin 0px $dayMargin
     text-align center
 
     &, &.prevMonthDay, &.nextMonthDay
