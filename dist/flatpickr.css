@@ -49,6 +49,7 @@
 .flatpickr-calendar.static {
   display: none;
   position: relative;
+  top: 2px;
 }
 .flatpickr-calendar.static.open {
   display: block;
@@ -154,6 +155,14 @@
         /*rtl:begin:ignore*/
 /*
         /*rtl:end:ignore*/
+.flatpickr-prev-month:hover,
+.flatpickr-next-month:hover {
+  color: #959ea9;
+}
+.flatpickr-prev-month:hover svg,
+.flatpickr-next-month:hover svg {
+  fill: #f64747;
+}
 .flatpickr-prev-month svg,
 .flatpickr-next-month svg {
   width: 14px;
@@ -162,14 +171,6 @@
 .flatpickr-next-month svg path {
   transition: fill 0.1s;
   fill: inherit;
-}
-.flatpickr-prev-month svg:hover,
-.flatpickr-next-month svg:hover {
-  fill: #f64747;
-}
-.flatpickr-prev-month:hover,
-.flatpickr-next-month:hover {
-  color: #959ea9;
 }
 .numInputWrapper {
   position: relative;
@@ -317,6 +318,12 @@
   box-sizing: border-box;
   color: #393939;
   cursor: pointer;
+  width: 14.2857143%;
+  flex-basis: 14.2857143%;
+  max-width: 38px;
+  height: 38px;
+  line-height: 38px;
+  margin: 0px 1.5px;
   display: inline-block;
   display: inline-block\9;
   position: relative;
@@ -324,12 +331,6 @@
   -ms-flex-pack: center;
   justify-content: center;
   font-weight: 300;
-  width: 14.2857143%;
-  flex-basis: 14.2857143%;
-  max-width: 38px;
-  height: 38px;
-  line-height: 38px;
-  margin: 0px 1.5px;
   text-align: center;
 }
 .flatpickr-day.inRange,
