@@ -864,6 +864,7 @@ function Flatpickr(element, config) {
 	}
 
 	function selectDate(e) {
+		e.preventDefault();
 		if (self.config.allowInput && e.which === 13 && e.target === (self.altInput || self.input)) return self.setDate((self.altInput || self.input).value), e.target.blur();
 
 		if (!e.target.classList.contains("flatpickr-day") || e.target.classList.contains("disabled") || e.target.classList.contains("notAllowed")) return;
