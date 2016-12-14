@@ -817,15 +817,13 @@ function Flatpickr(element, config) {
 				return bool;
 
 
-			else if ((d instanceof Date || (typeof d === "string")) &&
-				parseDate(d, true).getTime() === dateToCheck.getTime()
-			)
+			else if (d instanceof Date && d.getTime() === dateToCheck.getTime())
 				// disabled by date string
 				return bool;
 
 			else if ( // disabled by range
 				typeof d === "object" && d.from && d.to &&
-				dateToCheck >= parseDate(d.from) &&	dateToCheck <= parseDate(d.to)
+				dateToCheck >= d.from && dateToCheck <= d.to
 			)
 				return bool;
 		}
@@ -1217,32 +1215,52 @@ function Flatpickr(element, config) {
 	}
 
 	function setupDates() {
+		function parseDateRules(arr) {
+			for (let i = arr.length; i--;) {
+				if (typeof arr[i] === "string" || +arr[i])
+					arr[i] = self.parseDate(arr[i], true);
+
+				else if (arr[i] && arr[i].from && arr[i].to) {
+					arr[i].from = self.parseDate(arr[i].from);
+					arr[i].to = self.parseDate(arr[i].to);
+				}
+			}
+
+			return arr.filter(x => x); // remove falsy values
+		}
+
 		self.selectedDates = [];
 		self.now = new Date();
 		const inputDate = self.config.defaultDate || self.input.value;
 
 		if (Array.isArray(inputDate))
-			self.selectedDates = inputDate.map(parseDate);
+			self.selectedDates = inputDate.map(self.parseDate);
 
 		else if (inputDate) {
 			switch (self.config.mode) {
 				case "single":
-					self.selectedDates = [parseDate(inputDate)];
+					self.selectedDates = [self.parseDate(inputDate)];
 					break;
 
 				case "multiple":
-					self.selectedDates = inputDate.split("; ").map(parseDate);
+					self.selectedDates = inputDate.split("; ").map(self.parseDate);
 					break;
 
 				case "range":
 					self.selectedDates = inputDate
 						.split(self.l10n.rangeSeparator)
-						.map(parseDate);
+						.map(self.parseDate);
 					break;
 
 				default: break;
 			}
 		}
+
+		if (self.config.disable.length)
+			self.config.disable = parseDateRules(self.config.disable);
+
+		if (self.config.enable.length)
+			self.config.enable = parseDateRules(self.config.enable);
 
 		self.selectedDates = self.selectedDates.filter(
 			d => d instanceof Date && d.getTime() && isEnabled(d)
