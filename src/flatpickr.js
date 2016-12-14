@@ -28,7 +28,6 @@ function Flatpickr(element, config) {
 		self.formatDate = formatDate;
 		self.jumpToDate = jumpToDate;
 		self.open = open;
-		self.parseDate = parseDate;
 		self.redraw = redraw;
 		self.set = set;
 		self.setDate = setDate;
@@ -258,7 +257,7 @@ function Flatpickr(element, config) {
 
 	function jumpToDate(jumpDate) {
 		jumpDate = jumpDate
-			? parseDate(jumpDate)
+			? self.parseDate(jumpDate)
 			: latestSelectedDateObj() || (self.config.minDate > self.now
 				? self.config.minDate
 				: self.now
@@ -806,7 +805,7 @@ function Flatpickr(element, config) {
 			return true;
 
 
-		const dateToCheck = parseDate(date, true); // timeless
+		const dateToCheck = self.parseDate(date, true); // timeless
 
 		const bool = self.config.enable.length > 0,
 			array = bool ? self.config.enable : self.config.disable;
@@ -897,7 +896,7 @@ function Flatpickr(element, config) {
 			return;
 
 		let hoverDate = e.target.dateObj,
-			initialDate = parseDate(self.selectedDates[0], true),
+			initialDate = self.parseDate(self.selectedDates[0], true),
 			rangeStartDate = Math.min(hoverDate.getTime(), self.selectedDates[0].getTime()),
 			rangeEndDate = Math.max(hoverDate.getTime(), self.selectedDates[0].getTime()),
 			containsDisabled = false;
@@ -999,7 +998,7 @@ function Flatpickr(element, config) {
 				return this._minDate;
 			},
 			set: function(date) {
-				this._minDate = parseDate(date);
+				this._minDate = self.parseDate(date);
 
 				if(self.days)
 					redraw();
@@ -1028,7 +1027,7 @@ function Flatpickr(element, config) {
 				return this._maxDate;
 			},
 			set: function(date) {
-				this._maxDate = parseDate(date);
+				this._maxDate = self.parseDate(date);
 				if(self.days)
 					redraw();
 
@@ -1082,71 +1081,6 @@ function Flatpickr(element, config) {
 					? Flatpickr.l10ns[self.config.locale] || {}
 					: {}
 		);
-	}
-
-	function parseDate(date, timeless = false) {
-		if (!date)
-			return null;
-
-		const dateTimeRegex = /(\d+)/g,
-			timeRegex = /^(\d{1,2})[:\s](\d\d)?[:\s]?(\d\d)?\s?(a|p)?/i,
-			timestamp = /^(\d+)$/g,
-			date_orig = date;
-
-		if (date.toFixed || timestamp.test(date)) // timestamp
-			date = new Date(date);
-
-		else if (typeof date === "string") {
-			date = date.trim();
-
-			if (date === "today") {
-				date = new Date();
-				timeless = true;
-			}
-
-			else if (self.config.parseDate)
-				date = self.config.parseDate(date);
-
-			else if (timeRegex.test(date)) { // time picker
-				const m = date.match(timeRegex),
-					hours = !m[4]
-						? m[1]  // military time, no conversion needed
-						: (m[1] % 12) + (m[4].toLowerCase() === "p" ? 12 : 0); // am/pm
-
-				date = new Date();
-				date.setHours(hours, m[2] || 0, m[3] || 0);
-			}
-
-			else if (/Z$/.test(date) || /GMT$/.test(date)) // datestrings w/ timezone
-				date = new Date(date);
-
-			else if (dateTimeRegex.test(date) && /^[0-9]/.test(date)) {
-				const d = date.match(dateTimeRegex);
-				date = new Date(
-					`${d[0]}/${d[1] || 1}/${d[2] || 1} ${d[3] || 0}:${d[4] || 0}:${d[5] || 0}`
-				);
-			}
-
-			else // fallback
-				date = new Date(date);
-		}
-
-		else if (date instanceof Date)
-			date = new Date(date.getTime()); // create a copy
-
-		if (!(date instanceof Date)) {
-			console.warn(`flatpickr: invalid date ${date_orig}`);
-			console.info(self.element);
-			return null;
-		}
-
-		if (self.config.utc && !date.fp_isUTC)
-			date = date.fp_toUTC();
-
-		if (timeless === true)
-			date.setHours(0, 0, 0, 0);
-
-		return date;
 	}
 
 	function positionCalendar() {
@@ -1264,7 +1198,9 @@ function Flatpickr(element, config) {
 		if (!date)
 			return self.clear();
 
-		self.selectedDates = (Array.isArray(date) ? date.map(parseDate) : [parseDate(date)])
+		self.selectedDates = (Array.isArray(date)
+			? date.map(self.parseDate) :
+			[self.parseDate(date)])
 		.filter(
 			d => d instanceof Date && isEnabled(d)
 		);
@@ -1857,8 +1793,73 @@ Flatpickr.l10ns.default = Flatpickr.l10ns.en;
 Flatpickr.localize = l10n => Object.assign(Flatpickr.l10ns.default, l10n || {});
 
 Flatpickr.prototype = {
-	pad: function(number) {
+	pad (number) {
 		return `0${number}`.slice(-2);
+	},
+
+	parseDate(date, timeless = false) {
+		if (!date)
+			return null;
+
+		const dateTimeRegex = /(\d+)/g,
+			timeRegex = /^(\d{1,2})[:\s](\d\d)?[:\s]?(\d\d)?\s?(a|p)?/i,
+			timestamp = /^(\d+)$/g,
+			date_orig = date;
+
+		if (date.toFixed || timestamp.test(date)) // timestamp
+			date = new Date(date);
+
+		else if (typeof date === "string") {
+			date = date.trim();
+
+			if (date === "today") {
+				date = new Date();
+				timeless = true;
+			}
+
+			else if (this.config && this.config.parseDate)
+				date = this.config.parseDate(date);
+
+			else if (timeRegex.test(date)) { // time picker
+				const m = date.match(timeRegex),
+					hours = !m[4]
+						? m[1]  // military time, no conversion needed
+						: (m[1] % 12) + (m[4].toLowerCase() === "p" ? 12 : 0); // am/pm
+
+				date = new Date();
+				date.setHours(hours, m[2] || 0, m[3] || 0);
+			}
+
+			else if (/Z$/.test(date) || /GMT$/.test(date)) // datestrings w/ timezone
+				date = new Date(date);
+
+			else if (dateTimeRegex.test(date) && /^[0-9]/.test(date)) {
+				const d = date.match(dateTimeRegex);
+				date = new Date(
+					`${d[0]}/${d[1] || 1}/${d[2] || 1} ${d[3] || 0}:${d[4] || 0}:${d[5] || 0}`
+				);
+			}
+
+			else // fallback
+				date = new Date(date);
+		}
+
+		else if (date instanceof Date)
+			date = new Date(date.getTime()); // create a copy
+
+		if (!(date instanceof Date)) {
+			console.warn(`flatpickr: invalid date ${date_orig}`);
+			console.info(this.element);
+			return null;
+		}
+
+		if (this.config && this.config.utc && !date.fp_isUTC)
+			date = date.fp_toUTC();
+
+		if (timeless === true)
+			date.setHours(0, 0, 0, 0);
+
+		return date;
 	}
 };
 
