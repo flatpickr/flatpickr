@@ -4,7 +4,7 @@ node_js:
   - node
 
 after_success:
-  - coveralls
+  - yarn run coveralls
 
 notifications:
   email: false
