@@ -159,7 +159,7 @@ const Russian = require("flatpickr/dist/l10n/ru.js").ru;
 new Flatpickr(myElem, {
     "locale": Russian
 });
-</code></pre>Localize globally:<pre><code class="js">const Russian = require("flatpickr/dist/l10n/ru.js");
+</code></pre>Localize globally:<pre><code class="js">const Russian = require("flatpickr/dist/l10n/ru.js").ru;
 Flatpickr.localize(Russian); // default locale is now Russian
 new Flatpickr(myElem);
 </code></pre></p></section><section><p>You may also wish to modify only certain values of locale.</p><p>For instance, to set the first day of the week to Monday:</p><pre><code>Flatpickr.l10ns.default.firstDayOfWeek = 1; // Monday
