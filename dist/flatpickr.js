@@ -1125,7 +1125,9 @@ function Flatpickr(element, config) {
 	function setupMobile() {
 		var inputType = self.config.enableTime ? self.config.noCalendar ? "time" : "datetime-local" : "date";
 
+		if (self.config.mobileExtraClass) self.element.className += " " + self.config.mobileExtraClass;
 		self.mobileInput = createElement("input", "flatpickr-input flatpickr-mobile");
+		if (self.config.mobileInputExtraClass) self.mobileInput.className += " " + self.config.mobileInputExtraClass;
 		self.mobileInput.step = "any";
 		self.mobileInput.tabIndex = -1;
 		self.mobileInput.type = inputType;
@@ -1359,6 +1361,12 @@ Flatpickr.defaultConfig = {
 
 	// more date format chars at https://chmln.github.io/flatpickr/#dateformat
 	dateFormat: "Y-m-d",
+
+	// the element will have this additional class when mobile mode is active.
+	mobileExtraClass: "flatpickr-mobile-mode",
+
+	// the created mobileInput element will have this additional class.
+	mobileInputExtraClass: "form-control",
 
 	// altInput - see https://chmln.github.io/flatpickr/#altinput
 	altInput: false,
