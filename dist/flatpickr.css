@@ -29,6 +29,7 @@
   width: 293.75px;
   box-sizing: border-box;
   box-shadow: 0 3px 13px rgba(0,0,0,0.08);
+  z-index: 999;
 }
 .flatpickr-calendar.open,
 .flatpickr-calendar.inline {
