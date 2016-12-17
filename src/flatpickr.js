@@ -699,8 +699,13 @@ function Flatpickr(element, config) {
 		document.removeEventListener("click", documentClick);
 		document.removeEventListener("blur", documentClick);
 
-		if (instance.mobileInput && instance.mobileInput.parentNode)
-			instance.mobileInput.parentNode.removeChild(instance.mobileInput);
+		if(instance.mobileInput) {
+			if (instance.mobileExtraClasses)
+				for (let i = 0; i < instance.mobileExtraClasses.length; i++)
+					instance.element.classList.remove(instance.mobileExtraClasses[i]);
+			if (instance.mobileInput.parentNode)
+				instance.mobileInput.parentNode.removeChild(instance.mobileInput);
+		}
 
 		else if (instance.calendarContainer && instance.calendarContainer.parentNode)
 			instance.calendarContainer.parentNode.removeChild(instance.calendarContainer);
@@ -1385,17 +1390,15 @@ function Flatpickr(element, config) {
 			: "date";
 
 		if (self.config.mobileExtraClass) {
-			let classes = self.config.mobileExtraClass.split(/\s+/);
-			for (let i = 0; i < classes.length; i++) {
-				self.element.classList.add(classes[i]);
-			}
+			self.mobileExtraClasses = self.config.mobileExtraClass.split(/\s+/);
+			for (let i = 0; i < self.mobileExtraClasses.length; i++)
+				self.element.classList.add(self.mobileExtraClasses[i]);
 		}
 		self.mobileInput = createElement("input", "flatpickr-input flatpickr-mobile");
 		if (self.config.mobileInputExtraClass) {
 			let classes = self.config.mobileInputExtraClass.split(/\s+/);
-			for (let i = 0; i < classes.length; i++) {
+			for (let i = 0; i < classes.length; i++)
 				self.mobileInput.classList.add(classes[i]);
-			}
 		}
 		self.mobileInput.step = "any";
 		self.mobileInput.tabIndex = -1;
