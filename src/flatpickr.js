@@ -1384,11 +1384,19 @@ function Flatpickr(element, config) {
 			? (self.config.noCalendar ? "time" : "datetime-local")
 			: "date";
 
-		if (self.config.mobileExtraClass)
-			self.element.className += " " + self.config.mobileExtraClass;
+		if (self.config.mobileExtraClass) {
+			let classes = self.config.mobileExtraClass.split(/\s+/);
+			for (let i = 0; i < classes.length; i++) {
+				self.element.classList.add(classes[i]);
+			}
+		}
 		self.mobileInput = createElement("input", "flatpickr-input flatpickr-mobile");
-		if (self.config.mobileInputExtraClass)
-			self.mobileInput.className += " " + self.config.mobileInputExtraClass;
+		if (self.config.mobileInputExtraClass) {
+			let classes = self.config.mobileInputExtraClass.split(/\s+/);
+			for (let i = 0; i < classes.length; i++) {
+				self.mobileInput.classList.add(classes[i]);
+			}
+		}
 		self.mobileInput.step = "any";
 		self.mobileInput.tabIndex = -1;
 		self.mobileInput.type = inputType;

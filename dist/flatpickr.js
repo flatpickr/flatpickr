@@ -1125,9 +1125,19 @@ function Flatpickr(element, config) {
 	function setupMobile() {
 		var inputType = self.config.enableTime ? self.config.noCalendar ? "time" : "datetime-local" : "date";
 
-		if (self.config.mobileExtraClass) self.element.className += " " + self.config.mobileExtraClass;
+		if (self.config.mobileExtraClass) {
+			var classes = self.config.mobileExtraClass.split(/\s+/);
+			for (var i = 0; i < classes.length; i++) {
+				self.element.classList.add(classes[i]);
+			}
+		}
 		self.mobileInput = createElement("input", "flatpickr-input flatpickr-mobile");
-		if (self.config.mobileInputExtraClass) self.mobileInput.className += " " + self.config.mobileInputExtraClass;
+		if (self.config.mobileInputExtraClass) {
+			var _classes = self.config.mobileInputExtraClass.split(/\s+/);
+			for (var _i = 0; _i < _classes.length; _i++) {
+				self.mobileInput.classList.add(_classes[_i]);
+			}
+		}
 		self.mobileInput.step = "any";
 		self.mobileInput.tabIndex = -1;
 		self.mobileInput.type = inputType;
