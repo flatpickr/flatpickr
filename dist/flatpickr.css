@@ -108,6 +108,7 @@
   text-align: center;
   position: relative;
   user-select: none;
+  z-index: 2;
 }
 .flatpickr-prev-month,
 .flatpickr-next-month {
@@ -428,6 +429,7 @@ span.flatpickr-weekday {
 .flatpickr-weekwrapper {
   display: inline-block;
   float: left;
+  z-index: 2;
 }
 .flatpickr-weekwrapper .flatpickr-weeks {
   padding: 0 12px;
@@ -465,6 +467,7 @@ span.flatpickr-weekday {
   display: inline-block;
   padding: 0;
   box-sizing: border-box;
+  z-index: 2;
 }
 .flatpickr-time {
   text-align: center;
