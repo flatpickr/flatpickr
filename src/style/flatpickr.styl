@@ -153,8 +153,6 @@ $invertedBg = invert($calendarBackground)
     text-align center
     position relative
     user-select none
-    margin-bottom ($daySize/12)
-
 
 .flatpickr-prev-month, .flatpickr-next-month
     text-decoration none
@@ -439,7 +437,7 @@ span.flatpickr-weekday
     else
         color alpha(black, 0.54)
 
-    height 24px
+    height (24px + $daySize/12)
     line-height 24px
     margin 0
     background $monthBackground
@@ -449,6 +447,7 @@ span.flatpickr-weekday
     width 14.28%
     font-weight bold
     margin 0
+    padding-top ($daySize/12)
 
 .rangeMode .flatpickr-day
     margin-top 1px
@@ -480,8 +479,12 @@ span.flatpickr-weekday
     display flex
 
     box-sizing border-box
+    overflow: hidden;
 
-    unless $noCalendarBorder is defined
+    if $noCalendarBorder is defined
+        background $calendarBackground
+
+    else
         &:after
             content: '';
             position: absolute;
@@ -491,7 +494,7 @@ span.flatpickr-weekday
             bottom: -1px;
             border 1px solid $calendarBorderColor
             border-radius 5px
-            z-index -1
+            z-index 1
             background $calendarBackground
 
 
