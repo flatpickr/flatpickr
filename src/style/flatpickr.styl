@@ -87,7 +87,7 @@ $invertedBg = invert($calendarBackground)
         position relative
 
     &.static
-        display none
+        //display none
         position relative
         top 2px
 
@@ -153,7 +153,7 @@ $invertedBg = invert($calendarBackground)
     text-align center
     position relative
     user-select none
-    padding-bottom ($daySize/12)
+    margin-bottom ($daySize/12)
 
 
 .flatpickr-prev-month, .flatpickr-next-month
@@ -371,7 +371,6 @@ $invertedBg = invert($calendarBackground)
     -ms-flex-pack center
     justify-content center
 
-    font-weight 300
     text-align center
 
     &, &.prevMonthDay, &.nextMonthDay
@@ -414,7 +413,8 @@ $invertedBg = invert($calendarBackground)
         border-radius 0
         box-shadow: (-2.5*$dayMargin) 0 0 $dayHoverBackground, (2.5*$dayMargin) 0 0 $dayHoverBackground
 
-
+    &.disabled, &.disabled:hover
+        pointer-events none
 
     &.disabled, &.disabled:hover,
     &.prevMonthDay, &.nextMonthDay,
