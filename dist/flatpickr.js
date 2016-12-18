@@ -585,10 +585,10 @@ function Flatpickr(element, config) {
 	}
 
 	function documentClick(e) {
-		e.preventDefault();
 		var isInput = self.element.contains(e.target) || e.target === self.input || e.target === self.altInput;
 
 		if (self.isOpen && !isCalendarElem(e.target) && !isInput) {
+			e.preventDefault();
 			self.close();
 
 			if (self.config.mode === "range" && self.selectedDates.length === 1) {
