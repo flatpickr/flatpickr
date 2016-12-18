@@ -585,6 +585,7 @@ function Flatpickr(element, config) {
 	}
 
 	function documentClick(e) {
+		e.preventDefault();
 		var isInput = self.element.contains(e.target) || e.target === self.input || e.target === self.altInput;
 
 		if (self.isOpen && !isCalendarElem(e.target) && !isInput) {

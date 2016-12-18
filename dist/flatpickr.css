@@ -48,7 +48,6 @@
   position: relative;
 }
 .flatpickr-calendar.static {
-  display: none;
   position: relative;
   top: 2px;
 }
@@ -109,7 +108,7 @@
   text-align: center;
   position: relative;
   user-select: none;
-  padding-bottom: 3.166666666666667px;
+  margin-bottom: 3.166666666666667px;
 }
 .flatpickr-prev-month,
 .flatpickr-next-month {
@@ -331,7 +330,6 @@
   -webkit-justify-content: center;
   -ms-flex-pack: center;
   justify-content: center;
-  font-weight: 300;
   text-align: center;
 }
 .flatpickr-day.inRange,
@@ -392,6 +390,10 @@
 .flatpickr-day.inRange {
   border-radius: 0;
   box-shadow: -3.75px 0 0 #e6e6e6, 3.75px 0 0 #e6e6e6;
+}
+.flatpickr-day.disabled,
+.flatpickr-day.disabled:hover {
+  pointer-events: none;
 }
 .flatpickr-day.disabled,
 .flatpickr-day.disabled:hover,
