@@ -739,7 +739,8 @@ function Flatpickr(element, config) {
 			|| e.target === self.input
 			|| e.target === self.altInput;
 
-		if (self.isOpen && !isCalendarElem(e.target) && !isInput) {
+		if (self.isOpen && !self.config.inline && !isCalendarElem(e.target) && !isInput) {
+			e.preventDefault();
 			self.close();
 
 			if (self.config.mode === "range" && self.selectedDates.length === 1) {
