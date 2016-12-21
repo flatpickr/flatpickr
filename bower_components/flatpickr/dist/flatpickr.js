@@ -587,7 +587,8 @@ function Flatpickr(element, config) {
 	function documentClick(e) {
 		var isInput = self.element.contains(e.target) || e.target === self.input || e.target === self.altInput;
 
-		if (self.isOpen && !isCalendarElem(e.target) && !isInput) {
+		if (self.isOpen && !self.config.inline && !isCalendarElem(e.target) && !isInput) {
+			e.preventDefault();
 			self.close();
 
 			if (self.config.mode === "range" && self.selectedDates.length === 1) {
@@ -864,6 +865,7 @@ function Flatpickr(element, config) {
 	}
 
 	function selectDate(e) {
+		e.preventDefault();
 		if (self.config.allowInput && e.which === 13 && e.target === (self.altInput || self.input)) return self.setDate((self.altInput || self.input).value), e.target.blur();
 
 		if (!e.target.classList.contains("flatpickr-day") || e.target.classList.contains("disabled") || e.target.classList.contains("notAllowed")) return;

@@ -1,38 +1,32 @@
 doctype html
 html(lang='en')
-    head
-        title flatpickr - lightweight datetimepicker &amp; calendar
-        meta(charset='utf-8')
-        meta(http-equiv='x-ua-compatible', content='ie=edge')
-        link(rel='icon', type='image/png', href='favicon.png')
-        meta(name='viewport', content='width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=yes')
-        link(rel='stylesheet', type='text/css', href='assets/style.min.css')
-        link#cal_style(rel='stylesheet', type='text/css', href='bower_components/flatpickr/dist/flatpickr.min.css')
+	head
+		title flatpickr - lightweight datetimepicker &amp; calendar
+		meta(charset='utf-8')
+		meta(http-equiv='x-ua-compatible', content='ie=edge')
+		link(rel='icon', type='image/png', href='favicon.png')
+		meta(name='viewport', content='width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=yes')
+		link(rel='stylesheet', type='text/css', href='dist/_style.css')
+		link#cal_style(rel='stylesheet', type='text/css', href='bower_components/flatpickr/dist/flatpickr.css')
+		//- link#cal_style(rel='stylesheet', type='text/css', href='bower_components/flatpickr/dist/flatpickr.min.css')
 
-    body
-        .row
-            .col.col-3.sidebar
-                include sidebar
+	body
+		include navbar
+		include content/intro
 
-            .col.col-9.content
+		.wrapper.content
 
-                .wrapper
-                    include content/intro
-                    include content/install_use
-                    include content/examples
-                    include content/events
-                    include content/API
+			include content/install_use
+			include content/examples
+			include content/events
+			include content/API
 
-                    include content/options
-                    include content/format_chars
-                    include content/localization
+			include content/options
+			include content/format_chars
+			include content/localization
 
-        include forkme
+		include forkme
 
-        script(src='assets/highlight/highlight.pack.js')
-        script(src='bower_components/flatpickr/dist/flatpickr.js')
-        script(src='assets/js/site.js')
-
-
-        script(src='assets/js/table-of-contents.js')
+		script(src='bower_components/flatpickr/dist/flatpickr.js')
+		script(src='dist/site.js')
 

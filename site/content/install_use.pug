@@ -3,13 +3,13 @@ section#getting-started
 		h2 Getting Started
 		.row
 			.col
-				code npm install flatpickr
-				br
-
-				code bower install flatpickr-calendar
+				pre
+					code.bash.
+						npm install flatpickr // npm
+						bower install flatpickr-calendar // bower
 
 			.col.text-right
-				a.btn(href='https://github.com/chmln/flatpickr/archive/gh-pages.zip', type='success')
+				a.btn(download, href='https://github.com/chmln/flatpickr/archive/master.zip', type='success')
 					span Download&nbsp;
 					i.icon-angle-double-down
 	section
@@ -21,10 +21,11 @@ section#getting-started
 					&lt;script src=".../flatpickr.min.js"&gt;&lt;/script&gt;
 
 		p The latest version of Flatpickr can also be loaded from a CDN
-		pre
-			code.
-					&lt;link rel="stylesheet" href="https://unpkg.com/flatpickr/dist/flatpickr.min.css"&gt;
-					&lt;script src="https://unpkg.com/flatpickr"&gt;&lt;/script&gt;
+		p
+			pre
+				code.
+						&lt;link rel="stylesheet" href="https://unpkg.com/flatpickr/dist/flatpickr.min.css"&gt;
+						&lt;script src="https://unpkg.com/flatpickr"&gt;&lt;/script&gt;
 
 		p Then,
 			pre
@@ -32,7 +33,6 @@ section#getting-started
 					flatpickr(".selector", {}); // [Flatpickr, Flatpickr, ...]
 					document.getElementById("myID").flatpickr(config); // Flatpickr
 					let calendar = new Flatpickr(element, config); // Flatpickr
-
 
 					$(".selector").flatpickr({}); // jQuery
 

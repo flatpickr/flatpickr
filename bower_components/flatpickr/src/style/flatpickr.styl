@@ -69,6 +69,7 @@ $invertedBg = invert($calendarBackground)
     width $calendarWidth
     box-sizing border-box
     box-shadow 0 3px 13px alpha(black, 0.08)
+    z-index 999
 
     &.open, &.inline
         opacity 1
@@ -86,7 +87,7 @@ $invertedBg = invert($calendarBackground)
         position relative
 
     &.static
-        display none
+        //display none
         position relative
         top 2px
 
@@ -152,8 +153,7 @@ $invertedBg = invert($calendarBackground)
     text-align center
     position relative
     user-select none
-    padding-bottom ($daySize/12)
-
+    z-index 2
 
 .flatpickr-prev-month, .flatpickr-next-month
     text-decoration none
@@ -370,7 +370,6 @@ $invertedBg = invert($calendarBackground)
     -ms-flex-pack center
     justify-content center
 
-    font-weight 300
     text-align center
 
     &, &.prevMonthDay, &.nextMonthDay
@@ -413,7 +412,8 @@ $invertedBg = invert($calendarBackground)
         border-radius 0
         box-shadow: (-2.5*$dayMargin) 0 0 $dayHoverBackground, (2.5*$dayMargin) 0 0 $dayHoverBackground
 
-
+    &.disabled, &.disabled:hover
+        pointer-events none
 
     &.disabled, &.disabled:hover,
     &.prevMonthDay, &.nextMonthDay,
@@ -438,7 +438,7 @@ span.flatpickr-weekday
     else
         color alpha(black, 0.54)
 
-    height 24px
+    height (24px + $daySize/12)
     line-height 24px
     margin 0
     background $monthBackground
@@ -448,6 +448,7 @@ span.flatpickr-weekday
     width 14.28%
     font-weight bold
     margin 0
+    padding-top ($daySize/12)
 
 .rangeMode .flatpickr-day
     margin-top 1px
@@ -455,6 +456,7 @@ span.flatpickr-weekday
 .flatpickr-weekwrapper
     display inline-block
     float left
+    z-index 2
 
     .flatpickr-weeks
         padding 0 12px
@@ -478,9 +480,14 @@ span.flatpickr-weekday
     display block
     display flex
 
-    box-sizing border-box
 
-    unless $noCalendarBorder is defined
+    box-sizing border-box
+    overflow: hidden;
+
+    if $noCalendarBorder is defined
+        background $calendarBackground
+
+    else
         &:after
             content: '';
             position: absolute;
@@ -490,7 +497,7 @@ span.flatpickr-weekday
             bottom: -1px;
             border 1px solid $calendarBorderColor
             border-radius 5px
-            z-index -1
+            z-index 1
             background $calendarBackground
 
 
@@ -499,6 +506,7 @@ span.flatpickr-weekday
     display inline-block
     padding 0
     box-sizing border-box
+    z-index 2
 
 
 
