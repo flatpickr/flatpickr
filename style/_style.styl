@@ -1,0 +1,376 @@
+@import "https://fonts.googleapis.com/css?family=Lato:300,400,500,600,700"
+@import "https://fonts.googleapis.com/css?family=Nunito:700"
+@import "https://fonts.googleapis.com/css?family=Roboto+Mono:400"
+
+@require "./colors"
+@require "./reset"
+@require "./icons/icons"
+
+@require "./kube/_kube"
+@require "./atom-one-light"
+
+body
+    font 400 1.6rem "Lato"
+    line-height 24px
+    color rgba(0,0,0,0.8)
+    overflow-x hidden
+    background white
+
+a
+    color $primary
+
+.wrapper
+    max-width 1100px
+    width 100%
+    margin 0 auto
+
+#hero
+    background $hero
+    padding 96px 0 48px 0
+
+    h1, p
+        color invert($hero)
+
+
+    h1
+        font-family Nunito
+
+
+#nav
+    background $hero
+    position fixed
+    height 48px
+    line-height 48px
+    width 100%
+    border-bottom 1px solid alpha(black, 0.07)
+
+    a
+        color lighten(invert($hero), 15%)
+        display inline-block
+        text-decoration none
+
+    #themes
+        width auto
+        padding 4px 4px
+        display inline-block
+        height auto
+
+        .dark
+            background #2D3245
+            color #fafafa
+
+        .material_blue
+            background #42A5F5
+            color white
+
+        .material_red
+            background #EF5350
+            color white
+
+        .material_green
+            background #1bbc9b
+            color white
+
+        .material_orange
+            background #ff8a65
+            color white
+
+
+    .navItems
+        text-align right
+
+        ul
+            list-style none
+            margin-left 0
+
+        li
+            margin-right 36px
+            font-weight 500
+            position relative
+            display inline-block
+
+            &:hover
+                > a
+                    text-decoration underline
+
+                ul
+                    display block
+
+            ul
+                display none
+                position absolute
+                background white
+                width 400%
+                //top 0
+                right -200%
+                margin-left 0
+                border 1px solid alpha(black, 0.1)
+                border-top 0
+                border-bottom 0
+
+                &:before
+                    content ""
+                    position absolute
+                    top: -5px;
+                    left: calc(40% - 5px);
+                    width: 0;
+                    height: 0;
+                    border-left: 5px solid transparent;
+                    border-right: 5px solid transparent;
+                    z-index 9
+                    border-bottom: 5px solid white;
+
+                &:after
+                    content ""
+                    position absolute
+                    top: -6px;
+                    left: calc(40% - 6px);
+                    width: 0;
+                    height: 0;
+                    border-left: 6px solid transparent;
+                    border-right: 6px solid transparent;
+                    z-index 8
+                    border-bottom: 6px solid alpha(black, 0.1);
+
+                li
+                    margin 0
+                    display: block;
+                    width: 100%;
+                    text-align: left
+                    padding 0
+                    border-bottom 1px solid alpha(black, 0.1)
+
+                    a
+                        display block
+                        line-height 24px
+                        text-decoration none
+                        cursor pointer
+                        padding 1rem
+
+                    &:hover
+                        background alpha(black, 0.05)
+                        a, a:hover .desc
+                            text-decoration none
+
+
+
+
+            &:last-child
+                margin-right 0
+
+#logo
+    font-size 2rem
+    text-decoration none
+    font-family "Roboto Mono"
+
+.why-awesome
+    padding-top 8px
+    span
+        display block
+        padding 4px 0
+
+.content
+
+
+
+    section
+        padding-top 4.8rem // offset navbar
+
+        &:first-child
+            padding-top 2.4rem
+
+        &:after
+            display block
+            margin-bottom 4.8rem
+            font 2rem monospace
+            content: ""
+
+        section
+            margin-bottom 4.5rem
+            &:after
+                display none
+
+.sidebar
+    $padding = 5.2766%
+    $sidebarBG = #fefefe
+    $sidebarFG = invert($sidebarBG)
+    background $sidebarBG
+    border-right 1px solid darken($sidebarBG, 5%)
+    color black
+    height 100vh
+    overflow-y scroll
+    position fixed
+
+    #logo
+        padding 2rem 0 2rem $padding
+        font-family monospace
+        border-bottom 1px solid alpha(black, 0.1)
+        h5
+            margin 0
+
+
+    #nav
+        section
+            padding-top 1rem
+            border-bottom 1px solid alpha($sidebarFG, 0.06)
+        h2
+            padding-left $padding
+            font-weight 300
+            color alpha($sidebarFG, 0.85)
+
+        a
+            display block
+            padding: 1rem 0 1rem $padding;
+            color alpha($sidebarFG, 0.85)
+            font-weight 400
+            text-decoration none
+            position relative
+
+            &.current:before
+                content ""
+                width 3px
+                background #2f1e2e
+                opacity 0.77
+                position absolute
+                left 1px
+                top 0
+                height 100%
+
+            &.current, &:hover
+
+                background alpha(black, 0.07)
+
+    &::-webkit-scrollbar
+        width 5px
+
+    &::-webkit-scrollbar-thumb
+        background #999
+        &:hover
+            background #555
+        &:active
+            background #333
+        cursor grab
+
+
+
+@media (max-width: 1000px)
+    body
+        font-size 1.7rem
+    .sidebar
+        display none
+
+    .col.content
+        margin 0 auto
+        flex-basis: 96%;
+        max-width: 96%;
+        width: 96%;
+
+
+
+.input-group
+    &:after
+        display table
+        content ""
+        clear both
+    input
+        float left
+        border-bottom-right-radius 0
+        border-top-right-radius 0
+
+
+.input-btn
+    display inline-block
+    padding 0 1.6rem
+    font-size 1.6rem
+    font-weight 400
+    line-height 40px
+    height 40px
+    text-align center
+    white-space nowrap
+    vertical-align middle
+    cursor pointer
+    user-select none
+    border 1px solid #ddd
+    color #373a3c
+    float left
+    border-radius 0
+    border-left 0
+    background white
+
+
+    &.last
+        border-right 1px solid #ccc
+
+    &:hover
+        background-color #e9e9e9
+        text-decoration none
+
+    &:active
+        background-color #ddd
+
+
+
+
+.event
+    position absolute
+    width 3px
+    height 3px
+    border-radius 150px
+    bottom 3px
+    left 15px
+    content " "
+    display block
+    background #3D8EB9
+
+    &.busy
+        background #f64747
+
+
+code
+    padding 3px 5px
+
+hr
+    height: 1px;
+    border: 0;
+    margin 0
+    background: rgba(0,0,0,0.08);
+
+#playground
+    li
+        list-style none
+
+table.options
+    td
+        &:first-child
+            font-weight bolder
+
+        &:nth-child(2), &:nth-child(3)
+            color rgba(0,0,0,0.5)
+
+
+
+#themes
+    text-transform capitalize
+
+@keyframes octocat-wave
+    0%,100%
+        transform rotate(0)
+
+    20%,60%
+        transform rotate(-25deg)
+
+    40%,80%
+        transform rotate(10deg)
+
+@media (max-width:500px)
+    .github-corner, .github-corner:hover .octo-arm
+        animation:none
+
+.github-corner
+    position fixed
+    top 0
+    right 0
+    opacity 0.5
+    &:hover
+        .octo-arm
+            animation octocat-wave 560ms ease-in-out

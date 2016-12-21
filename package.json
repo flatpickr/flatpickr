@@ -3,24 +3,22 @@
   "version": "1.0.0",
   "description": "A lightweight, powerful javascript datetime picker",
   "scripts": {
-    "start": "parallelshell \"http-server -o --silent\" \"gulp\""
+    "build": "run-p build:*",
+    "build:layout": "pug site/index.pug -o ./",
+    "build:script": "babili ./assets/js --out-file ./dist/site.js",
+    "build:style": "stylus --compress --include ./style ./style/_style.styl --out dist",
+    "dev": "run-p \"build:* -- --watch\" serve livereload",
+    "livereload": "livereload \"./dist, index.html\"",
+    "serve": "http-server -o --silent"
   },
-  "dependencies": {
-    "flatpickr": "github:chmln/flatpickr#master"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "gulp": "github:gulpjs/gulp#4.0",
-    "gulp-concat": "^2.6.0",
-    "gulp-cssmin": "^0.1.7",
-    "gulp-eslint": "^3.0.1",
-    "gulp-livereload": "^3.8.1",
-    "gulp-plumber": "^1.1.0",
-    "gulp-pug": "^3.1.0",
-    "gulp-rename": "^1.2.2",
-    "gulp-stylus": "^2.5.0",
-    "gulp-uglify": "^2.0.0",
+    "babili": "latest",
     "http-server": "^0.9.0",
+    "livereload": "^0.6.0",
+    "npm-run-all": "^3.1.2",
     "parallelshell": "^2.0.0",
+    "pug": "^2.0.0-beta6",
     "stylus": "^0.54.5"
   }
 }
