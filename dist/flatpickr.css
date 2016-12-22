@@ -579,9 +579,6 @@ span.flatpickr-weekday {
   border-top: 1px solid #e6e6e6;
 }
 @media all and (-ms-high-contrast: none) {
-  .flatpickr-days {
-    width: 256px;
-  }
   .flatpickr-month {
     padding: 0;
   }

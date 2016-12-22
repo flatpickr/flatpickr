@@ -60,6 +60,7 @@ $selected_day_background ?= #569FF7
     position absolute
     width ($daySize*7 + 4px)
     box-sizing border-box
+    box-shadow 2px 4px 15px rgba(0,0,0,0.15)
 
     &.open
         opacity 1
@@ -88,7 +89,7 @@ $selected_day_background ?= #569FF7
 
     &.dateIsPicked.hasTime
         .flatpickr-time
-            height 38px
+            height 40px
 
     &:before, &:after
         position absolute
@@ -138,7 +139,7 @@ $selected_day_background ?= #569FF7
     background $months_background
     color $months_color
     fill $months_color
-    height 28px
+    height 32px
     line-height 24px
     text-align center
     position relative
@@ -420,7 +421,7 @@ $selected_day_background ?= #569FF7
 
 span.flatpickr-weekday
     cursor default
-    font-size 90%
+    font-size 85%
 
     if $weekdays_color is defined
         color alpha($weekdays_color, 0.54)
@@ -473,6 +474,48 @@ span.flatpickr-weekday
 .flatpickr-rContainer
     display inline-block
 
+.flatpickr-buttons
+    display flex
+    text-align center
+    outline 0
+    height 38px
+    box-sizing border-box
+    overflow hidden
+    border-top 1px solid #e6e6e6
+
+    &:after
+        content ""
+        display table
+        clear both
+
+    .flatpickr-ok
+        flex-grow 1
+        margin 0
+        justify-content center
+        align-items center
+
+.flatpickr-ok
+    min-width 38px
+    background transparent
+    border none
+    margin 0 0 0 8px
+    vertical-align top
+    padding 0
+    line-height normal
+
+    &:hover
+        background: #f0f0f0
+
+    svg
+        stroke #393939
+
+    &:focus, &:active
+        outline none
+
+    &:focus svg, &:active svg
+        stroke #569ff7
+
+
 
 .flatpickr-time
     text-align center
@@ -480,8 +523,8 @@ span.flatpickr-weekday
     outline 0
     display block
     height 0 // hide initially
-    line-height 36px
-    max-height 36px
+    line-height 38px
+    max-height 38px
     box-sizing border-box
     overflow hidden
     transition height 0.33s $bezier
@@ -494,8 +537,8 @@ span.flatpickr-weekday
 
     .numInputWrapper
         flex 1
-        width 40%
-        height 36px
+        width 28%
+        height 38px
         float left
 
         span.arrowUp:after
@@ -526,10 +569,7 @@ span.flatpickr-weekday
         position relative
         box-sizing border-box
 
-        &.flatpickr-hour
-            font-weight bold
-
-        &.flatpickr-minute, &.flatpickr-second
+        &.flatpickr-hour, &.flatpickr-minute, &.flatpickr-second
             font-weight 400
 
         &:focus
@@ -584,5 +624,3 @@ span.flatpickr-weekday
         padding 0
         svg
             top 0 !important
-
-

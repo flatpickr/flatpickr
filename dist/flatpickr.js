@@ -285,16 +285,14 @@ function Flatpickr(element, config) {
 			fragment.appendChild(self.innerContainer);
 		}
 
-		if (self.config.enableTime) {
-			fragment.appendChild(buildTime());
-		} else if (self.config.mode == "multiple" || self.config.mode == "range") {
+		if (self.config.enableTime) fragment.appendChild(buildTime());else if (self.config.mode == "multiple" || self.config.mode == "range") {
 			self.buttonsContainer = createElement("div", "flatpickr-buttons", "");
 			self.okButton = createElement("button", "flatpickr-ok", "");
 			self.okTick = createElement("span");
 			self.okTick.innerHTML = self.config.okTick;
-			self.buttonsContainer.appendChild(self.okButton)
-			self.okButton.appendChild(self.okTick)
-			fragment.appendChild(self.buttonsContainer)
+			self.buttonsContainer.appendChild(self.okButton);
+			self.okButton.appendChild(self.okTick);
+			fragment.appendChild(self.buttonsContainer);
 		}
 
 		self.calendarContainer.appendChild(fragment);
@@ -493,7 +491,7 @@ function Flatpickr(element, config) {
 		self.okButton = createElement("button", "flatpickr-ok", "");
 		self.okTick = createElement("span");
 		self.okTick.innerHTML = self.config.okTick;
-		self.okButton.appendChild(self.okTick)
+		self.okButton.appendChild(self.okTick);
 		self.timeContainer.appendChild(self.okButton);
 
 		return self.timeContainer;
