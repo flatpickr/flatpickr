@@ -6,7 +6,7 @@
     "build": "run-p build:*",
     "build:layout": "pug site/index.pug -o ./",
     "build:script": "babili ./assets/js --out-file ./dist/site.js",
-    "build:style": "stylus --compress --include ./style ./style/_style.styl --out dist",
+    "build:style": "stylus --compress --include ./style ./style/style.styl --out dist",
     "dev": "run-p \"build:* -- --watch\" serve livereload",
     "livereload": "livereload \"./dist, index.html\"",
     "serve": "http-server -o --silent"
