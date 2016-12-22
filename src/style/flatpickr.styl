@@ -76,7 +76,8 @@ $invertedBg = invert($calendarBackground)
         box-shadow 1px 0 0 $calendarBorderColor,
             -1px 0 0 $calendarBorderColor,
             0 1px 0 $calendarBorderColor,
-            0 -1px 0 $calendarBorderColor
+            0 -1px 0 $calendarBorderColor,
+            0 3px 13px alpha(black, 0.08)
 
     z-index 999
 
@@ -604,7 +605,6 @@ if $noCalendarBorder
 
 
 @media all and (-ms-high-contrast none)
-
     .flatpickr-month
         padding 0
         svg
