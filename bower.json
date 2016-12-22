@@ -3,10 +3,9 @@
   "description": "A lightweight, powerful javascript datetime picker",
   "main": "",
   "authors": [
-    "Gregory <gregory.petrosyan@mail.utoronto.ca>"
+    "Gregory <gregory.mkv@gmail.com>"
   ],
   "dependencies": {
-    "flatpickr": "git://github.com/chmln/flatpickr.git#master"
   },
   "license": "MIT",
   "homepage": "https://github.com/chmln/flatpickr",
