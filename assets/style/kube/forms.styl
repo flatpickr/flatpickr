@@ -1,0 +1,447 @@
+/* =Forms
+-----------------------------------------------------------------------------*/
+
+form
+	margin-bottom 24px
+
+input:focus
+	outline 0
+
+input[type=text], input[type=search], input[type=password], input[type=email], input[type=number], input[type*="date"], select, textarea
+	font-family inherit
+	font-size 1.4rem
+	padding 0rem 0.5rem
+	height 40px
+	background #fff
+	border 1px solid #e3e3e3
+	border-radius 2px
+	margin-bottom 0
+	color rgba(0, 0, 0, 0.9)
+	width 100%
+	max-width 300px
+	display block
+	transition all 200ms ease-out
+
+	&:focus, &.active
+		outline 0
+		background #fff
+		border 1px solid alpha($primary, 0.7)
+
+	&[disabled]
+		resize none
+		opacity 0.55
+		cursor default
+
+	&.width-1
+		width 8.33333333%
+
+	&.width-2
+		width 16.66666667%
+
+	&.width-3
+		width 25%
+
+	&.width-4
+		width 33.33333333%
+
+	&.width-5
+		width 41.66666667%
+
+	&.width-6
+		width 50%
+
+	&.width-7
+		width 58.33333333%
+
+	&.width-8
+		width 66.66666667%
+
+	&.width-9
+		width 75%
+
+	&.width-10
+		width 83.33333333%
+
+	&.width-11
+		width 91.66666667%
+
+	&.width-12
+		width 100%
+
+for color in $colors
+	.btn-{color},.btn[type={color}], button[type={color}]
+		if dark(darken($colors[color], 30%))
+			color #fff
+		else
+			color rgba(0, 0, 0, 0.9)
+		background: $colors[color]
+		border: 1px solid darken($colors[color], 12%)
+
+		&:hover
+			if dark(darken($colors[color], 30%))
+				color #fff
+			else
+				color rgba(0, 0, 0, 0.9)
+
+			if dark(lighten($colors[color], 25%))
+				background-color: lighten($colors[color], 10%)
+			else
+				background-color: darken($colors[color], 10%)
+
+		&[disabled]:hover
+			color rgba(255, 255, 255, 0.9)
+			background: $colors[color]
+
+		&:active
+			background-color: darken($colors[color], 30%)
+
+		&[outline]
+			background none
+			color: $colors[color]
+			border-color: $colors[color]
+			&:hover
+				background: $colors[color]
+				border-color: $colors[color]
+				if dark(darken($colors[color], 30%))
+					color #fff
+				else
+					color rgba(0, 0, 0, 0.9)
+
+			&[disabled]:hover
+				background none
+				border-color: $colors[color]
+				if dark($colors[color])
+					color #fff
+				else
+					color rgba(0, 0, 0, 0.9)
+
+textarea
+	height initial
+	line-height 1.5
+	padding-top 0.25rem
+
+select
+	background white
+	&[multiple]
+		height auto
+		line-height 1.5
+
+
+fieldset
+	padding 31px 32px
+	margin-bottom 24px
+	border 1px solid rgba(0, 0, 0, 0.1)
+	border-radius 2px
+	*:last-child
+		margin-bottom 0 !important
+
+
+legend
+	font-weight 500
+	font-size 86%
+	text-transform uppercase
+	padding 0 1em
+	margin-left -1em
+	top 2px
+	position relative
+	line-height 0
+
+
+form, .forms
+	section
+		display block
+		margin-bottom 24px
+
+	p
+		margin-bottom 24px
+
+	textarea, select
+		width 100%
+		display block
+
+	input
+		width 100%
+
+	label
+		font-size 94%
+		cursor pointer
+		display block
+		color rgba(0,0,0,0.8)
+		padding-bottom 0.3rem
+		font-weight 300
+
+		&.checkbox
+			text-transform none
+			font-weight normal
+			cursor pointer
+			color inherit
+			font-size inherit
+
+
+
+	.checkbox-list
+		display block
+		label
+			font-size inherit
+			color inherit
+			display inline-block
+			margin-bottom 0
+			margin-right 16px
+			text-transform none
+			font-weight normal
+			cursor pointer
+
+
+	.checkbox-list-vertical .checkbox
+		margin-bottom 8px
+		&:last-child
+			margin-bottom 0
+
+
+
+.forms.form-inline
+	textarea, select, input
+		width auto
+		display inline-block
+
+
+@media (max-width 768px)
+	form
+		.label-top
+			padding-top 0
+
+		input.width-1, textarea.width-1, select.width-1, input.width-2, textarea.width-2, select.width-2, input.width-3, textarea.width-3, select.width-3, input.width-4, textarea.width-4, select.width-4, input.width-5, textarea.width-5, select.width-5, input.width-6, textarea.width-6, select.width-6, input.width-7, textarea.width-7, select.width-7, input.width-8, textarea.width-8, select.width-8, input.width-9, textarea.width-9, select.width-9, input.width-10, textarea.width-10, select.width-10, input.width-11, textarea.width-11, select.width-11, input.width-12, textarea.width-12, select.width-12
+			width 100%
+
+
+
+.desc
+	text-transform none
+	color inherit
+	opacity 0.625
+	font-size 12px
+	line-height 20px
+	font-weight normal
+
+
+ul.desc
+	margin-bottom 8px
+
+
+span.desc
+	margin-left 4px
+	line-height 20px
+
+
+.error, .success
+	text-transform none
+	font-weight normal
+	font-size 12px
+	display inline-block
+
+
+span
+	&.error, &.success
+		margin-left .4rem
+
+
+input.input-big
+	font-size 1.8rem
+	padding 1.5rem 1.2rem
+	height 56px
+
+
+select.select-big
+	font-size 1.8rem
+	height 56px
+	padding 6px 10px
+
+
+input.input-small
+	font-size 1.2rem
+	padding 0.7rem 1rem
+	height 32px
+
+
+select.select-small
+	font-size 1.2rem
+	height 32px
+	padding 6px 10px
+
+
+.input-append, .input-prepend
+	display -webkit-box
+	display -moz-box
+	display -ms-flexbox
+	display -webkit-flex
+	display flex
+	margin-bottom 24px
+
+
+.input-append input, .input-prepend input
+	flex 1
+	margin-bottom 0 !important
+
+
+.input-append span, .input-prepend span
+	-webkit-flex-shrink 0
+	display block
+	font-weight normal
+	background-color #efefef
+	margin 0
+	padding 0 1rem
+	color rgba(0, 0, 0, 0.6)
+	font-size 86%
+	line-height 40px
+	white-space nowrap
+
+
+.input-append
+	span
+		position relative
+		z-index 1
+		border-left none
+		border-radius 0 2px 2px 0
+
+	input
+		border-radius 2px 0 0 2px
+
+
+
+.input-prepend
+	span
+		border-right none
+		border-radius 2px 0 0 2px
+
+	input
+		border-radius 0 2px 2px 0
+
+
+
+.btn-append
+	display -webkit-box
+	display -moz-box
+	display -ms-flexbox
+	display -webkit-flex
+	display flex
+	button, .btn
+		flex 1
+
+/* =Buttons
+-----------------------------------------------------------------------------*/
+
+.btn, button
+	display inline-block
+	vertical-align top
+	font-size 1.4rem
+	font-weight 300
+	white-space nowrap
+	padding 0 32px
+	height 40px
+	line-height 40px
+	text-align center
+	text-decoration none
+	-webkit-appearance none
+	outline none
+	margin 0
+	border none
+	border-radius 2px
+	box-shadow none
+	cursor pointer
+	color #000000
+	background #e5e5e5
+
+	&:hover
+		background-color #ededed
+		color rgba(0, 0, 0, 0.6)
+		text-decoration none
+
+	&[outline]
+		background none
+		border 1px solid rgba(0,0,0,.3)
+		color rgba(0,0,0,.9)
+
+		&:hover
+			border-color alpha(black, 0.6)
+			color black
+			text-decoration none
+
+	&[disabled], &[outline][disabled]
+
+		cursor default
+		box-shadow none
+		opacity 0.4
+
+		&:hover
+			background #e5e5e5
+			color #000000
+			text-decoration none
+
+	&[round]
+		border-radius 50px
+
+	&[small]
+		font-size 1.3rem
+		padding 0 20px
+		height 32px
+		line-height 32px
+		&[outline]
+			padding 0 19px
+
+	&[tiny]
+		font-size 1.2rem
+		padding 0 10px
+		height 24px
+		line-height 24px
+		&[outline]
+			padding 0 12px
+
+	&[big]
+		font-size 1.8rem
+		padding 0 48px
+		height 56px
+		line-height 56px
+		&[outline]
+			padding 0 47px
+
+	&[upper]
+		text-transform uppercase
+		font-size 1.1rem
+		padding 0 32px
+		letter-spacing .1em
+
+		&[outline]
+			padding 0 31px
+
+		&[small]
+			font-size 1rem
+			padding 0 20px
+
+		&[big]
+			font-size 1.4rem
+			padding 0 48px
+
+		&[big][outline]
+			padding 0 47px
+
+	&::-moz-focus-inner
+		border 0
+		padding 0
+
+.btn-group
+	display inline-block
+	vertical-align bottom
+	&:after
+		content ""
+		display block
+		clear both
+
+	.btn, button
+		float left
+		margin-left -1px
+
+	.btn:first-child, button:first-child
+		border-radius 2px 0 0 2px
+
+	.btn:last-child, button:last-child
+		border-radius 0 2px 2px 0

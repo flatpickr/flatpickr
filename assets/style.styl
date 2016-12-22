@@ -1,0 +1,226 @@
+@import "https://fonts.googleapis.com/css?family=Roboto:200,300,400,500,700"
+@import "./highlight/styles/paraiso-dark"
+@require "./style/colors"
+@require "./style/reset"
+@require "./icons/icons"
+
+@require "./style/kube/_kube"
+
+
+body
+    font 400 1.6rem "Roboto"
+    line-height 24px
+    color rgba(0,0,0,0.8)
+    overflow-x hidden
+    background white
+
+a
+    color $primary
+
+.wrapper
+    max-width 800px
+    width 100%
+
+
+
+.col.content
+    padding-top 2rem
+    margin-left 25%
+
+    section
+        &:after
+            display block
+            margin 4.5rem 0
+            font 2rem monospace
+            content: "***"
+
+        section
+            margin-bottom 4.5rem
+            &:after
+                display none
+
+.sidebar
+    $padding = 5.2766%
+    $sidebarBG = #fefefe
+    $sidebarFG = invert($sidebarBG)
+    background $sidebarBG
+    border-right 1px solid darken($sidebarBG, 5%)
+    color black
+    height 100vh
+    overflow-y scroll
+    position fixed
+
+    #logo
+        padding 2rem 0 2rem $padding
+        font-family monospace
+        border-bottom 1px solid alpha(black, 0.1)
+        h5
+            margin 0
+
+
+    #nav
+        section
+            padding-top 1rem
+            border-bottom 1px solid alpha($sidebarFG, 0.06)
+        h2
+            padding-left $padding
+            font-weight 300
+            color alpha($sidebarFG, 0.85)
+
+        a
+            display block
+            padding: 1rem 0 1rem $padding;
+            color alpha($sidebarFG, 0.85)
+            font-weight 400
+            text-decoration none
+            position relative
+
+            &.current:before
+                content ""
+                width 3px
+                background #2f1e2e
+                opacity 0.77
+                position absolute
+                left 1px
+                top 0
+                height 100%
+
+            &.current, &:hover
+
+                background alpha(black, 0.07)
+
+    &::-webkit-scrollbar
+        width 5px
+
+    &::-webkit-scrollbar-thumb
+        background #999
+        &:hover
+            background #555
+        &:active
+            background #333
+        cursor grab
+
+
+
+@media (max-width: 1000px)
+    body
+        font-size 1.7rem
+    .sidebar
+        display none
+
+    .col.content
+        margin 0 auto
+        flex-basis: 96%;
+        max-width: 96%;
+        width: 96%;
+
+
+
+.input-group
+    &:after
+        display table
+        content ""
+        clear both
+    input
+        float left
+        border-bottom-right-radius 0
+        border-top-right-radius 0
+
+
+.input-btn
+    display inline-block
+    padding 0 1.6rem
+    font-size 1.6rem
+    font-weight 400
+    line-height 40px
+    height 40px
+    text-align center
+    white-space nowrap
+    vertical-align middle
+    cursor pointer
+    user-select none
+    border 1px solid #ddd
+    color #373a3c
+    float left
+    border-radius 0
+    border-left 0
+    background white
+
+
+    &.last
+        border-right 1px solid #ccc
+
+    &:hover
+        background-color #e9e9e9
+        text-decoration none
+
+    &:active
+        background-color #ddd
+
+
+
+
+.event
+    position absolute
+    width 3px
+    height 3px
+    border-radius 150px
+    bottom 3px
+    left 15px
+    content " "
+    display block
+    background #3D8EB9
+
+    &.busy
+        background #f64747
+
+
+code
+    padding 3px 5px
+
+hr
+    height: 1px;
+    border: 0;
+    margin 0
+    background: rgba(0,0,0,0.08);
+
+#playground
+    li
+        list-style none
+
+table.options
+    td
+        &:first-child
+            font-weight bolder
+
+        &:nth-child(2), &:nth-child(3)
+            color rgba(0,0,0,0.5)
+
+        &:last-child
+            font-weight 300
+
+#themes
+    text-transform capitalize
+
+@keyframes octocat-wave
+    0%,100%
+        transform rotate(0)
+
+    20%,60%
+        transform rotate(-25deg)
+
+    40%,80%
+        transform rotate(10deg)
+
+@media (max-width:500px)
+    .github-corner, .github-corner:hover .octo-arm
+        animation:none
+
+.github-corner
+    position fixed
+    top 0
+    right 0
+    opacity 0.5
+    &:hover
+        .octo-arm
+            animation octocat-wave 560ms ease-in-out

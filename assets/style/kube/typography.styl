@@ -1,0 +1,264 @@
+/* =Typography
+-----------------------------------------------------------------------------*/
+
+html
+	font-size 62.5%
+
+.latex
+	line-height 27px
+	font italic 1.9rem KaTeX_Main
+
+/* =Headings
+-----------------------------------------------------------------------------*/
+
+.title, h1, h2, h3, h4, h5, h6
+	font-weight bold
+	text-rendering optimizeLegibility
+	a
+		color inherit
+		text-decoration none
+
+
+.title, h1
+	margin-bottom 16px
+
+
+h2, h3, h4, h5, h6
+	margin-bottom 8px
+
+
+.title, h1, h2, h3, h4
+	margin-left -1px
+
+
+.title
+	font-size 4.8rem
+	line-height 56px
+
+
+
+h1
+	font-size 3rem
+
+
+h2, .h2
+	font-size 2.4rem
+	line-height 32px
+
+
+h3
+	font-size 2rem
+	line-height 24px
+
+
+h4
+	font-size 1.8rem
+	line-height 24px
+
+
+h5
+	font-size 1.6rem
+	line-height 24px
+
+
+h6
+	font-size 1.5rem
+	line-height 24px
+	text-transform uppercase
+
+
+/* =Line height and margin
+-----------------------------------------------------------------------------*/
+
+for i in (1 2 3 4 5 6)
+	p + h{i}, ul + h{i}, ol + h{i}, dl + h{i}, blockquote + h{i},
+	hr + h{i}, pre + h{i}, table + h{i}, form + h{i}, figure + h{i},
+	address + h{i}
+		margin-top 24px
+
+ul, ol, ul ul, ol ol, ul ol
+	margin 0 0 0 24px
+
+
+ol
+	ul
+		margin 0 0 0 24px
+
+	ol
+		li
+			list-style-type lower-alpha
+
+		ol li
+			list-style-type lower-roman
+
+
+p, ul, ol, dl, blockquote, hr, pre, table, fieldset, figure, address, output
+	margin-bottom 16px
+
+
+/* =Lead
+-----------------------------------------------------------------------------*/
+
+.lead
+	font-size 120%
+	line-height 28px
+
+
+/* =Text-level
+-----------------------------------------------------------------------------*/
+
+cite
+	color rgba(0, 0, 0, 0.5)
+	font-style italic
+
+
+small
+	font-size 86%
+	line-height 20px
+
+
+s, del
+	text-decoration line-through
+
+
+abbr[title], dfn[title]
+	border-bottom 1px dotted #202020
+	cursor help
+
+
+strong, b
+	font-weight bold
+
+
+em, i
+	font-style italic
+
+
+sub
+	font-size 74%
+	line-height 0
+	position relative
+	margin-left .2rem
+
+
+sup
+	font-size 74%
+	line-height 0
+	position relative
+	margin-left .2rem
+	top -0.4rem
+
+
+sub
+	bottom -0.2rem
+
+
+figcaption
+	margin .3rem 0
+	font-size 86%
+	font-style italic
+
+
+ins, u
+	text-decoration underline
+
+
+mark
+	background-color #ffd61e
+	color #202020
+	text-decoration none
+
+
+time
+	font-size 74%
+
+
+/* =Code
+-----------------------------------------------------------------------------*/
+
+code, kbd, samp, var, output
+	font-size 90%
+	font-style normal
+	font-family Menlo, Monaco, Consolas, Courier, monospace
+
+code
+	background #eee
+
+pre
+	font-size 1.6rem
+	line-height 24px
+	color rgba(0, 0, 0, 0.9)
+	overflow auto
+	background rgba(0, 0, 0, 0.03)
+	word-wrap normal
+
+
+td pre
+	white-space pre-wrap
+	white-space -moz-pre-wrap
+	word-wrap break-word
+
+
+mark,  samp, kbd
+	padding .2rem .4rem
+	display inline-block
+	line-height 1
+	border-radius 2px
+
+
+
+
+
+pre code.hljs
+	line-height 24px
+	padding-bottom 0
+
+
+var
+	color rgba(0, 0, 0, 0.5)
+
+
+samp
+	background #46a9fc
+	color rgba(255, 255, 255, 0.95)
+
+
+kbd
+	background #202020
+	color rgba(255, 255, 255, 0.85)
+	white-space nowrap
+
+
+/* =Quote
+-----------------------------------------------------------------------------*/
+
+blockquote
+	font-style italic
+	font-size 120%
+	line-height 28px
+	padding-left 24px
+	border-left 1px solid rgba(0, 0, 0, 0.2)
+	cite
+		font-size 86%
+		font-weight normal
+		line-height 20px
+
+
+
+/* =Address
+-----------------------------------------------------------------------------*/
+
+address
+	font-style normal
+
+
+/* =Definition list
+-----------------------------------------------------------------------------*/
+
+dl dt
+	font-weight bold
+
+
+dd
+	margin-left 24px
+

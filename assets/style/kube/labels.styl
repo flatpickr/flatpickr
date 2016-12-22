@@ -1,0 +1,83 @@
+/* =Labels
+-----------------------------------------------------------------------------*/
+
+.label
+	font-size 10px
+	font-weight 400
+	display inline
+	line-height 1
+	top -1px
+	text-align center
+	border-radius 4px
+	position relative
+	background rgba(0,0,0,0.1)
+	padding 2px 8px
+	letter-spacing .01em
+
+	&:empty
+		display none
+
+	&[bold]
+		font-weight bold
+
+	&[outline]
+		background none
+		color rgba(0, 0, 0, 0.7)
+		border 1px solid rgba(0, 0, 0, 0.5)
+		padding 0.1rem 0.6rem
+
+		&[bold]
+			border-width 2px
+			padding 0rem 0.5rem
+
+	a
+		color #000
+		text-decoration none
+
+		&:hover
+			transition all linear 0.2s
+			color rgba(0, 0, 0, 0.6)
+
+
+.badge
+	border-radius 50px
+	background rgba(0,0,0,0.04)
+	display inline-block
+	font-size 14px
+	width 22px
+	height 22px
+	font-weight 400
+	line-height 22px
+	margin-top -2px
+	color rgba(0,0,0,.5)
+	text-align center
+	padding 0
+	margin-left 3px
+
+	&[medium]
+		font-size 20px
+		width 30px
+		height 30px
+		line-height 30px
+
+	&[medium]
+		font-size 30px
+		width 42px
+		height 42px
+		line-height 42px
+
+
+
+.title, .large, h1, h2, h3, h4, h5, h6
+	.label, .badge
+		vertical-align middle
+
+
+h3, h4, h5, h3, h4, h5
+	.label, .badge
+		top -1px
+
+
+h6
+	.label, .badge
+		top -2px
