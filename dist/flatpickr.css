@@ -319,6 +319,7 @@
   box-sizing: border-box;
   color: #393939;
   cursor: pointer;
+  font-weight: 400;
   width: 14.2857143%;
   flex-basis: 14.2857143%;
   max-width: 38px;
@@ -471,6 +472,7 @@ span.flatpickr-weekday {
   overflow: hidden;
   transition: height 0.33s cubic-bezier(0, 1, 0.5, 1);
   display: flex;
+  background: #fff;
   border-top: 1px solid #e6e6e6;
 }
 .flatpickr-time:after {
