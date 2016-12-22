@@ -1,4 +1,4 @@
-/*! flatpickr v2.2.3, @license MIT */
+/*! flatpickr v2.2.5, @license MIT */
 function Flatpickr(element, config) {
 	const self = this;
 
@@ -28,7 +28,6 @@ function Flatpickr(element, config) {
 		self.formatDate = formatDate;
 		self.jumpToDate = jumpToDate;
 		self.open = open;
-		self.parseDate = parseDate;
 		self.redraw = redraw;
 		self.set = set;
 		self.setDate = setDate;
@@ -78,8 +77,11 @@ function Flatpickr(element, config) {
 			updateValue();
 		}
 
-		if (self.config.weekNumbers)
-			self.calendarContainer.style.width = self.days.offsetWidth + self.weekWrapper.offsetWidth + 2 + "px";
+		if (self.config.weekNumbers) {
+			self.calendarContainer.style.width = self.days.clientWidth
+				+ self.weekWrapper.clientWidth + "px";
+		}
+
 
 		triggerEvent("Ready");
 	}
@@ -255,7 +257,7 @@ function Flatpickr(element, config) {
 
 	function jumpToDate(jumpDate) {
 		jumpDate = jumpDate
-			? parseDate(jumpDate)
+			? self.parseDate(jumpDate)
 			: latestSelectedDateObj() || (self.config.minDate > self.now
 				? self.config.minDate
 				: self.now
@@ -327,6 +329,9 @@ function Flatpickr(element, config) {
 
 		if (self.config.enableTime)
 			fragment.appendChild(buildTime());
+
+		if (self.config.mode === "range")
+			self.calendarContainer.classList.add("rangeMode");
 
 		self.calendarContainer.appendChild(fragment);
 
@@ -626,6 +631,7 @@ function Flatpickr(element, config) {
 		return self.weekdayContainer;
 	}
 
+	/* istanbul ignore next */
 	function buildWeeks() {
 		self.calendarContainer.classList.add("hasWeeks");
 		self.weekWrapper = createElement("div", "flatpickr-weekwrapper");
@@ -693,7 +699,7 @@ function Flatpickr(element, config) {
 		document.removeEventListener("click", documentClick);
 		document.removeEventListener("blur", documentClick);
 
-		if (instance.isMobile && instance.mobileInput && instance.mobileInput.parentNode)
+		if (instance.mobileInput && instance.mobileInput.parentNode)
 			instance.mobileInput.parentNode.removeChild(instance.mobileInput);
 
 		else if (instance.calendarContainer && instance.calendarContainer.parentNode)
@@ -709,7 +715,7 @@ function Flatpickr(element, config) {
 		instance.input.removeEventListener("focus", open);
 		instance.input.removeAttribute("readonly");
 
-
+		delete instance.input._flatpickr;
 	}
 
 	function isCalendarElem(elem) {
@@ -728,7 +734,8 @@ function Flatpickr(element, config) {
 			|| e.target === self.input
 			|| e.target === self.altInput;
 
-		if (self.isOpen && !isCalendarElem(e.target) && !isInput) {
+		if (self.isOpen && !self.config.inline && !isCalendarElem(e.target) && !isInput) {
+			e.preventDefault();
 			self.close();
 
 			if (self.config.mode === "range" && self.selectedDates.length === 1) {
@@ -788,18 +795,19 @@ function Flatpickr(element, config) {
 		}
 	}
 
-	function isEnabled(dateToCheck) {
+	function isEnabled(date) {
 		if (
-			(self.config.minDate && compareDates(dateToCheck, self.config.minDate) < 0) ||
-			(self.config.maxDate && compareDates(dateToCheck, self.config.maxDate) > 0)
+			(self.config.minDate && compareDates(date, self.config.minDate) < 0) ||
+			(self.config.maxDate && compareDates(date, self.config.maxDate) > 0)
 		)
 			return false;
+
 
 		if (!self.config.enable.length && !self.config.disable.length)
 			return true;
 
 
-		dateToCheck = parseDate(dateToCheck, true); // timeless
+		const dateToCheck = self.parseDate(date, true); // timeless
 
 		const bool = self.config.enable.length > 0,
 			array = bool ? self.config.enable : self.config.disable;
@@ -811,15 +819,13 @@ function Flatpickr(element, config) {
 				return bool;
 
 
-			else if ((d instanceof Date || (typeof d === "string")) &&
-				parseDate(d, true).getTime() === dateToCheck.getTime()
-			)
+			else if (d instanceof Date && d.getTime() === dateToCheck.getTime())
 				// disabled by date string
 				return bool;
 
 			else if ( // disabled by range
 				typeof d === "object" && d.from && d.to &&
-				dateToCheck >= parseDate(d.from) &&	dateToCheck <= parseDate(d.to)
+				dateToCheck >= d.from && dateToCheck <= d.to
 			)
 				return bool;
 		}
@@ -890,7 +896,7 @@ function Flatpickr(element, config) {
 			return;
 
 		let hoverDate = e.target.dateObj,
-			initialDate = parseDate(self.selectedDates[0], true),
+			initialDate = self.parseDate(self.selectedDates[0], true),
 			rangeStartDate = Math.min(hoverDate.getTime(), self.selectedDates[0].getTime()),
 			rangeEndDate = Math.max(hoverDate.getTime(), self.selectedDates[0].getTime()),
 			containsDisabled = false;
@@ -992,7 +998,7 @@ function Flatpickr(element, config) {
 				return this._minDate;
 			},
 			set: function(date) {
-				this._minDate = parseDate(date);
+				this._minDate = self.parseDate(date);
 
 				if(self.days)
 					redraw();
@@ -1021,7 +1027,7 @@ function Flatpickr(element, config) {
 				return this._maxDate;
 			},
 			set: function(date) {
-				this._maxDate = parseDate(date);
+				this._maxDate = self.parseDate(date);
 				if(self.days)
 					redraw();
 
@@ -1059,7 +1065,6 @@ function Flatpickr(element, config) {
 				? "h:i" + (self.config.enableSeconds ? ":S K" : " K")
 				: Flatpickr.defaultConfig.altFormat + ` h:i${self.config.enableSeconds ? ":S" : ""} K`;
 		}
-
 	}
 
 	function setupLocale() {
@@ -1076,69 +1081,6 @@ function Flatpickr(element, config) {
 					? Flatpickr.l10ns[self.config.locale] || {}
 					: {}
 		);
-	}
-
-	function parseDate(date, timeless = false) {
-		if (!date)
-			return null;
-
-		const dateTimeRegex = /(\d+)/g,
-			timeRegex = /^(\d{1,2})[:\s](\d\d)?[:\s]?(\d\d)?\s?(a|p)?/i,
-			timestamp = /^(\d+)$/g,
-			date_orig = date;
-
-		if (date.toFixed) // timestamp
-			date = new Date(date);
-
-
-		else if (typeof date === "string") {
-			date = date.trim();
-
-			if (date === "today") {
-				date = new Date();
-				timeless = true;
-			}
-
-			else if (self.config.parseDate)
-				date = self.config.parseDate(date);
-
-			else if (timeRegex.test(date)) { // time picker
-				const m = date.match(timeRegex),
-					hours = !m[4]
-						? m[1]  // military time, no conversion needed
-						: (m[1] % 12) + (m[4].toLowerCase() === "p" ? 12 : 0); // am/pm
-
-				date = new Date();
-				date.setHours(hours, m[2] || 0, m[3] || 0);
-			}
-
-			else if (/Z$/.test(date) || /GMT$/.test(date)) // datestrings w/ timezone
-				date = new Date(date);
-
-			else if (dateTimeRegex.test(date) && /^[0-9]/.test(date)) {
-				const d = date.match(dateTimeRegex);
-				date = new Date(
-					`${d[0]}/${d[1] || 1}/${d[2] || 1} ${d[3] || 0}:${d[4] || 0}:${d[5] || 0}`
-				);
-			}
-
-			else // fallback
-				date = new Date(date);
-		}
-
-		if (!(date instanceof Date)) {
-			console.warn(`flatpickr: invalid date ${date_orig}`);
-			console.info(self.element);
-			return null;
-		}
-
-		if (self.config.utc && !date.fp_isUTC)
-			date = date.fp_toUTC();
-
-		if (timeless)
-			date.setHours(0, 0, 0, 0);
-
-		return date;
 	}
 
 	function positionCalendar() {
@@ -1179,6 +1121,7 @@ function Flatpickr(element, config) {
 	}
 
 	function selectDate(e) {
+		e.preventDefault();
 		if (
 			self.config.allowInput &&
 			e.which === 13 &&
@@ -1192,6 +1135,8 @@ function Flatpickr(element, config) {
 			e.target.classList.contains("notAllowed")
 		)
 			return;
+
+
 
 		const selectedDate = e.target.dateObj;
 		self.selectedDateElem = e.target;
@@ -1256,7 +1201,9 @@ function Flatpickr(element, config) {
 		if (!date)
 			return self.clear();
 
-		self.selectedDates = (Array.isArray(date) ? date.map(parseDate) : [parseDate(date)])
+		self.selectedDates = (Array.isArray(date)
+			? date.map(self.parseDate) :
+			[self.parseDate(date)])
 		.filter(
 			d => d instanceof Date && isEnabled(d)
 		);
@@ -1273,32 +1220,52 @@ function Flatpickr(element, config) {
 	}
 
 	function setupDates() {
+		function parseDateRules(arr) {
+			for (let i = arr.length; i--;) {
+				if (typeof arr[i] === "string" || +arr[i])
+					arr[i] = self.parseDate(arr[i], true);
+
+				else if (arr[i] && arr[i].from && arr[i].to) {
+					arr[i].from = self.parseDate(arr[i].from);
+					arr[i].to = self.parseDate(arr[i].to);
+				}
+			}
+
+			return arr.filter(x => x); // remove falsy values
+		}
+
 		self.selectedDates = [];
 		self.now = new Date();
 		const inputDate = self.config.defaultDate || self.input.value;
 
 		if (Array.isArray(inputDate))
-			self.selectedDates = inputDate.map(parseDate);
+			self.selectedDates = inputDate.map(self.parseDate);
 
 		else if (inputDate) {
 			switch (self.config.mode) {
 				case "single":
-					self.selectedDates = [parseDate(inputDate)];
+					self.selectedDates = [self.parseDate(inputDate)];
 					break;
 
 				case "multiple":
-					self.selectedDates = inputDate.split("; ").map(parseDate);
+					self.selectedDates = inputDate.split("; ").map(self.parseDate);
 					break;
 
 				case "range":
 					self.selectedDates = inputDate
 						.split(self.l10n.rangeSeparator)
-						.map(parseDate);
+						.map(self.parseDate);
 					break;
 
 				default: break;
 			}
 		}
+
+		if (self.config.disable.length)
+			self.config.disable = parseDateRules(self.config.disable);
+
+		if (self.config.enable.length)
+			self.config.enable = parseDateRules(self.config.enable);
 
 		self.selectedDates = self.selectedDates.filter(
 			d => d instanceof Date && d.getTime() && isEnabled(d)
@@ -1329,6 +1296,7 @@ function Flatpickr(element, config) {
 		};
 	}
 
+	/* istanbul ignore next */
 	function setupFormats() {
 		self.formats = {
 			// weekday name, short, e.g. Thu
@@ -1596,6 +1564,7 @@ function Flatpickr(element, config) {
 		return e;
 	}
 
+	/* istanbul ignore next */
 	function debounce(func, wait, immediate) {
 		let timeout;
 		return function (...args) {
@@ -1671,6 +1640,7 @@ function Flatpickr(element, config) {
 	return self;
 }
 
+/* istanbul ignore next */
 Flatpickr.defaultConfig = {
 
 	mode: "single",
@@ -1710,7 +1680,7 @@ Flatpickr.defaultConfig = {
 	altInput: false,
 
 	// the created altInput element will have this class.
-	altInputClass: "form-control input",
+	altInputClass: "flatpickr-input form-control input",
 
 	// same as dateFormat, but for altInput
 	altFormat: "F j, Y", // defaults to e.g. June 10, 2016
@@ -1804,6 +1774,7 @@ Flatpickr.defaultConfig = {
 	onDayCreate: null
 };
 
+/* istanbul ignore next */
 Flatpickr.l10ns = {
 	en: {
 		weekdays: {
@@ -1849,8 +1820,73 @@ Flatpickr.l10ns.default = Flatpickr.l10ns.en;
 Flatpickr.localize = l10n => Object.assign(Flatpickr.l10ns.default, l10n || {});
 
 Flatpickr.prototype = {
-	pad: function(number) {
+	pad (number) {
 		return `0${number}`.slice(-2);
+	},
+
+	parseDate(date, timeless = false) {
+		if (!date)
+			return null;
+
+		const dateTimeRegex = /(\d+)/g,
+			timeRegex = /^(\d{1,2})[:\s](\d\d)?[:\s]?(\d\d)?\s?(a|p)?/i,
+			timestamp = /^(\d+)$/g,
+			date_orig = date;
+
+		if (date.toFixed || timestamp.test(date)) // timestamp
+			date = new Date(date);
+
+		else if (typeof date === "string") {
+			date = date.trim();
+
+			if (date === "today") {
+				date = new Date();
+				timeless = true;
+			}
+
+			else if (this.config && this.config.parseDate)
+				date = this.config.parseDate(date);
+
+			else if (timeRegex.test(date)) { // time picker
+				const m = date.match(timeRegex),
+					hours = !m[4]
+						? m[1]  // military time, no conversion needed
+						: (m[1] % 12) + (m[4].toLowerCase() === "p" ? 12 : 0); // am/pm
+
+				date = new Date();
+				date.setHours(hours, m[2] || 0, m[3] || 0);
+			}
+
+			else if (/Z$/.test(date) || /GMT$/.test(date)) // datestrings w/ timezone
+				date = new Date(date);
+
+			else if (dateTimeRegex.test(date) && /^[0-9]/.test(date)) {
+				const d = date.match(dateTimeRegex);
+				date = new Date(
+					`${d[0]}/${d[1] || 1}/${d[2] || 1} ${d[3] || 0}:${d[4] || 0}:${d[5] || 0}`
+				);
+			}
+
+			else // fallback
+				date = new Date(date);
+		}
+
+		else if (date instanceof Date)
+			date = new Date(date.getTime()); // create a copy
+
+		if (!(date instanceof Date)) {
+			console.warn(`flatpickr: invalid date ${date_orig}`);
+			console.info(this.element);
+			return null;
+		}
+
+		if (this.config && this.config.utc && !date.fp_isUTC)
+			date = date.fp_toUTC();
+
+		if (timeless === true)
+			date.setHours(0, 0, 0, 0);
+
+		return date;
 	}
 };
 
@@ -1914,6 +1950,7 @@ Date.prototype.fp_toUTC = function () {
 };
 
 // IE9 classList polyfill
+/* istanbul ignore next */
 if (
 	!("classList" in document.documentElement) &&
 	Object.defineProperty && typeof HTMLElement !== "undefined"

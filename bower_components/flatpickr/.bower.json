@@ -24,15 +24,13 @@
     "test",
     "tests"
   ],
-  "version": "2.2.4",
-  "_release": "2.2.4",
+  "_release": "69958f4c8f",
   "_resolution": {
-    "type": "version",
-    "tag": "v2.2.4",
-    "commit": "2591d11ec28a361c5ec6c32a45d5f2f00b50f3cc"
+    "type": "branch",
+    "branch": "master",
+    "commit": "69958f4c8f6b9e42cbcda1745d7450f7c25c34ed"
   },
   "_source": "https://github.com/chmln/flatpickr.git",
-  "_target": "^2.2.4",
-  "_originalSource": "flatpickr-calendar",
-  "_direct": true
+  "_target": "master",
+  "_originalSource": "github:chmln/flatpickr"
 }
