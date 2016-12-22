@@ -6,6 +6,7 @@
     "Gregory <gregory.mkv@gmail.com>"
   ],
   "dependencies": {
+    "flatpickr": "github:chmln/flatpickr#master"
   },
   "license": "MIT",
   "homepage": "https://github.com/chmln/flatpickr",
