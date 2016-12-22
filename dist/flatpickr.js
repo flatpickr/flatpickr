@@ -560,7 +560,11 @@ function Flatpickr(element, config) {
 		document.removeEventListener("click", documentClick);
 		document.removeEventListener("blur", documentClick);
 
-		if (instance.mobileInput && instance.mobileInput.parentNode) instance.mobileInput.parentNode.removeChild(instance.mobileInput);else if (instance.calendarContainer && instance.calendarContainer.parentNode) instance.calendarContainer.parentNode.removeChild(instance.calendarContainer);
+		if (instance.mobileInput) {
+			if (instance.mobileExtraClasses) for (var i = 0; i < instance.mobileExtraClasses.length; i++) {
+				instance.element.classList.remove(instance.mobileExtraClasses[i]);
+			}if (instance.mobileInput.parentNode) instance.mobileInput.parentNode.removeChild(instance.mobileInput);
+		} else if (instance.calendarContainer && instance.calendarContainer.parentNode) instance.calendarContainer.parentNode.removeChild(instance.calendarContainer);
 
 		if (instance.altInput) {
 			instance.input.type = "text";
@@ -1126,7 +1130,19 @@ function Flatpickr(element, config) {
 	function setupMobile() {
 		var inputType = self.config.enableTime ? self.config.noCalendar ? "time" : "datetime-local" : "date";
 
+		if (self.config.mobileExtraClass) {
+			self.mobileExtraClasses = self.config.mobileExtraClass.split(/\s+/);
+			for (var i = 0; i < self.mobileExtraClasses.length; i++) {
+				self.element.classList.add(self.mobileExtraClasses[i]);
+			}
+		}
 		self.mobileInput = createElement("input", "flatpickr-input flatpickr-mobile");
+		if (self.config.mobileInputExtraClass) {
+			var classes = self.config.mobileInputExtraClass.split(/\s+/);
+			for (var _i = 0; _i < classes.length; _i++) {
+				self.mobileInput.classList.add(classes[_i]);
+			}
+		}
 		self.mobileInput.step = "any";
 		self.mobileInput.tabIndex = -1;
 		self.mobileInput.type = inputType;
@@ -1360,6 +1376,12 @@ Flatpickr.defaultConfig = {
 
 	// more date format chars at https://chmln.github.io/flatpickr/#dateformat
 	dateFormat: "Y-m-d",
+
+	// the element will have this additional class when mobile mode is active.
+	mobileExtraClass: "flatpickr-mobile-mode",
+
+	// the created mobileInput element will have this additional class.
+	mobileInputExtraClass: "form-control",
 
 	// altInput - see https://chmln.github.io/flatpickr/#altinput
 	altInput: false,
