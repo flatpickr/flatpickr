@@ -28,6 +28,7 @@
   position: absolute;
   width: 293.75px;
   box-sizing: border-box;
+  background: #fff;
   box-shadow: 1px 0 0 #e6e6e6, -1px 0 0 #e6e6e6, 0 1px 0 #e6e6e6, 0 -1px 0 #e6e6e6, 0 3px 13px rgba(0,0,0,0.08);
   z-index: 999;
 }
@@ -453,7 +454,6 @@ span.flatpickr-weekday {
   display: flex;
   box-sizing: border-box;
   overflow: hidden;
-  background: #fff;
 }
 .flatpickr-rContainer {
   display: inline-block;
@@ -472,7 +472,6 @@ span.flatpickr-weekday {
   overflow: hidden;
   transition: height 0.33s cubic-bezier(0, 1, 0.5, 1);
   display: flex;
-  background: #fff;
   border-top: 1px solid #e6e6e6;
 }
 .flatpickr-time:after {

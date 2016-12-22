@@ -73,6 +73,7 @@ $invertedBg = invert($calendarBackground)
         box-shadow 0 3px 13px alpha(black, 0.08)
 
     else
+        background $calendarBackground
         box-shadow 1px 0 0 $calendarBorderColor,
             -1px 0 0 $calendarBorderColor,
             0 1px 0 $calendarBorderColor,
@@ -493,7 +494,7 @@ span.flatpickr-weekday
     display flex
     box-sizing border-box
     overflow: hidden;
-    background $calendarBackground
+    //background $calendarBackground
 
 
 .flatpickr-rContainer
@@ -515,7 +516,7 @@ span.flatpickr-weekday
     overflow hidden
     transition height 0.33s $bezier
     display flex
-    background $calendarBackground
+    //background $calendarBackground
 
     if $noCalendarBorder is defined
         border-radius 0 0 5px  5px
