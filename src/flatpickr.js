@@ -143,7 +143,7 @@ function Flatpickr(element, config) {
 
 	function setHours(hours, minutes, seconds) {
 		if (self.selectedDates.length) {
-			self.selectedDates[self.selectedDates.length - 1].setHours(
+			self.selectedDateElem.dateObj.setHours(
 				hours % 24, minutes, seconds || 0, 0
 			);
 		}
@@ -1167,12 +1167,13 @@ function Flatpickr(element, config) {
 
 		setHoursFromInputs();
 
-
 		if (selectedDate.getMonth() !== self.currentMonth && self.config.mode !== "range") {
 			self.currentYear = selectedDate.getFullYear();
 			self.currentMonth = selectedDate.getMonth();
 			updateNavigationCurrentMonth();
 		}
+
+
 
 		buildDays();
 
@@ -1464,8 +1465,8 @@ function Flatpickr(element, config) {
 	}
 
 	function latestSelectedDateObj() {
-		if (self.selectedDates.length)
-			return self.selectedDates[self.selectedDates.length - 1];
+		if (self.selectedDateElem)
+			return self.selectedDateElem.dateObj;
 		return null;
 	}
 
