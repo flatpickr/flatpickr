@@ -535,6 +535,7 @@ span.flatpickr-weekday {
   font-weight: bold;
   width: 2%;
   z-index: 3;
+  user-select: none;
 }
 .flatpickr-time .flatpickr-am-pm {
   outline: 0;

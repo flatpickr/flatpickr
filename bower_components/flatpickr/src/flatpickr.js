@@ -96,8 +96,11 @@ function Flatpickr(element, config) {
 		if (!self.selectedDates.length)
 			return;
 
-		setHoursFromInputs();
-		updateValue();
+		if (e.type !== "input" || e.target.value.length >= 2) {
+			setHoursFromInputs();
+			updateValue();
+		}
+
 	}
 
 	function setHoursFromInputs(){
@@ -143,7 +146,7 @@ function Flatpickr(element, config) {
 
 	function setHours(hours, minutes, seconds) {
 		if (self.selectedDates.length) {
-			self.selectedDates[self.selectedDates.length - 1].setHours(
+			self.selectedDateElem.dateObj.setHours(
 				hours % 24, minutes, seconds || 0, 0
 			);
 		}
@@ -1167,12 +1170,13 @@ function Flatpickr(element, config) {
 
 		setHoursFromInputs();
 
-
 		if (selectedDate.getMonth() !== self.currentMonth && self.config.mode !== "range") {
 			self.currentYear = selectedDate.getFullYear();
 			self.currentMonth = selectedDate.getMonth();
 			updateNavigationCurrentMonth();
 		}
+
+
 
 		buildDays();
 
@@ -1464,8 +1468,8 @@ function Flatpickr(element, config) {
 	}
 
 	function latestSelectedDateObj() {
-		if (self.selectedDates.length)
-			return self.selectedDates[self.selectedDates.length - 1];
+		if (self.selectedDateElem)
+			return self.selectedDateElem.dateObj;
 		return null;
 	}
 
@@ -1609,31 +1613,40 @@ function Flatpickr(element, config) {
 
 		let newValue = Number(curValue);
 
-		if (e.type === "wheel")
-			newValue = curValue + step * delta;
+		switch(e.type) {
+			case "wheel":
+				newValue = curValue + step * delta;
+				break;
 
-		else if (e.type === "keydown")
-			newValue = curValue + step * (e.which === 38 ? 1 : -1);
-
-		if (newValue < min) {
-			newValue = max + newValue + (e.target !== self.hourElement)
-				+ (e.target === self.hourElement && !self.amPM);
+			case "keydown":
+				newValue = curValue + step * (e.which === 38 ? 1 : -1);
+				break;
 		}
 
-		else if (newValue > max) {
-			newValue = e.target === self.hourElement
-				? newValue - max - (!self.amPM)
-				: min;
+		if (e.type !== "input" || e.target.value.length === 2) {
+			if (newValue < min) {
+				newValue = max + newValue + (e.target !== self.hourElement)
+					+ (e.target === self.hourElement && !self.amPM);
+			}
+
+			else if (newValue > max) {
+				newValue = e.target === self.hourElement
+					? newValue - max - (!self.amPM)
+					: min;
+			}
+
+			if (
+				self.amPM && e.target === self.hourElement && (step === 1
+					? newValue + curValue === 23
+					: Math.abs(newValue - curValue) > step)
+			)
+				self.amPM.textContent = self.amPM.innerHTML === "PM" ? "AM" : "PM";
+
+			e.target.value = self.pad(newValue);
 		}
 
-		if (
-			self.amPM && e.target === self.hourElement && (step === 1
-				? newValue + curValue === 23
-				: Math.abs(newValue - curValue) > step)
-		)
-			self.amPM.textContent = self.amPM.innerHTML === "PM" ? "AM" : "PM";
-
-		e.target.value = self.pad(newValue);
+		else
+			e.target.value = newValue;
 	}
 
 	init();
