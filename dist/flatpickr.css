@@ -61,6 +61,9 @@
 .flatpickr-calendar.dateIsPicked.hasTime .flatpickr-time {
   height: 40px;
 }
+.flatpickr-calendar.noCalendar.hasTime .flatpickr-time {
+  height: auto;
+}
 .flatpickr-calendar:before,
 .flatpickr-calendar:after {
   position: absolute;
