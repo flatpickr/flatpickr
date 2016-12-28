@@ -536,6 +536,8 @@ function Flatpickr(element, config) {
 
 	function buildTime() {
 		self.calendarContainer.classList.add("hasTime");
+		if (self.config.noCalendar)
+			self.calendarContainer.classList.add("noCalendar");
 		self.timeContainer = createElement("div", "flatpickr-time");
 		self.timeContainer.tabIndex = -1;
 		const separator = createElement("span", "flatpickr-time-separator", ":");
