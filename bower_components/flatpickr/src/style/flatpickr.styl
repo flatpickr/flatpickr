@@ -112,6 +112,10 @@ $invertedBg = invert($calendarBackground)
         .flatpickr-time
             height $timeHeight
 
+    &.noCalendar.hasTime
+        .flatpickr-time
+            height auto
+
     &:before, &:after
         position absolute
         display block
