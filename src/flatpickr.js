@@ -1399,7 +1399,7 @@ function Flatpickr(element, config) {
 
 		self.mobileInput = createElement("input", self.input.className + " flatpickr-mobile");
 		self.mobileInput.step = "any";
-		self.mobileInput.tabIndex = -1;
+		self.mobileInput.tabIndex = 1;
 		self.mobileInput.type = inputType;
 		self.mobileInput.disabled = self.input.disabled;
 
@@ -1477,7 +1477,7 @@ function Flatpickr(element, config) {
 	}
 
 	function isDateSelected(date) {
-		for (var i = 0; i < self.selectedDates.length; i++) {
+		for (let i = 0; i < self.selectedDates.length; i++) {
 			if (compareDates(self.selectedDates[i], date) === 0)
 				return "" + i;
 		}
@@ -1831,7 +1831,7 @@ Flatpickr.l10ns = {
 	}
 };
 
-Flatpickr.l10ns.default = Flatpickr.l10ns.en;
+Flatpickr.l10ns.default = Object.create(Flatpickr.l10ns.en);
 
 Flatpickr.localize = l10n => Object.assign(Flatpickr.l10ns.default, l10n || {});
 
