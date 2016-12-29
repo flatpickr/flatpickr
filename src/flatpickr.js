@@ -1149,18 +1149,15 @@ function Flatpickr(element, config) {
 
 		if (self.config.mode === "single") {
 			self.selectedDates = [selectedDate];
-
-			if (!self.config.enableTime)
-				self.close();
 		}
 
 		else if (self.config.mode === "multiple") {
 			const selectedIndex = isDateSelected(selectedDate);
 			if (selectedIndex)
 				self.selectedDates.splice(selectedIndex, 1);
+
 			else
 				self.selectedDates.push(selectedDate);
-
 		}
 
 		else if (self.config.mode === "range") {
@@ -1179,8 +1176,6 @@ function Flatpickr(element, config) {
 			updateNavigationCurrentMonth();
 		}
 
-
-
 		buildDays();
 
 		if (self.minDateHasTime	&& self.config.enableTime
@@ -1194,6 +1189,9 @@ function Flatpickr(element, config) {
 
 		if (self.config.mode === "range" && self.selectedDates.length === 1)
 			onMouseOver(e);
+
+		if (self.config.mode === "single" && !self.config.enableTime)
+			self.close();
 
 		triggerEvent("Change");
 	}
