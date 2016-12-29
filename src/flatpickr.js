@@ -1397,7 +1397,7 @@ function Flatpickr(element, config) {
 			? (self.config.noCalendar ? "time" : "datetime-local")
 			: "date";
 
-		self.mobileInput = createElement("input", "flatpickr-input flatpickr-mobile");
+		self.mobileInput = createElement("input", self.input.className + " flatpickr-mobile");
 		self.mobileInput.step = "any";
 		self.mobileInput.tabIndex = -1;
 		self.mobileInput.type = inputType;
