@@ -876,11 +876,7 @@ function Flatpickr(element, config) {
 		var selectedDate = self.latestSelectedDateObj = e.target.dateObj;
 		self.selectedDateElem = e.target;
 
-		if (self.config.mode === "single") {
-			self.selectedDates = [selectedDate];
-
-			if (!self.config.enableTime) self.close();
-		} else if (self.config.mode === "multiple") {
+		if (self.config.mode === "single") self.selectedDates = [selectedDate];else if (self.config.mode === "multiple") {
 			var selectedIndex = isDateSelected(selectedDate);
 			if (selectedIndex) self.selectedDates.splice(selectedIndex, 1);else self.selectedDates.push(selectedDate);
 		} else if (self.config.mode === "range") {
@@ -911,6 +907,8 @@ function Flatpickr(element, config) {
 		}, 50);
 
 		if (self.config.mode === "range" && self.selectedDates.length === 1) onMouseOver(e);
+
+		if (self.config.mode === "single" && !self.config.enableTime) self.close();
 
 		triggerEvent("Change");
 	}
@@ -1132,7 +1130,7 @@ function Flatpickr(element, config) {
 
 		self.mobileInput = createElement("input", self.input.className + " flatpickr-mobile");
 		self.mobileInput.step = "any";
-		self.mobileInput.tabIndex = -1;
+		self.mobileInput.tabIndex = 1;
 		self.mobileInput.type = inputType;
 		self.mobileInput.disabled = self.input.disabled;
 
@@ -1502,7 +1500,7 @@ Flatpickr.l10ns = {
 	}
 };
 
-Flatpickr.l10ns.default = Flatpickr.l10ns.en;
+Flatpickr.l10ns.default = Object.create(Flatpickr.l10ns.en);
 
 Flatpickr.localize = function (l10n) {
 	return _extends(Flatpickr.l10ns.default, l10n || {});

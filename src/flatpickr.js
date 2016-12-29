@@ -1147,9 +1147,8 @@ function Flatpickr(element, config) {
 		const selectedDate = self.latestSelectedDateObj = e.target.dateObj;
 		self.selectedDateElem = e.target;
 
-		if (self.config.mode === "single") {
+		if (self.config.mode === "single")
 			self.selectedDates = [selectedDate];
-		}
 
 		else if (self.config.mode === "multiple") {
 			const selectedIndex = isDateSelected(selectedDate);
