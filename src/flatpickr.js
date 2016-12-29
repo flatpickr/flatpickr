@@ -193,17 +193,14 @@ function Flatpickr(element, config) {
 		self.triggerChange = () => triggerEvent("Change");
 		self.debouncedChange = debounce(self.triggerChange, 1000);
 
-		if (self.config.mode === "range")
+		if (self.config.mode === "range" && self.days)
 			self.days.addEventListener("mouseover", onMouseOver);
 
 		document.addEventListener("keydown", onKeyDown);
 		window.addEventListener("resize", self.debouncedResize);
 
-		const clickEvent = typeof window.ontouchstart !== "undefined"
-			? "touchstart"
-			: "click";
-
-		document.addEventListener(clickEvent, documentClick);
+		document.addEventListener("touchstart", documentClick);
+		document.addEventListener("click", documentClick);
 		document.addEventListener("blur", documentClick);
 
 		if (self.config.clickOpens)
@@ -261,7 +258,7 @@ function Flatpickr(element, config) {
 	function jumpToDate(jumpDate) {
 		jumpDate = jumpDate
 			? self.parseDate(jumpDate)
-			: latestSelectedDateObj() || (self.config.minDate > self.now
+			: self.latestSelectedDateObj || (self.config.minDate > self.now
 				? self.config.minDate
 				: self.now
 			);
@@ -702,6 +699,7 @@ function Flatpickr(element, config) {
 		window.removeEventListener("resize", instance.debouncedResize);
 
 		document.removeEventListener("click", documentClick);
+		document.removeEventListener("touchstart", documentClick);
 		document.removeEventListener("blur", documentClick);
 
 		if (instance.mobileInput && instance.mobileInput.parentNode)
