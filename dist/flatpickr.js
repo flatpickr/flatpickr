@@ -840,8 +840,7 @@ function Flatpickr(element, config) {
 		    inputBounds = input.getBoundingClientRect(),
 		    distanceFromBottom = window.innerHeight - inputBounds.bottom + input.offsetHeight;
 
-		var top = void 0,
-		    left = window.pageXOffset + inputBounds.left;
+		var top = void 0;
 
 		if (distanceFromBottom < calendarHeight) {
 			top = window.pageYOffset - calendarHeight + inputBounds.top - 2;
@@ -855,7 +854,21 @@ function Flatpickr(element, config) {
 
 		if (!self.config.static && !self.config.inline) {
 			self.calendarContainer.style.top = top + "px";
-			self.calendarContainer.style.left = left + "px";
+
+			var left = window.pageXOffset + inputBounds.left;
+			var right = document.body.offsetWidth - inputBounds.right;
+
+			if (left + self.calendarContainer.offsetWidth <= document.body.offsetWidth) {
+				self.calendarContainer.style.left = left + "px";
+				self.calendarContainer.style.right = "auto";
+
+				self.calendarContainer.classList.remove("rightMost");
+			} else {
+				self.calendarContainer.style.left = "auto";
+				self.calendarContainer.style.right = right + "px";
+
+				self.calendarContainer.classList.add("rightMost");
+			}
 		}
 	}
 
