@@ -75,6 +75,11 @@
   width: 0;
   left: 22px;
 }
+.flatpickr-calendar.rightMost:before,
+.flatpickr-calendar.rightMost:after {
+  left: auto;
+  right: 22px;
+}
 .flatpickr-calendar:before {
   border-width: 5px;
   margin: 0 -5px;
