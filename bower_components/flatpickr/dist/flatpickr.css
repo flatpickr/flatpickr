@@ -19,7 +19,8 @@
   visibility: hidden;
   text-align: center;
   padding: 0;
-  animation: none;
+  -webkit-animation: none;
+          animation: none;
   direction: ltr;
   border: 0;
   font-size: 14px;
@@ -42,7 +43,8 @@
 .flatpickr-calendar.open {
   display: inline-block;
   z-index: 99999;
-  animation: flatpickrFadeInDown 0.5s cubic-bezier(0, 1, 0.5, 1);
+  -webkit-animation: flatpickrFadeInDown 0.5s cubic-bezier(0, 1, 0.5, 1);
+          animation: flatpickrFadeInDown 0.5s cubic-bezier(0, 1, 0.5, 1);
 }
 .flatpickr-calendar.inline {
   display: block;
@@ -116,7 +118,10 @@
   line-height: 24px;
   text-align: center;
   position: relative;
-  user-select: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   z-index: 2;
 }
 .flatpickr-prev-month,
@@ -178,6 +183,7 @@
 }
 .flatpickr-prev-month svg path,
 .flatpickr-next-month svg path {
+  -webkit-transition: fill 0.1s;
   transition: fill 0.1s;
   fill: inherit;
 }
@@ -317,8 +323,11 @@
   width: 293.75px;
   box-sizing: border-box;
   display: inline-block;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
   border-right: 1px solid transparent;
 }
 .flatpickr-day {
@@ -330,7 +339,8 @@
   cursor: pointer;
   font-weight: 400;
   width: 14.2857143%;
-  flex-basis: 14.2857143%;
+  -ms-flex-preferred-size: 14.2857143%;
+      flex-basis: 14.2857143%;
   max-width: 38px;
   height: 38px;
   line-height: 38px;
@@ -338,9 +348,9 @@
   display: inline-block;
   display: inline-block\9;
   position: relative;
-  -webkit-justify-content: center;
   -ms-flex-pack: center;
-  justify-content: center;
+  -webkit-box-pack: center;
+          justify-content: center;
   text-align: center;
 }
 .flatpickr-day.inRange,
@@ -459,6 +469,8 @@ span.flatpickr-weekday {
 }
 .flatpickr-innerContainer {
   display: block;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   box-sizing: border-box;
   overflow: hidden;
@@ -478,7 +490,10 @@ span.flatpickr-weekday {
   max-height: 40px;
   box-sizing: border-box;
   overflow: hidden;
+  -webkit-transition: height 0.33s cubic-bezier(0, 1, 0.5, 1);
   transition: height 0.33s cubic-bezier(0, 1, 0.5, 1);
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   border-top: 1px solid #e6e6e6;
 }
@@ -488,7 +503,9 @@ span.flatpickr-weekday {
   clear: both;
 }
 .flatpickr-time .numInputWrapper {
-  flex: 1;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
   width: 40%;
   height: 40px;
   float: left;
@@ -543,7 +560,10 @@ span.flatpickr-weekday {
   font-weight: bold;
   width: 2%;
   z-index: 3;
-  user-select: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 .flatpickr-time .flatpickr-am-pm {
   outline: 0;
@@ -573,44 +593,28 @@ span.flatpickr-weekday {
     top: 0 !important;
   }
 }
-@-moz-keyframes flatpickrFadeInDown {
-  from {
-    opacity: 0;
-    transform: translate3d(0, -20px, 0);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
 @-webkit-keyframes flatpickrFadeInDown {
   from {
     opacity: 0;
-    transform: translate3d(0, -20px, 0);
+    -webkit-transform: translate3d(0, -20px, 0);
+            transform: translate3d(0, -20px, 0);
   }
   to {
     opacity: 1;
-    transform: none;
-  }
-}
-@-o-keyframes flatpickrFadeInDown {
-  from {
-    opacity: 0;
-    transform: translate3d(0, -20px, 0);
-  }
-  to {
-    opacity: 1;
-    transform: none;
+    -webkit-transform: none;
+            transform: none;
   }
 }
 @keyframes flatpickrFadeInDown {
   from {
     opacity: 0;
-    transform: translate3d(0, -20px, 0);
+    -webkit-transform: translate3d(0, -20px, 0);
+            transform: translate3d(0, -20px, 0);
   }
   to {
     opacity: 1;
-    transform: none;
+    -webkit-transform: none;
+            transform: none;
   }
 }
 
