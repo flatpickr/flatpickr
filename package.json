@@ -10,7 +10,7 @@
     "build-min-script": "babel src/flatpickr.js | uglifyjs --screw-ie8 --compress --comments --mangle > dist/flatpickr.min.js",
     "build-l10n": "babel src/l10n --out-dir dist/l10n",
     "build-styles": "parallelshell \"npm run build-style\" \"npm run build-min-style\"",
-    "build-style": "stylus < ./src/style/flatpickr.styl | postcss -c postcss.json  > dist/flatpickr.css",
+    "build-style": "stylus < ./src/style/flatpickr.styl | postcss --use autoprefixer  > dist/flatpickr.css",
     "build-min-style": "stylus < ./src/style/flatpickr.styl | postcss -c postcss.json > ./dist/flatpickr.min.css",
     "build-themes": "stylus --out dist/themes src/style/themes && postcss -c postcss.json -d dist/themes dist/themes/*.css",
     "build-rtl": "rtlcss -d ./dist/themes ./dist/rtl/themes && rtlcss dist/flatpickr.min.css dist/rtl/flatpickr.min.css",
