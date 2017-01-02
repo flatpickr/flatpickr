@@ -201,9 +201,8 @@ function Flatpickr(element, config) {
 
 		if (window.ontouchstart)
 			document.addEventListener("touchstart", documentClick);
-		else
-			document.addEventListener("click", documentClick);
 
+		document.addEventListener("click", documentClick);
 		document.addEventListener("blur", documentClick);
 
 		if (self.config.clickOpens)

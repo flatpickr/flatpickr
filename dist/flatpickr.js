@@ -155,8 +155,9 @@ function Flatpickr(element, config) {
 		document.addEventListener("keydown", onKeyDown);
 		window.addEventListener("resize", self.debouncedResize);
 
-		if (window.ontouchstart) document.addEventListener("touchstart", documentClick);else document.addEventListener("click", documentClick);
+		if (window.ontouchstart) document.addEventListener("touchstart", documentClick);
 
+		document.addEventListener("click", documentClick);
 		document.addEventListener("blur", documentClick);
 
 		if (self.config.clickOpens) (self.altInput || self.input).addEventListener("focus", open);
