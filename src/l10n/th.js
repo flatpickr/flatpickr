@@ -13,9 +13,9 @@ Flatpickr.l10ns.th.months = {
 };
 
 Flatpickr.l10ns.th.firstDayOfWeek = 1;
-Flatpickr.l10ns.th.rangeSeparator: " ถึง ",
-Flatpickr.l10ns.th.scrollTitle: "เลื่อนเพื่อเพิ่มหรือลด",
-Flatpickr.l10ns.th.toggleTitle: "คลิกเพื่อเปลี่ยน"
+Flatpickr.l10ns.th.rangeSeparator = " ถึง ",
+Flatpickr.l10ns.th.scrollTitle = "เลื่อนเพื่อเพิ่มหรือลด",
+Flatpickr.l10ns.th.toggleTitle = "คลิกเพื่อเปลี่ยน"
 
 Flatpickr.l10ns.th.ordinal = () => {
   return "";
