@@ -114,7 +114,7 @@ function Flatpickr(element, config) {
 				: 0;
 
 		if (self.amPM)
-			hours = (hours % 12) + (12 * (self.amPM.innerHTML === "PM"));
+			hours = (hours % 12) + (12 * (self.amPM.textContent === "PM"));
 
 		if (
 			self.minDateHasTime
@@ -450,8 +450,8 @@ function Flatpickr(element, config) {
 
 		let	dayNumber = self.prevMonthDays + 1 - self.firstOfMonth;
 
-		if (self.config.weekNumbers)
-			self.weekNumbers.innerHTML = "";
+		if (self.config.weekNumbers && self.weekNumbers.firstChild)
+			self.weekNumbers.textContent = "";
 
 		if (self.config.mode === "range") {
 			// const dateLimits = self.config.enable.length || self.config.disable.length || self.config.mixDate || self.config.maxDate;
@@ -463,7 +463,8 @@ function Flatpickr(element, config) {
 			);
 		}
 
-		self.days.innerHTML = "";
+		if (self.days.firstChild)
+			self.days.textContent = "";
 
 		// prepend days from the ending of previous month
 		for (let i = 0; dayNumber <= self.prevMonthDays; i++, dayNumber++) {
@@ -1574,12 +1575,15 @@ function Flatpickr(element, config) {
 		e.target.value = self.currentYear;
 	}
 
-	function createElement(tag, className = "", content = "") {
+	function createElement(tag, className, content) {
 		const e = document.createElement(tag);
+		className = className || "";
+		content = content || "";
+
 		e.className = className;
 
 		if (content)
-			e.innerHTML = content;
+			e.textContent = content;
 
 		return e;
 	}
@@ -1656,7 +1660,7 @@ function Flatpickr(element, config) {
 					? newValue + curValue === 23
 					: Math.abs(newValue - curValue) > step)
 			)
-				self.amPM.textContent = self.amPM.innerHTML === "PM" ? "AM" : "PM";
+				self.amPM.textContent = self.amPM.textContent === "PM" ? "AM" : "PM";
 
 			e.target.value = self.pad(newValue);
 		}
