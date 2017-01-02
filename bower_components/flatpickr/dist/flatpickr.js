@@ -155,8 +155,9 @@ function Flatpickr(element, config) {
 		document.addEventListener("keydown", onKeyDown);
 		window.addEventListener("resize", self.debouncedResize);
 
-		if (window.ontouchstart) document.addEventListener("touchstart", documentClick);else document.addEventListener("click", documentClick);
+		if (window.ontouchstart) document.addEventListener("touchstart", documentClick);
 
+		document.addEventListener("click", documentClick);
 		document.addEventListener("blur", documentClick);
 
 		if (self.config.clickOpens) (self.altInput || self.input).addEventListener("focus", open);
@@ -219,7 +220,7 @@ function Flatpickr(element, config) {
 	}
 
 	function jumpToDate(jumpDate) {
-		jumpDate = jumpDate ? self.parseDate(jumpDate) : self.latestSelectedDateObj || (self.config.minDate > self.now ? self.config.minDate : self.now);
+		jumpDate = jumpDate ? self.parseDate(jumpDate) : self.latestSelectedDateObj || (self.config.minDate > self.now ? self.config.minDate : self.config.maxDate && self.config.maxDate < self.now ? self.config.maxDate : self.now);
 
 		try {
 			self.currentYear = jumpDate.getFullYear();

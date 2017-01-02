@@ -201,9 +201,8 @@ function Flatpickr(element, config) {
 
 		if (window.ontouchstart)
 			document.addEventListener("touchstart", documentClick);
-		else
-			document.addEventListener("click", documentClick);
 
+		document.addEventListener("click", documentClick);
 		document.addEventListener("blur", documentClick);
 
 		if (self.config.clickOpens)
@@ -263,7 +262,9 @@ function Flatpickr(element, config) {
 			? self.parseDate(jumpDate)
 			: self.latestSelectedDateObj || (self.config.minDate > self.now
 				? self.config.minDate
-				: self.now
+				: self.config.maxDate && self.config.maxDate < self.now
+					? self.config.maxDate
+					: self.now
 			);
 
 		try {
