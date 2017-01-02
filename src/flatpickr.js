@@ -262,7 +262,9 @@ function Flatpickr(element, config) {
 			? self.parseDate(jumpDate)
 			: self.latestSelectedDateObj || (self.config.minDate > self.now
 				? self.config.minDate
-				: self.now
+				: self.config.maxDate && self.config.maxDate < self.now
+					? self.config.maxDate
+					: self.now
 			);
 
 		try {
