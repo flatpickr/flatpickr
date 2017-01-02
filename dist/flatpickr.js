@@ -1266,11 +1266,11 @@ function Flatpickr(element, config) {
 		e.target.value = self.currentYear;
 	}
 
-	function createElement(tag) {
-		var className = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
-		var content = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "";
-
+	function createElement(tag, className, content) {
 		var e = document.createElement(tag);
+		className = className || "";
+		content = content || "";
+
 		e.className = className;
 
 		if (content) e.textContent = content;

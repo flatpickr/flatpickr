@@ -1575,8 +1575,11 @@ function Flatpickr(element, config) {
 		e.target.value = self.currentYear;
 	}
 
-	function createElement(tag, className = "", content = "") {
+	function createElement(tag, className, content) {
 		const e = document.createElement(tag);
+		className = className || "";
+		content = content || "";
+
 		e.className = className;
 
 		if (content)
