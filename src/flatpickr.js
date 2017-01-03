@@ -996,6 +996,40 @@ function Flatpickr(element, config) {
 		triggerEvent("Open");
 	}
 
+	function minMaxDateSetter(type) {
+		return function(date) {
+			const dateObj = self.config[`_${type}Date`] = self.parseDate(date);
+			const inverseDateObj = self.config[`_${type === "min" ? "max" : "min"}Date`];
+
+			if (self.selectedDates) {
+				self.selectedDates = self.selectedDates.filter(isEnabled);
+				updateValue();
+			}
+
+			if(self.days)
+				redraw();
+
+
+
+			if (!self.currentYearElement)
+				return;
+
+			if (date && dateObj instanceof Date) {
+				self[`${type}DateHasTime`] = dateObj.getHours()
+					|| dateObj.getMinutes()
+					|| dateObj.getSeconds();
+
+				self.currentYearElement[type] = dateObj.getFullYear();
+			}
+
+			else
+				self.currentYearElement.removeAttribute(type);
+
+			self.currentYearElement.disabled = inverseDateObj && dateObj &&
+				inverseDateObj.getFullYear() === dateObj.getFullYear();
+		}
+	}
+
 	function parseConfig() {
 		var boolOpts = [
 			"utc", "wrap", "weekNumbers", "allowInput", "clickOpens", "time_24hr", "enableTime", "noCalendar", "altInput", "shorthandCurrentMonth", "inline", "static", "enableSeconds", "disableMobile"
@@ -1007,56 +1041,14 @@ function Flatpickr(element, config) {
 			get: function() {
 				return this._minDate;
 			},
-			set: function(date) {
-				this._minDate = self.parseDate(date);
-
-				if(self.days)
-					redraw();
-
-				if (!self.currentYearElement)
-					return;
-
-				if (date && this._minDate instanceof Date) {
-					self.minDateHasTime = this._minDate.getHours()
-						|| this._minDate.getMinutes()
-						|| this._minDate.getSeconds();
-
-					self.currentYearElement.min = this._minDate.getFullYear();
-				}
-
-				else
-					self.currentYearElement.removeAttribute("min");
-
-				self.currentYearElement.disabled = this._maxDate && this._minDate &&
-					this._maxDate.getFullYear() === this._minDate.getFullYear();
-			}
+			set: minMaxDateSetter("min")
 		});
 
 		Object.defineProperty(self.config, "maxDate", {
 			get: function() {
 				return this._maxDate;
 			},
-			set: function(date) {
-				this._maxDate = self.parseDate(date);
-				if(self.days)
-					redraw();
-
-				if (!self.currentYearElement)
-					return;
-
-				if (date && this._maxDate instanceof Date) {
-					self.currentYearElement.max = this._maxDate.getFullYear();
-					self.maxDateHasTime = this._maxDate.getHours()
-						|| this._maxDate.getMinutes()
-						|| this._maxDate.getSeconds();
-				}
-
-				else
-					self.currentYearElement.removeAttribute("max");
-
-				self.currentYearElement.disabled = this._maxDate && this._minDate &&
-					this._maxDate.getFullYear() === this._minDate.getFullYear();
-			}
+			set: minMaxDateSetter("max")
 		});
 
 		Object.assign(self.config, userConfig);
