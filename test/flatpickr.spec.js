@@ -335,11 +335,15 @@ describe('flatpickr', () => {
 				expect(date.getFullYear()).toEqual(2016);
 				expect(date.getMonth()).toEqual(9);
 				expect(date.getDate()).toEqual(10);
+
+				expect(fp.hourElement.value).toEqual("03");
+				expect(fp.minuteElement.value).toEqual("30");
+				expect(fp.amPM.textContent).toEqual("AM");
 			};
 
 			createInstance({
 				enableTime: true,
-				defaultDate: "2016-10-01",
+				defaultDate: "2016-10-01 3:30",
 				onChange: (dates, datestr) => {
 					if (dates.length)
 						verifySelected(dates[0]);
@@ -350,6 +354,34 @@ describe('flatpickr', () => {
 			fp.days.childNodes[15].click(); // oct 10
 
 			verifySelected(fp.selectedDates[0]);
+		});
+
+		it("has valid latestSelectedDateObj", () => {
+			createInstance({
+				defaultDate: "2016-10-01 3:30",
+				enableTime: true
+			});
+
+			expect(fp.latestSelectedDateObj).toBeDefined();
+			expect(fp.latestSelectedDateObj.getFullYear()).toEqual(2016);
+			expect(fp.latestSelectedDateObj.getMonth()).toEqual(9);
+			expect(fp.latestSelectedDateObj.getDate()).toEqual(1);
+			expect(fp.hourElement.value).toEqual("03");
+			expect(fp.minuteElement.value).toEqual("30");
+			expect(fp.amPM.textContent).toEqual("AM");
+
+			fp.setDate("2016-11-03 16:49");
+			expect(fp.latestSelectedDateObj).toBeDefined();
+			expect(fp.latestSelectedDateObj.getFullYear()).toEqual(2016);
+			expect(fp.latestSelectedDateObj.getMonth()).toEqual(10);
+			expect(fp.latestSelectedDateObj.getDate()).toEqual(3);
+
+			expect(fp.hourElement.value).toEqual("04");
+			expect(fp.minuteElement.value).toEqual("49");
+			expect(fp.amPM.textContent).toEqual("PM");
+
+			fp.setDate("");
+			expect(fp.latestSelectedDateObj).toEqual(null);
 		});
 	});
 

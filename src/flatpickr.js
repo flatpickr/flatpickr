@@ -679,6 +679,7 @@ function Flatpickr(element, config) {
 			self.mobileInput.value = "";
 
 		self.selectedDates = [];
+		self.latestSelectedDateObj = null;
 		self.dateIsPicked = false;
 
 		self.redraw();
@@ -709,6 +710,9 @@ function Flatpickr(element, config) {
 		document.removeEventListener("click", documentClick);
 		document.removeEventListener("touchstart", documentClick);
 		document.removeEventListener("blur", documentClick);
+
+		if (instance.timeContainer)
+			instance.timeContainer.removeEventListener("transitionend", positionCalendar);
 
 		if (instance.mobileInput && instance.mobileInput.parentNode)
 			instance.mobileInput.parentNode.removeChild(instance.mobileInput);
