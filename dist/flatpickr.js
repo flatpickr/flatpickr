@@ -91,7 +91,7 @@ function Flatpickr(element, config) {
 		    minutes = parseInt(self.minuteElement.value, 10) || 0,
 		    seconds = self.config.enableSeconds ? parseInt(self.secondElement.value, 10) || 0 : 0;
 
-		if (self.amPM) hours = hours % 12 + 12 * (self.amPM.innerHTML === "PM");
+		if (self.amPM) hours = hours % 12 + 12 * (self.amPM.textContent === "PM");
 
 		if (self.minDateHasTime && compareDates(self.latestSelectedDateObj, self.config.minDate) === 0) {
 			hours = Math.max(hours, self.config.minDate.getHours());
@@ -354,7 +354,7 @@ function Flatpickr(element, config) {
 
 		var dayNumber = self.prevMonthDays + 1 - self.firstOfMonth;
 
-		if (self.config.weekNumbers) self.weekNumbers.innerHTML = "";
+		if (self.config.weekNumbers && self.weekNumbers.firstChild) self.weekNumbers.textContent = "";
 
 		if (self.config.mode === "range") {
 			// const dateLimits = self.config.enable.length || self.config.disable.length || self.config.mixDate || self.config.maxDate;
@@ -362,7 +362,7 @@ function Flatpickr(element, config) {
 			self.maxRangeDate = new Date(self.currentYear, self.currentMonth + 1, (42 - self.firstOfMonth) % daysInMonth);
 		}
 
-		self.days.innerHTML = "";
+		if (self.days.firstChild) self.days.textContent = "";
 
 		// prepend days from the ending of previous month
 		for (var i = 0; dayNumber <= self.prevMonthDays; i++, dayNumber++) {
@@ -1269,14 +1269,14 @@ function Flatpickr(element, config) {
 		e.target.value = self.currentYear;
 	}
 
-	function createElement(tag) {
-		var className = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
-		var content = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "";
-
+	function createElement(tag, className, content) {
 		var e = document.createElement(tag);
+		className = className || "";
+		content = content || "";
+
 		e.className = className;
 
-		if (content) e.innerHTML = content;
+		if (content) e.textContent = content;
 
 		return e;
 	}
@@ -1340,7 +1340,7 @@ function Flatpickr(element, config) {
 				newValue = e.target === self.hourElement ? newValue - max - !self.amPM : min;
 			}
 
-			if (self.amPM && e.target === self.hourElement && (step === 1 ? newValue + curValue === 23 : Math.abs(newValue - curValue) > step)) self.amPM.textContent = self.amPM.innerHTML === "PM" ? "AM" : "PM";
+			if (self.amPM && e.target === self.hourElement && (step === 1 ? newValue + curValue === 23 : Math.abs(newValue - curValue) > step)) self.amPM.textContent = self.amPM.textContent === "PM" ? "AM" : "PM";
 
 			e.target.value = self.pad(newValue);
 		} else e.target.value = newValue;
