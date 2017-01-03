@@ -231,6 +231,7 @@ function Flatpickr(element, config) {
 		}
 
 		if (self.config.enableTime) {
+			self.timeContainer.addEventListener("transitionend", positionCalendar);
 			self.timeContainer.addEventListener("wheel", e => debounce(updateTime(e), 5));
 			self.timeContainer.addEventListener("input", updateTime);
 
@@ -1086,7 +1087,10 @@ function Flatpickr(element, config) {
 		);
 	}
 
-	function positionCalendar() {
+	function positionCalendar(e) {
+		if (e && e.target !== self.timeContainer)
+			return;
+
 		const calendarHeight = self.calendarContainer.offsetHeight,
 			input = (self.altInput || self.input),
 			inputBounds = input.getBoundingClientRect(),
@@ -1094,7 +1098,7 @@ function Flatpickr(element, config) {
 
 		let top;
 
-		if (distanceFromBottom < calendarHeight) {
+		if (distanceFromBottom < calendarHeight + 60) {
 			top = (window.pageYOffset - calendarHeight + inputBounds.top) - 2;
 			self.calendarContainer.classList.remove("arrowTop");
 			self.calendarContainer.classList.add("arrowBottom");
