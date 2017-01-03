@@ -1386,14 +1386,21 @@ function Flatpickr(element, config) {
 	}
 
 	function setupInputs() {
-		self.input = self.config.wrap ? self.element.querySelector("[data-input]") : self.element;
+		self.input = self.config.wrap
+			? self.element.querySelector("[data-input]")
+			: self.element;
 
+		if (!self.input)
+			return console.warn("Error: invalid input element specified", self.input);
+
+		self.input.type = "text";
 		self.input.classList.add("flatpickr-input");
+
 		if (self.config.altInput) {
 			// replicate self.element
 			self.altInput = createElement(
 				self.input.nodeName,
-				self.config.altInputClass
+				self.input.className
 			);
 			self.altInput.placeholder = self.input.placeholder;
 			self.altInput.type = "text";
