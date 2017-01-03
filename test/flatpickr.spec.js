@@ -26,11 +26,16 @@ describe('flatpickr', () => {
 		it("should parse defaultDate", () => {
 			createInstance({
 				defaultDate: "2016-12-27T16:16:22.585Z",
+				enableTime: true
 			});
 
 			expect(fp.currentYear).toEqual(2016);
 			expect(fp.currentMonth).toEqual(11);
 			expect(fp.days.querySelector(".selected").textContent).toEqual("27");
+
+			expect(fp.hourElement.value).toEqual("11");
+			expect(fp.minuteElement.value).toEqual("16");
+			expect(fp.amPM.textContent).toEqual("AM");
 		});
 
 		it("shouldn't parse out-of-bounds defaultDate", () => {
