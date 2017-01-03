@@ -28,6 +28,7 @@
   position: absolute;
   width: 293.75px;
   box-sizing: border-box;
+  transition: top cubic-bezier(0, 1, 0.5, 1) 100ms;
   box-shadow: 0 3px 13px rgba(0,0,0,0.08);
   z-index: 999;
 }
@@ -41,7 +42,7 @@
 .flatpickr-calendar.open {
   display: inline-block;
   z-index: 99999;
-  animation: flatpickrFadeInDown 0.5s cubic-bezier(0, 1, 0.5, 1);
+  animation: flatpickrFadeInDown 300ms cubic-bezier(0, 1, 0.5, 1);
 }
 .flatpickr-calendar.inline {
   display: block;

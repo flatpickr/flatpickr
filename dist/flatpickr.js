@@ -2,7 +2,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-/*! flatpickr v2.2.5, @license MIT */
+/*! flatpickr v2.2.6, @license MIT */
 function Flatpickr(element, config) {
 	var self = this;
 
@@ -190,6 +190,7 @@ function Flatpickr(element, config) {
 		}
 
 		if (self.config.enableTime) {
+			self.timeContainer.addEventListener("transitionend", positionCalendar);
 			self.timeContainer.addEventListener("wheel", function (e) {
 				return debounce(updateTime(e), 5);
 			});
@@ -835,7 +836,9 @@ function Flatpickr(element, config) {
 		self.l10n = _extends(Object.create(Flatpickr.l10ns.default), _typeof(self.config.locale) === "object" ? self.config.locale : self.config.locale !== "default" ? Flatpickr.l10ns[self.config.locale] || {} : {});
 	}
 
-	function positionCalendar() {
+	function positionCalendar(e) {
+		if (e && e.target !== self.timeContainer) return;
+
 		var calendarHeight = self.calendarContainer.offsetHeight,
 		    input = self.altInput || self.input,
 		    inputBounds = input.getBoundingClientRect(),
@@ -843,7 +846,7 @@ function Flatpickr(element, config) {
 
 		var top = void 0;
 
-		if (distanceFromBottom < calendarHeight) {
+		if (distanceFromBottom < calendarHeight + 60) {
 			top = window.pageYOffset - calendarHeight + inputBounds.top - 2;
 			self.calendarContainer.classList.remove("arrowTop");
 			self.calendarContainer.classList.add("arrowBottom");
@@ -1128,10 +1131,14 @@ function Flatpickr(element, config) {
 	function setupInputs() {
 		self.input = self.config.wrap ? self.element.querySelector("[data-input]") : self.element;
 
+		if (!self.input) return console.warn("Error: invalid input element specified", self.input);
+
+		self.input.type = "text";
 		self.input.classList.add("flatpickr-input");
+
 		if (self.config.altInput) {
 			// replicate self.element
-			self.altInput = createElement(self.input.nodeName, self.config.altInputClass);
+			self.altInput = createElement(self.input.nodeName, self.input.className);
 			self.altInput.placeholder = self.input.placeholder;
 			self.altInput.type = "text";
 
