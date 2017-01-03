@@ -1,4 +1,4 @@
-/*! flatpickr v2.2.6, @license MIT */
+/*! flatpickr v2.2.7, @license MIT */
 function Flatpickr(element, config) {
 	const self = this;
 
@@ -1305,6 +1305,9 @@ function Flatpickr(element, config) {
 
 		self.currentYear = initialDate.getFullYear();
 		self.currentMonth = initialDate.getMonth();
+
+		if (self.selectedDates.length)
+			self.latestSelectedDateObj = self.selectedDates[0];
 	}
 
 	function setupHelperFunctions() {
