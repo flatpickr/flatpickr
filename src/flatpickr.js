@@ -197,7 +197,9 @@ function Flatpickr(element, config) {
 			self.days.addEventListener("mouseover", onMouseOver);
 
 		document.addEventListener("keydown", onKeyDown);
-		window.addEventListener("resize", self.debouncedResize);
+
+		if (!self.config.inline && !self.config.static)
+			window.addEventListener("resize", self.debouncedResize);
 
 		if (window.ontouchstart)
 			document.addEventListener("touchstart", documentClick);
@@ -767,6 +769,7 @@ function Flatpickr(element, config) {
 		if (self.currentMonth < 0 || self.currentMonth > 11) {
 			self.currentYear += self.currentMonth % 11;
 			self.currentMonth = (self.currentMonth + 12) % 12;
+
 			triggerEvent("YearChange");
 		}
 
@@ -975,7 +978,7 @@ function Flatpickr(element, config) {
 
 		self.calendarContainer.classList.add("open");
 
-		if (!self.config.static && !self.config.inline)
+		if (!self.config.static && !self.config.inline && !self.calendarContainer.style.top)
 			positionCalendar();
 
 		self.isOpen = true;
