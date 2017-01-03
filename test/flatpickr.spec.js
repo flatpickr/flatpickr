@@ -1,4 +1,4 @@
-const Flatpickr = require("../dist/flatpickr.js");
+const Flatpickr = require("../src/flatpickr.js");
 Flatpickr.l10ns.ru = require("../dist/l10n/ru.js").ru;
 
 describe('flatpickr', () => {
@@ -34,14 +34,14 @@ describe('flatpickr', () => {
 		});
 
 		it("shouldn't parse out-of-bounds defaultDate", () => {
-			let fp = createInstance({
+			createInstance({
 				minDate: "2016-12-28T16:16:22.585Z",
 				defaultDate: "2016-12-27T16:16:22.585Z",
 			});
 
 			expect(fp.days.querySelector(".selected")).toEqual(null);
 
-			fp = createInstance({
+			createInstance({
 				defaultDate: '2016-12-27T16:16:22.585Z',
 				enableTime: true
 			});
@@ -283,8 +283,9 @@ describe('flatpickr', () => {
 		});
 
 		it("setDate (date)", () => {
-
-			createInstance();
+			createInstance({
+				enableTime: true
+			});
 			fp.setDate("2016-10-20 03:00");
 
 			expect(fp.selectedDates[0]).toBeDefined();
@@ -292,6 +293,13 @@ describe('flatpickr', () => {
 			expect(fp.selectedDates[0].getMonth()).toEqual(9);
 			expect(fp.selectedDates[0].getDate()).toEqual(20);
 			expect(fp.selectedDates[0].getHours()).toEqual(3);
+
+			expect(fp.currentYear).toEqual(2016);
+			expect(fp.currentMonth).toEqual(9);
+
+			expect(fp.hourElement.value).toEqual("03");
+			expect(fp.minuteElement.value).toEqual("00");
+			expect(fp.amPM.textContent).toEqual("AM");
 
 			fp.setDate("");
 			expect(fp.selectedDates[0]).not.toBeDefined();

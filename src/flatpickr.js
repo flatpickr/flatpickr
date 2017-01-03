@@ -1223,17 +1223,19 @@ function Flatpickr(element, config) {
 			d => d instanceof Date && isEnabled(d)
 		);
 
+		if (self.selectedDates.length > 0) {
+			self.dateIsPicked = true;
+			self.latestSelectedDateObj = self.selectedDates[0];
+		}
+
+		else
+			self.latestSelectedDateObj = null;
+
 		self.redraw();
 		jumpToDate();
 
 		setHoursFromDate();
 		updateValue();
-
-		if (self.selectedDates.length > 0)
-			self.dateIsPicked = true;
-
-		else
-			self.latestSelectedDateObj = null;
 
 		if (triggerChange === true)
 			triggerEvent("Change");
