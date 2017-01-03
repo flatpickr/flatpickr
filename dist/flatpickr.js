@@ -153,7 +153,8 @@ function Flatpickr(element, config) {
 		if (self.config.mode === "range" && self.days) self.days.addEventListener("mouseover", onMouseOver);
 
 		document.addEventListener("keydown", onKeyDown);
-		window.addEventListener("resize", self.debouncedResize);
+
+		if (!self.config.inline && !self.config.static) window.addEventListener("resize", self.debouncedResize);
 
 		if (window.ontouchstart) document.addEventListener("touchstart", documentClick);
 
@@ -615,6 +616,7 @@ function Flatpickr(element, config) {
 		if (self.currentMonth < 0 || self.currentMonth > 11) {
 			self.currentYear += self.currentMonth % 11;
 			self.currentMonth = (self.currentMonth + 12) % 12;
+
 			triggerEvent("YearChange");
 		} else if (newYear && (!self.currentYearElement.min || newYear >= self.currentYearElement.min) && (!self.currentYearElement.max || newYear <= self.currentYearElement.max)) {
 			self.currentYear = parseInt(newYear, 10) || self.currentYear;
@@ -758,7 +760,7 @@ function Flatpickr(element, config) {
 
 		self.calendarContainer.classList.add("open");
 
-		if (!self.config.static && !self.config.inline) positionCalendar();
+		if (!self.config.static && !self.config.inline && !self.calendarContainer.style.top) positionCalendar();
 
 		self.isOpen = true;
 
@@ -771,6 +773,30 @@ function Flatpickr(element, config) {
 		triggerEvent("Open");
 	}
 
+	function minMaxDateSetter(type) {
+		return function (date) {
+			var dateObj = self.config["_" + type + "Date"] = self.parseDate(date);
+			var inverseDateObj = self.config["_" + (type === "min" ? "max" : "min") + "Date"];
+
+			if (self.selectedDates) {
+				self.selectedDates = self.selectedDates.filter(isEnabled);
+				updateValue();
+			}
+
+			if (self.days) redraw();
+
+			if (!self.currentYearElement) return;
+
+			if (date && dateObj instanceof Date) {
+				self[type + "DateHasTime"] = dateObj.getHours() || dateObj.getMinutes() || dateObj.getSeconds();
+
+				self.currentYearElement[type] = dateObj.getFullYear();
+			} else self.currentYearElement.removeAttribute(type);
+
+			self.currentYearElement.disabled = inverseDateObj && dateObj && inverseDateObj.getFullYear() === dateObj.getFullYear();
+		};
+	}
+
 	function parseConfig() {
 		var boolOpts = ["utc", "wrap", "weekNumbers", "allowInput", "clickOpens", "time_24hr", "enableTime", "noCalendar", "altInput", "shorthandCurrentMonth", "inline", "static", "enableSeconds", "disableMobile"];
 		self.config = Object.create(Flatpickr.defaultConfig);
@@ -780,40 +806,14 @@ function Flatpickr(element, config) {
 			get: function get() {
 				return this._minDate;
 			},
-			set: function set(date) {
-				this._minDate = self.parseDate(date);
-
-				if (self.days) redraw();
-
-				if (!self.currentYearElement) return;
-
-				if (date && this._minDate instanceof Date) {
-					self.minDateHasTime = this._minDate.getHours() || this._minDate.getMinutes() || this._minDate.getSeconds();
-
-					self.currentYearElement.min = this._minDate.getFullYear();
-				} else self.currentYearElement.removeAttribute("min");
-
-				self.currentYearElement.disabled = this._maxDate && this._minDate && this._maxDate.getFullYear() === this._minDate.getFullYear();
-			}
+			set: minMaxDateSetter("min")
 		});
 
 		Object.defineProperty(self.config, "maxDate", {
 			get: function get() {
 				return this._maxDate;
 			},
-			set: function set(date) {
-				this._maxDate = self.parseDate(date);
-				if (self.days) redraw();
-
-				if (!self.currentYearElement) return;
-
-				if (date && this._maxDate instanceof Date) {
-					self.currentYearElement.max = this._maxDate.getFullYear();
-					self.maxDateHasTime = this._maxDate.getHours() || this._maxDate.getMinutes() || this._maxDate.getSeconds();
-				} else self.currentYearElement.removeAttribute("max");
-
-				self.currentYearElement.disabled = this._maxDate && this._minDate && this._maxDate.getFullYear() === this._minDate.getFullYear();
-			}
+			set: minMaxDateSetter("max")
 		});
 
 		_extends(self.config, userConfig);
@@ -940,13 +940,16 @@ function Flatpickr(element, config) {
 			return d instanceof Date && isEnabled(d);
 		});
 
+		if (self.selectedDates.length > 0) {
+			self.dateIsPicked = true;
+			self.latestSelectedDateObj = self.selectedDates[0];
+		} else self.latestSelectedDateObj = null;
+
 		self.redraw();
 		jumpToDate();
 
 		setHoursFromDate();
 		updateValue();
-
-		if (self.selectedDates.length > 0) self.dateIsPicked = true;else self.latestSelectedDateObj = null;
 
 		if (triggerChange === true) triggerEvent("Change");
 	}
