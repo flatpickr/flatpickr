@@ -1006,6 +1006,8 @@ function Flatpickr(element, config) {
 
 		self.currentYear = initialDate.getFullYear();
 		self.currentMonth = initialDate.getMonth();
+
+		if (self.selectedDates.length) self.latestSelectedDateObj = self.selectedDates[0];
 	}
 
 	function setupHelperFunctions() {
