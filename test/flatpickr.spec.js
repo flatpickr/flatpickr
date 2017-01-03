@@ -1,4 +1,4 @@
-const Flatpickr = require("../dist/flatpickr.js");
+const Flatpickr = require("../src/flatpickr.js");
 Flatpickr.l10ns.ru = require("../dist/l10n/ru.js").ru;
 
 describe('flatpickr', () => {
@@ -32,10 +32,22 @@ describe('flatpickr', () => {
 			expect(fp.currentYear).toEqual(2016);
 			expect(fp.currentMonth).toEqual(11);
 			expect(fp.days.querySelector(".selected").textContent).toEqual("27");
+		});
 
-			expect(fp.hourElement.value).toEqual("11");
+		it("should parse UTC defaultDate", () => {
+			createInstance({
+				defaultDate: "2016-12-27T16:16:22.585Z",
+				enableTime: true,
+				utc: true
+			});
+
+			expect(fp.currentYear).toEqual(2016);
+			expect(fp.currentMonth).toEqual(11);
+			expect(fp.days.querySelector(".selected").textContent).toEqual("27");
+
+			expect(fp.hourElement.value).toEqual("04");
 			expect(fp.minuteElement.value).toEqual("16");
-			expect(fp.amPM.textContent).toEqual("AM");
+			expect(fp.amPM.textContent).toEqual("PM");
 		});
 
 		it("shouldn't parse out-of-bounds defaultDate", () => {
