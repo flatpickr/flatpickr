@@ -68,6 +68,7 @@ $invertedBg = invert($calendarBackground)
     position absolute
     width $calendarWidth
     box-sizing border-box
+    transition top $bezier 100ms
 
     if $noCalendarBorder is defined
         box-shadow 0 3px 13px alpha(black, 0.08)
@@ -91,7 +92,7 @@ $invertedBg = invert($calendarBackground)
     &.open
         display inline-block
         z-index 99999
-        animation flatpickrFadeInDown 0.5s $bezier
+        animation flatpickrFadeInDown 300ms $bezier
 
     &.inline
         display block
