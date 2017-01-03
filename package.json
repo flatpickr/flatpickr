@@ -1,6 +1,6 @@
 {
   "name": "flatpickr",
-  "version": "2.2.7",
+  "version": "2.2.8",
   "description": "A lightweight, powerful javascript datetime picker",
   "scripts": {
     "build": "parallelshell \"npm run build-all-scripts\" \"npm run build-all-styles\"",
@@ -28,7 +28,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "autoprefixer": "^6.6.0",
+    "autoprefixer": "^6.6.1",
     "babel-cli": "^6.18.0",
     "babel-plugin-transform-object-assign": "^6.8.0",
     "babel-plugin-transform-remove-strict-mode": "0.0.2",
@@ -42,7 +42,7 @@
     "onchange": "^3.2.1",
     "parallelshell": "^2.0.0",
     "postcss-cli": "^2.6.0",
-    "rtlcss": "^2.1.1",
+    "rtlcss": "^2.1.2",
     "stylus": "^0.54.5",
     "uglify-js": "^2.7.5"
   },
