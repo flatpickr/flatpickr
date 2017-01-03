@@ -24,14 +24,14 @@ new Flatpickr(element, config);</code></pre></p></section></section><section id=
 });
 </code></pre><input class="flatpickr" type="text" placeholder="Select Date.." data-alt-input="true" data-enable-time="true" data-alt-format="F j, Y h:i K"></section><section id="example-minMaxDate"><h3>Limit the range of available dates with&nbsp;<code>minDate</code>and&nbsp;<code>maxDate</code></h3><p>minDate and maxDate accept Date objects, date strings, timestamps, and the shortcut&nbsp;<code>"today"</code></p><pre><code class="js">flatpickr(".flatpickr", {
 	minDate: new Date(), // "today" / "2016-12-20" / 1477673788975
-	maxDate: "2016-12-20",
+	maxDate: "2017-12-20",
 	enableTime: true,
 
 	// create an extra input solely for display purposes
 	altInput: true,
 	altFormat: "F j, Y h:i K"
 });
-</code></pre><input class="flatpickr" type="text" placeholder="Select Date.." data-alt-input="true" data-enable-time="true" data-alt-format="F j, Y h:i K" data-min-date="today" data-max-date="2016-12-20"></section><section id="example-preload"><h3>Preloading Dates</h3><p>Flatpickr can work with existing date strings, or date objects.</p><p>Input values get parsed automatically.</p><p><pre><code>&lt;input type="text" value="2016-10-20"&gt;
+</code></pre><input class="flatpickr" type="text" placeholder="Select Date.." data-alt-input="true" data-enable-time="true" data-alt-format="F j, Y h:i K" data-min-date="today" data-max-date="2017-12-20"></section><section id="example-preload"><h3>Preloading Dates</h3><p>Flatpickr can work with existing date strings, or date objects.</p><p>Input values get parsed automatically.</p><p><pre><code>&lt;input type="text" value="2016-10-20"&gt;
 </code></pre><input class="flatpickr" type="text" value="2016-10-20"></p><p>To preload a Date object, timestamp, or otherwise supply a date string, use the<code>defaultDate</code>&nbsp;option.<br><div class="light muted">Timestamps are recommended due to their lack of ambiguity in parsing.</div></p><p><pre><code class="js">flatpickr("#example-defaultDate", {
 	defaultDate: 1477697199863, // Date objects and date strings are also accepted
 	enableTime: true
