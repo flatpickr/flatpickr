@@ -1,4 +1,4 @@
-const Flatpickr = require("../src/flatpickr.js");
+const Flatpickr = require("../dist/flatpickr.js");
 Flatpickr.l10ns.ru = require("../dist/l10n/ru.js").ru;
 
 describe('flatpickr', () => {
