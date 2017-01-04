@@ -333,10 +333,7 @@
   line-height: 38px;
   margin: 0px 1.5px;
   display: inline-block;
-  display: inline-block\9;
   position: relative;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
   justify-content: center;
   text-align: center;
 }
