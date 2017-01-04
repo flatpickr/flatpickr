@@ -1312,6 +1312,25 @@ function Flatpickr(element, config) {
 
 		if (self.selectedDates.length)
 			self.latestSelectedDateObj = self.selectedDates[0];
+
+		self.minDateHasTime = self.config.minDate && (self.config.minDate.getHours()
+			|| self.config.minDate.getMinutes()
+			|| self.config.minDate.getSeconds());
+
+		self.maxDateHasTime = self.config.maxDate && (self.config.maxDate.getHours()
+			|| self.config.maxDate.getMinutes()
+			|| self.config.maxDate.getSeconds());
+
+		Object.defineProperty(self, "latestSelectedDateObj", {
+			get() {
+				return self._selectedDateObj
+					|| self.selectedDates[self.selectedDates.length - 1]
+					|| null;
+			},
+			set(date) {
+				self._selectedDateObj = date;
+			}
+		});
 	}
 
 	function setupHelperFunctions() {
