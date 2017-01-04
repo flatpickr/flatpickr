@@ -69,6 +69,7 @@ $invertedBg = invert($calendarBackground)
     width $calendarWidth
     box-sizing border-box
     transition top $bezier 100ms
+    z-index 99999999
 
     if $noCalendarBorder is defined
         box-shadow 0 3px 13px alpha(black, 0.08)
@@ -81,7 +82,6 @@ $invertedBg = invert($calendarBackground)
             0 -1px 0 $calendarBorderColor,
             0 3px 13px alpha(black, 0.08)
 
-    z-index 999
 
     &.open, &.inline
         opacity 1
@@ -91,7 +91,6 @@ $invertedBg = invert($calendarBackground)
 
     &.open
         display inline-block
-        z-index 99999
         animation flatpickrFadeInDown 300ms $bezier
 
     &.inline
@@ -174,7 +173,6 @@ $invertedBg = invert($calendarBackground)
     text-align center
     position relative
     user-select none
-    z-index 2
 
 .flatpickr-prev-month, .flatpickr-next-month
     text-decoration none
@@ -241,7 +239,6 @@ $invertedBg = invert($calendarBackground)
         height 50%
         line-height 50%
         opacity 0
-        z-index 9
         cursor pointer
         border 1px solid alpha($dayForeground, 0.05)
         box-sizing border-box
@@ -364,6 +361,7 @@ $invertedBg = invert($calendarBackground)
     flex-wrap wrap
 
     if $noCalendarBorder is defined
+        margin-top 1px
         border-right 1px solid $calendarBorderColor
         border-left 1px solid $calendarBorderColor
     else
@@ -478,7 +476,6 @@ span.flatpickr-weekday
 .flatpickr-weekwrapper
     display inline-block
     float left
-    z-index 2
 
     .flatpickr-weeks
         padding 0 12px
@@ -503,6 +500,7 @@ span.flatpickr-weekday
     display flex
     box-sizing border-box
     overflow: hidden;
+
     if $noCalendarBorder is defined
         background $calendarBackground
 
@@ -511,8 +509,6 @@ span.flatpickr-weekday
     display inline-block
     padding 0
     box-sizing border-box
-    z-index 2
-
 
 
 .flatpickr-time
@@ -546,7 +542,6 @@ span.flatpickr-weekday
         width 40%
         height $timeHeight
         float left
-        z-index 3
 
         span.arrowUp:after
             border-bottom-color $dayForeground
@@ -594,7 +589,6 @@ span.flatpickr-weekday
         color $dayForeground
         font-weight bold
         width 2%
-        z-index 3
         user-select none
 
     .flatpickr-am-pm
