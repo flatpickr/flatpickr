@@ -1,4 +1,4 @@
-/*! flatpickr v2.2.8, @license MIT */
+/*! flatpickr v2.2.9, @license MIT */
 function Flatpickr(element, config) {
 	const self = this;
 
@@ -89,11 +89,12 @@ function Flatpickr(element, config) {
 			updateValue();
 		}
 
-		else
+		else {
 			setTimeout(function(){
 				setHoursFromInputs();
 				updateValue();
 			}, 1000);
+		}
 	}
 
 	function setHoursFromInputs(){
@@ -666,7 +667,7 @@ function Flatpickr(element, config) {
 		triggerEvent("MonthChange");
 	}
 
-	function clear(triggerChangeEvent = true) {
+	function clear(triggerChangeEvent) {
 		self.input.value = "";
 
 		if (self.altInput)
@@ -1347,14 +1348,28 @@ function Flatpickr(element, config) {
 			duration: {
 				DAY: 86400000,
 			},
-			getDaysinMonth: (month = self.currentMonth, yr = self.currentYear) => {
+			getDaysinMonth (month, yr ) {
+				month = typeof month === "undefined"
+					? self.currentMonth
+					: month;
+
+				yr = typeof yr === "undefined"
+					? self.currentYear
+					: yr;
+
 				if (month === 1 && (((yr % 4 === 0) && (yr % 100 !== 0)) || (yr % 400 === 0)))
 					return 29;
+
 				return self.l10n.daysInMonth[month];
 			},
 
-			monthToStr: (monthNumber, short = self.config.shorthandCurrentMonth) =>
-				self.l10n.months[(`${short ? "short" : "long"}hand`)][monthNumber],
+			monthToStr (monthNumber, shorthand) {
+				shorthand = typeof shorthand === "undefined"
+					? self.config.shorthandCurrentMonth
+					: shorthand;
+
+				return self.l10n.months[(`${shorthand ? "short" : "long"}hand`)][monthNumber];
+			}
 		};
 	}
 
@@ -1896,15 +1911,15 @@ Flatpickr.l10ns = {
 };
 
 Flatpickr.l10ns.default = Object.create(Flatpickr.l10ns.en);
-
 Flatpickr.localize = l10n => Object.assign(Flatpickr.l10ns.default, l10n || {});
+Flatpickr.setDefaults = config => Object.assign(Flatpickr.defaultConfig, config || {});
 
 Flatpickr.prototype = {
 	pad (number) {
 		return `0${number}`.slice(-2);
 	},
 
-	parseDate(date, timeless = false) {
+	parseDate(date, timeless) {
 		if (!date)
 			return null;
 

@@ -2,7 +2,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-/*! flatpickr v2.2.8, @license MIT */
+/*! flatpickr v2.2.9, @license MIT */
 function Flatpickr(element, config) {
 	var self = this;
 
@@ -77,10 +77,12 @@ function Flatpickr(element, config) {
 		if (!self.minDateHasTime || e.type !== "input" || e.target.value.length >= 2) {
 			setHoursFromInputs();
 			updateValue();
-		} else setTimeout(function () {
-			setHoursFromInputs();
-			updateValue();
-		}, 1000);
+		} else {
+			setTimeout(function () {
+				setHoursFromInputs();
+				updateValue();
+			}, 1000);
+		}
 	}
 
 	function setHoursFromInputs() {
@@ -529,9 +531,7 @@ function Flatpickr(element, config) {
 		triggerEvent("MonthChange");
 	}
 
-	function clear() {
-		var triggerChangeEvent = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
-
+	function clear(triggerChangeEvent) {
 		self.input.value = "";
 
 		if (self.altInput) self.altInput.value = "";
@@ -1043,17 +1043,19 @@ function Flatpickr(element, config) {
 			duration: {
 				DAY: 86400000
 			},
-			getDaysinMonth: function getDaysinMonth() {
-				var month = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : self.currentMonth;
-				var yr = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : self.currentYear;
+			getDaysinMonth: function getDaysinMonth(month, yr) {
+				month = typeof month === "undefined" ? self.currentMonth : month;
+
+				yr = typeof yr === "undefined" ? self.currentYear : yr;
 
 				if (month === 1 && (yr % 4 === 0 && yr % 100 !== 0 || yr % 400 === 0)) return 29;
+
 				return self.l10n.daysInMonth[month];
 			},
+			monthToStr: function monthToStr(monthNumber, shorthand) {
+				shorthand = typeof shorthand === "undefined" ? self.config.shorthandCurrentMonth : shorthand;
 
-			monthToStr: function monthToStr(monthNumber) {
-				var short = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : self.config.shorthandCurrentMonth;
-				return self.l10n.months[(short ? "short" : "long") + "hand"][monthNumber];
+				return self.l10n.months[(shorthand ? "short" : "long") + "hand"][monthNumber];
 			}
 		};
 	}
@@ -1559,18 +1561,18 @@ Flatpickr.l10ns = {
 };
 
 Flatpickr.l10ns.default = Object.create(Flatpickr.l10ns.en);
-
 Flatpickr.localize = function (l10n) {
 	return _extends(Flatpickr.l10ns.default, l10n || {});
+};
+Flatpickr.setDefaults = function (config) {
+	return _extends(Flatpickr.defaultConfig, config || {});
 };
 
 Flatpickr.prototype = {
 	pad: function pad(number) {
 		return ("0" + number).slice(-2);
 	},
-	parseDate: function parseDate(date) {
-		var timeless = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-
+	parseDate: function parseDate(date, timeless) {
 		if (!date) return null;
 
 		var dateTimeRegex = /(\d+)/g,

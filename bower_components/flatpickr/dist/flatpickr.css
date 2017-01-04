@@ -344,10 +344,9 @@
   line-height: 38px;
   margin: 0px 1.5px;
   display: inline-block;
-  display: inline-block\9;
   position: relative;
-  -ms-flex-pack: center;
   -webkit-box-pack: center;
+      -ms-flex-pack: center;
           justify-content: center;
   text-align: center;
 }

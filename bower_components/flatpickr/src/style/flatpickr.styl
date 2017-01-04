@@ -316,7 +316,6 @@ $invertedBg = invert($calendarBackground)
         span.arrowDown:after
             border-top-color $monthForeground
 
-
     input.cur-year
         background transparent
         box-sizing border-box
@@ -384,12 +383,8 @@ $invertedBg = invert($calendarBackground)
     margin 0px $dayMargin
 
     display inline-block
-    display unquote('inline-block\9')
     position relative
-    -webkit-justify-content center
-    -ms-flex-pack center
     justify-content center
-
     text-align center
 
     &, &.prevMonthDay, &.nextMonthDay
