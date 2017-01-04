@@ -1058,6 +1058,12 @@ function Flatpickr(element, config) {
 			set: minMaxDateSetter("max")
 		});
 
+		let userConfig = Object.assign(
+			{},
+			self.instanceConfig,
+			JSON.parse(JSON.stringify(self.element.dataset || {}))
+		);
+
 		Object.assign(self.config, userConfig);
 
 		for (var i = 0; i < boolOpts.length; i++)
