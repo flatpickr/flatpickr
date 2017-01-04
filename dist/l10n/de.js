@@ -11,6 +11,10 @@ Flatpickr.l10ns.de.months = {
 	shorthand: ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
 	longhand: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember']
 };
+
+Flatpickr.l10ns.de.firstDayOfWeek = 1;
+Flatpickr.l10ns.de.weekAbbreviation = 'KW';
+
 if (typeof module !== "undefined") {
 	module.exports = Flatpickr.l10ns;
 }
