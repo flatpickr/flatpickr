@@ -1919,7 +1919,7 @@ Flatpickr.prototype = {
 		return `0${number}`.slice(-2);
 	},
 
-	parseDate(date, timeless = false) {
+	parseDate(date, timeless) {
 		if (!date)
 			return null;
 

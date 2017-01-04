@@ -1572,9 +1572,7 @@ Flatpickr.prototype = {
 	pad: function pad(number) {
 		return ("0" + number).slice(-2);
 	},
-	parseDate: function parseDate(date) {
-		var timeless = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-
+	parseDate: function parseDate(date, timeless) {
 		if (!date) return null;
 
 		var dateTimeRegex = /(\d+)/g,
