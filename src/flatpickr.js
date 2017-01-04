@@ -808,13 +808,20 @@ function Flatpickr(element, config) {
 		}
 	}
 
-	function isEnabled(date) {
-		if (
-			(self.config.minDate && compareDates(date, self.config.minDate) < 0) ||
-			(self.config.maxDate && compareDates(date, self.config.maxDate) > 0)
-		)
-			return false;
+	function isEnabled(date, timeless) {
+		const ltmin = compareDates(
+			date,
+			self.config.minDate,
+			typeof timeless !== "undefined" ? timeless : !self.minDateHasTime
+		) < 0;
+		const gtmax = compareDates(
+			date,
+			self.config.maxDate,
+			typeof timeless !== "undefined" ? timeless : !self.maxDateHasTime
+		) > 0;
 
+		if (ltmin || gtmax)
+			return false;
 
 		if (!self.config.enable.length && !self.config.disable.length)
 			return true;
@@ -1012,8 +1019,6 @@ function Flatpickr(element, config) {
 			if(self.days)
 				redraw();
 
-
-
 			if (!self.currentYearElement)
 				return;
 
@@ -1038,7 +1043,6 @@ function Flatpickr(element, config) {
 			"utc", "wrap", "weekNumbers", "allowInput", "clickOpens", "time_24hr", "enableTime", "noCalendar", "altInput", "shorthandCurrentMonth", "inline", "static", "enableSeconds", "disableMobile"
 		];
 		self.config = Object.create(Flatpickr.defaultConfig);
-		let userConfig = Object.assign({}, self.instanceConfig, self.element.dataset || {});
 
 		Object.defineProperty(self.config, "minDate", {
 			get: function() {
@@ -1296,8 +1300,10 @@ function Flatpickr(element, config) {
 			self.config.enable = parseDateRules(self.config.enable);
 
 		self.selectedDates = self.selectedDates.filter(
-			d => d instanceof Date && d.getTime() && isEnabled(d)
+			d => d instanceof Date && d.getTime() && isEnabled(d, false)
 		);
+
+		self.selectedDates.sort((a,b) => a.getTime() - b.getTime());
 
 		const initialDate = (self.selectedDates.length
 			? self.selectedDates[0]
@@ -1637,12 +1643,16 @@ function Flatpickr(element, config) {
 		};
 	}
 
-	function compareDates(date1, date2) {
+	function compareDates(date1, date2, timeless) {
 		if (!(date1 instanceof Date) || !(date2 instanceof Date))
 			return false;
 
-		return new Date(date1.getTime()).setHours(0,0,0,0)
-			- new Date(date2.getTime()).setHours(0,0,0,0);
+		if (timeless !== false) {
+			return new Date(date1.getTime()).setHours(0,0,0,0)
+				- new Date(date2.getTime()).setHours(0,0,0,0);
+		}
+
+		return date1.getTime() - date2.getTime();
 	}
 
 	function timeWrapper(e) {
