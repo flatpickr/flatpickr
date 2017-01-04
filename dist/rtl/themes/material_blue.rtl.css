@@ -29,8 +29,8 @@
   width: 293.75px;
   box-sizing: border-box;
   transition: top cubic-bezier(0, 1, 0.5, 1) 100ms;
+  z-index: 99999999;
   box-shadow: 0 3px 13px rgba(0,0,0,0.08);
-  z-index: 999;
 }
 .flatpickr-calendar.open,
 .flatpickr-calendar.inline {
@@ -41,7 +41,6 @@
 }
 .flatpickr-calendar.open {
   display: inline-block;
-  z-index: 99999;
   animation: flatpickrFadeInDown 300ms cubic-bezier(0, 1, 0.5, 1);
 }
 .flatpickr-calendar.inline {
@@ -118,7 +117,6 @@
   text-align: center;
   position: relative;
   user-select: none;
-  z-index: 2;
 }
 .flatpickr-prev-month,
 .flatpickr-next-month {
@@ -201,7 +199,6 @@
   height: 50%;
   line-height: 50%;
   opacity: 0;
-  z-index: 9;
   cursor: pointer;
   border: 1px solid rgba(72,72,72,0.05);
   box-sizing: border-box;
@@ -319,6 +316,7 @@
   display: inline-block;
   display: flex;
   flex-wrap: wrap;
+  margin-top: 1px;
   border-left: 1px solid #e6e6e6;
   border-right: 1px solid #e6e6e6;
 }
@@ -441,7 +439,6 @@ span.flatpickr-weekday {
 .flatpickr-weekwrapper {
   display: inline-block;
   float: right;
-  z-index: 2;
 }
 .flatpickr-weekwrapper .flatpickr-weeks {
   padding: 0 12px;
@@ -470,7 +467,6 @@ span.flatpickr-weekday {
   display: inline-block;
   padding: 0;
   box-sizing: border-box;
-  z-index: 2;
 }
 .flatpickr-time {
   text-align: center;
@@ -497,7 +493,6 @@ span.flatpickr-weekday {
   width: 40%;
   height: 40px;
   float: right;
-  z-index: 3;
 }
 .flatpickr-time .numInputWrapper span.arrowUp:after {
   border-bottom-color: #484848;
@@ -547,7 +542,6 @@ span.flatpickr-weekday {
   color: #484848;
   font-weight: bold;
   width: 2%;
-  z-index: 3;
   user-select: none;
 }
 .flatpickr-time .flatpickr-am-pm {
