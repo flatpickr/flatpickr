@@ -89,11 +89,12 @@ function Flatpickr(element, config) {
 			updateValue();
 		}
 
-		else
+		else {
 			setTimeout(function(){
 				setHoursFromInputs();
 				updateValue();
 			}, 1000);
+		}
 	}
 
 	function setHoursFromInputs(){
@@ -1896,8 +1897,8 @@ Flatpickr.l10ns = {
 };
 
 Flatpickr.l10ns.default = Object.create(Flatpickr.l10ns.en);
-
 Flatpickr.localize = l10n => Object.assign(Flatpickr.l10ns.default, l10n || {});
+Flatpickr.setDefaults = config => Object.assign(Flatpickr.defaultConfig, config || {});
 
 Flatpickr.prototype = {
 	pad (number) {

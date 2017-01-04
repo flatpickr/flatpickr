@@ -77,10 +77,12 @@ function Flatpickr(element, config) {
 		if (!self.minDateHasTime || e.type !== "input" || e.target.value.length >= 2) {
 			setHoursFromInputs();
 			updateValue();
-		} else setTimeout(function () {
-			setHoursFromInputs();
-			updateValue();
-		}, 1000);
+		} else {
+			setTimeout(function () {
+				setHoursFromInputs();
+				updateValue();
+			}, 1000);
+		}
 	}
 
 	function setHoursFromInputs() {
@@ -1559,9 +1561,11 @@ Flatpickr.l10ns = {
 };
 
 Flatpickr.l10ns.default = Object.create(Flatpickr.l10ns.en);
-
 Flatpickr.localize = function (l10n) {
 	return _extends(Flatpickr.l10ns.default, l10n || {});
+};
+Flatpickr.setDefaults = function (config) {
+	return _extends(Flatpickr.defaultConfig, config || {});
 };
 
 Flatpickr.prototype = {
