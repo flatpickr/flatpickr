@@ -2,7 +2,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-/*! flatpickr v2.2.9, @license MIT */
+/*! flatpickr v2.3.0, @license MIT */
 function Flatpickr(element, config) {
 	var self = this;
 
@@ -147,8 +147,8 @@ function Flatpickr(element, config) {
 			});
 		}
 
-		if ("createEvent" in document) {
-			self.changeEvent = document.createEvent("HTMLEvents");
+		if ("createEvent" in window.document) {
+			self.changeEvent = window.document.createEvent("HTMLEvents");
 			self.changeEvent.initEvent("change", false, true);
 		}
 
@@ -162,14 +162,14 @@ function Flatpickr(element, config) {
 
 		if (self.config.mode === "range" && self.days) self.days.addEventListener("mouseover", onMouseOver);
 
-		document.addEventListener("keydown", onKeyDown);
+		window.document.addEventListener("keydown", onKeyDown);
 
 		if (!self.config.inline && !self.config.static) window.addEventListener("resize", self.debouncedResize);
 
-		if (window.ontouchstart) document.addEventListener("touchstart", documentClick);
+		if (window.ontouchstart) window.document.addEventListener("touchstart", documentClick);
 
-		document.addEventListener("click", documentClick);
-		document.addEventListener("blur", documentClick);
+		window.document.addEventListener("click", documentClick);
+		window.document.addEventListener("blur", documentClick);
 
 		if (self.config.clickOpens) (self.altInput || self.input).addEventListener("focus", open);
 
@@ -248,7 +248,7 @@ function Flatpickr(element, config) {
 		try {
 			input.dispatchEvent(new Event("increment", { "bubbles": true }));
 		} catch (e) {
-			var ev = document.createEvent("CustomEvent");
+			var ev = window.document.createEvent("CustomEvent");
 			ev.initCustomEvent("increment", true, true, {});
 			input.dispatchEvent(ev);
 		}
@@ -275,7 +275,7 @@ function Flatpickr(element, config) {
 	}
 
 	function build() {
-		var fragment = document.createDocumentFragment();
+		var fragment = window.document.createDocumentFragment();
 		self.calendarContainer = createElement("div", "flatpickr-calendar");
 		self.numInputType = navigator.userAgent.indexOf("MSIE 9.0") > 0 ? "text" : "number";
 
@@ -305,7 +305,7 @@ function Flatpickr(element, config) {
 			if (self.config.appendTo && self.config.appendTo.nodeType) self.config.appendTo.appendChild(self.calendarContainer);else {
 				self.element.parentNode.insertBefore(self.calendarContainer, (self.altInput || self.input).nextSibling);
 			}
-		} else document.body.appendChild(self.calendarContainer);
+		} else window.document.body.appendChild(self.calendarContainer);
 	}
 
 	function createDay(className, date, dayNumber) {
@@ -357,7 +357,7 @@ function Flatpickr(element, config) {
 		self.prevMonthDays = self.utils.getDaysinMonth((self.currentMonth - 1 + 12) % 12);
 
 		var daysInMonth = self.utils.getDaysinMonth(),
-		    days = document.createDocumentFragment();
+		    days = window.document.createDocumentFragment();
 
 		var dayNumber = self.prevMonthDays + 1 - self.firstOfMonth;
 
@@ -391,7 +391,7 @@ function Flatpickr(element, config) {
 	}
 
 	function buildMonthNav() {
-		var monthNavFragment = document.createDocumentFragment();
+		var monthNavFragment = window.document.createDocumentFragment();
 		self.monthNav = createElement("div", "flatpickr-month");
 
 		self.prevMonthNav = createElement("span", "flatpickr-prev-month");
@@ -564,12 +564,12 @@ function Flatpickr(element, config) {
 		instance = instance || self;
 		instance.clear(false);
 
-		document.removeEventListener("keydown", onKeyDown);
+		window.document.removeEventListener("keydown", onKeyDown);
 		window.removeEventListener("resize", instance.debouncedResize);
 
-		document.removeEventListener("click", documentClick);
-		document.removeEventListener("touchstart", documentClick);
-		document.removeEventListener("blur", documentClick);
+		window.document.removeEventListener("click", documentClick);
+		window.document.removeEventListener("touchstart", documentClick);
+		window.document.removeEventListener("blur", documentClick);
 
 		if (instance.timeContainer) instance.timeContainer.removeEventListener("transitionend", positionCalendar);
 
@@ -598,7 +598,7 @@ function Flatpickr(element, config) {
 	}
 
 	function documentClick(e) {
-		var isInput = self.element.contains(e.target) || e.target === self.input || e.target === self.altInput;
+		var isInput = self.element.contains(e.target) || e.target === self.input || e.target === self.altInput || ~e.path.indexOf(self.input) || ~e.path.indexOf(self.altInput);
 
 		if (self.isOpen && !self.config.inline && !isCalendarElem(e.target) && !isInput) {
 			e.preventDefault();
@@ -871,9 +871,9 @@ function Flatpickr(element, config) {
 			self.calendarContainer.style.top = top + "px";
 
 			var left = window.pageXOffset + inputBounds.left;
-			var right = document.body.offsetWidth - inputBounds.right;
+			var right = window.document.body.offsetWidth - inputBounds.right;
 
-			if (left + self.calendarContainer.offsetWidth <= document.body.offsetWidth) {
+			if (left + self.calendarContainer.offsetWidth <= window.document.body.offsetWidth) {
 				self.calendarContainer.style.left = left + "px";
 				self.calendarContainer.style.right = "auto";
 
@@ -1170,7 +1170,7 @@ function Flatpickr(element, config) {
 
 		if (self.config.altInput) {
 			// replicate self.element
-			self.altInput = createElement(self.input.nodeName, self.input.className);
+			self.altInput = createElement(self.input.nodeName, self.config.altInputClass);
 			self.altInput.placeholder = self.input.placeholder;
 			self.altInput.type = "text";
 
@@ -1237,7 +1237,7 @@ function Flatpickr(element, config) {
 				// many front-end frameworks bind to the input event
 				self.input.dispatchEvent(new Event("input", { "bubbles": true }));
 			} catch (e) {
-				if ("createEvent" in document) return self.input.dispatchEvent(self.changeEvent);
+				if ("createEvent" in window.document) return self.input.dispatchEvent(self.changeEvent);
 
 				self.input.fireEvent("onchange");
 			}
@@ -1309,7 +1309,7 @@ function Flatpickr(element, config) {
 	}
 
 	function createElement(tag, className, content) {
-		var e = document.createElement(tag);
+		var e = window.document.createElement(tag);
 		className = className || "";
 		content = content || "";
 
@@ -1642,7 +1642,7 @@ if (typeof HTMLElement !== "undefined") {
 }
 
 function flatpickr(selector, config) {
-	return _flatpickr(document.querySelectorAll(selector), config);
+	return _flatpickr(window.document.querySelectorAll(selector), config);
 }
 
 if (typeof jQuery !== "undefined") {
@@ -1665,7 +1665,7 @@ Date.prototype.fp_toUTC = function () {
 
 // IE9 classList polyfill
 /* istanbul ignore next */
-if (!("classList" in document.documentElement) && Object.defineProperty && typeof HTMLElement !== "undefined") {
+if (!("classList" in window.document.documentElement) && Object.defineProperty && typeof HTMLElement !== "undefined") {
 	Object.defineProperty(HTMLElement.prototype, "classList", {
 		get: function get() {
 			var self = this;
