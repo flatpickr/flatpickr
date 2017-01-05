@@ -746,8 +746,7 @@ function Flatpickr(element, config) {
 		const isInput = self.element.contains(e.target)
 			|| e.target === self.input
 			|| e.target === self.altInput
-			|| ~e.path.indexOf( self.input )
-			|| ~e.path.indexOf( self.altInput );
+			|| (e.path && (~e.path.indexOf(self.input) || ~e.path.indexOf(self.altInput)));
 
 		if (self.isOpen && !self.config.inline && !isCalendarElem(e.target) && !isInput) {
 			e.preventDefault();
