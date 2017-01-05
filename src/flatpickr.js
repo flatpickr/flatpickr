@@ -183,8 +183,8 @@ function Flatpickr(element, config) {
 			});
 		}
 
-		if ("createEvent" in document) {
-			self.changeEvent = document.createEvent("HTMLEvents");
+		if ("createEvent" in window.document) {
+			self.changeEvent = window.document.createEvent("HTMLEvents");
 			self.changeEvent.initEvent("change", false, true);
 		}
 
@@ -199,16 +199,16 @@ function Flatpickr(element, config) {
 		if (self.config.mode === "range" && self.days)
 			self.days.addEventListener("mouseover", onMouseOver);
 
-		document.addEventListener("keydown", onKeyDown);
+		window.document.addEventListener("keydown", onKeyDown);
 
 		if (!self.config.inline && !self.config.static)
 			window.addEventListener("resize", self.debouncedResize);
 
 		if (window.ontouchstart)
-			document.addEventListener("touchstart", documentClick);
+			window.document.addEventListener("touchstart", documentClick);
 
-		document.addEventListener("click", documentClick);
-		document.addEventListener("blur", documentClick);
+		window.document.addEventListener("click", documentClick);
+		window.document.addEventListener("blur", documentClick);
 
 		if (self.config.clickOpens)
 			(self.altInput || self.input).addEventListener("focus", open);
@@ -291,7 +291,7 @@ function Flatpickr(element, config) {
 		}
 
 		catch (e) {
-			const ev = document.createEvent("CustomEvent");
+			const ev = window.document.createEvent("CustomEvent");
 			ev.initCustomEvent("increment", true, true, {});
 			input.dispatchEvent(ev);
 		}
@@ -314,7 +314,7 @@ function Flatpickr(element, config) {
 	}
 
 	function build() {
-		const fragment = document.createDocumentFragment();
+		const fragment = window.document.createDocumentFragment();
 		self.calendarContainer = createElement("div", "flatpickr-calendar");
 		self.numInputType = navigator.userAgent.indexOf("MSIE 9.0") > 0 ? "text" : "number";
 
@@ -356,7 +356,7 @@ function Flatpickr(element, config) {
 
 		}
 		else
-			document.body.appendChild(self.calendarContainer);
+			window.document.body.appendChild(self.calendarContainer);
 	}
 
 	function createDay(className, date, dayNumber) {
@@ -447,7 +447,7 @@ function Flatpickr(element, config) {
 		self.prevMonthDays = self.utils.getDaysinMonth((self.currentMonth - 1 + 12) % 12);
 
 		const daysInMonth = self.utils.getDaysinMonth(),
-			days = document.createDocumentFragment();
+			days = window.document.createDocumentFragment();
 
 		let	dayNumber = self.prevMonthDays + 1 - self.firstOfMonth;
 
@@ -498,7 +498,7 @@ function Flatpickr(element, config) {
 	}
 
 	function buildMonthNav() {
-		const monthNavFragment = document.createDocumentFragment();
+		const monthNavFragment = window.document.createDocumentFragment();
 		self.monthNav = createElement("div", "flatpickr-month");
 
 		self.prevMonthNav = createElement("span", "flatpickr-prev-month");
@@ -702,12 +702,12 @@ function Flatpickr(element, config) {
 		instance = instance || self;
 		instance.clear(false);
 
-		document.removeEventListener("keydown", onKeyDown);
+		window.document.removeEventListener("keydown", onKeyDown);
 		window.removeEventListener("resize", instance.debouncedResize);
 
-		document.removeEventListener("click", documentClick);
-		document.removeEventListener("touchstart", documentClick);
-		document.removeEventListener("blur", documentClick);
+		window.document.removeEventListener("click", documentClick);
+		window.document.removeEventListener("touchstart", documentClick);
+		window.document.removeEventListener("blur", documentClick);
 
 		if (instance.timeContainer)
 			instance.timeContainer.removeEventListener("transitionend", positionCalendar);
@@ -1127,9 +1127,9 @@ function Flatpickr(element, config) {
 			self.calendarContainer.style.top = `${top}px`;
 
 			const left = window.pageXOffset + inputBounds.left;
-			const right = document.body.offsetWidth - inputBounds.right;
+			const right = window.document.body.offsetWidth - inputBounds.right;
 
-			if (left + self.calendarContainer.offsetWidth <= document.body.offsetWidth) {
+			if (left + self.calendarContainer.offsetWidth <= window.document.body.offsetWidth) {
 				self.calendarContainer.style.left = `${left}px`;
 				self.calendarContainer.style.right = "auto";
 
@@ -1540,7 +1540,7 @@ function Flatpickr(element, config) {
 			}
 
 			catch(e) {
-				if ("createEvent" in document)
+				if ("createEvent" in window.document)
 					return self.input.dispatchEvent(self.changeEvent);
 
 				self.input.fireEvent("onchange");
@@ -1635,7 +1635,7 @@ function Flatpickr(element, config) {
 	}
 
 	function createElement(tag, className, content) {
-		const e = document.createElement(tag);
+		const e = window.document.createElement(tag);
 		className = className || "";
 		content = content || "";
 
@@ -2013,7 +2013,7 @@ if (typeof HTMLElement !== "undefined") { // browser env
 }
 
 function flatpickr(selector, config) {
-	return _flatpickr(document.querySelectorAll(selector), config);
+	return _flatpickr(window.document.querySelectorAll(selector), config);
 }
 
 if (typeof jQuery !== "undefined") {
@@ -2048,7 +2048,7 @@ Date.prototype.fp_toUTC = function () {
 // IE9 classList polyfill
 /* istanbul ignore next */
 if (
-	!("classList" in document.documentElement) &&
+	!("classList" in window.document.documentElement) &&
 	Object.defineProperty && typeof HTMLElement !== "undefined"
 ) {
 	Object.defineProperty(HTMLElement.prototype, "classList", {
