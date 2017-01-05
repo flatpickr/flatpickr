@@ -1,4 +1,4 @@
-/*! flatpickr v2.2.9, @license MIT */
+/*! flatpickr v2.3.0, @license MIT */
 function Flatpickr(element, config) {
 	const self = this;
 
@@ -1450,7 +1450,7 @@ function Flatpickr(element, config) {
 			// replicate self.element
 			self.altInput = createElement(
 				self.input.nodeName,
-				self.input.className
+				self.config.altInputClass
 			);
 			self.altInput.placeholder = self.input.placeholder;
 			self.altInput.type = "text";
