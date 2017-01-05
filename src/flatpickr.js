@@ -1526,7 +1526,7 @@ function Flatpickr(element, config) {
 
 		if (self.config.minDate) {
 			const hidePrevMonthArrow = self.currentYear === self.config.minDate.getFullYear()
-				? (self.currentMonth + 11) % 12 < self.config.minDate.getMonth()
+				? self.currentMonth <= self.config.minDate.getMonth()
 				: self.currentYear < self.config.minDate.getFullYear();
 
 			self.prevMonthNav.style.display = hidePrevMonthArrow ? "none" : "block";
