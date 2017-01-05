@@ -1,28 +1,51 @@
+const Flatpickr = require("../src/flatpickr.js");
+Flatpickr.l10ns.ru = require("../dist/l10n/ru.js").ru;
+
+let elem, fp;
+
+function createInstance(config) {
+	fp = new Flatpickr(elem, config);
+	return fp;
+}
+
+function beforeEachTest(){
+	if (elem)
+		elem.parentNode.removeChild(elem);
+
+	if (fp)
+		fp.destroy();
+
+	elem = document.createElement("input");
+	document.body.appendChild(elem);
+}
+
+function incrementTime(type, times = 1) {
+	for(let i = times; i--;)
+		fp[`${type}Element`].parentNode.childNodes[1].click();
+}
+
+function decrementTime(type, times = 1) {
+	for(let i = times; i--;)
+		fp[`${type}Element`].parentNode.childNodes[2].click();
+}
+
+function simulate(eventType, onElement, options) {
+	onElement.dispatchEvent(
+		new Event(
+			eventType,
+			Object.assign({ "bubbles": true }, options||{})
+		)
+	);
+}
+
 describe('flatpickr', () => {
-
-	const container = document.querySelector('.container');
-	let elem, fp;
-
-	beforeEach(() => {
-		if (elem)
-			elem.parentNode.removeChild(elem);
-
-		if (fp)
-			fp.destroy();
-
-		elem = document.createElement("input");
-		document.body.appendChild(elem);
-	});
-
-	function createInstance(config) {
-		fp = new Flatpickr(elem, config);
-		return fp;
-	}
+	beforeEach(beforeEachTest);
 
 	describe("init", () => {
 		it("should parse defaultDate", () => {
 			createInstance({
 				defaultDate: "2016-12-27T16:16:22.585Z",
+				enableTime: true
 			});
 
 			expect(fp.currentYear).toEqual(2016);
@@ -30,21 +53,37 @@ describe('flatpickr', () => {
 			expect(fp.days.querySelector(".selected").textContent).toEqual("27");
 		});
 
+		it("should parse UTC defaultDate", () => {
+			createInstance({
+				defaultDate: "2016-12-27T16:16:22.585Z",
+				enableTime: true,
+				utc: true
+			});
+
+			expect(fp.currentYear).toEqual(2016);
+			expect(fp.currentMonth).toEqual(11);
+			expect(fp.days.querySelector(".selected").textContent).toEqual("27");
+
+			expect(fp.hourElement.value).toEqual("04");
+			expect(fp.minuteElement.value).toEqual("16");
+			expect(fp.amPM.textContent).toEqual("PM");
+		});
+
 		it("shouldn't parse out-of-bounds defaultDate", () => {
-			let fp = createInstance({
+			createInstance({
 				minDate: "2016-12-28T16:16:22.585Z",
 				defaultDate: "2016-12-27T16:16:22.585Z",
 			});
 
 			expect(fp.days.querySelector(".selected")).toEqual(null);
 
-			fp = createInstance({
+			createInstance({
 				defaultDate: '2016-12-27T16:16:22.585Z',
 				enableTime: true
 			});
 
-			fp.set('maxDate', '2016-12-25T16:16:22.585Z');
-			fp.set('minDate', '2016-12-24T16:16:22.585Z');
+			fp.set('maxDate', '2016-12-25');
+			fp.set('minDate', '2016-12-24');
 
 			expect(fp.currentMonth).toEqual(11);
 			expect(fp.days.querySelector(".selected")).toEqual(null);
@@ -54,11 +93,19 @@ describe('flatpickr', () => {
 			expect(enabledDays.length).toEqual(2);
 			expect(enabledDays[0].textContent).toEqual("24");
 			expect(enabledDays[1].textContent).toEqual("25");
+
+			createInstance({
+				defaultDate: '2016-12-27T16:16:22.585Z',
+				minDate: '2016-12-27T16:26:22.585Z',
+				enableTime: true
+			});
+
+			expect(fp.selectedDates.length).toBe(0);
+			expect(fp.days.querySelector(".selected")).toEqual(null);
 		});
 	});
 
 	describe("datetimestring parser", () => {
-
 		describe("date string parser", () => {
 			it('should parse timestamp', () => {
 
@@ -280,8 +327,9 @@ describe('flatpickr', () => {
 		});
 
 		it("setDate (date)", () => {
-
-			createInstance();
+			createInstance({
+				enableTime: true
+			});
 			fp.setDate("2016-10-20 03:00");
 
 			expect(fp.selectedDates[0]).toBeDefined();
@@ -289,6 +337,13 @@ describe('flatpickr', () => {
 			expect(fp.selectedDates[0].getMonth()).toEqual(9);
 			expect(fp.selectedDates[0].getDate()).toEqual(20);
 			expect(fp.selectedDates[0].getHours()).toEqual(3);
+
+			expect(fp.currentYear).toEqual(2016);
+			expect(fp.currentMonth).toEqual(9);
+
+			expect(fp.hourElement.value).toEqual("03");
+			expect(fp.minuteElement.value).toEqual("00");
+			expect(fp.amPM.textContent).toEqual("AM");
 
 			fp.setDate("");
 			expect(fp.selectedDates[0]).not.toBeDefined();
@@ -319,11 +374,15 @@ describe('flatpickr', () => {
 				expect(date.getFullYear()).toEqual(2016);
 				expect(date.getMonth()).toEqual(9);
 				expect(date.getDate()).toEqual(10);
+
+				expect(fp.hourElement.value).toEqual("03");
+				expect(fp.minuteElement.value).toEqual("30");
+				expect(fp.amPM.textContent).toEqual("AM");
 			};
 
 			createInstance({
 				enableTime: true,
-				defaultDate: "2016-10-01",
+				defaultDate: "2016-10-01 3:30",
 				onChange: (dates, datestr) => {
 					if (dates.length)
 						verifySelected(dates[0]);
@@ -334,6 +393,131 @@ describe('flatpickr', () => {
 			fp.days.childNodes[15].click(); // oct 10
 
 			verifySelected(fp.selectedDates[0]);
+		});
+
+		it("year input", () => {
+			createInstance();
+			fp.currentYearElement.value = "2000";
+			simulate("input", fp.currentYearElement);
+
+			expect(fp.currentYear).toEqual(2000);
+			incrementTime("currentYear");
+
+			expect(fp.currentYear).toEqual(2001);
+			expect(fp.currentYearElement.value).toEqual("2001");
+			expect(fp.days.childNodes[10].dateObj.getFullYear()).toEqual(2001);
+		});
+
+		it("has valid latestSelectedDateObj", () => {
+			createInstance({
+				defaultDate: "2016-10-01 3:30",
+				enableTime: true
+			});
+
+			expect(fp.latestSelectedDateObj).toBeDefined();
+			expect(fp.latestSelectedDateObj.getFullYear()).toEqual(2016);
+			expect(fp.latestSelectedDateObj.getMonth()).toEqual(9);
+			expect(fp.latestSelectedDateObj.getDate()).toEqual(1);
+			expect(fp.hourElement.value).toEqual("03");
+			expect(fp.minuteElement.value).toEqual("30");
+			expect(fp.amPM.textContent).toEqual("AM");
+
+			fp.setDate("2016-11-03 16:49");
+			expect(fp.latestSelectedDateObj).toBeDefined();
+			expect(fp.latestSelectedDateObj.getFullYear()).toEqual(2016);
+			expect(fp.latestSelectedDateObj.getMonth()).toEqual(10);
+			expect(fp.latestSelectedDateObj.getDate()).toEqual(3);
+
+			expect(fp.hourElement.value).toEqual("04");
+			expect(fp.minuteElement.value).toEqual("49");
+			expect(fp.amPM.textContent).toEqual("PM");
+
+			fp.setDate("");
+			expect(fp.latestSelectedDateObj).toEqual(null);
+		});
+
+		it("time input and increments", () => {
+			createInstance({
+				enableTime: true,
+				defaultDate: "2017-1-1 10:00"
+				//minDate: "2017-1-01 3:35",
+			});
+
+			expect(fp.hourElement.value).toEqual("10");
+			expect(fp.minuteElement.value).toEqual("00");
+			expect(fp.amPM.textContent).toEqual("AM");
+
+			incrementTime("hour");
+			expect(fp.hourElement.value).toEqual("11");
+
+			incrementTime("minute");
+			expect(fp.minuteElement.value).toEqual("05");
+
+			fp.amPM.click();
+			expect(fp.amPM.textContent).toEqual("PM");
+
+			simulate("wheel", fp.hourElement, {
+				wheelDelta: 1
+			});
+
+			expect(fp.hourElement.value).toEqual("12");
+
+			fp.hourElement.value = "9";
+			simulate("input", fp.hourElement);
+
+			expect(fp.hourElement.value).toEqual("09");
+		});
+
+		it("time input respects minDate", () => {
+			createInstance({
+				enableTime: true,
+				defaultDate: "2017-1-1 4:00",
+				minDate: "2017-1-01 3:35",
+			});
+
+			fp.hourElement.parentNode.childNodes[2].click();
+			expect(fp.hourElement.value).toEqual("03");
+			expect(fp.minuteElement.value).toEqual("35");
+
+			fp.hourElement.parentNode.childNodes[2].click();
+			expect(fp.hourElement.value).toEqual("03"); // unchanged
+
+			fp.minuteElement.parentNode.childNodes[2].click();
+			expect(fp.minuteElement.value).toEqual("35"); // can't go lower than min
+
+			fp.minuteElement.parentNode.childNodes[1].click(); // increment
+			expect(fp.minuteElement.value).toEqual("40");
+
+			fp.hourElement.value = "2";
+			simulate("input", fp.hourElement);
+
+			setTimeout(() => {
+				expect(fp.hourElement.value).toEqual("03");
+			}, 1001);
+
+			fp.minuteElement.value = "00";
+			simulate("input", fp.minuteElement);
+
+			setTimeout(() => {
+				expect(fp.minuteElement.value).toEqual("35");
+			}, 1001);
+		});
+
+		it("time input respects maxDate", () => {
+			createInstance({
+				enableTime: true,
+				defaultDate: "2017-1-1 3:00",
+				maxDate: "2017-1-01 3:35",
+			});
+
+			fp.hourElement.parentNode.childNodes[2].click();
+			expect(fp.hourElement.value).toEqual("02"); // ok
+
+			incrementTime("hour", 3);
+			expect(fp.hourElement.value).toEqual("03");
+
+			incrementTime("minute", 8);
+			expect(fp.minuteElement.value).toEqual("35"); // can't go higher than 35
 		});
 	});
 

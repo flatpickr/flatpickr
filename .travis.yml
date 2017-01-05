@@ -1,0 +1,12 @@
+language: node_js
+
+node_js:
+  - node
+
+after_success:
+  - yarn run coveralls
+
+notifications:
+  email: false
+
+cache: yarn

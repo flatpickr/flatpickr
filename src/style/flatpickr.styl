@@ -1,20 +1,31 @@
 $bezier = cubic-bezier(0, 1, 0.5, 1)
-$daySize = 34px
-$calendar_background ?= #ffffff
-$calendar_border_color ?= #e6e6e6
 
-$months_color ?= alpha(black, 0.8)
+$daySize = 38px
+$padding = ($daySize/16)
+$dayMargin = 1.5px
+$daysWidth = ($daySize*7 + $dayMargin*14 + $padding*2 + 2)
+$timeHeight = 40px
+$calendarWidth = ($daysWidth)
+
+// Colors
+
+$calendarBackground ?= #ffffff
+$calendarBorderColor ?= #e6e6e6
+
+$monthForeground ?= alpha(black, 0.9)
 $arrow_hover_color ?= #f64747
 
-$months_background ?= transparent
+$monthBackground ?= transparent
 
-$weekdays_background ?= transparent
+$weekdaysBackground ?= transparent
 
-$day_text_color ?= #393939
-$day_hover_background_color ?= #e6e6e6
+$dayForeground ?= #393939
+$dayHoverBackground ?= #e6e6e6
 
-$today_color ?= #959ea9
-$selected_day_background ?= #569FF7
+$todayColor ?= #959ea9
+$selectedDayBackground ?= #569FF7
+
+$invertedBg = invert($calendarBackground)
 
 
 @keyframes flatpickrFadeInDown
@@ -41,8 +52,8 @@ $selected_day_background ?= #569FF7
     padding 0
 
 .flatpickr-calendar
-    background $calendar_background
-    display none
+    background transparent
+    overflow hidden
     max-height 0
     opacity 0
     visibility hidden
@@ -50,36 +61,46 @@ $selected_day_background ?= #569FF7
     padding 0
     animation none
     direction ltr
-
-    unless $border-calendar-only is defined
-        border 1px solid $calendar_border_color
-
+    border 0
     font-size 14px
     line-height 24px
     border-radius 5px
     position absolute
-    width ($daySize*7 + 4px)
+    width $calendarWidth
     box-sizing border-box
+    transition top $bezier 100ms
+    z-index 99999999
+
+    if $noCalendarBorder is defined
+        box-shadow 0 3px 13px alpha(black, 0.08)
+
+    else
+        background $calendarBackground
+        box-shadow 1px 0 0 $calendarBorderColor,
+            -1px 0 0 $calendarBorderColor,
+            0 1px 0 $calendarBorderColor,
+            0 -1px 0 $calendarBorderColor,
+            0 3px 13px alpha(black, 0.08)
+
+
+    &.open, &.inline
+        opacity 1
+        visibility visible
+        overflow visible
+        max-height 640px
 
     &.open
         display inline-block
-        opacity 1
-        visibility visible
-        max-height 320px
-        z-index 99999
-
-        animation flatpickrFadeInDown 0.5s $bezier
+        animation flatpickrFadeInDown 300ms $bezier
 
     &.inline
-        opacity 1
-        visibility visible
-        max-height 320px
         display block
         position relative
 
     &.static
-        display none
+        //display none
         position relative
+        top 2px
 
         &.open
             display block
@@ -89,7 +110,11 @@ $selected_day_background ?= #569FF7
 
     &.dateIsPicked.hasTime
         .flatpickr-time
-            height 38px
+            height $timeHeight
+
+    &.noCalendar.hasTime
+        .flatpickr-time
+            height auto
 
     &:before, &:after
         position absolute
@@ -100,6 +125,11 @@ $selected_day_background ?= #569FF7
         height 0
         width 0
         left 22px
+
+    &.rightMost
+        &:before, &:after
+            left auto
+            right 22px
 
     &:before
         border-width 5px
@@ -113,38 +143,36 @@ $selected_day_background ?= #569FF7
         &:before, &:after
             bottom 100%
         &:before
-            border-bottom-color $calendar_border_color
+            border-bottom-color $calendarBorderColor
         &:after
-            if $border-calendar-only is defined
-                border-bottom-color $months_background
+            if $noCalendarBorder is defined
+                border-bottom-color $monthBackground
             else
-                border-bottom-color $calendar_background
+                border-bottom-color $calendarBackground
 
     &.arrowBottom
         &:before, &:after
             top 100%
         &:before
-            border-top-color $calendar_border_color
+            border-top-color $calendarBorderColor
         &:after
-            if $border-calendar-only is defined
-                border-top-color $months_background
+            if $noCalendarBorder is defined
+                border-top-color $monthBackground
             else
-                border-top-color $calendar_background
+                border-top-color $calendarBackground
 
 
 .flatpickr-month
-    if $border-calendar-only is defined
+    if $noCalendarBorder is defined
         border-radius 5px 5px 0 0
-
-    background $months_background
-    color $months_color
-    fill $months_color
+    background $monthBackground
+    color $monthForeground
+    fill $monthForeground
     height 28px
     line-height 24px
     text-align center
     position relative
     user-select none
-
 
 .flatpickr-prev-month, .flatpickr-next-month
     text-decoration none
@@ -161,7 +189,7 @@ $selected_day_background ?= #569FF7
         /*!
         /*rtl:begin:ignore*//*
         */
-        left 5px
+        left calc(3.57% - 1.5px)
         /*!
         /*rtl:end:ignore*//*
         */
@@ -171,10 +199,19 @@ $selected_day_background ?= #569FF7
         /*!
         /*rtl:begin:ignore*//*
         */
-        right 5px
+        right calc(3.57% - 1.5px)
         /*!
         /*rtl:end:ignore*//*
         */
+
+    &:hover
+        color $todayColor
+        svg
+            if $arrow_hover_color is defined
+                fill $arrow_hover_color
+
+            else
+                fill $todayColor
 
     svg
         width 14px
@@ -183,15 +220,6 @@ $selected_day_background ?= #569FF7
             transition fill 0.1s
             fill inherit
 
-        &:hover
-            if $arrow_hover_color is defined
-                fill $arrow_hover_color
-
-            else
-                fill $today_color
-
-    &:hover
-        color $today_color
 
 .numInputWrapper
     position relative
@@ -211,16 +239,15 @@ $selected_day_background ?= #569FF7
         height 50%
         line-height 50%
         opacity 0
-        z-index 9
         cursor pointer
-        border 1px solid alpha($day_text_color, 0.05)
+        border 1px solid alpha($dayForeground, 0.05)
         box-sizing border-box
 
         &:hover
-            background alpha(black, 0.1)
+            background: alpha($invertedBg, 0.1)
 
         &:active
-            background alpha(black, 0.2)
+            background: alpha($invertedBg, 0.2)
 
         &:after
             display block
@@ -235,7 +262,7 @@ $selected_day_background ?= #569FF7
             &:after
                 border-left 4px solid transparent
                 border-right 4px solid transparent
-                border-bottom 4px solid alpha($day_text_color, 0.6)
+                border-bottom 4px solid alpha($dayForeground, 0.6)
 
         &.arrowDown
             top 50%
@@ -243,16 +270,16 @@ $selected_day_background ?= #569FF7
             &:after
                 border-left 4px solid transparent
                 border-right 4px solid transparent
-                border-top 4px solid alpha($day_text_color, 0.6)
+                border-top 4px solid alpha($dayForeground, 0.6)
 
         svg
             width inherit
             height auto
             path
-                fill alpha($months_color, 0.5)
+                fill alpha($monthForeground, 0.5)
 
     &:hover
-        background rgba(0,0,0,0.05)
+        background: alpha($invertedBg, 0.05)
 
         span
             opacity 1
@@ -284,11 +311,10 @@ $selected_day_background ?= #569FF7
         display inline-block
 
         span.arrowUp:after
-            border-bottom-color $months_color
+            border-bottom-color $monthForeground
 
         span.arrowDown:after
-            border-top-color $months_color
-
+            border-top-color $monthForeground
 
     input.cur-year
         background transparent
@@ -314,68 +340,67 @@ $selected_day_background ?= #569FF7
 
         &[disabled], &[disabled]:hover
             font-size 100%
-            color alpha($months_color, 0.5)
+            color alpha($monthForeground, 0.5)
             background transparent
             pointer-events none
 
 .flatpickr-weekdays
-    background $weekdays_background
+    background $weekdaysBackground
     text-align center
     overflow hidden
 
 .flatpickr-days
-    padding 1px
+    padding 0 $padding
     outline 0
     text-align left
-    width ($daySize*7 + 2)
+    width ($daysWidth)
     box-sizing border-box
     display inline-block
     display flex
     flex-wrap wrap
 
-    if $border-calendar-only is defined
-        border 1px solid $calendar_border_color
-        border-top 0
-        border-bottom 0
-        border-radius 0 0 3px 3px
+    if $noCalendarBorder is defined
+        margin-top 1px
+        border-right 1px solid $calendarBorderColor
+        border-left 1px solid $calendarBorderColor
+    else
+        border-right 1px solid transparent
 
 .flatpickr-day
     background none
     border 1px solid transparent
     border-radius 150px
     box-sizing border-box
-    color $day_text_color
+    color $dayForeground
     cursor pointer
-    display inline-block
-    display unquote('inline-block\9')
-    position relative
-    -webkit-justify-content center
-    -ms-flex-pack center
-    justify-content center
 
-    font-weight 300
+    font-weight 400
     width 14.2857143%
     flex-basis 14.2857143%
     max-width $daySize
     height $daySize
     line-height $daySize
-    margin 1px 0 0 0
+    margin 0px $dayMargin
+
+    display inline-block
+    position relative
+    justify-content center
     text-align center
-    transition 50ms all ease-out
 
     &, &.prevMonthDay, &.nextMonthDay
         &.inRange, &.today.inRange,  &:hover, &:focus
             cursor pointer
             outline 0
-            background $day_hover_background_color
-            border-color $day_hover_background_color
+            background $dayHoverBackground
+            border-color $dayHoverBackground
+
 
     &.today
-        border-color $today_color
+        border-color $todayColor
 
         &:hover, &:focus
-            border-color $today_color
-            background $today_color
+            border-color $todayColor
+            background $todayColor
             if $today_fg_color is defined
                 color $today_fg_color
             else
@@ -383,14 +408,14 @@ $selected_day_background ?= #569FF7
 
     &.selected, &.startRange, &.endRange
         &, &:focus, &:hover, &.prevMonthDay, &.nextMonthDay
-            background $selected_day_background
+            background $selectedDayBackground
 
-            if $selected_day_color is defined
-                color $selected_day_color
+            if $selectedDayForeground is defined
+                color $selectedDayForeground
             else
                 color white
 
-            border-color $selected_day_background
+            border-color $selectedDayBackground
 
         &.startRange
             border-radius 50px 0 0 50px
@@ -400,8 +425,10 @@ $selected_day_background ?= #569FF7
 
     &.inRange
         border-radius 0
+        box-shadow: (-2.5*$dayMargin) 0 0 $dayHoverBackground, (2.5*$dayMargin) 0 0 $dayHoverBackground
 
-
+    &.disabled, &.disabled:hover
+        pointer-events none
 
     &.disabled, &.disabled:hover,
     &.prevMonthDay, &.nextMonthDay,
@@ -409,15 +436,13 @@ $selected_day_background ?= #569FF7
         if $disabled_day_color is defined
             color $disabled_day_color
         else
-            color alpha($day_text_color, 0.3)
+            color alpha($dayForeground, 0.3)
         background transparent
         if $disabled_border_color is defined
             border-color $disabled_border_color
         else
             border-color transparent
         cursor default
-
-
 
 span.flatpickr-weekday
     cursor default
@@ -428,16 +453,20 @@ span.flatpickr-weekday
     else
         color alpha(black, 0.54)
 
-    height 24px
+    height (24px + $daySize/12)
     line-height 24px
     margin 0
-    background $months_background
+    background $monthBackground
     text-align center
     display block
     float left
     width 14.28%
     font-weight bold
+    margin 0
+    padding-top ($daySize/12)
 
+.rangeMode .flatpickr-day
+    margin-top 1px
 
 .flatpickr-weekwrapper
     display inline-block
@@ -445,9 +474,9 @@ span.flatpickr-weekday
 
     .flatpickr-weeks
         padding 0 12px
-        if $border-calendar-only is defined
-            border-left 1px solid $calendar_border_color
-        border-right 1px solid $calendar_border_color
+        if $noCalendarBorder is defined
+            border-left 1px solid $calendarBorderColor
+        box-shadow 1px 0 0 $calendarBorderColor
 
     .flatpickr-weekday
         float none
@@ -457,36 +486,46 @@ span.flatpickr-weekday
         display block
         width 100%
         max-width none
-
+        margin 0
+        border 0
 
 
 .flatpickr-innerContainer
     display block
     display flex
-    if $border-calendar-only is defined
-        border-bottom 1px solid $calendar_border_color
+    box-sizing border-box
+    overflow: hidden;
 
-    &:after
-        display inline-block
-        content ""
-        clear both
+    if $noCalendarBorder is defined
+        background $calendarBackground
+
 
 .flatpickr-rContainer
     display inline-block
+    padding 0
+    box-sizing border-box
 
 
 .flatpickr-time
     text-align center
-    border-top 0
     outline 0
     display block
     height 0 // hide initially
-    line-height 36px
-    max-height 36px
+    line-height $timeHeight
+    max-height $timeHeight
     box-sizing border-box
     overflow hidden
     transition height 0.33s $bezier
     display flex
+
+
+    if $noCalendarBorder is defined
+        background $calendarBackground
+        border-radius 0 0 5px  5px
+        border 1px solid $calendarBorderColor
+
+    else
+        border-top 1px solid $calendarBorderColor
 
     &:after
         content ""
@@ -496,14 +535,14 @@ span.flatpickr-weekday
     .numInputWrapper
         flex 1
         width 40%
-        height 36px
+        height $timeHeight
         float left
 
         span.arrowUp:after
-            border-bottom-color $day_text_color
+            border-bottom-color $dayForeground
 
         span.arrowDown:after
-            border-top-color $day_text_color
+            border-top-color $dayForeground
 
     &.hasSeconds .numInputWrapper
         width 26%
@@ -522,7 +561,7 @@ span.flatpickr-weekday
         height inherit
         line-height inherit
         cursor pointer
-        color $day_text_color
+        color $dayForeground
         font-size 14px
         position relative
         box-sizing border-box
@@ -542,9 +581,10 @@ span.flatpickr-weekday
         display inline-block
         float left
         line-height inherit
-        color $day_text_color
+        color $dayForeground
         font-weight bold
         width 2%
+        user-select none
 
     .flatpickr-am-pm
         outline 0
@@ -554,7 +594,7 @@ span.flatpickr-weekday
         font-weight 400
 
         &:hover, &:focus
-            background lighten($day_hover_background_color, 4)
+            background lighten($dayHoverBackground, 4)
 
 
 .hasWeeks, .hasTime
@@ -563,24 +603,12 @@ span.flatpickr-weekday
         border-bottom-right-radius 0
         border-bottom-left-radius 0
 
-.hasWeeks .flatpickr-days
-    border-left 0
-
-.dateIsPicked .flatpickr-innerContainer + .flatpickr-time
-    if $border-calendar-only is defined
-        border 1px solid $calendar_border_color
-        border-top 0
-
-    else
-        border-top 1px solid $calendar_border_color
-
-
+if $noCalendarBorder
+    .hasWeeks .flatpickr-days
+        border-left 0
 
 
 @media all and (-ms-high-contrast none)
-    .flatpickr-days
-        width 256px
-
     .flatpickr-month
         padding 0
         svg
