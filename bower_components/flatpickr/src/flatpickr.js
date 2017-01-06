@@ -1,4 +1,4 @@
-/*! flatpickr v2.3.1-1, @license MIT */
+/*! flatpickr v2.3.2, @license MIT */
 function Flatpickr(element, config) {
 	const self = this;
 
@@ -17,7 +17,6 @@ function Flatpickr(element, config) {
 		setupLocale();
 		setupInputs();
 		setupDates();
-
 		setupHelperFunctions();
 
 		self.isOpen = self.config.inline;
@@ -39,6 +38,7 @@ function Flatpickr(element, config) {
 			self.config.mode === "single" &&
 			!self.config.disable.length &&
 			!self.config.enable.length &&
+			!self.config.weekNumbers &&
 			/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 		);
 
@@ -1456,7 +1456,7 @@ function Flatpickr(element, config) {
 			// replicate self.element
 			self.altInput = createElement(
 				self.input.nodeName,
-				self.config.altInputClass
+				self.input.className + " " + self.config.altInputClass
 			);
 			self.altInput.placeholder = self.input.placeholder;
 			self.altInput.type = "text";
@@ -1992,11 +1992,12 @@ Flatpickr.prototype = {
 };
 
 function _flatpickr(nodeList, config) {
+	const nodes = Array.prototype.slice.call(nodeList); // static list
 	let instances = [];
-	for (let i = 0; i < nodeList.length; i++) {
+	for (let i = 0; i < nodes.length; i++) {
 		try {
-			nodeList[i]._flatpickr = new Flatpickr(nodeList[i], config || {});
-			instances.push(nodeList[i]._flatpickr);
+			nodes[i]._flatpickr = new Flatpickr(nodes[i], config || {});
+			instances.push(nodes[i]._flatpickr);
 		}
 
 		catch (e) {
