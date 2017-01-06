@@ -771,7 +771,7 @@ function Flatpickr(element, config) {
 
 		self.calendarContainer.classList.add("open");
 
-		if (!self.config.static && !self.config.inline && !self.calendarContainer.style.top) positionCalendar();
+		if (!self.config.static && !self.config.inline) positionCalendar();
 
 		self.isOpen = true;
 
