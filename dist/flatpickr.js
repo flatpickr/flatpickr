@@ -2,7 +2,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-/*! flatpickr v2.3.0-2, @license MIT */
+/*! flatpickr v2.3.0-3, @license MIT */
 function Flatpickr(element, config) {
 	var self = this;
 
@@ -851,6 +851,7 @@ function Flatpickr(element, config) {
 		if (e && e.target !== self.timeContainer) return;
 
 		var calendarHeight = self.calendarContainer.offsetHeight,
+		    calendarWidth = self.calendarContainer.offsetWidth,
 		    input = self.altInput || self.input,
 		    inputBounds = input.getBoundingClientRect(),
 		    distanceFromBottom = window.innerHeight - inputBounds.bottom + input.offsetHeight;
@@ -873,7 +874,7 @@ function Flatpickr(element, config) {
 			var left = window.pageXOffset + inputBounds.left;
 			var right = window.document.body.offsetWidth - inputBounds.right;
 
-			if (left + self.calendarContainer.offsetWidth <= window.document.body.offsetWidth) {
+			if (left + calendarWidth <= window.document.body.offsetWidth) {
 				self.calendarContainer.style.left = left + "px";
 				self.calendarContainer.style.right = "auto";
 
