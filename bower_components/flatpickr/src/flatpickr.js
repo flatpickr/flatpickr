@@ -1,4 +1,4 @@
-/*! flatpickr v2.3.1, @license MIT */
+/*! flatpickr v2.3.1-1, @license MIT */
 function Flatpickr(element, config) {
 	const self = this;
 
@@ -990,7 +990,7 @@ function Flatpickr(element, config) {
 
 		self.calendarContainer.classList.add("open");
 
-		if (!self.config.static && !self.config.inline && !self.calendarContainer.style.top)
+		if (!self.config.static && !self.config.inline)
 			positionCalendar();
 
 		self.isOpen = true;
