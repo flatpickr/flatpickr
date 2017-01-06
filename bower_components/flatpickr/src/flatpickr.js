@@ -1,4 +1,4 @@
-/*! flatpickr v2.3.0-3, @license MIT */
+/*! flatpickr v2.3.1, @license MIT */
 function Flatpickr(element, config) {
 	const self = this;
 
@@ -183,7 +183,7 @@ function Flatpickr(element, config) {
 			});
 		}
 
-		if ("createEvent" in window.document) {
+		if (window.document.createEvent !== undefined) {
 			self.changeEvent = window.document.createEvent("HTMLEvents");
 			self.changeEvent.initEvent("change", false, true);
 		}
@@ -1316,7 +1316,11 @@ function Flatpickr(element, config) {
 
 		const initialDate = (self.selectedDates.length
 			? self.selectedDates[0]
-			: (self.config.minDate > self.now ? self.config.minDate : self.now)
+			: self.config.minDate && self.config.minDate.getTime() > self.now
+				? self.config.minDate
+				: self.config.maxDate && self.config.maxDate.getTime() < self.now
+					? self.config.maxDate
+					: self.now
 		);
 
 		self.currentYear = initialDate.getFullYear();
@@ -1541,7 +1545,7 @@ function Flatpickr(element, config) {
 			}
 
 			catch(e) {
-				if ("createEvent" in window.document)
+				if (window.document.createEvent !== undefined)
 					return self.input.dispatchEvent(self.changeEvent);
 
 				self.input.fireEvent("onchange");
@@ -1575,7 +1579,7 @@ function Flatpickr(element, config) {
 
 		if (self.config.minDate) {
 			const hidePrevMonthArrow = self.currentYear === self.config.minDate.getFullYear()
-				? (self.currentMonth + 11) % 12 < self.config.minDate.getMonth()
+				? self.currentMonth <= self.config.minDate.getMonth()
 				: self.currentYear < self.config.minDate.getFullYear();
 
 			self.prevMonthNav.style.display = hidePrevMonthArrow ? "none" : "block";
@@ -2049,7 +2053,7 @@ Date.prototype.fp_toUTC = function () {
 // IE9 classList polyfill
 /* istanbul ignore next */
 if (
-	!("classList" in window.document.documentElement) &&
+	!(window.document.documentElement.classList) &&
 	Object.defineProperty && typeof HTMLElement !== "undefined"
 ) {
 	Object.defineProperty(HTMLElement.prototype, "classList", {

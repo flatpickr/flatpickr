@@ -2,7 +2,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-/*! flatpickr v2.3.0-3, @license MIT */
+/*! flatpickr v2.3.1, @license MIT */
 function Flatpickr(element, config) {
 	var self = this;
 
@@ -147,7 +147,7 @@ function Flatpickr(element, config) {
 			});
 		}
 
-		if ("createEvent" in window.document) {
+		if (window.document.createEvent !== undefined) {
 			self.changeEvent = window.document.createEvent("HTMLEvents");
 			self.changeEvent.initEvent("change", false, true);
 		}
@@ -1018,7 +1018,7 @@ function Flatpickr(element, config) {
 			return a.getTime() - b.getTime();
 		});
 
-		var initialDate = self.selectedDates.length ? self.selectedDates[0] : self.config.minDate > self.now ? self.config.minDate : self.now;
+		var initialDate = self.selectedDates.length ? self.selectedDates[0] : self.config.minDate && self.config.minDate.getTime() > self.now ? self.config.minDate : self.config.maxDate && self.config.maxDate.getTime() < self.now ? self.config.maxDate : self.now;
 
 		self.currentYear = initialDate.getFullYear();
 		self.currentMonth = initialDate.getMonth();
@@ -1238,7 +1238,7 @@ function Flatpickr(element, config) {
 				// many front-end frameworks bind to the input event
 				self.input.dispatchEvent(new Event("input", { "bubbles": true }));
 			} catch (e) {
-				if ("createEvent" in window.document) return self.input.dispatchEvent(self.changeEvent);
+				if (window.document.createEvent !== undefined) return self.input.dispatchEvent(self.changeEvent);
 
 				self.input.fireEvent("onchange");
 			}
@@ -1265,7 +1265,7 @@ function Flatpickr(element, config) {
 		self.currentYearElement.value = self.currentYear;
 
 		if (self.config.minDate) {
-			var hidePrevMonthArrow = self.currentYear === self.config.minDate.getFullYear() ? (self.currentMonth + 11) % 12 < self.config.minDate.getMonth() : self.currentYear < self.config.minDate.getFullYear();
+			var hidePrevMonthArrow = self.currentYear === self.config.minDate.getFullYear() ? self.currentMonth <= self.config.minDate.getMonth() : self.currentYear < self.config.minDate.getFullYear();
 
 			self.prevMonthNav.style.display = hidePrevMonthArrow ? "none" : "block";
 		} else self.prevMonthNav.style.display = "block";
@@ -1666,7 +1666,7 @@ Date.prototype.fp_toUTC = function () {
 
 // IE9 classList polyfill
 /* istanbul ignore next */
-if (!("classList" in window.document.documentElement) && Object.defineProperty && typeof HTMLElement !== "undefined") {
+if (!window.document.documentElement.classList && Object.defineProperty && typeof HTMLElement !== "undefined") {
 	Object.defineProperty(HTMLElement.prototype, "classList", {
 		get: function get() {
 			var self = this;
