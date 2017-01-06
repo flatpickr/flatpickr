@@ -2,7 +2,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-/*! flatpickr v2.3.1-1, @license MIT */
+/*! flatpickr v2.3.2, @license MIT */
 function Flatpickr(element, config) {
 	var self = this;
 
@@ -20,7 +20,6 @@ function Flatpickr(element, config) {
 		setupLocale();
 		setupInputs();
 		setupDates();
-
 		setupHelperFunctions();
 
 		self.isOpen = self.config.inline;
@@ -36,7 +35,7 @@ function Flatpickr(element, config) {
 		self.setDate = setDate;
 		self.toggle = toggle;
 
-		self.isMobile = !self.config.disableMobile && !self.config.inline && self.config.mode === "single" && !self.config.disable.length && !self.config.enable.length && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+		self.isMobile = !self.config.disableMobile && !self.config.inline && self.config.mode === "single" && !self.config.disable.length && !self.config.enable.length && !self.config.weekNumbers && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
 		if (!self.isMobile) build();
 
@@ -1171,7 +1170,7 @@ function Flatpickr(element, config) {
 
 		if (self.config.altInput) {
 			// replicate self.element
-			self.altInput = createElement(self.input.nodeName, self.config.altInputClass);
+			self.altInput = createElement(self.input.nodeName, self.input.className + " " + self.config.altInputClass);
 			self.altInput.placeholder = self.input.placeholder;
 			self.altInput.type = "text";
 
@@ -1619,11 +1618,12 @@ Flatpickr.prototype = {
 };
 
 function _flatpickr(nodeList, config) {
+	var nodes = Array.prototype.slice.call(nodeList); // static list
 	var instances = [];
-	for (var i = 0; i < nodeList.length; i++) {
+	for (var i = 0; i < nodes.length; i++) {
 		try {
-			nodeList[i]._flatpickr = new Flatpickr(nodeList[i], config || {});
-			instances.push(nodeList[i]._flatpickr);
+			nodes[i]._flatpickr = new Flatpickr(nodes[i], config || {});
+			instances.push(nodes[i]._flatpickr);
 		} catch (e) {
 			console.warn(e, e.stack);
 		}
