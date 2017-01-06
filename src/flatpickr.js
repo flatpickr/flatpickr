@@ -1,4 +1,4 @@
-/*! flatpickr v2.2.4-1, @license MIT */
+/*! flatpickr v2.2.4-1, @license MIT *
 function Flatpickr(element, config) {
 	const self = this;
 
@@ -746,8 +746,7 @@ function Flatpickr(element, config) {
 		const isInput = self.element.contains(e.target)
 			|| e.target === self.input
 			|| e.target === self.altInput
-			|| ~e.path.indexOf( self.input )
-			|| ~e.path.indexOf( self.altInput );
+			|| (e.path && (~e.path.indexOf(self.input) || ~e.path.indexOf(self.altInput)));
 
 		if (self.isOpen && !self.config.inline && !isCalendarElem(e.target) && !isInput) {
 			e.preventDefault();
@@ -1106,6 +1105,7 @@ function Flatpickr(element, config) {
 			return;
 
 		const calendarHeight = self.calendarContainer.offsetHeight,
+			calendarWidth = self.calendarContainer.offsetWidth,
 			input = (self.altInput || self.input),
 			inputBounds = input.getBoundingClientRect(),
 			distanceFromBottom = window.innerHeight - inputBounds.bottom + input.offsetHeight;
@@ -1130,7 +1130,7 @@ function Flatpickr(element, config) {
 			const left = window.pageXOffset + inputBounds.left;
 			const right = window.document.body.offsetWidth - inputBounds.right;
 
-			if (left + self.calendarContainer.offsetWidth <= window.document.body.offsetWidth) {
+			if (left + calendarWidth <= window.document.body.offsetWidth) {
 				self.calendarContainer.style.left = `${left}px`;
 				self.calendarContainer.style.right = "auto";
 
@@ -1350,7 +1350,7 @@ function Flatpickr(element, config) {
 			duration: {
 				DAY: 86400000,
 			},
-			getDaysinMonth (month, yr ) {
+			getDaysinMonth (month, yr) {
 				month = typeof month === "undefined"
 					? self.currentMonth
 					: month;

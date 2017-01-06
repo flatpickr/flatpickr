@@ -598,7 +598,7 @@ function Flatpickr(element, config) {
 	}
 
 	function documentClick(e) {
-		var isInput = self.element.contains(e.target) || e.target === self.input || e.target === self.altInput || ~e.path.indexOf(self.input) || ~e.path.indexOf(self.altInput);
+		var isInput = self.element.contains(e.target) || e.target === self.input || e.target === self.altInput || e.path && (~e.path.indexOf(self.input) || ~e.path.indexOf(self.altInput));
 
 		if (self.isOpen && !self.config.inline && !isCalendarElem(e.target) && !isInput) {
 			e.preventDefault();
@@ -851,6 +851,7 @@ function Flatpickr(element, config) {
 		if (e && e.target !== self.timeContainer) return;
 
 		var calendarHeight = self.calendarContainer.offsetHeight,
+		    calendarWidth = self.calendarContainer.offsetWidth,
 		    input = self.altInput || self.input,
 		    inputBounds = input.getBoundingClientRect(),
 		    distanceFromBottom = window.innerHeight - inputBounds.bottom + input.offsetHeight;
@@ -873,7 +874,7 @@ function Flatpickr(element, config) {
 			var left = window.pageXOffset + inputBounds.left;
 			var right = window.document.body.offsetWidth - inputBounds.right;
 
-			if (left + self.calendarContainer.offsetWidth <= window.document.body.offsetWidth) {
+			if (left + calendarWidth <= window.document.body.offsetWidth) {
 				self.calendarContainer.style.left = left + "px";
 				self.calendarContainer.style.right = "auto";
 
