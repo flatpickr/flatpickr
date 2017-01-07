@@ -1,0 +1,6 @@
+{
+    "use": ["autoprefixer", "cssnano", "postcss-flexbugs-fixes"],
+    "cssnano": {
+    	"safe": true
+    }
+}

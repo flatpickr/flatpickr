@@ -3,6 +3,7 @@ var Flatpickr = Flatpickr || { l10ns: {} };
 Flatpickr.l10ns.sv = {};
 
 Flatpickr.l10ns.sv.firstDayOfWeek = 1;
+Flatpickr.l10ns.sv.weekAbbreviation = "v";
 
 Flatpickr.l10ns.sv.weekdays = {
 	shorthand: ['Sön', 'Mån', 'Tis', 'Ons', 'Tor', 'Fre', 'Lör'],
