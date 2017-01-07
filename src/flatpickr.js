@@ -552,7 +552,7 @@ function Flatpickr(element, config) {
 		self.minuteElement =  minuteInput.childNodes[0];
 
 		self.hourElement.tabIndex = self.minuteElement.tabIndex = 0;
-		self.hourElement.pattern = self.minuteElement.pattern = "\d*";
+		self.hourElement.pattern = self.minuteElement.pattern = "\\d*";
 
 		self.hourElement.value = self.pad(self.latestSelectedDateObj
 			? self.latestSelectedDateObj.getHours()
