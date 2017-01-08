@@ -49,8 +49,15 @@ span.flatpickr-day
 		&:hover
 			border-color $todayColor
 
+	&.startRange, &.endRange
+		border-color $selectedDayBackground
+
+
 	&.today, &.selected
 		z-index 2
+
+.rangeMode .flatpickr-day
+	margin-top -1px
 
 .flatpickr-weekwrapper .flatpickr-weeks
 	box-shadow none

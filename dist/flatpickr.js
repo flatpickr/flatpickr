@@ -901,7 +901,8 @@ function Flatpickr(element, config) {
 
 		if (!e.target.classList.contains("flatpickr-day") || e.target.classList.contains("disabled") || e.target.classList.contains("notAllowed")) return;
 
-		var selectedDate = self.latestSelectedDateObj = e.target.dateObj;
+		var selectedDate = self.latestSelectedDateObj = new Date(e.target.dateObj.getTime());
+
 		self.selectedDateElem = e.target;
 
 		if (self.config.mode === "single") self.selectedDates = [selectedDate];else if (self.config.mode === "multiple") {
