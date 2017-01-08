@@ -308,6 +308,7 @@
   padding: 1px 0 0 0;
 }
 .flatpickr-days {
+  padding: 0 2.375px;
   outline: 0;
   text-align: left;
   width: 293.75px;
