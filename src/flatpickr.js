@@ -1172,9 +1172,10 @@ function Flatpickr(element, config) {
 		)
 			return;
 
+		const selectedDate
+			= self.latestSelectedDateObj
+			= new Date(e.target.dateObj.getTime());
 
-
-		const selectedDate = self.latestSelectedDateObj = e.target.dateObj;
 		self.selectedDateElem = e.target;
 
 		if (self.config.mode === "single")
