@@ -51,6 +51,7 @@
 }
 .flatpickr-calendar.dateIsPicked.hasTime .flatpickr-time {
   height: 40px;
+  border-top: 1px solid #e6e6e6;
 }
 .flatpickr-calendar.noCalendar.hasTime .flatpickr-time {
   height: auto;
@@ -479,7 +480,6 @@ span.flatpickr-weekday {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  border-top: 1px solid #e6e6e6;
 }
 .flatpickr-time:after {
   content: "";
