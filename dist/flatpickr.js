@@ -579,6 +579,7 @@ function Flatpickr(element, config) {
 			if (instance.altInput.parentNode) instance.altInput.parentNode.removeChild(instance.altInput);
 		}
 
+		instance.input.type = instance.input._type;
 		instance.input.classList.remove("flatpickr-input");
 		instance.input.removeEventListener("focus", open);
 		instance.input.removeAttribute("readonly");
@@ -1166,6 +1167,7 @@ function Flatpickr(element, config) {
 
 		if (!self.input) return console.warn("Error: invalid input element specified", self.input);
 
+		self.input._type = self.input.type;
 		self.input.type = "text";
 		self.input.classList.add("flatpickr-input");
 
