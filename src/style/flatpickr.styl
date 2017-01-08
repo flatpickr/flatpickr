@@ -98,6 +98,14 @@ $invertedBg = invert($calendarBackground)
     &.dateIsPicked.hasTime
         .flatpickr-time
             height $timeHeight
+            border-top 1px solid $calendarBorderColor
+
+        if $noCalendarBorder is defined
+            .flatpickr-innerContainer
+                border-bottom 0
+
+            .flatpickr-time
+                border 1px solid $calendarBorderColor
 
     &.noCalendar.hasTime
         .flatpickr-time
@@ -483,6 +491,7 @@ span.flatpickr-weekday
 
     if $noCalendarBorder is defined
         background $calendarBackground
+        border-bottom 1px solid $calendarBorderColor
 
 
 .flatpickr-rContainer
@@ -507,10 +516,7 @@ span.flatpickr-weekday
     if $noCalendarBorder is defined
         background $calendarBackground
         border-radius 0 0 5px  5px
-        border 1px solid $calendarBorderColor
 
-    else
-        border-top 1px solid $calendarBorderColor
 
     &:after
         content ""
