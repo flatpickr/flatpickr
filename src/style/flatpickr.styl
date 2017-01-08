@@ -337,7 +337,7 @@ $invertedBg = invert($calendarBackground)
     overflow hidden
 
 .flatpickr-days
-    padding 0 $padding
+    padding 1px 0 0 0
     outline 0
     text-align left
     width ($daysWidth)
@@ -345,6 +345,7 @@ $invertedBg = invert($calendarBackground)
     display inline-block
     display flex
     flex-wrap wrap
+    justify-content space-around
 
     if $noCalendarBorder is defined
         border-right 1px solid $calendarBorderColor
@@ -364,7 +365,7 @@ $invertedBg = invert($calendarBackground)
     max-width $daySize
     height $daySize
     line-height $daySize
-    margin 0px $dayMargin
+    margin 0
 
     display inline-block
     position relative
