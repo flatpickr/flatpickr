@@ -1,4 +1,4 @@
-/*! flatpickr v2.3.2, @license MIT */
+/*! flatpickr v2.3.3, @license MIT */
 function Flatpickr(element, config) {
 	const self = this;
 
@@ -552,7 +552,7 @@ function Flatpickr(element, config) {
 		self.minuteElement =  minuteInput.childNodes[0];
 
 		self.hourElement.tabIndex = self.minuteElement.tabIndex = 0;
-		self.hourElement.pattern = self.minuteElement.pattern = "\d*";
+		self.hourElement.pattern = self.minuteElement.pattern = "\\d*";
 
 		self.hourElement.value = self.pad(self.latestSelectedDateObj
 			? self.latestSelectedDateObj.getHours()
@@ -724,6 +724,7 @@ function Flatpickr(element, config) {
 				instance.altInput.parentNode.removeChild(instance.altInput);
 		}
 
+		instance.input.type = instance.input._type;
 		instance.input.classList.remove("flatpickr-input");
 		instance.input.removeEventListener("focus", open);
 		instance.input.removeAttribute("readonly");
@@ -1172,9 +1173,10 @@ function Flatpickr(element, config) {
 		)
 			return;
 
+		const selectedDate
+			= self.latestSelectedDateObj
+			= new Date(e.target.dateObj.getTime());
 
-
-		const selectedDate = self.latestSelectedDateObj = e.target.dateObj;
 		self.selectedDateElem = e.target;
 
 		if (self.config.mode === "single")
@@ -1449,6 +1451,7 @@ function Flatpickr(element, config) {
 		if (!self.input)
 			return console.warn("Error: invalid input element specified", self.input);
 
+		self.input._type = self.input.type;
 		self.input.type = "text";
 		self.input.classList.add("flatpickr-input");
 

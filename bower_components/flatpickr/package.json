@@ -1,6 +1,6 @@
 {
   "name": "flatpickr",
-  "version": "2.3.2",
+  "version": "2.3.3",
   "description": "A lightweight, powerful javascript datetime picker",
   "scripts": {
     "build": "parallelshell \"npm run build-all-scripts\" \"npm run build-all-styles\"",
@@ -16,7 +16,7 @@
     "build-rtl": "rtlcss -d ./dist/themes ./dist/rtl/themes && rtlcss dist/flatpickr.min.css dist/rtl/flatpickr.min.css",
     "lint": "eslint src/flatpickr.js || true",
     "dev-script": "onchange \"src/flatpickr.js\" -- npm run build-script",
-    "dev-style": "onchange \"src/style/flatpickr.styl\" -- parallelshell \"npm run build-styles\" \"npm run build-themes\"",
+    "dev-style": "onchange \"src/style/**/*\" -- parallelshell \"npm run build-styles\" \"npm run build-themes\"",
     "dev-lint": "onchange \"src/flatpickr.js\" -- npm run lint",
     "dev": "parallelshell \"npm run dev-script\" \"npm run dev-style\" \"npm run dev-lint\"",
     "livereload": "livereload \"dist\"",
