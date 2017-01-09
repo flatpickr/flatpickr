@@ -1545,20 +1545,19 @@ function Flatpickr(element, config) {
 		}
 
 		if (event === "Change") {
-			try {
+			if (typeof Event === "function" && Event.constructor) {
 				self.input.dispatchEvent(new Event("change", { "bubbles": true }));
 
 				// many front-end frameworks bind to the input event
 				self.input.dispatchEvent(new Event("input", { "bubbles": true }));
 			}
 
-			catch(e) {
+			else {
 				if (window.document.createEvent !== undefined)
 					return self.input.dispatchEvent(self.changeEvent);
 
 				self.input.fireEvent("onchange");
 			}
-
 		}
 	}
 
