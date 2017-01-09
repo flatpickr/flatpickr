@@ -2,7 +2,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-/*! flatpickr v2.3.3-1, @license MIT */
+/*! flatpickr v2.3.4, @license MIT */
 function Flatpickr(element, config) {
 	var self = this;
 
@@ -952,12 +952,39 @@ function Flatpickr(element, config) {
 		jumpToDate();
 	}
 
+	function setSelectedDate(inputDate) {
+		if (Array.isArray(inputDate)) self.selectedDates = inputDate.map(self.parseDate);else if (inputDate) {
+			switch (self.config.mode) {
+				case "single":
+					self.selectedDates = [self.parseDate(inputDate)];
+					break;
+
+				case "multiple":
+					self.selectedDates = inputDate.split("; ").map(self.parseDate);
+					break;
+
+				case "range":
+					self.selectedDates = inputDate.split(self.l10n.rangeSeparator).map(self.parseDate);
+					break;
+
+				default:
+					break;
+			}
+		}
+
+		self.selectedDates = self.selectedDates.filter(function (d) {
+			return d instanceof Date && d.getTime() && isEnabled(d, false);
+		});
+
+		self.selectedDates.sort(function (a, b) {
+			return a.getTime() - b.getTime();
+		});
+	}
+
 	function setDate(date, triggerChange) {
 		if (!date) return self.clear();
 
-		self.selectedDates = (Array.isArray(date) ? date.map(self.parseDate) : [self.parseDate(date)]).filter(function (d) {
-			return d instanceof Date && isEnabled(d);
-		});
+		setSelectedDate(date);
 
 		if (self.selectedDates.length > 0) {
 			self.dateIsPicked = true;
@@ -989,38 +1016,12 @@ function Flatpickr(element, config) {
 
 		self.selectedDates = [];
 		self.now = new Date();
-		var inputDate = self.config.defaultDate || self.input.value;
 
-		if (Array.isArray(inputDate)) self.selectedDates = inputDate.map(self.parseDate);else if (inputDate) {
-			switch (self.config.mode) {
-				case "single":
-					self.selectedDates = [self.parseDate(inputDate)];
-					break;
-
-				case "multiple":
-					self.selectedDates = inputDate.split("; ").map(self.parseDate);
-					break;
-
-				case "range":
-					self.selectedDates = inputDate.split(self.l10n.rangeSeparator).map(self.parseDate);
-					break;
-
-				default:
-					break;
-			}
-		}
+		setSelectedDate(self.config.defaultDate || self.input.value);
 
 		if (self.config.disable.length) self.config.disable = parseDateRules(self.config.disable);
 
 		if (self.config.enable.length) self.config.enable = parseDateRules(self.config.enable);
-
-		self.selectedDates = self.selectedDates.filter(function (d) {
-			return d instanceof Date && d.getTime() && isEnabled(d, false);
-		});
-
-		self.selectedDates.sort(function (a, b) {
-			return a.getTime() - b.getTime();
-		});
 
 		var initialDate = self.selectedDates.length ? self.selectedDates[0] : self.config.minDate && self.config.minDate.getTime() > self.now ? self.config.minDate : self.config.maxDate && self.config.maxDate.getTime() < self.now ? self.config.maxDate : self.now;
 
@@ -1237,12 +1238,12 @@ function Flatpickr(element, config) {
 		}
 
 		if (event === "Change") {
-			try {
+			if (typeof Event === "function" && Event.constructor) {
 				self.input.dispatchEvent(new Event("change", { "bubbles": true }));
 
 				// many front-end frameworks bind to the input event
 				self.input.dispatchEvent(new Event("input", { "bubbles": true }));
-			} catch (e) {
+			} else {
 				if (window.document.createEvent !== undefined) return self.input.dispatchEvent(self.changeEvent);
 
 				self.input.fireEvent("onchange");
@@ -1637,6 +1638,7 @@ function _flatpickr(nodeList, config) {
 
 	return instances.length === 1 ? instances[0] : instances;
 }
+
 if (typeof HTMLElement !== "undefined") {
 	// browser env
 	HTMLCollection.prototype.flatpickr = NodeList.prototype.flatpickr = function (config) {
