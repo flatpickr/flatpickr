@@ -31,29 +31,41 @@ $selectedDayForeground = #fff
 span.flatpickr-day
 	border-radius 0 !important
 	border 1px solid $dayHoverBackground
-	margin -1px 0px 0 -1px
-	width calc(14.28571% + 1px)
-	flex-basis calc(14.28571% + 1px)
+	margin -1px 0 0 -1px
 	max-width none
-	font-weight 400
+	flex-basis: calc(14.28571% + 1px)
+	width: calc(14.28571% + 1px)
 
 	&:nth-child(7n)
 		border-right 0
-
 
 	&:nth-child(n+36)
 		border-bottom 0
 
 	&.today:not(.selected)
-		border-color transparent
-		border-bottom 1px solid $todayColor
+		border-color $dayHoverBackground
+		border-bottom-color $todayColor
+
+		&:hover
+			border-color $todayColor
+
+	&.startRange, &.endRange
+		border-color $selectedDayBackground
+
 
 	&.today, &.selected
 		z-index 2
 
+.rangeMode .flatpickr-day
+	margin-top -1px
+
+.flatpickr-weekwrapper .flatpickr-weeks
+	box-shadow none
+
 .flatpickr-weekwrapper span.flatpickr-day
 	border 0
-	margin-top -1px
+	margin -1px 0 0 -1px
+
 
 .hasWeeks .flatpickr-days
 	border-right 0

@@ -4,8 +4,6 @@ $daySize = 38px
 $padding = ($daySize/16)
 $dayMargin = 1.5px
 $daysWidth = ($daySize*7 + $dayMargin*14 + $padding*2 + 2)
-if $noCalendarBorder is defined
-    $daysWidth = ceil($daysWidth)
 $timeHeight = 40px
 $calendarWidth = ($daysWidth)
 
@@ -85,9 +83,9 @@ $invertedBg = invert($calendarBackground)
     &.inline
         display block
         position relative
+        top 2px
 
     &.static
-        //display none
         position relative
         top 2px
 
@@ -100,6 +98,14 @@ $invertedBg = invert($calendarBackground)
     &.dateIsPicked.hasTime
         .flatpickr-time
             height $timeHeight
+            border-top 1px solid $calendarBorderColor
+
+        if $noCalendarBorder is defined
+            .flatpickr-innerContainer
+                border-bottom 0
+
+            .flatpickr-time
+                border 1px solid $calendarBorderColor
 
     &.noCalendar.hasTime
         .flatpickr-time
@@ -338,6 +344,9 @@ $invertedBg = invert($calendarBackground)
     text-align center
     overflow hidden
 
+.flatpickr-days, .flatpickr-weeks
+    padding 1px 0 0 0
+
 .flatpickr-days
     padding 0 $padding
     outline 0
@@ -347,13 +356,11 @@ $invertedBg = invert($calendarBackground)
     display inline-block
     display flex
     flex-wrap wrap
+    justify-content space-around
 
     if $noCalendarBorder is defined
-        margin-top 1px
         border-right 1px solid $calendarBorderColor
         border-left 1px solid $calendarBorderColor
-    else
-        border-right 1px solid transparent
 
 .flatpickr-day
     background none
@@ -369,7 +376,7 @@ $invertedBg = invert($calendarBackground)
     max-width $daySize
     height $daySize
     line-height $daySize
-    margin 0px $dayMargin
+    margin 0
 
     display inline-block
     position relative
@@ -462,7 +469,7 @@ span.flatpickr-weekday
     float left
 
     .flatpickr-weeks
-        padding 0 12px
+        padding 1px 12px 0 12px
         if $noCalendarBorder is defined
             border-left 1px solid $calendarBorderColor
         box-shadow 1px 0 0 $calendarBorderColor
@@ -475,8 +482,6 @@ span.flatpickr-weekday
         display block
         width 100%
         max-width none
-        margin 0
-        border 0
 
 
 .flatpickr-innerContainer
@@ -487,6 +492,7 @@ span.flatpickr-weekday
 
     if $noCalendarBorder is defined
         background $calendarBackground
+        border-bottom 1px solid $calendarBorderColor
 
 
 .flatpickr-rContainer
@@ -511,10 +517,7 @@ span.flatpickr-weekday
     if $noCalendarBorder is defined
         background $calendarBackground
         border-radius 0 0 5px  5px
-        border 1px solid $calendarBorderColor
 
-    else
-        border-top 1px solid $calendarBorderColor
 
     &:after
         content ""

@@ -2,7 +2,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-/*! flatpickr v2.3.2, @license MIT */
+/*! flatpickr v2.3.3-1, @license MIT */
 function Flatpickr(element, config) {
 	var self = this;
 
@@ -155,9 +155,9 @@ function Flatpickr(element, config) {
 
 		self.debouncedResize = debounce(onResize, 50);
 		self.triggerChange = function () {
-			return triggerEvent("Change");
+			triggerEvent("Change");
 		};
-		self.debouncedChange = debounce(self.triggerChange, 1000);
+		self.debouncedChange = debounce(self.triggerChange, 300);
 
 		if (self.config.mode === "range" && self.days) self.days.addEventListener("mouseover", onMouseOver);
 
@@ -200,6 +200,7 @@ function Flatpickr(element, config) {
 			});
 			self.timeContainer.addEventListener("input", updateTime);
 			self.timeContainer.addEventListener("increment", updateTime);
+			self.timeContainer.addEventListener("increment", self.debouncedChange);
 
 			self.timeContainer.addEventListener("wheel", self.debouncedChange);
 			self.timeContainer.addEventListener("input", self.triggerChange);
@@ -441,7 +442,7 @@ function Flatpickr(element, config) {
 		self.minuteElement = minuteInput.childNodes[0];
 
 		self.hourElement.tabIndex = self.minuteElement.tabIndex = 0;
-		self.hourElement.pattern = self.minuteElement.pattern = "\d*";
+		self.hourElement.pattern = self.minuteElement.pattern = "\\d*";
 
 		self.hourElement.value = self.pad(self.latestSelectedDateObj ? self.latestSelectedDateObj.getHours() : self.config.defaultHour);
 
@@ -579,6 +580,7 @@ function Flatpickr(element, config) {
 			if (instance.altInput.parentNode) instance.altInput.parentNode.removeChild(instance.altInput);
 		}
 
+		instance.input.type = instance.input._type;
 		instance.input.classList.remove("flatpickr-input");
 		instance.input.removeEventListener("focus", open);
 		instance.input.removeAttribute("readonly");
@@ -903,7 +905,8 @@ function Flatpickr(element, config) {
 
 		if (!e.target.classList.contains("flatpickr-day") || e.target.classList.contains("disabled") || e.target.classList.contains("notAllowed")) return;
 
-		var selectedDate = self.latestSelectedDateObj = e.target.dateObj;
+		var selectedDate = self.latestSelectedDateObj = new Date(e.target.dateObj.getTime());
+
 		self.selectedDateElem = e.target;
 
 		if (self.config.mode === "single") self.selectedDates = [selectedDate];else if (self.config.mode === "multiple") {
@@ -1167,6 +1170,7 @@ function Flatpickr(element, config) {
 
 		if (!self.input) return console.warn("Error: invalid input element specified", self.input);
 
+		self.input._type = self.input.type;
 		self.input.type = "text";
 		self.input.classList.add("flatpickr-input");
 
