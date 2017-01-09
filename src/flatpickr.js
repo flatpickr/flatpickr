@@ -846,6 +846,10 @@ function Flatpickr(element, config) {
 
 
 			else if (d instanceof Date && d.getTime() === dateToCheck.getTime())
+				// disabled by date
+				return bool;
+
+			else if (typeof d === "string" && self.parseDate(d, true).getTime() === dateToCheck.getTime())
 				// disabled by date string
 				return bool;
 
