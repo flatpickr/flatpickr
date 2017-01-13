@@ -14,6 +14,7 @@ Flatpickr.l10ns.de.months = {
 
 Flatpickr.l10ns.de.firstDayOfWeek = 1;
 Flatpickr.l10ns.de.weekAbbreviation = 'KW';
+Flatpickr.l10ns.de.rangeSeparator = ' bis ';
 
 if (typeof module !== "undefined") {
 	module.exports = Flatpickr.l10ns;
