@@ -747,10 +747,21 @@ function Flatpickr(element, config) {
 	}
 
 	function documentClick(e) {
+		var path = [];
+		if (e.path) {
+			// In older browser path is a NodeList that should be converted to Array
+			// to call indexOf successfully.
+			if (Object.prototype.isPrototypeOf.call(NodeList, e.path)) {
+				for(var i = 0; i < e.path.length; ++i)
+					path.push(e.path[i]);
+			}
+			else
+				path = e.path;
+		}
 		const isInput = self.element.contains(e.target)
 			|| e.target === self.input
 			|| e.target === self.altInput
-			|| (e.path && (~e.path.indexOf(self.input) || ~e.path.indexOf(self.altInput)));
+			|| (e.path && (~path.indexOf(self.input) || ~path.indexOf(self.altInput)));
 
 		if (self.isOpen && !self.config.inline && !isCalendarElem(e.target) && !isInput) {
 			e.preventDefault();
