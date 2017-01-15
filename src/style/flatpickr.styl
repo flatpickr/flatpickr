@@ -86,8 +86,8 @@ $invertedBg = invert($calendarBackground)
         top 2px
 
     &.static
-        position relative
-        top 2px
+        position absolute
+        top calc(100% + 2px)
 
         &.open
             display block
@@ -156,6 +156,9 @@ $invertedBg = invert($calendarBackground)
             else
                 border-top-color $calendarBackground
 
+.flatpickr-wrapper
+    position relative
+    display inline-block
 
 .flatpickr-month
     if $noCalendarBorder is defined
