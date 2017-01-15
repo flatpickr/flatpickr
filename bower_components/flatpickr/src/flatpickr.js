@@ -351,10 +351,16 @@ function Flatpickr(element, config) {
 				self.config.appendTo.appendChild(self.calendarContainer);
 
 			else {
-				self.element.parentNode.insertBefore(
-					self.calendarContainer,
-					(self.altInput || self.input).nextSibling
-				);
+				if (self.config.inline)
+					return self.element.parentNode.insertBefore(
+						self.calendarContainer,
+						(self.altInput || self.input).nextSibling
+					);
+
+				const wrapper = createElement("div", "flatpickr-wrapper");
+				self.element.parentNode.insertBefore(wrapper, self.element);
+				wrapper.appendChild(self.element);
+				wrapper.appendChild(self.calendarContainer);
 			}
 
 		}
@@ -750,7 +756,11 @@ function Flatpickr(element, config) {
 		const isInput = self.element.contains(e.target)
 			|| e.target === self.input
 			|| e.target === self.altInput
-			|| (e.path && (~e.path.indexOf(self.input) || ~e.path.indexOf(self.altInput)));
+			|| (
+				// web components
+				e.path && e.path.indexOf &&
+				(~e.path.indexOf(self.input) || ~e.path.indexOf(self.altInput))
+			);
 
 		if (self.isOpen && !self.config.inline && !isCalendarElem(e.target) && !isInput) {
 			e.preventDefault();

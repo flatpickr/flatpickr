@@ -18,7 +18,7 @@
   box-sizing: border-box;
   -webkit-transition: top cubic-bezier(0, 1, 0.5, 1) 100ms;
   transition: top cubic-bezier(0, 1, 0.5, 1) 100ms;
-  z-index: 99999999;
+  z-index: 999;
   background: #fff;
   box-shadow: 1px 0 0 #e6e6e6, -1px 0 0 #e6e6e6, 0 1px 0 #e6e6e6, 0 -1px 0 #e6e6e6, 0 3px 13px rgba(0,0,0,0.08);
 }
@@ -40,8 +40,8 @@
   top: 2px;
 }
 .flatpickr-calendar.static {
-  position: relative;
-  top: 2px;
+  position: absolute;
+  top: calc(100% + 2px);
 }
 .flatpickr-calendar.static.open {
   display: block;
@@ -99,6 +99,10 @@
 }
 .flatpickr-calendar.arrowBottom:after {
   border-top-color: #fff;
+}
+.flatpickr-wrapper {
+  position: relative;
+  display: inline-block;
 }
 .flatpickr-month {
   background: transparent;

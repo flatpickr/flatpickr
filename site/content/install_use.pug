@@ -1,47 +1,37 @@
 section#getting-started
 	section
 		h2 Getting Started
-		.row
-			.col
-				pre
-					code.bash.
-						npm install flatpickr // npm
-						bower install flatpickr-calendar // bower
+		pre
+			code.
+				npm install flatpickr // npm
+				bower install flatpickr-calendar // bower
 
-			.col.text-right
-				a.btn(download, href='https://github.com/chmln/flatpickr/archive/master.zip', type='success')
-					span Download&nbsp;
-					i.icon-angle-double-down
-	section
-		h3#env-browser Flatpickr in browsers
-		p
-			pre
-				code.
-					&lt;link rel="stylesheet" href=".../flatpickr.min.css"&gt;
-					&lt;script src=".../flatpickr.min.js"&gt;&lt;/script&gt;
 
-		p The latest version of Flatpickr can also be loaded from a CDN
+		p#env-browser The latest version of Flatpickr can also be loaded from a CDN
 		p
 			pre
 				code.
 						&lt;link rel="stylesheet" href="https://unpkg.com/flatpickr/dist/flatpickr.min.css"&gt;
 						&lt;script src="https://unpkg.com/flatpickr"&gt;&lt;/script&gt;
 
-		p Then,
-			pre
-				code.
-					flatpickr(".selector", {}); // [Flatpickr, Flatpickr, ...]
-					document.getElementById("myID").flatpickr(config); // Flatpickr
-					let calendar = new Flatpickr(element, config); // Flatpickr
-
-					$(".selector").flatpickr({}); // jQuery
-
 	section
-		h3#env-bundle Flatpickr as a module
+		h3 Invocation
+			p
+				pre
+					code.
+						flatpickr(".selector", {}); // [Flatpickr, Flatpickr, ...]
+						document.getElementById("myID").flatpickr(config); // Flatpickr
+						let calendar = new Flatpickr(element, config); // Flatpickr
+
+						// jQuery
+						$(".selector").flatpickr({});
+
+
+		h3#env-bundle Using flatpickr as a module
 		p
 			pre
 				code.
 					const Flatpickr = require("flatpickr");
-					// ...
-					new Flatpickr(element, config);
+					new Flatpickr(element, config); // where element is an html node, not a selector
+
 

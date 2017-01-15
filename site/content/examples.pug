@@ -24,12 +24,19 @@ section#example-datetime
 
 section#example-altInput
 	h3 Display a human-readable date
+	p You can (and should) use&nbsp;
+		code altInput
+		|&nbsp;for displaying dates in a nice format.&nbsp;
+		br
+		|The original input will remain unaffected, and formatted as per&nbsp;
+		code dateFormat
+
+	p Select a date, then inspect the input below to get a glimpse of what's going on.
+
 	pre
 		code.js.
 			flatpickr(".flatpickr", {
 				enableTime: true,
-
-				// create an extra input solely for display purposes
 				altInput: true,
 				altFormat: "F j, Y h:i K"
 			});

@@ -2,10 +2,15 @@ section#options
 	h2 Options
 
 	p
-		strong Protip:
+		strong P.S.&nbsp;
 
-		u all
-		|  of the string/boolean config options can also be supplied using data attributes, e.g. data-min-date, data-default-date, data-date-format etc.
+		|string/boolean config options can also be supplied using data attributes, e.g. data-min-date, data-default-date, data-date-format etc.
+		br
+
+		strong P.P.S&nbsp;
+		span.dim this doesn't work in IE9 and IE10, unless you&nbsp;
+		a.dim(target="_blank", rel="nofollow", href="https://www.npmjs.com/package/element-dataset") polyfill
+		|.
 
 	table.options
 		thead
@@ -31,21 +36,33 @@ section#options
 				td String
 				td &quot;&quot;
 				td
-					| This class will be added to the input element created by the altInput option. Helpful if input elements are styled using classes. Bootstrap users will want to specify
-					code form-control
-					| here.
+					| This class will be added to the input element created by the altInput option.
+					|&nbsp;Note that&nbsp;
+					code altInput
+					|&nbsp;already inherits classes from the original input.
 			tr
 				td allowInput
 				td boolean
 				td false
 				td
 					| Allows the user to enter a date directly input the input field. By default, direct entry is disabled.
+
+			tr
+				td appendTo
+				td HTMLElement
+				td null
+				td
+					| Instead of&nbsp;
+					code body
+					|, appends the calendar to the specified node instead.
+
 			tr
 				td clickOpens
 				td boolean
 				td true
 				td
-					| Clicking on the input opens the date (time) picker. Disable this if you wish to open the calendar manually with
+					| Whether clicking on the input should open the picker.
+					| You could disable this if you wish to open the calendar manually with
 					code .open()
 			tr
 				td dateFormat
@@ -55,7 +72,7 @@ section#options
 					| A string of characters which are used to define how the date will be displayed in the input box. The supported characters are defined in the table below.
 			tr
 				td defaultDate
-				td String/Date
+				td string/Date
 				td null
 				td
 					| Set the initial selected date. Same as preloading a date string into an input&apos;s value attribute, but can also handle a Date object.
@@ -71,9 +88,11 @@ section#options
 				td Boolean
 				td false
 				td
-					| Flatpickr utilizes native datetime pickers unless certain options (e.g. disable) are used. Set&nbsp;
+					|Set&nbsp;
 					code disableMobile
-					|&nbsp;to false to always use the non-native picker
+					|&nbsp;to true to always use the non-native picker.
+					br
+					| By default, Flatpickr utilizes native datetime widgets unless certain options (e.g. disable) are used.
 
 			tr
 				td enable
@@ -109,13 +128,13 @@ section#options
 				td maxDate
 				td String/Date
 				td null
-				td The maximum date that a user can pick to.
+				td The maximum date that a user can pick to (inclusive).
 
 			tr
 				td minDate
 				td String/Date
 				td null
-				td The minimum date that a user can start picking from.
+				td The minimum date that a user can start picking from (inclusive).
 
 
 			tr
@@ -140,13 +159,17 @@ section#options
 				td string
 				td
 					code &gt;
-				td Code for the arrow icon, used to switch months.
+				td HTML for the arrow icon, used to switch months.
 
 			tr
 				td noCalendar
 				td boolean
 				td false
-				td Hides the calendar. For use along with enableTime.
+				td Hides the day selection in calendar.
+					br
+					|Use it along with&nbsp;
+					code enableTime
+					|&nbsp;to create a time picker.
 
 			tr
 				td onChange
@@ -188,7 +211,7 @@ section#options
 				td string
 				td
 					code &lt;
-				td Code for the left arrow icon.
+				td HTML for the left arrow icon.
 
 			tr
 				td shorthandCurrentMonth
