@@ -960,14 +960,18 @@ function Flatpickr(element, config) {
 
 			if (outOfRange) {
 				self.days.childNodes[i].classList.add("notAllowed");
-				self.days.childNodes[i].classList.remove("inRange", "startRange", "endRange");
+				["inRange", "startRange", "endRange"].forEach(c => {
+					self.days.childNodes[i].classList.remove(c)				
+				});
 				continue;
 			}
 
 			else if (containsDisabled && !outOfRange)
 				continue;
 
-			self.days.childNodes[i].classList.remove("startRange", "inRange", "endRange", "notAllowed");
+			["startRange", "inRange", "endRange", "notAllowed"].forEach(c => {
+				self.days.childNodes[i].classList.remove(c)
+			});
 
 			const minRangeDate = Math.max(self.minRangeDate.getTime(), rangeStartDate),
 				maxRangeDate = Math.min(self.maxRangeDate.getTime(), rangeEndDate);
