@@ -343,29 +343,31 @@ function Flatpickr(element, config) {
 
 		self.calendarContainer.appendChild(fragment);
 
+		const customAppend = self.config.appendTo && self.config.appendTo.nodeType;
+
 		if (self.config.inline || self.config.static) {
 			self.calendarContainer.classList.add(self.config.inline ? "inline" : "static");
 			positionCalendar();
 
-			if (self.config.appendTo && self.config.appendTo.nodeType)
-				self.config.appendTo.appendChild(self.calendarContainer);
+			if (self.config.inline && !customAppend) {
+				return self.element.parentNode.insertBefore(
+					self.calendarContainer,
+					(self.altInput || self.input).nextSibling
+				);
+			}
 
-			else {
-				if (self.config.inline)
-					return self.element.parentNode.insertBefore(
-						self.calendarContainer,
-						(self.altInput || self.input).nextSibling
-					);
-
+			if (self.config.static){
 				const wrapper = createElement("div", "flatpickr-wrapper");
 				self.element.parentNode.insertBefore(wrapper, self.element);
 				wrapper.appendChild(self.element);
 				wrapper.appendChild(self.calendarContainer);
+				return;
 			}
-
 		}
-		else
-			window.document.body.appendChild(self.calendarContainer);
+
+		(customAppend ? self.config.appendTo : window.document.body)
+			.appendChild(self.calendarContainer);
+
 	}
 
 	function createDay(className, date, dayNumber) {
