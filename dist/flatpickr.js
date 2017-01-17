@@ -44,8 +44,7 @@ function Flatpickr(element, config) {
 		if (!self.isMobile) {
 			Object.defineProperty(self, "dateIsPicked", {
 				set: function set(bool) {
-					if (bool) return self.calendarContainer.classList.add("dateIsPicked");
-					self.calendarContainer.classList.remove("dateIsPicked");
+					toggleClass(self.calendarContainer, "dateIsPicked", bool);
 				}
 			});
 		}
@@ -747,16 +746,20 @@ function Flatpickr(element, config) {
 			}
 		}
 
-		for (var timestamp = self.days.childNodes[0].dateObj.getTime(), i = 0; i < 42; i++, timestamp += self.utils.duration.DAY) {
+		var _loop = function _loop(timestamp, i) {
 			var outOfRange = timestamp < self.minRangeDate.getTime() || timestamp > self.maxRangeDate.getTime();
 
 			if (outOfRange) {
 				self.days.childNodes[i].classList.add("notAllowed");
-				self.days.childNodes[i].classList.remove("inRange", "startRange", "endRange");
-				continue;
-			} else if (containsDisabled && !outOfRange) continue;
+				["inRange", "startRange", "endRange"].forEach(function (c) {
+					self.days.childNodes[i].classList.remove(c);
+				});
+				return "continue";
+			} else if (containsDisabled && !outOfRange) return "continue";
 
-			self.days.childNodes[i].classList.remove("startRange", "inRange", "endRange", "notAllowed");
+			["startRange", "inRange", "endRange", "notAllowed"].forEach(function (c) {
+				self.days.childNodes[i].classList.remove(c);
+			});
 
 			var minRangeDate = Math.max(self.minRangeDate.getTime(), rangeStartDate),
 			    maxRangeDate = Math.min(self.maxRangeDate.getTime(), rangeEndDate);
@@ -764,6 +767,12 @@ function Flatpickr(element, config) {
 			e.target.classList.add(hoverDate < self.selectedDates[0] ? "startRange" : "endRange");
 
 			if (initialDate > hoverDate && timestamp === initialDate.getTime()) self.days.childNodes[i].classList.add("endRange");else if (initialDate < hoverDate && timestamp === initialDate.getTime()) self.days.childNodes[i].classList.add("startRange");else if (timestamp > minRangeDate && timestamp < maxRangeDate) self.days.childNodes[i].classList.add("inRange");
+		};
+
+		for (var timestamp = self.days.childNodes[0].dateObj.getTime(), i = 0; i < 42; i++, timestamp += self.utils.duration.DAY) {
+			var _ret = _loop(timestamp, i);
+
+			if (_ret === "continue") continue;
 		}
 	}
 
@@ -871,37 +880,32 @@ function Flatpickr(element, config) {
 		    calendarWidth = self.calendarContainer.offsetWidth,
 		    input = self.altInput || self.input,
 		    inputBounds = input.getBoundingClientRect(),
-		    distanceFromBottom = window.innerHeight - inputBounds.bottom + input.offsetHeight;
+		    distanceFromBottom = window.innerHeight - inputBounds.bottom + input.offsetHeight,
+		    bottomCalendar = distanceFromBottom < calendarHeight + 60;
 
-		var top = void 0;
+		var top = window.pageYOffset + inputBounds.top + (!bottomCalendar ? input.offsetHeight + 2 : -calendarHeight - 2);
 
-		if (distanceFromBottom < calendarHeight + 60) {
-			top = window.pageYOffset - calendarHeight + inputBounds.top - 2;
-			self.calendarContainer.classList.remove("arrowTop");
-			self.calendarContainer.classList.add("arrowBottom");
+		toggleClass(self.calendarContainer, "arrowTop", !bottomCalendar);
+		toggleClass(self.calendarContainer, "arrowBottom", bottomCalendar);
+
+		if (self.config.inline) return;
+
+		var left = window.pageXOffset + inputBounds.left;
+		var right = window.document.body.offsetWidth - inputBounds.right;
+		var rightMost = left + calendarWidth > window.document.body.offsetWidth;
+
+		toggleClass(self.calendarContainer, "rightMost", rightMost);
+
+		if (self.config.static) return;
+
+		self.calendarContainer.style.top = top + "px";
+
+		if (!rightMost) {
+			self.calendarContainer.style.left = left + "px";
+			self.calendarContainer.style.right = "auto";
 		} else {
-			top = window.pageYOffset + input.offsetHeight + inputBounds.top + 2;
-			self.calendarContainer.classList.remove("arrowBottom");
-			self.calendarContainer.classList.add("arrowTop");
-		}
-
-		if (!self.config.static && !self.config.inline) {
-			self.calendarContainer.style.top = top + "px";
-
-			var left = window.pageXOffset + inputBounds.left;
-			var right = window.document.body.offsetWidth - inputBounds.right;
-
-			if (left + calendarWidth <= window.document.body.offsetWidth) {
-				self.calendarContainer.style.left = left + "px";
-				self.calendarContainer.style.right = "auto";
-
-				self.calendarContainer.classList.remove("rightMost");
-			} else {
-				self.calendarContainer.style.left = "auto";
-				self.calendarContainer.style.right = right + "px";
-
-				self.calendarContainer.classList.add("rightMost");
-			}
+			self.calendarContainer.style.left = "auto";
+			self.calendarContainer.style.right = right + "px";
 		}
 	}
 
@@ -1339,6 +1343,11 @@ function Flatpickr(element, config) {
 		if (content) e.textContent = content;
 
 		return e;
+	}
+
+	function toggleClass(elem, className, bool) {
+		if (bool) return elem.classList.add(className);
+		elem.classList.remove(className);
 	}
 
 	/* istanbul ignore next */
