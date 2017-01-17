@@ -959,7 +959,7 @@ function Flatpickr(element, config) {
 			if (outOfRange) {
 				self.days.childNodes[i].classList.add("notAllowed");
 				["inRange", "startRange", "endRange"].forEach(c => {
-					self.days.childNodes[i].classList.remove(c)				
+					self.days.childNodes[i].classList.remove(c)
 				});
 				continue;
 			}
@@ -1255,7 +1255,10 @@ function Flatpickr(element, config) {
 		if (Array.isArray(inputDate))
 			self.selectedDates = inputDate.map(self.parseDate);
 
-		else if (inputDate) {
+		else if (inputDate instanceof Date || !isNaN(inputDate))
+			self.selectedDates = [self.parseDate(inputDate)];
+
+		else if (inputDate && inputDate.substring) {
 			switch (self.config.mode) {
 				case "single":
 					self.selectedDates = [self.parseDate(inputDate)];
@@ -1269,6 +1272,7 @@ function Flatpickr(element, config) {
 					self.selectedDates = inputDate
 						.split(self.l10n.rangeSeparator)
 						.map(self.parseDate);
+
 					break;
 
 				default: break;
