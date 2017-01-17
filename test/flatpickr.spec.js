@@ -304,6 +304,37 @@ describe('flatpickr', () => {
 	});
 
 	describe("API", () => {
+		it("changeMonth()", () => {
+			createInstance({
+				defaultDate: "2016-12-20"
+			});
+
+			fp.changeMonth(1);
+			expect(fp.currentYear).toEqual(2017);
+
+			fp.changeMonth(-1);
+			expect(fp.currentYear).toEqual(2016);
+
+			fp.changeMonth(2);
+			expect(fp.currentMonth).toEqual(1);
+		});
+
+		it("destroy()", () => {
+			createInstance({
+				altInput: true
+			});
+
+			expect(fp.input.type).toEqual("hidden");
+
+			fp.destroy();
+
+			setTimeout(() => {
+				expect(fp.input.type).toEqual("text");
+				expect(fp.altInput.nodeName).toBeUndefined();
+			}, 1);
+
+		});
+
 		it("set (option, value)", () => {
 			createInstance();
 			fp.set("minDate", "2016-10-20");
@@ -348,25 +379,38 @@ describe('flatpickr', () => {
 			fp.setDate("");
 			expect(fp.selectedDates[0]).not.toBeDefined();
 		});
+
+		it("has valid latestSelectedDateObj", () => {
+			createInstance({
+				defaultDate: "2016-10-01 3:30",
+				enableTime: true
+			});
+
+			expect(fp.latestSelectedDateObj).toBeDefined();
+			expect(fp.latestSelectedDateObj.getFullYear()).toEqual(2016);
+			expect(fp.latestSelectedDateObj.getMonth()).toEqual(9);
+			expect(fp.latestSelectedDateObj.getDate()).toEqual(1);
+			expect(fp.hourElement.value).toEqual("03");
+			expect(fp.minuteElement.value).toEqual("30");
+			expect(fp.amPM.textContent).toEqual("AM");
+
+			fp.setDate("2016-11-03 16:49");
+			expect(fp.latestSelectedDateObj).toBeDefined();
+			expect(fp.latestSelectedDateObj.getFullYear()).toEqual(2016);
+			expect(fp.latestSelectedDateObj.getMonth()).toEqual(10);
+			expect(fp.latestSelectedDateObj.getDate()).toEqual(3);
+
+			expect(fp.hourElement.value).toEqual("04");
+			expect(fp.minuteElement.value).toEqual("49");
+			expect(fp.amPM.textContent).toEqual("PM");
+
+			fp.setDate("");
+			expect(fp.latestSelectedDateObj).toEqual(null);
+		});
 	});
 
 
-	describe("Internals", () => {
-		it("updateNavigationCurrentMonth()", () => {
-			createInstance({
-				defaultDate: "2016-12-20"
-			});
-
-			fp.changeMonth(1);
-			expect(fp.currentYear).toEqual(2017);
-
-			fp.changeMonth(-1);
-			expect(fp.currentYear).toEqual(2016);
-
-			fp.changeMonth(2);
-			expect(fp.currentMonth).toEqual(1);
-		});
-
+	describe("UI", () => {
 		it("selectDate() + onChange() through GUI", () => {
 			function verifySelected (date) {
 				expect(date).toBeDefined();
@@ -406,34 +450,6 @@ describe('flatpickr', () => {
 			expect(fp.currentYear).toEqual(2001);
 			expect(fp.currentYearElement.value).toEqual("2001");
 			expect(fp.days.childNodes[10].dateObj.getFullYear()).toEqual(2001);
-		});
-
-		it("has valid latestSelectedDateObj", () => {
-			createInstance({
-				defaultDate: "2016-10-01 3:30",
-				enableTime: true
-			});
-
-			expect(fp.latestSelectedDateObj).toBeDefined();
-			expect(fp.latestSelectedDateObj.getFullYear()).toEqual(2016);
-			expect(fp.latestSelectedDateObj.getMonth()).toEqual(9);
-			expect(fp.latestSelectedDateObj.getDate()).toEqual(1);
-			expect(fp.hourElement.value).toEqual("03");
-			expect(fp.minuteElement.value).toEqual("30");
-			expect(fp.amPM.textContent).toEqual("AM");
-
-			fp.setDate("2016-11-03 16:49");
-			expect(fp.latestSelectedDateObj).toBeDefined();
-			expect(fp.latestSelectedDateObj.getFullYear()).toEqual(2016);
-			expect(fp.latestSelectedDateObj.getMonth()).toEqual(10);
-			expect(fp.latestSelectedDateObj.getDate()).toEqual(3);
-
-			expect(fp.hourElement.value).toEqual("04");
-			expect(fp.minuteElement.value).toEqual("49");
-			expect(fp.amPM.textContent).toEqual("PM");
-
-			fp.setDate("");
-			expect(fp.latestSelectedDateObj).toEqual(null);
 		});
 
 		it("time input and increments", () => {
@@ -518,6 +534,128 @@ describe('flatpickr', () => {
 
 			incrementTime("minute", 8);
 			expect(fp.minuteElement.value).toEqual("35"); // can't go higher than 35
+		});
+
+		it("should have an implicit selectedDate in time picker mode", () => {
+			createInstance({
+				enableTime: true,
+				noCalendar: true
+			});
+
+			expect(fp.selectedDates.length).toEqual(0);
+			fp.minuteElement.parentNode.childNodes[1].click();
+
+			expect(fp.selectedDates.length).toEqual(1);
+			expect(fp.selectedDates[0].getDate()).toEqual(new Date().getDate());
+		});
+
+		it("should delay time input validation on keydown", () => {
+			createInstance({
+				enableTime: true,
+				defaultDate: new Date().setHours(17, 30, 0, 0),
+				minDate: new Date().setHours(16, 30, 0, 0),
+				time_24hr: true
+			});
+
+			fp.hourElement.value = "16";
+			simulate("input", fp.hourElement);
+			expect(fp.hourElement.value).toEqual("16");
+
+			fp.hourElement.value = "1";
+			simulate("input", fp.hourElement);
+			setTimeout(() => {
+				expect(fp.hourElement.value).toEqual("1");
+			}, 100);
+
+			setTimeout(() => {
+				expect(fp.hourElement.value).toEqual("16");
+			}, 1001);
+		});
+
+		it("should have working strap mode", () => {
+			let wrapper = document.createElement("div");
+			const input = document.createElement("input");
+			input.setAttribute("data-input", "");
+
+			wrapper.appendChild(input);
+
+			["open", "close", "toggle", "clear"].forEach(type => {
+				let e = document.createElement("button");
+				e.setAttribute(`data-${type}`, "");
+				wrapper.appendChild(e);
+			});
+
+			const instance = new Flatpickr(wrapper, {
+				wrap: true
+			});
+
+			expect(instance.input).toEqual(input);
+
+			wrapper.childNodes[1].click(); // open
+			expect(instance.isOpen).toEqual(true);
+
+			wrapper.childNodes[2].click(); // close
+			expect(instance.isOpen).toEqual(false);
+
+			wrapper.childNodes[3].click(); // toggle
+			expect(instance.isOpen).toEqual(true);
+			wrapper.childNodes[3].click();
+			expect(instance.isOpen).toEqual(false);
+
+			instance.setDate(new Date());
+			expect(instance.selectedDates.length).toEqual(1);
+
+			expect(instance.selectedDateElem).toBeDefined();
+			expect(parseInt(instance.selectedDateElem.textContent)).toEqual(new Date().getDate());
+
+			wrapper.childNodes[4].click(); // clear
+			expect(instance.selectedDates.length).toEqual(0);
+			expect(instance.input.value).toEqual("");
+
+			instance.destroy();
+			wrapper = null;
+		});
+
+		it("valid mouseover behavior in range mode", () => {
+			createInstance({
+				mode: "range"
+			});
+
+			simulate("mouseover", fp.days.childNodes[15]);
+			expect(fp.selectedDates.length).toEqual(0);
+
+			fp.setDate("2016-1-17");
+			expect(fp.selectedDates.length).toEqual(1);
+
+			simulate("mouseover", fp.days.childNodes[32]);
+			expect(fp.days.childNodes[21].classList.contains("startRange")).toEqual(true);
+			expect(fp.days.childNodes[32].classList.contains("endRange")).toEqual(true);
+
+			for (let i = 22; i < 32; i++) {
+				expect(fp.days.childNodes[i].classList.contains("inRange")).toEqual(true);
+			}
+
+			fp.clear();
+			fp.set("disable", ["2016-1-12", "2016-1-20"]);
+			fp.setDate("2016-1-17");
+
+			simulate("mouseover", fp.days.childNodes[32]);
+			expect(fp.days.childNodes[32].classList.contains("endRange")).toEqual(false);
+			expect(fp.days.childNodes[24].classList.contains("disabled")).toEqual(true);
+			expect(fp.days.childNodes[25].classList.contains("notAllowed")).toEqual(true);
+
+			for (let i = 25; i < 32; i++) {
+				expect(fp.days.childNodes[i].classList.contains("inRange")).toEqual(false);
+			}
+
+			for (let i = 17; i < 22; i++) {
+				expect(fp.days.childNodes[i].classList.contains("notAllowed")).toEqual(false);
+				expect(fp.days.childNodes[i].classList.contains("disabled")).toEqual(false);
+			}
+
+			simulate("click", fp.days.childNodes[17]);
+			expect(fp.selectedDates.length).toEqual(2);
+			expect(fp.input.value).toEqual("2016-01-13 to 2016-01-17");
 		});
 	});
 
