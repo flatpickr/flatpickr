@@ -4,8 +4,6 @@ Flatpickr.l10ns.fr = {};
 
 Flatpickr.l10ns.fr.firstDayOfWeek = 1;
 
-Flatpickr.l10ns.fr.rangeSeparator = ' au ';
-
 Flatpickr.l10ns.fr.weekdays = {
 	shorthand: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
 	longhand: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']
