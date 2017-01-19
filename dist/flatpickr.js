@@ -615,12 +615,16 @@ function Flatpickr(element, config) {
 		e.path && e.path.indexOf && (~e.path.indexOf(self.input) || ~e.path.indexOf(self.altInput));
 
 		if (self.isOpen && !self.config.inline && !isCalendarElem(e.target) && !isInput) {
-			e.preventDefault();
-			self.close();
+			if (self.config.closeAlways) {
+				self.close();
+			} else {
+				e.preventDefault();
+				self.close();
 
-			if (self.config.mode === "range" && self.selectedDates.length === 1) {
-				self.clear();
-				self.redraw();
+				if (self.config.mode === "range" && self.selectedDates.length === 1) {
+					self.clear();
+					self.redraw();
+				}
 			}
 		}
 	}
@@ -835,7 +839,7 @@ function Flatpickr(element, config) {
 	}
 
 	function parseConfig() {
-		var boolOpts = ["utc", "wrap", "weekNumbers", "allowInput", "clickOpens", "time_24hr", "enableTime", "noCalendar", "altInput", "shorthandCurrentMonth", "inline", "static", "enableSeconds", "disableMobile"];
+		var boolOpts = ["utc", "wrap", "weekNumbers", "allowInput", "clickOpens", "time_24hr", "enableTime", "noCalendar", "altInput", "shorthandCurrentMonth", "inline", "static", "enableSeconds", "disableMobile", "closeAlways"];
 		self.config = Object.create(Flatpickr.defaultConfig);
 
 		Object.defineProperty(self.config, "minDate", {
@@ -1447,6 +1451,9 @@ Flatpickr.defaultConfig = {
  	disable if you wish to open the calendar manually with .open()
  */
 	clickOpens: true,
+
+	// always close the calendar
+	closeAlways: false,
 
 	// display time picker in 24 hour mode
 	time_24hr: false,
