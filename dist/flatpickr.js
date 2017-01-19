@@ -636,7 +636,7 @@ function Flatpickr(element, config) {
 
 	function handleYearChange(newYear) {
 		if (self.currentMonth < 0 || self.currentMonth > 11) {
-			self.currentYear += self.currentMonth % 11;
+			self.currentYear += self.currentMonth > 11 ? 1 : -1;
 			self.currentMonth = (self.currentMonth + 12) % 12;
 
 			triggerEvent("YearChange");
