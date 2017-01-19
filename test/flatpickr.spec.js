@@ -317,6 +317,11 @@ describe('flatpickr', () => {
 
 			fp.changeMonth(2);
 			expect(fp.currentMonth).toEqual(1);
+			expect(fp.currentYear).toEqual(2017);
+
+			fp.changeMonth(14);
+			expect(fp.currentYear).toEqual(2018);
+			expect(fp.currentMonth).toEqual(3);
 		});
 
 		it("destroy()", () => {
