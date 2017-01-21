@@ -262,7 +262,11 @@
   font-weight: 700;
   color: inherit;
   display: inline-block;
-  padding-left: 7px;
+  margin-left: 7px;
+  padding: 0;
+}
+.flatpickr-current-month span.cur-month:hover {
+  background: rgba(0,0,0,0.05);
 }
 .flatpickr-current-month .numInputWrapper {
   width: 6ch;

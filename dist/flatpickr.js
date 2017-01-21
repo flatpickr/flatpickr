@@ -134,6 +134,11 @@ function Flatpickr(element, config) {
 		}
 	}
 
+	function onMonthScroll(e) {
+		e.preventDefault();
+		self.changeMonth(Math.max(-1, Math.min(1, e.wheelDelta || -e.deltaY)));
+	}
+
 	function bind() {
 		if (self.config.wrap) {
 			["open", "close", "toggle", "clear"].forEach(function (el) {
@@ -179,6 +184,9 @@ function Flatpickr(element, config) {
 				return changeMonth(1);
 			});
 
+			self.currentMonthElement.addEventListener("wheel", function (e) {
+				return debounce(onMonthScroll(e), 50);
+			});
 			self.currentYearElement.addEventListener("wheel", function (e) {
 				return debounce(yearScroll(e), 50);
 			});
@@ -409,6 +417,7 @@ function Flatpickr(element, config) {
 		self.prevMonthNav.innerHTML = self.config.prevArrow;
 
 		self.currentMonthElement = createElement("span", "cur-month");
+		self.currentMonthElement.title = self.l10n.scrollTitle;
 
 		var yearInput = createNumberInput("cur-year");
 		self.currentYearElement = yearInput.childNodes[0];
