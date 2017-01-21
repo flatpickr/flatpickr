@@ -14,7 +14,7 @@
   line-height: 24px;
   border-radius: 5px;
   position: absolute;
-  width: 293.75px;
+  width: 315px;
   box-sizing: border-box;
   -webkit-transition: top cubic-bezier(0, 1, 0.5, 1) 100ms;
   transition: top cubic-bezier(0, 1, 0.5, 1) 100ms;
@@ -312,10 +312,10 @@
   padding: 1px 0 0 0;
 }
 .flatpickr-days {
-  padding: 0 2.375px;
+  padding: 0;
   outline: 0;
   text-align: left;
-  width: 293.75px;
+  width: 315px;
   box-sizing: border-box;
   display: inline-block;
   display: -webkit-box;
@@ -337,9 +337,9 @@
   width: 14.2857143%;
   -ms-flex-preferred-size: 14.2857143%;
       flex-basis: 14.2857143%;
-  max-width: 38px;
-  height: 38px;
-  line-height: 38px;
+  max-width: 40px;
+  height: 40px;
+  line-height: 40px;
   margin: 0;
   display: inline-block;
   position: relative;
@@ -405,7 +405,7 @@
 }
 .flatpickr-day.inRange {
   border-radius: 0;
-  box-shadow: -3.75px 0 0 #e6e6e6, 3.75px 0 0 #e6e6e6;
+  box-shadow: -5px 0 0 #e6e6e6, 5px 0 0 #e6e6e6;
 }
 .flatpickr-day.disabled,
 .flatpickr-day.disabled:hover {
@@ -427,7 +427,7 @@ span.flatpickr-weekday {
   cursor: default;
   font-size: 90%;
   color: rgba(0,0,0,0.54);
-  height: 27.166666666666668px;
+  height: 27.333333333333332px;
   line-height: 24px;
   margin: 0;
   background: transparent;
@@ -437,7 +437,7 @@ span.flatpickr-weekday {
   width: 14.28%;
   font-weight: bold;
   margin: 0;
-  padding-top: 3.166666666666667px;
+  padding-top: 3.333333333333333px;
 }
 .rangeMode .flatpickr-day {
   margin-top: 1px;
