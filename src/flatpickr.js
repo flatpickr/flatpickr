@@ -281,8 +281,11 @@ function Flatpickr(element, config) {
 			self.currentMonth = jumpDate.getMonth();
 		}
 
+
 		catch (e) {
+			/* istanbul ignore next */
 			console.error(e.stack);
+			/* istanbul ignore next */
 			console.warn("Invalid date supplied: " + jumpDate);
 		}
 
@@ -1462,6 +1465,7 @@ function Flatpickr(element, config) {
 			? self.element.querySelector("[data-input]")
 			: self.element;
 
+		/* istanbul ignore next */
 		if (!self.input)
 			return console.warn("Error: invalid input element specified", self.input);
 
@@ -1561,6 +1565,7 @@ function Flatpickr(element, config) {
 				self.input.dispatchEvent(new Event("input", { "bubbles": true }));
 			}
 
+			/* istanbul ignore next */
 			else {
 				if (window.document.createEvent !== undefined)
 					return self.input.dispatchEvent(self.changeEvent);
@@ -1723,15 +1728,8 @@ function Flatpickr(element, config) {
 
 		let newValue = Number(curValue);
 
-		switch(e.type) {
-			case "wheel":
-				newValue = curValue + step * delta;
-				break;
-
-			case "keydown":
-				newValue = curValue + step * (e.which === 38 ? 1 : -1);
-				break;
-		}
+		if(e.type === "wheel")
+			newValue = curValue + step * delta;
 
 		if (e.type !== "input" || e.target.value.length === 2) {
 			if (newValue < min) {
@@ -1997,6 +1995,7 @@ Flatpickr.prototype = {
 		else if (date instanceof Date)
 			date = new Date(date.getTime()); // create a copy
 
+		/* istanbul ignore next */
 		if (!(date instanceof Date)) {
 			console.warn(`flatpickr: invalid date ${date_orig}`);
 			console.info(this.element);
@@ -2013,6 +2012,7 @@ Flatpickr.prototype = {
 	}
 };
 
+/* istanbul ignore next */
 function _flatpickr(nodeList, config) {
 	const nodes = Array.prototype.slice.call(nodeList); // static list
 	let instances = [];
@@ -2030,6 +2030,7 @@ function _flatpickr(nodeList, config) {
 	return instances.length === 1 ? instances[0] : instances;
 }
 
+/* istanbul ignore next */
 if (typeof HTMLElement !== "undefined") { // browser env
 	HTMLCollection.prototype.flatpickr =
 	NodeList.prototype.flatpickr = function (config) {
@@ -2041,10 +2042,12 @@ if (typeof HTMLElement !== "undefined") { // browser env
 	};
 }
 
+/* istanbul ignore next */
 function flatpickr(selector, config) {
 	return _flatpickr(window.document.querySelectorAll(selector), config);
 }
 
+/* istanbul ignore next */
 if (typeof jQuery !== "undefined") {
 	jQuery.fn.flatpickr = function (config) {
 		return _flatpickr(this, config);
