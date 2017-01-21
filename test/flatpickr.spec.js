@@ -29,9 +29,9 @@ function decrementTime(type, times = 1) {
 		fp[`${type}Element`].parentNode.childNodes[2].click();
 }
 
-function simulate(eventType, onElement, options) {
+function simulate(eventType, onElement, options, type) {
 	onElement.dispatchEvent(
-		new Event(
+		new (type || Event)(
 			eventType,
 			Object.assign({ "bubbles": true }, options||{})
 		)
@@ -412,10 +412,117 @@ describe('flatpickr', () => {
 			fp.setDate("");
 			expect(fp.latestSelectedDateObj).toEqual(null);
 		});
+
+		it("documentClick", () => {
+			window.ontouchstart = true;
+			createInstance({
+				mode: "range"
+			});
+
+			window.ontouchstart = null;
+
+			fp.open();
+			simulate("touchstart", document.body);
+			expect(fp.isOpen).toBe(false);
+			expect(fp.calendarContainer.classList.contains("open")).toBe(false);
+
+			fp.open();
+			simulate("click", fp.days.childNodes[15]);
+			expect(fp.selectedDates.length).toBe(1);
+			simulate("click", document.body);
+
+			expect(fp.selectedDates.length).toBe(0);
+			expect(fp.input.value).toBe("");
+		});
+
+		it("onKeyDown", () => {
+			createInstance({
+				enableTime: true
+			});
+
+			fp.open();
+			simulate("keydown", fp.timeContainer, {
+				which: 13 // enter
+			}, KeyboardEvent);
+
+			expect(fp.selectedDates.length).toBe(0);
+			fp.open();
+
+			fp.days.childNodes[15].focus();
+			fp.isOpen = true;
+			simulate("keydown", fp.days.childNodes[15], {
+				which: 13 // enter
+			}, KeyboardEvent);
+
+			setTimeout(function(){
+				expect(fp.selectedDates.length).toBe(1);
+			}, 1);
+
+			fp.close();
+			fp.open();
+			simulate("keydown", document, {
+				which: 27, //esc
+				keyCode: 27
+			}, KeyboardEvent);
+			setTimeout(function(){
+				expect(fp.isOpen).toBe(false);
+			}, 1);
+
+			fp.changeMonth(3, false);
+
+			simulate("keydown", fp.calendarContainer, {
+				which: 37,
+				keyCode: 37
+			}, KeyboardEvent);
+
+			setTimeout(function(){
+				expect(fp.currentMonth).toBe(2);
+			}, 1);
+
+			simulate("keydown", fp.calendarContainer, {
+				which: 39,
+				keyCode: 39
+			}, KeyboardEvent);
+
+			setTimeout(function(){
+				expect(fp.currentMonth).toBe(3);
+			}, 1);
+
+			const now = new Date();
+
+			simulate("keydown", fp.calendarContainer, {
+				which: 38,
+				keyCode: 38
+			}, KeyboardEvent);
+
+			setTimeout(function(){
+				expect(fp.currentYear).toBe(now.getFullYear() + 1);
+			}, 1);
+
+			simulate("keydown", fp.calendarContainer, {
+				which: 40,
+				keyCode: 40
+			}, KeyboardEvent);
+
+			setTimeout(function(){
+				expect(fp.currentYear).toBe(now.getFullYear());
+			}, 1);
+		});
 	});
 
 
 	describe("UI", () => {
+		it("static mode", () => {
+			createInstance({
+				static: true
+			});
+
+			expect(fp.calendarContainer.classList.contains("static")).toBe(true);
+			expect(fp.element.parentNode.classList.contains("flatpickr-wrapper")).toBe(true);
+			expect(fp.element.parentNode.childNodes[0]).toEqual(fp.element);
+			expect(fp.element.parentNode.childNodes[1]).toEqual(fp.calendarContainer);
+		});
+
 		it("selectDate() + onChange() through GUI", () => {
 			function verifySelected (date) {
 				expect(date).toBeDefined();
