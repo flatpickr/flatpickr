@@ -300,7 +300,11 @@ $invertedBg = invert($calendarBackground)
         font-weight 700
         color inherit
         display inline-block
-        padding-left 7px
+        margin-left 7px
+        padding 0
+
+        &:hover
+            background: alpha($invertedBg, 0.05)
 
 
     .numInputWrapper

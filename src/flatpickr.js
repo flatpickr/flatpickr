@@ -168,6 +168,11 @@ function Flatpickr(element, config) {
 		}
 	}
 
+	function onMonthScroll(e) {
+		e.preventDefault();
+		self.changeMonth(Math.max(-1, Math.min(1, (e.wheelDelta || -e.deltaY))));
+	}
+
 	function bind() {
 		if (self.config.wrap) {
 			["open", "close", "toggle", "clear"].forEach(el => {
@@ -217,6 +222,7 @@ function Flatpickr(element, config) {
 			self.prevMonthNav.addEventListener("click", () => changeMonth(-1));
 			self.nextMonthNav.addEventListener("click", () => changeMonth(1));
 
+			self.currentMonthElement.addEventListener("wheel", e => debounce(onMonthScroll(e), 50));
 			self.currentYearElement.addEventListener("wheel", e => debounce(yearScroll(e), 50));
 			self.currentYearElement.addEventListener("focus", () => {
 				self.currentYearElement.select();
@@ -514,6 +520,7 @@ function Flatpickr(element, config) {
 		self.prevMonthNav.innerHTML = self.config.prevArrow;
 
 		self.currentMonthElement = createElement("span", "cur-month");
+		self.currentMonthElement.title = self.l10n.scrollTitle;
 
 		const yearInput = createNumberInput("cur-year");
 		self.currentYearElement =  yearInput.childNodes[0];
