@@ -324,6 +324,19 @@ describe('flatpickr', () => {
 			expect(fp.currentMonth).toEqual(3);
 		});
 
+		it("month scroll", () => {
+			fp.changeMonth(1, false);
+
+			fp.open();
+			simulate("wheel", fp.currentMonthElement, {
+				wheelDelta: 1
+			}, MouseEvent);
+
+			setTimeout(() => {
+				expect(fp.currentMonth).toEqual(2);
+			}, 1);
+		});
+
 		it("destroy()", () => {
 			createInstance({
 				altInput: true
@@ -413,6 +426,39 @@ describe('flatpickr', () => {
 			expect(fp.latestSelectedDateObj).toEqual(null);
 		});
 
+		it("parses dates in enable[] and disable[]", () => {
+			createInstance({
+				disable: [
+					{from: "2016-11-20", to: "2016-12-20"},
+					"2016-12-21",
+					null
+				]
+			});
+
+			expect(fp.config.disable[0].from instanceof Date).toBe(true);
+			expect(fp.config.disable[0].to instanceof Date).toBe(true);
+			expect(fp.config.disable[1] instanceof Date).toBe(true);
+
+			expect(fp.config.disable.includes(null)).toBe(false);
+
+			fp.set("disable", []);
+			fp.clear();
+
+			createInstance({
+				enable: [
+					{from: "2016-11-20", to: "2016-12-20"},
+					"2016-12-21",
+					null
+				]
+			});
+
+			expect(fp.config.enable[0].from instanceof Date).toBe(true);
+			expect(fp.config.enable[0].to instanceof Date).toBe(true);
+			expect(fp.config.enable[1] instanceof Date).toBe(true);
+
+			expect(fp.config.enable.includes(null)).toBe(false);
+		});
+
 		it("documentClick", () => {
 			window.ontouchstart = true;
 			createInstance({
@@ -437,7 +483,8 @@ describe('flatpickr', () => {
 
 		it("onKeyDown", () => {
 			createInstance({
-				enableTime: true
+				enableTime: true,
+				altInput: true
 			});
 
 			fp.open();
@@ -456,7 +503,7 @@ describe('flatpickr', () => {
 
 			setTimeout(function(){
 				expect(fp.selectedDates.length).toBe(1);
-			}, 1);
+			}, 10);
 
 			fp.close();
 			fp.open();
@@ -466,10 +513,11 @@ describe('flatpickr', () => {
 			}, KeyboardEvent);
 			setTimeout(function(){
 				expect(fp.isOpen).toBe(false);
-			}, 1);
+			}, 100);
 
 			fp.changeMonth(3, false);
 
+			fp.open();
 			simulate("keydown", fp.calendarContainer, {
 				which: 37,
 				keyCode: 37
@@ -479,14 +527,20 @@ describe('flatpickr', () => {
 				expect(fp.currentMonth).toBe(2);
 			}, 1);
 
+			fp.open();
+			simulate("keydown", fp.altInput, {	which: 37, keyCode: 37 });
+			setTimeout(() => { expect(fp.currentMonth).toBe(2); }, 100);
+
+			simulate("keydown", fp.input, {	which: 39, keyCode: 39 });
+			setTimeout(() => { expect(fp.currentMonth).toBe(2); }, 100);
+
 			simulate("keydown", fp.calendarContainer, {
 				which: 39,
 				keyCode: 39
 			}, KeyboardEvent);
 
-			setTimeout(function(){
-				expect(fp.currentMonth).toBe(3);
-			}, 1);
+
+			setTimeout(() => { expect(fp.currentMonth).toBe(3); }, 10);
 
 			const now = new Date();
 
@@ -495,11 +549,18 @@ describe('flatpickr', () => {
 				keyCode: 38
 			}, KeyboardEvent);
 
-			setTimeout(function(){
-				expect(fp.currentYear).toBe(now.getFullYear() + 1);
-			}, 1);
+			setTimeout(() => { expect(fp.currentYear).toBe(now.getFullYear() + 1); }, 1);
 
 			simulate("keydown", fp.calendarContainer, {
+				which: 40,
+				keyCode: 40
+			}, KeyboardEvent);
+
+			setTimeout(function(){
+				expect(fp.currentYear).toBe(now.getFullYear());
+			}, 1);
+
+			simulate("keydown", fp.timeContainer, {
 				which: 40,
 				keyCode: 40
 			}, KeyboardEvent);
