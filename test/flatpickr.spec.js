@@ -324,7 +324,7 @@ describe('flatpickr', () => {
 			expect(fp.currentMonth).toEqual(3);
 		});
 
-		it("month scroll", () => {
+		it("monthScroll", () => {
 			fp.changeMonth(1, false);
 
 			fp.open();
@@ -334,6 +334,20 @@ describe('flatpickr', () => {
 
 			setTimeout(() => {
 				expect(fp.currentMonth).toEqual(2);
+			}, 1);
+		});
+
+		it("yearScroll", () => {
+			const now = new Date();
+			fp.setDate(now);
+
+			fp.open();
+			simulate("wheel", fp.currentYearElement, {
+				wheelDelta: 1
+			}, MouseEvent);
+
+			setTimeout(() => {
+				expect(fp.currentYear).toEqual(now.getFullYear() + 1);
 			}, 1);
 		});
 
