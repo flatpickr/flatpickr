@@ -1233,8 +1233,23 @@ function Flatpickr(element, config) {
 
 		setTimeout(() => self.dateIsPicked = true, 50);
 
-		if (self.config.mode === "range" && self.selectedDates.length === 1)
-			onMouseOver(e);
+		if (self.config.mode === "range") {
+			if(self.selectedDates.length === 1) {
+				onMouseOver(e);
+
+				if (self.maxRangeDate < self.days.childNodes[41].dateObj)
+					self.nextMonthNav.style.display = "none";
+
+				if (self.minRangeDate > self.days.childNodes[0].dateObj)
+					self.prevMonthNav.style.display = "none";
+			}
+
+			else {
+				self.nextMonthNav.style.display = "block";
+				self.prevMonthNav.style.display = "block";
+				updateNavigationCurrentMonth();
+			}
+		}
 
 		if (self.config.mode === "single" && !self.config.enableTime)
 			self.close();
