@@ -4,12 +4,12 @@ Flatpickr.l10ns.lt = {};
 
 Flatpickr.l10ns.lt.weekdays = {
 	shorthand: ['S', 'Pr', 'A', 'T', 'K', 'Pn', 'Š'],
-	longhand: ['Sekmadienis', 'Pirmadienis', 'Antradienis', 'TreĦiadienis', 'Ketvirtadienis', 'Penktadienis', 'Šeštadienis']
+	longhand: ['Sekmadienis', 'Pirmadienis', 'Antradienis', 'Trečiadienis', 'Ketvirtadienis', 'Penktadienis', 'Šeštadienis']
 };
 
 Flatpickr.l10ns.lt.months = {
 	shorthand: ['Sau', 'Vas', 'Kov', 'Bal', 'Geg', 'Bir', 'Lie', 'Rgp', 'Rgs', 'Spl', 'Lap', 'Grd'],
-	longhand: ['Sausis', 'Vasaris', 'Kovas', 'Balandis', 'Geguņė', 'Birņelis', 'Liepa', 'Rugpjūtis', 'Rugsėjis', 'Spalis', 'Lapkritis', 'Gruodis']
+	longhand: ['Sausis', 'Vasaris', 'Kovas', 'Balandis', 'Gegužȩ̇', 'Birņelis', 'Liepa', 'Rugpjūtis', 'Rugsėjis', 'Spalis', 'Lapkritis', 'Gruodis']
 };
 
 Flatpickr.l10ns.lt.firstDayOfWeek = 1;
