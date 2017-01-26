@@ -7,7 +7,7 @@
 @require "./icons/icons"
 
 @require "./kube/_kube"
-@require "./navbar"
+//@require "./navbar"
 @require "./atom-one-light"
 
 
@@ -31,8 +31,8 @@ a
         width 96%
 
 #hero
-    background $hero
-    padding 96px 0 48px 0
+    //background $hero
+    padding 11px 0 16px 0
 
     h1, p
         color invert($hero)
@@ -52,6 +52,8 @@ a
 
 .content
     padding-top 1.2rem
+    width 95vw
+    padding-left 35vw
     section
         padding-top 4.8rem // offset navbar
 
@@ -70,6 +72,7 @@ a
                 display none
 
 .sidebar
+    width 30vw
     $padding = 5.2766%
     $sidebarBG = #fefefe
     $sidebarFG = invert($sidebarBG)
@@ -89,13 +92,16 @@ a
 
 
     #nav
+        .themer
+            padding $padding
         section
             padding-top 1rem
             border-bottom 1px solid alpha($sidebarFG, 0.06)
         h2
             padding-left $padding
-            font-weight 300
-            color alpha($sidebarFG, 0.85)
+            font-weight 400
+            color: rgba(1, 1, 1, 0.46);
+            letter-spacing: -0.04em;
 
         a
             display block

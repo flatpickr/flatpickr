@@ -11,11 +11,15 @@ html(lang='en')
 		link#cal_style(rel='stylesheet', type='text/css', href='bower_components/flatpickr/dist/flatpickr.css')
 
 	body
-		include navbar
-		include content/intro
+		//include navbar
+		.sidebar
+			include sidebar
 
-		.wrapper.content
 
+
+
+		.content
+			include content/intro
 			include content/install_use
 			include content/examples
 			include content/events
