@@ -2,6 +2,19 @@
 function Flatpickr(element, config) {
 	const self = this;
 
+	self.changeMonth = changeMonth;
+	self.clear = clear;
+	self.close = close;
+	self._createElement = createElement;
+	self.destroy = destroy;
+	self.formatDate = formatDate;
+	self.jumpToDate = jumpToDate;
+	self.open = open;
+	self.redraw = redraw;
+	self.set = set;
+	self.setDate = setDate;
+	self.toggle = toggle;
+
 	function init() {
 		if (element._flatpickr)
 			destroy(element._flatpickr);
@@ -20,17 +33,6 @@ function Flatpickr(element, config) {
 		setupHelperFunctions();
 
 		self.isOpen = self.config.inline;
-		self.changeMonth = changeMonth;
-		self.clear = clear;
-		self.close = close;
-		self.destroy = destroy;
-		self.formatDate = formatDate;
-		self.jumpToDate = jumpToDate;
-		self.open = open;
-		self.redraw = redraw;
-		self.set = set;
-		self.setDate = setDate;
-		self.toggle = toggle;
 
 		self.isMobile = (
 			!self.config.disableMobile &&
