@@ -340,7 +340,16 @@ function Flatpickr(element, config) {
 
 			self.rContainer = createElement("div", "flatpickr-rContainer");
 			self.rContainer.appendChild(buildWeekdays());
-			self.rContainer.appendChild(buildDays());
+
+			if (!self.days) {
+				self.days = createElement("div", "flatpickr-days");
+				self.days.tabIndex = -1;
+			}
+
+			buildDays();
+			self.rContainer.appendChild(self.days);
+
+
 			self.innerContainer.appendChild(self.rContainer);
 			fragment.appendChild(self.innerContainer);
 		}
@@ -454,13 +463,8 @@ function Flatpickr(element, config) {
 		return dayElement;
 	}
 
-	function buildDays() {
-		if (!self.days) {
-			self.days = createElement("div", "flatpickr-days");
-			self.days.tabIndex = -1;
-		}
-
-		self.firstOfMonth = (
+	function buildDays(year, month) {
+		const firstOfMonth = (
 				new Date(self.currentYear, self.currentMonth, 1).getDay() -
 				self.l10n.firstDayOfWeek + 7
 			) % 7;
@@ -470,7 +474,7 @@ function Flatpickr(element, config) {
 		const daysInMonth = self.utils.getDaysinMonth(),
 			days = window.document.createDocumentFragment();
 
-		let	dayNumber = self.prevMonthDays + 1 - self.firstOfMonth;
+		let	dayNumber = self.prevMonthDays + 1 - firstOfMonth;
 
 		if (self.config.weekNumbers && self.weekNumbers.firstChild)
 			self.weekNumbers.textContent = "";
@@ -481,7 +485,7 @@ function Flatpickr(element, config) {
 			self.maxRangeDate = new Date(
 				self.currentYear,
 				self.currentMonth + 1,
-				(42 - self.firstOfMonth) % daysInMonth
+				(42 - firstOfMonth) % daysInMonth
 			);
 		}
 
@@ -504,7 +508,7 @@ function Flatpickr(element, config) {
 
 
 		// append days from the next month
-		for (let dayNum = daysInMonth + 1; dayNum <= 42 - self.firstOfMonth; dayNum++) {
+		for (let dayNum = daysInMonth + 1; dayNum <= 42 - firstOfMonth; dayNum++) {
 			days.appendChild(
 				createDay(
 					"nextMonthDay",
