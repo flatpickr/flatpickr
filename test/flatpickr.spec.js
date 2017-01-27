@@ -59,14 +59,16 @@ describe('flatpickr', () => {
 				enableTime: true,
 				utc: true
 			});
+			setTimeout(() => {
+				expect(fp.currentYear).toEqual(2016);
+				expect(fp.currentMonth).toEqual(11);
+				expect(fp.days.querySelector(".selected").textContent).toEqual("27");
 
-			expect(fp.currentYear).toEqual(2016);
-			expect(fp.currentMonth).toEqual(11);
-			expect(fp.days.querySelector(".selected").textContent).toEqual("27");
+				expect(fp.hourElement.value).toEqual("04");
+				expect(fp.minuteElement.value).toEqual("16");
+				expect(fp.amPM.textContent).toEqual("PM");
+			}, 1);
 
-			expect(fp.hourElement.value).toEqual("04");
-			expect(fp.minuteElement.value).toEqual("16");
-			expect(fp.amPM.textContent).toEqual("PM");
 		});
 
 		it("shouldn't parse out-of-bounds defaultDate", () => {
