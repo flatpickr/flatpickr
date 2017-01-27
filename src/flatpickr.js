@@ -2004,7 +2004,7 @@ Flatpickr.prototype = {
 			date = new Date(date);
 
 		else if (typeof date === "string") {
-			date = date.trim();
+			date = date.trim().toLowerCase();
 
 			if (date === "today") {
 				date = new Date();
@@ -2028,10 +2028,16 @@ Flatpickr.prototype = {
 				date = new Date(date);
 
 			else if (dateTimeRegex.test(date) && /^[0-9]/.test(date)) {
-				const d = date.match(dateTimeRegex);
+				const d = date.match(dateTimeRegex),
+					isAM = /(am)$/.test(date),
+					isPM = /(pm)$/.test(date);
+
 				date = new Date(
 					`${d[0]}/${d[1] || 1}/${d[2] || 1} ${d[3] || 0}:${d[4] || 0}:${d[5] || 0}`
 				);
+
+				if (isAM || isPM)
+					date.setHours((date.getHours() % 12) + (12 * isPM));
 			}
 
 			else // fallback
