@@ -1,0 +1,18 @@
+.flatpickr-confirm {
+	height: 40px;
+	max-height: 0px;
+	visibility: hidden;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+}
+
+.flatpickr-confirm:hover {
+
+}
+
+.flatpickr-confirm.visible {
+	max-height: 40px;
+	visibility: visible
+}
