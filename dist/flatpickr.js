@@ -1651,7 +1651,7 @@ Flatpickr.prototype = {
 
 		if (date.toFixed || timestamp.test(date)) // timestamp
 			date = new Date(date);else if (typeof date === "string") {
-			date = date.trim();
+			date = date.trim().toLowerCase();
 
 			if (date === "today") {
 				date = new Date();
@@ -1666,8 +1666,13 @@ Flatpickr.prototype = {
 				date.setHours(hours, m[2] || 0, m[3] || 0);
 			} else if (/Z$/.test(date) || /GMT$/.test(date)) // datestrings w/ timezone
 				date = new Date(date);else if (dateTimeRegex.test(date) && /^[0-9]/.test(date)) {
-				var d = date.match(dateTimeRegex);
+				var d = date.match(dateTimeRegex),
+				    isAM = /(am)$/.test(date),
+				    isPM = /(pm)$/.test(date);
+
 				date = new Date(d[0] + "/" + (d[1] || 1) + "/" + (d[2] || 1) + " " + (d[3] || 0) + ":" + (d[4] || 0) + ":" + (d[5] || 0));
+
+				if (isAM || isPM) date.setHours(date.getHours() % 12 + 12 * isPM);
 			} else // fallback
 				date = new Date(date);
 		} else if (date instanceof Date) date = new Date(date.getTime()); // create a copy
