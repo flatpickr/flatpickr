@@ -50,6 +50,7 @@
     "uglify-js": "^2.7.5"
   },
   "main": "dist/flatpickr.js",
+  "styles": "dist/flatpickr.css",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/chmln/flatpickr.git"
