@@ -1441,6 +1441,9 @@ function Flatpickr(element, config) {
 	/* istanbul ignore next */
 	function setupFormats() {
 		self.formats = {
+			// get the date in UTC
+			Z: date => date.toUTCString(),
+			
 			// weekday name, short, e.g. Thu
 			D: date => self.l10n.weekdays.shorthand[self.formats.w(date)],
 
