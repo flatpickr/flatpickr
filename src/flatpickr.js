@@ -173,7 +173,13 @@ function Flatpickr(element, config) {
 
 	function onMonthScroll(e) {
 		e.preventDefault();
-		self.changeMonth(Math.max(-1, Math.min(1, (e.wheelDelta || -e.deltaY))));
+		const delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.deltaY)));
+
+		if (
+			(delta < 0 && !self._hidePrevMonthArrow) || 
+			(delta > 0 && !self._hideNextMonthArrow)
+		)
+			self.changeMonth(delta);
 	}
 
 	function bind() {
