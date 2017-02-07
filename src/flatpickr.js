@@ -564,6 +564,29 @@ function Flatpickr(element, config) {
 		monthNavFragment.appendChild(self.nextMonthNav);
 		self.monthNav.appendChild(monthNavFragment);
 
+		Object.defineProperty(self, "_hidePrevMonthArrow", {
+			get () {
+				return this.__hidePrevMonthArrow;
+			},
+			set (bool) {
+				if (this.__hidePrevMonthArrow !== bool)
+					self.prevMonthNav.style.display = bool ? "none" : "block";
+				this.__hidePrevMonthArrow = bool;				
+			}
+		});
+
+
+		Object.defineProperty(self, "_hideNextMonthArrow", {
+			get () {
+				return this.__hideNextMonthArrow;
+			},
+			set (bool) {
+				if (this.__hideNextMonthArrow !== bool)
+					self.nextMonthNav.style.display = bool ? "none" : "block";
+				this.__hideNextMonthArrow = bool;				
+			}
+		});
+
 		updateNavigationCurrentMonth();
 
 		return self.monthNav;
@@ -1268,18 +1291,15 @@ function Flatpickr(element, config) {
 			if(self.selectedDates.length === 1) {
 				onMouseOver(e);
 
-				if (self.maxRangeDate < self.days.childNodes[41].dateObj)
-					self.nextMonthNav.style.display = "none";
+				self._hidePrevMonthArrow = self._hidePrevMonthArrow || 
+					self.minRangeDate > self.days.childNodes[0].dateObj;
 
-				if (self.minRangeDate > self.days.childNodes[0].dateObj)
-					self.prevMonthNav.style.display = "none";
+				self._hideNextMonthArrow = self._hideNextMonthArrow || 
+					self.maxRangeDate < self.days.childNodes[41].dateObj;
 			}
 
-			else {
-				self.nextMonthNav.style.display = "block";
-				self.prevMonthNav.style.display = "block";
+			else 
 				updateNavigationCurrentMonth();
-			}
 		}
 
 		if (self.config.mode === "single" && !self.config.enableTime)
@@ -1642,29 +1662,15 @@ function Flatpickr(element, config) {
 		self.currentMonthElement.textContent = self.utils.monthToStr(self.currentMonth) + " ";
 		self.currentYearElement.value = self.currentYear;
 
-		if (self.config.minDate) {
-			const hidePrevMonthArrow = self.currentYear === self.config.minDate.getFullYear()
-				? self.currentMonth <= self.config.minDate.getMonth()
-				: self.currentYear < self.config.minDate.getFullYear();
+		self._hidePrevMonthArrow = self.config.minDate && 
+				(self.currentYear === self.config.minDate.getFullYear()
+					? self.currentMonth <= self.config.minDate.getMonth()
+					: self.currentYear < self.config.minDate.getFullYear());
 
-			self.prevMonthNav.style.display = hidePrevMonthArrow ? "none" : "block";
-		}
-
-		else
-			self.prevMonthNav.style.display = "block";
-
-
-		if (self.config.maxDate) {
-			const hideNextMonthArrow = self.currentYear === self.config.maxDate.getFullYear()
+		self._hideNextMonthArrow = self.config.maxDate && 
+			(self.currentYear === self.config.maxDate.getFullYear()
 				? self.currentMonth + 1 > self.config.maxDate.getMonth()
-				: self.currentYear > self.config.maxDate.getFullYear();
-
-			self.nextMonthNav.style.display = hideNextMonthArrow ? "none" : "block";
-		}
-
-		else
-			self.nextMonthNav.style.display = "block";
-
+				: self.currentYear > self.config.maxDate.getFullYear());
 	}
 
 
