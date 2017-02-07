@@ -113,7 +113,12 @@ function Flatpickr(element, config) {
 
 		if (
 			self.minDateHasTime
-			&& compareDates(self.latestSelectedDateObj, self.config.minDate) === 0
+			&& (
+				compareDates(
+					self.latestSelectedDateObj, 
+					self.config.minDate
+				) === 0
+			)
 		) {
 
 			hours = Math.max(hours, self.config.minDate.getHours());
@@ -1076,22 +1081,21 @@ function Flatpickr(element, config) {
 			if(self.days)
 				redraw();
 
-			if (!self.currentYearElement)
-				return;
-
 			if (date && dateObj instanceof Date) {
 				self[`${type}DateHasTime`] = dateObj.getHours()
 					|| dateObj.getMinutes()
 					|| dateObj.getSeconds();
-
-				self.currentYearElement[type] = dateObj.getFullYear();
 			}
 
-			else
-				self.currentYearElement.removeAttribute(type);
+			if (self.currentYearElement) {
+				if(self[`${type}DateHasTime`])
+					self.currentYearElement[type] = dateObj.getFullYear();
+				else
+					self.currentYearElement.removeAttribute(type);
 
-			self.currentYearElement.disabled = inverseDateObj && dateObj &&
-				inverseDateObj.getFullYear() === dateObj.getFullYear();
+				self.currentYearElement.disabled = inverseDateObj && dateObj &&
+					inverseDateObj.getFullYear() === dateObj.getFullYear();
+			}			
 		}
 	}
 
