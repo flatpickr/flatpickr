@@ -113,12 +113,7 @@ function Flatpickr(element, config) {
 
 		if (
 			self.minDateHasTime
-			&& (
-				compareDates(
-					self.latestSelectedDateObj, 
-					self.config.minDate
-				) === 0
-			)
+			&& compareDates(self.latestSelectedDateObj, self.config.minDate) === 0
 		) {
 
 			hours = Math.max(hours, self.config.minDate.getHours());
