@@ -1310,6 +1310,9 @@ function Flatpickr(element, config) {
 
 	function set(option, value) {
 		self.config[option] = value;
+		if (option === 'locale') {
+			setupLocale();
+		}
 		self.redraw();
 		jumpToDate();
 	}
