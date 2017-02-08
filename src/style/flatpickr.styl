@@ -426,6 +426,9 @@ $invertedBg = invert($calendarBackground)
         &.endRange
             border-radius 0 50px 50px 0
 
+        &.startRange.endRange
+            border-radius 50px
+
     &.inRange
         border-radius 0
         box-shadow: (-2.5*$dayMargin) 0 0 $dayHoverBackground, (2.5*$dayMargin) 0 0 $dayHoverBackground
