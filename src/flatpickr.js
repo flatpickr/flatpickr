@@ -1328,13 +1328,13 @@ function Flatpickr(element, config) {
 					break;
 
 				case "multiple":
-					self.selectedDates = inputDate.split("; ").map(self.parseDate);
+					self.selectedDates = inputDate.split("; ").map(self.parseDate, self);
 					break;
 
 				case "range":
 					self.selectedDates = inputDate
 						.split(self.l10n.rangeSeparator)
-						.map(self.parseDate);
+						.map(self.parseDate, self);
 
 					break;
 
