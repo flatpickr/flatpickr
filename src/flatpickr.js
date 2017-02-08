@@ -1,4 +1,4 @@
-/*! flatpickr v2.3.6, @license MIT */
+/*! flatpickr v2.3.7, @license MIT */
 function Flatpickr(element, config) {
 	const self = this;
 
@@ -1067,6 +1067,7 @@ function Flatpickr(element, config) {
 		return function(date) {
 			const dateObj = self.config[`_${type}Date`] = self.parseDate(date);
 			const inverseDateObj = self.config[`_${type === "min" ? "max" : "min"}Date`];
+			const isValidDate = date && dateObj instanceof Date;
 
 			if (self.selectedDates) {
 				self.selectedDates = self.selectedDates.filter(isEnabled);
@@ -1076,14 +1077,14 @@ function Flatpickr(element, config) {
 			if(self.days)
 				redraw();
 
-			if (date && dateObj instanceof Date) {
+			if (isValidDate) {
 				self[`${type}DateHasTime`] = dateObj.getHours()
 					|| dateObj.getMinutes()
 					|| dateObj.getSeconds();
 			}
 
 			if (self.currentYearElement) {
-				if(self[`${type}DateHasTime`])
+				if(isValidDate)
 					self.currentYearElement[type] = dateObj.getFullYear();
 				else
 					self.currentYearElement.removeAttribute(type);

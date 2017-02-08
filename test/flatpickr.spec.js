@@ -373,8 +373,11 @@ describe('flatpickr', () => {
 			createInstance();
 			fp.set("minDate", "2016-10-20");
 
+			setTimeout(function(){
+				expect(fp.currentYearElement.min).toEqual("2016");
+			}, 1)
 			expect(fp.config.minDate).toBeDefined();
-			expect(fp.currentYearElement.min).toEqual("2016");
+			
 
 			fp.set("minDate", null);
 			expect(fp.currentYearElement.hasAttribute("min")).toEqual(false);

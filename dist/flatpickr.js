@@ -2,7 +2,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-/*! flatpickr v2.3.6, @license MIT */
+/*! flatpickr v2.3.7, @license MIT */
 function Flatpickr(element, config) {
 	var self = this;
 
@@ -847,6 +847,7 @@ function Flatpickr(element, config) {
 		return function (date) {
 			var dateObj = self.config["_" + type + "Date"] = self.parseDate(date);
 			var inverseDateObj = self.config["_" + (type === "min" ? "max" : "min") + "Date"];
+			var isValidDate = date && dateObj instanceof Date;
 
 			if (self.selectedDates) {
 				self.selectedDates = self.selectedDates.filter(isEnabled);
@@ -855,12 +856,12 @@ function Flatpickr(element, config) {
 
 			if (self.days) redraw();
 
-			if (date && dateObj instanceof Date) {
+			if (isValidDate) {
 				self[type + "DateHasTime"] = dateObj.getHours() || dateObj.getMinutes() || dateObj.getSeconds();
 			}
 
 			if (self.currentYearElement) {
-				if (self[type + "DateHasTime"]) self.currentYearElement[type] = dateObj.getFullYear();else self.currentYearElement.removeAttribute(type);
+				if (isValidDate) self.currentYearElement[type] = dateObj.getFullYear();else self.currentYearElement.removeAttribute(type);
 
 				self.currentYearElement.disabled = inverseDateObj && dateObj && inverseDateObj.getFullYear() === dateObj.getFullYear();
 			}
