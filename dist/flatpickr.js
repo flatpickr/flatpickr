@@ -871,7 +871,7 @@ function Flatpickr(element, config) {
 	function parseConfig() {
 		var boolOpts = ["utc", "wrap", "weekNumbers", "allowInput", "clickOpens", "time_24hr", "enableTime", "noCalendar", "altInput", "shorthandCurrentMonth", "inline", "static", "enableSeconds", "disableMobile"];
 
-		var hooks = ["onChange", "onClose", "onDayCreate", "onOpen", "onReady", "onValueUpdate"];
+		var hooks = ["onChange", "onClose", "onDayCreate", "onMonthChange", "onOpen", "onReady", "onValueUpdate", "onYearChange"];
 
 		self.config = Object.create(Flatpickr.defaultConfig);
 
@@ -1142,6 +1142,11 @@ function Flatpickr(element, config) {
 	/* istanbul ignore next */
 	function setupFormats() {
 		self.formats = {
+			// get the date in UTC
+			Z: function Z(date) {
+				return date.toISOString();
+			},
+
 			// weekday name, short, e.g. Thu
 			D: function D(date) {
 				return self.l10n.weekdays.shorthand[self.formats.w(date)];
