@@ -6,10 +6,7 @@
 	justify-content: center;
 	align-items: center;
 	cursor: pointer;
-}
-
-.flatpickr-confirm:hover {
-
+	background: rgba(0,0,0,0.06)
 }
 
 .flatpickr-confirm.visible {
