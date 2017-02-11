@@ -1608,7 +1608,11 @@ Flatpickr.defaultConfig = {
 
 	onValueUpdate: [],
 
-	onDayCreate: []
+	onDayCreate: [],
+
+	onMonthChange: [],
+
+	onYearChange: []
 };
 
 /* istanbul ignore next */
