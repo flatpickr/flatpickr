@@ -1100,7 +1100,10 @@ function Flatpickr(element, config) {
 			"utc", "wrap", "weekNumbers", "allowInput", "clickOpens", "time_24hr", "enableTime", "noCalendar", "altInput", "shorthandCurrentMonth", "inline", "static", "enableSeconds", "disableMobile"
 		];
 
-		let hooks = ["onChange", "onClose", "onDayCreate", "onOpen", "onReady", "onValueUpdate"];
+		let hooks = [
+			"onChange", "onClose", "onDayCreate", "onMonthChange",
+			"onOpen", "onReady", "onValueUpdate", "onYearChange"
+		];
 
 		self.config = Object.create(Flatpickr.defaultConfig);
 
