@@ -16,7 +16,6 @@
   position: absolute;
   width: 315px;
   box-sizing: border-box;
-  -webkit-transition: top cubic-bezier(0, 1, 0.5, 1) 100ms;
   transition: top cubic-bezier(0, 1, 0.5, 1) 100ms;
   z-index: 999;
   background: #fff;
@@ -176,7 +175,6 @@
 }
 .flatpickr-prev-month svg path,
 .flatpickr-next-month svg path {
-  -webkit-transition: fill 0.1s;
   transition: fill 0.1s;
   fill: inherit;
 }
@@ -322,13 +320,15 @@
   width: 315px;
   box-sizing: border-box;
   display: inline-block;
-  display: -webkit-box;
+  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  -ms-flex-pack: distribute;
-      justify-content: space-around;
+  -webkit-flex-wrap: wrap;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
+  -webkit-justify-content: space-around;
+      -ms-flex-pack: distribute;
+          justify-content: space-around;
 }
 .flatpickr-day {
   background: none;
@@ -339,15 +339,16 @@
   cursor: pointer;
   font-weight: 400;
   width: 14.2857143%;
-  -ms-flex-preferred-size: 14.2857143%;
-      flex-basis: 14.2857143%;
+  -webkit-flex-basis: 14.2857143%;
+      -ms-flex-preferred-size: 14.2857143%;
+          flex-basis: 14.2857143%;
   max-width: 40px;
   height: 40px;
   line-height: 40px;
   margin: 0;
   display: inline-block;
   position: relative;
-  -webkit-box-pack: center;
+  -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center;
   text-align: center;
@@ -465,7 +466,7 @@ span.flatpickr-weekday {
 }
 .flatpickr-innerContainer {
   display: block;
-  display: -webkit-box;
+  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   box-sizing: border-box;
@@ -485,9 +486,8 @@ span.flatpickr-weekday {
   max-height: 40px;
   box-sizing: border-box;
   overflow: hidden;
-  -webkit-transition: height 0.33s cubic-bezier(0, 1, 0.5, 1);
   transition: height 0.33s cubic-bezier(0, 1, 0.5, 1);
-  display: -webkit-box;
+  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
 }
@@ -497,7 +497,7 @@ span.flatpickr-weekday {
   clear: both;
 }
 .flatpickr-time .numInputWrapper {
-  -webkit-box-flex: 1;
+  -webkit-flex: 1;
       -ms-flex: 1;
           flex: 1 1 0%;
   width: 40%;
