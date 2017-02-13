@@ -988,7 +988,6 @@ function Flatpickr(element, config) {
 		for (let t = rangeStartDate; t < rangeEndDate; t += self.utils.duration.DAY) {
 			if (!isEnabled(new Date(t))) {
 				containsDisabled = true;
-				console.log(containsDisabled)
 				break;
 			}
 		}
