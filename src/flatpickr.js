@@ -173,13 +173,7 @@ function Flatpickr(element, config) {
 
 	function onMonthScroll(e) {
 		e.preventDefault();
-		const delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.deltaY)));
-
-		if (
-			(delta < 0 && !self._hidePrevMonthArrow) || 
-			(delta > 0 && !self._hideNextMonthArrow)
-		)
-			self.changeMonth(delta);
+		self.changeMonth(Math.max(-1, Math.min(1, (e.wheelDelta || -e.deltaY))));
 	}
 
 	function bind() {
@@ -405,25 +399,21 @@ function Flatpickr(element, config) {
 
 		dayElement.dateObj = date;
 
-		if (compareDates(date, self.now) === 0)
-			dayElement.classList.add("today");
+		toggleClass(dayElement, "today", compareDates(date, self.now) === 0);
 
 		if (dateIsEnabled) {
 			dayElement.tabIndex = 0;
 
 			if (isDateSelected(date)){
 				dayElement.classList.add("selected");
-
+				self.selectedDateElem = dayElement;
 				if (self.config.mode === "range") {
 					dayElement.classList.add(
 						compareDates(date, self.selectedDates[0]) === 0
 							? "startRange"
 							: "endRange"
 						);
-				}
-
-				else
-					self.selectedDateElem = dayElement;
+				}					
 			}
 		}
 
@@ -434,13 +424,14 @@ function Flatpickr(element, config) {
 				&& date > self.minRangeDate
 				&& date < self.selectedDates[0]
 			)
+		
 				self.minRangeDate = date;
 
 			else if (
 				self.selectedDates[0]
 				&& date < self.maxRangeDate
 				&& date > self.selectedDates[0]
-			)
+			) 
 				self.maxRangeDate = date;
 		}
 
@@ -473,7 +464,8 @@ function Flatpickr(element, config) {
 		const firstOfMonth = (
 				new Date(self.currentYear, self.currentMonth, 1).getDay() -
 				self.l10n.firstDayOfWeek + 7
-			) % 7;
+			) % 7,
+			isRangeMode = self.config.mode === "range";
 
 		self.prevMonthDays = self.utils.getDaysinMonth((self.currentMonth - 1 + 12) % 12);
 
@@ -485,7 +477,7 @@ function Flatpickr(element, config) {
 		if (self.config.weekNumbers && self.weekNumbers.firstChild)
 			self.weekNumbers.textContent = "";
 
-		if (self.config.mode === "range") {
+		if (isRangeMode) {
 			// const dateLimits = self.config.enable.length || self.config.disable.length || self.config.mixDate || self.config.maxDate;
 			self.minRangeDate = new Date(self.currentYear, self.currentMonth - 1, dayNumber);
 			self.maxRangeDate = new Date(
@@ -523,6 +515,18 @@ function Flatpickr(element, config) {
 				)
 			);
 		}
+
+		if (isRangeMode && self.selectedDates.length === 1 && days.childNodes[0]) {
+			self._hidePrevMonthArrow = self._hidePrevMonthArrow ||
+				self.minRangeDate > days.childNodes[0].dateObj;
+
+			self._hideNextMonthArrow = self._hideNextMonthArrow ||
+				self.maxRangeDate < days.childNodes[41].dateObj;
+		}
+
+		else
+			updateNavigationCurrentMonth();
+		
 
 		self.days.appendChild(days);
 		return self.days;
@@ -708,9 +712,16 @@ function Flatpickr(element, config) {
 	}
 
 	function changeMonth(value, is_offset) {
-		self.currentMonth = (typeof is_offset === "undefined" || is_offset)
-			? self.currentMonth + value
-			: value;
+		is_offset = typeof is_offset === "undefined" || is_offset;
+		const delta = is_offset ? value : value - self.currentMonth;
+
+		if (
+			(delta < 0 && self._hidePrevMonthArrow) || 
+			(delta > 0 && self._hideNextMonthArrow)
+		)
+			return;
+
+		self.currentMonth += delta;
 
 		if (self.currentMonth < 0 || self.currentMonth > 11) {
 			self.currentYear += (self.currentMonth > 11 ? 1 : -1);
@@ -977,6 +988,7 @@ function Flatpickr(element, config) {
 		for (let t = rangeStartDate; t < rangeEndDate; t += self.utils.duration.DAY) {
 			if (!isEnabled(new Date(t))) {
 				containsDisabled = true;
+				console.log(containsDisabled)
 				break;
 			}
 		}
