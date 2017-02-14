@@ -637,6 +637,8 @@ function Flatpickr(element, config) {
 		window.document.removeEventListener("touchstart", documentClick);
 		window.document.removeEventListener("blur", documentClick);
 
+		clearEvents(instance);
+
 		if (instance.timeContainer) instance.timeContainer.removeEventListener("transitionend", positionCalendar);
 
 		if (instance.mobileInput && instance.mobileInput.parentNode) instance.mobileInput.parentNode.removeChild(instance.mobileInput);else if (instance.calendarContainer && instance.calendarContainer.parentNode) instance.calendarContainer.parentNode.removeChild(instance.calendarContainer);
@@ -652,6 +654,14 @@ function Flatpickr(element, config) {
 		instance.input.removeAttribute("readonly");
 
 		delete instance.input._flatpickr;
+	}
+
+	function clearEvents(instance) {
+		var hooks = getHooksOptions();
+
+		hooks.forEach(function (hook) {
+			return instance.config[hook] = [];
+		});
 	}
 
 	function isCalendarElem(elem) {
@@ -881,7 +891,7 @@ function Flatpickr(element, config) {
 	function parseConfig() {
 		var boolOpts = ["utc", "wrap", "weekNumbers", "allowInput", "clickOpens", "time_24hr", "enableTime", "noCalendar", "altInput", "shorthandCurrentMonth", "inline", "static", "enableSeconds", "disableMobile"];
 
-		var hooks = ["onChange", "onClose", "onDayCreate", "onMonthChange", "onOpen", "onReady", "onValueUpdate", "onYearChange"];
+		var hooks = getHooksOptions();
 
 		self.config = Object.create(Flatpickr.defaultConfig);
 
@@ -921,6 +931,10 @@ function Flatpickr(element, config) {
 				if (Array.isArray(self.config[key])) self.config[key] = arrayify(pluginConf[key]).concat(self.config[key]);else if (userConfig[key] !== undefined) self.config[key] = pluginConf[key];
 			}
 		}
+	}
+
+	function getHooksOptions() {
+		return ["onChange", "onClose", "onDayCreate", "onMonthChange", "onOpen", "onReady", "onValueUpdate", "onYearChange"];
 	}
 
 	function setupLocale() {

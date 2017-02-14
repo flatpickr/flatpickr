@@ -355,7 +355,9 @@ describe('flatpickr', () => {
 
 		it("destroy()", () => {
 			createInstance({
-				altInput: true
+        altInput: true,
+        onChange: () => false,
+        onClose: () => false
 			});
 
 			expect(fp.input.type).toEqual("hidden");
@@ -365,8 +367,9 @@ describe('flatpickr', () => {
 			setTimeout(() => {
 				expect(fp.input.type).toEqual("text");
 				expect(fp.altInput.nodeName).toBeUndefined();
+        expect(fp.config["onChange"].length).toEqual(0);
+        expect(fp.config["onClose"].length).toEqual(0);
 			}, 1);
-
 		});
 
 		it("set (option, value)", () => {
