@@ -1793,11 +1793,9 @@ function Flatpickr(element, config) {
 	}
 
 	function timeWrapper(e) {
-		e.preventDefault();
-		if (e && (
-			(e.target.value || e.target.textContent).length >= 2 || // typed two digits
-			(e.type !== "keydown" && e.type !== "input") // scroll event
-		))
+		if (e && e.type !=="keydown" &&
+			(e.target.value || e.target.textContent).length >= 2 // typed two digits
+		)
 			e.target.blur();
 
 		if (self.amPM && e.target === self.amPM)
@@ -1807,11 +1805,13 @@ function Flatpickr(element, config) {
 			max = Number(e.target.max),
 			step = Number(e.target.step),
 			curValue = parseInt(e.target.value, 10),
-			delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.deltaY)));
+			delta = e.type === "keydown"
+				? e.which === 38 ? 1 : -1
+				: Math.max(-1, Math.min(1, (e.wheelDelta || -e.deltaY)));
 
 		let newValue = Number(curValue);
 
-		if(e.type === "wheel")
+		if(e.type === "wheel" || e.type === "keydown")
 			newValue = curValue + step * delta;
 
 		if (e.type !== "input" || e.target.value.length === 2) {
