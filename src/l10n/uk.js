@@ -1,6 +1,8 @@
 /* Ukrainian locals for flatpickr */
-var Flatpickr = Flatpickr||{l10ns: {}};
+var Flatpickr = Flatpickr || { l10ns: {} };
 Flatpickr.l10ns.uk = {};
+
+Flatpickr.l10ns.uk.firstDayOfWeek = 1;
 
 Flatpickr.l10ns.uk.weekdays = {
 	shorthand: ['Нд', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
