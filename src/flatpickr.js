@@ -931,47 +931,57 @@ function Flatpickr(element, config) {
 	}
 
 	function onKeyDown(e) {
-		if (self.isOpen) {
-			switch (e.which) {
-				case 13:
-					if (self.timeContainer && self.timeContainer.contains(e.target))
-						updateValue();
+		if (!self.isOpen || !self.calendarContainer.contains(e.target))
+			return;
 
-					else
-						selectDate(e);
+		switch (e.which) {
+			case 13:
+				if (self.timeContainer && self.timeContainer.contains(e.target))
+					updateValue();
 
-					break;
+				else
+					selectDate(e);
 
-				case 27: // escape
-					self.close();
-					break;
+				break;
 
-				case 37:
-					if (e.target !== self.input & e.target !== self.altInput)
-						changeMonth(-1);
-					break;
+			case 27: // escape
+				self.close();
+				break;
 
-				case 38:
+			case 37:
+				if (e.target !== self.input & e.target !== self.altInput)
+					changeMonth(-1);
+				break;
+
+			case 38:
+				if (!self.timeContainer || !self.timeContainer.contains(e.target)) {
 					e.preventDefault();
 					self.currentYear++;
 					self.redraw();
+				}
+				else
+					updateTime(e);
 
-					break;
 
-				case 39:
-					if (e.target !== self.input & e.target !== self.altInput)
-						changeMonth(1);
-					break;
+				break;
 
-				case 40:
+			case 39:
+				if (e.target !== self.input & e.target !== self.altInput)
+					changeMonth(1);
+				break;
+
+			case 40:
+				if (!self.timeContainer || !self.timeContainer.contains(e.target)) {
 					e.preventDefault();
 					self.currentYear--;
 					self.redraw();
+				}
+				else
+					updateTime(e);
 
-					break;
+				break;
 
-				default: break;
-			}
+			default: break;
 		}
 	}
 
