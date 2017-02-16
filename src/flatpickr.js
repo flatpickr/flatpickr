@@ -413,7 +413,7 @@ function Flatpickr(element, config) {
 							? "startRange"
 							: "endRange"
 						);
-				}					
+				}
 			}
 		}
 
@@ -424,14 +424,14 @@ function Flatpickr(element, config) {
 				&& date > self.minRangeDate
 				&& date < self.selectedDates[0]
 			)
-		
+
 				self.minRangeDate = date;
 
 			else if (
 				self.selectedDates[0]
 				&& date < self.maxRangeDate
 				&& date > self.selectedDates[0]
-			) 
+			)
 				self.maxRangeDate = date;
 		}
 
@@ -526,7 +526,7 @@ function Flatpickr(element, config) {
 
 		else
 			updateNavigationCurrentMonth();
-		
+
 
 		self.days.appendChild(days);
 		return self.days;
@@ -575,7 +575,7 @@ function Flatpickr(element, config) {
 			set (bool) {
 				if (this.__hidePrevMonthArrow !== bool)
 					self.prevMonthNav.style.display = bool ? "none" : "block";
-				this.__hidePrevMonthArrow = bool;				
+				this.__hidePrevMonthArrow = bool;
 			}
 		});
 
@@ -587,7 +587,7 @@ function Flatpickr(element, config) {
 			set (bool) {
 				if (this.__hideNextMonthArrow !== bool)
 					self.nextMonthNav.style.display = bool ? "none" : "block";
-				this.__hideNextMonthArrow = bool;				
+				this.__hideNextMonthArrow = bool;
 			}
 		});
 
@@ -716,7 +716,7 @@ function Flatpickr(element, config) {
 		const delta = is_offset ? value : value - self.currentMonth;
 
 		if (
-			(delta < 0 && self._hidePrevMonthArrow) || 
+			(delta < 0 && self._hidePrevMonthArrow) ||
 			(delta > 0 && self._hideNextMonthArrow)
 		)
 			return;
@@ -1112,7 +1112,7 @@ function Flatpickr(element, config) {
 
 				self.currentYearElement.disabled = inverseDateObj && dateObj &&
 					inverseDateObj.getFullYear() === dateObj.getFullYear();
-			}			
+			}
 		}
 	}
 
@@ -1315,16 +1315,19 @@ function Flatpickr(element, config) {
 			if(self.selectedDates.length === 1) {
 				onMouseOver(e);
 
-				self._hidePrevMonthArrow = self._hidePrevMonthArrow || 
+				self._hidePrevMonthArrow = self._hidePrevMonthArrow ||
 					self.minRangeDate > self.days.childNodes[0].dateObj;
 
-				self._hideNextMonthArrow = self._hideNextMonthArrow || 
+				self._hideNextMonthArrow = self._hideNextMonthArrow ||
 					self.maxRangeDate < self.days.childNodes[41].dateObj;
 			}
 
-			else 
+			else
 				updateNavigationCurrentMonth();
 		}
+
+		if (e.which === 13 && self.config.enableTime)
+			setTimeout(() => self.hourElement.focus(), 451);
 
 		if (self.config.mode === "single" && !self.config.enableTime)
 			self.close();
@@ -1493,7 +1496,7 @@ function Flatpickr(element, config) {
 		self.formats = {
 			// get the date in UTC
 			Z: date => date.toISOString(),
-			
+
 			// weekday name, short, e.g. Thu
 			D: date => self.l10n.weekdays.shorthand[self.formats.w(date)],
 
@@ -1689,12 +1692,12 @@ function Flatpickr(element, config) {
 		self.currentMonthElement.textContent = self.utils.monthToStr(self.currentMonth) + " ";
 		self.currentYearElement.value = self.currentYear;
 
-		self._hidePrevMonthArrow = self.config.minDate && 
+		self._hidePrevMonthArrow = self.config.minDate &&
 				(self.currentYear === self.config.minDate.getFullYear()
 					? self.currentMonth <= self.config.minDate.getMonth()
 					: self.currentYear < self.config.minDate.getFullYear());
 
-		self._hideNextMonthArrow = self.config.maxDate && 
+		self._hideNextMonthArrow = self.config.maxDate &&
 			(self.currentYear === self.config.maxDate.getFullYear()
 				? self.currentMonth + 1 > self.config.maxDate.getMonth()
 				: self.currentYear > self.config.maxDate.getFullYear());
