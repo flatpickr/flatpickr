@@ -4,8 +4,8 @@
   "description": "A lightweight, powerful javascript datetime picker",
   "scripts": {
     "build": "run-p build:*",
-    "build:script": "run-s build:script:min build:script:unmin",
-    "build:script:min": "uglifyjs -cm --comments dist/flatpickr.js -o dist/flatpickr.min.js",
+    "build:script": "run-s build:script:unmin build:script:min",
+    "build:script:min": "cat dist/flatpickr.js | uglifyjs -c -m --comments > dist/flatpickr.min.js",
     "build:script:unmin": "babel src/flatpickr.js --out-file dist/flatpickr.js",
     "build:extra": "run-p build:extra:*",
     "build:extra:l10n": "babel src/l10n --out-dir dist/l10n",
