@@ -1,6 +1,8 @@
 const Flatpickr = require("../src/flatpickr.js");
 Flatpickr.l10ns.ru = require("../dist/l10n/ru.js").ru;
 
+jest.useFakeTimers();
+
 let elem, fp;
 
 function createInstance(config) {
@@ -9,6 +11,7 @@ function createInstance(config) {
 }
 
 function beforeEachTest(){
+	jest.runAllTimers();
 	if (elem)
 		elem.parentNode.removeChild(elem);
 
@@ -30,12 +33,17 @@ function decrementTime(type, times = 1) {
 }
 
 function simulate(eventType, onElement, options, type) {
-	onElement.dispatchEvent(
-		new (type || Event)(
-			eventType,
-			Object.assign({ "bubbles": true }, options||{})
-		)
-	);
+	const eventOptions = Object.assign(options || {}, { bubbles: true});
+	const evt = new (type || CustomEvent)(eventType, eventOptions);
+	try {
+		Object.assign(evt, eventOptions);
+	}
+
+	catch (e) {
+
+	}
+
+	onElement.dispatchEvent(evt);
 }
 
 describe('flatpickr', () => {
@@ -59,15 +67,14 @@ describe('flatpickr', () => {
 				enableTime: true,
 				utc: true
 			});
-			setTimeout(() => {
-				expect(fp.currentYear).toEqual(2016);
-				expect(fp.currentMonth).toEqual(11);
-				expect(fp.days.querySelector(".selected").textContent).toEqual("27");
 
-				expect(fp.hourElement.value).toEqual("04");
-				expect(fp.minuteElement.value).toEqual("16");
-				expect(fp.amPM.textContent).toEqual("PM");
-			}, 1);
+			expect(fp.currentYear).toEqual(2016);
+			expect(fp.currentMonth).toEqual(11);
+			expect(fp.days.querySelector(".selected").textContent).toEqual("27");
+
+			expect(fp.hourElement.value).toEqual("04");
+			expect(fp.minuteElement.value).toEqual("16");
+			expect(fp.amPM.textContent).toEqual("PM");
 
 		});
 
@@ -332,11 +339,9 @@ describe('flatpickr', () => {
 			fp.open();
 			simulate("wheel", fp.currentMonthElement, {
 				wheelDelta: 1
-			}, MouseEvent);
+			}, window.MouseEvent);
 
-			setTimeout(() => {
-				expect(fp.currentMonth).toEqual(2);
-			}, 1);
+			expect(fp.currentMonth).toEqual(2);
 		});
 
 		it("yearScroll", () => {
@@ -346,11 +351,9 @@ describe('flatpickr', () => {
 			fp.open();
 			simulate("wheel", fp.currentYearElement, {
 				wheelDelta: 1
-			}, MouseEvent);
+			}, window.MouseEvent);
 
-			setTimeout(() => {
-				expect(fp.currentYear).toEqual(now.getFullYear() + 1);
-			}, 1);
+			expect(fp.currentYear).toEqual(now.getFullYear() + 1);
 		});
 
 		it("destroy()", () => {
@@ -362,10 +365,8 @@ describe('flatpickr', () => {
 
 			fp.destroy();
 
-			setTimeout(() => {
-				expect(fp.input.type).toEqual("text");
-				expect(fp.altInput.nodeName).toBeUndefined();
-			}, 1);
+			expect(fp.input.type).toEqual("text");
+			expect(fp.altInput).toBeUndefined();
 
 		});
 
@@ -373,11 +374,9 @@ describe('flatpickr', () => {
 			createInstance();
 			fp.set("minDate", "2016-10-20");
 
-			setTimeout(function(){
-				expect(fp.currentYearElement.min).toEqual("2016");
-			}, 1)
+			expect(fp.currentYearElement.min).toEqual("2016");
 			expect(fp.config.minDate).toBeDefined();
-			
+
 
 			fp.set("minDate", null);
 			expect(fp.currentYearElement.hasAttribute("min")).toEqual(false);
@@ -487,14 +486,15 @@ describe('flatpickr', () => {
 			window.ontouchstart = null;
 
 			fp.open();
-			simulate("touchstart", document.body);
+			expect(fp.isOpen).toBe(true);
+			window.document.body.click();
 			expect(fp.isOpen).toBe(false);
 			expect(fp.calendarContainer.classList.contains("open")).toBe(false);
 
 			fp.open();
-			simulate("click", fp.days.childNodes[15]);
+			fp.days.childNodes[15].click();
 			expect(fp.selectedDates.length).toBe(1);
-			simulate("click", document.body);
+			window.document.body.click();
 
 			expect(fp.selectedDates.length).toBe(0);
 			expect(fp.input.value).toBe("");
@@ -515,24 +515,25 @@ describe('flatpickr', () => {
 			fp.open();
 
 			fp.days.childNodes[15].focus();
-			fp.isOpen = true;
-			simulate("keydown", fp.days.childNodes[15], {
-				which: 13 // enter
-			}, KeyboardEvent);
 
-			setTimeout(function(){
-				expect(fp.selectedDates.length).toBe(1);
-			}, 10);
+			simulate("keydown", fp.days.childNodes[15], {
+				key: "Enter",
+				keyCode: 13,
+				which: 13 // enter
+			});
+
+			expect(fp.selectedDates.length).toBe(1);;
 
 			fp.close();
 			fp.open();
-			simulate("keydown", document, {
+
+			simulate("keydown", fp.calendarContainer, {
+				key: "Escape",
 				which: 27, //esc
 				keyCode: 27
-			}, KeyboardEvent);
-			setTimeout(function(){
-				expect(fp.isOpen).toBe(false);
-			}, 100);
+			});
+
+			expect(fp.isOpen).toBe(false);
 
 			fp.changeMonth(3, false);
 
@@ -540,18 +541,17 @@ describe('flatpickr', () => {
 			simulate("keydown", fp.calendarContainer, {
 				which: 37,
 				keyCode: 37
-			}, KeyboardEvent);
+			});
 
-			setTimeout(function(){
-				expect(fp.currentMonth).toBe(2);
-			}, 1);
+			expect(fp.currentMonth).toBe(2);
+
 
 			fp.open();
 			simulate("keydown", fp.altInput, {	which: 37, keyCode: 37 });
-			setTimeout(() => { expect(fp.currentMonth).toBe(2); }, 100);
+			expect(fp.currentMonth).toBe(2);
 
 			simulate("keydown", fp.input, {	which: 39, keyCode: 39 });
-			setTimeout(() => { expect(fp.currentMonth).toBe(2); }, 100);
+			expect(fp.currentMonth).toBe(2);
 
 			simulate("keydown", fp.calendarContainer, {
 				which: 39,
@@ -559,7 +559,7 @@ describe('flatpickr', () => {
 			}, KeyboardEvent);
 
 
-			setTimeout(() => { expect(fp.currentMonth).toBe(3); }, 10);
+			expect(fp.currentMonth).toBe(3);
 
 			const now = new Date();
 
@@ -568,25 +568,22 @@ describe('flatpickr', () => {
 				keyCode: 38
 			}, KeyboardEvent);
 
-			setTimeout(() => { expect(fp.currentYear).toBe(now.getFullYear() + 1); }, 1);
+			expect(fp.currentYear).toBe(now.getFullYear() + 1);
 
 			simulate("keydown", fp.calendarContainer, {
 				which: 40,
 				keyCode: 40
 			}, KeyboardEvent);
 
-			setTimeout(function(){
-				expect(fp.currentYear).toBe(now.getFullYear());
-			}, 1);
+
+			expect(fp.currentYear).toBe(now.getFullYear());
 
 			simulate("keydown", fp.timeContainer, {
 				which: 40,
 				keyCode: 40
 			}, KeyboardEvent);
 
-			setTimeout(function(){
-				expect(fp.currentYear).toBe(now.getFullYear());
-			}, 1);
+			expect(fp.currentYear).toBe(now.getFullYear());
 		});
 	});
 
@@ -666,7 +663,7 @@ describe('flatpickr', () => {
 
 			simulate("wheel", fp.hourElement, {
 				wheelDelta: 1
-			});
+			}, window.MouseEvent);
 
 			expect(fp.hourElement.value).toEqual("12");
 
@@ -699,16 +696,14 @@ describe('flatpickr', () => {
 			fp.hourElement.value = "2";
 			simulate("input", fp.hourElement);
 
-			setTimeout(() => {
-				expect(fp.hourElement.value).toEqual("03");
-			}, 1001);
+			jest.runAllTimers();
+
+			expect(fp.hourElement.value).toEqual("03");
 
 			fp.minuteElement.value = "00";
 			simulate("input", fp.minuteElement);
 
-			setTimeout(() => {
-				expect(fp.minuteElement.value).toEqual("35");
-			}, 1001);
+			expect(fp.minuteElement.value).toEqual("35");
 		});
 
 		it("time input respects maxDate", () => {
@@ -751,17 +746,17 @@ describe('flatpickr', () => {
 
 			fp.hourElement.value = "16";
 			simulate("input", fp.hourElement);
+
+			jest.runAllTimers();
 			expect(fp.hourElement.value).toEqual("16");
 
 			fp.hourElement.value = "1";
-			simulate("input", fp.hourElement);
-			setTimeout(() => {
-				expect(fp.hourElement.value).toEqual("1");
-			}, 100);
 
-			setTimeout(() => {
-				expect(fp.hourElement.value).toEqual("16");
-			}, 1001);
+			simulate("input", fp.hourElement);
+			expect(fp.hourElement.value).toEqual("1");
+
+			jest.runAllTimers();
+			expect(fp.hourElement.value).toEqual("16");
 		});
 
 		it("should have working strap mode", () => {
