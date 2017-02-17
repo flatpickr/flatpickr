@@ -165,11 +165,12 @@ function Flatpickr(element, config) {
 	}
 
 	function onYearInput(event) {
-		if (event.target.value.length === 4) {
+		let year = event.target.value;
+		if (year.length === 4) {
 			self.currentYearElement.blur();
-			if (!/[^\\d]/.test(event.target.value))
-				changeYear(event.target.value);
-			event.target.value = self.currentYear;
+			if (!/[^\d]/.test(year))
+				changeYear(year);
+
 		}
 	}
 
@@ -229,7 +230,7 @@ function Flatpickr(element, config) {
 				self.currentYearElement.select();
 			});
 
-			self.currentYearElement.addEventListener("input", onYearInput, true);
+			self.currentYearElement.addEventListener("input", onYearInput);
 			self.currentYearElement.addEventListener("increment", onYearInput);
 
 			self.days.addEventListener("click", selectDate);
