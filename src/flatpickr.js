@@ -1418,13 +1418,13 @@ function Flatpickr(element, config) {
 		self.selectedDates = [];
 		self.now = new Date();
 
-		setSelectedDate(self.config.defaultDate || self.input.value);
-
 		if (self.config.disable.length)
 			self.config.disable = parseDateRules(self.config.disable);
 
 		if (self.config.enable.length)
 			self.config.enable = parseDateRules(self.config.enable);
+
+		setSelectedDate(self.config.defaultDate || self.input.value);
 
 		const initialDate = (self.selectedDates.length
 			? self.selectedDates[0]
