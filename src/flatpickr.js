@@ -409,11 +409,17 @@ function Flatpickr(element, config) {
 				dayElement.classList.add("selected");
 				self.selectedDateElem = dayElement;
 				if (self.config.mode === "range") {
-					dayElement.classList.add(
+					toggleClass(
+						dayElement,
+						"startRange",
 						compareDates(date, self.selectedDates[0]) === 0
-							? "startRange"
-							: "endRange"
-						);
+					);
+
+					toggleClass(
+						dayElement,
+						"endRange",
+						compareDates(date, self.selectedDates[1]) === 0
+					);
 				}
 			}
 		}
@@ -1803,13 +1809,15 @@ function Flatpickr(element, config) {
 	function timeWrapper(e) {
 		e.preventDefault();
 
-		const isKeyDown = e.type ==="keydown",
+		const isKeyDown = e.type === "keydown",
 			isWheel = e.type === "wheel";
 
 		if ((e.type !== "input" && !isKeyDown) &&
 			(e.target.value || e.target.textContent).length >= 2 // typed two digits
-		)
-			e.target.focus(), e.target.blur();
+		) {
+			e.target.focus();
+			e.target.blur();
+		}
 
 		if (self.amPM && e.target === self.amPM)
 			return e.target.textContent = ["AM", "PM"][(e.target.textContent === "AM") | 0];
