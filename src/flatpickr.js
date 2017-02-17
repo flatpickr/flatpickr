@@ -1309,7 +1309,7 @@ function Flatpickr(element, config) {
 		setHoursFromInputs();
 
 		if (selectedDate.getMonth() !== self.currentMonth && self.config.mode !== "range") {
-			const isNewYear = self.currentYear = selectedDate.getFullYear();
+			const isNewYear = self.currentYear !== selectedDate.getFullYear();
 			self.currentYear = selectedDate.getFullYear();
 			self.currentMonth = selectedDate.getMonth();
 
