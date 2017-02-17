@@ -943,7 +943,10 @@ function Flatpickr(element, config) {
 	}
 
 	function onKeyDown(e) {
-		if (self.isOpen && e.target.nodeName !== "INPUT" && self.calendarContainer.contains(e.target)) {
+		if (e.target === (self.altInput || self.input) && e.which === 13)
+			selectDate(e);
+
+		else if (self.isOpen && isCalendarElem(e.target)) {
 			switch (e.which) {
 				case 13:
 					if (self.timeContainer && self.timeContainer.contains(e.target))
@@ -1263,7 +1266,7 @@ function Flatpickr(element, config) {
 
 	function selectDate(e) {
 		e.preventDefault();
-		e.stopPropagaton();
+		e.stopPropagation();
 
 		if (
 			self.config.allowInput &&
@@ -1417,7 +1420,7 @@ function Flatpickr(element, config) {
 		setHoursFromDate();
 		updateValue();
 
-		if (triggerChange === true)
+		if (triggerChange !== false)
 			triggerEvent("Change");
 	}
 
