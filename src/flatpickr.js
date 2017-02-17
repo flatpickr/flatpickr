@@ -785,8 +785,11 @@ function Flatpickr(element, config) {
 		if (instance.timeContainer)
 			instance.timeContainer.removeEventListener("transitionend", positionCalendar);
 
-		if (instance.mobileInput && instance.mobileInput.parentNode)
-			instance.mobileInput.parentNode.removeChild(instance.mobileInput);
+		if (instance.mobileInput) {
+			if (instance.mobileInput.parentNode)
+				instance.mobileInput.parentNode.removeChild(instance.mobileInput);
+			delete instance.mobileInput;
+		}
 
 		else if (instance.calendarContainer && instance.calendarContainer.parentNode)
 			instance.calendarContainer.parentNode.removeChild(instance.calendarContainer);
@@ -795,6 +798,7 @@ function Flatpickr(element, config) {
 			instance.input.type = "text";
 			if (instance.altInput.parentNode)
 				instance.altInput.parentNode.removeChild(instance.altInput);
+			delete instance.altInput;
 		}
 
 		instance.input.type = instance.input._type;
