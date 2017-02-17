@@ -4,6 +4,12 @@ Flatpickr.l10ns.ru = require("../dist/l10n/ru.js").ru;
 jest.useFakeTimers();
 
 let elem, fp;
+const UA = navigator.userAgent;
+let mockAgent = null;
+
+navigator.__defineGetter__('userAgent', function(){
+    return mockAgent || UA;
+});
 
 function createInstance(config) {
 	fp = new Flatpickr(elem, config);
@@ -11,7 +17,8 @@ function createInstance(config) {
 }
 
 function beforeEachTest(){
-	jest.runAllTimers();
+	mockAgent = false;
+
 	if (elem)
 		elem.parentNode.removeChild(elem);
 
@@ -170,6 +177,20 @@ describe('flatpickr', () => {
 				expect(fp.selectedDates[0].getSeconds()).toEqual(12);
 			});
 
+			it('should parse today', () => {
+				createInstance();
+				expect(fp.parseDate("today")).toBeDefined();
+
+				expect(fp.parseDate("today", true).getHours()).toBe(0);
+			});
+
+			it ("should parse JSON datestrings", () => {
+				createInstance();
+
+				const date = fp.parseDate("2016-12-27T16:16:22.585Z", false);
+				expect(date.getTime()).toBeDefined();
+				expect(date.getTime()).toEqual(Date.parse("2016-12-27T16:16:22.585Z"));
+			});
 		});
 
 		describe("time string parser", () => {
@@ -585,6 +606,24 @@ describe('flatpickr', () => {
 
 			expect(fp.currentYear).toBe(now.getFullYear());
 		});
+
+		it("enabling dates by function", () => {
+			createInstance({
+				enable: [
+					d => d.getDate() === 6,
+					new Date()
+				],
+				disable: [
+					{from: "2016-10-20", to: "2016-10-25"}
+				]
+			});
+
+			expect(fp.isEnabled("2016-10-06")).toBe(true);
+			expect(fp.isEnabled(new Date())).toBe(true);
+			expect(fp.isEnabled("2016-10-20")).toBe(false);
+			expect(fp.isEnabled("2016-10-22")).toBe(false);
+			expect(fp.isEnabled("2016-10-25")).toBe(false);
+		});
 	});
 
 
@@ -598,6 +637,12 @@ describe('flatpickr', () => {
 			expect(fp.element.parentNode.classList.contains("flatpickr-wrapper")).toBe(true);
 			expect(fp.element.parentNode.childNodes[0]).toEqual(fp.element);
 			expect(fp.element.parentNode.childNodes[1]).toEqual(fp.calendarContainer);
+		});
+
+		it("mobile mode", () => {
+			mockAgent = "Android";
+			createInstance();
+			expect(fp.isMobile).toBe(true);
 		});
 
 		it("selectDate() + onChange() through GUI", () => {
