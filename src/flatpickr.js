@@ -1300,7 +1300,10 @@ function Flatpickr(element, config) {
 				self.clear();
 
 			self.selectedDates.push(selectedDate);
-			self.selectedDates.sort((a,b) => a.getTime() - b.getTime());
+
+			// unless selecting same date twice, sort ascendingly
+			if (compareDates(selectedDate, self.selectedDates[0], true) !== 0)
+				self.selectedDates.sort((a,b) => a.getTime() - b.getTime());
 		}
 
 		setHoursFromInputs();
