@@ -167,7 +167,8 @@ function Flatpickr(element, config) {
 	function onYearInput(event) {
 		if (event.target.value.length === 4) {
 			self.currentYearElement.blur();
-			changeYear(event.target.value);
+			if (/\d+/.test(event.target.value))
+				changeYear(event.target.value);
 			event.target.value = self.currentYear;
 		}
 	}
@@ -228,7 +229,7 @@ function Flatpickr(element, config) {
 				self.currentYearElement.select();
 			});
 
-			self.currentYearElement.addEventListener("input", onYearInput);
+			self.currentYearElement.addEventListener("input", onYearInput, true);
 			self.currentYearElement.addEventListener("increment", onYearInput);
 
 			self.days.addEventListener("click", selectDate);
@@ -938,57 +939,56 @@ function Flatpickr(element, config) {
 	}
 
 	function onKeyDown(e) {
-		if (!self.isOpen || !self.calendarContainer.contains(e.target))
-			return;
+		if (self.isOpen && e.target.nodeName !== "INPUT" && self.calendarContainer.contains(e.target)) {
+			switch (e.which) {
+				case 13:
+					if (self.timeContainer && self.timeContainer.contains(e.target))
+						updateValue();
 
-		switch (e.which) {
-			case 13:
-				if (self.timeContainer && self.timeContainer.contains(e.target))
-					updateValue();
+					else
+						selectDate(e);
 
-				else
-					selectDate(e);
+					break;
 
-				break;
+				case 27: // escape
+					self.close();
+					break;
 
-			case 27: // escape
-				self.close();
-				break;
+				case 37:
+					if (e.target !== self.input & e.target !== self.altInput)
+						changeMonth(-1);
+					break;
 
-			case 37:
-				if (e.target !== self.input & e.target !== self.altInput)
-					changeMonth(-1);
-				break;
-
-			case 38:
-				if (!self.timeContainer || !self.timeContainer.contains(e.target)) {
-					e.preventDefault();
-					self.currentYear++;
-					self.redraw();
-				}
-				else
-					updateTime(e);
+				case 38:
+					if (!self.timeContainer || !self.timeContainer.contains(e.target)) {
+						e.preventDefault();
+						self.currentYear++;
+						self.redraw();
+					}
+					else
+						updateTime(e);
 
 
-				break;
+					break;
 
-			case 39:
-				if (e.target !== self.input & e.target !== self.altInput)
-					changeMonth(1);
-				break;
+				case 39:
+					if (e.target !== self.input & e.target !== self.altInput)
+						changeMonth(1);
+					break;
 
-			case 40:
-				if (!self.timeContainer || !self.timeContainer.contains(e.target)) {
-					e.preventDefault();
-					self.currentYear--;
-					self.redraw();
-				}
-				else
-					updateTime(e);
+				case 40:
+					if (!self.timeContainer || !self.timeContainer.contains(e.target)) {
+						e.preventDefault();
+						self.currentYear--;
+						self.redraw();
+					}
+					else
+						updateTime(e);
 
-				break;
+					break;
 
-			default: break;
+
+			}
 		}
 	}
 
