@@ -862,7 +862,10 @@ function Flatpickr(element, config) {
 		)
 			return;
 
-		self.currentYear = parseInt(newYear, 10) || self.currentYear;
+		const newYearNum = parseInt(newYear, 10),
+			isNewYear = self.currentYear !== newYearNum;
+
+		self.currentYear = newYearNum || self.currentYear;
 
 		if (
 			self.config.maxDate
@@ -884,8 +887,10 @@ function Flatpickr(element, config) {
 			);
 		}
 
-		self.redraw();
-		triggerEvent("YearChange");
+		if (isNewYear) {
+			self.redraw();
+			triggerEvent("YearChange");
+		}
 	}
 
 	function isEnabled(date, timeless) {
@@ -1304,9 +1309,14 @@ function Flatpickr(element, config) {
 		setHoursFromInputs();
 
 		if (selectedDate.getMonth() !== self.currentMonth && self.config.mode !== "range") {
+			const isNewYear = self.currentYear = selectedDate.getFullYear();
 			self.currentYear = selectedDate.getFullYear();
 			self.currentMonth = selectedDate.getMonth();
-			updateNavigationCurrentMonth();
+
+			if (isNewYear)
+				triggerEvent("YearChange");
+
+			triggerEvent("MonthChange");
 		}
 
 		buildDays();
