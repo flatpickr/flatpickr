@@ -1577,8 +1577,17 @@ function Flatpickr(element, config) {
 			);
 			self.altInput.placeholder = self.input.placeholder;
 			self.altInput.type = "text";
-
 			self.input.type = "hidden";
+
+			if (self.config.altInputId) {
+				self.altInput.id = self.config.altInputId;
+				
+				var labelElement = window.document.querySelector("label[for=\"" + self.input.id + "\"]");
+
+				if (labelElement) 
+					labelElement.setAttribute("for", self.config.altInputId);
+			}
+
 			if (self.input.parentNode)
 				self.input.parentNode.insertBefore(self.altInput, self.input.nextSibling);
 		}

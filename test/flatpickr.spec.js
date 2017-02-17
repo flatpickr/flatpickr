@@ -1,21 +1,36 @@
 const Flatpickr = require("../src/flatpickr.js");
 Flatpickr.l10ns.ru = require("../dist/l10n/ru.js").ru;
 
-let elem, fp;
+let elem, label, fp;
 
 function createInstance(config) {
 	fp = new Flatpickr(elem, config);
 	return fp;
 }
 
-function beforeEachTest(){
+
+function createLabel() {	
+	label = document.createElement("label");
+	label.setAttribute("for", "dateInput");
+
+	document.body.appendChild(label);
+}
+
+function beforeEachTest() {
 	if (elem)
 		elem.parentNode.removeChild(elem);
-
+	
+	if (label) {
+		label.parentNode.removeChild(label);
+		label = null;
+	}
+	
 	if (fp)
 		fp.destroy();
 
 	elem = document.createElement("input");
+	elem.id = "dateInput";
+
 	document.body.appendChild(elem);
 }
 
@@ -848,6 +863,37 @@ describe('flatpickr', () => {
 			simulate("click", fp.days.childNodes[17]);
 			expect(fp.selectedDates.length).toEqual(2);
 			expect(fp.input.value).toEqual("2016-01-13 to 2016-01-17");
+		});
+
+		it("applies altInputId to altInput", () => { 
+			createInstance({
+				altInput: true,
+				altInputId: "flatpickr-1"
+			});
+
+			expect(fp.altInput.id).toEqual("flatpickr-1");
+		});
+	});
+
+	describe("Label", () => {
+		it("continue without label", () => { 
+			expect(() => {
+				createInstance({
+					altInput: true,
+					altInputId: "flatpickr-1"
+				});
+			}).not.toThrow();
+		});
+
+		it("associate label with altInput", () => { 
+			createLabel();
+
+			createInstance({
+				altInput: true,
+				altInputId: "flatpickr-1"
+			});
+
+			expect(label.getAttribute("for")).toEqual("flatpickr-1");
 		});
 	});
 
