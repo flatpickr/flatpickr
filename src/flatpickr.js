@@ -9,6 +9,7 @@ function Flatpickr(element, config) {
 	self._createElement = createElement;
 	self.destroy = destroy;
 	self.formatDate = formatDate;
+	self.isEnabled = isEnabled;
 	self.jumpToDate = jumpToDate;
 	self.open = open;
 	self.redraw = redraw;
@@ -24,7 +25,7 @@ function Flatpickr(element, config) {
 
 		self.element = element;
 		self.instanceConfig = config || {};
-		self.parseDate = self.parseDate.bind(this);
+		self.parseDate = Flatpickr.prototype.parseDate.bind(self);
 
 		setupFormats();
 
@@ -868,10 +869,7 @@ function Flatpickr(element, config) {
 
 		self.currentYear = newYearNum || self.currentYear;
 
-		if (
-			self.config.maxDate
-			&& self.currentYear === self.config.maxDate.getFullYear()
-		) {
+		if (self.config.maxDate	&& self.currentYear === self.config.maxDate.getFullYear()) {
 			self.currentMonth = Math.min(
 				self.config.maxDate.getMonth(),
 				self.currentMonth
@@ -879,9 +877,7 @@ function Flatpickr(element, config) {
 		}
 
 		else if (
-			self.config.minDate
-			&& self.currentYear === self.config.minDate.getFullYear()
-		) {
+			self.config.minDate && self.currentYear === self.config.minDate.getFullYear()) {
 			self.currentMonth = Math.max(
 				self.config.minDate.getMonth(),
 				self.currentMonth
@@ -2078,7 +2074,7 @@ Flatpickr.prototype = {
 			date = new Date(date);
 
 		else if (typeof date === "string") {
-			date = date.trim().toLowerCase();
+			date = date.trim();
 
 			if (date === "today") {
 				date = new Date();
