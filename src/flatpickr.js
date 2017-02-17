@@ -167,7 +167,7 @@ function Flatpickr(element, config) {
 	function onYearInput(event) {
 		if (event.target.value.length === 4) {
 			self.currentYearElement.blur();
-			if (/\d+/.test(event.target.value))
+			if (!/[^\\d]/.test(event.target.value))
 				changeYear(event.target.value);
 			event.target.value = self.currentYear;
 		}
@@ -315,6 +315,7 @@ function Flatpickr(element, config) {
 			arrowDown = createElement("span", "arrowDown");
 
 		numInput.type = "text";
+		numInput.pattern = "\\d*";
 		wrapper.appendChild(numInput);
 		wrapper.appendChild(arrowUp);
 		wrapper.appendChild(arrowDown);
@@ -615,7 +616,6 @@ function Flatpickr(element, config) {
 		self.minuteElement =  minuteInput.childNodes[0];
 
 		self.hourElement.tabIndex = self.minuteElement.tabIndex = 0;
-		self.hourElement.pattern = self.minuteElement.pattern = "\\d*";
 
 		self.hourElement.value = self.pad(self.latestSelectedDateObj
 			? self.latestSelectedDateObj.getHours()
@@ -651,7 +651,6 @@ function Flatpickr(element, config) {
 			const secondInput = createNumberInput("flatpickr-second");
 			self.secondElement =  secondInput.childNodes[0];
 
-			self.secondElement.pattern = self.hourElement.pattern;
 			self.secondElement.value =
 				self.latestSelectedDateObj ? self.pad(self.latestSelectedDateObj.getSeconds()) : "00";
 
