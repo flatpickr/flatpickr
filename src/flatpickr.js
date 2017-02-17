@@ -1801,10 +1801,15 @@ function Flatpickr(element, config) {
 	}
 
 	function timeWrapper(e) {
-		if (e && e.type !=="keydown" &&
+		e.preventDefault();
+
+		const isKeyDown = e.type ==="keydown",
+			isWheel = e.type === "wheel";
+
+		if ((e.type !== "input" && !isKeyDown) &&
 			(e.target.value || e.target.textContent).length >= 2 // typed two digits
 		)
-			e.target.blur();
+			e.target.focus(), e.target.blur();
 
 		if (self.amPM && e.target === self.amPM)
 			return e.target.textContent = ["AM", "PM"][(e.target.textContent === "AM") | 0];
@@ -1813,19 +1818,18 @@ function Flatpickr(element, config) {
 			max = Number(e.target.max),
 			step = Number(e.target.step),
 			curValue = parseInt(e.target.value, 10),
-			delta = e.type === "keydown"
-				? e.which === 38 ? 1 : -1
-				: Math.max(-1, Math.min(1, (e.wheelDelta || -e.deltaY)));
+			delta = !isKeyDown
+				? Math.max(-1, Math.min(1, (e.wheelDelta || -e.deltaY))) || 0
+				: e.which === 38 ? 1 : -1;
 
-		let newValue = Number(curValue);
+		let newValue = curValue + (isWheel || isKeyDown) * step * delta;
 
-		if(e.type === "wheel" || e.type === "keydown")
-			newValue = curValue + step * delta;
+		if (e.target.value.length === 2) {
+			const isHourElem = e.target === self.hourElement;
 
-		if (e.type !== "input" || e.target.value.length === 2) {
 			if (newValue < min) {
-				newValue = max + newValue + (e.target !== self.hourElement)
-					+ (e.target === self.hourElement && !self.amPM);
+				newValue = max + newValue + !isHourElem
+					+ (isHourElem && !self.amPM);
 			}
 
 			else if (newValue > max) {
@@ -1835,7 +1839,7 @@ function Flatpickr(element, config) {
 			}
 
 			if (
-				self.amPM && e.target === self.hourElement && (step === 1
+				self.amPM && isHourElem && (step === 1
 					? newValue + curValue === 23
 					: Math.abs(newValue - curValue) > step)
 			)
@@ -1843,9 +1847,6 @@ function Flatpickr(element, config) {
 
 			e.target.value = self.pad(newValue);
 		}
-
-		else
-			e.target.value = newValue;
 	}
 
 	init();
