@@ -180,13 +180,9 @@ function Flatpickr(element, config) {
 	function bind() {
 		if (self.config.wrap) {
 			["open", "close", "toggle", "clear"].forEach(el => {
-				try {
-					self.element.querySelector(`[data-${el}]`)
-						.addEventListener("click", self[el]);
-				}
-				catch (e) {
-					//
-				}
+				const toggles = self.element.querySelectorAll(`[data-${el}]`);
+				for (let i = 0; i < toggles.length; i++)
+					toggles[i].addEventListener("click", self[el]);
 			});
 		}
 
