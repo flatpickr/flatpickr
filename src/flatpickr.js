@@ -24,6 +24,7 @@ function Flatpickr(element, config) {
 
 		self.element = element;
 		self.instanceConfig = config || {};
+		self.parseDate = self.parseDate.bind(this);
 
 		setupFormats();
 
