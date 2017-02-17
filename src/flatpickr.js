@@ -1263,6 +1263,8 @@ function Flatpickr(element, config) {
 
 	function selectDate(e) {
 		e.preventDefault();
+		e.stopPropagaton();
+
 		if (
 			self.config.allowInput &&
 			e.which === 13 &&
