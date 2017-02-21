@@ -119,6 +119,14 @@ describe('flatpickr', () => {
 			expect(fp.selectedDates.length).toBe(0);
 			expect(fp.days.querySelector(".selected")).toEqual(null);
 		});
+
+		it("doesn't throw with undefined properties", () => {
+			createInstance({
+				onChange: undefined,
+			});
+			fp.set("minDate", "2016-10-20");
+			expect(fp.config.minDate).toBeDefined();
+		});
 	});
 
 	describe("datetimestring parser", () => {
