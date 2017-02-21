@@ -2069,7 +2069,7 @@ Flatpickr.prototype = {
 			return null;
 
 		const dateTimeRegex = /(\d+)/g,
-			timeRegex = /^(\d{1,2})[:\s](\d\d)?[:\s]?(\d\d)?\s?(a|p)?/i,
+			timeRegex = /^(\d{1,2})[:\s](\d\d)?[:\s]?(\d\d)?\s?(a|p|A|P)?/i,
 			timestamp = /^(\d+)$/g,
 			date_orig = date;
 
@@ -2102,8 +2102,8 @@ Flatpickr.prototype = {
 
 			else if (dateTimeRegex.test(date) && /^[0-9]/.test(date)) {
 				const d = date.match(dateTimeRegex),
-					isAM = /(am)$/.test(date),
-					isPM = /(pm)$/.test(date);
+					isAM = /(am|AM)$/.test(date),
+					isPM = /(pm|PM)$/.test(date);
 
 				date = new Date(
 					`${d[0]}/${d[1] || 1}/${d[2] || 1} ${d[3] || 0}:${d[4] || 0}:${d[5] || 0}`
