@@ -123,7 +123,7 @@ function Flatpickr(element, config) {
 				minutes = Math.max(minutes, self.config.minDate.getMinutes());
 		}
 
-		else if (
+		if (
 			self.maxDateHasTime
 			&& compareDates(self.latestSelectedDateObj, self.config.maxDate) === 0
 		) {

@@ -768,6 +768,34 @@ describe('flatpickr', () => {
 			expect(fp.minuteElement.value).toEqual("35"); // can't go higher than 35
 		});
 
+		it("time input respects same-day minDate/maxDate", () => {
+			createInstance({
+				enableTime: true,
+				minDate: "2017-1-01 2:00 PM",
+				maxDate: "2017-1-01 3:35 PM",
+			});
+
+			fp.setDate("2017-1-1 2:30 PM");
+
+			decrementTime("hour");
+
+			simulate("wheel", fp.hourElement, {
+				wheelDelta: -1
+			}, window.MouseEvent);
+
+			expect(fp.hourElement.value).toEqual("02"); // ok
+
+			incrementTime("hour", 4);
+			expect(fp.hourElement.value).toEqual("03");
+
+			incrementTime("minute", 8);
+			simulate("wheel", fp.minuteElement, {
+				wheelDelta: 1
+			}, window.MouseEvent);
+
+			expect(fp.minuteElement.value).toEqual("35"); // can't go higher than 35
+		});
+
 		it("should have an implicit selectedDate in time picker mode", () => {
 			createInstance({
 				enableTime: true,
