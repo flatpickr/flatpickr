@@ -22,7 +22,7 @@ function confirmIconPlugin(pluginConfig) {
 		};
 
 		if (config.showAlways) fp.confirmContainer.classList.add("visible");else hooks.onChange = function (dateObj, dateStr) {
-			if (dateStr) return fp.confirmContainer.classList.add("visible");
+			if (dateStr && !fp.config.inline) return fp.confirmContainer.classList.add("visible");
 			fp.confirmContainer.classList.remove("visible");
 		};
 
