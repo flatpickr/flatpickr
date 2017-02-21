@@ -24,7 +24,7 @@ function confirmIconPlugin(pluginConfig) {
 
 		else
 			hooks.onChange = function(dateObj, dateStr) {
-				if(dateStr)
+				if(dateStr && !fp.config.inline)
 					return fp.confirmContainer.classList.add("visible");
 				fp.confirmContainer.classList.remove("visible");
 			}
