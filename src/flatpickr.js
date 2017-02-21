@@ -814,6 +814,9 @@ function Flatpickr(element, config) {
 	}
 
 	function isCalendarElem(elem) {
+		if (self.config.appendTo && self.config.appendTo.contains(elem))
+			return true;
+
 		let e = elem;
 		while (e) {
 			if (/flatpickr-day|flatpickr-calendar/.test(e.className))
