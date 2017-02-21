@@ -817,14 +817,7 @@ function Flatpickr(element, config) {
 		if (self.config.appendTo && self.config.appendTo.contains(elem))
 			return true;
 
-		let e = elem;
-		while (e) {
-			if (/flatpickr-day|flatpickr-calendar/.test(e.className))
-				return true;
-			e = e.parentNode;
-		}
-
-		return false;
+		return self.calendarContainer.contains(elem);
 	}
 
 	function documentClick(e) {
@@ -962,8 +955,10 @@ function Flatpickr(element, config) {
 					break;
 
 				case 37:
-					if (e.target !== self.input & e.target !== self.altInput)
+					if (e.target !== self.input & e.target !== self.altInput) {
 						changeMonth(-1);
+						self.currentMonthElement.focus();
+					}
 					break;
 
 				case 38:
@@ -979,8 +974,10 @@ function Flatpickr(element, config) {
 					break;
 
 				case 39:
-					if (e.target !== self.input & e.target !== self.altInput)
+					if (e.target !== self.input & e.target !== self.altInput) {
 						changeMonth(1);
+						self.currentMonthElement.focus();
+					}
 					break;
 
 				case 40:
@@ -993,6 +990,8 @@ function Flatpickr(element, config) {
 						updateTime(e);
 
 					break;
+
+				default: break;
 
 
 			}
