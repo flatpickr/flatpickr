@@ -101,7 +101,9 @@ function Flatpickr(element, config) {
 
 			hours = Math.max(hours, self.config.minDate.getHours());
 			if (hours === self.config.minDate.getHours()) minutes = Math.max(minutes, self.config.minDate.getMinutes());
-		} else if (self.maxDateHasTime && compareDates(self.latestSelectedDateObj, self.config.maxDate) === 0) {
+		}
+
+		if (self.maxDateHasTime && compareDates(self.latestSelectedDateObj, self.config.maxDate) === 0) {
 			hours = Math.min(hours, self.config.maxDate.getHours());
 			if (hours === self.config.maxDate.getHours()) minutes = Math.min(minutes, self.config.maxDate.getMinutes());
 		}
@@ -1709,7 +1711,7 @@ Flatpickr.prototype = {
 		if (!date) return null;
 
 		var dateTimeRegex = /(\d+)/g,
-		    timeRegex = /^(\d{1,2})[:\s](\d\d)?[:\s]?(\d\d)?\s?(a|p)?/i,
+		    timeRegex = /^(\d{1,2})[:\s](\d\d)?[:\s]?(\d\d)?\s?(a|p|A|P)?/i,
 		    timestamp = /^(\d+)$/g,
 		    date_orig = date;
 
@@ -1731,8 +1733,8 @@ Flatpickr.prototype = {
 			} else if (/Z$/.test(date) || /GMT$/.test(date)) // datestrings w/ timezone
 				date = new Date(date);else if (dateTimeRegex.test(date) && /^[0-9]/.test(date)) {
 				var d = date.match(dateTimeRegex),
-				    isAM = /(am)$/.test(date),
-				    isPM = /(pm)$/.test(date);
+				    isAM = /(am|AM)$/.test(date),
+				    isPM = /(pm|PM)$/.test(date);
 
 				date = new Date(d[0] + "/" + (d[1] || 1) + "/" + (d[2] || 1) + " " + (d[3] || 0) + ":" + (d[4] || 0) + ":" + (d[5] || 0));
 
