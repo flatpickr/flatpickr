@@ -1159,6 +1159,9 @@ function Flatpickr(element, config) {
 			JSON.parse(JSON.stringify(self.element.dataset || {}))
 		);
 
+		self.config.parseDate = userConfig.parseDate;
+		self.config.formatDate = userConfig.formatDate;
+
 		Object.assign(self.config, userConfig);
 
 		for (let i = 0; i < boolOpts.length; i++)
