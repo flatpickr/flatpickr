@@ -2,7 +2,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-/*! flatpickr v2.3.7, @license MIT */
+/*! flatpickr v2.4, @license MIT */
 function Flatpickr(element, config) {
 	var self = this;
 
@@ -663,13 +663,9 @@ function Flatpickr(element, config) {
 	}
 
 	function isCalendarElem(elem) {
-		var e = elem;
-		while (e) {
-			if (/flatpickr-day|flatpickr-calendar/.test(e.className)) return true;
-			e = e.parentNode;
-		}
+		if (self.config.appendTo && self.config.appendTo.contains(elem)) return true;
 
-		return false;
+		return self.calendarContainer.contains(elem);
 	}
 
 	function documentClick(e) {
@@ -759,7 +755,10 @@ function Flatpickr(element, config) {
 					break;
 
 				case 37:
-					if (e.target !== self.input & e.target !== self.altInput) changeMonth(-1);
+					if (e.target !== self.input & e.target !== self.altInput) {
+						changeMonth(-1);
+						self.currentMonthElement.focus();
+					}
 					break;
 
 				case 38:
@@ -772,7 +771,10 @@ function Flatpickr(element, config) {
 					break;
 
 				case 39:
-					if (e.target !== self.input & e.target !== self.altInput) changeMonth(1);
+					if (e.target !== self.input & e.target !== self.altInput) {
+						changeMonth(1);
+						self.currentMonthElement.focus();
+					}
 					break;
 
 				case 40:
@@ -782,6 +784,9 @@ function Flatpickr(element, config) {
 						self.redraw();
 					} else updateTime(e);
 
+					break;
+
+				default:
 					break;
 
 			}
