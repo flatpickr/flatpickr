@@ -1169,8 +1169,9 @@ function Flatpickr(element, config) {
 		for (let i = 0; i < boolOpts.length; i++)
 			self.config[boolOpts[i]] = (self.config[boolOpts[i]] === true) || self.config[boolOpts[i]] === "true";
 
-		for (let i = 0; i < hooks.length; i++)
-			self.config[hooks[i]] = arrayify(self.config[hooks[i]]);
+		for (let i = 0; i < hooks.length; i++) {
+			self.config[hooks[i]] = arrayify(self.config[hooks[i]] || []);
+		}
 
 
 		if (!userConfig.dateFormat && userConfig.enableTime) {
