@@ -15,7 +15,7 @@ Flatpickr.l10ns.sk.months = {
 Flatpickr.l10ns.sk.firstDayOfWeek = 1;
 
 Flatpickr.l10ns.sk.ordinal = function() {
-	eturn ".";
+	return ".";
 };
 if (typeof module !== "undefined") {
 	module.exports = Flatpickr.l10ns;
