@@ -1,6 +1,6 @@
 {
   "name": "flatpickr",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "description": "A lightweight, powerful javascript datetime picker",
   "scripts": {
     "build": "run-p build:*",
@@ -26,7 +26,8 @@
     "serve:livereload": "livereload \"dist\"",
     "start": "run-p build dev serve lint",
     "test": "jest --bail",
-    "coveralls": "jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
+    "coveralls": "jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "release": "node --harmony-async-await ./newRelease.js"
   },
   "dependencies": {},
   "devDependencies": {
@@ -47,6 +48,7 @@
     "postcss-cli": "https://github.com/postcss/postcss-cli.git#develop",
     "postcss-flexbugs-fixes": "^2.1.0",
     "rtlcss": "^2.1.2",
+    "semver": "^5.3.0",
     "stylus": "^0.54.5",
     "uglify-js": "^2.7.5"
   },
