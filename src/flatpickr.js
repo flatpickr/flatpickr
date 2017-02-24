@@ -1173,10 +1173,8 @@ function Flatpickr(element, config) {
 		for (let i = 0; i < boolOpts.length; i++)
 			self.config[boolOpts[i]] = (self.config[boolOpts[i]] === true) || self.config[boolOpts[i]] === "true";
 
-		for (let i = 0; i < hooks.length; i++) {
+		for (let i = 0; i < hooks.length; i++)
 			self.config[hooks[i]] = arrayify(self.config[hooks[i]] || []);
-		}
-
 
 		if (!userConfig.dateFormat && userConfig.enableTime) {
 			self.config.dateFormat = self.config.noCalendar
@@ -1830,7 +1828,9 @@ function Flatpickr(element, config) {
 		e.preventDefault();
 
 		const isKeyDown = e.type === "keydown",
-			isWheel = e.type === "wheel";
+			isWheel = e.type === "wheel",
+			isIncrement = e.type === "increment",
+			input = e.target;
 
 		if ((e.type !== "input" && !isKeyDown) &&
 			(e.target.value || e.target.textContent).length >= 2 // typed two digits
@@ -1842,28 +1842,35 @@ function Flatpickr(element, config) {
 		if (self.amPM && e.target === self.amPM)
 			return e.target.textContent = ["AM", "PM"][(e.target.textContent === "AM") | 0];
 
-		const min = Number(e.target.min),
-			max = Number(e.target.max),
-			step = Number(e.target.step),
-			curValue = parseInt(e.target.value, 10),
-			delta = !isKeyDown
+		const min = Number(input.min),
+			max = Number(input.max),
+			step = Number(input.step),
+			curValue = parseInt(input.value, 10),
+			delta = e.delta || (!isKeyDown
 				? Math.max(-1, Math.min(1, (e.wheelDelta || -e.deltaY))) || 0
-				: e.which === 38 ? 1 : -1;
+				: e.which === 38 ? 1 : -1);
 
-		let newValue = curValue + (isWheel || isKeyDown) * step * delta;
+		let newValue = curValue + step * delta;
 
-		if (e.target.value.length === 2) {
-			const isHourElem = e.target === self.hourElement;
+		if (input.value.length === 2) {
+			const isHourElem = input === self.hourElement,
+				isMinuteElem = input === self.minuteElement;
 
 			if (newValue < min) {
 				newValue = max + newValue + !isHourElem
 					+ (isHourElem && !self.amPM);
+
+				if (isMinuteElem)
+					incrementNumInput(null, -1, self.hourElement)
 			}
 
 			else if (newValue > max) {
-				newValue = e.target === self.hourElement
+				newValue = input === self.hourElement
 					? newValue - max - (!self.amPM)
 					: min;
+
+				if (isMinuteElem)
+					incrementNumInput(null, 1, self.hourElement);
 			}
 
 			if (
@@ -1873,7 +1880,9 @@ function Flatpickr(element, config) {
 			)
 				self.amPM.textContent = self.amPM.textContent === "PM" ? "AM" : "PM";
 
-			e.target.value = self.pad(newValue);
+
+
+			input.value = self.pad(newValue);
 		}
 	}
 
