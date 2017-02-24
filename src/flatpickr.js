@@ -167,11 +167,13 @@ function Flatpickr(element, config) {
 
 	function onYearInput(event) {
 		let year = event.target.value;
+		if (event.delta)
+			year = (parseInt(year) + event.delta).toString();
+
 		if (year.length === 4) {
 			self.currentYearElement.blur();
 			if (!/[^\d]/.test(year))
 				changeYear(year);
-
 		}
 	}
 
@@ -295,17 +297,19 @@ function Flatpickr(element, config) {
 		self.redraw();
 	}
 
-	function incrementNumInput(e, delta) {
-		const input = e.target.parentNode.childNodes[0];
-		input.value = parseInt(input.value, 10) + delta * (input.step || 1);
+	function incrementNumInput(e, delta, inputElem) {
+		const input = inputElem || e.target.parentNode.childNodes[0];
 
-		try {
-			input.dispatchEvent(new Event("increment", { "bubbles": true }));
+		if (typeof Event !== "undefined") {
+			const ev = new Event("increment", { "bubbles": true });
+			ev.delta = delta;
+			input.dispatchEvent(ev);
 		}
 
-		catch (e) {
+		else {
 			const ev = window.document.createEvent("CustomEvent");
 			ev.initCustomEvent("increment", true, true, {});
+			ev.delta = delta;
 			input.dispatchEvent(ev);
 		}
 	}
