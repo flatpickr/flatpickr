@@ -28,7 +28,6 @@ function Flatpickr(element, config) {
 		self.parseDate = Flatpickr.prototype.parseDate.bind(self);
 
 		setupFormats();
-
 		parseConfig();
 		setupLocale();
 		setupInputs();
@@ -72,7 +71,6 @@ function Flatpickr(element, config) {
 			self.calendarContainer.style.width = self.days.clientWidth
 				+ self.weekWrapper.clientWidth + "px";
 		}
-
 
 		triggerEvent("Ready");
 	}
@@ -196,7 +194,6 @@ function Flatpickr(element, config) {
 			self.changeEvent.initEvent("change", false, true);
 		}
 
-
 		if (self.isMobile)
 			return setupMobile();
 
@@ -286,7 +283,6 @@ function Flatpickr(element, config) {
 			self.currentMonth = jumpDate.getMonth();
 		}
 
-
 		catch (e) {
 			/* istanbul ignore next */
 			console.error(e.stack);
@@ -353,7 +349,6 @@ function Flatpickr(element, config) {
 
 			buildDays();
 			self.rContainer.appendChild(self.days);
-
 
 			self.innerContainer.appendChild(self.rContainer);
 			fragment.appendChild(self.innerContainer);
@@ -446,7 +441,6 @@ function Flatpickr(element, config) {
 				self.maxRangeDate = date;
 		}
 
-
 		if (self.config.mode === "range") {
 			if (isDateInRange(date) && !isDateSelected(date))
 				dayElement.classList.add("inRange");
@@ -457,7 +451,6 @@ function Flatpickr(element, config) {
 			)
 				dayElement.classList.add("notAllowed");
 		}
-
 
 		if (self.config.weekNumbers && className !== "prevMonthDay" && dayNumber % 7 === 1) {
 			self.weekNumbers.insertAdjacentHTML(
@@ -515,7 +508,6 @@ function Flatpickr(element, config) {
 			);
 		}
 
-
 		// append days from the next month
 		for (let dayNum = daysInMonth + 1; dayNum <= 42 - firstOfMonth; dayNum++) {
 			days.appendChild(
@@ -537,7 +529,6 @@ function Flatpickr(element, config) {
 
 		else
 			updateNavigationCurrentMonth();
-
 
 		self.days.appendChild(days);
 		return self.days;
@@ -589,7 +580,6 @@ function Flatpickr(element, config) {
 				this.__hidePrevMonthArrow = bool;
 			}
 		});
-
 
 		Object.defineProperty(self, "_hideNextMonthArrow", {
 			get () {
@@ -908,7 +898,6 @@ function Flatpickr(element, config) {
 		if (!self.config.enable.length && !self.config.disable.length)
 			return true;
 
-
 		const dateToCheck = self.parseDate(date, true); // timeless
 
 		const bool = self.config.enable.length > 0,
@@ -919,7 +908,6 @@ function Flatpickr(element, config) {
 
 			if (d instanceof Function && d(dateToCheck)) // disabled by function
 				return bool;
-
 
 			else if (d instanceof Date && d.getTime() === dateToCheck.getTime())
 				// disabled by date
@@ -974,7 +962,6 @@ function Flatpickr(element, config) {
 					else
 						updateTime(e);
 
-
 					break;
 
 				case 39:
@@ -996,7 +983,6 @@ function Flatpickr(element, config) {
 					break;
 
 				default: break;
-
 
 			}
 		}
@@ -1104,6 +1090,7 @@ function Flatpickr(element, config) {
 	function minMaxDateSetter(type) {
 		return function(date) {
 			const dateObj = self.config[`_${type}Date`] = self.parseDate(date);
+
 			const inverseDateObj = self.config[`_${type === "min" ? "max" : "min"}Date`];
 			const isValidDate = date && dateObj instanceof Date;
 
@@ -1145,6 +1132,29 @@ function Flatpickr(element, config) {
 
 		self.config = Object.create(Flatpickr.defaultConfig);
 
+		let userConfig = Object.assign(
+			{},
+			self.instanceConfig,
+			JSON.parse(JSON.stringify(self.element.dataset || {}))
+		);
+
+		self.config.parseDate = userConfig.parseDate;
+		self.config.formatDate = userConfig.formatDate;
+
+		Object.assign(self.config, userConfig);
+
+		if (!userConfig.dateFormat && userConfig.enableTime) {
+			self.config.dateFormat = self.config.noCalendar
+				? "H:i" + (self.config.enableSeconds ? ":S" : "")
+				: Flatpickr.defaultConfig.dateFormat + " H:i" + (self.config.enableSeconds ? ":S" : "");
+		}
+
+		if (userConfig.altInput && userConfig.enableTime && !userConfig.altFormat) {
+			self.config.altFormat = self.config.noCalendar
+				? "h:i" + (self.config.enableSeconds ? ":S K" : " K")
+				: Flatpickr.defaultConfig.altFormat + ` h:i${self.config.enableSeconds ? ":S" : ""} K`;
+		}
+
 		Object.defineProperty(self.config, "minDate", {
 			get: function() {
 				return this._minDate;
@@ -1159,34 +1169,14 @@ function Flatpickr(element, config) {
 			set: minMaxDateSetter("max")
 		});
 
-		let userConfig = Object.assign(
-			{},
-			self.instanceConfig,
-			JSON.parse(JSON.stringify(self.element.dataset || {}))
-		);
-
-		self.config.parseDate = userConfig.parseDate;
-		self.config.formatDate = userConfig.formatDate;
-
-		Object.assign(self.config, userConfig);
+		self.config.minDate = userConfig.minDate;
+		self.config.maxDate = userConfig.maxDate;
 
 		for (let i = 0; i < boolOpts.length; i++)
 			self.config[boolOpts[i]] = (self.config[boolOpts[i]] === true) || self.config[boolOpts[i]] === "true";
 
 		for (let i = 0; i < hooks.length; i++)
 			self.config[hooks[i]] = arrayify(self.config[hooks[i]] || []);
-
-		if (!userConfig.dateFormat && userConfig.enableTime) {
-			self.config.dateFormat = self.config.noCalendar
-				? "H:i" + (self.config.enableSeconds ? ":S" : "")
-				: Flatpickr.defaultConfig.dateFormat + " H:i" + (self.config.enableSeconds ? ":S" : "");
-		}
-
-		if (userConfig.altInput && userConfig.enableTime && !userConfig.altFormat) {
-			self.config.altFormat = self.config.noCalendar
-				? "h:i" + (self.config.enableSeconds ? ":S K" : " K")
-				: Flatpickr.defaultConfig.altFormat + ` h:i${self.config.enableSeconds ? ":S" : ""} K`;
-		}
 
 		for (let i = 0; i < self.config.plugins.length; i++) {
 			const pluginConf = self.config.plugins[i](self) || {};
@@ -1583,6 +1573,41 @@ function Flatpickr(element, config) {
 			// last two digits of year e.g. 16 for 2016
 			y: date => String(self.formats.Y(date)).substring(2)
 		};
+
+		self.tokenRegex = {
+			y: "(\\d{2})",
+			Y: "(\\d{4})"
+		};
+
+		// two/one digit tokens
+		["d", "h", "i", "j", "m", "s", "H", "S"].forEach(t => self.tokenRegex[t] = "(\\d\\d|\\d)");
+
+		// single words
+		["D", "F", "K"].forEach(t => self.tokenRegex[t] = "(\\w+)");
+
+		const blank = () => {};
+
+		self.revFormat = {
+			d: (dateObj, day) => dateObj.setDate(parseFloat(day)),
+			h: (dateObj, hour) => dateObj.setHours(parseFloat(hour)),
+			i: (dateObj, minutes) => dateObj.setMinutes(parseFloat(minutes)),
+			j: (dateObj, day) => dateObj.setDate(parseFloat(day)),
+			m: (dateObj, month) => dateObj.setMonth(parseFloat(month)-1),
+			s: (dateObj, seconds) => dateObj.setSeconds(parseFloat(seconds)),
+			y: (dateObj, year) => dateObj.setFullYear(2000+parseFloat(year)),
+			D: blank,
+			F: (dateObj, monthName) => dateObj.setMonth(self.l10n.months.longhand.indexOf(monthName)),
+			H: (dateObj, hour) => dateObj.setHours(parseFloat(hour)),
+			K: (dateObj, amPM) => {
+				const hours = dateObj.getHours(),
+					isPM = (amPM.toLowerCase() === "pm");
+
+				if (hours !== 12)
+					dateObj.setHours(hours % 12 + 12 * isPM);
+			},
+			S: (dateObj, seconds) => dateObj.setSeconds(seconds),
+			Y: (dateObj, year) => dateObj.setFullYear(year)
+		}
 	}
 
 	function setupInputs() {
@@ -1733,7 +1758,6 @@ function Flatpickr(element, config) {
 	}
 
 
-
 	function updateValue() {
 		if (!self.selectedDates.length)
 			return self.clear();
@@ -1879,7 +1903,6 @@ function Flatpickr(element, config) {
 					: Math.abs(newValue - curValue) > step)
 			)
 				self.amPM.textContent = self.amPM.textContent === "PM" ? "AM" : "PM";
-
 
 
 			input.value = self.pad(newValue);
@@ -2080,19 +2103,17 @@ Flatpickr.prototype = {
 		return `0${number}`.slice(-2);
 	},
 
-	parseDate(date, timeless) {
+	parseDate(date, timeless, givenFormat) {
 		if (!date)
 			return null;
 
-		const dateTimeRegex = /(\d+)/g,
-			timeRegex = /^(\d{1,2})[:\s](\d\d)?[:\s]?(\d\d)?\s?(a|p|A|P)?/i,
-			timestamp = /^(\d+)$/g,
-			date_orig = date;
+		const date_orig = date;
 
-		if (date.toFixed || timestamp.test(date)) // timestamp
+		if (date.toFixed) // timestamp
 			date = new Date(date);
 
 		else if (typeof date === "string") {
+			const format = typeof givenFormat === "string" ? givenFormat : this.config.dateFormat;
 			date = date.trim();
 
 			if (date === "today") {
@@ -2103,34 +2124,31 @@ Flatpickr.prototype = {
 			else if (this.config && this.config.parseDate)
 				date = this.config.parseDate(date);
 
-			else if (timeRegex.test(date)) { // time picker
-				const m = date.match(timeRegex),
-					hours = !m[4]
-						? m[1]  // military time, no conversion needed
-						: (m[1] % 12) + (m[4].toLowerCase() === "p" ? 12 : 0); // am/pm
-
-				date = new Date();
-				date.setHours(hours, m[2] || 0, m[3] || 0);
-			}
-
 			else if (/Z$/.test(date) || /GMT$/.test(date)) // datestrings w/ timezone
 				date = new Date(date);
 
-			else if (dateTimeRegex.test(date) && /^[0-9]/.test(date)) {
-				const d = date.match(dateTimeRegex),
-					isAM = /(am|AM)$/.test(date),
-					isPM = /(pm|PM)$/.test(date);
+			else {
+				const parsedDate = new Date();
+				parsedDate.setHours(0,0,0,0);
 
-				date = new Date(
-					`${d[0]}/${d[1] || 1}/${d[2] || 1} ${d[3] || 0}:${d[4] || 0}:${d[5] || 0}`
-				);
+				let matched = false;
 
-				if (isAM || isPM)
-					date.setHours((date.getHours() % 12) + (12 * isPM));
+				for (let i = 0, matchIndex = 0, regexStr = ""; i < format.length; i++) {
+					const token = format[i];
+					const isBackSlash = token === "\\";
+					const escaped = format[i-1] === "\\" || isBackSlash;
+					if (this.tokenRegex[token] && !escaped) {
+						const match = new RegExp(regexStr += this.tokenRegex[token]).exec(date);
+						if (match && (matched = true))
+							this.revFormat[token](parsedDate, match[++matchIndex]);
+					}
+
+					else if (!isBackSlash)
+						regexStr += ".";
+				}
+
+				date = matched	? parsedDate : null;
 			}
-
-			else // fallback
-				date = new Date(date);
 		}
 
 		else if (date instanceof Date)

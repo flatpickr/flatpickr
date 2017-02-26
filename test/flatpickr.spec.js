@@ -144,7 +144,6 @@ describe('flatpickr', () => {
 			});
 
 			it('should parse "2016-10"', () => {
-
 				createInstance({
 					defaultDate: "2016-10"
 				});
@@ -155,9 +154,9 @@ describe('flatpickr', () => {
 			});
 
 			it('should parse "2016-10-20 3:30"', () => {
-
 				createInstance({
-					defaultDate: "2016-10-20 3:30"
+					defaultDate: "2016-10-20 3:30",
+					enableTime: true
 				});
 
 				expect(fp.selectedDates[0]).toBeDefined();
@@ -169,7 +168,6 @@ describe('flatpickr', () => {
 			});
 
 			it('should parse ISO8601', () => {
-
 				createInstance({
 					defaultDate: "2007-03-04T21:08:12",
 					enableTime: true,
@@ -216,7 +214,6 @@ describe('flatpickr', () => {
 			});
 
 			it('should parse "21:11:12"', () => {
-
 				elem.value = '21:11:12';
 				createInstance({
 					allowInput: true,
@@ -232,12 +229,12 @@ describe('flatpickr', () => {
 			});
 
 			it('should parse "11:59 PM"', () => {
-
 				elem.value = '11:59 PM';
 				createInstance({
 					allowInput: true,
 					enableTime: true,
 					noCalendar: true,
+					dateFormat: "h:i K"
 				});
 
 				expect(fp.selectedDates[0]).toBeDefined();
@@ -259,6 +256,7 @@ describe('flatpickr', () => {
 					enableTime: true,
 					enableSeconds: true,
 					noCalendar: true,
+					dateFormat: "h:i:S K"
 				});
 
 				expect(fp.selectedDates[0]).toBeDefined();
@@ -281,33 +279,34 @@ describe('flatpickr', () => {
 
 		describe('default formatter', () => {
 			const
-				DFEAULT_FORMAT_1 = 'd.m.y H:i:S',
-				DFEAULT_FORMAT_2 = 'D j F, \'y';
+				DEFAULT_FORMAT_1 = 'd.m.y H:i:S',
+				DEFAULT_FORMAT_2 = 'D j F, \'y';
 
-			it(`should format the date with the pattern "${DFEAULT_FORMAT_1}"`, () => {
+			it(`should format the date with the pattern "${DEFAULT_FORMAT_1}"`, () => {
 				const RESULT = '20.10.16 09:19:59';
 				createInstance({
-					dateFormat: DFEAULT_FORMAT_1
+					dateFormat: DEFAULT_FORMAT_1
 				});
 
-				fp.setDate(DATE_STR);
+				fp.setDate('20.10.16 09:19:59');
 				expect(fp.input.value).toEqual(RESULT);
-				fp.setDate('2015-11-21 19:29:49');
+				fp.setDate('2015.11.21 19:29:49');
 				expect(fp.input.value).not.toEqual(RESULT);
 			});
 
-			it(`should format the date with the pattern "${DFEAULT_FORMAT_2}"`, () => {
+			it(`should format the date with the pattern "${DEFAULT_FORMAT_2}"`, () => {
 				const RESULT = 'Thu 20 October, \'16';
 				createInstance({
-					dateFormat: DFEAULT_FORMAT_2
+					dateFormat: DEFAULT_FORMAT_2
 				});
 
-				fp.setDate(DATE_STR);
+				fp.setDate("Thu 20 October, '16");
 				expect(fp.input.value).toEqual(RESULT);
 				fp.setDate('2015-11-21 19:29:49');
 				expect(fp.input.value).not.toEqual(RESULT);
 			});
 		});
+
 		describe('custom formatter', () => {
 			it('should format the date using the custom formatter', () => {
 				const RESULT = 'MAAAGIC.*^*.2016.*^*.20.*^*.10';
@@ -333,10 +332,13 @@ describe('flatpickr', () => {
 					}
 				});
 
-				fp.setDate(DATE_STR);
+
+				fp.setDate(new Date(2016, 9, 20));
 				expect(fp.input.value).toEqual(RESULT);
-				fp.setDate('2015-11-21 19:29:49');
+
+				fp.setDate(new Date(2016, 10, 20));
 				expect(fp.input.value).not.toEqual(RESULT);
+
 			});
 		});
 	});
@@ -729,6 +731,7 @@ describe('flatpickr', () => {
 		it("time input respects minDate", () => {
 			createInstance({
 				enableTime: true,
+				dateFormat: "Y-m-d H:i",
 				defaultDate: "2017-1-1 4:00",
 				minDate: "2017-1-01 3:35",
 			});
