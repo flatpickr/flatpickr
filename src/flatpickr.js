@@ -2157,8 +2157,7 @@ Flatpickr.prototype = {
 				date = new Date(date);
 
 			else {
-				const parsedDate = new Date();
-				parsedDate.setHours(0,0,0,0);
+				const parsedDate = new Date(new Date().getFullYear(), 0, 1, 0, 0, 0 ,0);
 
 				let matched = false;
 
