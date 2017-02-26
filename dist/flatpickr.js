@@ -45,16 +45,6 @@ function Flatpickr(element, config) {
 
 		bind();
 
-		if (!self.isMobile) {
-			Object.defineProperty(self, "dateIsPicked", {
-				set: function set(bool) {
-					toggleClass(self.calendarContainer, "dateIsPicked", bool);
-				}
-			});
-		}
-
-		self.dateIsPicked = self.selectedDates.length > 0 || self.config.noCalendar;
-
 		if (self.selectedDates.length) {
 			if (self.config.enableTime) setHoursFromDate();
 			updateValue();
@@ -1007,7 +997,10 @@ function Flatpickr(element, config) {
 		e.preventDefault();
 		e.stopPropagation();
 
-		if (self.config.allowInput && e.which === 13 && e.target === (self.altInput || self.input)) return self.setDate((self.altInput || self.input).value), e.target.blur();
+		if (self.config.allowInput && e.which === 13 && e.target === (self.altInput || self.input)) {
+			self.setDate((self.altInput || self.input).value, true, e.target === self.altInput ? self.config.altFormat : self.config.dateFormat);
+			return e.target.blur();
+		}
 
 		if (!e.target.classList.contains("flatpickr-day") || e.target.classList.contains("disabled") || e.target.classList.contains("notAllowed")) return;
 
@@ -1076,19 +1069,25 @@ function Flatpickr(element, config) {
 		jumpToDate();
 	}
 
-	function setSelectedDate(inputDate) {
-		if (Array.isArray(inputDate)) self.selectedDates = inputDate.map(self.parseDate);else if (inputDate instanceof Date || !isNaN(inputDate)) self.selectedDates = [self.parseDate(inputDate)];else if (inputDate && inputDate.substring) {
+	function setSelectedDate(inputDate, format) {
+		if (Array.isArray(inputDate)) self.selectedDates = inputDate.map(function (d) {
+			return self.parseDate(d, false, format);
+		});else if (inputDate instanceof Date || !isNaN(inputDate)) self.selectedDates = [self.parseDate(inputDate)];else if (inputDate && inputDate.substring) {
 			switch (self.config.mode) {
 				case "single":
-					self.selectedDates = [self.parseDate(inputDate)];
+					self.selectedDates = [self.parseDate(inputDate, false, format)];
 					break;
 
 				case "multiple":
-					self.selectedDates = inputDate.split("; ").map(self.parseDate);
+					self.selectedDates = inputDate.split("; ").map(function (date) {
+						return self.parseDate(date, false, format);
+					});
 					break;
 
 				case "range":
-					self.selectedDates = inputDate.split(self.l10n.rangeSeparator).map(self.parseDate);
+					self.selectedDates = inputDate.split(self.l10n.rangeSeparator).map(function (date) {
+						return self.parseDate(date, false, format);
+					});
 
 					break;
 
@@ -1106,10 +1105,10 @@ function Flatpickr(element, config) {
 		});
 	}
 
-	function setDate(date, triggerChange) {
+	function setDate(date, triggerChange, format) {
 		if (!date) return self.clear();
 
-		setSelectedDate(date);
+		setSelectedDate(date, format);
 
 		if (self.selectedDates.length > 0) {
 			self.dateIsPicked = true;
@@ -1167,6 +1166,16 @@ function Flatpickr(element, config) {
 				self._selectedDateObj = date;
 			}
 		});
+
+		if (!self.isMobile) {
+			Object.defineProperty(self, "dateIsPicked", {
+				set: function set(bool) {
+					if (self.calendarContainer) toggleClass(self.calendarContainer, "dateIsPicked", bool);
+				}
+			});
+		}
+
+		self.dateIsPicked = self.selectedDates.length > 0 || self.config.noCalendar;
 	}
 
 	function setupHelperFunctions() {
@@ -1193,167 +1202,11 @@ function Flatpickr(element, config) {
 
 	/* istanbul ignore next */
 	function setupFormats() {
-		self.formats = {
-			// get the date in UTC
-			Z: function Z(date) {
-				return date.toISOString();
-			},
-
-			// weekday name, short, e.g. Thu
-			D: function D(date) {
-				return self.l10n.weekdays.shorthand[self.formats.w(date)];
-			},
-
-			// full month name e.g. January
-			F: function F(date) {
-				return self.utils.monthToStr(self.formats.n(date) - 1, false);
-			},
-
-			// hours with leading zero e.g. 03
-			H: function H(date) {
-				return Flatpickr.prototype.pad(date.getHours());
-			},
-
-			// day (1-30) with ordinal suffix e.g. 1st, 2nd
-			J: function J(date) {
-				return date.getDate() + self.l10n.ordinal(date.getDate());
-			},
-
-			// AM/PM
-			K: function K(date) {
-				return date.getHours() > 11 ? "PM" : "AM";
-			},
-
-			// shorthand month e.g. Jan, Sep, Oct, etc
-			M: function M(date) {
-				return self.utils.monthToStr(date.getMonth(), true);
-			},
-
-			// seconds 00-59
-			S: function S(date) {
-				return Flatpickr.prototype.pad(date.getSeconds());
-			},
-
-			// unix timestamp
-			U: function U(date) {
-				return date.getTime() / 1000;
-			},
-
-			// full year e.g. 2016
-			Y: function Y(date) {
-				return date.getFullYear();
-			},
-
-			// day in month, padded (01-30)
-			d: function d(date) {
-				return Flatpickr.prototype.pad(self.formats.j(date));
-			},
-
-			// hour from 1-12 (am/pm)
-			h: function h(date) {
-				return date.getHours() % 12 ? date.getHours() % 12 : 12;
-			},
-
-			// minutes, padded with leading zero e.g. 09
-			i: function i(date) {
-				return Flatpickr.prototype.pad(date.getMinutes());
-			},
-
-			// day in month (1-30)
-			j: function j(date) {
-				return date.getDate();
-			},
-
-			// weekday name, full, e.g. Thursday
-			l: function l(date) {
-				return self.l10n.weekdays.longhand[self.formats.w(date)];
-			},
-
-			// padded month number (01-12)
-			m: function m(date) {
-				return Flatpickr.prototype.pad(self.formats.n(date));
-			},
-
-			// the month number (1-12)
-			n: function n(date) {
-				return date.getMonth() + 1;
-			},
-
-			// seconds 0-59
-			s: function s(date) {
-				return date.getSeconds();
-			},
-
-			// number of the day of the week
-			w: function w(date) {
-				return date.getDay();
-			},
-
-			// last two digits of year e.g. 16 for 2016
-			y: function y(date) {
-				return String(self.formats.Y(date)).substring(2);
-			}
-		};
-
-		self.tokenRegex = {
-			y: "(\\d{2})",
-			Y: "(\\d{4})"
-		};
-
-		// two/one digit tokens
-		["d", "h", "i", "j", "m", "s", "H", "S"].forEach(function (t) {
-			return self.tokenRegex[t] = "(\\d\\d|\\d)";
+		["D", "F", "J", "M", "l"].forEach(function (f) {
+			self.formats[f] = Flatpickr.prototype.formats[f].bind(self);
 		});
 
-		// single words
-		["D", "F", "K"].forEach(function (t) {
-			return self.tokenRegex[t] = "(\\w+)";
-		});
-
-		var blank = function blank() {};
-
-		self.revFormat = {
-			d: function d(dateObj, day) {
-				return dateObj.setDate(parseFloat(day));
-			},
-			h: function h(dateObj, hour) {
-				return dateObj.setHours(parseFloat(hour));
-			},
-			i: function i(dateObj, minutes) {
-				return dateObj.setMinutes(parseFloat(minutes));
-			},
-			j: function j(dateObj, day) {
-				return dateObj.setDate(parseFloat(day));
-			},
-			m: function m(dateObj, month) {
-				return dateObj.setMonth(parseFloat(month) - 1);
-			},
-			s: function s(dateObj, seconds) {
-				return dateObj.setSeconds(parseFloat(seconds));
-			},
-			y: function y(dateObj, year) {
-				return dateObj.setFullYear(2000 + parseFloat(year));
-			},
-			D: blank,
-			F: function F(dateObj, monthName) {
-				return dateObj.setMonth(self.l10n.months.longhand.indexOf(monthName));
-			},
-			H: function H(dateObj, hour) {
-				return dateObj.setHours(parseFloat(hour));
-			},
-			K: function K(dateObj, amPM) {
-				var hours = dateObj.getHours(),
-				    isPM = amPM.toLowerCase() === "pm";
-
-				if (hours !== 12) dateObj.setHours(hours % 12 + 12 * isPM);
-			},
-			S: function S(dateObj, seconds) {
-				return dateObj.setSeconds(seconds);
-			},
-			Y: function Y(dateObj, year) {
-				return dateObj.setFullYear(year);
-			}
-		};
+		self.revFormat.F = Flatpickr.prototype.revFormat.F.bind(self);
 	}
 
 	function setupInputs() {
@@ -1784,9 +1637,170 @@ Flatpickr.setDefaults = function (config) {
 };
 
 Flatpickr.prototype = {
+	formats: {
+		// get the date in UTC
+		Z: function Z(date) {
+			return date.toISOString();
+		},
+
+		// weekday name, short, e.g. Thu
+		D: function D(date) {
+			return this.l10n.weekdays.shorthand[this.formats.w(date)];
+		},
+
+		// full month name e.g. January
+		F: function F(date) {
+			return this.utils.monthToStr(this.formats.n(date) - 1, false);
+		},
+
+		// hours with leading zero e.g. 03
+		H: function H(date) {
+			return Flatpickr.prototype.pad(date.getHours());
+		},
+
+		// day (1-30) with ordinal suffix e.g. 1st, 2nd
+		J: function J(date) {
+			return date.getDate() + this.l10n.ordinal(date.getDate());
+		},
+
+		// AM/PM
+		K: function K(date) {
+			return date.getHours() > 11 ? "PM" : "AM";
+		},
+
+		// shorthand month e.g. Jan, Sep, Oct, etc
+		M: function M(date) {
+			return this.utils.monthToStr(date.getMonth(), true);
+		},
+
+		// seconds 00-59
+		S: function S(date) {
+			return Flatpickr.prototype.pad(date.getSeconds());
+		},
+
+		// unix timestamp
+		U: function U(date) {
+			return date.getTime() / 1000;
+		},
+
+		// full year e.g. 2016
+		Y: function Y(date) {
+			return date.getFullYear();
+		},
+
+		// day in month, padded (01-30)
+		d: function d(date) {
+			return Flatpickr.prototype.pad(date.getDate());
+		},
+
+		// hour from 1-12 (am/pm)
+		h: function h(date) {
+			return date.getHours() % 12 ? date.getHours() % 12 : 12;
+		},
+
+		// minutes, padded with leading zero e.g. 09
+		i: function i(date) {
+			return Flatpickr.prototype.pad(date.getMinutes());
+		},
+
+		// day in month (1-30)
+		j: function j(date) {
+			return date.getDate();
+		},
+
+		// weekday name, full, e.g. Thursday
+		l: function l(date) {
+			return this.l10n.weekdays.longhand[date.getDay()];
+		},
+
+		// padded month number (01-12)
+		m: function m(date) {
+			return Flatpickr.prototype.pad(date.getMonth() + 1);
+		},
+
+		// the month number (1-12)
+		n: function n(date) {
+			return date.getMonth() + 1;
+		},
+
+		// seconds 0-59
+		s: function s(date) {
+			return date.getSeconds();
+		},
+
+		// number of the day of the week
+		w: function w(date) {
+			return date.getDay();
+		},
+
+		// last two digits of year e.g. 16 for 2016
+		y: function y(date) {
+			return String(date.getFullYear()).substring(2);
+		}
+	},
+
+	revFormat: {
+		d: function d(dateObj, day) {
+			return dateObj.setDate(parseFloat(day));
+		},
+		h: function h(dateObj, hour) {
+			return dateObj.setHours(parseFloat(hour));
+		},
+		i: function i(dateObj, minutes) {
+			return dateObj.setMinutes(parseFloat(minutes));
+		},
+		j: function j(dateObj, day) {
+			return dateObj.setDate(parseFloat(day));
+		},
+		m: function m(dateObj, month) {
+			return dateObj.setMonth(parseFloat(month) - 1);
+		},
+		s: function s(dateObj, seconds) {
+			return dateObj.setSeconds(parseFloat(seconds));
+		},
+		y: function y(dateObj, year) {
+			return dateObj.setFullYear(2000 + parseFloat(year));
+		},
+		D: function D() {},
+		F: function F(dateObj, monthName) {
+			dateObj.setMonth(this.l10n.months.longhand.indexOf(monthName));
+		},
+		H: function H(dateObj, hour) {
+			return dateObj.setHours(parseFloat(hour));
+		},
+		K: function K(dateObj, amPM) {
+			var hours = dateObj.getHours(),
+			    isPM = amPM.toLowerCase() === "pm";
+
+			if (hours !== 12) dateObj.setHours(hours % 12 + 12 * isPM);
+		},
+		S: function S(dateObj, seconds) {
+			return dateObj.setSeconds(seconds);
+		},
+		Y: function Y(dateObj, year) {
+			return dateObj.setFullYear(year);
+		}
+	},
+	tokenRegex: {
+		D: "(\\w+)",
+		F: "(\\w+)",
+		H: "(\\d\\d|\\d)",
+		K: "(\\w+)",
+		S: "(\\d\\d|\\d)",
+		Y: "(\\d{4})",
+		d: "(\\d\\d|\\d)",
+		h: "(\\d\\d|\\d)",
+		i: "(\\d\\d|\\d)",
+		j: "(\\d\\d|\\d)",
+		m: "(\\d\\d|\\d)",
+		s: "(\\d\\d|\\d)",
+		y: "(\\d{2})"
+	},
+
 	pad: function pad(number) {
 		return ("0" + number).slice(-2);
 	},
+
 	parseDate: function parseDate(date, timeless, givenFormat) {
 		if (!date) return null;
 
@@ -1812,9 +1826,10 @@ Flatpickr.prototype = {
 					var isBackSlash = token === "\\";
 					var escaped = format[i - 1] === "\\" || isBackSlash;
 					if (this.tokenRegex[token] && !escaped) {
-						var match = new RegExp(regexStr += this.tokenRegex[token]).exec(date);
+						regexStr += this.tokenRegex[token];
+						var match = new RegExp(regexStr).exec(date);
 						if (match && (matched = true)) this.revFormat[token](parsedDate, match[++matchIndex]);
-					} else if (!isBackSlash) regexStr += ".";
+					} else if (!isBackSlash) regexStr += "."; // don't really care
 				}
 
 				date = matched ? parsedDate : null;
