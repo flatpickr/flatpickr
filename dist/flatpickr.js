@@ -31,7 +31,6 @@ function Flatpickr(element, config) {
 		self.parseDate = Flatpickr.prototype.parseDate.bind(self);
 
 		setupFormats();
-
 		parseConfig();
 		setupLocale();
 		setupInputs();
@@ -135,6 +134,8 @@ function Flatpickr(element, config) {
 
 	function onYearInput(event) {
 		var year = event.target.value;
+		if (event.delta) year = (parseInt(year) + event.delta).toString();
+
 		if (year.length === 4) {
 			self.currentYearElement.blur();
 			if (!/[^\d]/.test(year)) changeYear(year);
@@ -256,16 +257,18 @@ function Flatpickr(element, config) {
 		self.redraw();
 	}
 
-	function incrementNumInput(e, delta) {
-		var input = e.target.parentNode.childNodes[0];
-		input.value = parseInt(input.value, 10) + delta * (input.step || 1);
+	function incrementNumInput(e, delta, inputElem) {
+		var input = inputElem || e.target.parentNode.childNodes[0];
 
-		try {
-			input.dispatchEvent(new Event("increment", { "bubbles": true }));
-		} catch (e) {
-			var ev = window.document.createEvent("CustomEvent");
-			ev.initCustomEvent("increment", true, true, {});
+		if (typeof Event !== "undefined") {
+			var ev = new Event("increment", { "bubbles": true });
+			ev.delta = delta;
 			input.dispatchEvent(ev);
+		} else {
+			var _ev = window.document.createEvent("CustomEvent");
+			_ev.initCustomEvent("increment", true, true, {});
+			_ev.delta = delta;
+			input.dispatchEvent(_ev);
 		}
 	}
 
@@ -876,6 +879,7 @@ function Flatpickr(element, config) {
 	function minMaxDateSetter(type) {
 		return function (date) {
 			var dateObj = self.config["_" + type + "Date"] = self.parseDate(date);
+
 			var inverseDateObj = self.config["_" + (type === "min" ? "max" : "min") + "Date"];
 			var isValidDate = date && dateObj instanceof Date;
 
@@ -905,6 +909,21 @@ function Flatpickr(element, config) {
 
 		self.config = Object.create(Flatpickr.defaultConfig);
 
+		var userConfig = _extends({}, self.instanceConfig, JSON.parse(JSON.stringify(self.element.dataset || {})));
+
+		self.config.parseDate = userConfig.parseDate;
+		self.config.formatDate = userConfig.formatDate;
+
+		_extends(self.config, userConfig);
+
+		if (!userConfig.dateFormat && userConfig.enableTime) {
+			self.config.dateFormat = self.config.noCalendar ? "H:i" + (self.config.enableSeconds ? ":S" : "") : Flatpickr.defaultConfig.dateFormat + " H:i" + (self.config.enableSeconds ? ":S" : "");
+		}
+
+		if (userConfig.altInput && userConfig.enableTime && !userConfig.altFormat) {
+			self.config.altFormat = self.config.noCalendar ? "h:i" + (self.config.enableSeconds ? ":S K" : " K") : Flatpickr.defaultConfig.altFormat + (" h:i" + (self.config.enableSeconds ? ":S" : "") + " K");
+		}
+
 		Object.defineProperty(self.config, "minDate", {
 			get: function get() {
 				return this._minDate;
@@ -919,28 +938,14 @@ function Flatpickr(element, config) {
 			set: minMaxDateSetter("max")
 		});
 
-		var userConfig = _extends({}, self.instanceConfig, JSON.parse(JSON.stringify(self.element.dataset || {})));
-
-		self.config.parseDate = userConfig.parseDate;
-		self.config.formatDate = userConfig.formatDate;
-
-		_extends(self.config, userConfig);
+		self.config.minDate = userConfig.minDate;
+		self.config.maxDate = userConfig.maxDate;
 
 		for (var i = 0; i < boolOpts.length; i++) {
 			self.config[boolOpts[i]] = self.config[boolOpts[i]] === true || self.config[boolOpts[i]] === "true";
 		}for (var _i = 0; _i < hooks.length; _i++) {
 			self.config[hooks[_i]] = arrayify(self.config[hooks[_i]] || []);
-		}
-
-		if (!userConfig.dateFormat && userConfig.enableTime) {
-			self.config.dateFormat = self.config.noCalendar ? "H:i" + (self.config.enableSeconds ? ":S" : "") : Flatpickr.defaultConfig.dateFormat + " H:i" + (self.config.enableSeconds ? ":S" : "");
-		}
-
-		if (userConfig.altInput && userConfig.enableTime && !userConfig.altFormat) {
-			self.config.altFormat = self.config.noCalendar ? "h:i" + (self.config.enableSeconds ? ":S K" : " K") : Flatpickr.defaultConfig.altFormat + (" h:i" + (self.config.enableSeconds ? ":S" : "") + " K");
-		}
-
-		for (var _i2 = 0; _i2 < self.config.plugins.length; _i2++) {
+		}for (var _i2 = 0; _i2 < self.config.plugins.length; _i2++) {
 			var pluginConf = self.config.plugins[_i2](self) || {};
 			for (var key in pluginConf) {
 				if (Array.isArray(self.config[key])) self.config[key] = arrayify(pluginConf[key]).concat(self.config[key]);else if (userConfig[key] !== undefined) self.config[key] = pluginConf[key];
@@ -1289,6 +1294,66 @@ function Flatpickr(element, config) {
 				return String(self.formats.Y(date)).substring(2);
 			}
 		};
+
+		self.tokenRegex = {
+			y: "(\\d{2})",
+			Y: "(\\d{4})"
+		};
+
+		// two/one digit tokens
+		["d", "h", "i", "j", "m", "s", "H", "S"].forEach(function (t) {
+			return self.tokenRegex[t] = "(\\d\\d|\\d)";
+		});
+
+		// single words
+		["D", "F", "K"].forEach(function (t) {
+			return self.tokenRegex[t] = "(\\w+)";
+		});
+
+		var blank = function blank() {};
+
+		self.revFormat = {
+			d: function d(dateObj, day) {
+				return dateObj.setDate(parseFloat(day));
+			},
+			h: function h(dateObj, hour) {
+				return dateObj.setHours(parseFloat(hour));
+			},
+			i: function i(dateObj, minutes) {
+				return dateObj.setMinutes(parseFloat(minutes));
+			},
+			j: function j(dateObj, day) {
+				return dateObj.setDate(parseFloat(day));
+			},
+			m: function m(dateObj, month) {
+				return dateObj.setMonth(parseFloat(month) - 1);
+			},
+			s: function s(dateObj, seconds) {
+				return dateObj.setSeconds(parseFloat(seconds));
+			},
+			y: function y(dateObj, year) {
+				return dateObj.setFullYear(2000 + parseFloat(year));
+			},
+			D: blank,
+			F: function F(dateObj, monthName) {
+				return dateObj.setMonth(self.l10n.months.longhand.indexOf(monthName));
+			},
+			H: function H(dateObj, hour) {
+				return dateObj.setHours(parseFloat(hour));
+			},
+			K: function K(dateObj, amPM) {
+				var hours = dateObj.getHours(),
+				    isPM = amPM.toLowerCase() === "pm";
+
+				if (hours !== 12) dateObj.setHours(hours % 12 + 12 * isPM);
+			},
+			S: function S(dateObj, seconds) {
+				return dateObj.setSeconds(seconds);
+			},
+			Y: function Y(dateObj, year) {
+				return dateObj.setFullYear(year);
+			}
+		};
 	}
 
 	function setupInputs() {
@@ -1493,7 +1558,9 @@ function Flatpickr(element, config) {
 		e.preventDefault();
 
 		var isKeyDown = e.type === "keydown",
-		    isWheel = e.type === "wheel";
+		    isWheel = e.type === "wheel",
+		    isIncrement = e.type === "increment",
+		    input = e.target;
 
 		if (e.type !== "input" && !isKeyDown && (e.target.value || e.target.textContent).length >= 2 // typed two digits
 		) {
@@ -1503,26 +1570,31 @@ function Flatpickr(element, config) {
 
 		if (self.amPM && e.target === self.amPM) return e.target.textContent = ["AM", "PM"][e.target.textContent === "AM" | 0];
 
-		var min = Number(e.target.min),
-		    max = Number(e.target.max),
-		    step = Number(e.target.step),
-		    curValue = parseInt(e.target.value, 10),
-		    delta = !isKeyDown ? Math.max(-1, Math.min(1, e.wheelDelta || -e.deltaY)) || 0 : e.which === 38 ? 1 : -1;
+		var min = Number(input.min),
+		    max = Number(input.max),
+		    step = Number(input.step),
+		    curValue = parseInt(input.value, 10),
+		    delta = e.delta || (!isKeyDown ? Math.max(-1, Math.min(1, e.wheelDelta || -e.deltaY)) || 0 : e.which === 38 ? 1 : -1);
 
-		var newValue = curValue + (isWheel || isKeyDown) * step * delta;
+		var newValue = curValue + step * delta;
 
-		if (e.target.value.length === 2) {
-			var isHourElem = e.target === self.hourElement;
+		if (input.value.length === 2) {
+			var isHourElem = input === self.hourElement,
+			    isMinuteElem = input === self.minuteElement;
 
 			if (newValue < min) {
 				newValue = max + newValue + !isHourElem + (isHourElem && !self.amPM);
+
+				if (isMinuteElem) incrementNumInput(null, -1, self.hourElement);
 			} else if (newValue > max) {
-				newValue = e.target === self.hourElement ? newValue - max - !self.amPM : min;
+				newValue = input === self.hourElement ? newValue - max - !self.amPM : min;
+
+				if (isMinuteElem) incrementNumInput(null, 1, self.hourElement);
 			}
 
 			if (self.amPM && isHourElem && (step === 1 ? newValue + curValue === 23 : Math.abs(newValue - curValue) > step)) self.amPM.textContent = self.amPM.textContent === "PM" ? "AM" : "PM";
 
-			e.target.value = self.pad(newValue);
+			input.value = self.pad(newValue);
 		}
 	}
 
@@ -1715,40 +1787,38 @@ Flatpickr.prototype = {
 	pad: function pad(number) {
 		return ("0" + number).slice(-2);
 	},
-	parseDate: function parseDate(date, timeless) {
+	parseDate: function parseDate(date, timeless, givenFormat) {
 		if (!date) return null;
 
-		var dateTimeRegex = /(\d+)/g,
-		    timeRegex = /^(\d{1,2})[:\s](\d\d)?[:\s]?(\d\d)?\s?(a|p|A|P)?/i,
-		    timestamp = /^(\d+)$/g,
-		    date_orig = date;
+		var date_orig = date;
 
-		if (date.toFixed || timestamp.test(date)) // timestamp
+		if (date.toFixed) // timestamp
 			date = new Date(date);else if (typeof date === "string") {
+			var format = typeof givenFormat === "string" ? givenFormat : this.config.dateFormat;
 			date = date.trim();
 
 			if (date === "today") {
 				date = new Date();
 				timeless = true;
-			} else if (this.config && this.config.parseDate) date = this.config.parseDate(date);else if (timeRegex.test(date)) {
-				// time picker
-				var m = date.match(timeRegex),
-				    hours = !m[4] ? m[1] // military time, no conversion needed
-				: m[1] % 12 + (m[4].toLowerCase() === "p" ? 12 : 0); // am/pm
+			} else if (this.config && this.config.parseDate) date = this.config.parseDate(date);else if (/Z$/.test(date) || /GMT$/.test(date)) // datestrings w/ timezone
+				date = new Date(date);else {
+				var parsedDate = new Date();
+				parsedDate.setHours(0, 0, 0, 0);
 
-				date = new Date();
-				date.setHours(hours, m[2] || 0, m[3] || 0);
-			} else if (/Z$/.test(date) || /GMT$/.test(date)) // datestrings w/ timezone
-				date = new Date(date);else if (dateTimeRegex.test(date) && /^[0-9]/.test(date)) {
-				var d = date.match(dateTimeRegex),
-				    isAM = /(am|AM)$/.test(date),
-				    isPM = /(pm|PM)$/.test(date);
+				var matched = false;
 
-				date = new Date(d[0] + "/" + (d[1] || 1) + "/" + (d[2] || 1) + " " + (d[3] || 0) + ":" + (d[4] || 0) + ":" + (d[5] || 0));
+				for (var i = 0, matchIndex = 0, regexStr = ""; i < format.length; i++) {
+					var token = format[i];
+					var isBackSlash = token === "\\";
+					var escaped = format[i - 1] === "\\" || isBackSlash;
+					if (this.tokenRegex[token] && !escaped) {
+						var match = new RegExp(regexStr += this.tokenRegex[token]).exec(date);
+						if (match && (matched = true)) this.revFormat[token](parsedDate, match[++matchIndex]);
+					} else if (!isBackSlash) regexStr += ".";
+				}
 
-				if (isAM || isPM) date.setHours(date.getHours() % 12 + 12 * isPM);
-			} else // fallback
-				date = new Date(date);
+				date = matched ? parsedDate : null;
+			}
 		} else if (date instanceof Date) date = new Date(date.getTime()); // create a copy
 
 		/* istanbul ignore next */
