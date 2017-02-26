@@ -1816,8 +1816,7 @@ Flatpickr.prototype = {
 				timeless = true;
 			} else if (this.config && this.config.parseDate) date = this.config.parseDate(date);else if (/Z$/.test(date) || /GMT$/.test(date)) // datestrings w/ timezone
 				date = new Date(date);else {
-				var parsedDate = new Date();
-				parsedDate.setHours(0, 0, 0, 0);
+				var parsedDate = new Date(new Date().getFullYear(), 0, 1, 0, 0, 0, 0);
 
 				var matched = false;
 
