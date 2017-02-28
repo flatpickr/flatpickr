@@ -46,14 +46,14 @@
 .flatpickr-calendar.hasWeeks {
   width: auto;
 }
-.flatpickr-calendar.dateIsPicked.hasTime .flatpickr-time {
+.flatpickr-calendar.showTimeInput.hasTime .flatpickr-time {
   height: 40px;
   border-top: 1px solid rgba(255,138,101,0.2);
 }
-.flatpickr-calendar.dateIsPicked.hasTime .flatpickr-innerContainer {
+.flatpickr-calendar.showTimeInput.hasTime .flatpickr-innerContainer {
   border-bottom: 0;
 }
-.flatpickr-calendar.dateIsPicked.hasTime .flatpickr-time {
+.flatpickr-calendar.showTimeInput.hasTime .flatpickr-time {
   border: 1px solid rgba(255,138,101,0.2);
 }
 .flatpickr-calendar.noCalendar.hasTime .flatpickr-time {

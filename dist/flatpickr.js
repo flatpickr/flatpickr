@@ -54,6 +54,7 @@ function Flatpickr(element, config) {
 			self.calendarContainer.style.width = self.days.clientWidth + self.weekWrapper.clientWidth + "px";
 		}
 
+		self.showTimeInput = self.selectedDates.length || self.config.noCalendar;
 		triggerEvent("Ready");
 	}
 
@@ -603,7 +604,7 @@ function Flatpickr(element, config) {
 
 		self.selectedDates = [];
 		self.latestSelectedDateObj = null;
-		self.dateIsPicked = false;
+		self.showTimeInput = false;
 
 		self.redraw();
 
@@ -957,15 +958,16 @@ function Flatpickr(element, config) {
 
 		var calendarHeight = self.calendarContainer.offsetHeight,
 		    calendarWidth = self.calendarContainer.offsetWidth,
+		    configPos = self.config.position,
 		    input = self.altInput || self.input,
 		    inputBounds = input.getBoundingClientRect(),
 		    distanceFromBottom = window.innerHeight - inputBounds.bottom + input.offsetHeight,
-		    bottomCalendar = distanceFromBottom < calendarHeight + 60;
+		    showOnTop = configPos === "above" || configPos !== "below" && distanceFromBottom < calendarHeight + 60;
 
-		var top = window.pageYOffset + inputBounds.top + (!bottomCalendar ? input.offsetHeight + 2 : -calendarHeight - 2);
+		var top = window.pageYOffset + inputBounds.top + (!showOnTop ? input.offsetHeight + 2 : -calendarHeight - 2);
 
-		toggleClass(self.calendarContainer, "arrowTop", !bottomCalendar);
-		toggleClass(self.calendarContainer, "arrowBottom", bottomCalendar);
+		toggleClass(self.calendarContainer, "arrowTop", !showOnTop);
+		toggleClass(self.calendarContainer, "arrowBottom", showOnTop);
 
 		if (self.config.inline) return;
 
@@ -1044,7 +1046,7 @@ function Flatpickr(element, config) {
 		updateValue();
 
 		setTimeout(function () {
-			return self.dateIsPicked = true;
+			return self.showTimeInput = true;
 		}, 50);
 
 		if (self.config.mode === "range") {
@@ -1114,7 +1116,7 @@ function Flatpickr(element, config) {
 		setSelectedDate(date, format);
 
 		if (self.selectedDates.length > 0) {
-			self.dateIsPicked = true;
+			self.showTimeInput = true;
 			self.latestSelectedDateObj = self.selectedDates[0];
 		} else self.latestSelectedDateObj = null;
 
@@ -1171,14 +1173,12 @@ function Flatpickr(element, config) {
 		});
 
 		if (!self.isMobile) {
-			Object.defineProperty(self, "dateIsPicked", {
+			Object.defineProperty(self, "showTimeInput", {
 				set: function set(bool) {
-					if (self.calendarContainer) toggleClass(self.calendarContainer, "dateIsPicked", bool);
+					if (self.calendarContainer) toggleClass(self.calendarContainer, "showTimeInput", bool);
 				}
 			});
 		}
-
-		self.dateIsPicked = self.selectedDates.length > 0 || self.config.noCalendar;
 	}
 
 	function setupHelperFunctions() {
@@ -1462,6 +1462,8 @@ function Flatpickr(element, config) {
 Flatpickr.defaultConfig = {
 
 	mode: "single",
+
+	position: "top",
 
 	/* if true, dates will be parsed, formatted, and displayed in UTC.
  preloading date strings w/ timezones is recommended but not necessary */
