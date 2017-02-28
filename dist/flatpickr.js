@@ -873,18 +873,21 @@ function Flatpickr(element, config) {
 			var inverseDateObj = self.config["_" + (type === "min" ? "max" : "min") + "Date"];
 			var isValidDate = date && dateObj instanceof Date;
 
-			if (self.selectedDates) {
-				self.selectedDates = self.selectedDates.filter(isEnabled);
-				updateValue();
-			}
-
-			if (self.days) redraw();
-
 			if (isValidDate) {
 				self[type + "DateHasTime"] = dateObj.getHours() || dateObj.getMinutes() || dateObj.getSeconds();
 			}
 
-			if (self.currentYearElement) {
+			if (self.selectedDates) {
+				self.selectedDates = self.selectedDates.filter(function (d) {
+					return isEnabled(d);
+				});
+				if (!self.selectedDates.length && type === "min") setHoursFromDate(dateObj);
+				updateValue();
+			}
+
+			if (self.days) {
+				redraw();
+
 				if (isValidDate) self.currentYearElement[type] = dateObj.getFullYear();else self.currentYearElement.removeAttribute(type);
 
 				self.currentYearElement.disabled = inverseDateObj && dateObj && inverseDateObj.getFullYear() === dateObj.getFullYear();
@@ -1816,7 +1819,7 @@ Flatpickr.prototype = {
 				timeless = true;
 			} else if (this.config && this.config.parseDate) date = this.config.parseDate(date);else if (/Z$/.test(date) || /GMT$/.test(date)) // datestrings w/ timezone
 				date = new Date(date);else {
-				var parsedDate = new Date(new Date().getFullYear(), 0, 1, 0, 0, 0, 0);
+				var parsedDate = this.config.noCalendar ? new Date(new Date().setHours(0, 0, 0, 0)) : new Date(new Date().getFullYear(), 0, 1, 0, 0, 0, 0);
 
 				var matched = false;
 
