@@ -1084,21 +1084,22 @@ function Flatpickr(element, config) {
 			const inverseDateObj = self.config[`_${type === "min" ? "max" : "min"}Date`];
 			const isValidDate = date && dateObj instanceof Date;
 
-			if (self.selectedDates) {
-				self.selectedDates = self.selectedDates.filter(isEnabled);
-				updateValue();
-			}
-
-			if(self.days)
-				redraw();
-
 			if (isValidDate) {
 				self[`${type}DateHasTime`] = dateObj.getHours()
 					|| dateObj.getMinutes()
 					|| dateObj.getSeconds();
 			}
 
-			if (self.currentYearElement) {
+			if (self.selectedDates) {
+				self.selectedDates = self.selectedDates.filter(d => isEnabled(d));
+				if (!self.selectedDates.length && type === "min")
+					setHoursFromDate(dateObj);
+				updateValue();
+			}
+
+			if(self.days) {
+				redraw();
+
 				if(isValidDate)
 					self.currentYearElement[type] = dateObj.getFullYear();
 				else
@@ -2132,7 +2133,7 @@ Flatpickr.prototype = {
 
 	pad: number => `0${number}`.slice(-2),
 
-	parseDate(date, timeless, givenFormat) {
+	parseDate (date, timeless, givenFormat) {
 		if (!date)
 			return null;
 
@@ -2157,7 +2158,9 @@ Flatpickr.prototype = {
 				date = new Date(date);
 
 			else {
-				const parsedDate = new Date(new Date().getFullYear(), 0, 1, 0, 0, 0 ,0);
+				const parsedDate = this.config.noCalendar
+					? new Date(new Date().setHours(0,0,0,0))
+					: new Date(new Date().getFullYear(), 0, 1, 0, 0, 0 ,0);
 
 				let matched = false;
 
