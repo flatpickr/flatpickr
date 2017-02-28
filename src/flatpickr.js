@@ -62,6 +62,7 @@ function Flatpickr(element, config) {
 				+ self.weekWrapper.clientWidth + "px";
 		}
 
+		self.showTimeInput = self.selectedDates.length || self.config.noCalendar;
 		triggerEvent("Ready");
 	}
 
@@ -739,7 +740,7 @@ function Flatpickr(element, config) {
 
 		self.selectedDates = [];
 		self.latestSelectedDateObj = null;
-		self.dateIsPicked = false;
+		self.showTimeInput = false;
 
 		self.redraw();
 
@@ -1331,7 +1332,7 @@ function Flatpickr(element, config) {
 
 		updateValue();
 
-		setTimeout(() => self.dateIsPicked = true, 50);
+		setTimeout(() => self.showTimeInput = true, 50);
 
 		if (self.config.mode === "range") {
 			if(self.selectedDates.length === 1) {
@@ -1407,7 +1408,7 @@ function Flatpickr(element, config) {
 		setSelectedDate(date, format);
 
 		if (self.selectedDates.length > 0) {
-			self.dateIsPicked = true;
+			self.showTimeInput = true;
 			self.latestSelectedDateObj = self.selectedDates[0];
 		}
 
@@ -1485,15 +1486,13 @@ function Flatpickr(element, config) {
 		});
 
 		if (!self.isMobile) {
-			Object.defineProperty(self, "dateIsPicked", {
+			Object.defineProperty(self, "showTimeInput", {
 				set (bool) {
 					if (self.calendarContainer)
-						toggleClass(self.calendarContainer, "dateIsPicked", bool);
+						toggleClass(self.calendarContainer, "showTimeInput", bool);
 				}
 			});
 		}
-
-		self.dateIsPicked = self.selectedDates.length > 0 || self.config.noCalendar;
 	}
 
 	function setupHelperFunctions() {
