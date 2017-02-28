@@ -1203,18 +1203,22 @@ function Flatpickr(element, config) {
 
 		const calendarHeight = self.calendarContainer.offsetHeight,
 			calendarWidth = self.calendarContainer.offsetWidth,
+			configPos = self.config.position,
 			input = (self.altInput || self.input),
 			inputBounds = input.getBoundingClientRect(),
 			distanceFromBottom = window.innerHeight - inputBounds.bottom + input.offsetHeight,
-			bottomCalendar = distanceFromBottom < calendarHeight + 60;
+			showOnTop = configPos === "above" || (
+				configPos !== "below"
+				&& distanceFromBottom < calendarHeight + 60
+			);
 
-		let top = (window.pageYOffset + inputBounds.top) + (!bottomCalendar
+		let top = (window.pageYOffset + inputBounds.top) + (!showOnTop
 			? (input.offsetHeight + 2)
 			: (- calendarHeight - 2)
 		);
 
-		toggleClass(self.calendarContainer, "arrowTop", !bottomCalendar);
-		toggleClass(self.calendarContainer, "arrowBottom", bottomCalendar);
+		toggleClass(self.calendarContainer, "arrowTop", !showOnTop);
+		toggleClass(self.calendarContainer, "arrowBottom", showOnTop);
 
 		if (self.config.inline)
 			return;
@@ -1838,6 +1842,8 @@ function Flatpickr(element, config) {
 Flatpickr.defaultConfig = {
 
 	mode: "single",
+
+	position: "top",
 
 	/* if true, dates will be parsed, formatted, and displayed in UTC.
 	preloading date strings w/ timezones is recommended but not necessary */
