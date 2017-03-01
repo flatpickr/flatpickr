@@ -66,6 +66,12 @@ function Flatpickr(element, config) {
 		triggerEvent("Ready");
 	}
 
+	function bindToInstance(fn) {
+		if (fn && fn.bind)
+			return fn.bind(self);
+		return fn;
+	}
+
 	function updateTime(e) {
 		if (self.config.noCalendar && !self.selectedDates.length)
 			// picking time only
