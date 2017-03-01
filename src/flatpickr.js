@@ -1540,7 +1540,7 @@ function Flatpickr(element, config) {
 
 	/* istanbul ignore next */
 	function setupFormats() {
-		["D", "F", "J", "M", "l"].forEach(f => {
+		["D", "F", "J", "M", "W", "l"].forEach(f => {
 			self.formats[f] = Flatpickr.prototype.formats[f].bind(self);
 		});
 
@@ -2080,6 +2080,10 @@ Flatpickr.prototype = {
 
 		// unix timestamp
 		U: date => date.getTime() / 1000,
+
+		W: function(date) {
+			return this.getWeek(date);
+		},
 
 		// full year e.g. 2016
 		Y: date => date.getFullYear(),
