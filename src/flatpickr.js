@@ -1177,16 +1177,18 @@ function Flatpickr(element, config) {
 		for (let i = 0; i < boolOpts.length; i++)
 			self.config[boolOpts[i]] = (self.config[boolOpts[i]] === true) || self.config[boolOpts[i]] === "true";
 
-		for (let i = 0; i < hooks.length; i++)
-			self.config[hooks[i]] = arrayify(self.config[hooks[i]] || []);
+		for (let i = 0; i < hooks.length; i++) 
+			self.config[hooks[i]] = arrayify(self.config[hooks[i]] || []).map(bindToInstance);
 
 		for (let i = 0; i < self.config.plugins.length; i++) {
 			const pluginConf = self.config.plugins[i](self) || {};
 			for (let key in pluginConf) {
 				if (Array.isArray(self.config[key]))
-					self.config[key] = arrayify(pluginConf[key]).concat(self.config[key]);
+					self.config[key] = arrayify(pluginConf[key])
+						.map(bindToInstance)
+						.concat(self.config[key]);
 
-				else if (userConfig[key] !== undefined)
+				else if (typeof userConfig[key] === "undefined")
 					self.config[key] = pluginConf[key];
 			}
 		}
