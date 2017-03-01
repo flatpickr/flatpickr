@@ -370,6 +370,10 @@ function Flatpickr(element, config) {
 				const wrapper = createElement("div", "flatpickr-wrapper");
 				self.element.parentNode.insertBefore(wrapper, self.element);
 				wrapper.appendChild(self.element);
+
+				if(self.altInput)
+					wrapper.appendChild(self.altInput);
+					
 				wrapper.appendChild(self.calendarContainer);
 				return;
 			}
@@ -1555,9 +1559,9 @@ function Flatpickr(element, config) {
 			);
 			self.altInput.placeholder = self.input.placeholder;
 			self.altInput.type = "text";
-
 			self.input.type = "hidden";
-			if (self.input.parentNode)
+
+			if (!self.config.static && self.input.parentNode)
 				self.input.parentNode.insertBefore(self.altInput, self.input.nextSibling);
 		}
 
