@@ -379,7 +379,7 @@ function Flatpickr(element, config) {
 
 				if(self.altInput)
 					wrapper.appendChild(self.altInput);
-					
+
 				wrapper.appendChild(self.calendarContainer);
 				return;
 			}
@@ -1129,7 +1129,7 @@ function Flatpickr(element, config) {
 
 		let hooks = [
 			"onChange", "onClose", "onDayCreate", "onMonthChange",
-			"onOpen", "onReady", "onValueUpdate", "onYearChange"
+			"onOpen", "onParseConfig", "onReady", "onValueUpdate", "onYearChange"
 		];
 
 		self.config = Object.create(Flatpickr.defaultConfig);
@@ -1190,6 +1190,9 @@ function Flatpickr(element, config) {
 					self.config[key] = pluginConf[key];
 			}
 		}
+
+
+		triggerEvent("ParseConfig");
 	}
 
 	function setupLocale() {
@@ -1636,7 +1639,7 @@ function Flatpickr(element, config) {
 
 		if (hooks) {
 			for (let i = 0; i < hooks.length; i++)
-				hooks[i](self.selectedDates, self.input.value, self, data);
+				hooks[i](self.selectedDates, self.input && self.input.value, self, data);
 		}
 
 		if (event === "Change") {
@@ -1968,24 +1971,31 @@ Flatpickr.defaultConfig = {
 
 	plugins: [],
 
+	// called every time calendar is closed
+	onClose: [], // function (dateObj, dateStr) {}
+
 	// onChange callback when user selects a date or time
 	onChange: [], // function (dateObj, dateStr) {}
+
+	// called for every day element
+	onDayCreate: [],
+
+	// called every time the month is changed
+	onMonthChange: [],
 
 	// called every time calendar is opened
 	onOpen: [], // function (dateObj, dateStr) {}
 
-	// called every time calendar is closed
-	onClose: [], // function (dateObj, dateStr) {}
+	// called after the configuration has been parsed
+	onParseConfig: [],
 
 	// called after calendar is ready
 	onReady: [], // function (dateObj, dateStr) {}
 
+	// called after input value updated
 	onValueUpdate: [],
 
-	onDayCreate: [],
-
-	onMonthChange: [],
-
+	// called every time the year is changed
 	onYearChange: []
 };
 
