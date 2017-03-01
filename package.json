@@ -27,7 +27,7 @@
     "start": "run-p build dev serve lint",
     "test": "jest --bail",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
-    "release": "node --harmony-async-await ./newRelease.js"
+    "release": "node ./newRelease.js"
   },
   "dependencies": {},
   "devDependencies": {
