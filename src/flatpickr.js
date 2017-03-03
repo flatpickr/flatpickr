@@ -1177,7 +1177,7 @@ function Flatpickr(element, config) {
 		for (let i = 0; i < boolOpts.length; i++)
 			self.config[boolOpts[i]] = (self.config[boolOpts[i]] === true) || self.config[boolOpts[i]] === "true";
 
-		for (let i = 0; i < hooks.length; i++) 
+		for (let i = 0; i < hooks.length; i++)
 			self.config[hooks[i]] = arrayify(self.config[hooks[i]] || []).map(bindToInstance);
 
 		for (let i = 0; i < self.config.plugins.length; i++) {
@@ -1547,6 +1547,7 @@ function Flatpickr(element, config) {
 		});
 
 		self.revFormat.F = Flatpickr.prototype.revFormat.F.bind(self);
+		self.revFormat.M = Flatpickr.prototype.revFormat.M.bind(self);
 	}
 
 	function setupInputs() {
@@ -2084,7 +2085,7 @@ Flatpickr.prototype = {
 		U: date => date.getTime() / 1000,
 
 		W: function(date) {
-			return this.getWeek(date);
+			return this.config.getWeek(date);
 		},
 
 		// full year e.g. 2016
@@ -2124,41 +2125,57 @@ Flatpickr.prototype = {
 	},
 
 	revFormat: {
-		d: (dateObj, day) => dateObj.setDate(parseFloat(day)),
-		h: (dateObj, hour) => dateObj.setHours(parseFloat(hour)),
-		i: (dateObj, minutes) => dateObj.setMinutes(parseFloat(minutes)),
-		j: (dateObj, day) => dateObj.setDate(parseFloat(day)),
-		m: (dateObj, month) => dateObj.setMonth(parseFloat(month) - 1),
-		s: (dateObj, seconds) => dateObj.setSeconds(parseFloat(seconds)),
-		y: (dateObj, year) => dateObj.setFullYear(2000 + parseFloat(year)),
 		D: () => {},
 		F: function(dateObj, monthName) {
 			dateObj.setMonth(this.l10n.months.longhand.indexOf(monthName));
 		},
 		H: (dateObj, hour) => dateObj.setHours(parseFloat(hour)),
+		J: (dateObj, day) => dateObj.setDate(parseFloat(day)),
 		K: (dateObj, amPM) => {
-			const hours = dateObj.getHours(),
-				isPM = (amPM.toLowerCase() === "pm");
+			const hours = dateObj.getHours();
 
 			if (hours !== 12)
-				dateObj.setHours(hours % 12 + 12 * isPM);
+				dateObj.setHours(hours % 12 + 12 * /pm/i.test(amPM));
+		},
+		M: function(dateObj, shortMonth) {
+			dateObj.setMonth(this.l10n.months.shorthand.indexOf(shortMonth));
 		},
 		S: (dateObj, seconds) => dateObj.setSeconds(seconds),
-		Y: (dateObj, year) => dateObj.setFullYear(year)
+		W: () => {},
+		Y: (dateObj, year) => dateObj.setFullYear(year),
+		Z: (dateObj, ISODate) => dateObj = new Date(ISODate),
+
+		d: (dateObj, day) => dateObj.setDate(parseFloat(day)),
+		h: (dateObj, hour) => dateObj.setHours(parseFloat(hour)),
+		i: (dateObj, minutes) => dateObj.setMinutes(parseFloat(minutes)),
+		j: (dateObj, day) => dateObj.setDate(parseFloat(day)),
+		l: () => {},
+		m: (dateObj, month) => dateObj.setMonth(parseFloat(month) - 1),
+		n: (dateObj, month) => dateObj.setMonth(parseFloat(month) - 1),
+		s: (dateObj, seconds) => dateObj.setSeconds(parseFloat(seconds)),
+		w: () => {},
+		y: (dateObj, year) => dateObj.setFullYear(2000 + parseFloat(year)),
 	},
+
 	tokenRegex: {
 		D:"(\\w+)",
 		F:"(\\w+)",
 		H:"(\\d\\d|\\d)",
+		J:"(\\d\\d|\\d)\\w+",
 		K:"(\\w+)",
+		M:"(\\w+)",
 		S:"(\\d\\d|\\d)",
 		Y:"(\\d{4})",
+		Z:"(.+)",
 		d:"(\\d\\d|\\d)",
 		h:"(\\d\\d|\\d)",
 		i:"(\\d\\d|\\d)",
 		j:"(\\d\\d|\\d)",
+		l:"(\\w+)",
 		m:"(\\d\\d|\\d)",
+		n:"(\\d\\d|\\d)",
 		s:"(\\d\\d|\\d)",
+		w: "(\\d\\d|\\d)",
 		y:"(\\d{2})"
 	},
 
