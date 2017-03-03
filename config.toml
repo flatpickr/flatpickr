@@ -48,22 +48,33 @@ googleAnalytics = ""
 [[menu.main]]
     name   = "Introduction"
     url    = "/"
-    weight = 10
+    weight = 1
 
 [[menu.main]]
     name   = "Getting Started"
     url    = "getting-started/"
-    weight = 20
+    weight = 2
 
 [[menu.main]]
     name   = "Examples"
     url    = "examples/"
-    weight = 30
+    weight = 3
+
+[[menu.main]]
+    name   = "The Flatpickr Instance"
+    url    = "instance-methods-properties-elements/"
+    weight = 4
+
+
+[[menu.main]]
+    name   = "Events & Hooks"
+    url    = "events/"
+    weight = 5
 
 [[menu.main]]
     name   = "Options"
     url    = "options/"
-    weight = 40
+    weight = 6
 
 
 [blackfriday]

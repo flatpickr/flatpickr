@@ -1,5 +1,5 @@
 +++
-date = "2017-02-15"
+date = "2017-02-16"
 title = "Examples"
 weight = 3
 +++
@@ -232,7 +232,7 @@ This is the `enable` option, which takes in an array of date strings, date range
 {
     enable: [
         function(date) {
-            // return true to disable
+            // return true to enable
 
             return (date.getMonth() % 2 === 0 && date.getDate() < 15);
 
@@ -241,3 +241,77 @@ This is the `enable` option, which takes in an array of date strings, date range
 }
 ```
 
+## Selecting multiple dates
+
+It is possible to select multiple dates.
+
+```js
+{
+    mode: "multiple"
+}
+```
+
+<input class=flatpickr type="text" placeholder="Select Date.." data-id="multiple">
+
+## Range Calendar
+
+Select a range of dates using the range calendar.
+
+```js
+{
+    mode: "range"
+}
+```
+
+<input class=flatpickr type="text" placeholder="Select Date.." data-id="range">
+
+Note that disabled dates (by either `minDate`, `maxDate`, `enable` or `disable`) will not be allowed in selections.
+
+```js
+{
+    mode: "range",
+    minDate: "today",
+    disable: [
+        function(date) {
+            // disable every multiple of 8
+            return !(date.getDate() % 8);
+        }
+    ]
+}
+```
+
+<input class=flatpickr type="text" placeholder="Select Date.." data-id="rangeDisable">
+
+## Inline Calendar
+
+Display the calendar in an always-open state with the `inline` option.
+
+```js
+{
+    inline: true
+}
+```
+
+<input class=flatpickr type="text" placeholder="Select Date.." data-id="inline">
+
+## Display Week Numbers
+
+Enable the `weekNumbers` option to display the week number in a column left to the calendar.
+
+```js
+{
+    weekNumbers: true,
+    /*
+        optionally, you may override the function that 
+        extracts the week numbers from a Date by
+        supplying a getWeek function. It takes in a date
+        as a parameter and should return a corresponding string
+        that you want to appear left of every week.
+    */
+    getWeek: function(dateObj) {
+        // ...
+    }
+}
+```
+
+<input class=flatpickr type="text" placeholder="Select Date.." data-id="weekNumbers">

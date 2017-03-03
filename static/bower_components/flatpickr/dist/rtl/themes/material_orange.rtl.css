@@ -15,8 +15,6 @@
   position: absolute;
   width: 315px;
   box-sizing: border-box;
-  transition: top cubic-bezier(0, 1, 0.5, 1) 100ms;
-  z-index: 999;
   box-shadow: 0 3px 13px rgba(0,0,0,0.08);
 }
 .flatpickr-calendar.open,
@@ -29,6 +27,7 @@
 .flatpickr-calendar.open {
   display: inline-block;
   animation: flatpickrFadeInDown 300ms cubic-bezier(0, 1, 0.5, 1);
+  z-index: 99999;
 }
 .flatpickr-calendar.inline {
   display: block;
@@ -40,19 +39,20 @@
   top: calc(100% + 2px);
 }
 .flatpickr-calendar.static.open {
+  z-index: 999;
   display: block;
 }
 .flatpickr-calendar.hasWeeks {
   width: auto;
 }
-.flatpickr-calendar.dateIsPicked.hasTime .flatpickr-time {
+.flatpickr-calendar.showTimeInput.hasTime .flatpickr-time {
   height: 40px;
   border-top: 1px solid rgba(255,138,101,0.2);
 }
-.flatpickr-calendar.dateIsPicked.hasTime .flatpickr-innerContainer {
+.flatpickr-calendar.showTimeInput.hasTime .flatpickr-innerContainer {
   border-bottom: 0;
 }
-.flatpickr-calendar.dateIsPicked.hasTime .flatpickr-time {
+.flatpickr-calendar.showTimeInput.hasTime .flatpickr-time {
   border: 1px solid rgba(255,138,101,0.2);
 }
 .flatpickr-calendar.noCalendar.hasTime .flatpickr-time {
@@ -578,6 +578,9 @@ span.flatpickr-weekday {
   .flatpickr-month svg {
     top: 0 !important;
   }
+}
+.flatpickr-input {
+  cursor: pointer;
 }
 @-moz-keyframes flatpickrFadeInDown {
   from {

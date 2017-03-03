@@ -84,6 +84,45 @@ const configs = {
             }
         ]
     },
+
+    multiple: {
+        mode: "multiple"
+    },
+
+    range: {
+        mode: "range"
+    },
+
+    rangeDisable:{
+        mode: "range",
+        minDate: "today",
+        disable: [
+            function(date) {
+                // disable every multiple of 8
+                return !(date.getDate() % 8);
+            }
+        ]
+    },
+
+    inline: {
+        inline: true
+    },
+    weekNumbers: {
+        weekNumbers: true
+    },
+
+    onDayCreate: {
+        onDayCreate: function(dObj, dStr, fp, dayElem){
+            // Utilize dayElem.dateObj, which is the corresponding Date
+
+            // dummy logic
+            if (Math.random() < 0.15)
+                dayElem.innerHTML += "<span class='event'></span>";
+
+            else if (Math.random() > 0.85)
+                dayElem.innerHTML += "<span class='event busy'></span>";
+        }
+    }
 }
 
 for (let i = 0; i < examples.length; i++) {
