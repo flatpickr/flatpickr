@@ -1220,6 +1220,7 @@ function Flatpickr(element, config) {
 		});
 
 		self.revFormat.F = Flatpickr.prototype.revFormat.F.bind(self);
+		self.revFormat.M = Flatpickr.prototype.revFormat.M.bind(self);
 	}
 
 	function setupInputs() {
@@ -1706,7 +1707,7 @@ Flatpickr.prototype = {
 		},
 
 		W: function W(date) {
-			return this.getWeek(date);
+			return this.config.getWeek(date);
 		},
 
 		// full year e.g. 2016
@@ -1766,6 +1767,35 @@ Flatpickr.prototype = {
 	},
 
 	revFormat: {
+		D: function D() {},
+		F: function F(dateObj, monthName) {
+			dateObj.setMonth(this.l10n.months.longhand.indexOf(monthName));
+		},
+		H: function H(dateObj, hour) {
+			return dateObj.setHours(parseFloat(hour));
+		},
+		J: function J(dateObj, day) {
+			return dateObj.setDate(parseFloat(day));
+		},
+		K: function K(dateObj, amPM) {
+			var hours = dateObj.getHours();
+
+			if (hours !== 12) dateObj.setHours(hours % 12 + 12 * /pm/i.test(amPM));
+		},
+		M: function M(dateObj, shortMonth) {
+			dateObj.setMonth(this.l10n.months.shorthand.indexOf(shortMonth));
+		},
+		S: function S(dateObj, seconds) {
+			return dateObj.setSeconds(seconds);
+		},
+		W: function W() {},
+		Y: function Y(dateObj, year) {
+			return dateObj.setFullYear(year);
+		},
+		Z: function Z(dateObj, ISODate) {
+			return dateObj = new Date(ISODate);
+		},
+
 		d: function d(dateObj, day) {
 			return dateObj.setDate(parseFloat(day));
 		},
@@ -1778,48 +1808,41 @@ Flatpickr.prototype = {
 		j: function j(dateObj, day) {
 			return dateObj.setDate(parseFloat(day));
 		},
+		l: function l() {},
 		m: function m(dateObj, month) {
+			return dateObj.setMonth(parseFloat(month) - 1);
+		},
+		n: function n(dateObj, month) {
 			return dateObj.setMonth(parseFloat(month) - 1);
 		},
 		s: function s(dateObj, seconds) {
 			return dateObj.setSeconds(parseFloat(seconds));
 		},
+		w: function w() {},
 		y: function y(dateObj, year) {
 			return dateObj.setFullYear(2000 + parseFloat(year));
-		},
-		D: function D() {},
-		F: function F(dateObj, monthName) {
-			dateObj.setMonth(this.l10n.months.longhand.indexOf(monthName));
-		},
-		H: function H(dateObj, hour) {
-			return dateObj.setHours(parseFloat(hour));
-		},
-		K: function K(dateObj, amPM) {
-			var hours = dateObj.getHours(),
-			    isPM = amPM.toLowerCase() === "pm";
-
-			if (hours !== 12) dateObj.setHours(hours % 12 + 12 * isPM);
-		},
-		S: function S(dateObj, seconds) {
-			return dateObj.setSeconds(seconds);
-		},
-		Y: function Y(dateObj, year) {
-			return dateObj.setFullYear(year);
 		}
 	},
+
 	tokenRegex: {
 		D: "(\\w+)",
 		F: "(\\w+)",
 		H: "(\\d\\d|\\d)",
+		J: "(\\d\\d|\\d)\\w+",
 		K: "(\\w+)",
+		M: "(\\w+)",
 		S: "(\\d\\d|\\d)",
 		Y: "(\\d{4})",
+		Z: "(.+)",
 		d: "(\\d\\d|\\d)",
 		h: "(\\d\\d|\\d)",
 		i: "(\\d\\d|\\d)",
 		j: "(\\d\\d|\\d)",
+		l: "(\\w+)",
 		m: "(\\d\\d|\\d)",
+		n: "(\\d\\d|\\d)",
 		s: "(\\d\\d|\\d)",
+		w: "(\\d\\d|\\d)",
 		y: "(\\d{2})"
 	},
 

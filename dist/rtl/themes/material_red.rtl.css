@@ -580,6 +580,9 @@ span.flatpickr-weekday {
     top: 0 !important;
   }
 }
+.flatpickr-input {
+  cursor: pointer;
+}
 @-moz-keyframes flatpickrFadeInDown {
   from {
     opacity: 0;
