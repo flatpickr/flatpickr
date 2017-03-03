@@ -168,7 +168,7 @@ function Flatpickr(element, config) {
 
 		if (self.config.mode === "range" && self.days) self.days.addEventListener("mouseover", onMouseOver);
 
-		window.document.addEventListener("keydown", onKeyDown);
+		self.calendarContainer.addEventListener("keydown", onKeyDown);
 
 		if (!self.config.inline && !self.config.static) window.addEventListener("resize", self.debouncedResize);
 
@@ -636,7 +636,6 @@ function Flatpickr(element, config) {
 		instance = instance || self;
 		instance.clear(false);
 
-		window.document.removeEventListener("keydown", onKeyDown);
 		window.removeEventListener("resize", instance.debouncedResize);
 
 		window.document.removeEventListener("click", documentClick);
@@ -744,7 +743,7 @@ function Flatpickr(element, config) {
 	}
 
 	function onKeyDown(e) {
-		if (e.target === (self.altInput || self.input) && e.which === 13) selectDate(e);else if (self.isOpen && isCalendarElem(e.target)) {
+		if (e.target === (self.altInput || self.input) && e.which === 13) selectDate(e);else if (self.isOpen || self.config.inline) {
 			switch (e.which) {
 				case 13:
 					if (self.timeContainer && self.timeContainer.contains(e.target)) updateValue();else selectDate(e);
@@ -758,6 +757,7 @@ function Flatpickr(element, config) {
 
 				case 37:
 					if (e.target !== self.input & e.target !== self.altInput) {
+						e.preventDefault();
 						changeMonth(-1);
 						self.currentMonthElement.focus();
 					}
@@ -774,6 +774,7 @@ function Flatpickr(element, config) {
 
 				case 39:
 					if (e.target !== self.input & e.target !== self.altInput) {
+						e.preventDefault();
 						changeMonth(1);
 						self.currentMonthElement.focus();
 					}
