@@ -1,0 +1,75 @@
+{{ if .IsPage }}
+{{ if .Prev | or .Next }}
+<nav class="pagination" aria-label="Footer">
+  <div class="previous">
+  {{ if .Prev }}
+      <a href="{{ .Prev.Permalink }}" title="{{ .Prev.Title }}">
+        <span class="direction">
+          Previous
+        </span>
+        <div class="page">
+          <div class="button button-previous" role="button" aria-label="Previous">
+            <i class="icon icon-back"></i>
+          </div>
+          <div class="stretch">
+            <div class="title">
+              {{ .Prev.Title }}
+            </div>
+          </div>
+        </div>
+      </a>
+  {{ end }}
+  </div>
+
+  <div class="next">
+
+  {{ if .Next }}
+      <a href="{{ .Next.Permalink }}" title="{{ .Next.Title }}">
+        <span class="direction">
+          Next
+        </span>
+        <div class="page">
+          <div class="stretch">
+            <div class="title">
+              {{ .Next.Title }}
+            </div>
+          </div>
+          <div class="button button-next" role="button" aria-label="Next">
+            <i class="icon icon-forward"></i>
+          </div>
+        </div>
+      </a>
+  {{ end }}
+  </div>
+</nav>
+{{ end }}
+{{ end }}
+
+{{ if .IsHome }}
+{{ if gt (len .Site.Pages) 2 }}
+<nav class="pagination" aria-label="Footer">
+  <div class="previous">
+  </div>
+
+  {{ $title := (index (.Site.Pages.ByDate) 1).Title  }}
+  {{ $permalink := (index (.Site.Pages.ByDate) 1).Permalink }}
+  <div class="next">
+      <a href="{{ $permalink }}" title="{{ $title }}">
+        <span class="direction">
+          Next
+        </span>
+        <div class="page">
+          <div class="stretch">
+            <div class="title">
+              {{ $title }}
+            </div>
+          </div>
+          <div class="button button-next" role="button" aria-label="Next">
+            <i class="icon icon-forward"></i>
+          </div>
+        </div>
+      </a>
+  </div>
+</nav>
+{{ end }}
+{{ end }}

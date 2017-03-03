@@ -1,0 +1,73 @@
+baseurl = "/"
+languageCode = "en-us"
+title = "flatpickr"
+theme = "hugo-material-docs"
+metadataformat = "toml"
+canonifyurls = true
+# Enable Google Analytics by entering your tracking id
+googleAnalytics = ""
+
+[params]
+    # General information
+    author = "chmln"
+    description = "A lightweight and powerful datetimepicker"
+    copyright = "Released under the MIT license"
+
+    # Repository
+    provider = "GitHub"
+    repo_url = "https://github.com/chmln/flatpickr"
+
+    version = "v2.3.7"
+    logo = "images/logo.png"
+    favicon = ""
+
+    permalink = "#"
+
+    # Custom assets
+    custom_css = ["site.css", "/bower_components/flatpickr/dist/flatpickr.css"]
+    custom_js  = ["/bower_components/flatpickr/dist/flatpickr.js", "/flatpickr.js"]
+
+    # Syntax highlighting theme
+    highlight_css  = ""
+
+    [params.palette]
+        primary = "blue"
+        accent  = "light-blue"
+
+    [params.font]
+        text = "Libre Franklin"
+        code = "Roboto Mono"
+
+
+[social]
+    twitter = ""
+    github  = "chmln"
+    email   = "hello@email.com"
+
+
+[[menu.main]]
+    name   = "Introduction"
+    url    = "/"
+    weight = 10
+
+[[menu.main]]
+    name   = "Getting Started"
+    url    = "getting-started/"
+    weight = 20
+
+[[menu.main]]
+    name   = "Examples"
+    url    = "examples/"
+    weight = 30
+
+[[menu.main]]
+    name   = "Options"
+    url    = "options/"
+    weight = 40
+
+
+[blackfriday]
+    smartypants = false
+    fractions = true
+    smartDashes = true
+    plainIDAnchors = true

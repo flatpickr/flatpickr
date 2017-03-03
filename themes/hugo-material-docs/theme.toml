@@ -1,0 +1,18 @@
+name = "Material Docs"
+license = "MIT"
+licenselink = "https://github.com/digitalcraftsman/hugo-material-docs/blob/master/LICENSE.md"
+description = "A material design theme for documentations."
+homepage = "https://github.com/digitalcraftsman/hugo-material-docs"
+tags = ["material", "documentation", "docs", "google analytics", "responsive"]
+features = ["", ""]
+min_version = 0.15
+
+[author]
+  name = "Digitalcraftsman"
+  homepage = "https://github.com/digitalcraftsman"
+
+# If porting an existing theme
+[original]
+  name = "Martin Donath"
+  homepage = "http://struct.cc/"
+  repo = "https://github.com/squidfunk/mkdocs-material"

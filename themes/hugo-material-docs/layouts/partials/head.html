@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+  <!--[if lt IE 7 ]><html class="no-js ie6"><![endif]-->
+  <!--[if IE 7 ]><html class="no-js ie7"><![endif]-->
+  <!--[if IE 8 ]><html class="no-js ie8"><![endif]-->
+  <!--[if IE 9 ]><html class="no-js ie9"><![endif]-->
+  <!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js"> <!--<![endif]-->
+
+  <head {{ with .Site.LanguageCode }}lang="{{ . }}"{{ end }}>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=10" />
+    <title>{{ .Title }}{{ if not .IsHome }} - {{ .Site.Title }}{{ end }}</title>
+    {{ .Hugo.Generator }}
+
+    {{ with .Site.Params.description }}
+    <meta name="description" content="{{ . }}">
+    {{ end }}
+    <link rel="canonical" href="{{ .Permalink }}">
+    {{ with .Site.Params.author }}
+    <meta name="author" content="{{ . }}">
+    {{ end }}
+
+    <meta property="og:url" content="{{ .Permalink }}">
+    {{ with .Site.Title }}<meta property="og:title" content="{{ . }}">{{ end }}
+    {{ with .Site.Params.logo }}<meta property="og:image" content="{{ . | absURL }}">{{ end }}
+    {{ with .Site.Title }}<meta name="apple-mobile-web-app-title" content="{{ . }}">{{ end }}
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <link rel="shortcut icon" type="image/x-icon" href="{{ with .Site.Params.favicon }}{{ . | absURL }}{{ else }}{{ "images/favicon.ico" | absURL }}{{ end }}">
+    <link rel="icon" type="image/x-icon" href="{{ with .Site.Params.favicon }}{{ . | absURL }}{{ else }}{{ "images/favicon.ico" | absURL }}{{ end }}">
+
+    <style>
+      @font-face {
+        font-family: 'Icon';
+        src: url('{{ "fonts/icon.eot?52m981" | absURL }}');
+        src: url('{{ "fonts/icon.eot?#iefix52m981" | absURL }}')
+               format('embedded-opentype'),
+             url('{{ "fonts/icon.woff?52m981" | absURL }}')
+               format('woff'),
+             url('{{ "fonts/icon.ttf?52m981" | absURL }}')
+               format('truetype'),
+             url('{{ "fonts/icon.svg?52m981#icon" | absURL }}')
+               format('svg');
+        font-weight: normal;
+        font-style: normal;
+      }
+    </style>
+
+    <link rel="stylesheet" href="{{ "stylesheets/application.css" | absURL }}">
+    <link rel="stylesheet" href="{{ "stylesheets/temporary.css" | absURL }}">
+    <link rel="stylesheet" href="{{ "stylesheets/palettes.css" | absURL }}">
+    <link rel="stylesheet" href="{{ with .Site.Params.highlight_css }}{{ . | absURL }}{{ else }}{{ "stylesheets/highlight/highlight.css" | absURL }}{{ end }}">
+
+    {{/* set default values if no custom ones are defined */}}
+    {{ $text := or .Site.Params.font.text "Roboto" }}
+    {{ $code := or .Site.Params.font.code "Roboto Mono" }}
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family={{ $text }}:400,700|{{ replace  $code " " "+" | safeURL }}">
+    <style>
+      body, input {
+        font-family: '{{ $text }}', Helvetica, Arial, sans-serif;
+      }
+      pre, code {
+        font-family: '{{ $code }}', 'Courier New', 'Courier', monospace;
+      }
+    </style>
+
+    {{ range .Site.Params.custom_css }}
+    <link rel="stylesheet" href="{{ . | absURL }}">
+    {{ end }}
+    <script src="{{ "javascripts/modernizr.js" | absURL }}"></script>
+
+    {{ with .RSSLink }}
+    <link href="{{ . }}" rel="alternate" type="application/rss+xml" title="{{ $.Site.Title }}" />
+    <link href="{{ . }}" rel="feed" type="application/rss+xml" title="{{ $.Site.Title }}" />
+    {{ end }}
+
+  </head>
+  <body class="{{ with .Site.Params.palette.primary }}palette-primary-{{ . }}{{end }} {{ with .Site.Params.palette.accent }}palette-accent-{{ .  }}{{ end }}">

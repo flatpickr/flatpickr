@@ -1,0 +1,78 @@
+<nav aria-label="Navigation">
+  <a href="{{ with .Site.Params.repo_url }}{{ . }}{{ else }}{{ .Site.BaseURL }}{{ end }}" class="project">
+    <div class="banner">
+      {{ with .Site.Params.logo }}
+        <div class="logo">
+          <img src="{{ $.Site.BaseURL }}{{ . }}">
+        </div>
+      {{ end }}
+      <div class="name">
+        <strong>{{ .Site.Title }} {{ with .Site.Params.version }}<span class="version">{{ . }}</span>{{ end }}</strong>
+        {{ with .Scratch.Get "repo_id" }}
+          <br>
+          {{ . }}
+        {{ end }}
+      </div>
+    </div>
+  </a>
+
+  <div class="scrollable">
+    <div class="wrapper">
+      {{ if (eq (trim .Site.Params.provider " " | lower) "github") | and (isset .Site.Params "repo_url") }}
+        <ul class="repo">
+          <li class="repo-download">
+            <a href="{{ .Site.Params.repo_url }}/archive/master.zip" target="_blank" title="Download" data-action="download">
+              <i class="icon icon-download"></i> Download
+            </a>
+          </li>
+          <li class="repo-stars">
+            <a href="{{ .Site.Params.repo_url }}/stargazers" target="_blank" title="Stargazers" data-action="star">
+              <i class="icon icon-star"></i> Stars
+              <span class="count">&ndash;</span>
+            </a>
+          </li>
+        </ul>
+        <hr>
+      {{ end }}
+
+      <div class="toc">
+        {{ if gt (len .Site.Menus.main) 0 }}
+        <ul>
+          {{ partial "nav" . }}
+        </ul>
+        {{ end }}
+
+        {{ if isset .Site.Params "author" }}
+        <hr>
+        <span class="section">The author</span>
+        
+        <ul>
+          {{ with .Site.Social.twitter }}
+          <li>
+            <a href="https://twitter.com/{{ . }}" target="_blank" title="@{{ . }} on Twitter">
+              @{{ . }} on Twitter
+            </a>
+          </li>
+          {{ end }}
+
+          {{ with .Site.Social.github }}
+          <li>
+            <a href="https://github.com/{{ . }}" target="_blank" title="@{{ . }} on GitHub">
+              @{{ . }} on GitHub
+            </a>
+          </li>
+          {{ end }}
+
+          {{ with .Site.Social.email }}
+          <li>
+            <a href="mailto:{{ . }}" title="Email of {{ . }}">
+              Contact via email
+            </a>
+          </li>
+          {{ end }}
+        </ul>
+        {{ end }}
+      </div>
+    </div>
+  </div>
+</nav>

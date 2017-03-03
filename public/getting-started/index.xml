@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Getting-starteds on flatpickr</title>
+    <link>/getting-started/index.xml</link>
+    <description>Recent content in Getting-starteds on flatpickr</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Released under the MIT license</copyright>
+    <lastBuildDate>Wed, 15 Feb 2017 13:35:22 -0500</lastBuildDate>
+    <atom:link href="/getting-started/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Getting Started</title>
+      <link>/getting-started/</link>
+      <pubDate>Wed, 15 Feb 2017 13:35:22 -0500</pubDate>
+      
+      <guid>/getting-started/</guid>
+      <description>
+
+&lt;h2 id=&#34;installation&#34;&gt;Installation&lt;/h2&gt;
+
+&lt;h3 id=&#34;installing-a-flatpickr-module&#34;&gt;Installing a flatpickr module&lt;/h3&gt;
+
+&lt;p&gt;flatpickr is available on npm and bower. Use either one to easily stay up to date with new features and (inevitably) bugfixes.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;# using npm install
+npm i flatpickr --save
+
+# bower
+bower install flatpickr-calendar --save
+
+# or, if you like yarn better
+yarn add flatpickr
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;non-module-environments&#34;&gt;Non-module environments&lt;/h3&gt;
+
+&lt;p&gt;If, for any reason, you are constained to a non-module environment (e.g. no bundlers such as webpack) - don&amp;rsquo;t fret. I suggest simply pulling the latest version of &lt;code&gt;flatpickr&lt;/code&gt; from &lt;code&gt;unpkg&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;https://unpkg.com/flatpickr/dist/flatpickr.min.css&amp;quot;&amp;gt;
+&amp;lt;script src=&amp;quot;https://unpkg.com/flatpickr&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;usage&#34;&gt;Usage&lt;/h2&gt;
+
+&lt;h3 id=&#34;using-the-flatpickr-module&#34;&gt;Using the flatpickr &lt;strong&gt;module&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;p&gt;This is the recommended method if you can &lt;code&gt;require&lt;/code&gt; packages on front end&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;const Flatpickr = require(&amp;quot;flatpickr&amp;quot;);
+new Flatpickr(element, optional_config);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;where &lt;code&gt;element&lt;/code&gt; is a &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/Element&#34;&gt;node&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Configuration is optional and passed in an object&lt;code&gt;{}&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;non-module-environments-1&#34;&gt;Non-module environments&lt;/h3&gt;
+
+&lt;p&gt;The above syntax works just as well for non-module environments. Make sure the flatpickr&amp;rsquo;s script is included, and the &lt;code&gt;Flatpickr&lt;/code&gt; variable will be available.&lt;/p&gt;
+
+&lt;p&gt;Additionally, flatpickr registers a helper function to make invocation easier.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;flatpickr(&amp;quot;.mySelector&amp;quot;, optional_config);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;jquery&#34;&gt;jQuery&lt;/h3&gt;
+
+&lt;p&gt;If you have jQuery, flatpickr is available as a plugin.
+Simply&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;$(&amp;quot;.selector&amp;quot;).flatpickr(optional_config);
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

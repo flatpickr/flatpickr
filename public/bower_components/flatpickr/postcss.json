@@ -1,0 +1,6 @@
+{
+    "use": ["autoprefixer", "postcss-flexbugs-fixes"],
+    "autoprefixer": {
+        "browsers": "last 2 versions, Firefox ESR, ios >= 7, ie >= 9"
+    }
+}

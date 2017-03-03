@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>flatpickr</title>
+    <link>/index.xml</link>
+    <description>Recent content on flatpickr</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Released under the MIT license</copyright>
+    <lastBuildDate>Wed, 15 Feb 2017 13:35:22 -0500</lastBuildDate>
+    <atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Getting Started</title>
+      <link>/getting-started/</link>
+      <pubDate>Wed, 15 Feb 2017 13:35:22 -0500</pubDate>
+      
+      <guid>/getting-started/</guid>
+      <description>
+
+&lt;h2 id=&#34;installation&#34;&gt;Installation&lt;/h2&gt;
+
+&lt;h3 id=&#34;installing-a-flatpickr-module&#34;&gt;Installing a flatpickr module&lt;/h3&gt;
+
+&lt;p&gt;flatpickr is available on npm and bower. Use either one to easily stay up to date with new features and (inevitably) bugfixes.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;# using npm install
+npm i flatpickr --save
+
+# bower
+bower install flatpickr-calendar --save
+
+# or, if you like yarn better
+yarn add flatpickr
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;non-module-environments&#34;&gt;Non-module environments&lt;/h3&gt;
+
+&lt;p&gt;If, for any reason, you are constained to a non-module environment (e.g. no bundlers such as webpack) - don&amp;rsquo;t fret. I suggest simply pulling the latest version of &lt;code&gt;flatpickr&lt;/code&gt; from &lt;code&gt;unpkg&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;https://unpkg.com/flatpickr/dist/flatpickr.min.css&amp;quot;&amp;gt;
+&amp;lt;script src=&amp;quot;https://unpkg.com/flatpickr&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;usage&#34;&gt;Usage&lt;/h2&gt;
+
+&lt;h3 id=&#34;using-the-flatpickr-module&#34;&gt;Using the flatpickr &lt;strong&gt;module&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;p&gt;This is the recommended method if you can &lt;code&gt;require&lt;/code&gt; packages on front end&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;const Flatpickr = require(&amp;quot;flatpickr&amp;quot;);
+new Flatpickr(element, optional_config);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;where &lt;code&gt;element&lt;/code&gt; is a &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/Element&#34;&gt;node&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Configuration is optional and passed in an object&lt;code&gt;{}&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;non-module-environments-1&#34;&gt;Non-module environments&lt;/h3&gt;
+
+&lt;p&gt;The above syntax works just as well for non-module environments. Make sure the flatpickr&amp;rsquo;s script is included, and the &lt;code&gt;Flatpickr&lt;/code&gt; variable will be available.&lt;/p&gt;
+
+&lt;p&gt;Additionally, flatpickr registers a helper function to make invocation easier.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;flatpickr(&amp;quot;.mySelector&amp;quot;, optional_config);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;jquery&#34;&gt;jQuery&lt;/h3&gt;
+
+&lt;p&gt;If you have jQuery, flatpickr is available as a plugin.
+Simply&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;$(&amp;quot;.selector&amp;quot;).flatpickr(optional_config);
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>examples</title>
+      <link>/examples/</link>
+      <pubDate>Wed, 15 Feb 2017 13:56:21 -0500</pubDate>
+      
+      <guid>/examples/</guid>
+      <description>
+
+&lt;p&gt;Unless otherwise specified, the markup for examples below consists of just an input element, and flatpickr &lt;a href=&#34;/getting-started/#usage&#34;&gt;invocation&lt;/a&gt; with a given config.&lt;/p&gt;
+
+&lt;h2 id=&#34;basic&#34;&gt;Basic&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;flatpickr&lt;/code&gt; without any config. Some features right off the bat:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;The year is scrollable and can be typed in&lt;/li&gt;
+&lt;li&gt;The month name is scrollable&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;input class=flatpickr type=&#34;text&#34; placeholder=&#34;Select Date..&#34;&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;datetime&#34;&gt;DateTime&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+    enableTime: true
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;input class=flatpickr type=&#34;text&#34; placeholder=&#34;Select Date..&#34; data-id=&#34;datetime&#34;&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;human-friendly-dates&#34;&gt;Human-friendly Dates&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;altInput&lt;/code&gt; hides your original input and creates a new one.&lt;/p&gt;
+
+&lt;p&gt;Upon date selection, the original input will contain a &lt;code&gt;Y-m-d...&lt;/code&gt; string, while the &lt;code&gt;altInput&lt;/code&gt; will display the date in a more legible, customizable format.&lt;/p&gt;
+
+&lt;p&gt;Enabling this option is highly recommended.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+    altInput: true
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;input class=flatpickr type=&#34;text&#34; placeholder=&#34;Select Date..&#34; data-id=&#34;altinput&#34;&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;supplying-dates-for-flatpickr&#34;&gt;Supplying Dates for flatpickr&lt;/h2&gt;
+
+&lt;p&gt;flatpickr has numerous options that accept date values in a variety of formats. Those are:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;defaultDate&lt;/li&gt;
+&lt;li&gt;minDate&lt;/li&gt;
+&lt;li&gt;maxDate&lt;/li&gt;
+&lt;li&gt;enable/disable&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The values accepted by these options all follow the same guidelines.&lt;/p&gt;
+
+&lt;p&gt;You may specify those dates in a variety of formats:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date&#34;&gt;Date Objects&lt;/a&gt; are always accepted
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;new Date(2015, 0, 10)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Unix_time&#34;&gt;Timestamps&lt;/a&gt; are always accepted
+
+&lt;ul&gt;
+&lt;li&gt;e.g. &lt;code&gt;1488136398547&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;ISO Date Strings are always accepted
+
+&lt;ul&gt;
+&lt;li&gt;e.g. &lt;code&gt;&amp;quot;2017-02-26T19:40:03.243Z&amp;quot;&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Date Strings, which &lt;strong&gt;must match the &lt;code&gt;dateFormat&lt;/code&gt;&lt;/strong&gt; chronologically&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;dateFormat&lt;/code&gt; defaults to &lt;code&gt;YYYY-MM-DD HH:MM&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;This means that &lt;code&gt;&amp;quot;2016&amp;quot;&lt;/code&gt; &lt;code&gt;&amp;quot;2016-10&amp;quot;&lt;/code&gt;, &lt;code&gt;&amp;quot;2016-10-20&amp;quot;&lt;/code&gt;, &lt;code&gt;&amp;quot;2016-10-20 15&amp;quot;&lt;/code&gt;, &lt;code&gt;&amp;quot;2016-10-20 15:30&amp;quot;&lt;/code&gt; are all valid date strings
+&lt;br /&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;The shortcut &lt;code&gt;&amp;quot;today&amp;quot;&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;preloading-a-date&#34;&gt;Preloading a Date&lt;/h2&gt;
+
+&lt;p&gt;The selected date will get parsed from the input&amp;rsquo;s value or the &lt;code&gt;defaultDate&lt;/code&gt; option.&lt;/p&gt;
+
+&lt;p&gt;See &lt;a href=&#34;#supplying-dates-for-flatpickr&#34;&gt;supplying dates&lt;/a&gt; for valid date examples.&lt;/p&gt;
+
+&lt;h2 id=&#34;mindate-and-maxdate&#34;&gt;minDate and maxDate&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;minDate&lt;/code&gt; option specifies the &lt;strong&gt;minimum/earliest&lt;/strong&gt; date (inclusively) allowed for selection.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;maxDate&lt;/code&gt; option specifies the &lt;strong&gt;maximum/latest&lt;/strong&gt; date (inclusively) allowed for selection.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+    minDate: &amp;quot;2017-04&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;input class=flatpickr type=&#34;text&#34; placeholder=&#34;Select Date..&#34; data-id=&#34;minDate2017&#34;&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+    dateFormat: &amp;quot;d.m.Y&amp;quot;,
+    maxDate: &amp;quot;15.12.2017&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;input class=flatpickr type=&#34;text&#34; placeholder=&#34;Select Date..&#34; data-id=&#34;maxDateStr&#34;&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+    minDate: &amp;quot;today&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;input class=flatpickr type=&#34;text&#34; placeholder=&#34;Select Date..&#34; data-id=&#34;minDateToday&#34;&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;{
+    minDate: &amp;quot;today&amp;quot;,
+    maxDate: new Date().fp_incr(14) // 14 days from now
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;input class=flatpickr type=&#34;text&#34; placeholder=&#34;Select Date..&#34; data-id=&#34;minMaxDateTwoWeeks&#34;&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>index</title>
+      <link>/options/</link>
+      <pubDate>Wed, 15 Feb 2017 12:59:42 -0500</pubDate>
+      
+      <guid>/options/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>flatpickr</title>
+      <link>/</link>
+      <pubDate>Wed, 15 Feb 2017 12:49:53 -0500</pubDate>
+      
+      <guid>/</guid>
+      <description>
+
+&lt;h2 id=&#34;intro&#34;&gt;Intro&lt;/h2&gt;
+
+&lt;p&gt;Intro.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

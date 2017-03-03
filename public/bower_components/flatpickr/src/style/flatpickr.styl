@@ -1,0 +1,619 @@
+$bezier = cubic-bezier(0, 1, 0.5, 1)
+
+$daySize = 40px
+$padding = ($daySize/16)
+$dayMargin = 2px
+$daysWidth = ($daySize*7 + $dayMargin*14 + $padding*2 + 2)
+$timeHeight = 40px
+$calendarWidth = ($daysWidth)
+
+// Colors
+
+$calendarBackground ?= #ffffff
+$calendarBorderColor ?= #e6e6e6
+
+$monthForeground ?= alpha(black, 0.9)
+$arrow_hover_color ?= #f64747
+
+$monthBackground ?= transparent
+
+$weekdaysBackground ?= transparent
+
+$dayForeground ?= #393939
+$dayHoverBackground ?= #e6e6e6
+
+$todayColor ?= #959ea9
+$selectedDayBackground ?= #569FF7
+
+$invertedBg = invert($calendarBackground)
+
+
+@keyframes flatpickrFadeInDown
+    from
+        opacity 0
+        transform translate3d(0, -20px, 0)
+
+    to
+        opacity 1
+        transform none
+
+
+.flatpickr-calendar
+    background transparent
+    overflow hidden
+    max-height 0
+    opacity 0
+    visibility hidden
+    text-align center
+    padding 0
+    animation none
+    direction ltr
+    border 0
+    font-size 14px
+    line-height 24px
+    border-radius 5px
+    position absolute
+    width $calendarWidth
+    box-sizing border-box
+    transition top $bezier 100ms
+    z-index 999
+
+    if $noCalendarBorder is defined
+        box-shadow 0 3px 13px alpha(black, 0.08)
+
+    else
+        background $calendarBackground
+        box-shadow 1px 0 0 $calendarBorderColor,
+            -1px 0 0 $calendarBorderColor,
+            0 1px 0 $calendarBorderColor,
+            0 -1px 0 $calendarBorderColor,
+            0 3px 13px alpha(black, 0.08)
+
+
+    &.open, &.inline
+        opacity 1
+        visibility visible
+        overflow visible
+        max-height 640px
+
+    &.open
+        display inline-block
+        animation flatpickrFadeInDown 300ms $bezier
+
+    &.inline
+        display block
+        position relative
+        top 2px
+
+    &.static
+        position absolute
+        top calc(100% + 2px)
+
+        &.open
+            display block
+
+    &.hasWeeks
+        width auto
+
+    &.dateIsPicked.hasTime
+        .flatpickr-time
+            height $timeHeight
+            border-top 1px solid $calendarBorderColor
+
+        if $noCalendarBorder is defined
+            .flatpickr-innerContainer
+                border-bottom 0
+
+            .flatpickr-time
+                border 1px solid $calendarBorderColor
+
+    &.noCalendar.hasTime
+        .flatpickr-time
+            height auto
+
+    &:before, &:after
+        position absolute
+        display block
+        pointer-events none
+        border solid transparent
+        content ''
+        height 0
+        width 0
+        left 22px
+
+    &.rightMost
+        &:before, &:after
+            left auto
+            right 22px
+
+    &:before
+        border-width 5px
+        margin 0 -5px
+
+    &:after
+        border-width 4px
+        margin 0 -4px
+
+    &.arrowTop
+        &:before, &:after
+            bottom 100%
+        &:before
+            border-bottom-color $calendarBorderColor
+        &:after
+            if $noCalendarBorder is defined
+                border-bottom-color $monthBackground
+            else
+                border-bottom-color $calendarBackground
+
+    &.arrowBottom
+        &:before, &:after
+            top 100%
+        &:before
+            border-top-color $calendarBorderColor
+        &:after
+            if $noCalendarBorder is defined
+                border-top-color $monthBackground
+            else
+                border-top-color $calendarBackground
+
+.flatpickr-wrapper
+    position relative
+    display inline-block
+
+.flatpickr-month
+    if $noCalendarBorder is defined
+        border-radius 5px 5px 0 0
+    background $monthBackground
+    color $monthForeground
+    fill $monthForeground
+    height 28px
+    line-height 24px
+    text-align center
+    position relative
+    user-select none
+
+.flatpickr-prev-month, .flatpickr-next-month
+    text-decoration none
+    cursor pointer
+    position absolute
+    top 10px
+    height 16px
+    line-height 16px
+
+    i
+        position relative
+
+    &.flatpickr-prev-month
+        /*!
+        /*rtl:begin:ignore*//*
+        */
+        left calc(3.57% - 1.5px)
+        /*!
+        /*rtl:end:ignore*//*
+        */
+
+
+    &.flatpickr-next-month
+        /*!
+        /*rtl:begin:ignore*//*
+        */
+        right calc(3.57% - 1.5px)
+        /*!
+        /*rtl:end:ignore*//*
+        */
+
+    &:hover
+        color $todayColor
+        svg
+            if $arrow_hover_color is defined
+                fill $arrow_hover_color
+
+            else
+                fill $todayColor
+
+    svg
+        width 14px
+
+        path
+            transition fill 0.1s
+            fill inherit
+
+
+.numInputWrapper
+    position relative
+    height auto
+
+    input, span
+        display inline-block
+
+    input
+        width 100%
+
+    span
+        position absolute
+        right 0
+        width 14px
+        padding 0 4px 0 2px
+        height 50%
+        line-height 50%
+        opacity 0
+        cursor pointer
+        border 1px solid alpha($dayForeground, 0.05)
+        box-sizing border-box
+
+        &:hover
+            background: alpha($invertedBg, 0.1)
+
+        &:active
+            background: alpha($invertedBg, 0.2)
+
+        &:after
+            display block
+            content ""
+            position absolute
+            top 33%
+
+        &.arrowUp
+            top 0
+            border-bottom 0
+
+            &:after
+                border-left 4px solid transparent
+                border-right 4px solid transparent
+                border-bottom 4px solid alpha($dayForeground, 0.6)
+
+        &.arrowDown
+            top 50%
+
+            &:after
+                border-left 4px solid transparent
+                border-right 4px solid transparent
+                border-top 4px solid alpha($dayForeground, 0.6)
+
+        svg
+            width inherit
+            height auto
+            path
+                fill alpha($monthForeground, 0.5)
+
+    &:hover
+        background: alpha($invertedBg, 0.05)
+
+        span
+            opacity 1
+
+
+.flatpickr-current-month
+    font-size 135%
+    line-height inherit
+    font-weight 300
+    color inherit
+    position absolute
+    width 75%
+    left 12.5%
+    top 5px
+    display inline-block
+    text-align center
+
+    span.cur-month
+        font-family inherit
+        font-weight 700
+        color inherit
+        display inline-block
+        margin-left 7px
+        padding 0
+
+        &:hover
+            background: alpha($invertedBg, 0.05)
+
+
+    .numInputWrapper
+        width 6ch
+        width unquote("7ch\0")
+        display inline-block
+
+        span.arrowUp:after
+            border-bottom-color $monthForeground
+
+        span.arrowDown:after
+            border-top-color $monthForeground
+
+    input.cur-year
+        background transparent
+        box-sizing border-box
+        color inherit
+        cursor default
+        padding 0 0 0 0.5ch
+        margin 0
+
+        display inline
+        font-size inherit
+        font-family inherit
+        font-weight 300
+        line-height inherit
+        height initial
+        border 0
+        border-radius 0
+        vertical-align initial
+
+        &:focus
+            outline 0
+
+
+        &[disabled], &[disabled]:hover
+            font-size 100%
+            color alpha($monthForeground, 0.5)
+            background transparent
+            pointer-events none
+
+.flatpickr-weekdays
+    background $weekdaysBackground
+    text-align center
+    overflow hidden
+
+.flatpickr-days, .flatpickr-weeks
+    padding 1px 0 0 0
+
+.flatpickr-days
+    padding 0
+    outline 0
+    text-align left
+    width ($daysWidth)
+    box-sizing border-box
+    display inline-block
+    display flex
+    flex-wrap wrap
+    justify-content space-around
+
+    if $noCalendarBorder is defined
+        border-right 1px solid $calendarBorderColor
+        border-left 1px solid $calendarBorderColor
+
+.flatpickr-day
+    background none
+    border 1px solid transparent
+    border-radius 150px
+    box-sizing border-box
+    color $dayForeground
+    cursor pointer
+
+    font-weight 400
+    width 14.2857143%
+    flex-basis 14.2857143%
+    max-width $daySize
+    height $daySize
+    line-height $daySize
+    margin 0
+
+    display inline-block
+    position relative
+    justify-content center
+    text-align center
+
+    &, &.prevMonthDay, &.nextMonthDay
+        &.inRange, &.today.inRange,  &:hover, &:focus
+            cursor pointer
+            outline 0
+            background $dayHoverBackground
+            border-color $dayHoverBackground
+
+
+    &.today
+        border-color $todayColor
+
+        &:hover, &:focus
+            border-color $todayColor
+            background $todayColor
+            if $today_fg_color is defined
+                color $today_fg_color
+            else
+                color white
+
+    &.selected, &.startRange, &.endRange
+        &, &:focus, &:hover, &.prevMonthDay, &.nextMonthDay
+            background $selectedDayBackground
+
+            if $selectedDayForeground is defined
+                color $selectedDayForeground
+            else
+                color white
+
+            border-color $selectedDayBackground
+
+        &.startRange
+            border-radius 50px 0 0 50px
+
+        &.endRange
+            border-radius 0 50px 50px 0
+
+        &.startRange.endRange
+            border-radius 50px
+
+    &.inRange
+        border-radius 0
+        box-shadow: (-2.5*$dayMargin) 0 0 $dayHoverBackground, (2.5*$dayMargin) 0 0 $dayHoverBackground
+
+    &.disabled, &.disabled:hover
+        pointer-events none
+
+    &.disabled, &.disabled:hover,
+    &.prevMonthDay, &.nextMonthDay,
+    &.notAllowed, &.notAllowed.prevMonthDay, &.notAllowed.nextMonthDay
+        if $disabled_day_color is defined
+            color $disabled_day_color
+        else
+            color alpha($dayForeground, 0.3)
+        background transparent
+        if $disabled_border_color is defined
+            border-color $disabled_border_color
+        else
+            border-color transparent
+        cursor default
+
+span.flatpickr-weekday
+    cursor default
+    font-size 90%
+
+    if $weekdays_color is defined
+        color alpha($weekdays_color, 0.54)
+    else
+        color alpha(black, 0.54)
+
+    height (24px + $daySize/12)
+    line-height 24px
+    margin 0
+    background $monthBackground
+    text-align center
+    display block
+    float left
+    width 14.28%
+    font-weight bold
+    margin 0
+    padding-top ($daySize/12)
+
+.rangeMode .flatpickr-day
+    margin-top 1px
+
+.flatpickr-weekwrapper
+    display inline-block
+    float left
+
+    .flatpickr-weeks
+        padding 1px 12px 0 12px
+        if $noCalendarBorder is defined
+            border-left 1px solid $calendarBorderColor
+        box-shadow 1px 0 0 $calendarBorderColor
+
+    .flatpickr-weekday
+        float none
+        width 100%
+
+    span.flatpickr-day
+        display block
+        width 100%
+        max-width none
+
+
+.flatpickr-innerContainer
+    display block
+    display flex
+    box-sizing border-box
+    overflow: hidden;
+
+    if $noCalendarBorder is defined
+        background $calendarBackground
+        border-bottom 1px solid $calendarBorderColor
+
+
+.flatpickr-rContainer
+    display inline-block
+    padding 0
+    box-sizing border-box
+
+
+.flatpickr-time
+    text-align center
+    outline 0
+    display block
+    height 0 // hide initially
+    line-height $timeHeight
+    max-height $timeHeight
+    box-sizing border-box
+    overflow hidden
+    transition height 0.33s $bezier
+    display flex
+
+
+    if $noCalendarBorder is defined
+        background $calendarBackground
+        border-radius 0 0 5px  5px
+
+
+    &:after
+        content ""
+        display table
+        clear both
+
+    .numInputWrapper
+        flex 1
+        width 40%
+        height $timeHeight
+        float left
+
+        span.arrowUp:after
+            border-bottom-color $dayForeground
+
+        span.arrowDown:after
+            border-top-color $dayForeground
+
+    &.hasSeconds .numInputWrapper
+        width 26%
+
+    &.time24hr .numInputWrapper
+        width 49%
+
+    input
+        background transparent
+        box-shadow none
+        border 0
+        border-radius 0
+        text-align center
+        margin 0
+        padding 0
+        height inherit
+        line-height inherit
+        cursor pointer
+        color $dayForeground
+        font-size 14px
+        position relative
+        box-sizing border-box
+
+        &.flatpickr-hour
+            font-weight bold
+
+        &.flatpickr-minute, &.flatpickr-second
+            font-weight 400
+
+        &:focus
+            outline 0
+            border 0
+
+    .flatpickr-time-separator, .flatpickr-am-pm
+        height inherit
+        display inline-block
+        float left
+        line-height inherit
+        color $dayForeground
+        font-weight bold
+        width 2%
+        user-select none
+
+    .flatpickr-am-pm
+        outline 0
+        width 18%
+        cursor pointer
+        text-align center
+        font-weight 400
+
+        &:hover, &:focus
+            background lighten($dayHoverBackground, 4)
+
+
+.hasWeeks, .hasTime
+    .flatpickr-days
+        border-bottom 0
+        border-bottom-right-radius 0
+        border-bottom-left-radius 0
+
+if $noCalendarBorder
+    .hasWeeks .flatpickr-days
+        border-left 0
+
+
+@media all and (-ms-high-contrast none)
+    .flatpickr-month
+        padding 0
+        svg
+            top 0 !important
+
+
