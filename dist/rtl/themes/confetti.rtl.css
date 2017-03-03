@@ -15,7 +15,6 @@
   position: absolute;
   width: 315px;
   box-sizing: border-box;
-  transition: top cubic-bezier(0, 1, 0.5, 1) 100ms;
   box-shadow: 0 3px 13px rgba(0,0,0,0.08);
 }
 .flatpickr-calendar.open,
