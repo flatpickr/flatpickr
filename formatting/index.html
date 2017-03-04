@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+  
+  
+  
+  
+   <html class="no-js"> 
+
+  <head lang="en-us">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=10" />
+    <title>Formatting Tokens - flatpickr</title>
+    <meta name="generator" content="Hugo 0.19" />
+
+    
+    <meta name="description" content="A lightweight and powerful datetimepicker">
+    
+    <link rel="canonical" href="/formatting/">
+    
+    <meta name="author" content="chmln">
+    
+
+    <meta property="og:url" content="/formatting/">
+    <meta property="og:title" content="flatpickr">
+    <meta property="og:image" content="/images/logo.png">
+    <meta name="apple-mobile-web-app-title" content="flatpickr">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <link rel="shortcut icon" type="image/x-icon" href="/images/logo.png">
+    <link rel="icon" type="image/x-icon" href="/images/logo.png">
+
+    <style>
+      @font-face {
+        font-family: 'Icon';
+        src: url('/fonts/icon.eot');
+        src: url('/fonts/icon.eot')
+               format('embedded-opentype'),
+             url('/fonts/icon.woff')
+               format('woff'),
+             url('/fonts/icon.ttf')
+               format('truetype'),
+             url('/fonts/icon.svg')
+               format('svg');
+        font-weight: normal;
+        font-style: normal;
+      }
+    </style>
+
+    <link rel="stylesheet" href="/stylesheets/application.css">
+    <link rel="stylesheet" href="/stylesheets/temporary.css">
+    <link rel="stylesheet" href="/stylesheets/palettes.css">
+    <link rel="stylesheet" href="/stylesheets/highlight/highlight.css">
+
+    
+    
+    
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Libre%20Franklin:400,700|Roboto&#43;Mono">
+    <style>
+      body, input {
+        font-family: 'Libre Franklin', Helvetica, Arial, sans-serif;
+      }
+      pre, code {
+        font-family: 'Roboto Mono', 'Courier New', 'Courier', monospace;
+      }
+    </style>
+
+    
+    <link rel="stylesheet" href="/site.css">
+    
+    <link rel="stylesheet" href="/bower_components/flatpickr/dist/flatpickr.css">
+    
+    <script src="/javascripts/modernizr.js"></script>
+
+    
+
+  </head>
+  <body class="palette-primary-blue palette-accent-light-blue">
+
+
+
+	
+	
+
+
+<div class="backdrop">
+	<div class="backdrop-paper"></div>
+</div>
+
+<input class="toggle" type="checkbox" id="toggle-drawer">
+<input class="toggle" type="checkbox" id="toggle-search">
+<label class="toggle-button overlay" for="toggle-drawer"></label>
+
+<header class="header">
+	<nav aria-label="Header">
+  <div class="bar default">
+    <div class="button button-menu" role="button" aria-label="Menu">
+      <label class="toggle-button icon icon-menu" for="toggle-drawer">
+        <span></span>
+      </label>
+    </div>
+    <div class="stretch">
+      <div class="title">
+        Formatting Tokens
+      </div>
+    </div>
+
+    
+
+    
+    <div class="button button-github" role="button" aria-label="GitHub">
+      <a href="https://github.com/chmln" title="@chmln on GitHub" target="_blank" class="toggle-button icon icon-github"></a>
+    </div>
+    
+    
+        
+  </div>
+  <div class="bar search">
+    <div class="button button-close" role="button" aria-label="Close">
+      <label class="toggle-button icon icon-back" for="toggle-search"></label>
+    </div>
+    <div class="stretch">
+      <div class="field">
+        <input class="query" type="text" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck>
+      </div>
+    </div>
+    <div class="button button-reset" role="button" aria-label="Search">
+      <button class="toggle-button icon icon-close" id="reset-search"></button>
+    </div>
+  </div>
+</nav>
+</header>
+
+<main class="main">
+	<div class="drawer">
+		<nav aria-label="Navigation">
+  <a href="https://github.com/chmln/flatpickr" class="project">
+    <div class="banner">
+      
+        <div class="logo">
+          <img src="/images/logo.png">
+        </div>
+      
+      <div class="name">
+        <strong>flatpickr </strong>
+        
+          <br>
+          chmln/flatpickr
+        
+      </div>
+    </div>
+  </a>
+
+  <div class="scrollable">
+    <div class="wrapper">
+      
+        <ul class="repo">
+          <li class="repo-download">
+            <a href="https://github.com/chmln/flatpickr/archive/master.zip" target="_blank" title="Download" data-action="download">
+              <i class="icon icon-download"></i> Download
+            </a>
+          </li>
+          <li class="repo-stars">
+            <a href="https://github.com/chmln/flatpickr/stargazers" target="_blank" title="Stargazers" data-action="star">
+              <i class="icon icon-star"></i> Stars
+              <span class="count">&ndash;</span>
+            </a>
+          </li>
+        </ul>
+        <hr>
+      
+
+      <div class="toc">
+        
+        <ul>
+          
+
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Introduction" href="/">
+	
+	Introduction
+</a>
+
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Getting Started" href="/getting-started/">
+	
+	Getting Started
+</a>
+
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Examples" href="/examples/">
+	
+	Examples
+</a>
+
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="The Flatpickr Instance" href="/instance-methods-properties-elements/">
+	
+	The Flatpickr Instance
+</a>
+
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Events &amp; Hooks" href="/events/">
+	
+	Events &amp; Hooks
+</a>
+
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Config Options" href="/options/">
+	
+	Config Options
+</a>
+
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a class="current" title="Formatting Tokens" href="/formatting/">
+	
+	Formatting Tokens
+</a>
+
+
+<ul id="scrollspy">
+</ul>
+
+
+  
+</li>
+
+
+        </ul>
+        
+
+        
+        <hr>
+        <span class="section">The author</span>
+        
+        <ul>
+          
+
+          
+          <li>
+            <a href="https://github.com/chmln" target="_blank" title="@chmln on GitHub">
+              @chmln on GitHub
+            </a>
+          </li>
+          
+
+          
+          <li>
+            <a href="mailto:hello@email.com" title="Email of hello@email.com">
+              Contact via email
+            </a>
+          </li>
+          
+        </ul>
+        
+      </div>
+    </div>
+  </div>
+</nav>
+
+	</div>
+
+	<article class="article">
+		<div class="wrapper">
+			<h1>Formatting Tokens </h1>
+
+			
+
+<p>Each character in the table below can be used in <code>dateFormat</code> and <code>altFormat</code> options to achieve the format you need.</p>
+
+<h2 id="date-formatting-tokens">Date Formatting Tokens</h2>
+
+<table>
+<thead>
+<tr>
+<th>Character</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>d</td>
+<td>Day of the month, 2 digits with leading zeros</td>
+<td>01 to 31</td>
+</tr>
+<tr>
+<td>D</td>
+<td>A textual representation of a day</td>
+<td>Mon through Sun</td>
+</tr>
+<tr>
+<td>l (lowercase 'L')</td>
+<td>A full textual representation of the day of the week</td>
+<td>Sunday through Saturday</td>
+</tr>
+<tr>
+<td>j</td>
+<td>Day of the month without leading zeros</td>
+<td>1 to 31</td>
+</tr>
+<tr>
+<td>J</td>
+<td>Day of the month without leading zeros and ordinal suffix</td>
+<td>1st, 2nd, to 31st</td>
+</tr>
+<tr>
+<td>w</td>
+<td>Numeric representation of the day of the week</td>
+<td>0 (for Sunday) through 6 (for Saturday)</td>
+</tr>
+<tr>
+<td>F</td>
+<td>A full textual representation of a month</td>
+<td>January through December</td>
+</tr>
+<tr>
+<td>m</td>
+<td>Numeric representation of a month, with leading zero</td>
+<td>01 through 12</td>
+</tr>
+<tr>
+<td>n</td>
+<td>Numeric representation of a month, without leading zeros</td>
+<td>1 through 12</td>
+</tr>
+<tr>
+<td>M</td>
+<td>A short textual representation of a month</td>
+<td>Jan through Dec</td>
+</tr>
+<tr>
+<td>U</td>
+<td>The number of seconds since the Unix Epoch</td>
+<td>1413704993</td>
+</tr>
+<tr>
+<td>y</td>
+<td>A two digit representation of a year</td>
+<td>99 or 03</td>
+</tr>
+<tr>
+<td>Y</td>
+<td>A full numeric representation of a year, 4 digits</td>
+<td>1999 or 2003</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="time-formatting-tokens">Time Formatting Tokens</h2>
+
+<table>
+<thead>
+<tr>
+<th>Character</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>H</td>
+<td>Hours (24 hours)</td>
+<td>00 to 23</td>
+</tr>
+<tr>
+<td>h</td>
+<td>Hours</td>
+<td>1 to 12</td>
+</tr>
+<tr>
+<td>i</td>
+<td>Minutes</td>
+<td>00 to 59</td>
+</tr>
+<tr>
+<td>S</td>
+<td>Seconds, 2 digits</td>
+<td>00 to 59</td>
+</tr>
+<tr>
+<td>s</td>
+<td>Seconds</td>
+<td>0, 1 to 59</td>
+</tr>
+<tr>
+<td>K</td>
+<td>AM/PM</td>
+<td>AM or PM</td>
+</tr>
+</tbody>
+</table>
+
+
+			<aside class="copyright" role="note">
+				
+				&copy; 2017 Released under the MIT license
+				
+				</aside>
+
+			<footer class="footer">
+				
+
+<nav class="pagination" aria-label="Footer">
+  <div class="previous">
+  
+      <a href="/options/" title="Options">
+        <span class="direction">
+          Previous
+        </span>
+        <div class="page">
+          <div class="button button-previous" role="button" aria-label="Previous">
+            <i class="icon icon-back"></i>
+          </div>
+          <div class="stretch">
+            <div class="title">
+              Options
+            </div>
+          </div>
+        </div>
+      </a>
+  
+  </div>
+
+  <div class="next">
+
+  
+  </div>
+</nav>
+
+
+
+
+
+			</footer>
+		</div>
+	</article>
+
+	<div class="results" role="status" aria-live="polite">
+		<div class="scrollable">
+			<div class="wrapper">
+				<div class="meta"></div>
+				<div class="list"></div>
+			</div>
+		</div>
+	</div>
+</main>
+
+    <script>
+    
+      var base_url = '\/';
+      var repo_id  = 'chmln\/flatpickr';
+    
+    </script>
+
+    <script src="/javascripts/application.js"></script>
+    
+    <script src="/bower_components/flatpickr/dist/flatpickr.js"></script>
+    
+    <script src="/flatpickr.js"></script>
+    
+
+    <script>
+      /* Add headers to scrollspy */
+      var headers   = document.getElementsByTagName("h2");
+      var scrollspy = document.getElementById('scrollspy');
+
+      if(scrollspy) {
+        if(headers.length > 0) {
+          for(var i = 0; i < headers.length; i++) {
+            var li = document.createElement("li");
+            li.setAttribute("class", "anchor");
+
+            var a  = document.createElement("a");
+            a.setAttribute("href", "#" + headers[i].id);
+            a.setAttribute("title", headers[i].innerHTML);
+            a.innerHTML = headers[i].innerHTML;
+
+            li.appendChild(a)
+            scrollspy.appendChild(li);
+          }
+        } else {
+          scrollspy.parentElement.removeChild(scrollspy)
+        }
+
+
+        /* Add permanent link next to the headers */
+        var headers = document.querySelectorAll("h1, h2, h3, h4, h5, h6");
+
+        for(var i = 0; i < headers.length; i++) {
+            var a = document.createElement("a");
+            a.setAttribute("class", "headerlink");
+            a.setAttribute("href", "#" + headers[i].id);
+            a.setAttribute("title", "Permanent link")
+            a.innerHTML = "#";
+            headers[i].appendChild(a);
+        }
+      }
+    </script>
+
+    
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

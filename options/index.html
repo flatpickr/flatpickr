@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+  
+  
+  
+  
+   <html class="no-js"> 
+
+  <head lang="en-us">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=10" />
+    <title>Options - flatpickr</title>
+    <meta name="generator" content="Hugo 0.19" />
+
+    
+    <meta name="description" content="A lightweight and powerful datetimepicker">
+    
+    <link rel="canonical" href="/options/">
+    
+    <meta name="author" content="chmln">
+    
+
+    <meta property="og:url" content="/options/">
+    <meta property="og:title" content="flatpickr">
+    <meta property="og:image" content="/images/logo.png">
+    <meta name="apple-mobile-web-app-title" content="flatpickr">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <link rel="shortcut icon" type="image/x-icon" href="/images/logo.png">
+    <link rel="icon" type="image/x-icon" href="/images/logo.png">
+
+    <style>
+      @font-face {
+        font-family: 'Icon';
+        src: url('/fonts/icon.eot');
+        src: url('/fonts/icon.eot')
+               format('embedded-opentype'),
+             url('/fonts/icon.woff')
+               format('woff'),
+             url('/fonts/icon.ttf')
+               format('truetype'),
+             url('/fonts/icon.svg')
+               format('svg');
+        font-weight: normal;
+        font-style: normal;
+      }
+    </style>
+
+    <link rel="stylesheet" href="/stylesheets/application.css">
+    <link rel="stylesheet" href="/stylesheets/temporary.css">
+    <link rel="stylesheet" href="/stylesheets/palettes.css">
+    <link rel="stylesheet" href="/stylesheets/highlight/highlight.css">
+
+    
+    
+    
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Libre%20Franklin:400,700|Roboto&#43;Mono">
+    <style>
+      body, input {
+        font-family: 'Libre Franklin', Helvetica, Arial, sans-serif;
+      }
+      pre, code {
+        font-family: 'Roboto Mono', 'Courier New', 'Courier', monospace;
+      }
+    </style>
+
+    
+    <link rel="stylesheet" href="/site.css">
+    
+    <link rel="stylesheet" href="/bower_components/flatpickr/dist/flatpickr.css">
+    
+    <script src="/javascripts/modernizr.js"></script>
+
+    
+
+  </head>
+  <body class="palette-primary-blue palette-accent-light-blue">
+
+
+
+	
+	
+
+
+<div class="backdrop">
+	<div class="backdrop-paper"></div>
+</div>
+
+<input class="toggle" type="checkbox" id="toggle-drawer">
+<input class="toggle" type="checkbox" id="toggle-search">
+<label class="toggle-button overlay" for="toggle-drawer"></label>
+
+<header class="header">
+	<nav aria-label="Header">
+  <div class="bar default">
+    <div class="button button-menu" role="button" aria-label="Menu">
+      <label class="toggle-button icon icon-menu" for="toggle-drawer">
+        <span></span>
+      </label>
+    </div>
+    <div class="stretch">
+      <div class="title">
+        Options
+      </div>
+    </div>
+
+    
+
+    
+    <div class="button button-github" role="button" aria-label="GitHub">
+      <a href="https://github.com/chmln" title="@chmln on GitHub" target="_blank" class="toggle-button icon icon-github"></a>
+    </div>
+    
+    
+        
+  </div>
+  <div class="bar search">
+    <div class="button button-close" role="button" aria-label="Close">
+      <label class="toggle-button icon icon-back" for="toggle-search"></label>
+    </div>
+    <div class="stretch">
+      <div class="field">
+        <input class="query" type="text" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck>
+      </div>
+    </div>
+    <div class="button button-reset" role="button" aria-label="Search">
+      <button class="toggle-button icon icon-close" id="reset-search"></button>
+    </div>
+  </div>
+</nav>
+</header>
+
+<main class="main">
+	<div class="drawer">
+		<nav aria-label="Navigation">
+  <a href="https://github.com/chmln/flatpickr" class="project">
+    <div class="banner">
+      
+        <div class="logo">
+          <img src="/images/logo.png">
+        </div>
+      
+      <div class="name">
+        <strong>flatpickr </strong>
+        
+          <br>
+          chmln/flatpickr
+        
+      </div>
+    </div>
+  </a>
+
+  <div class="scrollable">
+    <div class="wrapper">
+      
+        <ul class="repo">
+          <li class="repo-download">
+            <a href="https://github.com/chmln/flatpickr/archive/master.zip" target="_blank" title="Download" data-action="download">
+              <i class="icon icon-download"></i> Download
+            </a>
+          </li>
+          <li class="repo-stars">
+            <a href="https://github.com/chmln/flatpickr/stargazers" target="_blank" title="Stargazers" data-action="star">
+              <i class="icon icon-star"></i> Stars
+              <span class="count">&ndash;</span>
+            </a>
+          </li>
+        </ul>
+        <hr>
+      
+
+      <div class="toc">
+        
+        <ul>
+          
+
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Introduction" href="/">
+	
+	Introduction
+</a>
+
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Getting Started" href="/getting-started/">
+	
+	Getting Started
+</a>
+
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Examples" href="/examples/">
+	
+	Examples
+</a>
+
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="The Flatpickr Instance" href="/instance-methods-properties-elements/">
+	
+	The Flatpickr Instance
+</a>
+
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Events &amp; Hooks" href="/events/">
+	
+	Events &amp; Hooks
+</a>
+
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a class="current" title="Config Options" href="/options/">
+	
+	Config Options
+</a>
+
+
+<ul id="scrollspy">
+</ul>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Formatting Tokens" href="/formatting/">
+	
+	Formatting Tokens
+</a>
+
+
+
+  
+</li>
+
+
+        </ul>
+        
+
+        
+        <hr>
+        <span class="section">The author</span>
+        
+        <ul>
+          
+
+          
+          <li>
+            <a href="https://github.com/chmln" target="_blank" title="@chmln on GitHub">
+              @chmln on GitHub
+            </a>
+          </li>
+          
+
+          
+          <li>
+            <a href="mailto:hello@email.com" title="Email of hello@email.com">
+              Contact via email
+            </a>
+          </li>
+          
+        </ul>
+        
+      </div>
+    </div>
+  </div>
+</nav>
+
+	</div>
+
+	<article class="article">
+		<div class="wrapper">
+			<h1>Options </h1>
+
+			<table class="options">
+    <thead>
+        <tr>
+            <th>Config Option</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>altFormat</td>
+            <td>string</td>
+            <td>"F j, Y"</td>
+            <td>Exactly the same as date format, but for the altInput field</td>
+        </tr>
+        <tr>
+            <td>altInput</td>
+            <td>Boolean</td>
+            <td>false</td>
+            <td>Show the user a readable date (as per altFormat), but return something totally different to the server.</td>
+        </tr>
+        <tr>
+            <td>altInputClass</td>
+            <td>String</td>
+            <td>""</td>
+            <td>This class will be added to the input element created by the altInput option. &nbsp;Note that&nbsp;<code>altInput</code>&nbsp;already inherits classes from the original input.</td>
+        </tr>
+        <tr>
+            <td>allowInput</td>
+            <td>boolean</td>
+            <td>false</td>
+            <td>Allows the user to enter a date directly input the input field. By default, direct entry is disabled.</td>
+        </tr>
+        <tr>
+            <td>appendTo</td>
+            <td>HTMLElement</td>
+            <td>null</td>
+            <td>Instead of&nbsp;<code>body</code>, appends the calendar to the specified node instead.</td>
+        </tr>
+        <tr>
+            <td>clickOpens</td>
+            <td>boolean</td>
+            <td>true</td>
+            <td>Whether clicking on the input should open the picker. You could disable this if you wish to open the calendar manually with<code>.open()</code></td>
+        </tr>
+        <tr>
+            <td>dateFormat</td>
+            <td>string</td>
+            <td>"Y-m-d"</td>
+            <td>A string of characters which are used to define how the date will be displayed in the input box. The supported characters are defined in the table below.</td>
+        </tr>
+        <tr>
+            <td>defaultDate</td>
+            <td>string/Date</td>
+            <td>null</td>
+            <td>Set the initial selected date. Same as preloading a date string into an input's value attribute, but can also handle a Date object.</td>
+        </tr>
+        <tr>
+            <td>disable</td>
+            <td>array</td>
+            <td>[]</td>
+            <td>
+                See&nbsp;<a href="#disable">Disabling dates</a>
+            </td>
+        </tr>
+        <tr>
+            <td>disableMobile</td>
+            <td>Boolean</td>
+            <td>false</td>
+            <td>Set&nbsp;<code>disableMobile</code>&nbsp;to true to always use the non-native picker.<br>
+            By default, Flatpickr utilizes native datetime widgets unless certain options (e.g. disable) are used.</td>
+        </tr>
+        <tr>
+            <td>enable</td>
+            <td>array</td>
+            <td>[]</td>
+            <td>
+                See&nbsp;<a href="#enable">Enabling dates</a>
+            </td>
+        </tr>
+        <tr>
+            <td>enableTime</td>
+            <td>boolean</td>
+            <td>false</td>
+            <td>Enables time picker</td>
+        </tr>
+        <tr>
+            <td>enableSeconds</td>
+            <td>boolean</td>
+            <td>false</td>
+            <td>Enables seconds in the time picker.</td>
+        </tr>
+        <tr>
+            <td>hourIncrement</td>
+            <td>integer</td>
+            <td>1</td>
+            <td>Adjusts the step for the hour input (incl. scrolling)</td>
+        </tr>
+        <tr>
+            <td>inline</td>
+            <td>boolean</td>
+            <td>false</td>
+            <td>Displays the calendar inline</td>
+        </tr>
+        <tr>
+            <td>maxDate</td>
+            <td>String/Date</td>
+            <td>null</td>
+            <td>The maximum date that a user can pick to (inclusive).</td>
+        </tr>
+        <tr>
+            <td>minDate</td>
+            <td>String/Date</td>
+            <td>null</td>
+            <td>The minimum date that a user can start picking from (inclusive).</td>
+        </tr>
+        <tr>
+            <td>minuteIncrement</td>
+            <td>integer</td>
+            <td>5</td>
+            <td>Adjusts the step for the minute input (incl. scrolling)</td>
+        </tr>
+        <tr>
+            <td>mode</td>
+            <td>String</td>
+            <td>"single"</td>
+            <td><code>"single"</code>,&nbsp;<code>"multiple"</code>, or&nbsp;<code>"range"</code></td>
+        </tr>
+        <tr>
+            <td>nextArrow</td>
+            <td>string</td>
+            <td><code>&gt;</code></td>
+            <td>HTML for the arrow icon, used to switch months.</td>
+        </tr>
+        <tr>
+            <td>noCalendar</td>
+            <td>boolean</td>
+            <td>false</td>
+            <td>Hides the day selection in calendar.<br>
+            Use it along with&nbsp;<code>enableTime</code>&nbsp;to create a time picker.</td>
+        </tr>
+        <tr>
+            <td>onChange</td>
+            <td>function, [functions]</td>
+            <td>null</td>
+            <td>
+                Function(s) to trigger on every date selection. See&nbsp;<a href="#eventsAPI">Events API</a>
+            </td>
+        </tr>
+        <tr>
+            <td>onClose</td>
+            <td>function, [functions]</td>
+            <td>null</td>
+            <td>
+                Function(s) to trigger on every time the calendar is closed. See&nbsp;<a href="#eventsAPI">Events API</a>
+            </td>
+        </tr>
+        <tr>
+            <td>onOpen</td>
+            <td>function, [functions]</td>
+            <td>null</td>
+            <td>
+                Function(s) to trigger on every time the calendar is opened. See&nbsp;<a href="#eventsAPI">Events API</a>
+            </td>
+        </tr>
+        <tr>
+            <td>onReady</td>
+            <td>function, [functions]</td>
+            <td>null</td>
+            <td>
+                Function to trigger when the calendar is ready. See&nbsp;<a href="#eventsAPI">Events API</a>
+            </td>
+        </tr>
+        <tr>
+            <td>parseDate</td>
+            <td>function</td>
+            <td>false</td>
+            <td>Function that expects a date string and must return a Date object</td>
+        </tr>
+        <tr>
+            <td>prevArrow</td>
+            <td>string</td>
+            <td><code>&lt;</code></td>
+            <td>HTML for the left arrow icon.</td>
+        </tr>
+        <tr>
+            <td>shorthandCurrentMonth</td>
+            <td>boolean</td>
+            <td>false</td>
+            <td>Show the month using the shorthand version (ie, Sep instead of September).</td>
+        </tr>
+        <tr>
+            <td>static</td>
+            <td>boolean</td>
+            <td>false</td>
+            <td>Position the calendar inside the wrapper and next to the input element. (Leave<code>false</code>unless you know what you're doing.</td>
+        </tr>
+        <tr>
+            <td>time_24hr</td>
+            <td>boolean</td>
+            <td>false</td>
+            <td>Displays time picker in 24 hour mode without AM/PM selection when enabled.</td>
+        </tr>
+        <tr>
+            <td>utc</td>
+            <td>boolean</td>
+            <td>false</td>
+            <td>When true, dates will parsed, formatted, and displayed in UTC. It's recommended that date strings contain the timezone, but not necessary.</td>
+        </tr>
+        <tr>
+            <td>weekNumbers</td>
+            <td>boolean</td>
+            <td>false</td>
+            <td>Enables display of week numbers in calendar.</td>
+        </tr>
+        <tr>
+            <td>wrap</td>
+            <td>Boolean</td>
+            <td>false</td>
+            <td>
+                <a href="https://chmln.github.io/flatpickr/#example-strap">Custom elements and input groups</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+			<aside class="copyright" role="note">
+				
+				&copy; 2017 Released under the MIT license
+				
+				</aside>
+
+			<footer class="footer">
+				
+
+<nav class="pagination" aria-label="Footer">
+  <div class="previous">
+  
+      <a href="/events/" title="Events &amp; Hooks">
+        <span class="direction">
+          Previous
+        </span>
+        <div class="page">
+          <div class="button button-previous" role="button" aria-label="Previous">
+            <i class="icon icon-back"></i>
+          </div>
+          <div class="stretch">
+            <div class="title">
+              Events &amp; Hooks
+            </div>
+          </div>
+        </div>
+      </a>
+  
+  </div>
+
+  <div class="next">
+
+  
+      <a href="/formatting/" title="Formatting Tokens">
+        <span class="direction">
+          Next
+        </span>
+        <div class="page">
+          <div class="stretch">
+            <div class="title">
+              Formatting Tokens
+            </div>
+          </div>
+          <div class="button button-next" role="button" aria-label="Next">
+            <i class="icon icon-forward"></i>
+          </div>
+        </div>
+      </a>
+  
+  </div>
+</nav>
+
+
+
+
+
+			</footer>
+		</div>
+	</article>
+
+	<div class="results" role="status" aria-live="polite">
+		<div class="scrollable">
+			<div class="wrapper">
+				<div class="meta"></div>
+				<div class="list"></div>
+			</div>
+		</div>
+	</div>
+</main>
+
+    <script>
+    
+      var base_url = '\/';
+      var repo_id  = 'chmln\/flatpickr';
+    
+    </script>
+
+    <script src="/javascripts/application.js"></script>
+    
+    <script src="/bower_components/flatpickr/dist/flatpickr.js"></script>
+    
+    <script src="/flatpickr.js"></script>
+    
+
+    <script>
+      /* Add headers to scrollspy */
+      var headers   = document.getElementsByTagName("h2");
+      var scrollspy = document.getElementById('scrollspy');
+
+      if(scrollspy) {
+        if(headers.length > 0) {
+          for(var i = 0; i < headers.length; i++) {
+            var li = document.createElement("li");
+            li.setAttribute("class", "anchor");
+
+            var a  = document.createElement("a");
+            a.setAttribute("href", "#" + headers[i].id);
+            a.setAttribute("title", headers[i].innerHTML);
+            a.innerHTML = headers[i].innerHTML;
+
+            li.appendChild(a)
+            scrollspy.appendChild(li);
+          }
+        } else {
+          scrollspy.parentElement.removeChild(scrollspy)
+        }
+
+
+        /* Add permanent link next to the headers */
+        var headers = document.querySelectorAll("h1, h2, h3, h4, h5, h6");
+
+        for(var i = 0; i < headers.length; i++) {
+            var a = document.createElement("a");
+            a.setAttribute("class", "headerlink");
+            a.setAttribute("href", "#" + headers[i].id);
+            a.setAttribute("title", "Permanent link")
+            a.innerHTML = "#";
+            headers[i].appendChild(a);
+        }
+      }
+    </script>
+
+    
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+

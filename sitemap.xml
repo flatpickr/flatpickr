@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>/</loc>
+    <lastmod>2017-02-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/getting-started/</loc>
+    <lastmod>2017-03-03T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/examples/</loc>
+    <lastmod>2017-03-03T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/instance-methods-properties-elements/</loc>
+    <lastmod>2017-03-03T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/events/</loc>
+    <lastmod>2017-03-03T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/options/</loc>
+    <lastmod>2017-03-03T20:23:43-05:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/formatting/</loc>
+    <lastmod>2017-03-03T20:23:43-05:00</lastmod>
+  </url>
+  
+</urlset>

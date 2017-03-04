@@ -1,0 +1,29 @@
+input.flatpickr {
+    cursor: pointer;
+}
+
+input[type="text"] {
+    border: 1px solid #e3e3e3;
+    padding: 8px;
+}
+
+article.article {
+    line-height: 1.5;
+}
+
+.palette-primary-blue .article code {
+    color: #5b6982;
+    padding: 2px 3px;
+}
+
+.article ul>li:before {
+    display: none;
+}
+
+.article ul {
+    list-style-type: disc;
+}
+
+.article ul ul {
+    list-style-type: circle;
+}

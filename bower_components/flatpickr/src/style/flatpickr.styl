@@ -55,8 +55,6 @@ $invertedBg = invert($calendarBackground)
     position absolute
     width $calendarWidth
     box-sizing border-box
-    transition top $bezier 100ms
-    z-index 999
 
     if $noCalendarBorder is defined
         box-shadow 0 3px 13px alpha(black, 0.08)
@@ -79,6 +77,7 @@ $invertedBg = invert($calendarBackground)
     &.open
         display inline-block
         animation flatpickrFadeInDown 300ms $bezier
+        z-index 99999
 
     &.inline
         display block
@@ -90,12 +89,13 @@ $invertedBg = invert($calendarBackground)
         top calc(100% + 2px)
 
         &.open
+            z-index 999
             display block
 
     &.hasWeeks
         width auto
 
-    &.dateIsPicked.hasTime
+    &.showTimeInput.hasTime
         .flatpickr-time
             height $timeHeight
             border-top 1px solid $calendarBorderColor
@@ -426,6 +426,9 @@ $invertedBg = invert($calendarBackground)
         &.endRange
             border-radius 0 50px 50px 0
 
+        &.startRange.endRange
+            border-radius 50px
+
     &.inRange
         border-radius 0
         box-shadow: (-2.5*$dayMargin) 0 0 $dayHoverBackground, (2.5*$dayMargin) 0 0 $dayHoverBackground
@@ -614,3 +617,5 @@ if $noCalendarBorder
             top 0 !important
 
 
+.flatpickr-input
+    cursor pointer

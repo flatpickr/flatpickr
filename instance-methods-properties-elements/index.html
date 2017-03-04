@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+  
+  
+  
+  
+   <html class="no-js"> 
+
+  <head lang="en-us">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=10" />
+    <title>The Flatpickr Instance - flatpickr</title>
+    <meta name="generator" content="Hugo 0.19" />
+
+    
+    <meta name="description" content="A lightweight and powerful datetimepicker">
+    
+    <link rel="canonical" href="/instance-methods-properties-elements/">
+    
+    <meta name="author" content="chmln">
+    
+
+    <meta property="og:url" content="/instance-methods-properties-elements/">
+    <meta property="og:title" content="flatpickr">
+    <meta property="og:image" content="/images/logo.png">
+    <meta name="apple-mobile-web-app-title" content="flatpickr">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <link rel="shortcut icon" type="image/x-icon" href="/images/logo.png">
+    <link rel="icon" type="image/x-icon" href="/images/logo.png">
+
+    <style>
+      @font-face {
+        font-family: 'Icon';
+        src: url('/fonts/icon.eot');
+        src: url('/fonts/icon.eot')
+               format('embedded-opentype'),
+             url('/fonts/icon.woff')
+               format('woff'),
+             url('/fonts/icon.ttf')
+               format('truetype'),
+             url('/fonts/icon.svg')
+               format('svg');
+        font-weight: normal;
+        font-style: normal;
+      }
+    </style>
+
+    <link rel="stylesheet" href="/stylesheets/application.css">
+    <link rel="stylesheet" href="/stylesheets/temporary.css">
+    <link rel="stylesheet" href="/stylesheets/palettes.css">
+    <link rel="stylesheet" href="/stylesheets/highlight/highlight.css">
+
+    
+    
+    
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Libre%20Franklin:400,700|Roboto&#43;Mono">
+    <style>
+      body, input {
+        font-family: 'Libre Franklin', Helvetica, Arial, sans-serif;
+      }
+      pre, code {
+        font-family: 'Roboto Mono', 'Courier New', 'Courier', monospace;
+      }
+    </style>
+
+    
+    <link rel="stylesheet" href="/site.css">
+    
+    <link rel="stylesheet" href="/bower_components/flatpickr/dist/flatpickr.css">
+    
+    <script src="/javascripts/modernizr.js"></script>
+
+    
+
+  </head>
+  <body class="palette-primary-blue palette-accent-light-blue">
+
+
+
+	
+	
+
+
+<div class="backdrop">
+	<div class="backdrop-paper"></div>
+</div>
+
+<input class="toggle" type="checkbox" id="toggle-drawer">
+<input class="toggle" type="checkbox" id="toggle-search">
+<label class="toggle-button overlay" for="toggle-drawer"></label>
+
+<header class="header">
+	<nav aria-label="Header">
+  <div class="bar default">
+    <div class="button button-menu" role="button" aria-label="Menu">
+      <label class="toggle-button icon icon-menu" for="toggle-drawer">
+        <span></span>
+      </label>
+    </div>
+    <div class="stretch">
+      <div class="title">
+        The Flatpickr Instance
+      </div>
+    </div>
+
+    
+
+    
+    <div class="button button-github" role="button" aria-label="GitHub">
+      <a href="https://github.com/chmln" title="@chmln on GitHub" target="_blank" class="toggle-button icon icon-github"></a>
+    </div>
+    
+    
+        
+  </div>
+  <div class="bar search">
+    <div class="button button-close" role="button" aria-label="Close">
+      <label class="toggle-button icon icon-back" for="toggle-search"></label>
+    </div>
+    <div class="stretch">
+      <div class="field">
+        <input class="query" type="text" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck>
+      </div>
+    </div>
+    <div class="button button-reset" role="button" aria-label="Search">
+      <button class="toggle-button icon icon-close" id="reset-search"></button>
+    </div>
+  </div>
+</nav>
+</header>
+
+<main class="main">
+	<div class="drawer">
+		<nav aria-label="Navigation">
+  <a href="https://github.com/chmln/flatpickr" class="project">
+    <div class="banner">
+      
+        <div class="logo">
+          <img src="/images/logo.png">
+        </div>
+      
+      <div class="name">
+        <strong>flatpickr </strong>
+        
+          <br>
+          chmln/flatpickr
+        
+      </div>
+    </div>
+  </a>
+
+  <div class="scrollable">
+    <div class="wrapper">
+      
+        <ul class="repo">
+          <li class="repo-download">
+            <a href="https://github.com/chmln/flatpickr/archive/master.zip" target="_blank" title="Download" data-action="download">
+              <i class="icon icon-download"></i> Download
+            </a>
+          </li>
+          <li class="repo-stars">
+            <a href="https://github.com/chmln/flatpickr/stargazers" target="_blank" title="Stargazers" data-action="star">
+              <i class="icon icon-star"></i> Stars
+              <span class="count">&ndash;</span>
+            </a>
+          </li>
+        </ul>
+        <hr>
+      
+
+      <div class="toc">
+        
+        <ul>
+          
+
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Introduction" href="/">
+	
+	Introduction
+</a>
+
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Getting Started" href="/getting-started/">
+	
+	Getting Started
+</a>
+
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Examples" href="/examples/">
+	
+	Examples
+</a>
+
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a class="current" title="The Flatpickr Instance" href="/instance-methods-properties-elements/">
+	
+	The Flatpickr Instance
+</a>
+
+
+<ul id="scrollspy">
+</ul>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Events &amp; Hooks" href="/events/">
+	
+	Events &amp; Hooks
+</a>
+
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Config Options" href="/options/">
+	
+	Config Options
+</a>
+
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Formatting Tokens" href="/formatting/">
+	
+	Formatting Tokens
+</a>
+
+
+
+  
+</li>
+
+
+        </ul>
+        
+
+        
+        <hr>
+        <span class="section">The author</span>
+        
+        <ul>
+          
+
+          
+          <li>
+            <a href="https://github.com/chmln" target="_blank" title="@chmln on GitHub">
+              @chmln on GitHub
+            </a>
+          </li>
+          
+
+          
+          <li>
+            <a href="mailto:hello@email.com" title="Email of hello@email.com">
+              Contact via email
+            </a>
+          </li>
+          
+        </ul>
+        
+      </div>
+    </div>
+  </div>
+</nav>
+
+	</div>
+
+	<article class="article">
+		<div class="wrapper">
+			<h1>The Flatpickr Instance </h1>
+
+			
+
+<h2 id="properties">Properties</h2>
+
+<h3 id="selecteddates">selectedDates</h3>
+
+<p>The array of selected dates (Date objects).</p>
+
+<h3 id="currentyear">currentYear</h3>
+
+<p>The year currently displayed on the calendar.</p>
+
+<h3 id="currentmonth">currentMonth</h3>
+
+<p>The zero-indexed month number (0-11) currently displayed on the calendar.</p>
+
+<h3 id="config">config</h3>
+
+<p>The configuration object (defaults + user-specified options).</p>
+
+<h2 id="methods">Methods</h2>
+
+<h3 id="changemonth-monthnum-is-offset-true"><code>changeMonth(monthNum, is_offset = true)</code></h3>
+
+<p>Changes the current month.</p>
+
+<pre><code>let calendar = new Flatpickr(yourElement, config);
+calendar.changeMonth(1); // go a month ahead
+calendar.changeMonth(-2); // go two months back
+
+calendar.changeMonth(0, false); // go to January
+</code></pre>
+
+<h3 id="clear"><code>clear()</code></h3>
+
+<p>Resets the selected dates (if any) and clears the input.</p>
+
+<h3 id="close"><code>close()</code></h3>
+
+<p>Closes the calendar.</p>
+
+<h3 id="destroy"><code>destroy()</code></h3>
+
+<p>Destroys the Flatpickr instance, cleans up - removes event listeners, restores inputs, etc.</p>
+
+<h3 id="formatdate-formatstr-dateobj"><code>formatDate(formatStr, dateObj)</code></h3>
+
+<p><code>formatStr</code>  is a string consisting of formatting tokens, and <code>dateObj</code>  is a Date.</p>
+
+<p><strong>Return Value</strong>
+A string representation of<code>dateObj</code>,  formatted as per <code>formatStr</code></p>
+
+<h3 id="jumptodate-date"><code>jumpToDate(date)</code></h3>
+
+<p>Sets the calendar view to the year and month of<code>date</code>, which can be a date string, a Date, or nothing.</p>
+
+<p>If<code>date</code>is undefined, the view is set to the latest selected date, the <code>minDate</code>, or today&rsquo;s date</p>
+
+<h3 id="open"><code>open()</code></h3>
+
+<p>Shows/opens the calendar.</p>
+
+<h3 id="parsedate-date"><code>parseDate(date)</code></h3>
+
+<p>Parses a date string or a timestamp, and returns a Date.</p>
+
+<h3 id="redraw"><code>redraw()</code></h3>
+
+<p>Redraws the calendar. Shouldn&rsquo;t be necessary in most cases.</p>
+
+<h3 id="set-option-value"><code>set(option, value)</code></h3>
+
+<p>Sets a config option <code>option</code>to <code>value</code>, redrawing the calendar and updating the current view, if necessary.</p>
+
+<h3 id="setdate-date-triggerchange"><code>setDate(date, triggerChange)</code></h3>
+
+<p>Sets the current selected date(s) to<code>date</code>, which can be a date string, a Date, or an<code>Array</code> of the Dates.</p>
+
+<p>Optionally, pass true as the second argument to force any onChange events to fire.</p>
+
+<h3 id="toggle"><code>toggle()</code></h3>
+
+<p>Shows/opens the calendar if its closed, hides/closes it otherwise.</p>
+
+<h2 id="elements">Elements</h2>
+
+<h3 id="input">input</h3>
+
+<p>The text <code>input</code> element associated with <code>flatpickr</code>.</p>
+
+<h3 id="calendarcontainer">calendarContainer</h3>
+
+<p>Self-explanatory. This is the <code>div.flatpickr-calendar</code> element.</p>
+
+<h3 id="prevmonthnav">prevMonthNav</h3>
+
+<p>The &ldquo;left arrow&rdquo; element responsible for decrementing the current month.</p>
+
+<h3 id="nextmonthnav">nextMonthNav</h3>
+
+<p>The &ldquo;right arrow&rdquo; element responsible for incrementing the current month.</p>
+
+<h3 id="currentmonthelement">currentMonthElement</h3>
+
+<p>The <code>span</code> holding the current month&rsquo;s name.</p>
+
+<h3 id="currentyearelement">currentYearElement</h3>
+
+<p>The <code>input</code> holding the current year.</p>
+
+<h3 id="days">days</h3>
+
+<p>The container for all the day elements.</p>
+
+
+			<aside class="copyright" role="note">
+				
+				&copy; 2017 Released under the MIT license
+				
+				</aside>
+
+			<footer class="footer">
+				
+
+<nav class="pagination" aria-label="Footer">
+  <div class="previous">
+  
+      <a href="/examples/" title="Examples">
+        <span class="direction">
+          Previous
+        </span>
+        <div class="page">
+          <div class="button button-previous" role="button" aria-label="Previous">
+            <i class="icon icon-back"></i>
+          </div>
+          <div class="stretch">
+            <div class="title">
+              Examples
+            </div>
+          </div>
+        </div>
+      </a>
+  
+  </div>
+
+  <div class="next">
+
+  
+      <a href="/events/" title="Events &amp; Hooks">
+        <span class="direction">
+          Next
+        </span>
+        <div class="page">
+          <div class="stretch">
+            <div class="title">
+              Events &amp; Hooks
+            </div>
+          </div>
+          <div class="button button-next" role="button" aria-label="Next">
+            <i class="icon icon-forward"></i>
+          </div>
+        </div>
+      </a>
+  
+  </div>
+</nav>
+
+
+
+
+
+			</footer>
+		</div>
+	</article>
+
+	<div class="results" role="status" aria-live="polite">
+		<div class="scrollable">
+			<div class="wrapper">
+				<div class="meta"></div>
+				<div class="list"></div>
+			</div>
+		</div>
+	</div>
+</main>
+
+    <script>
+    
+      var base_url = '\/';
+      var repo_id  = 'chmln\/flatpickr';
+    
+    </script>
+
+    <script src="/javascripts/application.js"></script>
+    
+    <script src="/bower_components/flatpickr/dist/flatpickr.js"></script>
+    
+    <script src="/flatpickr.js"></script>
+    
+
+    <script>
+      /* Add headers to scrollspy */
+      var headers   = document.getElementsByTagName("h2");
+      var scrollspy = document.getElementById('scrollspy');
+
+      if(scrollspy) {
+        if(headers.length > 0) {
+          for(var i = 0; i < headers.length; i++) {
+            var li = document.createElement("li");
+            li.setAttribute("class", "anchor");
+
+            var a  = document.createElement("a");
+            a.setAttribute("href", "#" + headers[i].id);
+            a.setAttribute("title", headers[i].innerHTML);
+            a.innerHTML = headers[i].innerHTML;
+
+            li.appendChild(a)
+            scrollspy.appendChild(li);
+          }
+        } else {
+          scrollspy.parentElement.removeChild(scrollspy)
+        }
+
+
+        /* Add permanent link next to the headers */
+        var headers = document.querySelectorAll("h1, h2, h3, h4, h5, h6");
+
+        for(var i = 0; i < headers.length; i++) {
+            var a = document.createElement("a");
+            a.setAttribute("class", "headerlink");
+            a.setAttribute("href", "#" + headers[i].id);
+            a.setAttribute("title", "Permanent link")
+            a.innerHTML = "#";
+            headers[i].appendChild(a);
+        }
+      }
+    </script>
+
+    
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
+
