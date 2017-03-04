@@ -1,8 +1,9 @@
 +++
-weight = 4
+weight = "4"
 date = "2017-03-03"
 title = "The Flatpickr Instance"
 slug = "instance-methods-properties-elements"
+description = "Methods and properties of flatpickr instances"
 +++
 
 ## Properties

@@ -24,11 +24,9 @@
 
 	<article class="article">
 		<div class="wrapper">
-			{{ range where .Site.Pages "Type" "index" }}
-				<h1>{{ .Title }} {{ if .IsDraft }} (Draft){{ end }}</h1>
+			<h1>{{ .Title }} {{ if .IsDraft }} (Draft){{ end }}</h1>
+			{{ .Content }}
 
-				{{ .Content }}
-			{{ end }}
 
 			<aside class="copyright" role="note">
 				{{ with .Site.Params.copyright }}

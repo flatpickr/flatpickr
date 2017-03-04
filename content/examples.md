@@ -1,7 +1,8 @@
 +++
-date = "2017-02-16"
+date = "2017-03-03"
 title = "Examples"
-weight = 3
+weight = "3"
+description = "Examples of various flatpickr options in use"
 +++
 
 Unless otherwise specified, the markup for examples below consists of just an input element, and flatpickr [invocation](/getting-started/#usage) with a given config.

@@ -1,7 +1,8 @@
 +++
-weight = 2
+weight = "2"
 date = "2017-03-03"
 title = "Getting Started"
+description = "flatpickr installation and usage"
 +++
 
 ## Installation

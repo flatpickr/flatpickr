@@ -1,6 +1,8 @@
 +++
 title = "Events & Hooks"
-weight = 4
+weight = "5"
+description = "flatpickr event and hooks API"
+date="2017-03-03"
 +++
 
 ## Events

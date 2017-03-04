@@ -1,10 +1,11 @@
 +++
-weight = 1
-date = "2017-03-03"
+weight = "1"
 title = "Introduction"
+description = "Introduction to flatpickr"
+date = "2017-02-02"
 +++
 
-## Intro
+## Introduction
 
 `flatpickr` is a lightweight and powerful datetime picker. 
 

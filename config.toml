@@ -17,9 +17,9 @@ googleAnalytics = ""
     provider = "GitHub"
     repo_url = "https://github.com/chmln/flatpickr"
 
-    version = "v2.3.7"
+    version = ""
     logo = "images/logo.png"
-    favicon = ""
+    favicon = "images/logo.png"
 
     permalink = "#"
 
@@ -72,13 +72,17 @@ googleAnalytics = ""
     weight = 5
 
 [[menu.main]]
-    name   = "Options"
+    name   = "Config Options"
     url    = "options/"
     weight = 6
 
+[[menu.main]]
+    name   = "Formatting Tokens"
+    url    = "formatting/"
+    weight = 6
 
 [blackfriday]
-    smartypants = false
+    smartypants = true
     fractions = true
     smartDashes = true
     plainIDAnchors = true
