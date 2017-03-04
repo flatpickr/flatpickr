@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Introduction on flatpickr</title>
-    <link>/index.xml</link>
+    <link>https://chmln.github.io/flatpickr/index.xml</link>
     <description>Recent content in Introduction on flatpickr</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Released under the MIT license</copyright>
     <lastBuildDate>Thu, 02 Feb 2017 00:00:00 +0000</lastBuildDate>
-    <atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://chmln.github.io/flatpickr/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Getting Started</title>
-      <link>/getting-started/</link>
+      <link>https://chmln.github.io/flatpickr/getting-started/</link>
       <pubDate>Fri, 03 Mar 2017 00:00:00 +0000</pubDate>
       
-      <guid>/getting-started/</guid>
+      <guid>https://chmln.github.io/flatpickr/getting-started/</guid>
       <description>
 
 &lt;h2 id=&#34;installation&#34;&gt;Installation&lt;/h2&gt;
@@ -77,13 +77,13 @@ Simply&lt;/p&gt;
     
     <item>
       <title>Examples</title>
-      <link>/examples/</link>
+      <link>https://chmln.github.io/flatpickr/examples/</link>
       <pubDate>Fri, 03 Mar 2017 00:00:00 +0000</pubDate>
       
-      <guid>/examples/</guid>
+      <guid>https://chmln.github.io/flatpickr/examples/</guid>
       <description>
 
-&lt;p&gt;Unless otherwise specified, the markup for examples below consists of just an input element, and flatpickr &lt;a href=&#34;/getting-started/#usage&#34;&gt;invocation&lt;/a&gt; with a given config.&lt;/p&gt;
+&lt;p&gt;Unless otherwise specified, the markup for examples below consists of just an input element, and flatpickr &lt;a href=&#34;https://chmln.github.io/flatpickr/getting-started/#usage&#34;&gt;invocation&lt;/a&gt; with a given config.&lt;/p&gt;
 
 &lt;h2 id=&#34;basic&#34;&gt;Basic&lt;/h2&gt;
 
@@ -396,10 +396,10 @@ If the function returns &lt;code&gt;true&lt;/code&gt;, the date will be disabled
     
     <item>
       <title>The Flatpickr Instance</title>
-      <link>/instance-methods-properties-elements/</link>
+      <link>https://chmln.github.io/flatpickr/instance-methods-properties-elements/</link>
       <pubDate>Fri, 03 Mar 2017 00:00:00 +0000</pubDate>
       
-      <guid>/instance-methods-properties-elements/</guid>
+      <guid>https://chmln.github.io/flatpickr/instance-methods-properties-elements/</guid>
       <description>
 
 &lt;h2 id=&#34;properties&#34;&gt;Properties&lt;/h2&gt;
@@ -518,10 +518,10 @@ A string representation of&lt;code&gt;dateObj&lt;/code&gt;,  formatted as per 
     
     <item>
       <title>Events &amp; Hooks</title>
-      <link>/events/</link>
+      <link>https://chmln.github.io/flatpickr/events/</link>
       <pubDate>Fri, 03 Mar 2017 00:00:00 +0000</pubDate>
       
-      <guid>/events/</guid>
+      <guid>https://chmln.github.io/flatpickr/events/</guid>
       <description>
 
 &lt;h2 id=&#34;events&#34;&gt;Events&lt;/h2&gt;
@@ -644,10 +644,10 @@ A string representation of&lt;code&gt;dateObj&lt;/code&gt;,  formatted as per 
     
     <item>
       <title>Options</title>
-      <link>/options/</link>
+      <link>https://chmln.github.io/flatpickr/options/</link>
       <pubDate>Fri, 03 Mar 2017 20:23:43 -0500</pubDate>
       
-      <guid>/options/</guid>
+      <guid>https://chmln.github.io/flatpickr/options/</guid>
       <description>&lt;table class=&#34;options&#34;&gt;
     &lt;thead&gt;
         &lt;tr&gt;
@@ -879,10 +879,10 @@ A string representation of&lt;code&gt;dateObj&lt;/code&gt;,  formatted as per 
     
     <item>
       <title>Formatting Tokens</title>
-      <link>/formatting/</link>
+      <link>https://chmln.github.io/flatpickr/formatting/</link>
       <pubDate>Fri, 03 Mar 2017 20:23:43 -0500</pubDate>
       
-      <guid>/formatting/</guid>
+      <guid>https://chmln.github.io/flatpickr/formatting/</guid>
       <description>
 
 &lt;p&gt;Each character in the table below can be used in &lt;code&gt;dateFormat&lt;/code&gt; and &lt;code&gt;altFormat&lt;/code&gt; options to achieve the format you need.&lt;/p&gt;
