@@ -3,7 +3,7 @@ var Flatpickr = Flatpickr || { l10ns: {} };
 Flatpickr.l10ns.he = {};
 
 Flatpickr.l10ns.he.weekdays = {
-	shorthand: ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ז'],
+	shorthand: ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ש'],
 	longhand: ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת']
 };
 
