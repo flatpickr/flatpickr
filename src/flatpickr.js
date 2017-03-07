@@ -207,10 +207,10 @@ function Flatpickr(element, config) {
 			self.days.addEventListener("mouseover", onMouseOver);
 
 		self.calendarContainer.addEventListener("keydown", onKeyDown);
-		if (!self.config.static && self.config.allowInput) {
+		
+		if (!self.config.static && self.config.allowInput) 
 			(self.altInput || self.input).addEventListener("keydown", onKeyDown);
-		}
-
+		
 		if (!self.config.inline && !self.config.static)
 			window.addEventListener("resize", self.debouncedResize);
 
