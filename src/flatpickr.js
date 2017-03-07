@@ -1015,7 +1015,6 @@ function Flatpickr(element, config) {
 			i < 42;
 			i++, timestamp += self.utils.duration.DAY
 		) {
-
 			const outOfRange = timestamp < self.minRangeDate.getTime()
 				|| timestamp > self.maxRangeDate.getTime();
 
@@ -1367,8 +1366,10 @@ function Flatpickr(element, config) {
 					self.maxRangeDate < new Date(self.currentYear, self.currentMonth + 1, 1);
 			}
 
-			else
+			else {
 				updateNavigationCurrentMonth();
+				self.close();
+			}
 		}
 
 		if (e.which === 13 && self.config.enableTime)
