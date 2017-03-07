@@ -928,6 +928,29 @@ describe('flatpickr', () => {
 			expect(fp.selectedDates.length).toEqual(2);
 			expect(fp.input.value).toEqual("2016-01-13 to 2016-01-17");
 		});
+
+		it("show and hide prev/next month arrows", () => {
+			const isArrowVisible = which => fp[`${which}MonthNav`].style.display !== "none";
+			createInstance({
+				minDate: "2099-1-1",
+				maxDate: "2099-3-4",
+				mode: "range"
+			});
+
+			expect(fp.currentMonth).toBe(0);
+			expect(isArrowVisible("prev")).toBe(false);
+			expect(isArrowVisible("next")).toBe(true);
+
+			fp.days.childNodes[10].click(); // select some date
+
+			fp.nextMonthNav.click();
+			expect(isArrowVisible("prev")).toBe(true);
+			expect(isArrowVisible("next")).toBe(true);
+
+			fp.nextMonthNav.click();
+			expect(isArrowVisible("prev")).toBe(true);
+			expect(isArrowVisible("next")).toBe(false);
+		});
 	});
 
 	describe("Localization", () => {

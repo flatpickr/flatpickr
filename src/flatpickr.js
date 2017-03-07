@@ -499,7 +499,7 @@ function Flatpickr(element, config) {
 			self.days.textContent = "";
 
 		// prepend days from the ending of previous month
-		for (let i = 0; dayNumber <= self.prevMonthDays; i++, dayNumber++) {
+		for (; dayNumber <= self.prevMonthDays; dayNumber++) {
 			days.appendChild(
 				createDay("prevMonthDay", new Date(self.currentYear, self.currentMonth - 1, dayNumber), dayNumber)
 			);
@@ -528,7 +528,7 @@ function Flatpickr(element, config) {
 				self.minRangeDate > days.childNodes[0].dateObj;
 
 			self._hideNextMonthArrow = self._hideNextMonthArrow ||
-				self.maxRangeDate < days.childNodes[41].dateObj;
+				self.maxRangeDate < new Date(self.currentYear, self.currentMonth + 1, 1);
 		}
 
 		else
@@ -1015,6 +1015,7 @@ function Flatpickr(element, config) {
 			i < 42;
 			i++, timestamp += self.utils.duration.DAY
 		) {
+
 			const outOfRange = timestamp < self.minRangeDate.getTime()
 				|| timestamp > self.maxRangeDate.getTime();
 
@@ -1028,6 +1029,8 @@ function Flatpickr(element, config) {
 
 			else if (containsDisabled && !outOfRange)
 				continue;
+
+
 
 			["startRange", "inRange", "endRange", "notAllowed"].forEach(c => {
 				self.days.childNodes[i].classList.remove(c)
@@ -1361,7 +1364,7 @@ function Flatpickr(element, config) {
 					self.minRangeDate > self.days.childNodes[0].dateObj;
 
 				self._hideNextMonthArrow = self._hideNextMonthArrow ||
-					self.maxRangeDate < self.days.childNodes[41].dateObj;
+					self.maxRangeDate < new Date(self.currentYear, self.currentMonth + 1, 1);
 			}
 
 			else
