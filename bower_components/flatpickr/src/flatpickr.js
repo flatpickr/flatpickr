@@ -1,4 +1,4 @@
-/*! flatpickr v2.4.3, @license MIT */
+/*! flatpickr v2.4.4, @license MIT */
 function Flatpickr(element, config) {
 	const self = this;
 
@@ -64,7 +64,8 @@ function Flatpickr(element, config) {
 
 		self.showTimeInput = self.selectedDates.length || self.config.noCalendar;
 
-		positionCalendar();
+		if (!self.isMobile)
+			positionCalendar();
 		triggerEvent("Ready");
 	}
 
@@ -206,7 +207,10 @@ function Flatpickr(element, config) {
 			self.days.addEventListener("mouseover", onMouseOver);
 
 		self.calendarContainer.addEventListener("keydown", onKeyDown);
-
+		
+		if (!self.config.static && self.config.allowInput) 
+			(self.altInput || self.input).addEventListener("keydown", onKeyDown);
+		
 		if (!self.config.inline && !self.config.static)
 			window.addEventListener("resize", self.debouncedResize);
 
@@ -498,7 +502,7 @@ function Flatpickr(element, config) {
 			self.days.textContent = "";
 
 		// prepend days from the ending of previous month
-		for (let i = 0; dayNumber <= self.prevMonthDays; i++, dayNumber++) {
+		for (; dayNumber <= self.prevMonthDays; dayNumber++) {
 			days.appendChild(
 				createDay("prevMonthDay", new Date(self.currentYear, self.currentMonth - 1, dayNumber), dayNumber)
 			);
@@ -527,7 +531,7 @@ function Flatpickr(element, config) {
 				self.minRangeDate > days.childNodes[0].dateObj;
 
 			self._hideNextMonthArrow = self._hideNextMonthArrow ||
-				self.maxRangeDate < days.childNodes[41].dateObj;
+				self.maxRangeDate < new Date(self.currentYear, self.currentMonth + 1, 1);
 		}
 
 		else
@@ -1028,6 +1032,8 @@ function Flatpickr(element, config) {
 			else if (containsDisabled && !outOfRange)
 				continue;
 
+
+
 			["startRange", "inRange", "endRange", "notAllowed"].forEach(c => {
 				self.days.childNodes[i].classList.remove(c)
 			});
@@ -1043,7 +1049,7 @@ function Flatpickr(element, config) {
 			else if (initialDate < hoverDate && timestamp === initialDate.getTime())
 				self.days.childNodes[i].classList.add("startRange");
 
-			else if (timestamp > minRangeDate && timestamp < maxRangeDate)
+			else if (timestamp >= minRangeDate && timestamp <= maxRangeDate)
 				self.days.childNodes[i].classList.add("inRange");
 		}
 	}
@@ -1360,11 +1366,13 @@ function Flatpickr(element, config) {
 					self.minRangeDate > self.days.childNodes[0].dateObj;
 
 				self._hideNextMonthArrow = self._hideNextMonthArrow ||
-					self.maxRangeDate < self.days.childNodes[41].dateObj;
+					self.maxRangeDate < new Date(self.currentYear, self.currentMonth + 1, 1);
 			}
 
-			else
+			else {
 				updateNavigationCurrentMonth();
+				self.close();
+			}
 		}
 
 		if (e.which === 13 && self.config.enableTime)
