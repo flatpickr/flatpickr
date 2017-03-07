@@ -1,4 +1,4 @@
-baseurl = "/"
+baseurl = "https://chmln.github.io/flatpickr/"
 languageCode = "en-us"
 title = "flatpickr"
 theme = "hugo-material-docs"
@@ -24,8 +24,8 @@ googleAnalytics = ""
     permalink = "#"
 
     # Custom assets
-    custom_css = ["site.css", "/bower_components/flatpickr/dist/flatpickr.css"]
-    custom_js  = ["/bower_components/flatpickr/dist/flatpickr.js", "/flatpickr.js"]
+    custom_css = ["site.css", "bower_components/flatpickr/dist/flatpickr.css"]
+    custom_js  = ["bower_components/flatpickr/dist/flatpickr.js", "flatpickr.js"]
 
     # Syntax highlighting theme
     highlight_css  = ""

@@ -2,7 +2,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-/*! flatpickr v2.4.3, @license MIT */
+/*! flatpickr v2.4.4, @license MIT */
 function Flatpickr(element, config) {
 	var self = this;
 
@@ -56,7 +56,7 @@ function Flatpickr(element, config) {
 
 		self.showTimeInput = self.selectedDates.length || self.config.noCalendar;
 
-		positionCalendar();
+		if (!self.isMobile) positionCalendar();
 		triggerEvent("Ready");
 	}
 
@@ -171,6 +171,8 @@ function Flatpickr(element, config) {
 		if (self.config.mode === "range" && self.days) self.days.addEventListener("mouseover", onMouseOver);
 
 		self.calendarContainer.addEventListener("keydown", onKeyDown);
+
+		if (!self.config.static && self.config.allowInput) (self.altInput || self.input).addEventListener("keydown", onKeyDown);
 
 		if (!self.config.inline && !self.config.static) window.addEventListener("resize", self.debouncedResize);
 
@@ -410,7 +412,7 @@ function Flatpickr(element, config) {
 		if (self.days.firstChild) self.days.textContent = "";
 
 		// prepend days from the ending of previous month
-		for (var i = 0; dayNumber <= self.prevMonthDays; i++, dayNumber++) {
+		for (; dayNumber <= self.prevMonthDays; dayNumber++) {
 			days.appendChild(createDay("prevMonthDay", new Date(self.currentYear, self.currentMonth - 1, dayNumber), dayNumber));
 		}
 
@@ -427,7 +429,7 @@ function Flatpickr(element, config) {
 		if (isRangeMode && self.selectedDates.length === 1 && days.childNodes[0]) {
 			self._hidePrevMonthArrow = self._hidePrevMonthArrow || self.minRangeDate > days.childNodes[0].dateObj;
 
-			self._hideNextMonthArrow = self._hideNextMonthArrow || self.maxRangeDate < days.childNodes[41].dateObj;
+			self._hideNextMonthArrow = self._hideNextMonthArrow || self.maxRangeDate < new Date(self.currentYear, self.currentMonth + 1, 1);
 		} else updateNavigationCurrentMonth();
 
 		self.days.appendChild(days);
@@ -834,7 +836,7 @@ function Flatpickr(element, config) {
 
 			e.target.classList.add(hoverDate < self.selectedDates[0] ? "startRange" : "endRange");
 
-			if (initialDate > hoverDate && timestamp === initialDate.getTime()) self.days.childNodes[i].classList.add("endRange");else if (initialDate < hoverDate && timestamp === initialDate.getTime()) self.days.childNodes[i].classList.add("startRange");else if (timestamp > minRangeDate && timestamp < maxRangeDate) self.days.childNodes[i].classList.add("inRange");
+			if (initialDate > hoverDate && timestamp === initialDate.getTime()) self.days.childNodes[i].classList.add("endRange");else if (initialDate < hoverDate && timestamp === initialDate.getTime()) self.days.childNodes[i].classList.add("startRange");else if (timestamp >= minRangeDate && timestamp <= maxRangeDate) self.days.childNodes[i].classList.add("inRange");
 		};
 
 		for (var timestamp = self.days.childNodes[0].dateObj.getTime(), i = 0; i < 42; i++, timestamp += self.utils.duration.DAY) {
@@ -1068,8 +1070,11 @@ function Flatpickr(element, config) {
 
 				self._hidePrevMonthArrow = self._hidePrevMonthArrow || self.minRangeDate > self.days.childNodes[0].dateObj;
 
-				self._hideNextMonthArrow = self._hideNextMonthArrow || self.maxRangeDate < self.days.childNodes[41].dateObj;
-			} else updateNavigationCurrentMonth();
+				self._hideNextMonthArrow = self._hideNextMonthArrow || self.maxRangeDate < new Date(self.currentYear, self.currentMonth + 1, 1);
+			} else {
+				updateNavigationCurrentMonth();
+				self.close();
+			}
 		}
 
 		if (e.which === 13 && self.config.enableTime) setTimeout(function () {
