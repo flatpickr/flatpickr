@@ -1046,7 +1046,7 @@ function Flatpickr(element, config) {
 			else if (initialDate < hoverDate && timestamp === initialDate.getTime())
 				self.days.childNodes[i].classList.add("startRange");
 
-			else if (timestamp > minRangeDate && timestamp < maxRangeDate)
+			else if (timestamp >= minRangeDate && timestamp <= maxRangeDate)
 				self.days.childNodes[i].classList.add("inRange");
 		}
 	}
