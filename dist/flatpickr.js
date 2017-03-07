@@ -56,7 +56,7 @@ function Flatpickr(element, config) {
 
 		self.showTimeInput = self.selectedDates.length || self.config.noCalendar;
 
-		positionCalendar();
+		if (!self.isMobile) positionCalendar();
 		triggerEvent("Ready");
 	}
 
