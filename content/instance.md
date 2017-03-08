@@ -79,7 +79,7 @@ Sets a config option `option`to `value`, redrawing the calendar and updating t
 
 Sets the current selected date(s) to`date`, which can be a date string, a Date, or an`Array` of the Dates.
 
-Optionally, pass true as the second argument to force any onChange events to fire.
+Optionally, pass false as the second argument to force any onChange events not to fire.
 
 
 ### `toggle()`
