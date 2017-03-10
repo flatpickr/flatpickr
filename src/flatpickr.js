@@ -827,7 +827,7 @@ function Flatpickr(element, config) {
 			|| (
 				// web components
 				e.path && e.path.indexOf &&
-				(~e.path.indexOf(self.input) || ~e.path.indexOf(self.altInput))
+				(~e.path.indexOf(self.input) || ~e.path.indexOf(self.altInput) || ~e.path.indexOf(self.calendarContainer))
 			);
 
 		if (self.isOpen && !self.config.inline && !isCalendarElem(e.target) && !isInput) {
