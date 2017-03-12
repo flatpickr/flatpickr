@@ -16,7 +16,7 @@
     "build:style:themes": "stylus --out dist/themes src/style/themes",
     "build:style:unmin": "stylus < ./src/style/flatpickr.styl > dist/flatpickr.css",
     "dev": "run-p dev:*",
-    "dev:plugins": "onchange \"src/plugins/**/*\" -- run-s build:plugins",
+    "dev:plugins": "onchange \"src/plugins/**/*\" -- run-s build:extra:plugins",
     "dev:style": "onchange \"src/style/**/*\" -- run-s build:style",
     "dev:script": "onchange \"src/flatpickr.js\" -- run-s lint build:script",
     "lint": "eslint src/flatpickr.js || (exit 0)",
