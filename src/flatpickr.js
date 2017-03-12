@@ -1234,7 +1234,8 @@ function Flatpickr(element, config) {
 			distanceFromBottom = window.innerHeight - inputBounds.bottom + input.offsetHeight,
 			showOnTop = configPos === "above" || (
 				configPos !== "below"
-				&& distanceFromBottom < calendarHeight + 60
+				&& distanceFromBottom < calendarHeight
+				&& inputBounds.top > calendarHeight
 			);
 
 		let top = (window.pageYOffset + inputBounds.top) + (!showOnTop
