@@ -1,4 +1,6 @@
-Thank you for your interest in contributing to this library!
+Hello,
+
+Thank you for your interest in contributing to `flatpickr`!
 
 ## Using the issue tracker
 
@@ -7,15 +9,15 @@ requests, and discussions.
 
 ## Pull requests
 
-Setup the necessary devDependencies by running `npm install`. 
+Setup the necessary dependencies by running `npm install`. 
 Optionally, also install the [LiveReload](https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei) extension for Chrome to auto-refresh the page after any changes.
 
-Then, `npm start`to launch the dev environment. 
+Then, `npm start` to launch the dev environment. 
 
 1. `index.html` is where you can experiment with various options. 
 2. Ensure there are no linting errors in the terminal
-3. Ensure that all the tests under `/test` pass.
-4. **Only the changes to `src` and `test` (if applicable) should be committed**
+3. Ensure that all the tests pass by running `npm test`
+4. **Commit only the changes to `src` and `test` (if applicable)**
 
 
 ## License
