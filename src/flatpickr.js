@@ -369,7 +369,7 @@ function Flatpickr(element, config) {
 
 		if (self.config.inline || self.config.static) {
 			self.calendarContainer.classList.add(self.config.inline ? "inline" : "static");
-			positionCalendar();
+
 
 			if (self.config.inline && !customAppend) {
 				return self.element.parentNode.insertBefore(
@@ -393,7 +393,6 @@ function Flatpickr(element, config) {
 
 		(customAppend ? self.config.appendTo : window.document.body)
 			.appendChild(self.calendarContainer);
-
 	}
 
 	function createDay(className, date, dayNumber) {
