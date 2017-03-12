@@ -321,8 +321,11 @@
   width: 315px;
   box-sizing: border-box;
   display: inline-block;
+  display: -ms-flexbox;
   display: flex;
   flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  -ms-flex-pack: justify;
   justify-content: space-around;
   border-left: 1px solid rgba(255,138,101,0.2);
   border-right: 1px solid rgba(255,138,101,0.2);
@@ -579,7 +582,7 @@ span.flatpickr-weekday {
     top: 0 !important;
   }
 }
-.flatpickr-input {
+.flatpickr-input[readonly] {
   cursor: pointer;
 }
 @-moz-keyframes flatpickrFadeInDown {

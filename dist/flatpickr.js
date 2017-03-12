@@ -260,7 +260,7 @@ function Flatpickr(element, config) {
 	function incrementNumInput(e, delta, inputElem) {
 		var input = inputElem || e.target.parentNode.childNodes[0];
 
-		if (typeof Event !== "undefined") {
+		if (typeof Event === "function" && Event.constructor) {
 			var ev = new Event("increment", { "bubbles": true });
 			ev.delta = delta;
 			input.dispatchEvent(ev);
@@ -329,7 +329,6 @@ function Flatpickr(element, config) {
 
 		if (self.config.inline || self.config.static) {
 			self.calendarContainer.classList.add(self.config.inline ? "inline" : "static");
-			positionCalendar();
 
 			if (self.config.inline && !customAppend) {
 				return self.element.parentNode.insertBefore(self.calendarContainer, (self.altInput || self.input).nextSibling);
@@ -977,7 +976,7 @@ function Flatpickr(element, config) {
 		    input = self.altInput || self.input,
 		    inputBounds = input.getBoundingClientRect(),
 		    distanceFromBottom = window.innerHeight - inputBounds.bottom + input.offsetHeight,
-		    showOnTop = configPos === "above" || configPos !== "below" && distanceFromBottom < calendarHeight + 60;
+		    showOnTop = configPos === "above" || configPos !== "below" && distanceFromBottom < calendarHeight && inputBounds.top > calendarHeight;
 
 		var top = window.pageYOffset + inputBounds.top + (!showOnTop ? input.offsetHeight + 2 : -calendarHeight - 2);
 
