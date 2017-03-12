@@ -1649,9 +1649,15 @@ function Flatpickr(element, config) {
 	}
 
 	function triggerEvent(event, data) {
-		const hooks = self.config["on" + event];
+		let hooks = self.config["on" + event];
 
 		if (hooks) {
+			if (!Array.isArray(hooks) && typeof hooks === 'function') {
+				const hook = hooks;
+				hooks = [];
+				hooks.push(hook);
+			}
+
 			for (let i = 0; i < hooks.length; i++)
 				hooks[i](self.selectedDates, self.input && self.input.value, self, data);
 		}
