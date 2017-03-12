@@ -179,7 +179,7 @@ function Flatpickr(element, config) {
 		if (window.ontouchstart) window.document.addEventListener("touchstart", documentClick);
 
 		window.document.addEventListener("click", documentClick);
-		window.document.addEventListener("blur", documentClick);
+		(self.altInput || self.input).addEventListener("blur", documentClick);
 
 		if (self.config.clickOpens) (self.altInput || self.input).addEventListener("focus", open);
 
@@ -673,17 +673,23 @@ function Flatpickr(element, config) {
 	}
 
 	function documentClick(e) {
-		var isInput = self.element.contains(e.target) || e.target === self.input || e.target === self.altInput ||
-		// web components
-		e.path && e.path.indexOf && (~e.path.indexOf(self.input) || ~e.path.indexOf(self.altInput));
+		if (self.isOpen && !self.config.inline) {
 
-		if (self.isOpen && !self.config.inline && !isCalendarElem(e.target) && !isInput) {
-			e.preventDefault();
-			self.close();
+			var isCalendarElement = isCalendarElem(e.target);
+			var isInput = self.element.contains(e.target) || e.target === self.input || e.target === self.altInput ||
+			// web components
+			e.path && e.path.indexOf && (~e.path.indexOf(self.input) || ~e.path.indexOf(self.altInput));
 
-			if (self.config.mode === "range" && self.selectedDates.length === 1) {
-				self.clear();
-				self.redraw();
+			var lostFocus = e.type === "blur" && (isInput || isCalendarElement) && e.relatedTarget !== null && !isCalendarElem(e.relatedTarget);
+
+			if (lostFocus || !isCalendarElement && !isInput) {
+				e.preventDefault();
+				self.close();
+
+				if (self.config.mode === "range" && self.selectedDates.length === 1) {
+					self.clear();
+					self.redraw();
+				}
 			}
 		}
 	}
