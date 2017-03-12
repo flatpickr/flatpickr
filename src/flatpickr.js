@@ -207,10 +207,10 @@ function Flatpickr(element, config) {
 			self.days.addEventListener("mouseover", onMouseOver);
 
 		self.calendarContainer.addEventListener("keydown", onKeyDown);
-		
-		if (!self.config.static && self.config.allowInput) 
+
+		if (!self.config.static && self.config.allowInput)
 			(self.altInput || self.input).addEventListener("keydown", onKeyDown);
-		
+
 		if (!self.config.inline && !self.config.static)
 			window.addEventListener("resize", self.debouncedResize);
 
@@ -299,7 +299,7 @@ function Flatpickr(element, config) {
 	function incrementNumInput(e, delta, inputElem) {
 		const input = inputElem || e.target.parentNode.childNodes[0];
 
-		if (typeof Event !== "undefined") {
+		if (typeof Event === "function" && Event.constructor) {
 			const ev = new Event("increment", { "bubbles": true });
 			ev.delta = delta;
 			input.dispatchEvent(ev);
