@@ -79,6 +79,8 @@ describe('flatpickr', () => {
 			expect(fp.currentMonth).toEqual(11);
 			expect(fp.days.querySelector(".selected").textContent).toEqual("27");
 
+			expect(fp.showTimeInput).toBe(true);
+
 			expect(fp.hourElement.value).toEqual("04");
 			expect(fp.minuteElement.value).toEqual("16");
 			expect(fp.amPM.textContent).toEqual("PM");
@@ -539,7 +541,7 @@ describe('flatpickr', () => {
 
 			fp.open();
 			simulate("keydown", fp.timeContainer, {
-				which: 13 // enter
+				key: "Enter" // enter
 			}, KeyboardEvent);
 
 			expect(fp.selectedDates.length).toBe(0);
@@ -548,9 +550,7 @@ describe('flatpickr', () => {
 			fp.days.childNodes[15].focus();
 
 			simulate("keydown", fp.days.childNodes[15], {
-				key: "Enter",
-				keyCode: 13,
-				which: 13 // enter
+				key: "Enter"
 			});
 
 			expect(fp.selectedDates.length).toBe(1);;
@@ -559,9 +559,7 @@ describe('flatpickr', () => {
 			fp.open();
 
 			simulate("keydown", fp.calendarContainer, {
-				key: "Escape",
-				which: 27, //esc
-				keyCode: 27
+				key: "Escape"
 			});
 
 			expect(fp.isOpen).toBe(false);
@@ -570,48 +568,42 @@ describe('flatpickr', () => {
 
 			fp.open();
 			simulate("keydown", fp.calendarContainer, {
-				which: 37,
-				keyCode: 37
+				key: "ArrowLeft"
 			});
 
 			expect(fp.currentMonth).toBe(2);
 
 
 			fp.open();
-			simulate("keydown", fp.altInput, {	which: 37, keyCode: 37 });
+			simulate("keydown", fp.altInput, {	key: "ArrowLeft" });
 			expect(fp.currentMonth).toBe(2);
 
-			simulate("keydown", fp.input, {	which: 39, keyCode: 39 });
+			simulate("keydown", fp.input, {	key: "ArrowRight" });
 			expect(fp.currentMonth).toBe(2);
 
 			simulate("keydown", fp.calendarContainer, {
-				which: 39,
-				keyCode: 39
+				key: "ArrowRight"
 			}, KeyboardEvent);
-
 
 			expect(fp.currentMonth).toBe(3);
 
 			const now = new Date();
 
 			simulate("keydown", fp.calendarContainer, {
-				which: 38,
-				keyCode: 38
+				key: "ArrowUp"
 			}, KeyboardEvent);
 
 			expect(fp.currentYear).toBe(now.getFullYear() + 1);
 
 			simulate("keydown", fp.calendarContainer, {
-				which: 40,
-				keyCode: 40
+				key: "ArrowDown"
 			}, KeyboardEvent);
 
 
 			expect(fp.currentYear).toBe(now.getFullYear());
 
 			simulate("keydown", fp.timeContainer, {
-				which: 40,
-				keyCode: 40
+				key: "ArrowDown"
 			}, KeyboardEvent);
 
 			expect(fp.currentYear).toBe(now.getFullYear());
