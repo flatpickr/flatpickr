@@ -1456,7 +1456,7 @@ function Flatpickr(element, config) {
 		setHoursFromDate();
 		updateValue();
 
-		if (triggerChange !== false)
+		if (triggerChange)
 			triggerEvent("Change");
 	}
 
