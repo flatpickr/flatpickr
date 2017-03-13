@@ -62,7 +62,7 @@ function Flatpickr(element, config) {
 				+ self.weekWrapper.clientWidth + "px";
 		}
 
-		self.showTimeInput = self.selectedDates.length || self.config.noCalendar;
+		self.showTimeInput = self.selectedDates.length > 0 || self.config.noCalendar;
 
 		if (!self.isMobile)
 			positionCalendar();
@@ -1447,13 +1447,8 @@ function Flatpickr(element, config) {
 
 		setSelectedDate(date, format);
 
-		if (self.selectedDates.length > 0) {
-			self.showTimeInput = true;
-			self.latestSelectedDateObj = self.selectedDates[0];
-		}
-
-		else
-			self.latestSelectedDateObj = null;
+		self.showTimeInput = self.selectedDates.length > 0;
+		self.latestSelectedDateObj = self.selectedDates[0];
 
 		self.redraw();
 		jumpToDate();
@@ -1527,7 +1522,11 @@ function Flatpickr(element, config) {
 
 		if (!self.isMobile) {
 			Object.defineProperty(self, "showTimeInput", {
+				get () {
+					return self._showTimeInput;
+				},
 				set (bool) {
+					self._showTimeInput = bool;
 					if (self.calendarContainer)
 						toggleClass(self.calendarContainer, "showTimeInput", bool);
 				}
