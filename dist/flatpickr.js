@@ -1133,7 +1133,7 @@ function Flatpickr(element, config) {
 		}
 
 		self.selectedDates = self.selectedDates.filter(function (d) {
-			return d instanceof Date && d.getTime() && isEnabled(d, false);
+			return d instanceof Date && isEnabled(d, false);
 		});
 
 		self.selectedDates.sort(function (a, b) {
