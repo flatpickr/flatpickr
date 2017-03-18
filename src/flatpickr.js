@@ -1095,7 +1095,7 @@ function Flatpickr(element, config) {
 			return;
 		}
 
-		if (self.isOpen || (self.altInput || self.input).disabled ||self.config.inline)
+		if (self.isOpen || (self.input || self.altInput).disabled ||self.config.inline)
 			return;
 		
 		self.isOpen = true;
