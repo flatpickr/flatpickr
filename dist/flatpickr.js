@@ -668,7 +668,14 @@ function Flatpickr(element, config) {
 	function isCalendarElem(elem) {
 		if (self.config.appendTo && self.config.appendTo.contains(elem)) return true;
 
-		return self.calendarContainer.contains(elem);
+		var e = elem;
+		while (e) {
+
+			if (e === self.calendarContainer) return true;
+			e = e.parentNode;
+		}
+
+		return false;
 	}
 
 	function documentClick(e) {
@@ -678,7 +685,7 @@ function Flatpickr(element, config) {
 			// web components
 			e.path && e.path.indexOf && (~e.path.indexOf(self.input) || ~e.path.indexOf(self.altInput));
 
-			var lostFocus = e.type === "blur" ? isInput && !isCalendarElem(e.relatedTarget) : !isInput && !isCalendarElement;
+			var lostFocus = e.type === "blur" ? isInput && e.relatedTarget && !isCalendarElem(e.relatedTarget) : !isInput && !isCalendarElement;
 
 			if (lostFocus) {
 				e.preventDefault();

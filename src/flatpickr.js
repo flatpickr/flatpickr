@@ -815,7 +815,15 @@ function Flatpickr(element, config) {
 		if (self.config.appendTo && self.config.appendTo.contains(elem))
 			return true;
 
-		return self.calendarContainer.contains(elem);
+		let e = elem;
+		while (e) {
+
+			if (e === self.calendarContainer)
+				return true;
+			e = e.parentNode;
+		}
+
+		return false;
 	}
 
 	function documentClick(e) {
@@ -831,7 +839,7 @@ function Flatpickr(element, config) {
 				);
 
 			const lostFocus = e.type === "blur"
-				? isInput && !isCalendarElem(e.relatedTarget)
+				? isInput && e.relatedTarget && !isCalendarElem(e.relatedTarget)
 				: !isInput && !isCalendarElement;
 
 			if(lostFocus) {
