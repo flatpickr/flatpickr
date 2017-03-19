@@ -2,7 +2,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-/*! flatpickr v2.4.4, @license MIT */
+/*! flatpickr v2.4.5, @license MIT */
 function Flatpickr(element, config) {
 	var self = this;
 
@@ -45,8 +45,8 @@ function Flatpickr(element, config) {
 
 		bind();
 
-		if (self.selectedDates.length) {
-			if (self.config.enableTime) setHoursFromDate();
+		if (self.selectedDates.length || self.config.noCalendar) {
+			if (self.config.enableTime) setHoursFromDate(self.config.noCalendar ? self.config.minDate : null);
 			updateValue();
 		}
 
@@ -125,7 +125,7 @@ function Flatpickr(element, config) {
 
 		self.minuteElement.value = self.pad(minutes);
 
-		if (!self.config.time_24hr && self.selectedDates.length) self.amPM.textContent = self.latestSelectedDateObj.getHours() >= 12 ? "PM" : "AM";
+		if (!self.config.time_24hr) self.amPM.textContent = hours >= 12 ? "PM" : "AM";
 
 		if (self.config.enableSeconds) self.secondElement.value = self.pad(seconds);
 	}
@@ -1418,18 +1418,13 @@ function Flatpickr(element, config) {
 	function debounce(func, wait, immediate) {
 		var timeout = void 0;
 		return function () {
-			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-				args[_key] = arguments[_key];
-			}
-
-			var context = this;
-			var later = function later() {
+			var context = this,
+			    args = arguments;
+			clearTimeout(timeout);
+			timeout = setTimeout(function () {
 				timeout = null;
 				if (!immediate) func.apply(context, args);
-			};
-
-			clearTimeout(timeout);
-			timeout = setTimeout(later, wait);
+			}, wait);
 			if (immediate && !timeout) func.apply(context, args);
 		};
 	}
@@ -1468,7 +1463,7 @@ function Flatpickr(element, config) {
 
 		var newValue = curValue + step * delta;
 
-		if (input.value.length === 2) {
+		if (typeof input.value !== "undefined" && input.value.length === 2) {
 			var isHourElem = input === self.hourElement,
 			    isMinuteElem = input === self.minuteElement;
 
