@@ -1785,18 +1785,14 @@ function Flatpickr(element, config) {
 	/* istanbul ignore next */
 	function debounce(func, wait, immediate) {
 		let timeout;
-		return function (...args) {
-			const context = this;
-			const later = function () {
-				timeout = null;
-				if (!immediate)
-					func.apply(context, args);
-			};
-
+		return function() {
+			let context = this, args = arguments;
 			clearTimeout(timeout);
-			timeout = setTimeout(later, wait);
-			if (immediate && !timeout)
-				func.apply(context, args);
+			timeout = setTimeout(function() {
+				timeout = null;
+				if (!immediate) func.apply(context, args);
+			}, wait);
+			if (immediate && !timeout) func.apply(context, args);
 		};
 	}
 
