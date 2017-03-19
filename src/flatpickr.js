@@ -304,7 +304,7 @@ function Flatpickr(element, config) {
 			ev = new Event("increment", { "bubbles": true });
 		}
 
-		else {
+		catch (err) {
 			ev = window.document.createEvent("CustomEvent");
 			ev.initCustomEvent("increment", true, true, {});
 		}
