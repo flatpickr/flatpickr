@@ -9,6 +9,7 @@ function confirmIconPlugin(pluginConfig) {
 
 	return function(fp) {
 		fp.confirmContainer = fp._createElement("div", "flatpickr-confirm", config.confirmText);
+		fp.confirmContainer.tabIndex = -1;
 		fp.confirmContainer.innerHTML += config.confirmIcon;
 
 		fp.confirmContainer.addEventListener("click", fp.close);
@@ -28,6 +29,16 @@ function confirmIconPlugin(pluginConfig) {
 					return fp.confirmContainer.classList.add("visible");
 				fp.confirmContainer.classList.remove("visible");
 			}
+		
+		hooks.onKeyDown = (_, __, ___, e) => {
+			if (fp.config.enableTime && e.key === "Tab" && e.target === fp.amPM) {
+				e.preventDefault();
+				fp.confirmContainer.focus();
+			}
+
+			else if (e.key === "Enter" && e.target === fp.confirmContainer)
+				fp.close();
+		};
 
 		return hooks;
 	}
