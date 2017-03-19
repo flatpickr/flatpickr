@@ -26,7 +26,7 @@
     "start": "run-p build dev serve lint",
     "test": "jest --bail",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
-    "release": "node ./newRelease.js"
+    "release": "npm run test -- --silent && ./release"
   },
   "dependencies": {},
   "devDependencies": {

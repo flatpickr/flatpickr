@@ -1,0 +1,7 @@
+#!/bin/sh
+currentVersion=$(grep -e "[0-9].[0-9].[0-9]" -o -m 1 src/flatpickr.js )
+newVersion=$(semver -i "$currentVersion")
+
+echo "$currentVersion -> $newVersion"
+sed s/$currentVersion/$newVersion/ --in-place src/flatpickr.js
+npm version "$newVersion"

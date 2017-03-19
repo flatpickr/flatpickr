@@ -829,11 +829,11 @@ function Flatpickr(element, config) {
 					e.path && e.path.indexOf &&
 					(~e.path.indexOf(self.input) || ~e.path.indexOf(self.altInput))
 				);
-			
-			const lostFocus = e.type === "blur" 
+
+			const lostFocus = e.type === "blur"
 				? isInput && !isCalendarElem(e.relatedTarget)
 				: !isInput && !isCalendarElement;
-			
+
 			if(lostFocus) {
 				e.preventDefault();
 				self.close();
@@ -939,7 +939,7 @@ function Flatpickr(element, config) {
 	}
 
 	function onKeyDown(e) {
-		
+
 		if (e.target === (self.altInput || self.input) && e.which === 13)
 			selectDate(e);
 
@@ -995,7 +995,7 @@ function Flatpickr(element, config) {
 						updateTime(e);
 
 					break;
-				
+
 				case "Tab":
 					if (e.target === self.hourElement) {
 						e.preventDefault();
@@ -1006,7 +1006,7 @@ function Flatpickr(element, config) {
 						e.preventDefault();
 						self.amPM.focus();
 					}
-						
+
 					break;
 
 				default: break;
@@ -1097,13 +1097,13 @@ function Flatpickr(element, config) {
 
 		if (self.isOpen || (self.altInput || self.input).disabled ||self.config.inline)
 			return;
-		
+
 		self.isOpen = true;
 		self.calendarContainer.classList.add("open");
-		positionCalendar();	
+		positionCalendar();
 		(self.altInput || self.input).classList.add("active");
 
-			
+
 		triggerEvent("Open");
 	}
 
@@ -1202,7 +1202,7 @@ function Flatpickr(element, config) {
 		for (let i = 0; i < self.config.plugins.length; i++) {
 			const pluginConf = self.config.plugins[i](self) || {};
 			for (let key in pluginConf) {
-				
+
 				if (Array.isArray(self.config[key]) || ~hooks.indexOf(key))
 					self.config[key] = arrayify(pluginConf[key])
 						.map(bindToInstance)
