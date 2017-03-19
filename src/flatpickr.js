@@ -298,19 +298,19 @@ function Flatpickr(element, config) {
 
 	function incrementNumInput(e, delta, inputElem) {
 		const input = inputElem || e.target.parentNode.childNodes[0];
+		let ev;
 
-		if (typeof Event === "function" && Event.constructor) {
-			const ev = new Event("increment", { "bubbles": true });
-			ev.delta = delta;
-			input.dispatchEvent(ev);
+		try {
+			ev = new Event("increment", { "bubbles": true });
 		}
 
 		else {
-			const ev = window.document.createEvent("CustomEvent");
+			ev = window.document.createEvent("CustomEvent");
 			ev.initCustomEvent("increment", true, true, {});
-			ev.delta = delta;
-			input.dispatchEvent(ev);
 		}
+
+		ev.delta = delta;
+		input.dispatchEvent(ev);
 	}
 
 	function createNumberInput(inputClassName) {
