@@ -51,9 +51,9 @@ function Flatpickr(element, config) {
 
 		bind();
 
-		if (self.selectedDates.length) {
+		if (self.selectedDates.length || self.config.noCalendar) {
 			if (self.config.enableTime)
-				setHoursFromDate();
+				setHoursFromDate(self.config.noCalendar ? self.config.minDate : null);
 			updateValue();
 		}
 
@@ -156,8 +156,8 @@ function Flatpickr(element, config) {
 
 		self.minuteElement.value = self.pad(minutes);
 
-		if (!self.config.time_24hr && self.selectedDates.length)
-			self.amPM.textContent = self.latestSelectedDateObj.getHours() >= 12 ? "PM" : "AM";
+		if (!self.config.time_24hr)
+			self.amPM.textContent = hours >= 12 ? "PM" : "AM";
 
 		if (self.config.enableSeconds)
 			self.secondElement.value = self.pad(seconds);
