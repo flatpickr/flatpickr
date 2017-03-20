@@ -470,9 +470,10 @@ function Flatpickr(element, config) {
 	}
 
 	function buildDays(year, month) {
+	    const firstDayOfWeek = self.instanceConfig.firstDayOfWeek || self.l10n.firstDayOfWeek;
 		const firstOfMonth = (
 				new Date(self.currentYear, self.currentMonth, 1).getDay() -
-				self.l10n.firstDayOfWeek + 7
+                firstDayOfWeek + 7
 			) % 7,
 			isRangeMode = self.config.mode === "range";
 
@@ -683,7 +684,7 @@ function Flatpickr(element, config) {
 		if (!self.weekdayContainer)
 			self.weekdayContainer = createElement("div", "flatpickr-weekdays");
 
-		const firstDayOfWeek = self.l10n.firstDayOfWeek;
+		const firstDayOfWeek = self.instanceConfig.firstDayOfWeek || self.l10n.firstDayOfWeek;
 		let	weekdays = self.l10n.weekdays.shorthand.slice();
 
 		if (firstDayOfWeek > 0 && firstDayOfWeek < weekdays.length) {
