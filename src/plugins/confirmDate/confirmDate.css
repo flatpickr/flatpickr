@@ -9,6 +9,15 @@
 	background: rgba(0,0,0,0.06)
 }
 
+.flatpickr-confirm svg path {
+	fill: inherit;
+}
+
+.flatpickr-confirm.darkTheme {
+	color: white;
+	fill: white;
+}
+
 .flatpickr-confirm.visible {
 	max-height: 40px;
 	visibility: visible
