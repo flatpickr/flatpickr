@@ -259,17 +259,17 @@ function Flatpickr(element, config) {
 
 	function incrementNumInput(e, delta, inputElem) {
 		var input = inputElem || e.target.parentNode.childNodes[0];
+		var ev = void 0;
 
-		if (typeof Event === "function" && Event.constructor) {
-			var ev = new Event("increment", { "bubbles": true });
-			ev.delta = delta;
-			input.dispatchEvent(ev);
-		} else {
-			var _ev = window.document.createEvent("CustomEvent");
-			_ev.initCustomEvent("increment", true, true, {});
-			_ev.delta = delta;
-			input.dispatchEvent(_ev);
+		try {
+			ev = new Event("increment", { "bubbles": true });
+		} catch (err) {
+			ev = window.document.createEvent("CustomEvent");
+			ev.initCustomEvent("increment", true, true, {});
 		}
+
+		ev.delta = delta;
+		input.dispatchEvent(ev);
 	}
 
 	function createNumberInput(inputClassName) {
