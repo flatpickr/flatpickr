@@ -5,7 +5,11 @@ function confirmDatePlugin(pluginConfig) {
 		showAlways: false
 	};
 
-	const config = Object.assign({}, defaultConfig, pluginConfig || {});
+	const config = {};
+	for (let key in defaultConfig) {
+		config[key] = pluginConfig[key] !== undefined 
+			? pluginConfig[key] 
+			: defaultConfig[key];
 
 	return function(fp) {
 		fp.confirmContainer = fp._createElement("div", "flatpickr-confirm", config.confirmText);
