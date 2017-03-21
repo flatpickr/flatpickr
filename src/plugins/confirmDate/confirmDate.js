@@ -8,7 +8,7 @@ function confirmDatePlugin(pluginConfig) {
 
 	const config = {};
 	for (let key in defaultConfig) {
-		config[key] = pluginConfig[key] !== undefined 
+		config[key] = pluginConfig && pluginConfig[key] !== undefined 
 			? pluginConfig[key] 
 			: defaultConfig[key];
 	}
