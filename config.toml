@@ -72,14 +72,19 @@ googleAnalytics = ""
     weight = 5
 
 [[menu.main]]
+    name   = "Localization"
+    url    = "localization/"
+    weight = 6
+
+[[menu.main]]
     name   = "Config Options"
     url    = "options/"
-    weight = 6
+    weight = 7
 
 [[menu.main]]
     name   = "Formatting Tokens"
     url    = "formatting/"
-    weight = 6
+    weight = 8
 
 [blackfriday]
     smartypants = true

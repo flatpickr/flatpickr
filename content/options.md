@@ -1,7 +1,7 @@
 +++
 date = "2017-03-03T20:23:43-05:00"
 title = "Options"
-weight = "6"
+weight = "7"
 +++
 
 <table class="options">
