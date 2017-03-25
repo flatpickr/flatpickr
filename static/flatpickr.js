@@ -111,6 +111,10 @@ const configs = {
         weekNumbers: true
     },
 
+    strap: {
+        wrap: true
+    },
+
     onDayCreate: {
         onDayCreate: function(dObj, dStr, fp, dayElem){
             // Utilize dayElem.dateObj, which is the corresponding Date

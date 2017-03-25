@@ -3,8 +3,13 @@ input.flatpickr {
 }
 
 input[type="text"] {
-    border: 1px solid #e3e3e3;
+    border: 1px solid #bbb;
     padding: 8px;
+}
+
+.color-danger {
+	color: #f64747 !important;
+	fill: #f64747 !important;
 }
 
 article.article {
@@ -26,4 +31,38 @@ article.article {
 
 .article ul ul {
     list-style-type: circle;
+}
+
+.input-group {
+	display: flex;
+	align-items: center
+}
+
+input:focus {
+	border-color: #4889e0
+}
+
+a.input-button {
+	text-decoration: none;
+	border: 1px solid #bbb;
+	display: block;
+	padding: 8.5px 12px;
+	border-left: 0;
+	cursor: pointer;
+	align-self: center;
+	justify-content: center;
+	line-height: 1
+}
+
+a.input-button:hover {
+	background: #eee;
+}
+
+a.input-button svg {
+	width: 16px;
+	height: 16px;
+}
+
+svg path {
+	fill: inherit;
 }
