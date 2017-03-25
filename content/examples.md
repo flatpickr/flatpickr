@@ -316,3 +316,42 @@ Enable the `weekNumbers` option to display the week number in a column left to t
 ```
 
 <input class=flatpickr type="text" placeholder="Select Date.." data-id="weekNumbers">
+
+## flatpickr + external elements
+
+flatpickr can parse an input group of textboxes and buttons, common in Bootstrap and other frameworks.
+
+This permits additional markup, as well as custom elements to trigger the state of the calendar.
+
+```html
+<div class=flatpickr>
+    <input type="text" placeholder="Select Date.." data-input>
+
+    <a class="input-button" title="toggle" data-toggle>
+        <i class="icon-calendar"></i>
+    </a>
+
+    <a class="input-button" title="clear" data-clear>
+        <i class="icon-close"></i>
+    </a>
+</div>
+```
+
+```js
+{
+    wrap: true
+}
+```
+
+
+<p class="flatpickr input-group" data-id="strap">
+    <input type="text" placeholder="Select Date.." data-input>
+
+    <a class="input-button" style="fill:#444" title="toggle" data-toggle>
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 17 17"><g></g><path d="M14 2v-1h-3v1h-5v-1h-3v1h-3v15h17v-15h-3zM12 2h1v2h-1v-2zM4 2h1v2h-1v-2zM16 16h-15v-8.921h15v8.921zM1 6.079v-3.079h2v2h3v-2h5v2h3v-2h2v3.079h-15z" fill="#000000" /></svg>
+    </a>
+
+    <a class="input-button color-danger" title="clear" data-clear>
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 17 17"><g></g><path d="M9.207 8.5l6.646 6.646-0.707 0.707-6.646-6.646-6.646 6.646-0.707-0.707 6.646-6.646-6.647-6.646 0.707-0.707 6.647 6.646 6.646-6.646 0.707 0.707-6.646 6.646z" fill="#000000" /></svg>
+    </a>
+</p>
