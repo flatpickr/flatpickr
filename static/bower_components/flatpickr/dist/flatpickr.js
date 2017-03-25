@@ -2,7 +2,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-/*! flatpickr v2.4.5, @license MIT */
+/*! flatpickr v2.4.6, @license MIT */
 function Flatpickr(element, config) {
 	var self = this;
 
@@ -259,17 +259,17 @@ function Flatpickr(element, config) {
 
 	function incrementNumInput(e, delta, inputElem) {
 		var input = inputElem || e.target.parentNode.childNodes[0];
+		var ev = void 0;
 
-		if (typeof Event === "function" && Event.constructor) {
-			var ev = new Event("increment", { "bubbles": true });
-			ev.delta = delta;
-			input.dispatchEvent(ev);
-		} else {
-			var _ev = window.document.createEvent("CustomEvent");
-			_ev.initCustomEvent("increment", true, true, {});
-			_ev.delta = delta;
-			input.dispatchEvent(_ev);
+		try {
+			ev = new Event("increment", { "bubbles": true });
+		} catch (err) {
+			ev = window.document.createEvent("CustomEvent");
+			ev.initCustomEvent("increment", true, true, {});
 		}
+
+		ev.delta = delta;
+		input.dispatchEvent(ev);
 	}
 
 	function createNumberInput(inputClassName) {
@@ -668,7 +668,14 @@ function Flatpickr(element, config) {
 	function isCalendarElem(elem) {
 		if (self.config.appendTo && self.config.appendTo.contains(elem)) return true;
 
-		return self.calendarContainer.contains(elem);
+		var e = elem;
+		while (e) {
+
+			if (e === self.calendarContainer) return true;
+			e = e.parentNode;
+		}
+
+		return false;
 	}
 
 	function documentClick(e) {
@@ -678,7 +685,7 @@ function Flatpickr(element, config) {
 			// web components
 			e.path && e.path.indexOf && (~e.path.indexOf(self.input) || ~e.path.indexOf(self.altInput));
 
-			var lostFocus = e.type === "blur" ? isInput && !isCalendarElem(e.relatedTarget) : !isInput && !isCalendarElement;
+			var lostFocus = e.type === "blur" ? isInput && e.relatedTarget && !isCalendarElem(e.relatedTarget) : !isInput && !isCalendarElement;
 
 			if (lostFocus) {
 				e.preventDefault();
