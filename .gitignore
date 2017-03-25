@@ -1,3 +1,5 @@
 static/bower_components/flatpickr/*
 !static/bower_components/flatpickr/dist/
 public
+
+.tern-port

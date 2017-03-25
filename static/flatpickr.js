@@ -126,6 +126,23 @@ const configs = {
             else if (Math.random() > 0.85)
                 dayElem.innerHTML += "<span class='event busy'></span>";
         }
+    },
+
+    confirmDate: {
+        "enableTime": true,
+        "plugins": [new confirmDatePlugin({})]
+    },
+    weekSelect: {
+        "plugins": [new weekSelectPlugin({})],
+        "onChange": [function(){
+            // extract the week number
+            // note: "this" is bound to the flatpickr instance
+            const weekNumber = this.selectedDates[0]
+                ? this.config.getWeek(this.selectedDates[0])
+                : null;
+
+            console.log(weekNumber);
+        }]
     }
 }
 

@@ -1,7 +1,7 @@
 +++
 date = "2017-03-03T20:23:43-05:00"
 title = "Localization"
-weight = "6"
+weight = "7"
 +++
 
 [Dozens of locales](https://github.com/chmln/flatpickr/tree/master/dist/l10n) are available.
