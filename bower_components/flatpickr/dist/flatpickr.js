@@ -2,7 +2,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-/*! flatpickr v2.4.6, @license MIT */
+/*! flatpickr v2.4.7, @license MIT */
 function Flatpickr(element, config) {
 	var self = this;
 
@@ -259,17 +259,17 @@ function Flatpickr(element, config) {
 
 	function incrementNumInput(e, delta, inputElem) {
 		var input = inputElem || e.target.parentNode.childNodes[0];
+		var ev = void 0;
 
-		if (typeof Event === "function" && Event.constructor) {
-			var ev = new Event("increment", { "bubbles": true });
-			ev.delta = delta;
-			input.dispatchEvent(ev);
-		} else {
-			var _ev = window.document.createEvent("CustomEvent");
-			_ev.initCustomEvent("increment", true, true, {});
-			_ev.delta = delta;
-			input.dispatchEvent(_ev);
+		try {
+			ev = new Event("increment", { "bubbles": true });
+		} catch (err) {
+			ev = window.document.createEvent("CustomEvent");
+			ev.initCustomEvent("increment", true, true, {});
 		}
+
+		ev.delta = delta;
+		input.dispatchEvent(ev);
 	}
 
 	function createNumberInput(inputClassName) {

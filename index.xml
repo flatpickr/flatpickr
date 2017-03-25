@@ -391,6 +391,42 @@ If the function returns &lt;code&gt;true&lt;/code&gt;, the date will be disabled
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;&lt;input class=flatpickr type=&#34;text&#34; placeholder=&#34;Select Date..&#34; data-id=&#34;weekNumbers&#34;&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;flatpickr-external-elements&#34;&gt;flatpickr + external elements&lt;/h2&gt;
+
+&lt;p&gt;flatpickr can parse an input group of textboxes and buttons, common in Bootstrap and other frameworks.&lt;/p&gt;
+
+&lt;p&gt;This permits additional markup, as well as custom elements to trigger the state of the calendar.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;div class=flatpickr&amp;gt;
+    &amp;lt;input type=&amp;quot;text&amp;quot; placeholder=&amp;quot;Select Date..&amp;quot; data-input&amp;gt;
+
+    &amp;lt;a class=&amp;quot;input-button&amp;quot; title=&amp;quot;toggle&amp;quot; data-toggle&amp;gt;
+        &amp;lt;i class=&amp;quot;icon-calendar&amp;quot;&amp;gt;&amp;lt;/i&amp;gt;
+    &amp;lt;/a&amp;gt;
+
+    &amp;lt;a class=&amp;quot;input-button&amp;quot; title=&amp;quot;clear&amp;quot; data-clear&amp;gt;
+        &amp;lt;i class=&amp;quot;icon-close&amp;quot;&amp;gt;&amp;lt;/i&amp;gt;
+    &amp;lt;/a&amp;gt;
+&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;{
+    wrap: true
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p class=&#34;flatpickr input-group&#34; data-id=&#34;strap&#34;&gt;
+    &lt;input type=&#34;text&#34; placeholder=&#34;Select Date..&#34; data-input&gt;
+
+    &lt;a class=&#34;input-button&#34; style=&#34;fill:#444&#34; title=&#34;toggle&#34; data-toggle&gt;
+        &lt;svg version=&#34;1.1&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34; xmlns:xlink=&#34;http://www.w3.org/1999/xlink&#34; viewBox=&#34;0 0 17 17&#34;&gt;&lt;g&gt;&lt;/g&gt;&lt;path d=&#34;M14 2v-1h-3v1h-5v-1h-3v1h-3v15h17v-15h-3zM12 2h1v2h-1v-2zM4 2h1v2h-1v-2zM16 16h-15v-8.921h15v8.921zM1 6.079v-3.079h2v2h3v-2h5v2h3v-2h2v3.079h-15z&#34; fill=&#34;#000000&#34; /&gt;&lt;/svg&gt;
+    &lt;/a&gt;
+
+    &lt;a class=&#34;input-button color-danger&#34; title=&#34;clear&#34; data-clear&gt;
+        &lt;svg version=&#34;1.1&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34; xmlns:xlink=&#34;http://www.w3.org/1999/xlink&#34; viewBox=&#34;0 0 17 17&#34;&gt;&lt;g&gt;&lt;/g&gt;&lt;path d=&#34;M9.207 8.5l6.646 6.646-0.707 0.707-6.646-6.646-6.646 6.646-0.707-0.707 6.646-6.646-6.647-6.646 0.707-0.707 6.647 6.646 6.646-6.646 0.707 0.707-6.646 6.646z&#34; fill=&#34;#000000&#34; /&gt;&lt;/svg&gt;
+    &lt;/a&gt;
+&lt;/p&gt;
 </description>
     </item>
     
@@ -1009,6 +1045,136 @@ A string representation of&lt;code&gt;dateObj&lt;/code&gt;,  formatted as per 
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Localization</title>
+      <link>https://chmln.github.io/flatpickr/localization/</link>
+      <pubDate>Fri, 03 Mar 2017 20:23:43 -0500</pubDate>
+      
+      <guid>https://chmln.github.io/flatpickr/localization/</guid>
+      <description>
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/chmln/flatpickr/tree/master/dist/l10n&#34;&gt;Dozens of locales&lt;/a&gt; are available.&lt;/p&gt;
+
+&lt;p&gt;Flatpickr can be localized per-instance, or globally.&lt;/p&gt;
+
+&lt;h2 id=&#34;using-modules&#34;&gt;Using Modules&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const Flatpickr = require(&amp;quot;flatpickr&amp;quot;);
+const Russian = require(&amp;quot;flatpickr/dist/l10n/ru.js&amp;quot;).ru;
+// or.. import {ru} from &amp;quot;flatpickr/dist/l10n/ru.js&amp;quot;
+
+new Flatpickr(myElem, {
+    &amp;quot;locale&amp;quot;: Russian // locale for this instance only
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Localize globally (for all instances):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;const Russian = require(&amp;quot;flatpickr/dist/l10n/ru.js&amp;quot;).ru;
+Flatpickr.localize(Russian); // default locale is now Russian
+
+new Flatpickr(myElem);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;localization-in-a-browser-environment&#34;&gt;Localization in a Browser Environment&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;script src=&amp;quot;https://npmcdn.com/flatpickr/dist/flatpickr.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script src=&amp;quot;https://npmcdn.com/flatpickr/dist/l10n/ru.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;new Flatpickr(myElement, {
+    &amp;quot;locale&amp;quot;: &amp;quot;ru&amp;quot;  // locale for this instance only
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Localize globally (for all instances):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;Flatpickr.localize(Flatpickr.l10ns.ru);
+flatpickr(&amp;quot;mySelector&amp;quot;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You may also wish to modify only certain values of locale.
+For instance, to set the first day of the week to Monday:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;Flatpickr.l10ns.default.firstDayOfWeek = 1; // Monday
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you&amp;rsquo;d like the option to persist regardless of locale, use the &lt;code&gt;locale&lt;/code&gt; option to override specific fields:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;new Flatpickr(myElem, {
+    locale: {
+        firstDayOfWeek: 2
+    }
+});
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Plugins</title>
+      <link>https://chmln.github.io/flatpickr/plugins/</link>
+      <pubDate>Sat, 25 Mar 2017 20:23:43 -0500</pubDate>
+      
+      <guid>https://chmln.github.io/flatpickr/plugins/</guid>
+      <description>
+
+&lt;p&gt;Plugins are in essentially a set of &lt;a href=&#34;https://chmln.github.io/flatpickr/events-hooks&#34;&gt;hooks&lt;/a&gt;, that receive a config object (optionally) and a &lt;a href=&#34;https://chmln.github.io/flatpickr/instance-methods-properties-elements/&#34;&gt;flatpickr instance&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Functionality requested by users that doesn&amp;rsquo;t make it to core usually ends up in a plugin. The &lt;code&gt;flatpickr&lt;/code&gt; repo comes with a few &lt;a href=&#34;https://github.com/chmln/flatpickr/tree/master/dist/plugins&#34;&gt;plugins&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;confirmdate&#34;&gt;&lt;code&gt;confirmDate&lt;/code&gt;&lt;/h2&gt;
+
+&lt;p&gt;Provides a visual cue for users after selecting either:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;date + time&lt;/li&gt;
+&lt;li&gt;multiple dates&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;{
+    &amp;quot;enableTime&amp;quot;: true,
+    &amp;quot;plugins&amp;quot;: [new confirmDatePlugin({})]
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;input class=flatpickr type=&#34;text&#34; placeholder=&#34;Select Date..&#34; data-id=&#34;confirmDate&#34;&gt;&lt;/p&gt;
+
+&lt;p&gt;A spiffy SVG icon is included, along with sane defaults, but you can customize them.&lt;/p&gt;
+
+&lt;p&gt;Here are all the available options:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;{
+    confirmIcon: &amp;quot;&amp;lt;i class=&#39;fa fa-check&#39;&amp;gt;&amp;lt;/i&amp;gt;&amp;quot;, // your icon&#39;s html, if you wish to override
+    confirmText: &amp;quot;OK &amp;quot;,
+    showAlways: false,
+    theme: &amp;quot;light&amp;quot; // or &amp;quot;dark&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;weekselect&#34;&gt;&lt;code&gt;weekSelect&lt;/code&gt;&lt;/h2&gt;
+
+&lt;p&gt;For selecting a week.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;new Flatpickr({
+    &amp;quot;plugins&amp;quot;: [new weekSelectPlugin({})],
+    &amp;quot;onChange&amp;quot;: [function(){
+        // extract the week number
+        // note: &amp;quot;this&amp;quot; is bound to the flatpickr instance
+        const weekNumber = this.selectedDates[0]
+            ? this.config.getWeek(this.selectedDates[0])
+            : null;
+
+        console.log(weekNumber);
+    }]
+});
+
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;input class=flatpickr type=&#34;text&#34; placeholder=&#34;Select Date..&#34; data-id=&#34;weekSelect&#34;&gt;&lt;/p&gt;
 </description>
     </item>
     
