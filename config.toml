@@ -24,8 +24,18 @@ googleAnalytics = ""
     permalink = "#"
 
     # Custom assets
-    custom_css = ["site.css", "bower_components/flatpickr/dist/flatpickr.css"]
-    custom_js  = ["bower_components/flatpickr/dist/flatpickr.js", "flatpickr.js"]
+    custom_css = [
+        "site.css",
+        "bower_components/flatpickr/dist/flatpickr.css",
+        "bower_components/flatpickr/dist/plugins/confirmDate/confirmDate.css",
+        "bower_components/flatpickr/dist/plugins/weekSelect/weekSelect.css"
+    ]
+    custom_js  = [
+        "bower_components/flatpickr/dist/flatpickr.js",
+        "bower_components/flatpickr/dist/plugins/confirmDate/confirmDate.js",
+        "bower_components/flatpickr/dist/plugins/weekSelect/weekSelect.js",
+        "flatpickr.js"
+    ]
 
     # Syntax highlighting theme
     highlight_css  = ""
@@ -42,7 +52,7 @@ googleAnalytics = ""
 [social]
     twitter = ""
     github  = "chmln"
-    email   = "hello@email.com"
+    email   = ""
 
 
 [[menu.main]]
@@ -72,11 +82,6 @@ googleAnalytics = ""
     weight = 5
 
 [[menu.main]]
-    name   = "Localization"
-    url    = "localization/"
-    weight = 6
-
-[[menu.main]]
     name   = "Config Options"
     url    = "options/"
     weight = 7
@@ -85,6 +90,16 @@ googleAnalytics = ""
     name   = "Formatting Tokens"
     url    = "formatting/"
     weight = 8
+
+[[menu.main]]
+    name   = "Localization"
+    url    = "localization/"
+    weight = 9
+
+[[menu.main]]
+    name   = "Plugins"
+    url    = "plugins/"
+    weight = 10
 
 [blackfriday]
     smartypants = true
