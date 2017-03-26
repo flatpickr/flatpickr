@@ -8,7 +8,6 @@ function Flatpickr(element, config) {
 	self.close = close;
 	self._createElement = createElement;
 	self.destroy = destroy;
-	self.formatDate = formatDate;
 	self.isEnabled = isEnabled;
 	self.jumpToDate = jumpToDate;
 	self.open = open;
@@ -26,6 +25,7 @@ function Flatpickr(element, config) {
 		self.element = element;
 		self.instanceConfig = config || {};
 		self.parseDate = Flatpickr.prototype.parseDate.bind(self);
+		self.formatDate = Flatpickr.prototype.formatDate.bind(self);
 
 		setupFormats();
 		parseConfig();
@@ -854,17 +854,6 @@ function Flatpickr(element, config) {
 		}
 	}
 
-	function formatDate(frmt, dateObj) {
-		if (self.config.formatDate)
-			return self.config.formatDate(frmt, dateObj);
-
-		const chars = frmt.split("");
-		return chars.map((c, i) => self.formats[c] && chars[i - 1] !== "\\"
-			? self.formats[c](dateObj)
-			: c !== "\\" ? c : ""
-		).join("");
-	}
-
 	function changeYear(newYear) {
 		if (
 			!newYear
@@ -1634,14 +1623,14 @@ function Flatpickr(element, config) {
 		if (self.selectedDates.length) {
 			self.mobileInput.defaultValue
 			= self.mobileInput.value
-			= formatDate(self.mobileFormatStr, self.selectedDates[0]);
+			= self.formatDate(self.mobileFormatStr, self.selectedDates[0]);
 		}
 
 		if (self.config.minDate)
-			self.mobileInput.min = formatDate("Y-m-d", self.config.minDate);
+			self.mobileInput.min = self.formatDate("Y-m-d", self.config.minDate);
 
 		if (self.config.maxDate)
-			self.mobileInput.max = formatDate("Y-m-d", self.config.maxDate);
+			self.mobileInput.max = self.formatDate("Y-m-d", self.config.maxDate);
 
 		self.input.type = "hidden";
 		if (self.config.altInput)
@@ -1736,19 +1725,19 @@ function Flatpickr(element, config) {
 
 		if (self.isMobile) {
 			self.mobileInput.value = self.selectedDates.length
-				? formatDate(self.mobileFormatStr, self.latestSelectedDateObj)
+				? self.formatDate(self.mobileFormatStr, self.latestSelectedDateObj)
 				: "";
 		}
 
 		const joinChar = self.config.mode !== "range" ? "; " : self.l10n.rangeSeparator;
 
 		self.input.value = self.selectedDates
-			.map(dObj => formatDate(self.config.dateFormat, dObj))
+			.map(dObj => self.formatDate(self.config.dateFormat, dObj))
 			.join(joinChar);
 
 		if (self.config.altInput) {
 			self.altInput.value = self.selectedDates
-				.map(dObj => formatDate(self.config.altFormat, dObj))
+				.map(dObj => self.formatDate(self.config.altFormat, dObj))
 				.join(joinChar);
 		}
 
@@ -2152,6 +2141,16 @@ Flatpickr.prototype = {
 
 		// last two digits of year e.g. 16 for 2016
 		y: date => String(date.getFullYear()).substring(2)
+	},
+
+	formatDate (frmt, dateObj) {
+		if (this.config.formatDate)
+			return this.config.formatDate(frmt, dateObj);
+
+		return frmt.split("").map((c, i, arr) => this.formats[c] && arr[i - 1] !== "\\"
+			? this.formats[c](dateObj)
+			: c !== "\\" ? c : ""
+		).join("");
 	},
 
 	revFormat: {
