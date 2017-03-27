@@ -26,7 +26,8 @@
     "start": "run-p build dev serve lint",
     "test": "jest --bail",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
-    "release": "jest --bail --silent && ./release"
+    "release": "jest --bail --silent && ./release",
+    "postinstall": "./node_modules/.bin/opencollective-postinstall || exit 0"
   },
   "dependencies": {},
   "devDependencies": {
@@ -42,6 +43,7 @@
     "ncp": "^2.0.0",
     "npm-run-all": "^4.0.2",
     "onchange": "^3.2.1",
+    "opencollective-postinstall": "^1.0.14",
     "rtlcss": "^2.1.2",
     "semver": "^5.3.0",
     "stylus": "^0.54.5",
@@ -67,5 +69,10 @@
     "time",
     "picker",
     "lightweight"
-  ]
+  ],
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/flatpickr",
+    "logo": "https://opencollective.com/opencollective/logo.txt"
+  }
 }
