@@ -405,7 +405,7 @@ function Flatpickr(element, config) {
 
 		dayElement.dateObj = date;
 		dayElement.$i = i;
-		dayElement.setAttribute('aria-label', self.formatDate(date, "F j, Y"));
+		dayElement.setAttribute("aria-label", self.formatDate(date, "F j, Y"));
 
 		if (compareDates(date, self.now) === 0) {
 			self.todayDateElem = dayElement;
@@ -476,7 +476,7 @@ function Flatpickr(element, config) {
 
 	function focusOnDay(currentIndex, offset) {
 		if (currentIndex === undefined)
-			return self.todayDateElem.focus();
+			return (self.todayDateElem||self.days.childNodes[0]).focus();
 
 		const newIndex = currentIndex + offset||0,
 			targetNode = self.days.childNodes[newIndex];
@@ -491,7 +491,7 @@ function Flatpickr(element, config) {
 
 		else {
 			self.changeMonth(-1);
-			self.days.childNodes[(42+newIndex) % 42].focus();
+			self.days.childNodes[42+newIndex].focus();
 		}
 	}
 
@@ -503,6 +503,7 @@ function Flatpickr(element, config) {
 			isRangeMode = self.config.mode === "range";
 
 		self.prevMonthDays = self.utils.getDaysinMonth((self.currentMonth - 1 + 12) % 12);
+		self.todayDateElem = null;
 
 		const daysInMonth = self.utils.getDaysinMonth(),
 			days = window.document.createDocumentFragment();
@@ -970,6 +971,7 @@ function Flatpickr(element, config) {
 			selectDate(e);
 
 		else if (self.isOpen || self.config.inline) {
+
 			switch (e.key) {
 				case "Enter":
 					if (self.timeContainer && self.timeContainer.contains(e.target))
@@ -981,8 +983,9 @@ function Flatpickr(element, config) {
 					break;
 
 				case "Escape": // escape
+					e.preventDefault();
+					//(self.altInput || self.input).focus();
 					self.close();
-					(self.altInput || self.input).focus();
 					break;
 
 				case "ArrowLeft":
