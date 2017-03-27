@@ -314,7 +314,7 @@ describe('flatpickr', () => {
 				const RESULT = 'MAAAGIC.*^*.2016.*^*.20.*^*.10';
 				createInstance({
 					dateFormat: 'YEAR-DAYOFMONTH-MONTH',
-					formatDate(formatStr, date) {
+					formatDate(date, formatStr) {
 						let segs = formatStr.split('-');
 						return 'MAAAGIC.*^*.' + segs.map(seg => {
 								let mapped = null;
@@ -539,74 +539,43 @@ describe('flatpickr', () => {
 				altInput: true
 			});
 
-			fp.open();
-			simulate("keydown", fp.timeContainer, {
-				key: "Enter" // enter
-			}, KeyboardEvent);
+			fp.jumpToDate("2016-2-1");
 
-			expect(fp.selectedDates.length).toBe(0);
 			fp.open();
-
 			fp.days.childNodes[15].focus();
 
 			simulate("keydown", fp.days.childNodes[15], {
 				key: "Enter"
 			});
 
-			expect(fp.selectedDates.length).toBe(1);;
-
-			fp.close();
-			fp.open();
+			expect(fp.selectedDates.length).toBe(1);
 
 			simulate("keydown", fp.calendarContainer, {
 				key: "Escape"
 			});
-
-			expect(fp.isOpen).toBe(false);
-
-			fp.changeMonth(3, false);
+			expect(fp.isOpen).toEqual(false);
 
 			fp.open();
+
 			simulate("keydown", fp.calendarContainer, {
 				key: "ArrowLeft"
 			});
 
-			expect(fp.currentMonth).toBe(2);
+			expect(document.activeElement === fp.days.childNodes[0]).toEqual(true);
 
-
-			fp.open();
 			simulate("keydown", fp.altInput, {	key: "ArrowLeft" });
-			expect(fp.currentMonth).toBe(2);
+			console.log(document.activeElement)
+			expect(fp.currentMonth).toBe(1);
+			expect(document.activeElement.dateObj.getMonth()).toEqual(0);
+			expect(document.activeElement.dateObj.getDate()).toEqual(31);
 
-			simulate("keydown", fp.input, {	key: "ArrowRight" });
-			expect(fp.currentMonth).toBe(2);
-
-			simulate("keydown", fp.calendarContainer, {
-				key: "ArrowRight"
-			}, KeyboardEvent);
-
-			expect(fp.currentMonth).toBe(3);
-
-			const now = new Date();
-
-			simulate("keydown", fp.calendarContainer, {
-				key: "ArrowUp"
-			}, KeyboardEvent);
-
-			expect(fp.currentYear).toBe(now.getFullYear() + 1);
-
-			simulate("keydown", fp.calendarContainer, {
-				key: "ArrowDown"
-			}, KeyboardEvent);
+			simulate("keydown", document.activeElement, {	key: "ArrowRight" });
+			console.log(document.activeElement)
+			expect(document.activeElement.dateObj.getMonth()).toEqual(1);
+			expect(document.activeElement.dateObj.getDate()).toEqual(1);
+			expect(fp.currentMonth).toBe(1);
 
 
-			expect(fp.currentYear).toBe(now.getFullYear());
-
-			simulate("keydown", fp.timeContainer, {
-				key: "ArrowDown"
-			}, KeyboardEvent);
-
-			expect(fp.currentYear).toBe(now.getFullYear());
 		});
 
 		it("enabling dates by function", () => {
