@@ -1,7 +1,6 @@
 ## flatpickr - javascript datetime picker
 [![Build Status](https://travis-ci.org/chmln/flatpickr.svg?branch=master)](https://travis-ci.org/chmln/flatpickr)
-[![Backers on Open Collective](https://opencollective.com/flatpickr/backers/badge.svg)](#backers)
-[![Sponsors on Open Collective](https://opencollective.com/flatpickr/sponsors/badge.svg)](#sponsors)
+
 [![Coverage](https://coveralls.io/repos/github/chmln/flatpickr/badge.svg?branch=master)](https://coveralls.io/github/chmln/flatpickr)
 [![npm version](https://badge.fury.io/js/flatpickr.svg)](https://www.npmjs.com/package/flatpickr)
 ![Bower version](https://badge.fury.io/bo/flatpickr-calendar.svg)
@@ -30,7 +29,6 @@ Written in vanilla javascript, works with anything, anywhere.
 IE9+, iOS Safari 6+, MS Edge, Chrome 8+, Firefox 6+
 
 ## Install & Use
-CDNJS: https://cdnjs.com/libraries/flatpickr
 
 Demos and documentation: https://chmln.github.io/flatpickr
 
@@ -39,14 +37,21 @@ See also:
 * [React Component](https://github.com/coderhaoxin/react-flatpickr)
 * [ember-flatpickr addon](https://www.npmjs.com/package/ember-flatpickr)
 * [angular-flatpickr addon](https://www.npmjs.com/package/angular-flatpickr)
+* [Vue-Blu/datepicker](https://chenz24.github.io/vue-blu/#/components/datepicker)
 
-flatpickr out in the wild:
-* As a [datepicker in Vue-Blu](https://chenz24.github.io/vue-blu/#/components/datepicker)
-
+---
 
 ## Backers
 
-Support us with a monthly donation and help us continue our activities. [[Become a backer](https://opencollective.com/flatpickr#backer)]
+<s>Support us with a monthly donation and help us continue our activities. </s>
+
+flatpickr will be developed indefinitely, until native date inputs are just as capable and aesthetic. It will be maintained regardless of any donations, unconditionally.
+
+You are encouraged to use flatpickr for any commercial and personal purposes alike. 
+
+If you'd like to support the project anyways, the links are below.
+
+[[Become a backer](https://opencollective.com/flatpickr#backer)]
 
 <a href="https://opencollective.com/flatpickr/backer/0/website" target="_blank"><img src="https://opencollective.com/flatpickr/backer/0/avatar.svg"></a>
 <a href="https://opencollective.com/flatpickr/backer/1/website" target="_blank"><img src="https://opencollective.com/flatpickr/backer/1/avatar.svg"></a>
@@ -82,7 +87,7 @@ Support us with a monthly donation and help us continue our activities. [[Become
 
 ## Sponsors
 
-Become a sponsor and get your logo on our README on Github with a link to your site. [[Become a sponsor](https://opencollective.com/flatpickr#sponsor)]
+Become a sponsor and get your logo on the README. [[Become a sponsor](https://opencollective.com/flatpickr#sponsor)]
 
 <a href="https://opencollective.com/flatpickr/sponsor/0/website" target="_blank"><img src="https://opencollective.com/flatpickr/sponsor/0/avatar.svg"></a>
 <a href="https://opencollective.com/flatpickr/sponsor/1/website" target="_blank"><img src="https://opencollective.com/flatpickr/sponsor/1/avatar.svg"></a>
