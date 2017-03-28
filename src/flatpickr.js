@@ -53,7 +53,9 @@ function Flatpickr(element, config) {
 
 		if (self.selectedDates.length || self.config.noCalendar) {
 			if (self.config.enableTime)
-				setHoursFromDate(self.config.noCalendar ? self.config.minDate : null);
+				setHoursFromDate(self.config.noCalendar
+					? self.latestSelectedDateObj || self.config.minDate
+					: null);
 			updateValue();
 		}
 
