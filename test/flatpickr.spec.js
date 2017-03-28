@@ -564,13 +564,13 @@ describe('flatpickr', () => {
 			expect(document.activeElement === fp.days.childNodes[0]).toEqual(true);
 
 			simulate("keydown", fp.altInput, {	key: "ArrowLeft" });
-			console.log(document.activeElement)
+
 			expect(fp.currentMonth).toBe(1);
 			expect(document.activeElement.dateObj.getMonth()).toEqual(0);
 			expect(document.activeElement.dateObj.getDate()).toEqual(31);
 
 			simulate("keydown", document.activeElement, {	key: "ArrowRight" });
-			console.log(document.activeElement)
+
 			expect(document.activeElement.dateObj.getMonth()).toEqual(1);
 			expect(document.activeElement.dateObj.getDate()).toEqual(1);
 			expect(fp.currentMonth).toBe(1);
