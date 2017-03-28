@@ -46,7 +46,9 @@ function Flatpickr(element, config) {
 		bind();
 
 		if (self.selectedDates.length || self.config.noCalendar) {
-			if (self.config.enableTime) setHoursFromDate(self.config.noCalendar ? self.config.minDate : null);
+			if (self.config.enableTime) {
+				setHoursFromDate(self.config.noCalendar ? self.latestSelectedDateObj || self.config.minDate : null);
+			}
 			updateValue();
 		}
 
@@ -993,7 +995,9 @@ function Flatpickr(element, config) {
 			var pluginConf = self.config.plugins[_i2](self) || {};
 			for (var key in pluginConf) {
 
-				if (Array.isArray(self.config[key]) || ~hooks.indexOf(key)) self.config[key] = arrayify(pluginConf[key]).map(bindToInstance).concat(self.config[key]);else if (typeof userConfig[key] === "undefined") self.config[key] = pluginConf[key];
+				if (Array.isArray(self.config[key]) || ~hooks.indexOf(key)) {
+					self.config[key] = arrayify(pluginConf[key]).map(bindToInstance).concat(self.config[key]);
+				} else if (typeof userConfig[key] === "undefined") self.config[key] = pluginConf[key];
 			}
 		}
 
@@ -1116,7 +1120,7 @@ function Flatpickr(element, config) {
 		}
 
 		if (self.config.enableTime) setTimeout(function () {
-			self.hourElement.select();
+			return self.hourElement.select();
 		}, 451);
 
 		if (self.config.mode === "single" && !self.config.enableTime) self.close();
