@@ -768,7 +768,7 @@ describe('flatpickr', () => {
 			expect(fp.minuteElement.value).toEqual("35"); // can't go higher than 35
 		});
 
-		it("should have an implicit selectedDate in time picker mode", () => {
+		it("time picker: implicit selectedDate", () => {
 			createInstance({
 				enableTime: true,
 				noCalendar: true
@@ -779,6 +779,40 @@ describe('flatpickr', () => {
 
 			expect(fp.selectedDates.length).toEqual(1);
 			expect(fp.selectedDates[0].getDate()).toEqual(new Date().getDate());
+		});
+
+		it("time picker: minDate/maxDate + preloading", () => {
+			createInstance({
+				enableTime: true,
+				noCalendar: true,
+				minDate: "02:30",
+				defaultDate: "3:30"
+			});
+
+			expect(fp.hourElement.value).toBe("03");
+			expect(fp.minuteElement.value).toBe("30");
+			expect(fp.amPM.textContent).toBe("AM");
+
+			decrementTime("hour", 1);
+			expect(fp.hourElement.value).toBe("02");
+
+			fp.set("maxDate", "04:30");
+			incrementTime("hour", 3);
+			expect(fp.hourElement.value).toBe("04");
+
+			fp.amPM.click();
+			expect(fp.amPM.textContent).toBe("AM");
+
+			fp.clear();
+
+			fp.setDate("03:30");
+			expect(fp.hourElement.value).toBe("03");
+
+			fp.setDate("05:30");
+			expect(fp.hourElement.value).toBe("03");
+
+			fp.setDate("00:30");
+			expect(fp.hourElement.value).toBe("03");
 		});
 
 		it("should delay time input validation on keydown", () => {
