@@ -52,10 +52,11 @@ function Flatpickr(element, config) {
 		bind();
 
 		if (self.selectedDates.length || self.config.noCalendar) {
-			if (self.config.enableTime)
+			if (self.config.enableTime) {
 				setHoursFromDate(self.config.noCalendar
 					? self.latestSelectedDateObj || self.config.minDate
 					: null);
+			}
 			updateValue();
 		}
 
@@ -478,9 +479,9 @@ function Flatpickr(element, config) {
 
 	function focusOnDay(currentIndex, offset) {
 		if (currentIndex === undefined)
-			return (self.todayDateElem||self.days.childNodes[0]).focus();
+			return (self.todayDateElem || self.days.childNodes[0]).focus();
 
-		const newIndex = currentIndex + offset||0,
+		const newIndex = currentIndex + offset || 0,
 			targetNode = self.days.childNodes[newIndex];
 
 		if (targetNode)
@@ -493,7 +494,7 @@ function Flatpickr(element, config) {
 
 		else {
 			self.changeMonth(-1);
-			self.days.childNodes[42+newIndex].focus();
+			self.days.childNodes[42 + newIndex].focus();
 		}
 	}
 
@@ -1137,7 +1138,7 @@ function Flatpickr(element, config) {
 			return;
 		}
 
-		if (self.isOpen || (self.altInput || self.input).disabled ||self.config.inline)
+		if (self.isOpen || (self.altInput || self.input).disabled || self.config.inline)
 			return;
 
 		self.isOpen = true;
@@ -1245,10 +1246,11 @@ function Flatpickr(element, config) {
 			const pluginConf = self.config.plugins[i](self) || {};
 			for (let key in pluginConf) {
 
-				if (Array.isArray(self.config[key]) || ~hooks.indexOf(key))
+				if (Array.isArray(self.config[key]) || ~hooks.indexOf(key)) {
 					self.config[key] = arrayify(pluginConf[key])
 						.map(bindToInstance)
 						.concat(self.config[key]);
+				}
 
 				else if (typeof userConfig[key] === "undefined")
 					self.config[key] = pluginConf[key];
@@ -1430,9 +1432,7 @@ function Flatpickr(element, config) {
 		}
 
 		if (self.config.enableTime)
-			setTimeout(() => {
-				self.hourElement.select();
-			}, 451);
+			setTimeout(() => self.hourElement.select(), 451);
 
 		if (self.config.mode === "single" && !self.config.enableTime)
 			self.close();
