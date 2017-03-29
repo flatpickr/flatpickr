@@ -1485,7 +1485,7 @@ function Flatpickr(element, config) {
 
 	function setDate(date, triggerChange, format) {
 		if (!date)
-			return self.clear();
+			return self.clear(triggerChange);
 
 		setSelectedDate(date, format);
 
