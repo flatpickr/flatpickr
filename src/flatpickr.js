@@ -2273,8 +2273,8 @@ Flatpickr.prototype = {
 
 		const date_orig = date;
 
-		if (date.toFixed) // timestamp
-			date = new Date(date);
+		if (date.toFixed || /^\d{8}/.test(date)) // timestamp
+			date = new Date(parseInt(date, 10));
 
 		else if (typeof date === "string") {
 			const format = typeof givenFormat === "string" ? givenFormat : this.config.dateFormat;
