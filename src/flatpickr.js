@@ -974,7 +974,6 @@ function Flatpickr(element, config) {
 			selectDate(e);
 
 		else if (self.isOpen || self.config.inline) {
-
 			switch (e.key) {
 				case "Enter":
 					if (self.timeContainer && self.timeContainer.contains(e.target))
@@ -987,57 +986,63 @@ function Flatpickr(element, config) {
 
 				case "Escape": // escape
 					e.preventDefault();
-					//(self.altInput || self.input).focus();
 					self.close();
 					break;
 
 				case "ArrowLeft":
-					// if (e.target !== self.input & e.target !== self.altInput) {
-					// 	e.preventDefault();
-					// 	changeMonth(-1);
-					// 	self.currentMonthElement.focus();
-					// }
 					e.preventDefault();
+					if (!e.ctrlKey)
 					focusOnDay(e.target.$i, -1);
 
-					break;
-
-				case "ArrowUp":
-					if (!self.timeContainer || !self.timeContainer.contains(e.target)) {
-						// e.preventDefault();
-						// self.currentYear++;
-						// self.redraw();
-						e.preventDefault();
-						focusOnDay(e.target.$i, -7);
+					else {
+						changeMonth(-1, true);
+						focusOnDay(e.target.$i, 0);
 					}
-					else
-						updateTime(e);
 
 					break;
 
 				case "ArrowRight":
-					// if (e.target !== self.input & e.target !== self.altInput) {
-					// 	e.preventDefault();
-					// 	changeMonth(1);
-					// 	self.currentMonthElement.focus();
-					// }
-					e.preventDefault();
-					focusOnDay(e.target.$i, 1);
+						e.preventDefault();
+					if (!e.ctrlKey)
+						focusOnDay(e.target.$i, 1);
+
+					else {
+						changeMonth(1, true);
+						focusOnDay(e.target.$i, 0);
+					}
 
 					break;
 
-				case "ArrowDown":
-					if (!self.timeContainer || !self.timeContainer.contains(e.target)) {
-						// e.preventDefault();
-						// self.currentYear--;
-						// self.redraw();
-						e.preventDefault();
-						focusOnDay(e.target.$i, 7);
+				case "ArrowUp":
+					e.preventDefault();
+					if (e.ctrlKey) {
+						changeYear(self.currentYear+1);
+						focusOnDay(e.target.$i, 0);
 					}
+
+					else if (!self.timeContainer || !self.timeContainer.contains(e.target))
+						focusOnDay(e.target.$i, -7);
+					
 					else
 						updateTime(e);
 
 					break;
+
+				case "ArrowDown":
+						e.preventDefault();
+					if (e.ctrlKey) {
+						changeYear(self.currentYear-1);
+						focusOnDay(e.target.$i, 0);
+					}
+
+					else if (!self.timeContainer || !self.timeContainer.contains(e.target))	
+						focusOnDay(e.target.$i, 7);
+
+					else
+						updateTime(e);
+
+					break;
+			
 
 				case "Tab":
 					if (e.target === self.hourElement) {
