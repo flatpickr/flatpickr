@@ -90,8 +90,8 @@ function Flatpickr(element, config) {
 	function setHoursFromInputs() {
 		if (!self.config.enableTime) return;
 
-		var hours = parseInt(self.hourElement.value, 10) || 0,
-		    minutes = parseInt(self.minuteElement.value, 10) || 0,
+		var hours = (parseInt(self.hourElement.value, 10) || 0) % (self.amPM ? 12 : 24),
+		    minutes = (parseInt(self.minuteElement.value, 10) || 0) % 60,
 		    seconds = self.config.enableSeconds ? parseInt(self.secondElement.value, 10) || 0 : 0;
 
 		if (self.amPM) hours = hours % 12 + 12 * (self.amPM.textContent === "PM");
@@ -624,8 +624,6 @@ function Flatpickr(element, config) {
 		updateNavigationCurrentMonth();
 		buildDays();
 
-		if (!self.config.noCalendar) self.days.focus();
-
 		triggerEvent("MonthChange");
 	}
 
@@ -766,7 +764,6 @@ function Flatpickr(element, config) {
 
 	function onKeyDown(e) {
 		if (e.target === (self.altInput || self.input) && e.key === "Enter") selectDate(e);else if (self.isOpen || self.config.inline) {
-
 			switch (e.key) {
 				case "Enter":
 					if (self.timeContainer && self.timeContainer.contains(e.target)) updateValue();else selectDate(e);
@@ -776,51 +773,42 @@ function Flatpickr(element, config) {
 				case "Escape":
 					// escape
 					e.preventDefault();
-					//(self.altInput || self.input).focus();
 					self.close();
 					break;
 
 				case "ArrowLeft":
-					// if (e.target !== self.input & e.target !== self.altInput) {
-					// 	e.preventDefault();
-					// 	changeMonth(-1);
-					// 	self.currentMonthElement.focus();
-					// }
 					e.preventDefault();
-					focusOnDay(e.target.$i, -1);
-
-					break;
-
-				case "ArrowUp":
-					if (!self.timeContainer || !self.timeContainer.contains(e.target)) {
-						// e.preventDefault();
-						// self.currentYear++;
-						// self.redraw();
-						e.preventDefault();
-						focusOnDay(e.target.$i, -7);
-					} else updateTime(e);
+					if (!e.ctrlKey) focusOnDay(e.target.$i, -1);else {
+						changeMonth(-1, true);
+						focusOnDay(e.target.$i, 0);
+					}
 
 					break;
 
 				case "ArrowRight":
-					// if (e.target !== self.input & e.target !== self.altInput) {
-					// 	e.preventDefault();
-					// 	changeMonth(1);
-					// 	self.currentMonthElement.focus();
-					// }
 					e.preventDefault();
-					focusOnDay(e.target.$i, 1);
+					if (!e.ctrlKey) focusOnDay(e.target.$i, 1);else {
+						changeMonth(1, true);
+						focusOnDay(e.target.$i, 0);
+					}
+
+					break;
+
+				case "ArrowUp":
+					e.preventDefault();
+					if (e.ctrlKey) {
+						changeYear(self.currentYear + 1);
+						focusOnDay(e.target.$i, 0);
+					} else if (!self.timeContainer || !self.timeContainer.contains(e.target)) focusOnDay(e.target.$i, -7);else updateTime(e);
 
 					break;
 
 				case "ArrowDown":
-					if (!self.timeContainer || !self.timeContainer.contains(e.target)) {
-						// e.preventDefault();
-						// self.currentYear--;
-						// self.redraw();
-						e.preventDefault();
-						focusOnDay(e.target.$i, 7);
-					} else updateTime(e);
+					e.preventDefault();
+					if (e.ctrlKey) {
+						changeYear(self.currentYear - 1);
+						focusOnDay(e.target.$i, 0);
+					} else if (!self.timeContainer || !self.timeContainer.contains(e.target)) focusOnDay(e.target.$i, 7);else updateTime(e);
 
 					break;
 
@@ -833,6 +821,22 @@ function Flatpickr(element, config) {
 						self.amPM.focus();
 					}
 
+					break;
+
+				case "a":
+					if (e.target === self.amPM) {
+						self.amPM.textContent = "AM";
+						setHoursFromInputs();
+						updateValue();
+					}
+					break;
+
+				case "p":
+					if (e.target === self.amPM) {
+						self.amPM.textContent = "PM";
+						setHoursFromInputs();
+						updateValue();
+					}
 					break;
 
 				default:
