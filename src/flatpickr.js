@@ -105,8 +105,8 @@ function Flatpickr(element, config) {
 		if (!self.config.enableTime)
 			return;
 
-		let hours = (parseInt(self.hourElement.value, 10) || 0),
-			minutes = (parseInt(self.minuteElement.value, 10) || 0),
+		let hours = (parseInt(self.hourElement.value, 10) || 0) % (self.amPM ? 12 : 24),
+			minutes = (parseInt(self.minuteElement.value, 10) || 0) % 60,
 			seconds = self.config.enableSeconds
 				? (parseInt(self.secondElement.value, 10) || 0)
 				: 0;
@@ -779,9 +779,6 @@ function Flatpickr(element, config) {
 		updateNavigationCurrentMonth();
 		buildDays();
 
-		if (!(self.config.noCalendar))
-			self.days.focus();
-
 		triggerEvent("MonthChange");
 	}
 
@@ -992,7 +989,7 @@ function Flatpickr(element, config) {
 				case "ArrowLeft":
 					e.preventDefault();
 					if (!e.ctrlKey)
-					focusOnDay(e.target.$i, -1);
+						focusOnDay(e.target.$i, -1);
 
 					else {
 						changeMonth(-1, true);
@@ -1000,9 +997,9 @@ function Flatpickr(element, config) {
 					}
 
 					break;
-
+				
 				case "ArrowRight":
-						e.preventDefault();
+					e.preventDefault();
 					if (!e.ctrlKey)
 						focusOnDay(e.target.$i, 1);
 
@@ -1029,7 +1026,7 @@ function Flatpickr(element, config) {
 					break;
 
 				case "ArrowDown":
-						e.preventDefault();
+					e.preventDefault();
 					if (e.ctrlKey) {
 						changeYear(self.currentYear-1);
 						focusOnDay(e.target.$i, 0);
