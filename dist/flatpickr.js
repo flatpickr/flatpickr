@@ -1171,7 +1171,7 @@ function Flatpickr(element, config) {
 	}
 
 	function setDate(date, triggerChange, format) {
-		if (!date) return self.clear();
+		if (!date) return self.clear(triggerChange);
 
 		setSelectedDate(date, format);
 
@@ -1923,8 +1923,8 @@ Flatpickr.prototype = {
 
 		var date_orig = date;
 
-		if (date.toFixed) // timestamp
-			date = new Date(date);else if (typeof date === "string") {
+		if (date.toFixed || /^\d{8}/.test(date)) // timestamp
+			date = new Date(parseInt(date, 10));else if (typeof date === "string") {
 			var format = typeof givenFormat === "string" ? givenFormat : this.config.dateFormat;
 			date = date.trim();
 
