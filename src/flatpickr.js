@@ -1051,6 +1051,22 @@ function Flatpickr(element, config) {
 					}
 
 					break;
+				
+				case "a":
+					if (e.target === self.amPM) {
+						self.amPM.textContent = "AM";
+						setHoursFromInputs();
+						updateValue();
+					}
+					break;
+				
+				case "p":
+					if (e.target === self.amPM) {
+						self.amPM.textContent = "PM";
+						setHoursFromInputs();
+						updateValue();
+					}
+					break;
 
 				default: break;
 
