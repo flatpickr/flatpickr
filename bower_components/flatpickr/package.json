@@ -1,6 +1,6 @@
 {
   "name": "flatpickr",
-  "version": "2.4.7",
+  "version": "2.4.8",
   "description": "A lightweight, powerful javascript datetime picker",
   "scripts": {
     "build": "run-p build:*",
@@ -17,8 +17,8 @@
     "build:style:unmin": "stylus < ./src/style/flatpickr.styl > dist/flatpickr.css",
     "dev": "run-p dev:*",
     "dev:plugins": "onchange \"src/plugins/**/*\" -- run-s build:extra:plugins",
-    "dev:style": "onchange \"src/style/**/*\" -- run-s build:style",
-    "dev:script": "onchange \"src/flatpickr.js\" -- run-s lint build:script",
+    "dev:style": "onchange \"src/style/**/*\" -- run-p build:style:unmin build:style:themes",
+    "dev:script": "onchange \"src/flatpickr.js\" -- run-s lint build:script:unmin",
     "lint": "eslint src/flatpickr.js || (exit 0)",
     "serve": "run-p serve:*",
     "serve:http": "http-server -o --silent",
@@ -30,22 +30,23 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "babel-cli": "^6.23.0",
+    "babel-cli": "^6.24.0",
     "babel-plugin-transform-object-assign": "^6.22.0",
     "babel-plugin-transform-remove-strict-mode": "0.0.2",
-    "babel-preset-es2015": "^6.22.0",
+    "babel-preset-es2015": "^6.24.0",
     "coveralls": "^2.12.0",
-    "eslint": "^3.17.1",
+    "eslint": "^3.18.0",
     "http-server": "^0.9.0",
     "jest": "^19.0.2",
-    "livereload": "^0.6.0",
+    "livereload": "^0.6.2",
     "ncp": "^2.0.0",
     "npm-run-all": "^4.0.2",
     "onchange": "^3.2.1",
+    "opencollective-postinstall": "^1.0.14",
     "rtlcss": "^2.1.2",
     "semver": "^5.3.0",
     "stylus": "^0.54.5",
-    "uglify-js": "^2.8.8"
+    "uglify-js": "^2.8.16"
   },
   "main": "dist/flatpickr.js",
   "style": "dist/flatpickr.css",
@@ -67,5 +68,10 @@
     "time",
     "picker",
     "lightweight"
-  ]
+  ],
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/flatpickr",
+    "logo": "https://opencollective.com/opencollective/logo.txt"
+  }
 }
