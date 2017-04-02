@@ -1,3 +1,5 @@
+'use strict';
+
 const Flatpickr = require("../src/flatpickr.js");
 Flatpickr.l10ns.ru = require("../dist/l10n/ru.js").ru;
 
@@ -546,36 +548,58 @@ describe('flatpickr', () => {
 
 			simulate("keydown", fp.days.childNodes[15], {
 				key: "Enter"
-			});
+			}, KeyboardEvent);
 
 			expect(fp.selectedDates.length).toBe(1);
-
 			simulate("keydown", fp.calendarContainer, {
 				key: "Escape"
-			});
+			}, KeyboardEvent);
+
 			expect(fp.isOpen).toEqual(false);
+		});
 
-			fp.open();
+		it("onKeyDown: arrow nav", () => {
+			createInstance();
+			fp.jumpToDate("2017-01-01");
 
-			simulate("keydown", fp.calendarContainer, {
-				key: "ArrowLeft"
-			});
+			fp.input.focus();
+			expect(fp.isOpen).toEqual(true);
 
-			expect(document.activeElement === fp.days.childNodes[0]).toEqual(true);
+			simulate("keydown", fp.input, {key: "ArrowLeft", bubbles: false}, KeyboardEvent);
 
-			simulate("keydown", fp.altInput, {	key: "ArrowLeft" });
-
-			expect(fp.currentMonth).toBe(1);
-			expect(document.activeElement.dateObj.getMonth()).toEqual(0);
-			expect(document.activeElement.dateObj.getDate()).toEqual(31);
-
-			simulate("keydown", document.activeElement, {	key: "ArrowRight" });
-
-			expect(document.activeElement.dateObj.getMonth()).toEqual(1);
+			expect(fp.currentMonth).toBe(0);
 			expect(document.activeElement.dateObj.getDate()).toEqual(1);
+
+			simulate("keydown", document.activeElement, {key: "ArrowLeft"});
+			expect(fp.currentMonth).toBe(11);
+			expect(fp.currentYear).toBe(2016);
+			expect(document.activeElement.dateObj.getDate()).toEqual(7);
+
+			simulate("keydown", document.activeElement, {key: "ArrowRight"});
+			expect(document.activeElement.dateObj.getDate()).toEqual(1);
+			expect(fp.currentMonth).toBe(0);
+			expect(fp.currentYear).toBe(2017);
+
+			simulate("keydown", document.activeElement, {key: "ArrowUp"});
+			simulate("keydown", document.activeElement, {key: "ArrowUp"});
+			expect(fp.currentMonth).toBe(11);
+			expect(fp.currentYear).toBe(2016);
+			expect(document.activeElement.dateObj.getDate()).toEqual(25);
+
+			simulate("keydown", document.activeElement, {key: "ArrowDown"});
+			simulate("keydown", document.activeElement, {key: "ArrowDown"});
+			expect(fp.currentMonth).toBe(0);
+			expect(fp.currentYear).toBe(2017);
+			expect(document.activeElement.dateObj.getDate()).toEqual(1);
+
+			simulate("keydown", document.activeElement, {key: "ArrowRight", ctrlKey: true});
 			expect(fp.currentMonth).toBe(1);
+			expect(fp.currentYear).toBe(2017);
 
-
+			simulate("keydown", document.activeElement, {key: "ArrowLeft", ctrlKey: true});
+			simulate("keydown", document.activeElement, {key: "ArrowLeft", ctrlKey: true});
+			expect(fp.currentMonth).toBe(11);
+			expect(fp.currentYear).toBe(2016);
 		});
 
 		it("enabling dates by function", () => {
