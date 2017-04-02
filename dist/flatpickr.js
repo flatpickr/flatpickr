@@ -63,8 +63,7 @@ function Flatpickr(element, config) {
 	}
 
 	function bindToInstance(fn) {
-		if (fn && fn.bind) return fn.bind(self);
-		return fn;
+		return fn.bind(self);
 	}
 
 	function updateTime(e) {
@@ -404,7 +403,7 @@ function Flatpickr(element, config) {
 		if (targetNode) targetNode.focus();else if (offset > 0) {
 			self.changeMonth(1);
 			self.days.childNodes[newIndex % 42].focus();
-		} else {
+		} else if (offset < 0) {
 			self.changeMonth(-1);
 			self.days.childNodes[42 + newIndex].focus();
 		}
@@ -431,7 +430,7 @@ function Flatpickr(element, config) {
 			self.maxRangeDate = new Date(self.currentYear, self.currentMonth + 1, (42 - firstOfMonth) % daysInMonth);
 		}
 
-		if (self.days.firstChild) self.days.textContent = "";
+		clearNode(self.days);
 
 		// prepend days from the ending of previous month
 		for (; dayNumber <= self.prevMonthDays; dayNumber++, dayIndex++) {
@@ -456,6 +455,12 @@ function Flatpickr(element, config) {
 
 		self.days.appendChild(days);
 		return self.days;
+	}
+
+	function clearNode(node) {
+		while (node.firstChild) {
+			node.removeChild(node.firstChild);
+		}
 	}
 
 	function buildMonthNav() {
@@ -1332,7 +1337,7 @@ function Flatpickr(element, config) {
 		}
 
 		self.mobileInput.addEventListener("change", function (e) {
-			self.latestSelectedDateObj = self.parseDate(e.target.value);
+			self.latestSelectedDateObj = self.parseDate(e.target.value, false, self.mobileFormatStr);
 			self.setDate(self.latestSelectedDateObj);
 			triggerEvent("Change");
 			triggerEvent("Close");
