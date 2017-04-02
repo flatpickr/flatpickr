@@ -623,7 +623,32 @@ describe('flatpickr', () => {
 
 
 	describe("UI", () => {
-		it("static mode", () => {
+		it("mode: multiple", () => {
+			createInstance({
+				mode: "multiple"
+			});
+
+			fp.jumpToDate("2017-1-1");
+			fp.open();
+
+			simulate("keydown", fp.days.childNodes[0], {key: "Enter"});
+			expect(fp.selectedDates.length).toBe(1);
+
+			simulate("keydown", fp.days.childNodes[0], {key: "Enter"});
+			expect(fp.selectedDates.length).toBe(0);
+		});
+
+		it("switch month to selectedDate", () => {
+			createInstance();
+			fp.jumpToDate("2017-1-1");
+			expect(fp.currentMonth).toBe(0);
+
+			fp.days.childNodes[41].click();
+			expect(fp.selectedDates.length).toBe(1);
+			expect(fp.currentMonth).toBe(1);
+		});
+
+		it("static calendar", () => {
 			createInstance({
 				static: true
 			});
@@ -634,10 +659,22 @@ describe('flatpickr', () => {
 			expect(fp.element.parentNode.childNodes[1]).toEqual(fp.calendarContainer);
 		});
 
-		it("mobile mode", () => {
+		it("mobile calendar", () => {
 			mockAgent = "Android";
-			createInstance();
+			createInstance({
+				enableTime: true
+			});
 			expect(fp.isMobile).toBe(true);
+
+			fp.mobileInput.value = "2016-10-20T02:30";
+			simulate("change", fp.mobileInput);
+
+			expect(fp.selectedDates.length).toBe(1);
+			expect(fp.latestSelectedDateObj.getFullYear()).toBe(2016);
+			expect(fp.latestSelectedDateObj.getMonth()).toBe(9);
+			expect(fp.latestSelectedDateObj.getDate()).toBe(20);
+			expect(fp.latestSelectedDateObj.getHours()).toBe(2);
+			expect(fp.latestSelectedDateObj.getMinutes()).toBe(30);
 		});
 
 		it("selectDate() + onChange() through GUI", () => {
@@ -721,6 +758,7 @@ describe('flatpickr', () => {
 				minDate: "2017-1-01 3:35",
 			});
 
+			expect(!!fp.minDateHasTime).toBe(true);
 			fp.hourElement.parentNode.childNodes[2].click();
 			expect(fp.hourElement.value).toEqual("03");
 			expect(fp.minuteElement.value).toEqual("35");
