@@ -45,9 +45,9 @@ Closes the calendar.
 
 Destroys the Flatpickr instance, cleans up - removes event listeners, restores inputs, etc.
 
-### `formatDate(formatStr, dateObj)`
+### `formatDate(dateObj, formatStr)`
 
-`formatStr`  is a string consisting of formatting tokens, and `dateObj`  is a Date.
+`dateObj` is a Date, and `formatStr` is a string consisting of formatting tokens.
 
 **Return Value**
 A string representation of`dateObj`,  formatted as per `formatStr`
