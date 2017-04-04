@@ -352,9 +352,6 @@
 .flatpickr-day.inRange,
 .flatpickr-day.prevMonthDay.inRange,
 .flatpickr-day.nextMonthDay.inRange,
-.flatpickr-day.today.inRange,
-.flatpickr-day.prevMonthDay.today.inRange,
-.flatpickr-day.nextMonthDay.today.inRange,
 .flatpickr-day:hover,
 .flatpickr-day.prevMonthDay:hover,
 .flatpickr-day.nextMonthDay:hover,
@@ -391,6 +388,7 @@
 .flatpickr-day.startRange.nextMonthDay,
 .flatpickr-day.endRange.nextMonthDay {
   background: #ff8a65;
+  box-shadow: none !important;
   color: #fff;
   border-color: #ff8a65;
 }
