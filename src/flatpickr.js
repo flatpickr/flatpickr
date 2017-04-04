@@ -939,7 +939,7 @@ function Flatpickr(element, config) {
 		if (!self.config.enable.length && !self.config.disable.length)
 			return true;
 
-		const dateToCheck = self.parseDate(date, true); // timeless
+		const dateToCheck = self.parseDate(date, null, true); // timeless
 
 		const bool = self.config.enable.length > 0,
 			array = bool ? self.config.enable : self.config.disable;
@@ -954,7 +954,7 @@ function Flatpickr(element, config) {
 				// disabled by date
 				return bool;
 
-			else if (typeof d === "string" && self.parseDate(d, true).getTime() === dateToCheck.getTime())
+			else if (typeof d === "string" && self.parseDate(d, null, true).getTime() === dateToCheck.getTime())
 				// disabled by date string
 				return bool;
 
@@ -1085,7 +1085,7 @@ function Flatpickr(element, config) {
 			return;
 
 		let hoverDate = e.target.dateObj,
-			initialDate = self.parseDate(self.selectedDates[0], true),
+			initialDate = self.parseDate(self.selectedDates[0], null, true),
 			rangeStartDate = Math.min(hoverDate.getTime(), self.selectedDates[0].getTime()),
 			rangeEndDate = Math.max(hoverDate.getTime(), self.selectedDates[0].getTime()),
 			containsDisabled = false;
@@ -1468,27 +1468,27 @@ function Flatpickr(element, config) {
 
 	function setSelectedDate(inputDate, format) {
 		if (Array.isArray(inputDate))
-			self.selectedDates = inputDate.map(d => self.parseDate(d, false, format));
+			self.selectedDates = inputDate.map(d => self.parseDate(d, format));
 
 		else if (inputDate instanceof Date || !isNaN(inputDate))
-			self.selectedDates = [self.parseDate(inputDate)];
+			self.selectedDates = [self.parseDate(inputDate, format)];
 
 		else if (inputDate && inputDate.substring) {
 			switch (self.config.mode) {
 				case "single":
-					self.selectedDates = [self.parseDate(inputDate, false, format)];
+					self.selectedDates = [self.parseDate(inputDate, format)];
 					break;
 
 				case "multiple":
 					self.selectedDates = inputDate
 						.split("; ")
-						.map(date => self.parseDate(date, false, format));
+						.map(date => self.parseDate(date, format));
 					break;
 
 				case "range":
 					self.selectedDates = inputDate
 						.split(self.l10n.rangeSeparator)
-						.map(date => self.parseDate(date, false, format));
+						.map(date => self.parseDate(date, format));
 
 					break;
 
@@ -1526,7 +1526,7 @@ function Flatpickr(element, config) {
 		function parseDateRules(arr) {
 			for (let i = arr.length; i--;) {
 				if (typeof arr[i] === "string" || +arr[i])
-					arr[i] = self.parseDate(arr[i], true);
+					arr[i] = self.parseDate(arr[i], null, true);
 
 				else if (arr[i] && arr[i].from && arr[i].to) {
 					arr[i].from = self.parseDate(arr[i].from);
@@ -2239,8 +2239,12 @@ Flatpickr.prototype = {
 		F: function(dateObj, monthName) {
 			dateObj.setMonth(this.l10n.months.longhand.indexOf(monthName));
 		},
-		H: (dateObj, hour) => dateObj.setHours(parseFloat(hour)),
-		J: (dateObj, day) => dateObj.setDate(parseFloat(day)),
+		H: (dateObj, hour) => {
+			dateObj.setHours(parseFloat(hour))
+		},
+		J: (dateObj, day) => {
+			dateObj.setDate(parseFloat(day))
+		},
 		K: (dateObj, amPM) => {
 			const hours = dateObj.getHours();
 
@@ -2250,21 +2254,43 @@ Flatpickr.prototype = {
 		M: function(dateObj, shortMonth) {
 			dateObj.setMonth(this.l10n.months.shorthand.indexOf(shortMonth));
 		},
-		S: (dateObj, seconds) => dateObj.setSeconds(seconds),
-		W: () => {},
-		Y: (dateObj, year) => dateObj.setFullYear(year),
-		Z: (dateObj, ISODate) => dateObj = new Date(ISODate),
+		S: (dateObj, seconds) => {
+			dateObj.setSeconds(seconds);
+		},
+		U: (dateObj, unixSeconds) => new Date(parseFloat(unixSeconds, 10)*1000),
 
-		d: (dateObj, day) => dateObj.setDate(parseFloat(day)),
-		h: (dateObj, hour) => dateObj.setHours(parseFloat(hour)),
-		i: (dateObj, minutes) => dateObj.setMinutes(parseFloat(minutes)),
-		j: (dateObj, day) => dateObj.setDate(parseFloat(day)),
-		l: () => {},
-		m: (dateObj, month) => dateObj.setMonth(parseFloat(month) - 1),
-		n: (dateObj, month) => dateObj.setMonth(parseFloat(month) - 1),
-		s: (dateObj, seconds) => dateObj.setSeconds(parseFloat(seconds)),
-		w: () => {},
-		y: (dateObj, year) => dateObj.setFullYear(2000 + parseFloat(year)),
+		W: () => {},
+		Y: (dateObj, year) =>  {
+			dateObj.setFullYear(year);
+		},
+		Z: (dateObj, ISODate) => new Date(ISODate),
+
+		d: (dateObj, day) =>  {
+			dateObj.setDate(parseFloat(day))
+		},
+		h: (dateObj, hour) =>  {
+			dateObj.setHours(parseFloat(hour))
+		},
+		i: (dateObj, minutes) =>  {
+			dateObj.setMinutes(parseFloat(minutes))
+		},
+		j: (dateObj, day) =>  {
+			dateObj.setDate(parseFloat(day))
+		},
+		l: () =>  {},
+		m: (dateObj, month) =>  {
+			dateObj.setMonth(parseFloat(month) - 1)
+		},
+		n: (dateObj, month) =>  {
+			dateObj.setMonth(parseFloat(month) - 1)
+		},
+		s: (dateObj, seconds) =>  {
+			dateObj.setSeconds(parseFloat(seconds))
+		},
+		w: () =>  {},
+		y: (dateObj, year) =>  {
+			dateObj.setFullYear(2000 + parseFloat(year))
+		},
 	},
 
 	tokenRegex: {
@@ -2275,6 +2301,7 @@ Flatpickr.prototype = {
 		K:"(\\w+)",
 		M:"(\\w+)",
 		S:"(\\d\\d|\\d)",
+		U: "(.+)",
 		Y:"(\\d{4})",
 		Z:"(.+)",
 		d:"(\\d\\d|\\d)",
@@ -2291,32 +2318,35 @@ Flatpickr.prototype = {
 
 	pad: number => `0${number}`.slice(-2),
 
-	parseDate (date, timeless, givenFormat) {
+	parseDate (date, givenFormat, timeless) {
 		if (!date)
 			return null;
 
 		const date_orig = date;
 
-		if (date.toFixed || /^\d{8}/.test(date)) // timestamp
-			date = new Date(parseInt(date, 10));
+		if (date instanceof Date)
+			date = new Date(date.getTime()); // create a copy
 
-		else if (typeof date === "string") {
-			const format = typeof givenFormat === "string" ? givenFormat : this.config.dateFormat;
-			date = date.trim();
+		else {
+			const format = givenFormat || this.config.dateFormat;
+			date = String(date).trim();
 
 			if (date === "today") {
 				date = new Date();
 				timeless = true;
 			}
 
-			else if (this.config && this.config.parseDate)
+			else if (format !== "U" && /\d{8}/.test(date)) //timestamp
+				date = new Date(date_orig);
+
+			else if (this.config.parseDate)
 				date = this.config.parseDate(date);
 
 			else if (/Z$/.test(date) || /GMT$/.test(date)) // datestrings w/ timezone
 				date = new Date(date);
 
 			else {
-				const parsedDate = this.config.noCalendar
+				let parsedDate = this.config.noCalendar
 					? new Date(new Date().setHours(0,0,0,0))
 					: new Date(new Date().getFullYear(), 0, 1, 0, 0, 0 ,0);
 
@@ -2326,23 +2356,25 @@ Flatpickr.prototype = {
 					const token = format[i];
 					const isBackSlash = token === "\\";
 					const escaped = format[i - 1] === "\\" || isBackSlash;
+
 					if (this.tokenRegex[token] && !escaped) {
 						regexStr += this.tokenRegex[token];
 						const match = new RegExp(regexStr).exec(date);
-						if (match && (matched = true))
-							this.revFormat[token](parsedDate, match[++matchIndex]);
+						if (match && (matched = true)) {
+							parsedDate =
+								this.revFormat[token](parsedDate, match[++matchIndex])
+								|| parsedDate;
+						}
 					}
 
 					else if (!isBackSlash)
 						regexStr += "."; // don't really care
+
 				}
 
 				date = matched	? parsedDate : null;
 			}
 		}
-
-		else if (date instanceof Date)
-			date = new Date(date.getTime()); // create a copy
 
 		/* istanbul ignore next */
 		if (!(date instanceof Date)) {
