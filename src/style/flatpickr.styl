@@ -394,7 +394,7 @@ $invertedBg = invert($calendarBackground)
     text-align center
 
     &, &.prevMonthDay, &.nextMonthDay
-        &.inRange, &.today.inRange,  &:hover, &:focus
+        &.inRange, &:hover, &:focus
             cursor pointer
             outline 0
             background $dayHoverBackground
@@ -415,6 +415,7 @@ $invertedBg = invert($calendarBackground)
     &.selected, &.startRange, &.endRange
         &, &:focus, &:hover, &.prevMonthDay, &.nextMonthDay
             background $selectedDayBackground
+            box-shadow none !important
 
             if $selectedDayForeground is defined
                 color $selectedDayForeground
