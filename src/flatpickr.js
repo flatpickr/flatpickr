@@ -2309,8 +2309,8 @@ Flatpickr.prototype = {
 				timeless = true;
 			}
 
-			else if (this.config && this.config.parseDate)
-				date = this.config.parseDate(date);
+			else if (self.config && self.config.parseDate)
+				date = self.config.parseDate(date);
 
 			else if (/Z$/.test(date) || /GMT$/.test(date)) // datestrings w/ timezone
 				date = new Date(date);
@@ -2351,7 +2351,7 @@ Flatpickr.prototype = {
 			return null;
 		}
 
-		if (this.config && this.config.utc && !date.fp_isUTC)
+		if (self.config && self.config.utc && !date.fp_isUTC)
 			date = date.fp_toUTC();
 
 		if (timeless === true)
