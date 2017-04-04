@@ -1546,7 +1546,7 @@ function Flatpickr(element, config) {
 		if (self.config.enable.length)
 			self.config.enable = parseDateRules(self.config.enable);
 
-		setSelectedDate(self.config.defaultDate || self.input.value);
+		setSelectedDate(self.config.defaultDate || self.input.value, self.config.dateFormat);
 
 		const initialDate = (self.selectedDates.length
 			? self.selectedDates[0]
@@ -1709,12 +1709,7 @@ function Flatpickr(element, config) {
 		}
 
 		self.mobileInput.addEventListener("change", e => {
-			self.latestSelectedDateObj = self.parseDate(
-				e.target.value,
-				false,
-				self.mobileFormatStr
-			);
-			self.setDate(self.latestSelectedDateObj);
+			self.setDate(e.target.value, false, self.mobileFormatStr);
 			triggerEvent("Change");
 			triggerEvent("Close");
 		});
@@ -1722,9 +1717,8 @@ function Flatpickr(element, config) {
 
 	function toggle() {
 		if (self.isOpen)
-			self.close();
-		else
-			self.open();
+			return self.close();
+		self.open();
 	}
 
 	function triggerEvent(event, data) {
@@ -1881,13 +1875,6 @@ function Flatpickr(element, config) {
 			isWheel = e.type === "wheel",
 			isIncrement = e.type === "increment",
 			input = e.target;
-
-		if ((e.type !== "input" && !isKeyDown) &&
-			(e.target.value || e.target.textContent).length >= 2 // typed two digits
-		) {
-			e.target.focus();
-			e.target.blur();
-		}
 
 		if (self.amPM && e.target === self.amPM)
 			return e.target.textContent = ["AM", "PM"][(e.target.textContent === "AM") | 0];
