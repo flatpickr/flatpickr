@@ -477,15 +477,10 @@ function Flatpickr(element, config) {
 	}
 
 	function focusOnDay(currentIndex, offset) {
-		if (currentIndex === undefined)
-			currentIndex = self.selectedDateElem !== undefined ?
-				self.selectedDateElem.$i
-				: self.todayDateElem  !== undefined
-					? self.todayDateElem.$i
-					: 0;
-
 		let newIndex = currentIndex + offset || 0,
-			targetNode = self.days.childNodes[newIndex];
+			targetNode = currentIndex !== undefined 
+				? self.days.childNodes[newIndex]
+				: self.selectedDateElem || self.todayDateElem || self.days.childNodes[0];
 
 		if (targetNode === undefined) {
 			if (offset > 0) {
@@ -1134,11 +1129,12 @@ function Flatpickr(element, config) {
 
 			elem.classList.add(hoverDate < self.selectedDates[0] ? "startRange" : "endRange");
 
-			if (initialDate > hoverDate && timestamp === initialDate.getTime())
-				self.days.childNodes[i].classList.add("endRange");
-
-			else if (initialDate < hoverDate && timestamp === initialDate.getTime())
+			if (initialDate < hoverDate && timestamp === initialDate.getTime())
 				self.days.childNodes[i].classList.add("startRange");
+			
+
+			else if (initialDate > hoverDate && timestamp === initialDate.getTime())
+				self.days.childNodes[i].classList.add("endRange");
 
 			else if (timestamp >= minRangeDate && timestamp <= maxRangeDate)
 				self.days.childNodes[i].classList.add("inRange");
