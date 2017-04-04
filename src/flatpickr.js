@@ -204,10 +204,11 @@ function Flatpickr(element, config) {
 		};
 		self.debouncedChange = debounce(self.triggerChange, 300);
 
-		if (self.config.mode === "range" && self.days)
-			self.days.addEventListener("mouseover", onMouseOver);
+		if (self.config.mode === "range" && self.days) {
+			self.days.addEventListener("mouseover", e => onMouseOver(e.target));
+		}
 
-		self.calendarContainer.addEventListener("keydown", onKeyDown);
+		document.body.addEventListener("keydown", onKeyDown);
 
 		if (!self.config.static)
 			(self.altInput || self.input).addEventListener("keydown", onKeyDown);
@@ -477,23 +478,31 @@ function Flatpickr(element, config) {
 
 	function focusOnDay(currentIndex, offset) {
 		if (currentIndex === undefined)
-			currentIndex = self.todayDateElem.$i || 0;
+			currentIndex = self.selectedDateElem !== undefined ?
+				self.selectedDateElem.$i
+				: self.todayDateElem  !== undefined
+					? self.todayDateElem.$i
+					: 0;
 
-		const newIndex = currentIndex + offset || 0,
+		let newIndex = currentIndex + offset || 0,
 			targetNode = self.days.childNodes[newIndex];
 
-		if (targetNode)
-			targetNode.focus();
+		if (targetNode === undefined) {
+			if (offset > 0) {
+				self.changeMonth(1);
+				targetNode = self.days.childNodes[newIndex % 42].focus();
+			}
 
-		else if (offset > 0) {
-			self.changeMonth(1);
-			self.days.childNodes[newIndex % 42].focus();
+			else if (offset < 0) {
+				self.changeMonth(-1);
+				targetNode = self.days.childNodes[42 + newIndex].focus();
+			}
 		}
 
-		else if (offset < 0) {
-			self.changeMonth(-1);
-			self.days.childNodes[42 + newIndex].focus();
-		}
+		targetNode.focus();
+
+		if (self.config.mode === "range")
+			onMouseOver(targetNode);
 	}
 
 	function buildDays(year, month) {
@@ -504,7 +513,8 @@ function Flatpickr(element, config) {
 			isRangeMode = self.config.mode === "range";
 
 		self.prevMonthDays = self.utils.getDaysinMonth((self.currentMonth - 1 + 12) % 12);
-		self.todayDateElem = null;
+		self.selectedDateElem = undefined;
+		self.todayDateElem = undefined;
 
 		const daysInMonth = self.utils.getDaysinMonth(),
 			days = window.document.createDocumentFragment();
@@ -969,10 +979,12 @@ function Flatpickr(element, config) {
 	}
 
 	function onKeyDown(e) {
+		
 		if (e.target === (self.altInput || self.input) && e.key === "Enter")
 			selectDate(e);
 
 		else if (self.isOpen || self.config.inline) {
+			
 			switch (e.key) {
 				case "Enter":
 					if (self.timeContainer && self.timeContainer.contains(e.target))
@@ -1075,11 +1087,11 @@ function Flatpickr(element, config) {
 		}
 	}
 
-	function onMouseOver(e) {
-		if (self.selectedDates.length !== 1 || !e.target.classList.contains("flatpickr-day"))
+	function onMouseOver(elem) {
+		if (self.selectedDates.length !== 1 || !elem.classList.contains("flatpickr-day"))
 			return;
 
-		let hoverDate = e.target.dateObj,
+		let hoverDate = elem.dateObj,
 			initialDate = self.parseDate(self.selectedDates[0], null, true),
 			rangeStartDate = Math.min(hoverDate.getTime(), self.selectedDates[0].getTime()),
 			rangeEndDate = Math.max(hoverDate.getTime(), self.selectedDates[0].getTime()),
@@ -1120,7 +1132,7 @@ function Flatpickr(element, config) {
 			const minRangeDate = Math.max(self.minRangeDate.getTime(), rangeStartDate),
 				maxRangeDate = Math.min(self.maxRangeDate.getTime(), rangeEndDate);
 
-			e.target.classList.add(hoverDate < self.selectedDates[0] ? "startRange" : "endRange");
+			elem.classList.add(hoverDate < self.selectedDates[0] ? "startRange" : "endRange");
 
 			if (initialDate > hoverDate && timestamp === initialDate.getTime())
 				self.days.childNodes[i].classList.add("endRange");
@@ -1427,11 +1439,12 @@ function Flatpickr(element, config) {
 
 		updateValue();
 
-		setTimeout(() => self.showTimeInput = true, 50);
+		if (self.config.enableTime)
+			setTimeout(() => self.showTimeInput = true, 50);
 
 		if (self.config.mode === "range") {
 			if(self.selectedDates.length === 1) {
-				onMouseOver(e);
+				onMouseOver(e.target);
 
 				self._hidePrevMonthArrow = self._hidePrevMonthArrow ||
 					self.minRangeDate > self.days.childNodes[0].dateObj;
