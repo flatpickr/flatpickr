@@ -477,7 +477,7 @@ function Flatpickr(element, config) {
 
 	function focusOnDay(currentIndex, offset) {
 		if (currentIndex === undefined)
-			return (self.todayDateElem || self.days.childNodes[0]).focus();
+			currentIndex = self.todayDateElem.$i || 0;
 
 		const newIndex = currentIndex + offset || 0,
 			targetNode = self.days.childNodes[newIndex];
@@ -989,56 +989,51 @@ function Flatpickr(element, config) {
 					break;
 
 				case "ArrowLeft":
+				case "ArrowRight": {
 					e.preventDefault();
-					if (!e.ctrlKey)
-						focusOnDay(e.target.$i, -1);
+					const isTimeObj = self.timeContainer 
+						&& self.timeContainer.contains(e.target);
+					if (self.days) {
+						const delta = e.key === "ArrowRight" ? 1 : -1;
+						if (!e.ctrlKey)
+							focusOnDay(e.target.$i, delta);
 
-					else {
-						changeMonth(-1, true);
-						focusOnDay(e.target.$i, 0);
-					}
+						else {
+							changeMonth(delta, true);
+							focusOnDay(e.target.$i, 0);
+						}
+					}		
+
+					else if (self.config.enableTime && !isTimeObj)
+						self.hourElement.focus();			
 
 					break;
-
-				case "ArrowRight":
-					e.preventDefault();
-					if (!e.ctrlKey)
-						focusOnDay(e.target.$i, 1);
-
-					else {
-						changeMonth(1, true);
-						focusOnDay(e.target.$i, 0);
-					}
-
-					break;
+				}
+					
 
 				case "ArrowUp":
-					e.preventDefault();
-					if (e.ctrlKey) {
-						changeYear(self.currentYear+1);
-						focusOnDay(e.target.$i, 0);
-					}
-
-					else if (!self.timeContainer || !self.timeContainer.contains(e.target))
-						focusOnDay(e.target.$i, -7);
-
-					else
-						updateTime(e);
-
-					break;
-
 				case "ArrowDown":
 					e.preventDefault();
-					if (e.ctrlKey) {
-						changeYear(self.currentYear-1);
-						focusOnDay(e.target.$i, 0);
+					const delta = e.key === "ArrowDown" ? 1 : -1;
+					const isTimeObj = self.timeContainer 
+						&& self.timeContainer.contains(e.target);
+
+					if (self.days) {
+						if (e.ctrlKey) {
+							changeYear(self.currentYear-delta);
+							focusOnDay(e.target.$i, 0);
+						}
+
+						else if (!isTimeObj)
+							focusOnDay(e.target.$i, delta*7);
 					}
 
-					else if (!self.timeContainer || !self.timeContainer.contains(e.target))
-						focusOnDay(e.target.$i, 7);
-
-					else
+					else if (self.config.enableTime) {
+						if (!isTimeObj)
+							self.hourElement.focus();
 						updateTime(e);
+					}
+						
 
 					break;
 
@@ -1545,8 +1540,10 @@ function Flatpickr(element, config) {
 
 		if (self.config.enable.length)
 			self.config.enable = parseDateRules(self.config.enable);
-
-		setSelectedDate(self.config.defaultDate || self.input.value, self.config.dateFormat);
+		
+		const preloadedDate = self.config.defaultDate || self.input.value;
+		if (preloadedDate)
+			setSelectedDate(preloadedDate, self.config.dateFormat);
 
 		const initialDate = (self.selectedDates.length
 			? self.selectedDates[0]
