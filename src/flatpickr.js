@@ -2,6 +2,8 @@
 function Flatpickr(element, config) {
 	const self = this;
 
+	self._ = {};
+
 	self.changeMonth = changeMonth;
 	self.changeYear = changeYear;
 	self.clear = clear;
@@ -478,7 +480,7 @@ function Flatpickr(element, config) {
 
 	function focusOnDay(currentIndex, offset) {
 		let newIndex = currentIndex + offset || 0,
-			targetNode = currentIndex !== undefined 
+			targetNode = currentIndex !== undefined
 				? self.days.childNodes[newIndex]
 				: self.selectedDateElem || self.todayDateElem || self.days.childNodes[0];
 
@@ -927,18 +929,17 @@ function Flatpickr(element, config) {
 	}
 
 	function isEnabled(date, timeless) {
-		const ltmin = compareDates(
-			date,
-			self.config.minDate,
-			typeof timeless !== "undefined" ? timeless : !self.minDateHasTime
-		) < 0;
-		const gtmax = compareDates(
-			date,
-			self.config.maxDate,
-			typeof timeless !== "undefined" ? timeless : !self.maxDateHasTime
-		) > 0;
-
-		if (ltmin || gtmax)
+		if (
+			(self.config.minDate && compareDates(
+				date,
+				self.config.minDate,
+				timeless !== undefined ? timeless : !self.minDateHasTime
+			) < 0) || (self.config.maxDate && compareDates(
+				date,
+				self.config.maxDate,
+				timeless !== undefined ? timeless : !self.maxDateHasTime
+			) > 0)
+		)
 			return false;
 
 		if (!self.config.enable.length && !self.config.disable.length)
@@ -974,12 +975,18 @@ function Flatpickr(element, config) {
 	}
 
 	function onKeyDown(e) {
-		
-		if (e.target === (self.altInput || self.input) && e.key === "Enter")
-			selectDate(e);
+		if (e.target === (self.altInput||self.input) && self.config.allowInput) {
+			self.setDate(
+				(self.altInput || self.input).value,
+				true,
+				e.target === self.altInput
+					? self.config.altFormat
+					: self.config.dateFormat
+			);
+			return e.target.blur();
+		}
 
 		else if (self.isOpen || self.config.inline) {
-			
 			switch (e.key) {
 				case "Enter":
 					if (self.timeContainer && self.timeContainer.contains(e.target))
@@ -990,6 +997,7 @@ function Flatpickr(element, config) {
 
 					break;
 
+
 				case "Escape": // escape
 					e.preventDefault();
 					self.close();
@@ -998,7 +1006,7 @@ function Flatpickr(element, config) {
 				case "ArrowLeft":
 				case "ArrowRight": {
 					e.preventDefault();
-					const isTimeObj = self.timeContainer 
+					const isTimeObj = self.timeContainer
 						&& self.timeContainer.contains(e.target);
 					if (self.days) {
 						const delta = e.key === "ArrowRight" ? 1 : -1;
@@ -1009,20 +1017,20 @@ function Flatpickr(element, config) {
 							changeMonth(delta, true);
 							focusOnDay(e.target.$i, 0);
 						}
-					}		
+					}
 
 					else if (self.config.enableTime && !isTimeObj)
-						self.hourElement.focus();			
+						self.hourElement.focus();
 
 					break;
 				}
-					
+
 
 				case "ArrowUp":
 				case "ArrowDown":
 					e.preventDefault();
 					const delta = e.key === "ArrowDown" ? 1 : -1;
-					const isTimeObj = self.timeContainer 
+					const isTimeObj = self.timeContainer
 						&& self.timeContainer.contains(e.target);
 
 					if (self.days) {
@@ -1040,7 +1048,7 @@ function Flatpickr(element, config) {
 							self.hourElement.focus();
 						updateTime(e);
 					}
-						
+
 
 					break;
 
@@ -1131,7 +1139,7 @@ function Flatpickr(element, config) {
 
 			if (initialDate < hoverDate && timestamp === initialDate.getTime())
 				self.days.childNodes[i].classList.add("startRange");
-			
+
 
 			else if (initialDate > hoverDate && timestamp === initialDate.getTime())
 				self.days.childNodes[i].classList.add("endRange");
@@ -1269,7 +1277,7 @@ function Flatpickr(element, config) {
 			const pluginConf = self.config.plugins[i](self) || {};
 			for (let key in pluginConf) {
 
-				if (Array.isArray(self.config[key]) || ~hooks.indexOf(key)) {
+				if ((self.config[key] || ~hooks.indexOf(key)) instanceof Array) {
 					self.config[key] = arrayify(pluginConf[key])
 						.map(bindToInstance)
 						.concat(self.config[key]);
@@ -1361,21 +1369,6 @@ function Flatpickr(element, config) {
 	function selectDate(e) {
 		e.preventDefault();
 		e.stopPropagation();
-
-		if (
-			self.config.allowInput &&
-			e.key === "Enter" &&
-			(e.target === (self.altInput || self.input))
-		) {
-			self.setDate(
-				(self.altInput || self.input).value,
-				true,
-				e.target === self.altInput
-					? self.config.altFormat
-					: self.config.dateFormat
-			);
-			return e.target.blur();
-		}
 
 		if (
 			!e.target.classList.contains("flatpickr-day") ||
@@ -1471,7 +1464,7 @@ function Flatpickr(element, config) {
 	}
 
 	function setSelectedDate(inputDate, format) {
-		if (Array.isArray(inputDate))
+		if (inputDate instanceof Array)
 			self.selectedDates = inputDate.map(d => self.parseDate(d, format));
 
 		else if (inputDate instanceof Date || !isNaN(inputDate))
@@ -1549,7 +1542,7 @@ function Flatpickr(element, config) {
 
 		if (self.config.enable.length)
 			self.config.enable = parseDateRules(self.config.enable);
-		
+
 		const preloadedDate = self.config.defaultDate || self.input.value;
 		if (preloadedDate)
 			setSelectedDate(preloadedDate, self.config.dateFormat);
@@ -1837,7 +1830,7 @@ function Flatpickr(element, config) {
 	}
 
 	function arrayify(obj) {
-		if (Array.isArray(obj))
+		if (obj instanceof Array)
 			return obj;
 		return [obj];
 	}
