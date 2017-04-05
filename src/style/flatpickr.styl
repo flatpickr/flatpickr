@@ -415,7 +415,7 @@ $invertedBg = invert($calendarBackground)
     &.selected, &.startRange, &.endRange
         &, &:focus, &:hover, &.prevMonthDay, &.nextMonthDay
             background $selectedDayBackground
-            box-shadow none !important
+            box-shadow none
 
             if $selectedDayForeground is defined
                 color $selectedDayForeground
@@ -426,9 +426,12 @@ $invertedBg = invert($calendarBackground)
 
         &.startRange
             border-radius 50px 0 0 50px
+            box-shadow: (-2.5*$dayMargin) 0 0 $selectedDayBackground, (2.5*$dayMargin) 0 0 $selectedDayBackground
 
         &.endRange
             border-radius 0 50px 50px 0
+            box-shadow: (-2.5*$dayMargin) 0 0 $selectedDayBackground, (2.5*$dayMargin) 0 0 $selectedDayBackground
+
 
         &.startRange.endRange
             border-radius 50px
