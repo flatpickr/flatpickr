@@ -394,7 +394,7 @@ $invertedBg = invert($calendarBackground)
     text-align center
 
     &, &.prevMonthDay, &.nextMonthDay
-        &.inRange, &:hover, &:focus
+        &.inRange, &.today.inRange, &:hover, &:focus
             cursor pointer
             outline 0
             background $dayHoverBackground
@@ -426,12 +426,14 @@ $invertedBg = invert($calendarBackground)
 
         &.startRange
             border-radius 50px 0 0 50px
-            box-shadow: (-2.5*$dayMargin) 0 0 $selectedDayBackground, (2.5*$dayMargin) 0 0 $selectedDayBackground
+            //box-shadow:  (2.5*$dayMargin) 0 0 $selectedDayBackground
 
         &.endRange
             border-radius 0 50px 50px 0
-            box-shadow: (-2.5*$dayMargin) 0 0 $selectedDayBackground, (2.5*$dayMargin) 0 0 $selectedDayBackground
+            //
 
+        &.startRange + .endRange
+            box-shadow: (-5*$dayMargin) 0 0 $selectedDayBackground
 
         &.startRange.endRange
             border-radius 50px
