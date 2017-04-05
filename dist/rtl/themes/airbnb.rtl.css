@@ -391,13 +391,16 @@
 .flatpickr-day.startRange.startRange,
 .flatpickr-day.endRange.startRange {
   border-radius: 0 50px 50px 0;
-  box-shadow: -5px 0 0 #4f99ff;
 }
 .flatpickr-day.selected.endRange,
 .flatpickr-day.startRange.endRange,
 .flatpickr-day.endRange.endRange {
   border-radius: 50px 0 0 50px;
-  box-shadow: 5px 0 0 #4f99ff;
+}
+.flatpickr-day.selected.startRange + .endRange,
+.flatpickr-day.startRange.startRange + .endRange,
+.flatpickr-day.endRange.startRange + .endRange {
+  box-shadow: 10px 0 0 #4f99ff;
 }
 .flatpickr-day.selected.startRange.endRange,
 .flatpickr-day.startRange.startRange.endRange,
