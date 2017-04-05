@@ -206,9 +206,8 @@ function Flatpickr(element, config) {
 		};
 		self.debouncedChange = debounce(self.triggerChange, 300);
 
-		if (self.config.mode === "range" && self.days) {
+		if (self.config.mode === "range" && self.days)
 			self.days.addEventListener("mouseover", e => onMouseOver(e.target));
-		}
 
 		document.body.addEventListener("keydown", onKeyDown);
 
@@ -975,7 +974,7 @@ function Flatpickr(element, config) {
 	}
 
 	function onKeyDown(e) {
-		if (e.target === (self.altInput||self.input) && self.config.allowInput) {
+		if (e.key === "Enter" && e.target === (self.altInput||self.input) && self.config.allowInput) {
 			self.setDate(
 				(self.altInput || self.input).value,
 				true,
@@ -2313,7 +2312,10 @@ Flatpickr.prototype = {
 		if (date instanceof Date)
 			date = new Date(date.getTime()); // create a copy
 
-		else {
+		else if (date.toFixed !== undefined) // timestamp
+			date = new Date(date);
+
+		else { // date string
 			const format = givenFormat || this.config.dateFormat;
 			date = String(date).trim();
 
@@ -2322,21 +2324,20 @@ Flatpickr.prototype = {
 				timeless = true;
 			}
 
-			else if (format !== "U" && /\d{8}/.test(date)) //timestamp
-				date = new Date(date_orig);
-
-			else if (this.config.parseDate)
-				date = this.config.parseDate(date);
-
 			else if (/Z$/.test(date) || /GMT$/.test(date)) // datestrings w/ timezone
 				date = new Date(date);
+
+			else if (this.config.parseDate)
+				date = this.config.parseDate(date, format);
 
 			else {
 				let parsedDate = this.config.noCalendar
 					? new Date(new Date().setHours(0,0,0,0))
 					: new Date(new Date().getFullYear(), 0, 1, 0, 0, 0 ,0);
 
-				let matched = false;
+				let matched;
+
+
 
 				for (let i = 0, matchIndex = 0, regexStr = ""; i < format.length; i++) {
 					const token = format[i];
