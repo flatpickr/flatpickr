@@ -144,7 +144,20 @@ describe('flatpickr', () => {
 				expect(fp.selectedDates[0]).toBeDefined();
 				expect(fp.selectedDates[0].getFullYear()).toEqual(2016);
 				expect(fp.selectedDates[0].getMonth()).toEqual(9);
+				expect(fp.selectedDates[0].getDate()).toEqual(22);
+			});
 
+			it('should parse unix time', () => {
+				createInstance({
+					defaultDate: "1477111633.771", // shouldnt parse as a timestamp
+					dateFormat: "U"
+				});
+
+				const parsedDate = fp.selectedDates[0];
+				expect(parsedDate).toBeDefined();
+				expect(parsedDate.getFullYear()).toEqual(2016);
+				expect(parsedDate.getMonth()).toEqual(9);
+				expect(parsedDate.getDate()).toEqual(22);
 			});
 
 			it('should parse "2016-10"', () => {
@@ -187,10 +200,9 @@ describe('flatpickr', () => {
 				expect(fp.selectedDates[0].getSeconds()).toEqual(12);
 			});
 
-			it('should parse today', () => {
+			it('should parse "today"', () => {
 				createInstance();
 				expect(fp.parseDate("today")).toBeDefined();
-
 				expect(fp.parseDate("today", true).getHours()).toBe(0);
 			});
 
