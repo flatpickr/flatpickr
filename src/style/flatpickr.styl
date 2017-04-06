@@ -1,4 +1,7 @@
 $bezier = cubic-bezier(0, 1, 0.5, 1)
+$slideOutBezier = cubic-bezier(0.4, 0.0, 1, 1);
+$slideInBezier = cubic-bezier(0.0, 0.0, 0.2, 1);
+$slideTime = 256ms
 
 $daySize = 40px
 $padding = ($daySize/16)
@@ -37,6 +40,33 @@ $invertedBg = invert($calendarBackground)
         opacity 1
         transform none
 
+@keyframes slideLeft
+    from
+        transform translate(0px, 0px)
+
+    to
+        transform translate(-100%, 0px)
+
+@keyframes slideRight
+    from
+        transform translate(-100%, 0px)
+
+    to
+        transform translate(0px, 0px)
+
+@keyframes fadeOut
+    from
+        opacity 1
+
+    to
+        opacity 0
+
+@keyframes fadeIn
+    from
+        opacity 0
+
+    to
+        opacity 1
 
 .flatpickr-calendar
     background transparent
@@ -76,8 +106,10 @@ $invertedBg = invert($calendarBackground)
 
     &.open
         display inline-block
-        animation flatpickrFadeInDown 300ms $bezier
         z-index 99999
+
+    &.animate.open
+        animation flatpickrFadeInDown 200ms $slideInBezier
 
     &.inline
         display block
@@ -350,11 +382,18 @@ $invertedBg = invert($calendarBackground)
     background $weekdaysBackground
     text-align center
     overflow hidden
+    width $calendarWidth
 
-.flatpickr-days, .flatpickr-weeks
+.dayContainer, .flatpickr-weeks
     padding 1px 0 0 0
 
 .flatpickr-days
+    position: relative;
+    max-height: 240px;
+    overflow: hidden;
+    display flex
+
+.dayContainer
     padding 0
     outline 0
     text-align left
@@ -367,6 +406,26 @@ $invertedBg = invert($calendarBackground)
     -ms-flex-wrap wrap
     -ms-flex-pack: justify
     justify-content space-around
+    transform: translate(0px, 0px);
+    opacity 1
+
+.flatpickr-calendar.animate .dayContainer
+    &.slideLeft
+        animation fadeOut $slideTime $slideOutBezier, slideLeft $slideTime $slideOutBezier
+
+    &.slideLeft, &.slideLeftNew
+        transform: translate(-100%, 0px);
+
+    &.slideLeftNew
+        animation fadeIn $slideTime $slideInBezier, slideLeft $slideTime $slideInBezier
+
+    &.slideRightNew
+        animation slideRight $slideTime $slideInBezier, fadeIn $slideTime $slideInBezier
+
+    &.slideRightNew + .slideRight
+        transform: translate(100%, 0px);
+        animation fadeOut $slideTime $slideOutBezier, slideRight $slideTime $slideOutBezier
+
 
     if $noCalendarBorder is defined
         border-right 1px solid $calendarBorderColor
@@ -609,13 +668,13 @@ span.flatpickr-weekday
 
 
 .hasWeeks, .hasTime
-    .flatpickr-days
+    .dayContainer
         border-bottom 0
         border-bottom-right-radius 0
         border-bottom-left-radius 0
 
 if $noCalendarBorder
-    .hasWeeks .flatpickr-days
+    .hasWeeks .dayContainer
         border-left 0
 
 

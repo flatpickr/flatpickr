@@ -240,6 +240,9 @@ function Flatpickr(element, config) {
 			self.currentYearElement.addEventListener("increment", onYearInput);
 
 			self.days.addEventListener("click", selectDate);
+
+			if (self.config.animate)
+				self.days.addEventListener("animationend", animateDays);
 		}
 
 		if (self.config.enableTime) {
@@ -270,6 +273,24 @@ function Flatpickr(element, config) {
 					updateTime(e);
 					self.triggerChange(e);
 				});
+			}
+		}
+	}
+
+	function animateDays (e) {
+		if (self.days.childNodes.length > 1) {
+			switch(e.animationName) {
+				case "slideLeft":
+					self.days.childNodes[1].classList.remove("slideLeftNew")
+					self.days.removeChild(self.days.childNodes[0]);
+					break;
+
+				case "slideRight":
+					self.days.childNodes[0].classList.remove("slideRightNew")
+					self.days.removeChild(self.days.childNodes[1]);
+					break;
+
+				default: break;
 			}
 		}
 	}
@@ -363,8 +384,8 @@ function Flatpickr(element, config) {
 		if (self.config.enableTime)
 			fragment.appendChild(buildTime());
 
-		if (self.config.mode === "range")
-			self.calendarContainer.classList.add("rangeMode");
+		toggleClass(self.calendarContainer, "rangeMode", self.config.mode === "range");
+		toggleClass(self.calendarContainer, "animate", self.config.animate);
 
 		self.calendarContainer.appendChild(fragment);
 
@@ -501,7 +522,7 @@ function Flatpickr(element, config) {
 			onMouseOver(targetNode);
 	}
 
-	function buildDays(year, month) {
+	function buildDays(delta) {
 		const firstOfMonth = (
 				new Date(self.currentYear, self.currentMonth, 1).getDay() -
 				self.l10n.firstDayOfWeek + 7
@@ -530,8 +551,6 @@ function Flatpickr(element, config) {
 				(42 - firstOfMonth) % daysInMonth
 			);
 		}
-
-		clearNode(self.days);
 
 		// prepend days from the ending of previous month
 		for (; dayNumber <= self.prevMonthDays; dayNumber++, dayIndex++) {
@@ -580,7 +599,22 @@ function Flatpickr(element, config) {
 		else
 			updateNavigationCurrentMonth();
 
-		self.days.appendChild(days);
+		const dayContainer = createElement("div", "dayContainer");
+		dayContainer.appendChild(days);
+
+		if (!self.config.animate)
+			clearNode(self.days);
+
+		else
+			while (self.days.childNodes.length > 1)
+				self.days.removeChild(self.days.firstChild);
+
+		if (delta >= 0)
+			self.days.appendChild(dayContainer);
+		else
+			self.days.insertBefore(dayContainer, self.days.firstChild);
+
+
 		return self.days;
 	}
 
@@ -785,9 +819,22 @@ function Flatpickr(element, config) {
 		}
 
 		updateNavigationCurrentMonth();
-		buildDays();
+		buildDays(delta);
 
 		triggerEvent("MonthChange");
+
+		if (!self.config.animate)
+			return;
+
+		if (delta > 0) {
+			self.days.lastChild.classList.add("slideLeftNew");
+			self.days.firstChild.classList.add("slideLeft");
+		}
+
+		else if (delta < 0) {
+			self.days.lastChild.classList.add("slideRight");
+			self.days.firstChild.classList.add("slideRightNew");
+		}
 	}
 
 	function clear(triggerChangeEvent) {
@@ -1926,10 +1973,11 @@ function Flatpickr(element, config) {
 
 /* istanbul ignore next */
 Flatpickr.defaultConfig = {
-
 	mode: "single",
 
-	position: "top",
+	position: "auto",
+
+	animate: true,
 
 	/* if true, dates will be parsed, formatted, and displayed in UTC.
 	preloading date strings w/ timezones is recommended but not necessary */
