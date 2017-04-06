@@ -26,8 +26,10 @@
 }
 .flatpickr-calendar.open {
   display: inline-block;
-  animation: flatpickrFadeInDown 300ms cubic-bezier(0, 1, 0.5, 1);
   z-index: 99999;
+}
+.flatpickr-calendar.animate.open {
+  animation: flatpickrFadeInDown 200ms cubic-bezier(0, 0, 0.2, 1);
 }
 .flatpickr-calendar.inline {
   display: block;
@@ -309,12 +311,19 @@
   background: #1bbc9b;
   text-align: center;
   overflow: hidden;
+  width: 315px;
 }
-.flatpickr-days,
+.dayContainer,
 .flatpickr-weeks {
   padding: 1px 0 0 0;
 }
 .flatpickr-days {
+  position: relative;
+  max-height: 240px;
+  overflow: hidden;
+  display: flex;
+}
+.dayContainer {
   padding: 0;
   outline: 0;
   text-align: right;
@@ -327,8 +336,29 @@
   -ms-flex-wrap: wrap;
   -ms-flex-pack: justify;
   justify-content: space-around;
+  transform: translate(0px, 0px);
+  opacity: 1;
+}
+.flatpickr-calendar.animate .dayContainer {
   border-left: 1px solid rgba(72,72,72,0.1);
   border-right: 1px solid rgba(72,72,72,0.1);
+}
+.flatpickr-calendar.animate .dayContainer.slideLeft {
+  animation: fadeOut 256ms cubic-bezier(0.4, 0, 1, 1), slideLeft 256ms cubic-bezier(0.4, 0, 1, 1);
+}
+.flatpickr-calendar.animate .dayContainer.slideLeft,
+.flatpickr-calendar.animate .dayContainer.slideLeftNew {
+  transform: translate(100%, 0px);
+}
+.flatpickr-calendar.animate .dayContainer.slideLeftNew {
+  animation: fadeIn 256ms cubic-bezier(0, 0, 0.2, 1), slideLeft 256ms cubic-bezier(0, 0, 0.2, 1);
+}
+.flatpickr-calendar.animate .dayContainer.slideRightNew {
+  animation: slideRight 256ms cubic-bezier(0, 0, 0.2, 1), fadeIn 256ms cubic-bezier(0, 0, 0.2, 1);
+}
+.flatpickr-calendar.animate .dayContainer.slideRightNew + .slideRight {
+  transform: translate(-100%, 0px);
+  animation: fadeOut 256ms cubic-bezier(0.4, 0, 1, 1), slideRight 256ms cubic-bezier(0.4, 0, 1, 1);
 }
 .flatpickr-day {
   background: none;
@@ -378,6 +408,9 @@
 .flatpickr-day.selected,
 .flatpickr-day.startRange,
 .flatpickr-day.endRange,
+.flatpickr-day.selected.inRange,
+.flatpickr-day.startRange.inRange,
+.flatpickr-day.endRange.inRange,
 .flatpickr-day.selected:focus,
 .flatpickr-day.startRange:focus,
 .flatpickr-day.endRange:focus,
@@ -571,13 +604,13 @@ span.flatpickr-weekday {
 .flatpickr-time .flatpickr-am-pm:focus {
   background: #ececec;
 }
-.hasWeeks .flatpickr-days,
-.hasTime .flatpickr-days {
+.hasWeeks .dayContainer,
+.hasTime .dayContainer {
   border-bottom: 0;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
-.hasWeeks .flatpickr-days {
+.hasWeeks .dayContainer {
   border-right: 0;
 }
 @media all and (-ms-high-contrast: none) {
@@ -629,5 +662,133 @@ span.flatpickr-weekday {
   to {
     opacity: 1;
     transform: none;
+  }
+}
+@-moz-keyframes slideLeft {
+  from {
+    transform: translate(0px, 0px);
+  }
+  to {
+    transform: translate(100%, 0px);
+  }
+}
+@-webkit-keyframes slideLeft {
+  from {
+    transform: translate(0px, 0px);
+  }
+  to {
+    transform: translate(100%, 0px);
+  }
+}
+@-o-keyframes slideLeft {
+  from {
+    transform: translate(0px, 0px);
+  }
+  to {
+    transform: translate(100%, 0px);
+  }
+}
+@keyframes slideLeft {
+  from {
+    transform: translate(0px, 0px);
+  }
+  to {
+    transform: translate(100%, 0px);
+  }
+}
+@-moz-keyframes slideRight {
+  from {
+    transform: translate(100%, 0px);
+  }
+  to {
+    transform: translate(0px, 0px);
+  }
+}
+@-webkit-keyframes slideRight {
+  from {
+    transform: translate(100%, 0px);
+  }
+  to {
+    transform: translate(0px, 0px);
+  }
+}
+@-o-keyframes slideRight {
+  from {
+    transform: translate(100%, 0px);
+  }
+  to {
+    transform: translate(0px, 0px);
+  }
+}
+@keyframes slideRight {
+  from {
+    transform: translate(100%, 0px);
+  }
+  to {
+    transform: translate(0px, 0px);
+  }
+}
+@-moz-keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@-webkit-keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@-o-keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@-moz-keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-o-keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

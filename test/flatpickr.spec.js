@@ -1,7 +1,7 @@
-'use strict';
-
 const Flatpickr = require("../src/flatpickr.js");
 Flatpickr.l10ns.ru = require("../dist/l10n/ru.js").ru;
+
+Flatpickr.defaultConfig.animate = false;
 
 jest.useFakeTimers();
 
@@ -108,7 +108,7 @@ describe('flatpickr', () => {
 			expect(fp.currentMonth).toEqual(11);
 			expect(fp.days.querySelector(".selected")).toEqual(null);
 
-			let enabledDays = fp.days.querySelectorAll(":not(.disabled)");
+			let enabledDays = fp.days.querySelectorAll(".flatpickr-day:not(.disabled)");
 
 			expect(enabledDays.length).toEqual(2);
 			expect(enabledDays[0].textContent).toEqual("24");
