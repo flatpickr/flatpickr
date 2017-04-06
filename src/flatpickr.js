@@ -63,7 +63,7 @@ function Flatpickr(element, config) {
 		}
 
 		if (self.config.weekNumbers) {
-			self.calendarContainer.style.width = self.days.clientWidth
+			self.calendarContainer.style.width = self.daysContainer.clientWidth
 				+ self.weekWrapper.clientWidth + "px";
 		}
 
@@ -206,8 +206,8 @@ function Flatpickr(element, config) {
 		};
 		self.debouncedChange = debounce(self.triggerChange, 300);
 
-		if (self.config.mode === "range" && self.days)
-			self.days.addEventListener("mouseover", e => onMouseOver(e.target));
+		if (self.config.mode === "range" && self.daysContainer)
+			self.daysContainer.addEventListener("mouseover", e => onMouseOver(e.target));
 
 		document.body.addEventListener("keydown", onKeyDown);
 
@@ -239,10 +239,10 @@ function Flatpickr(element, config) {
 			self.currentYearElement.addEventListener("input", onYearInput);
 			self.currentYearElement.addEventListener("increment", onYearInput);
 
-			self.days.addEventListener("click", selectDate);
+			self.daysContainer.addEventListener("click", selectDate);
 
 			if (self.config.animate)
-				self.days.addEventListener("animationend", animateDays);
+				self.daysContainer.addEventListener("animationend", animateDays);
 		}
 
 		if (self.config.enableTime) {
@@ -278,16 +278,16 @@ function Flatpickr(element, config) {
 	}
 
 	function animateDays (e) {
-		if (self.days.childNodes.length > 1) {
+		if (self.daysContainer.childNodes.length > 1) {
 			switch(e.animationName) {
 				case "slideLeft":
-					self.days.childNodes[1].classList.remove("slideLeftNew")
-					self.days.removeChild(self.days.childNodes[0]);
+					self.daysContainer.childNodes[1].classList.remove("slideLeftNew")
+					self.daysContainer.removeChild(self.daysContainer.childNodes[0]);
 					break;
 
 				case "slideRight":
-					self.days.childNodes[0].classList.remove("slideRightNew")
-					self.days.removeChild(self.days.childNodes[1]);
+					self.daysContainer.childNodes[0].classList.remove("slideRightNew")
+					self.daysContainer.removeChild(self.daysContainer.childNodes[1]);
 					break;
 
 				default: break;
@@ -369,13 +369,13 @@ function Flatpickr(element, config) {
 			self.rContainer = createElement("div", "flatpickr-rContainer");
 			self.rContainer.appendChild(buildWeekdays());
 
-			if (!self.days) {
-				self.days = createElement("div", "flatpickr-days");
-				self.days.tabIndex = -1;
+			if (!self.daysContainer) {
+				self.daysContainer = createElement("div", "flatpickr-days");
+				self.daysContainer.tabIndex = -1;
 			}
 
 			buildDays();
-			self.rContainer.appendChild(self.days);
+			self.rContainer.appendChild(self.daysContainer);
 
 			self.innerContainer.appendChild(self.rContainer);
 			fragment.appendChild(self.innerContainer);
@@ -602,20 +602,20 @@ function Flatpickr(element, config) {
 		const dayContainer = createElement("div", "dayContainer");
 		dayContainer.appendChild(days);
 
-		if (!self.config.animate)
-			clearNode(self.days);
+		if (!self.config.animate || delta === undefined)
+			clearNode(self.daysContainer);
 
 		else
-			while (self.days.childNodes.length > 1)
-				self.days.removeChild(self.days.firstChild);
+			while (self.daysContainer.childNodes.length > 1)
+				self.daysContainer.removeChild(self.daysContainer.firstChild);
 
 		if (delta >= 0)
-			self.days.appendChild(dayContainer);
+			self.daysContainer.appendChild(dayContainer);
 		else
-			self.days.insertBefore(dayContainer, self.days.firstChild);
+			self.daysContainer.insertBefore(dayContainer, self.daysContainer.firstChild);
 
-
-		return self.days;
+		self.days = self.daysContainer.firstChild;
+		return self.daysContainer;
 	}
 
 	function clearNode(node) {
@@ -827,13 +827,13 @@ function Flatpickr(element, config) {
 			return;
 
 		if (delta > 0) {
-			self.days.lastChild.classList.add("slideLeftNew");
-			self.days.firstChild.classList.add("slideLeft");
+			self.daysContainer.lastChild.classList.add("slideLeftNew");
+			self.daysContainer.firstChild.classList.add("slideLeft");
 		}
 
 		else if (delta < 0) {
-			self.days.lastChild.classList.add("slideRight");
-			self.days.firstChild.classList.add("slideRightNew");
+			self.daysContainer.lastChild.classList.add("slideRight");
+			self.daysContainer.firstChild.classList.add("slideRightNew");
 		}
 	}
 
@@ -1054,7 +1054,7 @@ function Flatpickr(element, config) {
 					e.preventDefault();
 					const isTimeObj = self.timeContainer
 						&& self.timeContainer.contains(e.target);
-					if (self.days) {
+					if (self.daysContainer) {
 						const delta = e.key === "ArrowRight" ? 1 : -1;
 						if (!e.ctrlKey)
 							focusOnDay(e.target.$i, delta);
@@ -1079,7 +1079,7 @@ function Flatpickr(element, config) {
 					const isTimeObj = self.timeContainer
 						&& self.timeContainer.contains(e.target);
 
-					if (self.days) {
+					if (self.daysContainer) {
 						if (e.ctrlKey) {
 							changeYear(self.currentYear-delta);
 							focusOnDay(e.target.$i, 0);
@@ -1159,12 +1159,13 @@ function Flatpickr(element, config) {
 			i++, timestamp += self.utils.duration.DAY
 		) {
 			const outOfRange = timestamp < self.minRangeDate.getTime()
-				|| timestamp > self.maxRangeDate.getTime();
+				|| timestamp > self.maxRangeDate.getTime(),
+				dayElem = self.days.childNodes[i];
 
 			if (outOfRange) {
 				self.days.childNodes[i].classList.add("notAllowed");
 				["inRange", "startRange", "endRange"].forEach(c => {
-					self.days.childNodes[i].classList.remove(c)
+					dayElem.classList.remove(c)
 				});
 				continue;
 			}
@@ -1175,7 +1176,7 @@ function Flatpickr(element, config) {
 
 
 			["startRange", "inRange", "endRange", "notAllowed"].forEach(c => {
-				self.days.childNodes[i].classList.remove(c)
+				dayElem.classList.remove(c)
 			});
 
 			const minRangeDate = Math.max(self.minRangeDate.getTime(), rangeStartDate),
@@ -1184,14 +1185,13 @@ function Flatpickr(element, config) {
 			elem.classList.add(hoverDate < self.selectedDates[0] ? "startRange" : "endRange");
 
 			if (initialDate < hoverDate && timestamp === initialDate.getTime())
-				self.days.childNodes[i].classList.add("startRange");
-
+				dayElem.classList.add("startRange");
 
 			else if (initialDate > hoverDate && timestamp === initialDate.getTime())
-				self.days.childNodes[i].classList.add("endRange");
+				dayElem.classList.add("endRange");
 
 			else if (timestamp >= minRangeDate && timestamp <= maxRangeDate)
-				self.days.childNodes[i].classList.add("inRange");
+				dayElem.classList.add("inRange");
 		}
 	}
 
@@ -1247,7 +1247,7 @@ function Flatpickr(element, config) {
 				updateValue();
 			}
 
-			if(self.days) {
+			if(self.daysContainer) {
 				redraw();
 
 				if(isValidDate)
