@@ -36,7 +36,7 @@ function Flatpickr(element, config) {
 		setupDates();
 		setupHelperFunctions();
 
-		self.isOpen = self.config.inline;
+		self.isOpen = false;
 
 		self.isMobile = (
 			!self.config.disableMobile &&
@@ -357,6 +357,7 @@ function Flatpickr(element, config) {
 	function build() {
 		const fragment = window.document.createDocumentFragment();
 		self.calendarContainer = createElement("div", "flatpickr-calendar");
+		self.calendarContainer.tabIndex = -1;
 		self.numInputType = navigator.userAgent.indexOf("MSIE 9.0") > 0 ? "text" : "number";
 
 		if (!self.config.noCalendar) {
@@ -605,9 +606,10 @@ function Flatpickr(element, config) {
 		if (!self.config.animate || delta === undefined)
 			clearNode(self.daysContainer);
 
-		else
+		else {
 			while (self.daysContainer.childNodes.length > 1)
 				self.daysContainer.removeChild(self.daysContainer.firstChild);
+		}
 
 		if (delta >= 0)
 			self.daysContainer.appendChild(dayContainer);
@@ -1021,7 +1023,10 @@ function Flatpickr(element, config) {
 	}
 
 	function onKeyDown(e) {
-		if (e.key === "Enter" && e.target === (self.altInput||self.input) && self.config.allowInput) {
+		const isInput = e.target === (self.altInput || self.input);
+		const calendarElem = isCalendarElem(e.target);
+
+		if (e.key === "Enter" && self.config.allowInput && isInput) {
 			self.setDate(
 				(self.altInput || self.input).value,
 				true,
@@ -1032,10 +1037,12 @@ function Flatpickr(element, config) {
 			return e.target.blur();
 		}
 
-		else if (self.isOpen || self.config.inline) {
+		else if (self.isOpen || (self.config.inline && (isInput || calendarElem))) {
+			const isTimeObj = self.timeContainer
+				&& self.timeContainer.contains(e.target);
 			switch (e.key) {
 				case "Enter":
-					if (self.timeContainer && self.timeContainer.contains(e.target))
+					if (isTimeObj)
 						updateValue();
 
 					else
@@ -1095,9 +1102,7 @@ function Flatpickr(element, config) {
 						updateTime(e);
 					}
 
-
 					break;
-
 
 				case "Tab":
 					if (e.target === self.hourElement) {
@@ -1172,8 +1177,6 @@ function Flatpickr(element, config) {
 
 			else if (containsDisabled && !outOfRange)
 				continue;
-
-
 
 			["startRange", "inRange", "endRange", "notAllowed"].forEach(c => {
 				dayElem.classList.remove(c)
