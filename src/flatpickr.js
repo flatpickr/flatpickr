@@ -1212,7 +1212,7 @@ function Flatpickr(element, config) {
 			else if (initialDate > hoverDate && timestamp === initialDate.getTime())
 				dayElem.classList.add("endRange");
 
-			else if (timestamp >= minRangeDate && timestamp <= maxRangeDate)
+			if (timestamp >= minRangeDate && timestamp <= maxRangeDate)
 				dayElem.classList.add("inRange");
 		}
 	}
@@ -2321,7 +2321,7 @@ Flatpickr.prototype = {
 		S: (dateObj, seconds) => {
 			dateObj.setSeconds(seconds);
 		},
-		U: (dateObj, unixSeconds) => new Date(parseFloat(unixSeconds)*1000),
+		U: (dateObj, unixSeconds) => new Date(parseFloat(unixSeconds) * 1000),
 
 		W: () => {},
 		Y: (dateObj, year) =>  {

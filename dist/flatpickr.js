@@ -39,7 +39,7 @@ function Flatpickr(element, config) {
 		setupDates();
 		setupHelperFunctions();
 
-		self.isOpen = self.config.inline;
+		self.isOpen = false;
 
 		self.isMobile = !self.config.disableMobile && !self.config.inline && self.config.mode === "single" && !self.config.disable.length && !self.config.enable.length && !self.config.weekNumbers && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
@@ -254,11 +254,13 @@ function Flatpickr(element, config) {
 				case "slideLeft":
 					self.daysContainer.childNodes[1].classList.remove("slideLeftNew");
 					self.daysContainer.removeChild(self.daysContainer.childNodes[0]);
+					self.days = self.daysContainer.firstChild;
 					break;
 
 				case "slideRight":
 					self.daysContainer.childNodes[0].classList.remove("slideRightNew");
 					self.daysContainer.removeChild(self.daysContainer.childNodes[1]);
+					self.days = self.daysContainer.firstChild;
 					break;
 
 				default:
@@ -322,6 +324,7 @@ function Flatpickr(element, config) {
 	function build() {
 		var fragment = window.document.createDocumentFragment();
 		self.calendarContainer = createElement("div", "flatpickr-calendar");
+		self.calendarContainer.tabIndex = -1;
 		self.numInputType = navigator.userAgent.indexOf("MSIE 9.0") > 0 ? "text" : "number";
 
 		if (!self.config.noCalendar) {
@@ -422,21 +425,32 @@ function Flatpickr(element, config) {
 
 	function focusOnDay(currentIndex, offset) {
 		var newIndex = currentIndex + offset || 0,
-		    targetNode = currentIndex !== undefined ? self.days.childNodes[newIndex] : self.selectedDateElem || self.todayDateElem || self.days.childNodes[0];
+		    targetNode = currentIndex !== undefined ? self.days.childNodes[newIndex] : self.selectedDateElem || self.todayDateElem || self.days.childNodes[0],
+		    focus = function focus() {
+			targetNode = targetNode || self.days.childNodes[newIndex];
+			targetNode.focus();
 
-		if (targetNode === undefined) {
+			if (self.config.mode === "range") onMouseOver(targetNode);
+		};
+
+		if (targetNode === undefined && offset !== 0) {
 			if (offset > 0) {
 				self.changeMonth(1);
-				targetNode = self.days.childNodes[newIndex % 42].focus();
+				newIndex = newIndex % 42;
 			} else if (offset < 0) {
 				self.changeMonth(-1);
-				targetNode = self.days.childNodes[42 + newIndex].focus();
+				newIndex += 42;
 			}
+
+			return afterDayAnim(focus);
 		}
 
-		targetNode.focus();
+		focus();
+	}
 
-		if (self.config.mode === "range") onMouseOver(targetNode);
+	function afterDayAnim(fn) {
+		if (self.config.animate) return setTimeout(fn, self._.daysAnimDuration + 1);
+		fn();
 	}
 
 	function buildDays(delta) {
@@ -485,9 +499,13 @@ function Flatpickr(element, config) {
 		var dayContainer = createElement("div", "dayContainer");
 		dayContainer.appendChild(days);
 
-		if (!self.config.animate || delta === undefined) clearNode(self.daysContainer);else while (self.daysContainer.childNodes.length > 1) {
-			self.daysContainer.removeChild(self.daysContainer.firstChild);
-		}if (delta >= 0) self.daysContainer.appendChild(dayContainer);else self.daysContainer.insertBefore(dayContainer, self.daysContainer.firstChild);
+		if (!self.config.animate || delta === undefined) clearNode(self.daysContainer);else {
+			while (self.daysContainer.childNodes.length > 1) {
+				self.daysContainer.removeChild(self.daysContainer.firstChild);
+			}
+		}
+
+		if (delta >= 0) self.daysContainer.appendChild(dayContainer);else self.daysContainer.insertBefore(dayContainer, self.daysContainer.firstChild);
 
 		self.days = self.daysContainer.firstChild;
 		return self.daysContainer;
@@ -676,6 +694,10 @@ function Flatpickr(element, config) {
 			self.daysContainer.lastChild.classList.add("slideRight");
 			self.daysContainer.firstChild.classList.add("slideRightNew");
 		}
+
+		if (self._.daysAnimDuration === undefined) {
+			self._.daysAnimDuration = parseInt(/(\d+)s/.exec(window.getComputedStyle(self.daysContainer.lastChild).getPropertyValue("animation-duration"))[1]);
+		}
 	}
 
 	function clear(triggerChangeEvent) {
@@ -811,13 +833,17 @@ function Flatpickr(element, config) {
 	}
 
 	function onKeyDown(e) {
-		if (e.key === "Enter" && e.target === (self.altInput || self.input) && self.config.allowInput) {
+		var isInput = e.target === (self.altInput || self.input);
+		var calendarElem = isCalendarElem(e.target);
+
+		if (e.key === "Enter" && self.config.allowInput && isInput) {
 			self.setDate((self.altInput || self.input).value, true, e.target === self.altInput ? self.config.altFormat : self.config.dateFormat);
 			return e.target.blur();
-		} else if (self.isOpen || self.config.inline) {
+		} else if (self.isOpen || self.config.inline && (isInput || calendarElem)) {
+			var isTimeObj = self.timeContainer && self.timeContainer.contains(e.target);
 			switch (e.key) {
 				case "Enter":
-					if (self.timeContainer && self.timeContainer.contains(e.target)) updateValue();else selectDate(e);
+					if (isTimeObj) updateValue();else selectDate(e);
 
 					break;
 
@@ -829,25 +855,25 @@ function Flatpickr(element, config) {
 
 				case "ArrowLeft":
 				case "ArrowRight":
-					{
-						e.preventDefault();
-						var _isTimeObj = self.timeContainer && self.timeContainer.contains(e.target);
-						if (self.daysContainer) {
-							var _delta = e.key === "ArrowRight" ? 1 : -1;
-							if (!e.ctrlKey) focusOnDay(e.target.$i, _delta);else {
-								changeMonth(_delta, true);
-								focusOnDay(e.target.$i, 0);
-							}
-						} else if (self.config.enableTime && !_isTimeObj) self.hourElement.focus();
+					e.preventDefault();
 
-						break;
-					}
+					if (self.daysContainer) {
+						var _delta = e.key === "ArrowRight" ? 1 : -1;
+
+						if (!e.ctrlKey) focusOnDay(e.target.$i, _delta);else {
+							changeMonth(_delta, true);
+							afterDayAnim(function () {
+								focusOnDay(e.target.$i, 0);
+							});
+						}
+					} else if (self.config.enableTime && !isTimeObj) self.hourElement.focus();
+
+					break;
 
 				case "ArrowUp":
 				case "ArrowDown":
 					e.preventDefault();
 					var delta = e.key === "ArrowDown" ? 1 : -1;
-					var isTimeObj = self.timeContainer && self.timeContainer.contains(e.target);
 
 					if (self.daysContainer) {
 						if (e.ctrlKey) {
@@ -934,7 +960,9 @@ function Flatpickr(element, config) {
 
 			elem.classList.add(hoverDate < self.selectedDates[0] ? "startRange" : "endRange");
 
-			if (initialDate < hoverDate && timestamp === initialDate.getTime()) dayElem.classList.add("startRange");else if (initialDate > hoverDate && timestamp === initialDate.getTime()) dayElem.classList.add("endRange");else if (timestamp >= minRangeDate && timestamp <= maxRangeDate) dayElem.classList.add("inRange");
+			if (initialDate < hoverDate && timestamp === initialDate.getTime()) dayElem.classList.add("startRange");else if (initialDate > hoverDate && timestamp === initialDate.getTime()) dayElem.classList.add("endRange");
+
+			if (timestamp >= minRangeDate && timestamp <= maxRangeDate) dayElem.classList.add("inRange");
 		};
 
 		for (var timestamp = self.days.childNodes[0].dateObj.getTime(), i = 0; i < 42; i++, timestamp += self.utils.duration.DAY) {
@@ -1117,6 +1145,8 @@ function Flatpickr(element, config) {
 
 		var selectedDate = self.latestSelectedDateObj = new Date(e.target.dateObj.getTime());
 
+		var shouldChangeMonth = selectedDate.getMonth() !== self.currentMonth && self.config.mode !== "range";
+
 		self.selectedDateElem = e.target;
 
 		if (self.config.mode === "single") self.selectedDates = [selectedDate];else if (self.config.mode === "multiple") {
@@ -1135,7 +1165,7 @@ function Flatpickr(element, config) {
 
 		setHoursFromInputs();
 
-		if (selectedDate.getMonth() !== self.currentMonth && self.config.mode !== "range") {
+		if (shouldChangeMonth) {
 			var isNewYear = self.currentYear !== selectedDate.getFullYear();
 			self.currentYear = selectedDate.getFullYear();
 			self.currentMonth = selectedDate.getMonth();
@@ -1168,13 +1198,18 @@ function Flatpickr(element, config) {
 			}
 		}
 
+		triggerEvent("Change");
+
+		// maintain focus
+		if (!shouldChangeMonth) focusOnDay(e.target.$i, 0);else afterDayAnim(function () {
+			return self.selectedDateElem.focus();
+		});
+
 		if (self.config.enableTime) setTimeout(function () {
 			return self.hourElement.select();
 		}, 451);
 
 		if (self.config.mode === "single" && !self.config.enableTime) self.close();
-
-		triggerEvent("Change");
 	}
 
 	function set(option, value) {

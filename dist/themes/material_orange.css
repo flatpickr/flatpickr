@@ -29,7 +29,7 @@
   z-index: 99999;
 }
 .flatpickr-calendar.animate.open {
-  animation: flatpickrFadeInDown 200ms cubic-bezier(0, 0, 0.2, 1);
+  animation: fadeIn 100ms cubic-bezier(0, 0, 0.2, 1);
 }
 .flatpickr-calendar.inline {
   display: block;
@@ -103,6 +103,9 @@
 }
 .flatpickr-calendar.arrowBottom:after {
   border-top-color: #ff8a65;
+}
+.flatpickr-calendar:focus {
+  outline: 0;
 }
 .flatpickr-wrapper {
   position: relative;
@@ -319,15 +322,20 @@
 }
 .flatpickr-days {
   position: relative;
-  max-height: 240px;
   overflow: hidden;
   display: flex;
+  width: 315px;
+  background: #fff;
+  border-left: 1px solid rgba(255,138,101,0.2);
+  border-right: 1px solid rgba(255,138,101,0.2);
 }
 .dayContainer {
   padding: 0;
   outline: 0;
   text-align: left;
   width: 315px;
+  min-width: 315px;
+  max-width: 315px;
   box-sizing: border-box;
   display: inline-block;
   display: -ms-flexbox;
@@ -339,26 +347,22 @@
   transform: translate(0px, 0px);
   opacity: 1;
 }
-.flatpickr-calendar.animate .dayContainer {
-  border-right: 1px solid rgba(255,138,101,0.2);
-  border-left: 1px solid rgba(255,138,101,0.2);
-}
 .flatpickr-calendar.animate .dayContainer.slideLeft {
-  animation: fadeOut 256ms cubic-bezier(0.4, 0, 1, 1), slideLeft 256ms cubic-bezier(0.4, 0, 1, 1);
+  animation: fadeOut 260.1ms cubic-bezier(0.4, 0, 0.8, 1), slideLeft 260.1ms cubic-bezier(0.4, 0, 0.8, 1);
 }
 .flatpickr-calendar.animate .dayContainer.slideLeft,
 .flatpickr-calendar.animate .dayContainer.slideLeftNew {
   transform: translate(-100%, 0px);
 }
 .flatpickr-calendar.animate .dayContainer.slideLeftNew {
-  animation: fadeIn 256ms cubic-bezier(0, 0, 0.2, 1), slideLeft 256ms cubic-bezier(0, 0, 0.2, 1);
+  animation: fadeIn 289ms cubic-bezier(0, 0, 0.2, 1), slideLeft 289ms cubic-bezier(0, 0, 0.2, 1);
 }
 .flatpickr-calendar.animate .dayContainer.slideRightNew {
-  animation: slideRight 256ms cubic-bezier(0, 0, 0.2, 1), fadeIn 256ms cubic-bezier(0, 0, 0.2, 1);
+  animation: slideRight 289ms cubic-bezier(0, 0, 0.2, 1), fadeIn 289ms cubic-bezier(0, 0, 0.2, 1);
 }
 .flatpickr-calendar.animate .dayContainer.slideRightNew + .slideRight {
   transform: translate(100%, 0px);
-  animation: fadeOut 256ms cubic-bezier(0.4, 0, 1, 1), slideRight 256ms cubic-bezier(0.4, 0, 1, 1);
+  animation: fadeOut 260.1ms cubic-bezier(0.4, 0, 0.8, 1), slideRight 260.1ms cubic-bezier(0.4, 0, 0.8, 1);
 }
 .flatpickr-day {
   background: none;
