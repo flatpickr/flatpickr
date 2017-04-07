@@ -283,11 +283,13 @@ function Flatpickr(element, config) {
 				case "slideLeft":
 					self.daysContainer.childNodes[1].classList.remove("slideLeftNew")
 					self.daysContainer.removeChild(self.daysContainer.childNodes[0]);
+					self.days = self.daysContainer.firstChild;
 					break;
 
 				case "slideRight":
 					self.daysContainer.childNodes[0].classList.remove("slideRightNew")
 					self.daysContainer.removeChild(self.daysContainer.childNodes[1]);
+					self.days = self.daysContainer.firstChild;
 					break;
 
 				default: break;
@@ -503,24 +505,36 @@ function Flatpickr(element, config) {
 		let newIndex = currentIndex + offset || 0,
 			targetNode = currentIndex !== undefined
 				? self.days.childNodes[newIndex]
-				: self.selectedDateElem || self.todayDateElem || self.days.childNodes[0];
+				: self.selectedDateElem || self.todayDateElem || self.days.childNodes[0],
+			focus = () => {
+				targetNode = targetNode || self.days.childNodes[newIndex];
+				targetNode.focus();
 
-		if (targetNode === undefined) {
+				if (self.config.mode === "range")
+					onMouseOver(targetNode);
+			};
+
+		if (targetNode === undefined && offset !== 0) {
 			if (offset > 0) {
 				self.changeMonth(1);
-				targetNode = self.days.childNodes[newIndex % 42].focus();
+				newIndex = newIndex % 42;
 			}
 
 			else if (offset < 0) {
 				self.changeMonth(-1);
-				targetNode = self.days.childNodes[42 + newIndex].focus();
+				newIndex += 42;
 			}
+
+			return afterDayAnim(focus);
 		}
 
-		targetNode.focus();
+		focus();
+	}
 
-		if (self.config.mode === "range")
-			onMouseOver(targetNode);
+	function afterDayAnim(fn) {
+		if (self.config.animate)
+			return setTimeout(fn, self._.daysAnimDuration + 1);
+		fn();
 	}
 
 	function buildDays(delta) {
@@ -837,6 +851,14 @@ function Flatpickr(element, config) {
 			self.daysContainer.lastChild.classList.add("slideRight");
 			self.daysContainer.firstChild.classList.add("slideRightNew");
 		}
+
+		if (self._.daysAnimDuration === undefined) {
+			self._.daysAnimDuration = parseInt(/(\d+)s/.exec(
+				window
+				.getComputedStyle(self.daysContainer.lastChild)
+				.getPropertyValue("animation-duration")
+			)[1]);
+		}
 	}
 
 	function clear(triggerChangeEvent) {
@@ -1050,25 +1072,26 @@ function Flatpickr(element, config) {
 
 					break;
 
-
 				case "Escape": // escape
 					e.preventDefault();
 					self.close();
 					break;
 
 				case "ArrowLeft":
-				case "ArrowRight": {
+				case "ArrowRight":
 					e.preventDefault();
-					const isTimeObj = self.timeContainer
-						&& self.timeContainer.contains(e.target);
+
 					if (self.daysContainer) {
 						const delta = e.key === "ArrowRight" ? 1 : -1;
+
 						if (!e.ctrlKey)
 							focusOnDay(e.target.$i, delta);
 
 						else {
 							changeMonth(delta, true);
-							focusOnDay(e.target.$i, 0);
+							afterDayAnim(() => {
+								focusOnDay(e.target.$i, 0)
+							});
 						}
 					}
 
@@ -1076,24 +1099,20 @@ function Flatpickr(element, config) {
 						self.hourElement.focus();
 
 					break;
-				}
-
 
 				case "ArrowUp":
 				case "ArrowDown":
 					e.preventDefault();
 					const delta = e.key === "ArrowDown" ? 1 : -1;
-					const isTimeObj = self.timeContainer
-						&& self.timeContainer.contains(e.target);
 
 					if (self.daysContainer) {
 						if (e.ctrlKey) {
-							changeYear(self.currentYear-delta);
+							changeYear(self.currentYear - delta);
 							focusOnDay(e.target.$i, 0);
 						}
 
 						else if (!isTimeObj)
-							focusOnDay(e.target.$i, delta*7);
+							focusOnDay(e.target.$i, delta * 7);
 					}
 
 					else if (self.config.enableTime) {
@@ -1430,6 +1449,9 @@ function Flatpickr(element, config) {
 			= self.latestSelectedDateObj
 			= new Date(e.target.dateObj.getTime());
 
+		const shouldChangeMonth = selectedDate.getMonth() !== self.currentMonth
+			&& self.config.mode !== "range";
+
 		self.selectedDateElem = e.target;
 
 		if (self.config.mode === "single")
@@ -1457,7 +1479,7 @@ function Flatpickr(element, config) {
 
 		setHoursFromInputs();
 
-		if (selectedDate.getMonth() !== self.currentMonth && self.config.mode !== "range") {
+		if (shouldChangeMonth) {
 			const isNewYear = self.currentYear !== selectedDate.getFullYear();
 			self.currentYear = selectedDate.getFullYear();
 			self.currentMonth = selectedDate.getMonth();
@@ -1497,13 +1519,19 @@ function Flatpickr(element, config) {
 			}
 		}
 
+		triggerEvent("Change");
+
+		// maintain focus
+		if (!shouldChangeMonth)
+			focusOnDay(e.target.$i, 0);
+		else
+			afterDayAnim(() => self.selectedDateElem.focus());
+
 		if (self.config.enableTime)
 			setTimeout(() => self.hourElement.select(), 451);
 
 		if (self.config.mode === "single" && !self.config.enableTime)
 			self.close();
-
-		triggerEvent("Change");
 	}
 
 	function set(option, value) {
