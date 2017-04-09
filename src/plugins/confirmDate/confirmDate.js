@@ -14,9 +14,6 @@ function confirmDatePlugin(pluginConfig) {
 	}
 
 	return function(fp) {
-		if (!fp.calendarContainer)
-			return;
-
 		fp.confirmContainer = fp._createElement(
 			"div", 
 			"flatpickr-confirm " + config.theme + "Theme", 
@@ -30,7 +27,8 @@ function confirmDatePlugin(pluginConfig) {
 
 		const hooks = {
 			onReady () {
-				fp.calendarContainer.appendChild(fp.confirmContainer);
+				if (fp.calendarContainer)
+					fp.calendarContainer.appendChild(fp.confirmContainer);
 			}
 		};
 
