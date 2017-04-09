@@ -27,7 +27,8 @@ function confirmDatePlugin(pluginConfig) {
 
 		const hooks = {
 			onReady () {
-				fp.calendarContainer.appendChild(fp.confirmContainer);
+				if (fp.calendarContainer)
+					fp.calendarContainer.appendChild(fp.confirmContainer);
 			}
 		};
 
