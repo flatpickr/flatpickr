@@ -39,8 +39,6 @@ See also:
 * [angular-flatpickr addon](https://www.npmjs.com/package/angular-flatpickr)
 * [Vue-Blu/datepicker](https://chenz24.github.io/vue-blu/#/components/datepicker)
 
----
-
 ## Supporting flatpickr
 
 Special thanks to support by:
