@@ -13,6 +13,8 @@ function themer() {
 			"confetti"
 		];
 
+	if (!theme_sel)
+		return;
 
 	for(var i = 0; i < themes.length; i++){
 		var opt = document.createElement("option");
