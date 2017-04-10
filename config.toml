@@ -34,7 +34,8 @@ googleAnalytics = ""
         "bower_components/flatpickr/dist/flatpickr.js",
         "bower_components/flatpickr/dist/plugins/confirmDate/confirmDate.js",
         "bower_components/flatpickr/dist/plugins/weekSelect/weekSelect.js",
-        "flatpickr.js"
+        "flatpickr.js",
+        "themer.js"
     ]
 
     # Syntax highlighting theme
@@ -100,6 +101,11 @@ googleAnalytics = ""
     name   = "Plugins"
     url    = "plugins/"
     weight = 10
+
+[[menu.main]]
+    name   = "Themes"
+    url    = "themes/"
+    weight = 11
 
 [blackfriday]
     smartypants = true
