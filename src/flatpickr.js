@@ -837,6 +837,7 @@ function Flatpickr(element, config) {
 	function changeMonth(value, is_offset, animate) {
 		is_offset = (is_offset === undefined) || is_offset;
 		const delta = is_offset ? value : value - self.currentMonth;
+		const skipAnimations = !self.config.animate || animate === false;
 
 		if (
 			(delta < 0 && self._hidePrevMonthArrow) ||
@@ -854,11 +855,11 @@ function Flatpickr(element, config) {
 		}
 
 		updateNavigationCurrentMonth();
-		buildDays(animate ? delta : undefined);
+		buildDays(!skipAnimations ? delta : undefined);
 
 		triggerEvent("MonthChange");
 
-		if (!self.config.animate || animate === false)
+		if (skipAnimations)
 			return;
 		
 		self.oldCurMonth = self.navigationCurrentMonth;
