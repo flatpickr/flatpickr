@@ -178,10 +178,7 @@ function Flatpickr(element, config) {
 		}
 	}
 
-	function onMonthScroll(e) {
-		e.preventDefault();
-		self.changeMonth(Math.max(-1, Math.min(1, (e.wheelDelta || -e.deltaY))));
-	}
+	
 
 	function bind() {
 		if (self.config.wrap) {
@@ -230,8 +227,7 @@ function Flatpickr(element, config) {
 			self.prevMonthNav.addEventListener("click", () => changeMonth(-1));
 			self.nextMonthNav.addEventListener("click", () => changeMonth(1));
 
-			self.currentMonthElement.addEventListener("wheel", e => debounce(onMonthScroll(e), 50));
-			self.currentYearElement.addEventListener("wheel", e => debounce(yearScroll(e), 50));
+			self.monthNav.addEventListener("wheel", onMonthNavScroll);
 			self.currentYearElement.addEventListener("focus", () => {
 				self.currentYearElement.select();
 			});
@@ -241,12 +237,13 @@ function Flatpickr(element, config) {
 
 			self.daysContainer.addEventListener("click", selectDate);
 
-			if (self.config.animate)
+			if (self.config.animate) {
 				self.daysContainer.addEventListener("animationend", animateDays);
+				self.monthNav.addEventListener("animationend", animateMonths);
+			}
 		}
 
 		if (self.config.enableTime) {
-			self.timeContainer.addEventListener("transitionend", positionCalendar);
 			self.timeContainer.addEventListener("wheel", e => debounce(updateTime(e), 5));
 			self.timeContainer.addEventListener("input", updateTime);
 			self.timeContainer.addEventListener("increment", updateTime);
@@ -281,21 +278,35 @@ function Flatpickr(element, config) {
 		if (self.daysContainer.childNodes.length > 1) {
 			switch(e.animationName) {
 				case "slideLeft":
-					self.daysContainer.childNodes[1].classList.remove("slideLeftNew")
-					self.daysContainer.removeChild(self.daysContainer.childNodes[0]);
+					self.daysContainer.lastChild.classList.remove("slideLeftNew")
+					self.daysContainer.removeChild(self.daysContainer.firstChild);
 					self.days = self.daysContainer.firstChild;
+
 					break;
 
 				case "slideRight":
-					self.daysContainer.childNodes[0].classList.remove("slideRightNew")
-					self.daysContainer.removeChild(self.daysContainer.childNodes[1]);
+					self.daysContainer.firstChild.classList.remove("slideRightNew")
+					self.daysContainer.removeChild(self.daysContainer.lastChild);
 					self.days = self.daysContainer.firstChild;
+
 					break;
 
 				default: break;
 			}
 		}
 	}
+
+	function animateMonths(e){
+		switch(e.animationName) {
+			case "slideLeft":
+			case "slideRight":
+				self.navigationCurrentMonth.classList.remove("slideLeftNew");
+				self.navigationCurrentMonth.classList.remove("slideRightNew");
+				self.monthNav.removeChild(self.oldCurMonth);
+				self.oldCurMonth = null;
+				break;
+		}
+	}		
 
 	function jumpToDate(jumpDate) {
 		jumpDate = jumpDate
@@ -841,16 +852,33 @@ function Flatpickr(element, config) {
 
 		if (!self.config.animate)
 			return;
+		
+		self.oldCurMonth = self.navigationCurrentMonth;
+		self.navigationCurrentMonth = self.monthNav.insertBefore(
+			self.oldCurMonth.cloneNode(true),
+			delta > 0 
+				? self.oldCurMonth.nextSibling
+				: self.oldCurMonth
+		);
 
 		if (delta > 0) {
-			self.daysContainer.lastChild.classList.add("slideLeftNew");
 			self.daysContainer.firstChild.classList.add("slideLeft");
+			self.daysContainer.lastChild.classList.add("slideLeftNew");
+
+			self.oldCurMonth.classList.add("slideLeft");
+			self.navigationCurrentMonth.classList.add("slideLeftNew");
 		}
 
 		else if (delta < 0) {
-			self.daysContainer.lastChild.classList.add("slideRight");
 			self.daysContainer.firstChild.classList.add("slideRightNew");
+			self.daysContainer.lastChild.classList.add("slideRight");
+			
+			self.oldCurMonth.classList.add("slideRight");
+			self.navigationCurrentMonth.classList.add("slideRightNew");
 		}
+
+		self.currentMonthElement = self.navigationCurrentMonth.firstChild;
+		self.currentYearElement = self.navigationCurrentMonth.lastChild.childNodes[0];
 
 		if (self._.daysAnimDuration === undefined) {
 			self._.daysAnimDuration = parseInt(/(\d+)s/.exec(
@@ -901,9 +929,6 @@ function Flatpickr(element, config) {
 		window.document.removeEventListener("click", documentClick);
 		window.document.removeEventListener("touchstart", documentClick);
 		window.document.removeEventListener("blur", documentClick);
-
-		if (instance.timeContainer)
-			instance.timeContainer.removeEventListener("transitionend", positionCalendar);
 
 		if (instance.mobileInput) {
 			if (instance.mobileInput.parentNode)
@@ -1376,10 +1401,7 @@ function Flatpickr(element, config) {
 		);
 	}
 
-	function positionCalendar(e) {
-		if (e && e.target !== self.timeContainer)
-			return;
-
+	function positionCalendar() {
 		const calendarHeight = self.calendarContainer.offsetHeight,
 			calendarWidth = self.calendarContainer.offsetWidth,
 			configPos = self.config.position,
@@ -1491,7 +1513,7 @@ function Flatpickr(element, config) {
 		}
 
 		buildDays();
-
+		
 		if (self.minDateHasTime	&& self.config.enableTime
 			&& compareDates(selectedDate, self.config.minDate) === 0
 		)
@@ -1667,6 +1689,7 @@ function Flatpickr(element, config) {
 					self._showTimeInput = bool;
 					if (self.calendarContainer)
 						toggleClass(self.calendarContainer, "showTimeInput", bool);
+					positionCalendar();
 				}
 			});
 		}
@@ -1883,14 +1906,24 @@ function Flatpickr(element, config) {
 		triggerEvent("ValueUpdate");
 	}
 
-	function yearScroll(e) {
-		e.preventDefault();
+	function onMonthNavScroll(e) {
+		switch(e.target) {
+			case self.currentMonthElement:
+			case self.currentYearElement:
+				e.preventDefault();
+				const delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.deltaY)));
 
-		const delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.deltaY))),
-			newYear = parseInt(e.target.value, 10) + delta;
+				if (e.target === self.currentMonthElement)
+					self.changeMonth(delta);
+				else {
+					changeYear(parseInt(e.target.value, 10) + delta);
+					e.target.value = self.currentYear;
+				}
 
-		changeYear(newYear);
-		e.target.value = self.currentYear;
+				break;
+			
+			default: break;
+		}
 	}
 
 	function createElement(tag, className, content) {
