@@ -69,8 +69,9 @@ function Flatpickr(element, config) {
 
 		self.showTimeInput = self.selectedDates.length > 0 || self.config.noCalendar;
 
-		if (!self.isMobile)
+		if (!self.isMobile) 
 			positionCalendar();
+
 		triggerEvent("Ready");
 	}
 
@@ -246,6 +247,9 @@ function Flatpickr(element, config) {
 			if (self.config.animate) {
 				self.daysContainer.addEventListener("animationend", animateDays);
 				self.monthNav.addEventListener("animationend", animateMonths);
+
+				self.daysContainer.addEventListener("webkitAnimationEnd", animateDays);
+				self.monthNav.addEventListener("webkitAnimationEnd", animateMonths);
 			}
 		}
 
@@ -894,11 +898,12 @@ function Flatpickr(element, config) {
 		self.currentYearElement = self.navigationCurrentMonth.lastChild.childNodes[0];
 
 		if (self._.daysAnimDuration === undefined) {
-			self._.daysAnimDuration = parseInt(/(\d+)s/.exec(
-				window
-				.getComputedStyle(self.daysContainer.lastChild)
-				.getPropertyValue("animation-duration")
-			)[1]);
+			const compStyle = window.getComputedStyle(self.daysContainer.lastChild);
+			
+			const duration = compStyle.getPropertyValue("animation-duration")
+				|| compStyle.getPropertyValue("-webkit-animation-duration");
+			
+			self._.daysAnimDuration = parseInt(/(\d+)s/.exec(duration)[1]);
 		}
 	}
 
