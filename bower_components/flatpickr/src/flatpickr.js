@@ -227,7 +227,7 @@ function Flatpickr(element, config) {
 			self.prevMonthNav.addEventListener("click", () => changeMonth(-1));
 			self.nextMonthNav.addEventListener("click", () => changeMonth(1));
 
-			self.calendarContainer.addEventListener("wheel", onMonthNavScroll);
+			self.monthNav.addEventListener("wheel", onMonthNavScroll);
 			self.monthNav.addEventListener("click", onMonthNavClick);
 
 			self.currentYearElement.addEventListener("focus", () => {
@@ -835,7 +835,7 @@ function Flatpickr(element, config) {
 	}
 
 	function changeMonth(value, is_offset, animate) {
-		is_offset = typeof is_offset === "undefined" || is_offset;
+		is_offset = (is_offset === undefined) || is_offset;
 		const delta = is_offset ? value : value - self.currentMonth;
 
 		if (
@@ -854,7 +854,7 @@ function Flatpickr(element, config) {
 		}
 
 		updateNavigationCurrentMonth();
-		buildDays(delta);
+		buildDays(animate ? delta : undefined);
 
 		triggerEvent("MonthChange");
 
@@ -1940,7 +1940,7 @@ function Flatpickr(element, config) {
 	function onMonthNavClick(e) {
 		if (e.target.className === "arrowUp")
 			self.changeYear(self.currentYear + 1);
-			
+
 		else if (e.target.className === "arrowDown")
 			self.changeYear(self.currentYear - 1);
 	}
