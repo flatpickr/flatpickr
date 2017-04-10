@@ -246,7 +246,9 @@ function Flatpickr(element, config) {
 		}
 
 		if (self.config.enableTime) {
-			self.timeContainer.addEventListener("wheel", e => debounce(updateTime(e), 5));
+			self.timeContainer.addEventListener("wheel", updateTime);
+			
+			self.timeContainer.addEventListener("click", timeIncrement);
 			self.timeContainer.addEventListener("input", updateTime);
 			self.timeContainer.addEventListener("increment", updateTime);
 			self.timeContainer.addEventListener("increment", self.debouncedChange);
@@ -335,6 +337,13 @@ function Flatpickr(element, config) {
 		self.redraw();
 	}
 
+	function timeIncrement(e) {
+		if (~e.target.className.indexOf("arrow")) {
+			incrementNumInput(e, e.target.classList.contains("arrowUp") ? 1 : -1);
+		}
+			
+	}
+
 	function incrementNumInput(e, delta, inputElem) {
 		const input = inputElem || e.target.parentNode.childNodes[0];
 		let ev;
@@ -360,9 +369,11 @@ function Flatpickr(element, config) {
 
 		numInput.type = "text";
 		numInput.pattern = "\\d*";
+
 		wrapper.appendChild(numInput);
 		wrapper.appendChild(arrowUp);
 		wrapper.appendChild(arrowDown);
+
 		return wrapper;
 	}
 
@@ -1908,12 +1919,16 @@ function Flatpickr(element, config) {
 		triggerEvent("ValueUpdate");
 	}
 
+	function mouseDelta(e) {
+		return Math.max(-1, Math.min(1, (e.wheelDelta || -e.deltaY)));
+	}
+
 	function onMonthNavScroll(e) {
 		const isYear = self.currentYearElement.parentNode.contains(e.target);
 		
 		if (e.target === self.currentMonthElement || isYear) {
 			e.preventDefault();
-			const delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.deltaY)));
+			const delta = mouseDelta(e);
 
 			if (isYear) {
 				changeYear(self.currentYear + delta);
