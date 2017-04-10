@@ -1,0 +1,10 @@
+.flatpickr-day.month.selected {
+  border-radius: 0;
+  box-shadow: -5px 0 0 #569ff7, 5px 0 0 #569ff7
+}
+.flatpickr-day.month.selected.startRange {
+  border-radius: 50px 0 0 50px;
+}
+.flatpickr-day.month.selected.endRange {
+  border-radius: 0 50px 50px 0;
+}
