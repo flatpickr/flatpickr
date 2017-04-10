@@ -41,16 +41,6 @@ See also:
 
 ## Supporting flatpickr
 
-Special thanks to support by:
-
-- BrowserStack for providing indispensable testing utilities
-
-  <a target="_blank" href="https://www.browserstack.com/">
-    <img src="https://cloud.githubusercontent.com/assets/11352152/24872293/ec310d48-1dea-11e7-9d09-8120d5742fba.png">
-  </a>
-
----
-
 <a href="https://opencollective.com/flatpickr/backer/0/website" target="_blank"><img src="https://opencollective.com/flatpickr/backer/0/avatar.svg"></a>
 <a href="https://opencollective.com/flatpickr/backer/1/website" target="_blank"><img src="https://opencollective.com/flatpickr/backer/1/avatar.svg"></a>
 <a href="https://opencollective.com/flatpickr/backer/2/website" target="_blank"><img src="https://opencollective.com/flatpickr/backer/2/avatar.svg"></a>
