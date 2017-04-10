@@ -227,7 +227,9 @@ function Flatpickr(element, config) {
 			self.prevMonthNav.addEventListener("click", () => changeMonth(-1));
 			self.nextMonthNav.addEventListener("click", () => changeMonth(1));
 
-			self.monthNav.addEventListener("wheel", onMonthNavScroll);
+			self.calendarContainer.addEventListener("wheel", onMonthNavScroll);
+			self.monthNav.addEventListener("click", onMonthNavClick);
+
 			self.currentYearElement.addEventListener("focus", () => {
 				self.currentYearElement.select();
 			});
@@ -361,9 +363,6 @@ function Flatpickr(element, config) {
 		wrapper.appendChild(numInput);
 		wrapper.appendChild(arrowUp);
 		wrapper.appendChild(arrowDown);
-
-		arrowUp.addEventListener("click", e => incrementNumInput(e, 1));
-		arrowDown.addEventListener("click", e => incrementNumInput(e, -1));
 		return wrapper;
 	}
 
@@ -826,7 +825,7 @@ function Flatpickr(element, config) {
 		return self.weekWrapper;
 	}
 
-	function changeMonth(value, is_offset) {
+	function changeMonth(value, is_offset, animate) {
 		is_offset = typeof is_offset === "undefined" || is_offset;
 		const delta = is_offset ? value : value - self.currentMonth;
 
@@ -850,7 +849,7 @@ function Flatpickr(element, config) {
 
 		triggerEvent("MonthChange");
 
-		if (!self.config.animate)
+		if (!self.config.animate || animate === false)
 			return;
 		
 		self.oldCurMonth = self.navigationCurrentMonth;
@@ -1404,7 +1403,7 @@ function Flatpickr(element, config) {
 	function positionCalendar() {
 		if (self.calendarContainer === undefined)
 			return;
-			
+
 		const calendarHeight = self.calendarContainer.offsetHeight,
 			calendarWidth = self.calendarContainer.offsetWidth,
 			configPos = self.config.position,
@@ -1910,23 +1909,26 @@ function Flatpickr(element, config) {
 	}
 
 	function onMonthNavScroll(e) {
-		switch(e.target) {
-			case self.currentMonthElement:
-			case self.currentYearElement:
-				e.preventDefault();
-				const delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.deltaY)));
+		const isYear = self.currentYearElement.parentNode.contains(e.target);
+		
+		if (e.target === self.currentMonthElement || isYear) {
+			e.preventDefault();
+			const delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.deltaY)));
 
-				if (e.target === self.currentMonthElement)
-					self.changeMonth(delta);
-				else {
-					changeYear(parseInt(e.target.value, 10) + delta);
-					e.target.value = self.currentYear;
-				}
-
-				break;
-			
-			default: break;
+			if (isYear) {
+				changeYear(self.currentYear + delta);
+				e.target.value = self.currentYear;
+			}
+			else
+				self.changeMonth(delta, true, false);
 		}
+	}
+
+	function onMonthNavClick(e) {
+		if (e.target.className === "arrowUp")
+			self.changeYear(self.currentYear+1);
+		else if (e.target.className === "arrowDown")
+			self.changeYear(self.currentYear-1);
 	}
 
 	function createElement(tag, className, content) {
