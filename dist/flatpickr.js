@@ -143,11 +143,6 @@ function Flatpickr(element, config) {
 		}
 	}
 
-	function onMonthScroll(e) {
-		e.preventDefault();
-		self.changeMonth(Math.max(-1, Math.min(1, e.wheelDelta || -e.deltaY)));
-	}
-
 	function bind() {
 		if (self.config.wrap) {
 			["open", "close", "toggle", "clear"].forEach(function (el) {
@@ -196,12 +191,7 @@ function Flatpickr(element, config) {
 				return changeMonth(1);
 			});
 
-			self.currentMonthElement.addEventListener("wheel", function (e) {
-				return debounce(onMonthScroll(e), 50);
-			});
-			self.currentYearElement.addEventListener("wheel", function (e) {
-				return debounce(yearScroll(e), 50);
-			});
+			self.monthNav.addEventListener("wheel", onMonthNavScroll);
 			self.currentYearElement.addEventListener("focus", function () {
 				self.currentYearElement.select();
 			});
@@ -211,11 +201,13 @@ function Flatpickr(element, config) {
 
 			self.daysContainer.addEventListener("click", selectDate);
 
-			if (self.config.animate) self.daysContainer.addEventListener("animationend", animateDays);
+			if (self.config.animate) {
+				self.daysContainer.addEventListener("animationend", animateDays);
+				self.monthNav.addEventListener("animationend", animateMonths);
+			}
 		}
 
 		if (self.config.enableTime) {
-			self.timeContainer.addEventListener("transitionend", positionCalendar);
 			self.timeContainer.addEventListener("wheel", function (e) {
 				return debounce(updateTime(e), 5);
 			});
@@ -252,20 +244,34 @@ function Flatpickr(element, config) {
 		if (self.daysContainer.childNodes.length > 1) {
 			switch (e.animationName) {
 				case "slideLeft":
-					self.daysContainer.childNodes[1].classList.remove("slideLeftNew");
-					self.daysContainer.removeChild(self.daysContainer.childNodes[0]);
+					self.daysContainer.lastChild.classList.remove("slideLeftNew");
+					self.daysContainer.removeChild(self.daysContainer.firstChild);
 					self.days = self.daysContainer.firstChild;
+
 					break;
 
 				case "slideRight":
-					self.daysContainer.childNodes[0].classList.remove("slideRightNew");
-					self.daysContainer.removeChild(self.daysContainer.childNodes[1]);
+					self.daysContainer.firstChild.classList.remove("slideRightNew");
+					self.daysContainer.removeChild(self.daysContainer.lastChild);
 					self.days = self.daysContainer.firstChild;
+
 					break;
 
 				default:
 					break;
 			}
+		}
+	}
+
+	function animateMonths(e) {
+		switch (e.animationName) {
+			case "slideLeft":
+			case "slideRight":
+				self.navigationCurrentMonth.classList.remove("slideLeftNew");
+				self.navigationCurrentMonth.classList.remove("slideRightNew");
+				self.monthNav.removeChild(self.oldCurMonth);
+				self.oldCurMonth = null;
+				break;
 		}
 	}
 
@@ -687,13 +693,25 @@ function Flatpickr(element, config) {
 
 		if (!self.config.animate) return;
 
+		self.oldCurMonth = self.navigationCurrentMonth;
+		self.navigationCurrentMonth = self.monthNav.insertBefore(self.oldCurMonth.cloneNode(true), delta > 0 ? self.oldCurMonth.nextSibling : self.oldCurMonth);
+
 		if (delta > 0) {
-			self.daysContainer.lastChild.classList.add("slideLeftNew");
 			self.daysContainer.firstChild.classList.add("slideLeft");
+			self.daysContainer.lastChild.classList.add("slideLeftNew");
+
+			self.oldCurMonth.classList.add("slideLeft");
+			self.navigationCurrentMonth.classList.add("slideLeftNew");
 		} else if (delta < 0) {
-			self.daysContainer.lastChild.classList.add("slideRight");
 			self.daysContainer.firstChild.classList.add("slideRightNew");
+			self.daysContainer.lastChild.classList.add("slideRight");
+
+			self.oldCurMonth.classList.add("slideRight");
+			self.navigationCurrentMonth.classList.add("slideRightNew");
 		}
+
+		self.currentMonthElement = self.navigationCurrentMonth.firstChild;
+		self.currentYearElement = self.navigationCurrentMonth.lastChild.childNodes[0];
 
 		if (self._.daysAnimDuration === undefined) {
 			self._.daysAnimDuration = parseInt(/(\d+)s/.exec(window.getComputedStyle(self.daysContainer.lastChild).getPropertyValue("animation-duration"))[1]);
@@ -738,8 +756,6 @@ function Flatpickr(element, config) {
 		window.document.removeEventListener("click", documentClick);
 		window.document.removeEventListener("touchstart", documentClick);
 		window.document.removeEventListener("blur", documentClick);
-
-		if (instance.timeContainer) instance.timeContainer.removeEventListener("transitionend", positionCalendar);
 
 		if (instance.mobileInput) {
 			if (instance.mobileInput.parentNode) instance.mobileInput.parentNode.removeChild(instance.mobileInput);
@@ -1092,9 +1108,7 @@ function Flatpickr(element, config) {
 		self.l10n = _extends(Object.create(Flatpickr.l10ns.default), _typeof(self.config.locale) === "object" ? self.config.locale : self.config.locale !== "default" ? Flatpickr.l10ns[self.config.locale] || {} : {});
 	}
 
-	function positionCalendar(e) {
-		if (e && e.target !== self.timeContainer) return;
-
+	function positionCalendar() {
 		var calendarHeight = self.calendarContainer.offsetHeight,
 		    calendarWidth = self.calendarContainer.offsetWidth,
 		    configPos = self.config.position,
@@ -1323,6 +1337,7 @@ function Flatpickr(element, config) {
 				set: function set(bool) {
 					self._showTimeInput = bool;
 					if (self.calendarContainer) toggleClass(self.calendarContainer, "showTimeInput", bool);
+					positionCalendar();
 				}
 			});
 		}
@@ -1496,14 +1511,23 @@ function Flatpickr(element, config) {
 		triggerEvent("ValueUpdate");
 	}
 
-	function yearScroll(e) {
-		e.preventDefault();
+	function onMonthNavScroll(e) {
+		switch (e.target) {
+			case self.currentMonthElement:
+			case self.currentYearElement:
+				e.preventDefault();
+				var delta = Math.max(-1, Math.min(1, e.wheelDelta || -e.deltaY));
 
-		var delta = Math.max(-1, Math.min(1, e.wheelDelta || -e.deltaY)),
-		    newYear = parseInt(e.target.value, 10) + delta;
+				if (e.target === self.currentMonthElement) self.changeMonth(delta);else {
+					changeYear(parseInt(e.target.value, 10) + delta);
+					e.target.value = self.currentYear;
+				}
 
-		changeYear(newYear);
-		e.target.value = self.currentYear;
+				break;
+
+			default:
+				break;
+		}
 	}
 
 	function createElement(tag, className, content) {
