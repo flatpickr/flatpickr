@@ -338,10 +338,8 @@ function Flatpickr(element, config) {
 	}
 
 	function timeIncrement(e) {
-		if (~e.target.className.indexOf("arrow")) {
+		if (~e.target.className.indexOf("arrow"))
 			incrementNumInput(e, e.target.classList.contains("arrowUp") ? 1 : -1);
-		}
-			
 	}
 
 	function incrementNumInput(e, delta, inputElem) {
@@ -1941,9 +1939,10 @@ function Flatpickr(element, config) {
 
 	function onMonthNavClick(e) {
 		if (e.target.className === "arrowUp")
-			self.changeYear(self.currentYear+1);
+			self.changeYear(self.currentYear + 1);
+			
 		else if (e.target.className === "arrowDown")
-			self.changeYear(self.currentYear-1);
+			self.changeYear(self.currentYear - 1);
 	}
 
 	function createElement(tag, className, content) {
