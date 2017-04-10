@@ -43,9 +43,11 @@ See also:
 
 Special thanks to support by:
 
-<a target="_blank" href="https://www.browserstack.com/">
-  <img src="https://cloud.githubusercontent.com/assets/11352152/24872293/ec310d48-1dea-11e7-9d09-8120d5742fba.png">
-</a>
+- BrowserStack for providing indispensable testing utilities
+
+  <a target="_blank" href="https://www.browserstack.com/">
+    <img src="https://cloud.githubusercontent.com/assets/11352152/24872293/ec310d48-1dea-11e7-9d09-8120d5742fba.png">
+  </a>
 
 ---
 
