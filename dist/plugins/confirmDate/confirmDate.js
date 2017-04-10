@@ -8,21 +8,32 @@ function confirmDatePlugin(pluginConfig) {
 
 	var config = {};
 	for (var key in defaultConfig) {
-		config[key] = pluginConfig && pluginConfig[key] !== undefined ? pluginConfig[key] : defaultConfig[key];
+		config[key] = pluginConfig && pluginConfig[key] !== undefined 
+			? pluginConfig[key] 
+			: defaultConfig[key];
 	}
 
-	return function (fp) {
+	return function(fp) {
 		var hooks = {
-			onKeyDown: function onKeyDown(_, __, ___, e) {
+			onKeyDown: function onKeyDown (_, __, ___, e) {
 				if (fp.config.enableTime && e.key === "Tab" && e.target === fp.amPM) {
 					e.preventDefault();
 					fp.confirmContainer.focus();
-				} else if (e.key === "Enter" && e.target === fp.confirmContainer) fp.close();
-			},
-			onReady: function onReady() {
-				if (fp.calendarContainer === undefined) return;
+				}
 
-				fp.confirmContainer = fp._createElement("div", "flatpickr-confirm " + (config.showAlways ? "visible" : "") + " " + config.theme + "Theme", config.confirmText);
+				else if (e.key === "Enter" && e.target === fp.confirmContainer)
+					{ fp.close(); }
+			},
+
+			onReady: function onReady () {
+				if (fp.calendarContainer === undefined)
+					{ return; }
+
+				fp.confirmContainer = fp._createElement(
+					"div", 
+					("flatpickr-confirm " + (config.showAlways ? "visible" : "") + " " + (config.theme) + "Theme"), 
+					config.confirmText
+				);
 
 				fp.confirmContainer.tabIndex = -1;
 				fp.confirmContainer.innerHTML += config.confirmIcon;
@@ -31,15 +42,19 @@ function confirmDatePlugin(pluginConfig) {
 				fp.calendarContainer.appendChild(fp.confirmContainer);
 			}
 		};
+		
 
-		if (!config.showAlways) hooks.onChange = function (dateObj, dateStr) {
-			var showCondition = fp.config.enableTime || fp.config.mode === "multiple";
-			if (dateStr && !fp.config.inline && showCondition) return fp.confirmContainer.classList.add("visible");
-			fp.confirmContainer.classList.remove("visible");
-		};
+		if (!config.showAlways)
+			{ hooks.onChange = function(dateObj, dateStr) {
+				var showCondition = fp.config.enableTime || fp.config.mode === "multiple";
+				if(dateStr && !fp.config.inline && showCondition)
+					{ return fp.confirmContainer.classList.add("visible"); }
+				fp.confirmContainer.classList.remove("visible");
+			} }
 
 		return hooks;
-	};
+	}
 }
 
-if (typeof module !== "undefined") module.exports = confirmDatePlugin;
+if (typeof module !== "undefined")
+	{ module.exports = confirmDatePlugin; }
