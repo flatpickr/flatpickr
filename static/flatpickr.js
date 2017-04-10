@@ -146,7 +146,7 @@ const configs = {
     }
 }
 
-for (let i = 0; i < examples.length; i++) {
+for (var i = 0; i < examples.length; i++) {
     new Flatpickr(examples[i], configs[examples[i].dataset.id] || {});
 }
 
