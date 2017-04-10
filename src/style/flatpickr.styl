@@ -139,6 +139,16 @@ $invertedBg = invert($calendarBackground)
     &.hasWeeks
         width auto
 
+    .hasWeeks, .hasTime
+        .dayContainer
+            border-bottom 0
+            border-bottom-right-radius 0
+            border-bottom-left-radius 0
+
+    if $noCalendarBorder
+        .hasWeeks .dayContainer
+            border-left 0
+
     &.showTimeInput.hasTime
         .flatpickr-time
             height $timeHeight
@@ -352,7 +362,7 @@ $invertedBg = invert($calendarBackground)
     &.slideLeftNew
         transform translate(100%, 0px)
         animation fadeIn $slideTime ease, slideLeftNew $slideTime $bezier
-
+    
     &.slideRight
         transform translate(100%, 0px)
         animation fadeOut $slideTime ease, slideRight $slideTime $bezier
@@ -417,6 +427,29 @@ $invertedBg = invert($calendarBackground)
     text-align center
     overflow hidden
     width $calendarWidth
+    display flex
+    align-items center
+    height 28px
+
+span.flatpickr-weekday
+    cursor default
+    font-size 90%
+
+    if $weekdays_color is defined
+        color alpha($weekdays_color, 0.54)
+    else
+        color alpha(black, 0.54)
+
+    line-height 1
+    margin 0
+    background $monthBackground
+    text-align center
+    display block
+    flex 1
+    font-weight bolder
+    margin 0
+
+
 
 .dayContainer, .flatpickr-weeks
     padding 1px 0 0 0
@@ -426,6 +459,9 @@ $invertedBg = invert($calendarBackground)
     overflow: hidden;
     display flex
     width $daysWidth
+
+    &:focus
+        outline 0
 
     if $noCalendarBorder is defined
         background $monthForeground
@@ -465,7 +501,7 @@ $invertedBg = invert($calendarBackground)
     &.slideRight
         animation fadeOut $slideTime $bezier, slideRight $slideTime $bezier
         transform: translate(100%, 0px);
-
+        
     &.slideRightNew
         animation fadeIn $slideTime $bezier, slideRightNew $slideTime $bezier
 
@@ -555,27 +591,6 @@ $invertedBg = invert($calendarBackground)
         else
             border-color transparent
         cursor default
-
-span.flatpickr-weekday
-    cursor default
-    font-size 90%
-
-    if $weekdays_color is defined
-        color alpha($weekdays_color, 0.54)
-    else
-        color alpha(black, 0.54)
-
-    height (24px + $daySize/12)
-    line-height 24px
-    margin 0
-    background $monthBackground
-    text-align center
-    display block
-    float left
-    width 14.28%
-    font-weight bold
-    margin 0
-    padding-top ($daySize/12)
 
 .rangeMode .flatpickr-day
     margin-top 1px
@@ -703,16 +718,6 @@ span.flatpickr-weekday
         &:hover, &:focus
             background lighten($dayHoverBackground, 4)
 
-
-.hasWeeks, .hasTime
-    .dayContainer
-        border-bottom 0
-        border-bottom-right-radius 0
-        border-bottom-left-radius 0
-
-if $noCalendarBorder
-    .hasWeeks .dayContainer
-        border-left 0
 
 
 @media all and (-ms-high-contrast none)
