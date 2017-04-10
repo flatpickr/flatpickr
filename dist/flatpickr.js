@@ -1109,6 +1109,8 @@ function Flatpickr(element, config) {
 	}
 
 	function positionCalendar() {
+		if (self.calendarContainer === undefined) return;
+
 		var calendarHeight = self.calendarContainer.offsetHeight,
 		    calendarWidth = self.calendarContainer.offsetWidth,
 		    configPos = self.config.position,
