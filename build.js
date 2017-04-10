@@ -33,7 +33,7 @@ function lint(code, filename){
         process.stdout.write(
             lintFormatter(report.results)
         );
-    
+
     else
         console.info("Linting: OK ✓")
 }
@@ -120,13 +120,19 @@ async function buildExtras(folder){
 }
 
 async function transpileStyle(src, compress=false){
-    
+
     return new Promise((resolve, reject) => {
         stylus(src, {
             compress
         })
         .include(`${__dirname}/src/style/themes`)
-        .use(stylus_autoprefixer())
+        .use(stylus_autoprefixer({
+            browsers: [
+                "ie >= 9",
+                "last 2 versions",
+                "safari >= 7"
+            ]
+        }))
         .render((err, css) => {
             if (!err)
                 resolve(css);
@@ -168,7 +174,7 @@ function setupWatchers(){
 function serve(){
     livereload.createServer().watch("./dist");
     server.createServer().listen(8080);
-    
+
 }
 
 function start(){

@@ -63,6 +63,6 @@
   "browserslist": [
     "ie >= 9",
     "last 2 versions",
-    "safari >= 6"
+    "safari >= 7"
   ]
 }
