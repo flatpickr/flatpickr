@@ -1178,5 +1178,44 @@ For instance, to set the first day of the week to Monday:&lt;/p&gt;
 </description>
     </item>
     
+    <item>
+      <title>Themes</title>
+      <link>https://chmln.github.io/flatpickr/themes/</link>
+      <pubDate>Sun, 09 Apr 2017 20:23:43 -0500</pubDate>
+      
+      <guid>https://chmln.github.io/flatpickr/themes/</guid>
+      <description>
+
+&lt;p&gt;&lt;label for=themes&gt;Select Theme:&lt;/label&gt;
+&lt;select id=themes&gt;
+    &lt;option value=&#34;&#34;&gt;Default&lt;/option&gt;
+&lt;/select&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;input class=flatpickr type=&#34;text&#34; placeholder=&#34;Select Date..&#34; data-id=&#34;datetime&#34;&gt;&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&#34;usage&#34;&gt;Usage&lt;/h2&gt;
+
+&lt;p&gt;To use a theme of your choice, simply load its corresponding CSS file.&lt;/p&gt;
+
+&lt;p&gt;For webpack builds and similar, you&amp;rsquo;d do something like:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;require(&amp;quot;flatpickr/dist/themes/dark.css&amp;quot;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;themes-in-browser-environments&#34;&gt;Themes in browser environments&lt;/h3&gt;
+
+&lt;p&gt;Otherwise, if you&amp;rsquo;re constrained to a browser, just link the CSS file as a regular stylesheet.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;link rel=&amp;quot;stylesheet&amp;quot; type=&amp;quot;text/css&amp;quot; href=&amp;quot;https://npmcdn.com/flatpickr/dist/themes/dark.css&amp;quot;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;available-themes&#34;&gt;Available Themes&lt;/h2&gt;
+
+&lt;p&gt;Available theme names are listed in the theme selector on top of the page.&lt;/p&gt;
+</description>
+    </item>
+    
   </channel>
 </rss>
