@@ -1,0 +1,14 @@
+{
+  "name": "fp",
+  "homepage": "https://github.com/chmln/flatpickr",
+  "authors": [
+    "Gregory"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "flatpickr": "github:chmln/flatpickr#master"
+  }
+}
