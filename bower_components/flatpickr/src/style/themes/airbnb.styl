@@ -24,37 +24,44 @@ $selectedDayForeground = #fff
 .flatpickr-calendar
 	width $daysWidth
 
-.flatpickr-days
+.dayContainer
 	padding 0
 	border-right 0
 
 span.flatpickr-day
-	border-radius 0 !important
-	border 1px solid $dayHoverBackground
-	margin -1px 0 0 -1px
-	max-width none
-	flex-basis: calc(14.28571% + 1px)
-	width: calc(14.28571% + 1px)
+	&, &.prevMonthDay, &.nextMonthDay
+		border-radius 0 !important
+		border 1px solid $dayHoverBackground
+		max-width none
+		border-right-color transparent
+		
+		&:nth-child(n+8)
+			border-top-color transparent
 
-	&:nth-child(7n)
-		border-right 0
+		&:nth-child(7n-6)
+			border-left 0
 
-	&:nth-child(n+36)
-		border-bottom 0
+		&:nth-child(n+36)
+			border-bottom 0
+		
+		&:nth-child(-n+7)
+			margin-top 0
 
-	&.today:not(.selected)
-		border-color $dayHoverBackground
-		border-bottom-color $todayColor
+		&.today:not(.selected)
+			border-color $dayHoverBackground
+			border-right-color transparent
+			border-top-color transparent
+			border-bottom-color $todayColor
 
-		&:hover
-			border-color $todayColor
+			&:hover
+				border 1px solid $todayColor
 
-	&.startRange, &.endRange
-		border-color $selectedDayBackground
+		&.startRange, &.endRange
+			border-color $selectedDayBackground
 
 
-	&.today, &.selected
-		z-index 2
+		&.today, &.selected
+			z-index 2
 
 .rangeMode .flatpickr-day
 	margin-top -1px

@@ -481,9 +481,9 @@ calendar.changeMonth(0, false); // go to January
 
 &lt;p&gt;Destroys the Flatpickr instance, cleans up - removes event listeners, restores inputs, etc.&lt;/p&gt;
 
-&lt;h3 id=&#34;formatdate-formatstr-dateobj&#34;&gt;&lt;code&gt;formatDate(formatStr, dateObj)&lt;/code&gt;&lt;/h3&gt;
+&lt;h3 id=&#34;formatdate-dateobj-formatstr&#34;&gt;&lt;code&gt;formatDate(dateObj, formatStr)&lt;/code&gt;&lt;/h3&gt;
 
-&lt;p&gt;&lt;code&gt;formatStr&lt;/code&gt;  is a string consisting of formatting tokens, and &lt;code&gt;dateObj&lt;/code&gt;  is a Date.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;dateObj&lt;/code&gt; is a Date, and &lt;code&gt;formatStr&lt;/code&gt; is a string consisting of formatting tokens.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Return Value&lt;/strong&gt;
 A string representation of&lt;code&gt;dateObj&lt;/code&gt;,  formatted as per &lt;code&gt;formatStr&lt;/code&gt;&lt;/p&gt;
