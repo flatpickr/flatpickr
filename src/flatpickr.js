@@ -227,7 +227,11 @@ function Flatpickr(element, config) {
 			self.prevMonthNav.addEventListener("click", () => changeMonth(-1));
 			self.nextMonthNav.addEventListener("click", () => changeMonth(1));
 
-			self.monthNav.addEventListener("wheel", onMonthNavScroll);
+			self.monthNav.addEventListener("wheel", e => {
+				e.preventDefault()
+			});
+
+			self.monthNav.addEventListener("wheel", debounce(onMonthNavScroll, 10));
 			self.monthNav.addEventListener("click", onMonthNavClick);
 
 			self.currentYearElement.addEventListener("focus", () => {
@@ -1923,10 +1927,11 @@ function Flatpickr(element, config) {
 	}
 
 	function onMonthNavScroll(e) {
+		e.preventDefault();
 		const isYear = self.currentYearElement.parentNode.contains(e.target);
 		
 		if (e.target === self.currentMonthElement || isYear) {
-			e.preventDefault();
+			
 			const delta = mouseDelta(e);
 
 			if (isYear) {
