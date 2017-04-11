@@ -127,6 +127,7 @@ async function transpileStyle(src, compress=false){
         stylus(src, {
             compress
         })
+        .include(`${__dirname}/src/style`)
         .include(`${__dirname}/src/style/themes`)
         .use(stylus_autoprefixer({
             browsers: [
@@ -146,14 +147,20 @@ async function transpileStyle(src, compress=false){
 
 
 async function buildStyle(){
-    const src = await readFileAsync(paths.style);
-    const [style, min] = await Promise.all([
+    const [src, src_ie] = await Promise.all([
+        readFileAsync(paths.style),
+        readFileAsync("./src/style/ie.styl")
+    ]);
+
+    const [style, min, ie] = await Promise.all([
         transpileStyle(src),
         transpileStyle(src, true),
+        transpileStyle(src_ie)
     ]);
 
     writeFileAsync("./dist/flatpickr.css", style).catch(logErr);
     writeFileAsync("./dist/flatpickr.min.css", min).catch(logErr);
+    writeFileAsync("./dist/ie.css", ie).catch(logErr);
 }
 
 async function buildThemes(){
@@ -169,7 +176,7 @@ async function buildThemes(){
 function setupWatchers(){
     watch(paths.script, buildScripts);
     watch("./src/plugins", buildExtras("plugins"));
-    watch(paths.style, () => {buildStyle(); buildThemes();});
+    watch("./src/style/*.styl", () => {buildStyle(); buildThemes();});
     watch("./src/style/themes", buildThemes);
 }
 
