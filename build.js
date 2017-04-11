@@ -1,10 +1,10 @@
 const fs = require('fs');
-const glob = require("glob-fs")({ gitignore: true });
+const glob = require("glob");
 
 const babel = require("babel-core");
 const uglifyJS = require("uglify-js");
 const ncp = require("ncp");
-const watch = require("node-watch");
+const chokidar = require("chokidar");
 const stylus = require("stylus");
 const stylus_autoprefixer = require("autoprefixer-stylus");
 
@@ -24,7 +24,7 @@ const paths = {
 }
 
 function logErr(e){
-    console.error(e.message);
+    console.error(e);
 }
 
 function lint(code, filename){
@@ -47,17 +47,6 @@ async function recursiveCopy(src, dest) {
                 reject();
         });
     })
-}
-
-async function resolveGlob(path) {
-    return new Promise((resolve, reject) => {
-        glob.readdir(path, (err, files) => {
-            if (err)
-                reject(err);
-            else
-                resolve(files);
-        });
-    });
 }
 
 async function readFileAsync(path) {
@@ -104,11 +93,24 @@ async function buildScripts(){
     writeFileAsync("./dist/flatpickr.min.js", uglify(transpiled)).catch(logErr);
 }
 
-async function buildExtras(folder){
+function resolveGlob(g) {
+    return new Promise((resolve, reject) => {
+        glob(g, (err, files) =>{
+            if (err)
+                reject(err);
+
+            else
+                resolve(files);
+        });
+    });    
+}
+
+function buildExtras(folder){
     return async function(){
         await recursiveCopy(`./src/${folder}`, `./dist/${folder}`);
-        const js = await resolveGlob(`./dist/${folder}/**/*.js`);
-        js.forEach(path => {
+        const paths = await resolveGlob(`./dist/${folder}/**/*.js`);
+
+        paths.forEach(path => {
             readFileAsync(path)
             .then(src => {
                 writeFileAsync(path, transpile(src))
@@ -116,11 +118,11 @@ async function buildExtras(folder){
             })
             .catch(logErr);
         });
+       
     }
 }
 
 async function transpileStyle(src, compress=false){
-
     return new Promise((resolve, reject) => {
         stylus(src, {
             compress
@@ -157,7 +159,7 @@ async function buildStyle(){
 async function buildThemes(){
     const themePaths = await resolveGlob("./src/style/themes/*.styl");
     themePaths.forEach(themePath => {
-        const themeName = /\/(\w+).styl/.exec(themePath)[1];
+        const themeName = /themes\/(.+).styl/.exec(themePath)[1];
         readFileAsync(themePath)
         .then(transpileStyle)
         .then(css => writeFileAsync(`./dist/themes/${themeName}.css`, css));
@@ -166,22 +168,29 @@ async function buildThemes(){
 
 function setupWatchers(){
     watch(paths.script, buildScripts);
-    watch("./src/plugins", {recursive: true}, buildExtras("plugins"));
+    watch("./src/plugins", buildExtras("plugins"));
     watch(paths.style, buildStyle);
-    watch("./src/style/themes", {recursive: true}, buildThemes);
+    watch("./src/style/themes", buildThemes);
 }
 
 function serve(){
     livereload.createServer().watch("./dist");
     server.createServer().listen(8080);
+}
 
+function watch(path, cb){
+    chokidar.watch(path)
+        .on('change', cb)
+        .on('error', logErr);
 }
 
 function start(){
+    process.stdout.write('\033c');
     const devMode = process.argv.includes("--dev");
     if (devMode) {
         setupWatchers();
         serve();
+        opn("http://localhost:8080");
     }
 
     else {
@@ -195,6 +204,4 @@ function start(){
 
 start();
 
-process.on('unhandledRejection', (reason, p) => {
-    logErr(reason);
-});
+process.on('unhandledRejection', logErr);
