@@ -381,14 +381,16 @@ describe('flatpickr', () => {
 		});
 
 		it("monthScroll", () => {
+			createInstance();
 			fp.changeMonth(1, false);
 
 			fp.open();
 			simulate("wheel", fp.currentMonthElement, {
 				wheelDelta: 1
-			}, window.MouseEvent);
+			});
 
-			expect(fp.currentMonth).toEqual(2);
+			jest.runAllTimers();
+			expect(fp.currentMonth).toEqual(2);			
 		});
 
 		it("yearScroll", () => {
@@ -400,6 +402,7 @@ describe('flatpickr', () => {
 				wheelDelta: 1
 			}, window.MouseEvent);
 
+			jest.runAllTimers();
 			expect(fp.currentYear).toEqual(now.getFullYear() + 1);
 		});
 
@@ -1010,9 +1013,8 @@ describe('flatpickr', () => {
 			expect(isArrowVisible("prev")).toBe(false);
 			expect(isArrowVisible("next")).toBe(true);
 
-			fp.days.childNodes[10].click(); // select some date
-
-			fp.nextMonthNav.click();
+			simulate("click", fp.nextMonthNav);
+			
 			expect(isArrowVisible("prev")).toBe(true);
 			expect(isArrowVisible("next")).toBe(true);
 
