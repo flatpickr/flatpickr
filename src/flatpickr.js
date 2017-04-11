@@ -897,7 +897,8 @@ function Flatpickr(element, config) {
 		self.currentYearElement = self.navigationCurrentMonth.lastChild.childNodes[0];
 
 		updateNavigationCurrentMonth();
-		self.oldCurMonth.firstChild.textContent = self.utils.monthToStr(self.currentMonth-delta)
+		self.oldCurMonth.firstChild.textContent = 
+			self.utils.monthToStr(self.currentMonth - delta)
 		
 		if (self._.daysAnimDuration === undefined) {
 			const compStyle = window.getComputedStyle(self.daysContainer.lastChild);
