@@ -1,4 +1,4 @@
-if (window.navigator.userAgent.indexOf('MSIE')){
+if (window.navigator.userAgent.indexOf('MSIE') > -1){
 	var iestyle = document.createElement("link");
 	iestyle.setAttribute("href", "/flatpickr/bower_components/flatpickr/dist/ie.css");
 	iestyle.setAttribute("rel", "stylesheet");
