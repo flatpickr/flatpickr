@@ -862,7 +862,6 @@ function Flatpickr(element, config) {
 			triggerEvent("YearChange");
 		}
 
-		updateNavigationCurrentMonth();
 		buildDays(!skipAnimations ? delta : undefined);
 
 		triggerEvent("MonthChange");
@@ -897,6 +896,10 @@ function Flatpickr(element, config) {
 		self.currentMonthElement = self.navigationCurrentMonth.firstChild;
 		self.currentYearElement = self.navigationCurrentMonth.lastChild.childNodes[0];
 
+		updateNavigationCurrentMonth();
+		self.oldCurMonth.firstChild.textContent = 
+			self.utils.monthToStr(self.currentMonth - delta)
+		
 		if (self._.daysAnimDuration === undefined) {
 			const compStyle = window.getComputedStyle(self.daysContainer.lastChild);
 			
