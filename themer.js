@@ -1,5 +1,14 @@
+if (window.navigator.userAgent.indexOf('MSIE')){
+	var iestyle = document.createElement("link");
+	iestyle.setAttribute("href", "/flatpickr/bower_components/flatpickr/dist/ie.css");
+	iestyle.setAttribute("rel", "stylesheet");
+	iestyle.setAttribute("type", "text/css");
+	document.head.appendChild(iestyle);
+}
+
+
 function themer() {
-	const theme_sel = document.getElementById("themes"),
+	var theme_sel = document.getElementById("themes"),
 		stylesheet = document.head.querySelector(
 			"link[href='https://chmln.github.io/flatpickr/bower_components/flatpickr/dist/flatpickr.css']"
 		) ||
