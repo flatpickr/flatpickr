@@ -1006,15 +1006,19 @@ describe('flatpickr', () => {
 			createInstance({
 				minDate: "2099-1-1",
 				maxDate: "2099-3-4",
-				mode: "range"
+				mode: "range",
+				animate: false
 			});
 
 			expect(fp.currentMonth).toBe(0);
 			expect(isArrowVisible("prev")).toBe(false);
 			expect(isArrowVisible("next")).toBe(true);
 
+			fp.days.childNodes[10].click(); // select some date
+			jest.runAllTimers();
 			simulate("click", fp.nextMonthNav);
 			
+
 			expect(isArrowVisible("prev")).toBe(true);
 			expect(isArrowVisible("next")).toBe(true);
 
