@@ -169,7 +169,7 @@ async function buildThemes(){
 function setupWatchers(){
     watch(paths.script, buildScripts);
     watch("./src/plugins", buildExtras("plugins"));
-    watch(paths.style, buildStyle);
+    watch(paths.style, () => {buildStyle(); buildThemes();});
     watch("./src/style/themes", buildThemes);
 }
 
@@ -179,9 +179,13 @@ function serve(){
 }
 
 function watch(path, cb){
-    chokidar.watch(path)
-        .on('change', cb)
-        .on('error', logErr);
+    chokidar.watch(path, {
+        awaitWriteFinish: {
+            stabilityThreshold: 100
+        }
+    })
+    .on('change', cb)
+    .on('error', logErr);
 }
 
 function start(){
