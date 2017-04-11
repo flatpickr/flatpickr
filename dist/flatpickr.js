@@ -1945,15 +1945,7 @@ Flatpickr.prototype = {
 	formatDate: function formatDate(dateObj, frmt) {
 		var _this = this;
 
-		if (this.config.formatDate) {
-			try {
-				return this.config.formatDate(dateObj, frmt);
-			} catch (e) {
-				console.warn("Please swap the format string and the date object parameters in your formatDate option", "\nThe old signature will be deprecated by v2.5");
-
-				return this.config.formatDate(frmt, dateObj);
-			}
-		}
+		if (this.config.formatDate) return this.config.formatDate(dateObj, frmt);
 
 		return frmt.split("").map(function (c, i, arr) {
 			return _this.formats[c] && arr[i - 1] !== "\\" ? _this.formats[c](dateObj) : c !== "\\" ? c : "";
