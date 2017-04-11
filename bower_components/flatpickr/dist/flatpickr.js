@@ -700,7 +700,7 @@ function Flatpickr(element, config) {
 
 		triggerEvent("MonthChange");
 
-		if (skipAnimations) return;
+		if (skipAnimations) return updateNavigationCurrentMonth();;
 
 		self.oldCurMonth = self.navigationCurrentMonth;
 		self.navigationCurrentMonth = self.monthNav.insertBefore(self.oldCurMonth.cloneNode(true), delta > 0 ? self.oldCurMonth.nextSibling : self.oldCurMonth);

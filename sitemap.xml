@@ -51,4 +51,14 @@
     <lastmod>2017-04-09T20:23:43-05:00</lastmod>
   </url>
   
+  <url>
+    <loc>https://chmln.github.io/flatpickr/categories/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://chmln.github.io/flatpickr/tags/</loc>
+    <priority>0</priority>
+  </url>
+  
 </urlset>

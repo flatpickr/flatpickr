@@ -24,3 +24,8 @@ Flatpickr.l10ns.fr.ordinal = (nth) => {
 if (typeof module !== "undefined") {
 	module.exports = Flatpickr.l10ns;
 }
+
+Flatpickr.l10ns.fr.rangeSeparator = " au ";
+Flatpickr.l10ns.fr.weekAbbreviation = "Sem";
+Flatpickr.l10ns.fr.scrollTitle = "Défiler pour augmenter la valeur";
+Flatpickr.l10ns.fr.toggleTitle = "Cliquer pour basculer";

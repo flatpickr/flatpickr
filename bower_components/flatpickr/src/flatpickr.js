@@ -867,7 +867,7 @@ function Flatpickr(element, config) {
 		triggerEvent("MonthChange");
 
 		if (skipAnimations)
-			return;
+			return updateNavigationCurrentMonth();;
 		
 		self.oldCurMonth = self.navigationCurrentMonth;
 		self.navigationCurrentMonth = self.monthNav.insertBefore(
