@@ -1006,8 +1006,7 @@ describe('flatpickr', () => {
 			createInstance({
 				minDate: "2099-1-1",
 				maxDate: "2099-3-4",
-				mode: "range",
-				animate: false
+				mode: "range"
 			});
 
 			expect(fp.currentMonth).toBe(0);
