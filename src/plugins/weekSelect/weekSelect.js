@@ -32,7 +32,7 @@ function weekSelectPlugin(pluginConfig) {
                 days[i].classList.remove("inRange");
         } 
 
-        function formatDate(format, date) {
+        function formatDate(date, format) {
             return `Week #${fp.config.getWeek(date)}, ${date.getFullYear()}`;
         }
 
