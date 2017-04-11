@@ -677,14 +677,6 @@ span.flatpickr-weekday {
 .flatpickr-time .flatpickr-am-pm:focus {
   background: #f3f3f3;
 }
-@media all and (-ms-high-contrast: none) {
-  .flatpickr-month {
-    padding: 0;
-  }
-  .flatpickr-month svg {
-    top: 0 !important;
-  }
-}
 .flatpickr-input[readonly] {
   cursor: pointer;
 }

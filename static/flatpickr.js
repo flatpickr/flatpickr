@@ -1,8 +1,9 @@
+Flatpickr.defaultConfig.animate = window.navigator.userAgent.indexOf('MSIE') === -1;
 flatpickr(".flatpickr");
 
-const examples = document.querySelectorAll(".flatpickr");
+var examples = document.querySelectorAll(".flatpickr");
 
-const configs = {
+var configs = {
     datetime: {
         enableTime: true
     },
@@ -137,7 +138,7 @@ const configs = {
         "onChange": [function(){
             // extract the week number
             // note: "this" is bound to the flatpickr instance
-            const weekNumber = this.selectedDates[0]
+            var weekNumber = this.selectedDates[0]
                 ? this.config.getWeek(this.selectedDates[0])
                 : null;
 
