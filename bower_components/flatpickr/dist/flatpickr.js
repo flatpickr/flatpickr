@@ -2,7 +2,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-/*! flatpickr v2.4.10, @license MIT */
+/*! flatpickr v2.5.0, @license MIT */
 function Flatpickr(element, config) {
 	var self = this;
 
@@ -275,11 +275,17 @@ function Flatpickr(element, config) {
 
 	function animateMonths(e) {
 		switch (e.animationName) {
-			case "slideLeft":
-			case "slideRight":
+			case "slideLeftNew":
+			case "slideRightNew":
 				self.navigationCurrentMonth.classList.remove("slideLeftNew");
 				self.navigationCurrentMonth.classList.remove("slideRightNew");
-				self.oldCurMonth = null;
+				var nav = self.navigationCurrentMonth;
+
+				while (nav.nextSibling && /curr/.test(nav.nextSibling.className)) {
+					self.monthNav.removeChild(nav.nextSibling);
+				}while (nav.previousSibling && /curr/.test(nav.previousSibling.className)) {
+					self.monthNav.removeChild(nav.previousSibling);
+				}self.oldCurMonth = null;
 				break;
 		}
 	}
@@ -704,12 +710,12 @@ function Flatpickr(element, config) {
 
 		// remove possible remnants from clicking too fast
 		var nav = self.navigationCurrentMonth;
-
-		while (nav.nextSibling && /curr/.test(nav.nextSibling.className)) {
+		if (delta < 0) while (nav.nextSibling && /curr/.test(nav.nextSibling.className)) {
 			self.monthNav.removeChild(nav.nextSibling);
-		}while (nav.previousSibling && /curr/.test(nav.previousSibling.className)) {
+		} else if (delta > 0) while (nav.previousSibling && /curr/.test(nav.previousSibling.className)) {
 			self.monthNav.removeChild(nav.previousSibling);
 		}self.oldCurMonth = self.navigationCurrentMonth;
+
 		self.navigationCurrentMonth = self.monthNav.insertBefore(self.oldCurMonth.cloneNode(true), delta > 0 ? self.oldCurMonth.nextSibling : self.oldCurMonth);
 
 		if (delta > 0) {
