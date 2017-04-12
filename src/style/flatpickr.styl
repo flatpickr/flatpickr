@@ -11,31 +11,31 @@
 
 @keyframes slideLeft
     from
-        transform translate(0px, 0px)
+        transform translate3d(0px, 0px, 0px)
 
     to
-        transform translate(-100%, 0px)
+        transform translate3d(-100%, 0px, 0px)
 
 @keyframes slideLeftNew
     from
-        transform translate(100%, 0px)
+        transform translate3d(100%, 0px, 0px)
 
     to
-        transform translate(0px, 0px)
+        transform translate3d(0px, 0px, 0px)
 
 @keyframes slideRight
     from
-        transform translate(0, 0)
+        transform translate3d(0, 0, 0px)
 
     to
-        transform translate(100%, 0px)
+        transform translate3d(100%, 0px, 0px)
 
 @keyframes slideRightNew
     from
-        transform translate(-100%, 0)
+        transform translate3d(-100%, 0, 0px)
 
     to
-        transform translate(0, 0)
+        transform translate3d(0, 0, 0px)
 
 @keyframes fadeOut
     from
@@ -325,22 +325,22 @@
     top 5px
     display inline-block
     text-align center
-    transform translate(0px, 0px)
+    transform translate3d(0px, 0px, 0px)
 
     &.slideLeft
-        transform translate(-100%, 0px)
+        transform translate3d(-100%, 0px, 0px)
         animation fadeOut $slideTime ease, slideLeft $slideTime $bezier
     
     &.slideLeftNew
-        transform translate(100%, 0px)
+        transform translate3d(100%, 0px, 0px)
         animation fadeIn $slideTime ease, slideLeftNew $slideTime $bezier
     
     &.slideRight
-        transform translate(100%, 0px)
+        transform translate3d(100%, 0px, 0px)
         animation fadeOut $slideTime ease, slideRight $slideTime $bezier
     
     &.slideRightNew
-        transform translate(0, 0)
+        transform translate3d(0, 0, 0px)
         animation fadeIn $slideTime ease, slideRightNew $slideTime $bezier
 
     span.cur-month
@@ -456,7 +456,7 @@ span.flatpickr-weekday
     -ms-flex-wrap wrap
     -ms-flex-pack: justify
     justify-content space-around
-    transform: translate(0px, 0px);
+    transform: translate3d(0px, 0px, 0px);
     opacity 1
 
 
@@ -465,14 +465,14 @@ span.flatpickr-weekday
         animation fadeOut $slideTime $bezier, slideLeft $slideTime $bezier
 
     &.slideLeft, &.slideLeftNew
-        transform: translate(-100%, 0px);
+        transform: translate3d(-100%, 0px, 0px);
 
     &.slideLeftNew
         animation fadeIn $slideTime $bezier, slideLeft $slideTime $bezier
 
     &.slideRight
         animation fadeOut $slideTime $bezier, slideRight $slideTime $bezier
-        transform: translate(100%, 0px);
+        transform: translate3d(100%, 0px, 0px);
         
     &.slideRightNew
         animation fadeIn $slideTime $bezier, slideRightNew $slideTime $bezier
