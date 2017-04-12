@@ -2,12 +2,12 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-/*! flatpickr v2.4.8, @license MIT */
+/*! flatpickr v2.4.10, @license MIT */
 function Flatpickr(element, config) {
 	var self = this;
 
 	self._ = {};
-
+	self._.afterDayAnim = afterDayAnim;
 	self.changeMonth = changeMonth;
 	self.changeYear = changeYear;
 	self.clear = clear;
@@ -279,7 +279,6 @@ function Flatpickr(element, config) {
 			case "slideRight":
 				self.navigationCurrentMonth.classList.remove("slideLeftNew");
 				self.navigationCurrentMonth.classList.remove("slideRightNew");
-				self.monthNav.removeChild(self.oldCurMonth);
 				self.oldCurMonth = null;
 				break;
 		}
@@ -698,11 +697,19 @@ function Flatpickr(element, config) {
 
 		buildDays(!skipAnimations ? delta : undefined);
 
-		triggerEvent("MonthChange");
+		if (skipAnimations) {
+			triggerEvent("MonthChange");
+			return updateNavigationCurrentMonth();
+		}
 
-		if (skipAnimations) return updateNavigationCurrentMonth();;
+		// remove possible remnants from clicking too fast
+		var nav = self.navigationCurrentMonth;
 
-		self.oldCurMonth = self.navigationCurrentMonth;
+		while (nav.nextSibling && /curr/.test(nav.nextSibling.className)) {
+			self.monthNav.removeChild(nav.nextSibling);
+		}while (nav.previousSibling && /curr/.test(nav.previousSibling.className)) {
+			self.monthNav.removeChild(nav.previousSibling);
+		}self.oldCurMonth = self.navigationCurrentMonth;
 		self.navigationCurrentMonth = self.monthNav.insertBefore(self.oldCurMonth.cloneNode(true), delta > 0 ? self.oldCurMonth.nextSibling : self.oldCurMonth);
 
 		if (delta > 0) {
@@ -1647,7 +1654,7 @@ Flatpickr.defaultConfig = {
 
 	position: "auto",
 
-	animate: true,
+	animate: window.navigator.userAgent.indexOf("MSIE") === -1,
 
 	/* if true, dates will be parsed, formatted, and displayed in UTC.
  preloading date strings w/ timezones is recommended but not necessary */
@@ -1944,15 +1951,7 @@ Flatpickr.prototype = {
 	formatDate: function formatDate(dateObj, frmt) {
 		var _this = this;
 
-		if (this.config.formatDate) {
-			try {
-				return this.config.formatDate(dateObj, frmt);
-			} catch (e) {
-				console.warn("Please swap the format string and the date object parameters in your formatDate option", "\nThe old signature will be deprecated by v2.5");
-
-				return this.config.formatDate(frmt, dateObj);
-			}
-		}
+		if (this.config.formatDate) return this.config.formatDate(dateObj, frmt);
 
 		return frmt.split("").map(function (c, i, arr) {
 			return _this.formats[c] && arr[i - 1] !== "\\" ? _this.formats[c](dateObj) : c !== "\\" ? c : "";
@@ -2155,54 +2154,5 @@ Date.prototype.fp_toUTC = function () {
 	newDate.fp_isUTC = true;
 	return newDate;
 };
-
-// IE9 classList polyfill
-/* istanbul ignore next */
-if (!window.document.documentElement.classList && Object.defineProperty && typeof HTMLElement !== "undefined") {
-	Object.defineProperty(HTMLElement.prototype, "classList", {
-		get: function get() {
-			var self = this;
-			function update(fn) {
-				return function (value) {
-					var classes = self.className.split(/\s+/),
-					    index = classes.indexOf(value);
-
-					fn(classes, index, value);
-					self.className = classes.join(" ");
-				};
-			}
-
-			var ret = {
-				add: update(function (classes, index, value) {
-					if (!~index) classes.push(value);
-				}),
-
-				remove: update(function (classes, index) {
-					if (~index) classes.splice(index, 1);
-				}),
-
-				toggle: update(function (classes, index, value) {
-					if (~index) classes.splice(index, 1);else classes.push(value);
-				}),
-
-				contains: function contains(value) {
-					return !!~self.className.split(/\s+/).indexOf(value);
-				},
-
-				item: function item(i) {
-					return self.className.split(/\s+/)[i] || null;
-				}
-			};
-
-			Object.defineProperty(ret, "length", {
-				get: function get() {
-					return self.className.split(/\s+/).length;
-				}
-			});
-
-			return ret;
-		}
-	});
-}
 
 if (typeof module !== "undefined") module.exports = Flatpickr;

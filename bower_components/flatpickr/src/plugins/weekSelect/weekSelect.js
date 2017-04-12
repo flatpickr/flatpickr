@@ -1,12 +1,11 @@
 function weekSelectPlugin(pluginConfig) {
     return function(fp) {
-        let days;
-
         function onDayHover(event){
             if (!event.target.classList.contains("flatpickr-day"))
                 return;
-                
-            dayIndex = Array.prototype.indexOf.call(days, event.target);
+            
+            const days = event.target.parentNode.childNodes;
+            dayIndex = event.target.$i;
             fp.weekStartDay = days[7*Math.floor(dayIndex/7)].dateObj;
             fp.weekEndDay = days[7*Math.ceil(dayIndex/7) - 1].dateObj;
             
@@ -20,6 +19,7 @@ function weekSelectPlugin(pluginConfig) {
         }
 
         function highlightWeek(){
+            const days = fp.days.childNodes;
             for(let i = days.length; i--;) {
                 const date = days[i].dateObj;
                 if (date >= fp.weekStartDay && date <= fp.weekEndDay)
@@ -28,26 +28,28 @@ function weekSelectPlugin(pluginConfig) {
         }
 
         function clearHover() {
+            const days = fp.days.childNodes;
             for(let i = days.length; i--;)
                 days[i].classList.remove("inRange");
         } 
 
-        function formatDate(format, date) {
+        function formatDate(date, format) {
             return `Week #${fp.config.getWeek(date)}, ${date.getFullYear()}`;
         }
 
         return {
             formatDate,
             onChange: highlightWeek,
-            onMonthChange: highlightWeek,
+            onMonthChange: () => fp._.afterDayAnim(highlightWeek),
             onClose: clearHover,            
-            onParseConfig: () => {
+            onParseConfig: function() {
                 fp.config.mode = "single";
                 fp.config.enableTime = false;
             },
             onReady: [
-                () => { days = fp.days.childNodes; },
-                () => fp.days.addEventListener("mouseover", onDayHover), 
+                function(){
+                    fp.days.parentNode.addEventListener("mouseover", onDayHover);
+                }, 
                 highlightWeek
             ]
         };

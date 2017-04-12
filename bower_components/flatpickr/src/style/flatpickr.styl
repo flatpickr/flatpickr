@@ -562,6 +562,11 @@ span.flatpickr-weekday
         else
             border-color transparent
         cursor default
+    
+    &.week.selected
+        border-radius 0
+        box-shadow: (-2.5*$dayMargin) 0 0 $selectedDayBackground, 
+            (2.5*$dayMargin) 0 0 $selectedDayBackground
 
 .rangeMode .flatpickr-day
     margin-top 1px

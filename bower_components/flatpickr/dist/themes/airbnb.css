@@ -554,6 +554,10 @@ span.flatpickr-weekday {
   border-color: #e9e9e9;
   cursor: default;
 }
+.flatpickr-day.week.selected {
+  border-radius: 0;
+  box-shadow: -5px 0 0 #4f99ff, 5px 0 0 #4f99ff;
+}
 .rangeMode .flatpickr-day {
   margin-top: 1px;
 }
