@@ -310,10 +310,18 @@ function Flatpickr(element, config) {
 
 	function animateMonths(e){
 		switch(e.animationName) {
-			case "slideLeft":
-			case "slideRight":
+			case "slideLeftNew":
+			case "slideRightNew":
 				self.navigationCurrentMonth.classList.remove("slideLeftNew");
 				self.navigationCurrentMonth.classList.remove("slideRightNew");
+				const nav = self.navigationCurrentMonth;
+
+				while (nav.nextSibling && /curr/.test(nav.nextSibling.className))
+					self.monthNav.removeChild(nav.nextSibling);
+			
+				while (nav.previousSibling && /curr/.test(nav.previousSibling.className))
+					self.monthNav.removeChild(nav.previousSibling);
+
 				self.oldCurMonth = null;
 				break;
 		}
@@ -869,24 +877,26 @@ function Flatpickr(element, config) {
 			triggerEvent("MonthChange");
 			return updateNavigationCurrentMonth();
 		}
-
+		
 		// remove possible remnants from clicking too fast
 		const nav = self.navigationCurrentMonth;
+		if(delta < 0)
+			while (nav.nextSibling && /curr/.test(nav.nextSibling.className))
+				self.monthNav.removeChild(nav.nextSibling);
 		
-		while (nav.nextSibling && /curr/.test(nav.nextSibling.className))
-			self.monthNav.removeChild(nav.nextSibling);
-		
-		while (nav.previousSibling && /curr/.test(nav.previousSibling.className))
-			self.monthNav.removeChild(nav.previousSibling);
-		
+		else if (delta > 0)
+			while (nav.previousSibling && /curr/.test(nav.previousSibling.className))
+				self.monthNav.removeChild(nav.previousSibling);
 
 		self.oldCurMonth = self.navigationCurrentMonth;
+
 		self.navigationCurrentMonth = self.monthNav.insertBefore(
 			self.oldCurMonth.cloneNode(true),
 			delta > 0 
 				? self.oldCurMonth.nextSibling
 				: self.oldCurMonth
 		);
+
 
 		if (delta > 0) {
 			self.daysContainer.firstChild.classList.add("slideLeft");
