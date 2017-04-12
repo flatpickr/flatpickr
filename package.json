@@ -1,39 +1,40 @@
 {
   "name": "flatpickr",
-  "version": "2.2.3",
+  "version": "2.4.9",
   "description": "A lightweight, powerful javascript datetime picker",
   "scripts": {
-    "build": "parallelshell \"npm run build-all-scripts\" \"npm run build-all-styles\"",
-    "build-all-scripts": "parallelshell \"npm run build-script\" \"npm run build-min-script\" \"npm run build-l10n\"",
-    "build-all-styles": "parallelshell \"npm run build-style\" \"npm run build-themes\" && npm run build-rtl",
-    "build-script": "babel src/flatpickr.js --out-file dist/flatpickr.js",
-    "build-min-script": "babel src/flatpickr.js | uglifyjs --screw-ie8 --compress --comments --mangle > dist/flatpickr.min.js",
-    "build-l10n": "babel src/l10n --out-dir dist/l10n",
-    "build-style": "stylus --compress --include src/style < ./src/style/flatpickr.styl > ./dist/flatpickr.min.css",
-    "build-themes": "stylus --out dist/themes --compress src/style/themes",
-    "build-rtl": "rtlcss -d ./dist/themes ./dist/rtl/themes && rtlcss dist/flatpickr.min.css dist/rtl/flatpickr.min.css",
-    "dev-script": "onchange \"src/flatpickr.js\" -- npm run build-script",
-    "dev-style": "parallelshell \"onchange \"src/style/flatpickr_base.styl\" \"src/style/flatpickr.styl\" -- npm run build-style\" \"npm run build-themes -- --watch\"",
-    "dev": "parallelshell \"npm run dev-script\" \"npm run dev-style\"",
-    "livereload": "livereload \"dist\"",
-    "serve": "parallelshell \"http-server -o --silent\" \"npm run livereload\"",
-    "start": "parallelshell \"npm run dev\" \"npm run serve\""
+    "start": "nodemon --watch build.js build.js -- --dev",
+    "build": "node build.js",
+    "test": "jest --bail",
+    "coveralls": "jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "release": "jest --bail --silent && ./release"
   },
   "dependencies": {},
   "devDependencies": {
-    "babel-cli": "^6.18.0",
-    "babel-plugin-transform-object-assign": "^6.8.0",
-    "babel-plugin-transform-remove-strict-mode": "0.0.2",
-    "babel-preset-es2015": "^6.18.0",
-    "http-server": "^0.9.0",
-    "livereload": "^0.6.0",
-    "onchange": "^3.0.2",
-    "parallelshell": "^2.0.0",
-    "rtlcss": "^2.0.7",
-    "stylus": "^0.54.5",
-    "uglify-js": "^2.7.4"
+    "autoprefixer-stylus": "^0.13.0",
+    "babel-cli": "next",
+    "babel-plugin-transform-object-assign": "next",
+    "babel-plugin-transform-remove-strict-mode": "latest",
+    "babel-preset-es2015": "next",
+    "chokidar": "^1.6.1",
+    "coveralls": "latest",
+    "eslint": "latest",
+    "glob": "^7.1.1",
+    "http-server": "latest",
+    "jest": "latest",
+    "livereload": "latest",
+    "ncp": "latest",
+    "node-watch": "^0.5.2",
+    "nodemon": "^1.11.0",
+    "npm-run-all": "latest",
+    "opn": "^4.0.2",
+    "rtlcss": "latest",
+    "semver": "latest",
+    "stylus": "latest",
+    "uglify-js": "latest"
   },
   "main": "dist/flatpickr.js",
+  "style": "dist/flatpickr.css",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/chmln/flatpickr.git"
@@ -52,5 +53,15 @@
     "time",
     "picker",
     "lightweight"
+  ],
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/flatpickr",
+    "logo": "https://opencollective.com/opencollective/logo.txt"
+  },
+  "browserslist": [
+    "ie >= 9",
+    "last 2 versions",
+    "safari >= 7"
   ]
 }

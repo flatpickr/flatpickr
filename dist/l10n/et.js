@@ -19,6 +19,7 @@ Flatpickr.l10ns.et.ordinal = function () {
 };
 
 Flatpickr.l10ns.et.weekAbbreviation = "Näd";
+Flatpickr.l10ns.et.rangeSeparator = " kuni ";
 Flatpickr.l10ns.et.scrollTitle = "Keri, et suurendada";
 Flatpickr.l10ns.et.toggleTitle = "Klõpsa, et vahetada";
 
