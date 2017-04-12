@@ -80,7 +80,10 @@ function transpile(src){
 
 function uglify(src) {
     return uglifyJS.minify(src, {
-        fromString: true
+        fromString: true,
+        output: {
+            comments: /license/
+        }
     }).code;
 }
 
