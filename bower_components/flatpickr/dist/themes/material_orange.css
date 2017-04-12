@@ -146,6 +146,7 @@
   height: 28px;
   line-height: 16px;
   padding: 10px calc(3.57% - 1.5px);
+  z-index: 3;
 }
 .flatpickr-prev-month i,
 .flatpickr-next-month i {
