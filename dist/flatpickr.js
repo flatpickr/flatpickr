@@ -279,7 +279,6 @@ function Flatpickr(element, config) {
 			case "slideRight":
 				self.navigationCurrentMonth.classList.remove("slideLeftNew");
 				self.navigationCurrentMonth.classList.remove("slideRightNew");
-				self.monthNav.removeChild(self.oldCurMonth);
 				self.oldCurMonth = null;
 				break;
 		}
@@ -703,7 +702,14 @@ function Flatpickr(element, config) {
 			return updateNavigationCurrentMonth();
 		}
 
-		self.oldCurMonth = self.navigationCurrentMonth;
+		// remove possible remnants from clicking too fast
+		var nav = self.navigationCurrentMonth;
+
+		while (nav.nextSibling && /curr/.test(nav.nextSibling.className)) {
+			self.monthNav.removeChild(nav.nextSibling);
+		}while (nav.previousSibling && /curr/.test(nav.previousSibling.className)) {
+			self.monthNav.removeChild(nav.previousSibling);
+		}self.oldCurMonth = self.navigationCurrentMonth;
 		self.navigationCurrentMonth = self.monthNav.insertBefore(self.oldCurMonth.cloneNode(true), delta > 0 ? self.oldCurMonth.nextSibling : self.oldCurMonth);
 
 		if (delta > 0) {
