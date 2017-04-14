@@ -1,9 +1,9 @@
-/*! flatpickr v2.4.8, @license MIT */
+/*! flatpickr v2.5.1, @license MIT */
 function Flatpickr(element, config) {
 	const self = this;
 
 	self._ = {};
-
+	self._.afterDayAnim = afterDayAnim;
 	self.changeMonth = changeMonth;
 	self.changeYear = changeYear;
 	self.clear = clear;
@@ -69,8 +69,9 @@ function Flatpickr(element, config) {
 
 		self.showTimeInput = self.selectedDates.length > 0 || self.config.noCalendar;
 
-		if (!self.isMobile)
+		if (!self.isMobile) 
 			positionCalendar();
+
 		triggerEvent("Ready");
 	}
 
@@ -227,7 +228,11 @@ function Flatpickr(element, config) {
 			self.prevMonthNav.addEventListener("click", () => changeMonth(-1));
 			self.nextMonthNav.addEventListener("click", () => changeMonth(1));
 
-			self.monthNav.addEventListener("wheel", onMonthNavScroll);
+			self.monthNav.addEventListener("wheel", e => {
+				e.preventDefault()
+			});
+
+			self.monthNav.addEventListener("wheel", debounce(onMonthNavScroll, 10));
 			self.monthNav.addEventListener("click", onMonthNavClick);
 
 			self.currentYearElement.addEventListener("focus", () => {
@@ -242,6 +247,9 @@ function Flatpickr(element, config) {
 			if (self.config.animate) {
 				self.daysContainer.addEventListener("animationend", animateDays);
 				self.monthNav.addEventListener("animationend", animateMonths);
+
+				self.daysContainer.addEventListener("webkitAnimationEnd", animateDays);
+				self.monthNav.addEventListener("webkitAnimationEnd", animateMonths);
 			}
 		}
 
@@ -302,11 +310,18 @@ function Flatpickr(element, config) {
 
 	function animateMonths(e){
 		switch(e.animationName) {
-			case "slideLeft":
-			case "slideRight":
+			case "slideLeftNew":
+			case "slideRightNew":
 				self.navigationCurrentMonth.classList.remove("slideLeftNew");
 				self.navigationCurrentMonth.classList.remove("slideRightNew");
-				self.monthNav.removeChild(self.oldCurMonth);
+				const nav = self.navigationCurrentMonth;
+
+				while (nav.nextSibling && /curr/.test(nav.nextSibling.className))
+					self.monthNav.removeChild(nav.nextSibling);
+			
+				while (nav.previousSibling && /curr/.test(nav.previousSibling.className))
+					self.monthNav.removeChild(nav.previousSibling);
+
 				self.oldCurMonth = null;
 				break;
 		}
@@ -854,21 +869,34 @@ function Flatpickr(element, config) {
 			triggerEvent("YearChange");
 		}
 
-		updateNavigationCurrentMonth();
 		buildDays(!skipAnimations ? delta : undefined);
 
-		triggerEvent("MonthChange");
-
-		if (skipAnimations)
-			return;
 		
+
+		if (skipAnimations) {
+			triggerEvent("MonthChange");
+			return updateNavigationCurrentMonth();
+		}
+		
+		// remove possible remnants from clicking too fast
+		const nav = self.navigationCurrentMonth;
+		if(delta < 0)
+			while (nav.nextSibling && /curr/.test(nav.nextSibling.className))
+				self.monthNav.removeChild(nav.nextSibling);
+		
+		else if (delta > 0)
+			while (nav.previousSibling && /curr/.test(nav.previousSibling.className))
+				self.monthNav.removeChild(nav.previousSibling);
+
 		self.oldCurMonth = self.navigationCurrentMonth;
+
 		self.navigationCurrentMonth = self.monthNav.insertBefore(
 			self.oldCurMonth.cloneNode(true),
 			delta > 0 
 				? self.oldCurMonth.nextSibling
 				: self.oldCurMonth
 		);
+
 
 		if (delta > 0) {
 			self.daysContainer.firstChild.classList.add("slideLeft");
@@ -889,12 +917,17 @@ function Flatpickr(element, config) {
 		self.currentMonthElement = self.navigationCurrentMonth.firstChild;
 		self.currentYearElement = self.navigationCurrentMonth.lastChild.childNodes[0];
 
+		updateNavigationCurrentMonth();
+		self.oldCurMonth.firstChild.textContent = 
+			self.utils.monthToStr(self.currentMonth - delta)
+		
 		if (self._.daysAnimDuration === undefined) {
-			self._.daysAnimDuration = parseInt(/(\d+)s/.exec(
-				window
-				.getComputedStyle(self.daysContainer.lastChild)
-				.getPropertyValue("animation-duration")
-			)[1]);
+			const compStyle = window.getComputedStyle(self.daysContainer.lastChild);
+			
+			const duration = compStyle.getPropertyValue("animation-duration")
+				|| compStyle.getPropertyValue("-webkit-animation-duration");
+			
+			self._.daysAnimDuration = parseInt(/(\d+)s/.exec(duration)[1]);
 		}
 	}
 
@@ -1923,10 +1956,11 @@ function Flatpickr(element, config) {
 	}
 
 	function onMonthNavScroll(e) {
+		e.preventDefault();
 		const isYear = self.currentYearElement.parentNode.contains(e.target);
 		
 		if (e.target === self.currentMonthElement || isYear) {
-			e.preventDefault();
+			
 			const delta = mouseDelta(e);
 
 			if (isYear) {
@@ -2061,7 +2095,7 @@ Flatpickr.defaultConfig = {
 
 	position: "auto",
 
-	animate: true,
+	animate: window.navigator.userAgent.indexOf("MSIE") === -1,
 
 	/* if true, dates will be parsed, formatted, and displayed in UTC.
 	preloading date strings w/ timezones is recommended but not necessary */
@@ -2330,21 +2364,9 @@ Flatpickr.prototype = {
 	},
 
 	formatDate (dateObj, frmt) {
-		if (this.config.formatDate) {
-			try {
-				return this.config.formatDate(dateObj, frmt);
-			}
-
-			catch (e) {
-				console.warn(
-					"Please swap the format string and the date object parameters in your formatDate option",
-					"\nThe old signature will be deprecated by v2.5"
-				);
-
-				return this.config.formatDate(frmt, dateObj);
-			}
-		}
-
+		if (this.config.formatDate) 
+			return this.config.formatDate(dateObj, frmt);
+		
 		return frmt.split("").map((c, i, arr) => this.formats[c] && arr[i - 1] !== "\\"
 			? this.formats[c](dateObj)
 			: c !== "\\" ? c : ""
@@ -2576,61 +2598,6 @@ Date.prototype.fp_toUTC = function () {
 	newDate.fp_isUTC = true;
 	return newDate;
 };
-
-// IE9 classList polyfill
-/* istanbul ignore next */
-if (
-	!(window.document.documentElement.classList) &&
-	Object.defineProperty && typeof HTMLElement !== "undefined"
-) {
-	Object.defineProperty(HTMLElement.prototype, "classList", {
-		get: function () {
-			let self = this;
-			function update(fn) {
-				return function (value) {
-					let classes = self.className.split(/\s+/),
-						index = classes.indexOf(value);
-
-					fn(classes, index, value);
-					self.className = classes.join(" ");
-				};
-			}
-
-			let ret = {
-				add: update((classes, index, value) => {
-					if (!(~index))
-						classes.push(value);
-				}),
-
-				remove: update((classes, index) => {
-					if (~index)
-						classes.splice(index, 1);
-				}),
-
-				toggle: update((classes, index, value) => {
-					if (~index)
-						classes.splice(index, 1);
-					else
-						classes.push(value);
-				}),
-
-				contains: value => !!~self.className.split(/\s+/).indexOf(value),
-
-				item: function (i) {
-					return self.className.split(/\s+/)[i] || null;
-				}
-			};
-
-			Object.defineProperty(ret, "length", {
-				get: function () {
-					return self.className.split(/\s+/).length;
-				}
-			});
-
-			return ret;
-		}
-	});
-}
 
 if (typeof module !== "undefined")
 	module.exports = Flatpickr;

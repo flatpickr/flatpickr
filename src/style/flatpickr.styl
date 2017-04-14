@@ -1,33 +1,4 @@
-$bezier = cubic-bezier(0.23, 1, 0.32, 1)
-$slideTime = 400ms
-
-$daySize = 40px
-$padding = ($daySize/16)
-$dayMargin = 2px
-$daysWidth = ($daySize*7 + $dayMargin*14 + $padding*2 + 2)
-$timeHeight = 40px
-$calendarWidth = ($daysWidth)
-
-// Colors
-
-$calendarBackground ?= #ffffff
-$calendarBorderColor ?= #e6e6e6
-
-$monthForeground ?= alpha(black, 0.9)
-$arrow_hover_color ?= #f64747
-
-$monthBackground ?= transparent
-
-$weekdaysBackground ?= transparent
-
-$dayForeground ?= #393939
-$dayHoverBackground ?= #e6e6e6
-
-$todayColor ?= #959ea9
-$selectedDayBackground ?= #569FF7
-
-$invertedBg = invert($calendarBackground)
-
+@require "./_vars.styl"
 
 @keyframes flatpickrFadeInDown
     from
@@ -40,31 +11,31 @@ $invertedBg = invert($calendarBackground)
 
 @keyframes slideLeft
     from
-        transform translate(0px, 0px)
+        transform translate3d(0px, 0px, 0px)
 
     to
-        transform translate(-100%, 0px)
+        transform translate3d(-100%, 0px, 0px)
 
 @keyframes slideLeftNew
     from
-        transform translate(100%, 0px)
+        transform translate3d(100%, 0px, 0px)
 
     to
-        transform translate(0px, 0px)
+        transform translate3d(0px, 0px, 0px)
 
 @keyframes slideRight
     from
-        transform translate(0, 0)
+        transform translate3d(0, 0, 0px)
 
     to
-        transform translate(100%, 0px)
+        transform translate3d(100%, 0px, 0px)
 
 @keyframes slideRightNew
     from
-        transform translate(-100%, 0)
+        transform translate3d(-100%, 0, 0px)
 
     to
-        transform translate(0, 0)
+        transform translate3d(0, 0, 0px)
 
 @keyframes fadeOut
     from
@@ -237,7 +208,8 @@ $invertedBg = invert($calendarBackground)
     top 0px
     height 28px
     line-height 16px
-    padding 10px calc(3.57% - 1.5px);
+    padding 10px calc(3.57% - 1.5px)
+    z-index 3
 
     i
         position relative
@@ -353,22 +325,22 @@ $invertedBg = invert($calendarBackground)
     top 5px
     display inline-block
     text-align center
-    transform translate(0px, 0px)
+    transform translate3d(0px, 0px, 0px)
 
     &.slideLeft
-        transform translate(-100%, 0px)
+        transform translate3d(-100%, 0px, 0px)
         animation fadeOut $slideTime ease, slideLeft $slideTime $bezier
     
     &.slideLeftNew
-        transform translate(100%, 0px)
+        transform translate3d(100%, 0px, 0px)
         animation fadeIn $slideTime ease, slideLeftNew $slideTime $bezier
     
     &.slideRight
-        transform translate(100%, 0px)
+        transform translate3d(100%, 0px, 0px)
         animation fadeOut $slideTime ease, slideRight $slideTime $bezier
     
     &.slideRightNew
-        transform translate(0, 0)
+        transform translate3d(0, 0, 0px)
         animation fadeIn $slideTime ease, slideRightNew $slideTime $bezier
 
     span.cur-month
@@ -484,7 +456,7 @@ span.flatpickr-weekday
     -ms-flex-wrap wrap
     -ms-flex-pack: justify
     justify-content space-around
-    transform: translate(0px, 0px);
+    transform: translate3d(0px, 0px, 0px);
     opacity 1
 
 
@@ -493,14 +465,14 @@ span.flatpickr-weekday
         animation fadeOut $slideTime $bezier, slideLeft $slideTime $bezier
 
     &.slideLeft, &.slideLeftNew
-        transform: translate(-100%, 0px);
+        transform: translate3d(-100%, 0px, 0px);
 
     &.slideLeftNew
         animation fadeIn $slideTime $bezier, slideLeft $slideTime $bezier
 
     &.slideRight
         animation fadeOut $slideTime $bezier, slideRight $slideTime $bezier
-        transform: translate(100%, 0px);
+        transform: translate3d(100%, 0px, 0px);
         
     &.slideRightNew
         animation fadeIn $slideTime $bezier, slideRightNew $slideTime $bezier
@@ -591,6 +563,11 @@ span.flatpickr-weekday
         else
             border-color transparent
         cursor default
+    
+    &.week.selected
+        border-radius 0
+        box-shadow: (-2.5*$dayMargin) 0 0 $selectedDayBackground, 
+            (2.5*$dayMargin) 0 0 $selectedDayBackground
 
 .rangeMode .flatpickr-day
     margin-top 1px
@@ -718,13 +695,6 @@ span.flatpickr-weekday
         &:hover, &:focus
             background lighten($dayHoverBackground, 4)
 
-
-
-@media all and (-ms-high-contrast none)
-    .flatpickr-month
-        padding 0
-        svg
-            top 0 !important
 
 
 .flatpickr-input[readonly]
