@@ -1,0 +1,2 @@
+#!/bin/sh
+cd static && bower update

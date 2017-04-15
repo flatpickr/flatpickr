@@ -27,8 +27,7 @@ googleAnalytics = ""
     custom_css = [
         "site.css",
         "bower_components/flatpickr/dist/flatpickr.css",
-        "bower_components/flatpickr/dist/plugins/confirmDate/confirmDate.css",
-        "bower_components/flatpickr/dist/plugins/weekSelect/weekSelect.css"
+        "bower_components/flatpickr/dist/plugins/confirmDate/confirmDate.css"
     ]
     custom_js  = [
         "bower_components/flatpickr/dist/flatpickr.js",
