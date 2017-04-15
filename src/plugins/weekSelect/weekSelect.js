@@ -6,12 +6,12 @@ function weekSelectPlugin(pluginConfig) {
 
 			const days = event.target.parentNode.childNodes;
 			dayIndex = event.target.$i;
-			fp.weekStartDay = days[7*Math.floor(dayIndex/7)].dateObj;
-			fp.weekEndDay = days[7*Math.ceil(dayIndex/7) - 1].dateObj;
+			const weekStartDay = days[7*Math.floor(dayIndex/7)].dateObj;
+			const weekEndDay = days[7*Math.ceil(dayIndex/7) - 1].dateObj;
 
 			for(let i = days.length; i--;) {
 				const date = days[i].dateObj;
-				if (date > fp.weekEndDay || date < fp.weekStartDay)
+				if (date > weekEndDay || date < weekStartDay)
 					days[i].classList.remove("inRange");
 				else
 					days[i].classList.add("inRange");
@@ -19,6 +19,10 @@ function weekSelectPlugin(pluginConfig) {
 		}
 
 		function highlightWeek(){
+			if (fp.selectedDateElem) {
+				fp.weekStartDay = fp.days.childNodes[7*Math.floor(fp.selectedDateElem.$i/7)].dateObj;
+				fp.weekEndDay = fp.days.childNodes[7*Math.ceil(fp.selectedDateElem.$i/7) - 1].dateObj;
+			}
 			const days = fp.days.childNodes;
 			for(let i = days.length; i--;) {
 				const date = days[i].dateObj;
@@ -35,15 +39,9 @@ function weekSelectPlugin(pluginConfig) {
 
 		function onReady(){
 			fp.days.parentNode.addEventListener("mouseover", onDayHover);
-
-			if (fp.selectedDateElem) {
-				fp.weekStartDay = fp.days.childNodes[7*Math.floor(fp.selectedDateElem.$i/7)].dateObj;
-				fp.weekEndDay = fp.days.childNodes[7*Math.ceil(fp.selectedDateElem.$i/7) - 1].dateObj;
-			}
 		}
 
 		return {
-			parseDate,
 			onChange: highlightWeek,
 			onMonthChange: () => fp._.afterDayAnim(highlightWeek),
 			onClose: clearHover,

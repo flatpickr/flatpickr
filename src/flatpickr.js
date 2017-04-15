@@ -2400,10 +2400,7 @@ Flatpickr.prototype = {
 
 		W: function(dateObj, weekNumber){
 			weekNumber = parseInt(weekNumber);
-			const months = Math.floor(weekNumber/4);
-			dateObj.setMonth(months);
-			dateObj.setDate(Math.max(1, (weekNumber - months * 4 -1) * 7 + 1)%31);
-			return dateObj;
+			return new Date(dateObj.getFullYear(), 0, 2 + (weekNumber-1)*7, 0,0,0,0,0);
 		},
 		Y: (dateObj, year) =>  {
 			dateObj.setFullYear(year);
