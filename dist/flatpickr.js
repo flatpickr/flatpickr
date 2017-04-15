@@ -1991,7 +1991,13 @@ Flatpickr.prototype = {
 			return new Date(parseFloat(unixSeconds) * 1000);
 		},
 
-		W: function W() {},
+		W: function W(dateObj, weekNumber) {
+			weekNumber = parseInt(weekNumber);
+			var months = Math.floor(weekNumber / 4);
+			dateObj.setMonth(months);
+			dateObj.setDate(Math.max(1, (weekNumber - months * 4 - 1) * 7 + 1) % 31);
+			return dateObj;
+		},
 		Y: function Y(dateObj, year) {
 			dateObj.setFullYear(year);
 		},
@@ -2036,6 +2042,7 @@ Flatpickr.prototype = {
 		M: "(\\w+)",
 		S: "(\\d\\d|\\d)",
 		U: "(.+)",
+		W: "(\\d\\d|\\d)",
 		Y: "(\\d{4})",
 		Z: "(.+)",
 		d: "(\\d\\d|\\d)",
