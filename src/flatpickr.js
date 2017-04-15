@@ -1117,9 +1117,11 @@ function Flatpickr(element, config) {
 	}
 
 	function onKeyDown(e) {
-		const isInput = e.target === (self.altInput || self.input);
+		const isInput = e.target === self._input;
 		const calendarElem = isCalendarElem(e.target);
 		const allowInput = self.config.allowInput;
+		const allowKeydown = self.isOpen && (!allowInput || !isInput);
+		const allowInlineKeydown = self.config.inline && isInput && !allowInput;
 
 		if (e.key === "Enter" && allowInput && isInput) {
 			self.setDate(
@@ -1132,7 +1134,7 @@ function Flatpickr(element, config) {
 			return e.target.blur();
 		}
 
-		else if (self.isOpen || (self.config.inline && ((isInput && allowInput) || calendarElem))) {
+		else if (calendarElem || allowKeydown || allowInlineKeydown) {
 			const isTimeObj = self.timeContainer
 				&& self.timeContainer.contains(e.target);
 			switch (e.key) {
