@@ -972,6 +972,8 @@ function Flatpickr(element, config) {
 		window.document.removeEventListener("click", documentClick);
 		window.document.removeEventListener("touchstart", documentClick);
 		window.document.removeEventListener("blur", documentClick);
+		window.document.body.removeEventListener("keydown", onKeyDown);
+		instance._input.removeEventListener("keydown", onKeyDown);
 
 		if (instance.mobileInput) {
 			if (instance.mobileInput.parentNode)
