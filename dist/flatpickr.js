@@ -710,11 +710,17 @@ function Flatpickr(element, config) {
 
 		// remove possible remnants from clicking too fast
 		var nav = self.navigationCurrentMonth;
-		if (delta < 0) while (nav.nextSibling && /curr/.test(nav.nextSibling.className)) {
-			self.monthNav.removeChild(nav.nextSibling);
-		} else if (delta > 0) while (nav.previousSibling && /curr/.test(nav.previousSibling.className)) {
-			self.monthNav.removeChild(nav.previousSibling);
-		}self.oldCurMonth = self.navigationCurrentMonth;
+		if (delta < 0) {
+			while (nav.nextSibling && /curr/.test(nav.nextSibling.className)) {
+				self.monthNav.removeChild(nav.nextSibling);
+			}
+		} else if (delta > 0) {
+			while (nav.previousSibling && /curr/.test(nav.previousSibling.className)) {
+				self.monthNav.removeChild(nav.previousSibling);
+			}
+		}
+
+		self.oldCurMonth = self.navigationCurrentMonth;
 
 		self.navigationCurrentMonth = self.monthNav.insertBefore(self.oldCurMonth.cloneNode(true), delta > 0 ? self.oldCurMonth.nextSibling : self.oldCurMonth);
 
@@ -1993,10 +1999,7 @@ Flatpickr.prototype = {
 
 		W: function W(dateObj, weekNumber) {
 			weekNumber = parseInt(weekNumber);
-			var months = Math.floor(weekNumber / 4);
-			dateObj.setMonth(months);
-			dateObj.setDate(Math.max(1, (weekNumber - months * 4 - 1) * 7 + 1) % 31);
-			return dateObj;
+			return new Date(dateObj.getFullYear(), 0, 2 + (weekNumber - 1) * 7, 0, 0, 0, 0, 0);
 		},
 		Y: function Y(dateObj, year) {
 			dateObj.setFullYear(year);

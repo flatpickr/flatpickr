@@ -880,13 +880,15 @@ function Flatpickr(element, config) {
 
 		// remove possible remnants from clicking too fast
 		const nav = self.navigationCurrentMonth;
-		if(delta < 0)
+		if(delta < 0) {
 			while (nav.nextSibling && /curr/.test(nav.nextSibling.className))
 				self.monthNav.removeChild(nav.nextSibling);
+		}
 
-		else if (delta > 0)
+		else if (delta > 0) {
 			while (nav.previousSibling && /curr/.test(nav.previousSibling.className))
 				self.monthNav.removeChild(nav.previousSibling);
+		}
 
 		self.oldCurMonth = self.navigationCurrentMonth;
 
@@ -2400,7 +2402,7 @@ Flatpickr.prototype = {
 
 		W: function(dateObj, weekNumber){
 			weekNumber = parseInt(weekNumber);
-			return new Date(dateObj.getFullYear(), 0, 2 + (weekNumber-1)*7, 0,0,0,0,0);
+			return new Date(dateObj.getFullYear(), 0, 2 + (weekNumber - 1) * 7, 0, 0, 0, 0, 0);
 		},
 		Y: (dateObj, year) =>  {
 			dateObj.setFullYear(year);
