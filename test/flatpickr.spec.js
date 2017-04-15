@@ -409,17 +409,32 @@ describe('flatpickr', () => {
 		});
 
 		it("destroy()", () => {
+			let fired = false;
+			const input = fp.input;
+
 			createInstance({
-				altInput: true
+				altInput: true,
+				onKeyDown: [() => {fired = true;}]
 			});
 
-			expect(fp.input.type).toEqual("hidden");
+			expect(input.type).toEqual("hidden");
+
+			fp.open();
+			simulate("keydown", fp.altInput, {key: "ArrowLeft", bubbles: true});
+			expect(fired).toEqual(true);
+
 
 			fp.destroy();
 
-			expect(fp.input.type).toEqual("text");
+			expect(input.type).toEqual("text");
 			expect(fp.altInput).toBeUndefined();
 			expect(fp.config).toBeUndefined();
+
+			fired = false;
+
+			simulate("keydown", input, {key: "ArrowLeft", bubbles: true});
+			simulate("keydown", document.body, {key: "ArrowLeft", bubbles: true});
+			expect(fired).toEqual(false);
 		});
 
 		it("set (option, value)", () => {
