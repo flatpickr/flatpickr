@@ -2,12 +2,12 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-/*! flatpickr v2.4.8, @license MIT */
+/*! flatpickr v2.5.1, @license MIT */
 function Flatpickr(element, config) {
 	var self = this;
 
 	self._ = {};
-
+	self._.afterDayAnim = afterDayAnim;
 	self.changeMonth = changeMonth;
 	self.changeYear = changeYear;
 	self.clear = clear;
@@ -23,7 +23,7 @@ function Flatpickr(element, config) {
 	self.toggle = toggle;
 
 	function init() {
-		if (element._flatpickr) destroy(element._flatpickr);
+		if (element._flatpickr) element._flatpickr = undefined;
 
 		element._flatpickr = self;
 
@@ -275,12 +275,17 @@ function Flatpickr(element, config) {
 
 	function animateMonths(e) {
 		switch (e.animationName) {
-			case "slideLeft":
-			case "slideRight":
+			case "slideLeftNew":
+			case "slideRightNew":
 				self.navigationCurrentMonth.classList.remove("slideLeftNew");
 				self.navigationCurrentMonth.classList.remove("slideRightNew");
-				self.monthNav.removeChild(self.oldCurMonth);
-				self.oldCurMonth = null;
+				var nav = self.navigationCurrentMonth;
+
+				while (nav.nextSibling && /curr/.test(nav.nextSibling.className)) {
+					self.monthNav.removeChild(nav.nextSibling);
+				}while (nav.previousSibling && /curr/.test(nav.previousSibling.className)) {
+					self.monthNav.removeChild(nav.previousSibling);
+				}self.oldCurMonth = null;
 				break;
 		}
 	}
@@ -698,11 +703,25 @@ function Flatpickr(element, config) {
 
 		buildDays(!skipAnimations ? delta : undefined);
 
-		triggerEvent("MonthChange");
+		if (skipAnimations) {
+			triggerEvent("MonthChange");
+			return updateNavigationCurrentMonth();
+		}
 
-		if (skipAnimations) return updateNavigationCurrentMonth();;
+		// remove possible remnants from clicking too fast
+		var nav = self.navigationCurrentMonth;
+		if (delta < 0) {
+			while (nav.nextSibling && /curr/.test(nav.nextSibling.className)) {
+				self.monthNav.removeChild(nav.nextSibling);
+			}
+		} else if (delta > 0) {
+			while (nav.previousSibling && /curr/.test(nav.previousSibling.className)) {
+				self.monthNav.removeChild(nav.previousSibling);
+			}
+		}
 
 		self.oldCurMonth = self.navigationCurrentMonth;
+
 		self.navigationCurrentMonth = self.monthNav.insertBefore(self.oldCurMonth.cloneNode(true), delta > 0 ? self.oldCurMonth.nextSibling : self.oldCurMonth);
 
 		if (delta > 0) {
@@ -765,7 +784,6 @@ function Flatpickr(element, config) {
 
 	function destroy(instance) {
 		instance = instance || self;
-		instance.clear(false);
 
 		window.removeEventListener("resize", instance.debouncedResize);
 
@@ -775,21 +793,25 @@ function Flatpickr(element, config) {
 
 		if (instance.mobileInput) {
 			if (instance.mobileInput.parentNode) instance.mobileInput.parentNode.removeChild(instance.mobileInput);
-			delete instance.mobileInput;
+			instance.mobileInput = undefined;
 		} else if (instance.calendarContainer && instance.calendarContainer.parentNode) instance.calendarContainer.parentNode.removeChild(instance.calendarContainer);
 
 		if (instance.altInput) {
 			instance.input.type = "text";
 			if (instance.altInput.parentNode) instance.altInput.parentNode.removeChild(instance.altInput);
-			delete instance.altInput;
+			instance.altInput = undefined;
 		}
 
-		instance.input.type = instance.input._type;
-		instance.input.classList.remove("flatpickr-input");
-		instance.input.removeEventListener("focus", open);
-		instance.input.removeAttribute("readonly");
+		if (instance.input) {
+			instance.input.type = instance.input._type;
+			instance.input.classList.remove("flatpickr-input");
+			instance.input.removeEventListener("focus", open);
+			instance.input.removeAttribute("readonly");
+			instance.input.value = "";
+		}
 
-		delete instance.input._flatpickr;
+		instance.config = undefined;
+		instance.input._flatpickr = undefined;
 	}
 
 	function isCalendarElem(elem) {
@@ -867,11 +889,12 @@ function Flatpickr(element, config) {
 	function onKeyDown(e) {
 		var isInput = e.target === (self.altInput || self.input);
 		var calendarElem = isCalendarElem(e.target);
+		var allowInput = self.config.allowInput;
 
-		if (e.key === "Enter" && self.config.allowInput && isInput) {
+		if (e.key === "Enter" && allowInput && isInput) {
 			self.setDate((self.altInput || self.input).value, true, e.target === self.altInput ? self.config.altFormat : self.config.dateFormat);
 			return e.target.blur();
-		} else if (self.isOpen || self.config.inline && (isInput || calendarElem)) {
+		} else if (self.isOpen || self.config.inline && (isInput && allowInput || calendarElem)) {
 			var isTimeObj = self.timeContainer && self.timeContainer.contains(e.target);
 			switch (e.key) {
 				case "Enter":
@@ -1647,7 +1670,7 @@ Flatpickr.defaultConfig = {
 
 	position: "auto",
 
-	animate: true,
+	animate: window.navigator.userAgent.indexOf("MSIE") === -1,
 
 	/* if true, dates will be parsed, formatted, and displayed in UTC.
  preloading date strings w/ timezones is recommended but not necessary */
@@ -1944,15 +1967,7 @@ Flatpickr.prototype = {
 	formatDate: function formatDate(dateObj, frmt) {
 		var _this = this;
 
-		if (this.config.formatDate) {
-			try {
-				return this.config.formatDate(dateObj, frmt);
-			} catch (e) {
-				console.warn("Please swap the format string and the date object parameters in your formatDate option", "\nThe old signature will be deprecated by v2.5");
-
-				return this.config.formatDate(frmt, dateObj);
-			}
-		}
+		if (this.config.formatDate) return this.config.formatDate(dateObj, frmt);
 
 		return frmt.split("").map(function (c, i, arr) {
 			return _this.formats[c] && arr[i - 1] !== "\\" ? _this.formats[c](dateObj) : c !== "\\" ? c : "";
@@ -1986,7 +2001,10 @@ Flatpickr.prototype = {
 			return new Date(parseFloat(unixSeconds) * 1000);
 		},
 
-		W: function W() {},
+		W: function W(dateObj, weekNumber) {
+			weekNumber = parseInt(weekNumber);
+			return new Date(dateObj.getFullYear(), 0, 2 + (weekNumber - 1) * 7, 0, 0, 0, 0, 0);
+		},
 		Y: function Y(dateObj, year) {
 			dateObj.setFullYear(year);
 		},
@@ -2031,6 +2049,7 @@ Flatpickr.prototype = {
 		M: "(\\w+)",
 		S: "(\\d\\d|\\d)",
 		U: "(.+)",
+		W: "(\\d\\d|\\d)",
 		Y: "(\\d{4})",
 		Z: "(.+)",
 		d: "(\\d\\d|\\d)",
@@ -2155,54 +2174,5 @@ Date.prototype.fp_toUTC = function () {
 	newDate.fp_isUTC = true;
 	return newDate;
 };
-
-// IE9 classList polyfill
-/* istanbul ignore next */
-if (!window.document.documentElement.classList && Object.defineProperty && typeof HTMLElement !== "undefined") {
-	Object.defineProperty(HTMLElement.prototype, "classList", {
-		get: function get() {
-			var self = this;
-			function update(fn) {
-				return function (value) {
-					var classes = self.className.split(/\s+/),
-					    index = classes.indexOf(value);
-
-					fn(classes, index, value);
-					self.className = classes.join(" ");
-				};
-			}
-
-			var ret = {
-				add: update(function (classes, index, value) {
-					if (!~index) classes.push(value);
-				}),
-
-				remove: update(function (classes, index) {
-					if (~index) classes.splice(index, 1);
-				}),
-
-				toggle: update(function (classes, index, value) {
-					if (~index) classes.splice(index, 1);else classes.push(value);
-				}),
-
-				contains: function contains(value) {
-					return !!~self.className.split(/\s+/).indexOf(value);
-				},
-
-				item: function item(i) {
-					return self.className.split(/\s+/)[i] || null;
-				}
-			};
-
-			Object.defineProperty(ret, "length", {
-				get: function get() {
-					return self.className.split(/\s+/).length;
-				}
-			});
-
-			return ret;
-		}
-	});
-}
 
 if (typeof module !== "undefined") module.exports = Flatpickr;
