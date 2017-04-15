@@ -184,15 +184,10 @@ function Flatpickr(element, config) {
 	function bind() {
 		if (self.config.wrap) {
 			["open", "close", "toggle", "clear"].forEach(el => {
-				const toggles = self.element.querySelectorAll(`[data-${el}]`);
-				for (let i = 0; i < toggles.length; i++)
-					toggles[i].addEventListener("click", self[el]);
+				self._toggles = self.element.querySelectorAll(`[data-${el}]`);
+				for (let i = self._toggles.length; i--;)
+					self._toggles[i].addEventListener("click", self[el]);
 			});
-		}
-
-		if (window.document.createEvent !== undefined) {
-			self.changeEvent = window.document.createEvent("HTMLEvents");
-			self.changeEvent.initEvent("change", false, true);
 		}
 
 		if (self.isMobile)
@@ -207,7 +202,7 @@ function Flatpickr(element, config) {
 		if (self.config.mode === "range" && self.daysContainer)
 			self.daysContainer.addEventListener("mouseover", e => onMouseOver(e.target));
 
-		document.body.addEventListener("keydown", onKeyDown);
+		window.document.body.addEventListener("keydown", onKeyDown);
 
 		if (!self.config.static)
 			self._input.addEventListener("keydown", onKeyDown);
@@ -225,8 +220,8 @@ function Flatpickr(element, config) {
 			self._input.addEventListener("focus", open);
 
 		if (!self.config.noCalendar) {
-			self.prevMonthNav.addEventListener("click", () => changeMonth(-1));
-			self.nextMonthNav.addEventListener("click", () => changeMonth(1));
+			self.prevMonthNav.addEventListener("click", self.prevMonthFn = () => changeMonth(-1));
+			self.nextMonthNav.addEventListener("click", self.nextMonthFn = () => changeMonth(1));
 
 			self.monthNav.addEventListener("wheel", e => {
 				e.preventDefault()
@@ -359,19 +354,9 @@ function Flatpickr(element, config) {
 
 	function incrementNumInput(e, delta, inputElem) {
 		const input = inputElem || e.target.parentNode.childNodes[0];
-		let ev;
-
-		try {
-			ev = new Event("increment", { "bubbles": true });
-		}
-
-		catch (err) {
-			ev = window.document.createEvent("CustomEvent");
-			ev.initCustomEvent("increment", true, true, {});
-		}
-
-		ev.delta = delta;
-		input.dispatchEvent(ev);
+		const event = createEvent("increment");
+		event.delta = delta;
+		input.dispatchEvent(event);
 	}
 
 	function createNumberInput(inputClassName) {
@@ -394,7 +379,6 @@ function Flatpickr(element, config) {
 		const fragment = window.document.createDocumentFragment();
 		self.calendarContainer = createElement("div", "flatpickr-calendar");
 		self.calendarContainer.tabIndex = -1;
-		self.numInputType = navigator.userAgent.indexOf("MSIE 9.0") > 0 ? "text" : "number";
 
 		if (!self.config.noCalendar) {
 			fragment.appendChild(buildMonthNav());
@@ -1885,21 +1869,24 @@ function Flatpickr(element, config) {
 		}
 
 		if (event === "Change") {
-			if (typeof Event === "function" && Event.constructor) {
-				self.input.dispatchEvent(new Event("change", { "bubbles": true }));
+			self.input.dispatchEvent(createEvent("change"));
 
-				// many front-end frameworks bind to the input event
-				self.input.dispatchEvent(new Event("input", { "bubbles": true }));
-			}
-
-			/* istanbul ignore next */
-			else {
-				if (window.document.createEvent !== undefined)
-					return self.input.dispatchEvent(self.changeEvent);
-
-				self.input.fireEvent("onchange");
-			}
+			// many front-end frameworks bind to the input event
+			self.input.dispatchEvent(createEvent("input"));
 		}
+	}
+
+	function createEvent(name) {
+		const existing = self._[`${name}Event`];
+		if (existing !== undefined)
+			return existing;
+
+		if (self._supportsEvents)
+			return self._[`${name}Event`] = new Event(name, { bubbles: true });
+
+		self._[`${name}Event`] = document.createEvent("Event");
+		self._[`${name}Event`].initEvent(name, true, true);
+		return self._[`${name}Event`];
 	}
 
 	function isDateSelected(date) {
