@@ -20,15 +20,16 @@ function createInstance(config) {
 
 function beforeEachTest(){
 	mockAgent = false;
-
-	if (elem)
-		elem.parentNode.removeChild(elem);
+	jest.runAllTimers();
+	document.activeElement.blur();
 
 	if (fp)
 		fp.destroy();
 
-	elem = document.createElement("input");
-	document.body.appendChild(elem);
+	if (elem === undefined) {
+		elem = document.createElement("input");
+		document.body.appendChild(elem);
+	}
 }
 
 function incrementTime(type, times = 1) {
@@ -390,10 +391,11 @@ describe('flatpickr', () => {
 			});
 
 			jest.runAllTimers();
-			expect(fp.currentMonth).toEqual(2);			
+			expect(fp.currentMonth).toEqual(2);
 		});
 
 		it("yearScroll", () => {
+			createInstance();
 			const now = new Date();
 			fp.setDate(now);
 
@@ -417,7 +419,7 @@ describe('flatpickr', () => {
 
 			expect(fp.input.type).toEqual("text");
 			expect(fp.altInput).toBeUndefined();
-
+			expect(fp.config).toBeUndefined();
 		});
 
 		it("set (option, value)", () => {
@@ -574,14 +576,14 @@ describe('flatpickr', () => {
 		});
 
 		it("onKeyDown: arrow nav", () => {
-			createInstance();
-			fp.jumpToDate("2017-01-01");
+			jest.runAllTimers();
+			createInstance({
+				defaultDate: "2017-01-01"
+			});
 
-			fp.input.focus();
-			expect(fp.isOpen).toEqual(true);
+			fp.open();
 
-			simulate("keydown", fp.input, {key: "ArrowLeft", bubbles: false}, KeyboardEvent);
-
+			simulate("keydown", document.body, {key: "ArrowLeft", bubbles: true});
 			expect(fp.currentMonth).toBe(0);
 			expect(document.activeElement.dateObj.getDate()).toEqual(1);
 
@@ -665,7 +667,7 @@ describe('flatpickr', () => {
 
 		it("static calendar", () => {
 			createInstance({
-				static: true
+				"static": true
 			});
 
 			expect(fp.calendarContainer.classList.contains("static")).toBe(true);
@@ -1014,9 +1016,9 @@ describe('flatpickr', () => {
 			expect(isArrowVisible("next")).toBe(true);
 
 			fp.days.childNodes[10].click(); // select some date
-			jest.runAllTimers();
+			jest.runOnlyPendingTimers();
 			simulate("click", fp.nextMonthNav);
-			
+
 
 			expect(isArrowVisible("prev")).toBe(true);
 			expect(isArrowVisible("next")).toBe(true);
