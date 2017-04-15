@@ -23,7 +23,7 @@ function Flatpickr(element, config) {
 	self.toggle = toggle;
 
 	function init() {
-		if (element._flatpickr) destroy(element._flatpickr);
+		if (element._flatpickr) element._flatpickr = undefined;
 
 		element._flatpickr = self;
 
@@ -784,7 +784,6 @@ function Flatpickr(element, config) {
 
 	function destroy(instance) {
 		instance = instance || self;
-		instance.clear(false);
 
 		window.removeEventListener("resize", instance.debouncedResize);
 
@@ -794,21 +793,25 @@ function Flatpickr(element, config) {
 
 		if (instance.mobileInput) {
 			if (instance.mobileInput.parentNode) instance.mobileInput.parentNode.removeChild(instance.mobileInput);
-			delete instance.mobileInput;
+			instance.mobileInput = undefined;
 		} else if (instance.calendarContainer && instance.calendarContainer.parentNode) instance.calendarContainer.parentNode.removeChild(instance.calendarContainer);
 
 		if (instance.altInput) {
 			instance.input.type = "text";
 			if (instance.altInput.parentNode) instance.altInput.parentNode.removeChild(instance.altInput);
-			delete instance.altInput;
+			instance.altInput = undefined;
 		}
 
-		instance.input.type = instance.input._type;
-		instance.input.classList.remove("flatpickr-input");
-		instance.input.removeEventListener("focus", open);
-		instance.input.removeAttribute("readonly");
+		if (instance.input) {
+			instance.input.type = instance.input._type;
+			instance.input.classList.remove("flatpickr-input");
+			instance.input.removeEventListener("focus", open);
+			instance.input.removeAttribute("readonly");
+			instance.input.value = "";
+		}
 
-		delete instance.input._flatpickr;
+		instance.config = undefined;
+		instance.input._flatpickr = undefined;
 	}
 
 	function isCalendarElem(elem) {
@@ -886,11 +889,12 @@ function Flatpickr(element, config) {
 	function onKeyDown(e) {
 		var isInput = e.target === (self.altInput || self.input);
 		var calendarElem = isCalendarElem(e.target);
+		var allowInput = self.config.allowInput;
 
-		if (e.key === "Enter" && self.config.allowInput && isInput) {
+		if (e.key === "Enter" && allowInput && isInput) {
 			self.setDate((self.altInput || self.input).value, true, e.target === self.altInput ? self.config.altFormat : self.config.dateFormat);
 			return e.target.blur();
-		} else if (self.isOpen || self.config.inline && (isInput || calendarElem)) {
+		} else if (self.isOpen || self.config.inline && (isInput && allowInput || calendarElem)) {
 			var isTimeObj = self.timeContainer && self.timeContainer.contains(e.target);
 			switch (e.key) {
 				case "Enter":
