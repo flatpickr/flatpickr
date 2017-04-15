@@ -173,16 +173,16 @@ function Flatpickr(element, config) {
 
 		document.body.addEventListener("keydown", onKeyDown);
 
-		if (!self.config.static) (self.altInput || self.input).addEventListener("keydown", onKeyDown);
+		if (!self.config.static) self._input.addEventListener("keydown", onKeyDown);
 
 		if (!self.config.inline && !self.config.static) window.addEventListener("resize", self.debouncedResize);
 
 		if (window.ontouchstart) window.document.addEventListener("touchstart", documentClick);
 
 		window.document.addEventListener("click", documentClick);
-		(self.altInput || self.input).addEventListener("blur", documentClick);
+		self._input.addEventListener("blur", documentClick);
 
-		if (self.config.clickOpens) (self.altInput || self.input).addEventListener("focus", open);
+		if (self.config.clickOpens) self._input.addEventListener("focus", open);
 
 		if (!self.config.noCalendar) {
 			self.prevMonthNav.addEventListener("click", function () {
@@ -381,7 +381,7 @@ function Flatpickr(element, config) {
 			self.calendarContainer.classList.add(self.config.inline ? "inline" : "static");
 
 			if (self.config.inline && !customAppend) {
-				return self.element.parentNode.insertBefore(self.calendarContainer, (self.altInput || self.input).nextSibling);
+				return self.element.parentNode.insertBefore(self.calendarContainer, self._input.nextSibling);
 			}
 
 			if (self.config.static) {
@@ -776,7 +776,7 @@ function Flatpickr(element, config) {
 
 		if (!self.isMobile) {
 			self.calendarContainer.classList.remove("open");
-			(self.altInput || self.input).classList.remove("active");
+			self._input.classList.remove("active");
 		}
 
 		triggerEvent("Close");
@@ -887,14 +887,16 @@ function Flatpickr(element, config) {
 	}
 
 	function onKeyDown(e) {
-		var isInput = e.target === (self.altInput || self.input);
+		var isInput = e.target === self._input;
 		var calendarElem = isCalendarElem(e.target);
 		var allowInput = self.config.allowInput;
+		var allowKeydown = self.isOpen && (!allowInput || !isInput);
+		var allowInlineKeydown = self.config.inline && isInput && !allowInput;
 
 		if (e.key === "Enter" && allowInput && isInput) {
-			self.setDate((self.altInput || self.input).value, true, e.target === self.altInput ? self.config.altFormat : self.config.dateFormat);
+			self.setDate(self._input.value, true, e.target === self.altInput ? self.config.altFormat : self.config.dateFormat);
 			return e.target.blur();
-		} else if (self.isOpen || self.config.inline && (isInput && allowInput || calendarElem)) {
+		} else if (calendarElem || allowKeydown || allowInlineKeydown) {
 			var isTimeObj = self.timeContainer && self.timeContainer.contains(e.target);
 			switch (e.key) {
 				case "Enter":
@@ -1046,12 +1048,12 @@ function Flatpickr(element, config) {
 			return;
 		}
 
-		if (self.isOpen || (self.altInput || self.input).disabled || self.config.inline) return;
+		if (self.isOpen || self._input.disabled || self.config.inline) return;
 
 		self.isOpen = true;
 		self.calendarContainer.classList.add("open");
 		positionCalendar();
-		(self.altInput || self.input).classList.add("active");
+		self._input.classList.add("active");
 
 		triggerEvent("Open");
 	}
@@ -1153,7 +1155,7 @@ function Flatpickr(element, config) {
 		var calendarHeight = self.calendarContainer.offsetHeight,
 		    calendarWidth = self.calendarContainer.offsetWidth,
 		    configPos = self.config.position,
-		    input = self.altInput || self.input,
+		    input = self._input,
 		    inputBounds = input.getBoundingClientRect(),
 		    distanceFromBottom = window.innerHeight - inputBounds.bottom + input.offsetHeight,
 		    showOnTop = configPos === "above" || configPos !== "below" && distanceFromBottom < calendarHeight && inputBounds.top > calendarHeight;
@@ -1421,14 +1423,15 @@ function Flatpickr(element, config) {
 
 		/* istanbul ignore next */
 		if (!self.input) return console.warn("Error: invalid input element specified", self.input);
-
 		self.input._type = self.input.type;
 		self.input.type = "text";
 		self.input.classList.add("flatpickr-input");
+		self._input = self.input;
 
 		if (self.config.altInput) {
 			// replicate self.element
 			self.altInput = createElement(self.input.nodeName, self.input.className + " " + self.config.altInputClass);
+			self._input = self.altInput;
 			self.altInput.placeholder = self.input.placeholder;
 			self.altInput.type = "text";
 			self.input.type = "hidden";
@@ -1436,7 +1439,7 @@ function Flatpickr(element, config) {
 			if (!self.config.static && self.input.parentNode) self.input.parentNode.insertBefore(self.altInput, self.input.nextSibling);
 		}
 
-		if (!self.config.allowInput) (self.altInput || self.input).setAttribute("readonly", "readonly");
+		if (!self.config.allowInput) self._input.setAttribute("readonly", "readonly");
 	}
 
 	function setupMobile() {
