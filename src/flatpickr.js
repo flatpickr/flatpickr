@@ -199,8 +199,7 @@ function Flatpickr(element, config) {
 		};
 		self.debouncedChange = debounce(self.triggerChange, 300);
 
-		if (self.config.mode === "range" && self.daysContainer)
-			self.daysContainer.addEventListener("mouseover", e => onMouseOver(e.target));
+		setupMouseOver();
 
 		window.document.body.addEventListener("keydown", onKeyDown);
 
@@ -279,6 +278,14 @@ function Flatpickr(element, config) {
 				});
 			}
 		}
+	}
+
+	function setupMouseOver() {
+		if(!self.days) return;
+		if (self.config.mode === "range")
+			self.days.addEventListener("mouseover", onMouseOver);
+		else
+			self.days.removeEventListener("mouseover", onMouseOver);
 	}
 
 	function animateDays (e) {
@@ -1493,6 +1500,7 @@ function Flatpickr(element, config) {
 		buildWeekdays();
 		updateNavigationCurrentMonth();
 		buildDays();
+		setupMouseOver();
 	}
 
 	function selectDate(e) {
