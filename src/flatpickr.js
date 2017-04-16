@@ -51,7 +51,7 @@ function Flatpickr(element, config) {
 		if (!self.isMobile)
 			build();
 
-		bind();
+		bindEvents();
 
 		if (self.selectedDates.length || self.config.noCalendar) {
 			if (self.config.enableTime) {
@@ -79,6 +79,10 @@ function Flatpickr(element, config) {
 		return fn.bind(self);
 	}
 
+	/**
+	 * The handler for all events targeting the time inputs
+	 * @param {Event} e the event - "input", "wheel", "increment", etc
+	 */
 	function updateTime(e) {
 		if (self.config.noCalendar && !self.selectedDates.length)
 			// picking time only
@@ -179,14 +183,42 @@ function Flatpickr(element, config) {
 		}
 	}
 
+	/**
+	 * Essentially addEventListener + tracking
+	 * @param {Element} element the element to addEventListener to
+	 * @param {String} event the event name
+	 * @param {Function} handler the event handler
+	 */
+	function bind(element, event, handler) {
+		if (event instanceof Array)
+			return event.forEach(ev => bind(element, ev, handler));
 
+		element.addEventListener(event, handler);
+		self._handlers.push({element, event, handler});
+	}
 
-	function bind() {
+	/**
+	 * A mousedown handler which mimics click.
+	 * Minimizes latency, since we don't need to wait for mouseup in most cases.
+	 * Also, avoids handling right clicks.
+	 *
+	 * @param {Function} handler the event handler
+	 */
+	function onClick(handler) {
+		return evt => evt.which === 1 && (handler(evt));
+	}
+
+	/**
+	 * Adds all the necessary event listeners
+	 */
+	function bindEvents() {
+		self._handlers = [];
 		if (self.config.wrap) {
-			["open", "close", "toggle", "clear"].forEach(el => {
-				self._toggles = self.element.querySelectorAll(`[data-${el}]`);
-				for (let i = self._toggles.length; i--;)
-					self._toggles[i].addEventListener("click", self[el]);
+			["open", "close", "toggle", "clear"].forEach(evt => {
+				Array.prototype.forEach.call(
+					self.element.querySelectorAll(`[data-${evt}]`),
+					el => bind(el, "mousedown", onClick(self[evt]))
+				)
 			});
 		}
 
@@ -200,87 +232,74 @@ function Flatpickr(element, config) {
 		self.debouncedChange = debounce(self.triggerChange, 300);
 
 		if (self.config.mode === "range" && self.daysContainer)
-			self.daysContainer.addEventListener("mouseover", e => onMouseOver(e.target));
+			bind(self.daysContainer, "mouseover", e => onMouseOver(e.target));
 
-		window.document.body.addEventListener("keydown", onKeyDown);
+		bind(window.document.body, "keydown", onKeyDown);
 
 		if (!self.config.static)
-			self._input.addEventListener("keydown", onKeyDown);
+			bind(self._input, "keydown", onKeyDown);
 
 		if (!self.config.inline && !self.config.static)
-			window.addEventListener("resize", self.debouncedResize);
+			bind(window, "resize", self.debouncedResize);
 
 		if (window.ontouchstart)
-			window.document.addEventListener("touchstart", documentClick);
+			bind(window.document, "touchstart", documentClick);
 
-		window.document.addEventListener("click", documentClick);
-		self._input.addEventListener("blur", documentClick);
+		bind(window.document, "mousedown", onClick(documentClick));
+		bind(self._input, "blur", documentClick);
 
 		if (self.config.clickOpens)
-			self._input.addEventListener("focus", open);
+			bind(self._input, "focus", open);
 
 		if (!self.config.noCalendar) {
-			self.prevMonthNav.addEventListener("click", self.prevMonthFn = () => changeMonth(-1));
-			self.nextMonthNav.addEventListener("click", self.nextMonthFn = () => changeMonth(1));
+			bind(self.prevMonthNav, "mousedown", onClick(self.prevMonthFn = () => changeMonth(-1)));
+			bind(self.nextMonthNav, "mousedown", onClick(self.nextMonthFn = () => changeMonth(1)));
 
-			self.monthNav.addEventListener("wheel", e => {
-				e.preventDefault()
-			});
+			self.monthNav.addEventListener("wheel", e => e.preventDefault());
 
-			self.monthNav.addEventListener("wheel", debounce(onMonthNavScroll, 10));
-			self.monthNav.addEventListener("click", onMonthNavClick);
+			bind(self.monthNav, "wheel", debounce(onMonthNavScroll, 10));
+			bind(self.monthNav, "mousedown", onClick(onMonthNavClick));
 
-			self.currentYearElement.addEventListener("focus", () => {
+			bind(self.currentYearElement, "focus", () => {
 				self.currentYearElement.select();
 			});
 
-			self.currentYearElement.addEventListener("input", onYearInput);
-			self.currentYearElement.addEventListener("increment", onYearInput);
+			bind(self.currentYearElement, ["input", "increment"], onYearInput);
 
-			self.daysContainer.addEventListener("click", selectDate);
+			bind(self.daysContainer, "mousedown", onClick(selectDate));
 
 			if (self.config.animate) {
-				self.daysContainer.addEventListener("animationend", animateDays);
-				self.monthNav.addEventListener("animationend", animateMonths);
-
-				self.daysContainer.addEventListener("webkitAnimationEnd", animateDays);
-				self.monthNav.addEventListener("webkitAnimationEnd", animateMonths);
+				bind(self.daysContainer, ["webkitAnimationEnd","animationend"], animateDays);
+				bind(self.monthNav, ["webkitAnimationEnd","animationend"], animateMonths);
 			}
 		}
 
 		if (self.config.enableTime) {
-			self.timeContainer.addEventListener("wheel", updateTime);
+			bind(self.timeContainer, ["wheel",  "input", "increment"], updateTime);
+			bind(self.timeContainer, "mousedown", onClick(timeIncrement));
 
-			self.timeContainer.addEventListener("click", timeIncrement);
-			self.timeContainer.addEventListener("input", updateTime);
-			self.timeContainer.addEventListener("increment", updateTime);
-			self.timeContainer.addEventListener("increment", self.debouncedChange);
+			bind(self.timeContainer, ["wheel", "increment"], self.debouncedChange);
+			bind(self.timeContainer, "input", self.triggerChange);
 
-			self.timeContainer.addEventListener("wheel", self.debouncedChange);
-			self.timeContainer.addEventListener("input", self.triggerChange);
+			bind(self.hourElement, "focus", () => self.hourElement.select());
+			bind(self.minuteElement, "focus", () => self.minuteElement.select());
 
-			self.hourElement.addEventListener("focus", () => {
-				self.hourElement.select();
-			});
-			self.minuteElement.addEventListener("focus", () => {
-				self.minuteElement.select();
-			});
-
-			if (self.secondElement) {
-				self.secondElement.addEventListener("focus", () => {
-					self.secondElement.select();
-				});
-			}
+			if (self.secondElement)
+				bind(self.secondElement, "focus", () => self.secondElement.select());
 
 			if (self.amPM) {
-				self.amPM.addEventListener("click", (e) => {
+				bind(self.amPM, "mousedown", onClick(e => {
 					updateTime(e);
 					self.triggerChange(e);
-				});
+				}));
 			}
 		}
 	}
 
+	/**
+	 * Removes the day container that slided out of view
+	 * @param {Event} e the animation event
+	 */
 	function animateDays (e) {
 		if (self.daysContainer.childNodes.length > 1) {
 			switch(e.animationName) {
@@ -303,6 +322,10 @@ function Flatpickr(element, config) {
 		}
 	}
 
+	/**
+	 * Removes the month element that animated out of view
+	 * @param {Event} e the animation event
+	 */
 	function animateMonths(e){
 		switch(e.animationName) {
 			case "slideLeftNew":
@@ -322,6 +345,10 @@ function Flatpickr(element, config) {
 		}
 	}
 
+	/**
+	 * Set the calendar view to a particular date.
+	 * @param {Date} jumpDate the date to set the view to
+	 */
 	function jumpToDate(jumpDate) {
 		jumpDate = jumpDate
 			? self.parseDate(jumpDate)
@@ -347,11 +374,24 @@ function Flatpickr(element, config) {
 		self.redraw();
 	}
 
+	/**
+	 * The up/down arrow handler for time inputs
+	 * @param {Event} e the click event
+	 */
 	function timeIncrement(e) {
 		if (~e.target.className.indexOf("arrow"))
 			incrementNumInput(e, e.target.classList.contains("arrowUp") ? 1 : -1);
 	}
 
+	/**
+	 * Increments/decrements the value of input associ-
+	 * ated with the up/down arrow by dispatching an
+	 * "increment" event on the input.
+	 *
+	 * @param {Event} e the click event
+	 * @param {Number} delta the diff (usually 1 or -1)
+	 * @param {Element} inputElem the input element
+	 */
 	function incrementNumInput(e, delta, inputElem) {
 		const input = inputElem || e.target.parentNode.childNodes[0];
 		const event = createEvent("increment");
@@ -951,13 +991,10 @@ function Flatpickr(element, config) {
 	function destroy(instance) {
 		instance = instance || self;
 
-		window.removeEventListener("resize", instance.debouncedResize);
-
-		window.document.removeEventListener("click", documentClick);
-		window.document.removeEventListener("touchstart", documentClick);
-		window.document.removeEventListener("blur", documentClick);
-		window.document.body.removeEventListener("keydown", onKeyDown);
-		instance._input.removeEventListener("keydown", onKeyDown);
+		for (let i = self._handlers.length; i--;) {
+			const h = self._handlers[i];
+			h.element.removeEventListener(h.event, h.handler);
+		}
 
 		if (instance.mobileInput) {
 			if (instance.mobileInput.parentNode)
@@ -978,7 +1015,6 @@ function Flatpickr(element, config) {
 		if (instance.input) {
 			instance.input.type = instance.input._type;
 			instance.input.classList.remove("flatpickr-input");
-			instance.input.removeEventListener("focus", open);
 			instance.input.removeAttribute("readonly");
 			instance.input.value = "";
 		}
@@ -1782,8 +1818,10 @@ function Flatpickr(element, config) {
 		/* istanbul ignore next */
 		if (!self.input)
 			return console.warn("Error: invalid input element specified", self.input);
+
 		self.input._type = self.input.type;
 		self.input.type = "text";
+
 		self.input.classList.add("flatpickr-input");
 		self._input = self.input;
 
@@ -2492,8 +2530,6 @@ Flatpickr.prototype = {
 					: new Date(new Date().getFullYear(), 0, 1, 0, 0, 0 ,0);
 
 				let matched;
-
-
 
 				for (let i = 0, matchIndex = 0, regexStr = ""; i < format.length; i++) {
 					const token = format[i];
