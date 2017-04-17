@@ -1914,6 +1914,11 @@ function Flatpickr(element, config) {
 		}
 	}
 
+	/**
+	 * Creates an Event, normalized across browsers
+	 * @param {String} name the event name, e.g. "click"
+	 * @return {Event} the created event
+	 */
 	function createEvent(name) {
 		const existing = self._[`${name}Event`];
 		if (existing !== undefined)
@@ -1961,7 +1966,10 @@ function Flatpickr(element, config) {
 				: self.currentYear > self.config.maxDate.getFullYear());
 	}
 
-
+	/**
+	 * Updates the values of inputs associated with the calendar
+	 * @return {void}
+	 */
 	function updateValue() {
 		if (!self.selectedDates.length)
 			return self.clear();
@@ -2016,6 +2024,13 @@ function Flatpickr(element, config) {
 			self.changeYear(self.currentYear - 1);
 	}
 
+	/**
+	 * Creates an HTMLElement with given tag, class, and textual content
+	 * @param {String} tag the HTML tag
+	 * @param {String} className the new element's class name
+	 * @param {String} content The new element's text content
+	 * @return {HTMLElement} the created HTML element
+	 */
 	function createElement(tag, className, content) {
 		const e = window.document.createElement(tag);
 		className = className || "";
@@ -2023,7 +2038,7 @@ function Flatpickr(element, config) {
 
 		e.className = className;
 
-		if (content)
+		if (content !== undefined)
 			e.textContent = content;
 
 		return e;
@@ -2055,6 +2070,13 @@ function Flatpickr(element, config) {
 		};
 	}
 
+	/**
+	 * Compute the difference in dates, measured in ms
+	 * @param {Date} date1
+	 * @param {Date} date2
+	 * @param {Boolean} timeless whether to reset times of both dates to 00:00
+	 * @return {Number} the difference in ms
+	 */
 	function compareDates(date1, date2, timeless) {
 		if (!(date1 instanceof Date) || !(date2 instanceof Date))
 			return false;
@@ -2137,7 +2159,7 @@ Flatpickr.defaultConfig = {
 	preloading date strings w/ timezones is recommended but not necessary */
 	utc: false,
 
-	// wrap: see https://chmln.github.io/flatpickr/#strap
+	// wrap: see https://chmln.github.io/flatpickr/examples/#flatpickr-external-elements
 	wrap: false,
 
 	// enables week numbers
@@ -2188,7 +2210,7 @@ Flatpickr.defaultConfig = {
 	// dateformatter that transforms a given date object to a string, according to passed format
 	formatDate: null,
 
-	getWeek: function (givenDate) {
+	getWeek (givenDate) {
 		const date = new Date(givenDate.getTime());
 		date.setHours(0, 0, 0, 0);
 
@@ -2215,7 +2237,7 @@ Flatpickr.defaultConfig = {
 
 	// position calendar inside wrapper and next to the input element
 	// leave at false unless you know what you"re doing
-	static: false,
+	"static": false,
 
 	// DOM node to append the calendar to in *static* mode
 	appendTo: null,
@@ -2399,8 +2421,14 @@ Flatpickr.prototype = {
 		y: date => String(date.getFullYear()).substring(2)
 	},
 
+	/**
+	 * Formats a given Date object into a string based on supplied format
+	 * @param {Date} dateObj the date object
+	 * @param {String} frmt a string composed of formatting tokens e.g. "Y-m-d"
+	 * @return {String} The textual representation of the date e.g. 2017-02-03
+	 */
 	formatDate (dateObj, frmt) {
-		if (this.config !== undefined && this.config.formatDate !== undefined )
+		if (this.config !== undefined && this.config.formatDate !== undefined)
 			return this.config.formatDate(dateObj, frmt);
 
 		return frmt.split("").map((c, i, arr) => this.formats[c] && arr[i - 1] !== "\\"
@@ -2497,6 +2525,13 @@ Flatpickr.prototype = {
 
 	pad: number => `0${number}`.slice(-2),
 
+	/**
+	 * Parses a date(+time) string into a Date object
+	 * @param {String} date the date string, e.g. 2017-02-03 14:45
+	 * @param {String} givenFormat the date format, e.g. Y-m-d H:i
+	 * @param {Boolean} timeless whether to reset the time of Date object
+	 * @return {Date} the parsed Date object
+	 */
 	parseDate (date, givenFormat, timeless) {
 		if (!date)
 			return null;
