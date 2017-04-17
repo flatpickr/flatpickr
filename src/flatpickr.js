@@ -2400,7 +2400,7 @@ Flatpickr.prototype = {
 	},
 
 	formatDate (dateObj, frmt) {
-		if (this.config.formatDate)
+		if (this.config !== undefined && this.config.formatDate !== undefined )
 			return this.config.formatDate(dateObj, frmt);
 
 		return frmt.split("").map((c, i, arr) => this.formats[c] && arr[i - 1] !== "\\"
