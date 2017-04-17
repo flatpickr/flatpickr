@@ -68,6 +68,7 @@
     position absolute
     width $calendarWidth
     box-sizing border-box
+    touch-action manipulation
 
     if $noCalendarBorder is defined
         box-shadow 0 3px 13px alpha(black, 0.08)
@@ -330,15 +331,15 @@
     &.slideLeft
         transform translate3d(-100%, 0px, 0px)
         animation fadeOut $slideTime ease, slideLeft $slideTime $bezier
-    
+
     &.slideLeftNew
         transform translate3d(100%, 0px, 0px)
         animation fadeIn $slideTime ease, slideLeftNew $slideTime $bezier
-    
+
     &.slideRight
         transform translate3d(100%, 0px, 0px)
         animation fadeOut $slideTime ease, slideRight $slideTime $bezier
-    
+
     &.slideRightNew
         transform translate3d(0, 0, 0px)
         animation fadeIn $slideTime ease, slideRightNew $slideTime $bezier
@@ -473,7 +474,7 @@ span.flatpickr-weekday
     &.slideRight
         animation fadeOut $slideTime $bezier, slideRight $slideTime $bezier
         transform: translate3d(100%, 0px, 0px);
-        
+
     &.slideRightNew
         animation fadeIn $slideTime $bezier, slideRightNew $slideTime $bezier
 
@@ -563,10 +564,10 @@ span.flatpickr-weekday
         else
             border-color transparent
         cursor default
-    
+
     &.week.selected
         border-radius 0
-        box-shadow: (-2.5*$dayMargin) 0 0 $selectedDayBackground, 
+        box-shadow: (-2.5*$dayMargin) 0 0 $selectedDayBackground,
             (2.5*$dayMargin) 0 0 $selectedDayBackground
 
 .rangeMode .flatpickr-day
@@ -694,8 +695,6 @@ span.flatpickr-weekday
 
         &:hover, &:focus
             background lighten($dayHoverBackground, 4)
-
-
 
 .flatpickr-input[readonly]
     cursor pointer
