@@ -16,6 +16,8 @@
   position: absolute;
   width: 315px;
   box-sizing: border-box;
+  -ms-touch-action: manipulation;
+      touch-action: manipulation;
   background: #fff;
   box-shadow: 1px 0 0 #eee, -1px 0 0 #eee, 0 1px 0 #eee, 0 -1px 0 #eee, 0 3px 13px rgba(0,0,0,0.08);
 }
