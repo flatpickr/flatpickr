@@ -820,8 +820,8 @@ camelcase@^3.0.0:
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-3.0.0.tgz#32fc4b9fcdaf845fcdf7e73bb97cac2261f0ab0a"
 
 caniuse-db@^1.0.30000604:
-  version "1.0.30000653"
-  resolved "https://registry.yarnpkg.com/caniuse-db/-/caniuse-db-1.0.30000653.tgz#123e112a29ce8f3199e4995d2d8b9d95492c5b41"
+  version "1.0.30000655"
+  resolved "https://registry.yarnpkg.com/caniuse-db/-/caniuse-db-1.0.30000655.tgz#e40b6287adc938848d6708ef83d65b5f54ac1874"
 
 caseless@~0.11.0:
   version "0.11.0"
@@ -2280,14 +2280,14 @@ js-tokens@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-3.0.1.tgz#08e9f132484a2c45a30907e9dc4d5567b7f114d7"
 
-js-yaml@3.6.1:
+js-yaml@3.6.1, js-yaml@^3.5.1:
   version "3.6.1"
   resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.6.1.tgz#6e5fe67d8b205ce4d22fad05b7781e8dadcc4b30"
   dependencies:
     argparse "^1.0.7"
     esprima "^2.6.0"
 
-js-yaml@^3.5.1, js-yaml@^3.7.0:
+js-yaml@^3.7.0:
   version "3.8.3"
   resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.8.3.tgz#33a05ec481c850c8875929166fe1beb61c728766"
   dependencies:
@@ -2583,13 +2583,17 @@ minimatch@^3.0.0, minimatch@^3.0.2, minimatch@^3.0.3:
   dependencies:
     brace-expansion "^1.0.0"
 
-minimist@0.0.8, minimist@~0.0.1:
+minimist@0.0.8:
   version "0.0.8"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-0.0.8.tgz#857fcabfc3397d2625b8228262e86aa7a011b05d"
 
 minimist@1.2.0, minimist@^1.1.0, minimist@^1.1.1, minimist@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.0.tgz#a35008b20f41383eec1fb914f4cd5df79a264284"
+
+minimist@~0.0.1:
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/minimist/-/minimist-0.0.10.tgz#de3f98543dbf96082be48ad1a0c7cda836301dcf"
 
 mkdirp@0.5.x, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1:
   version "0.5.1"
@@ -3106,9 +3110,9 @@ rechoir@^0.6.2:
   dependencies:
     resolve "^1.1.6"
 
-regenerate-unicode-properties@^5.0.3:
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/regenerate-unicode-properties/-/regenerate-unicode-properties-5.0.3.tgz#6ded7d4c5f378fb33146f92a97565e3ce745ed6f"
+regenerate-unicode-properties@^5.0.6:
+  version "5.0.7"
+  resolved "https://registry.yarnpkg.com/regenerate-unicode-properties/-/regenerate-unicode-properties-5.0.7.tgz#3fe692da96944fadced7e332340b50f8adf6371a"
   dependencies:
     regenerate "^1.3.2"
 
@@ -3136,15 +3140,15 @@ regex-cache@^0.4.2:
     is-primitive "^2.0.0"
 
 regexpu-core@^4.0.2:
-  version "4.0.7"
-  resolved "https://registry.yarnpkg.com/regexpu-core/-/regexpu-core-4.0.7.tgz#9d9eeeefeeb81c244bca8036b35556666839fe4b"
+  version "4.0.11"
+  resolved "https://registry.yarnpkg.com/regexpu-core/-/regexpu-core-4.0.11.tgz#798f9e9986f78c793dde403f1b3f34c007bf73a9"
   dependencies:
     regenerate "^1.3.2"
-    regenerate-unicode-properties "^5.0.3"
+    regenerate-unicode-properties "^5.0.6"
     regjsgen "^0.3.0"
     regjsparser "^0.2.1"
-    unicode-match-property "^0.1.3"
-    unicode-match-property-value "^1.0.2"
+    unicode-match-property-ecmascript "^1.0.1"
+    unicode-match-property-value-ecmascript "^1.0.0"
 
 registry-url@^3.0.0:
   version "3.1.0"
@@ -3705,30 +3709,24 @@ undefsafe@0.0.3:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/undefsafe/-/undefsafe-0.0.3.tgz#ecca3a03e56b9af17385baac812ac83b994a962f"
 
-unicode-canonical-property-names@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/unicode-canonical-property-names/-/unicode-canonical-property-names-1.0.3.tgz#63b0f02971c4812453df221ebd3ef9a16b3ca2ec"
+unicode-canonical-property-names-ecmascript@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/unicode-canonical-property-names-ecmascript/-/unicode-canonical-property-names-ecmascript-1.0.0.tgz#20068aef4ada99ea2a80bf3ff8299a4db3e5bed0"
 
-unicode-match-property-value@^1.0.2:
+unicode-match-property-ecmascript@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/unicode-match-property-ecmascript/-/unicode-match-property-ecmascript-1.0.1.tgz#f380567fb895cc649828bea3a524fa34f4feb9da"
+  dependencies:
+    unicode-canonical-property-names-ecmascript "^1.0.0"
+    unicode-property-aliases-ecmascript "^1.0.1"
+
+unicode-match-property-value-ecmascript@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/unicode-match-property-value-ecmascript/-/unicode-match-property-value-ecmascript-1.0.0.tgz#393fa3e8baf4de2c415b95a8d7338587e3e563be"
+
+unicode-property-aliases-ecmascript@^1.0.1:
   version "1.0.2"
-  resolved "https://registry.yarnpkg.com/unicode-match-property-value/-/unicode-match-property-value-1.0.2.tgz#55de300b04112a8cb663c0102343c082737714cc"
-  dependencies:
-    unicode-property-value-aliases "^1.2.1"
-
-unicode-match-property@^0.1.3:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/unicode-match-property/-/unicode-match-property-0.1.3.tgz#371c7308522b65a2cc4cfbbbe775187f7784352a"
-  dependencies:
-    unicode-canonical-property-names "^1.0.3"
-    unicode-property-aliases "^1.1.0"
-
-unicode-property-aliases@^1.1.0:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/unicode-property-aliases/-/unicode-property-aliases-1.1.1.tgz#61f2c004efc1182f0abed5b710f7eeb03eee1361"
-
-unicode-property-value-aliases@^1.2.1:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/unicode-property-value-aliases/-/unicode-property-value-aliases-1.2.2.tgz#12a3746fc66f75f08a3f4a8d56780f89f49acbbd"
+  resolved "https://registry.yarnpkg.com/unicode-property-aliases-ecmascript/-/unicode-property-aliases-ecmascript-1.0.2.tgz#b495f544c79c2a85cf3083c907c884ef154be1a0"
 
 union@~0.4.3:
   version "0.4.6"
