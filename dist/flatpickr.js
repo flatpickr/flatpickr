@@ -2008,7 +2008,7 @@ Flatpickr.prototype = {
 	formatDate: function formatDate(dateObj, frmt) {
 		var _this = this;
 
-		if (this.config.formatDate) return this.config.formatDate(dateObj, frmt);
+		if (this.config !== undefined && this.config.formatDate !== undefined) return this.config.formatDate(dateObj, frmt);
 
 		return frmt.split("").map(function (c, i, arr) {
 			return _this.formats[c] && arr[i - 1] !== "\\" ? _this.formats[c](dateObj) : c !== "\\" ? c : "";
