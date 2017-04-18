@@ -323,7 +323,7 @@
     position absolute
     width 75%
     left 12.5%
-    padding (0.25*$monthNavHeight) 0 0 0
+    padding (0.15*$monthNavHeight) 0 0 0
     line-height 1
     height $monthNavHeight
     display inline-block
@@ -407,20 +407,14 @@
 span.flatpickr-weekday
     cursor default
     font-size 90%
-
-    if $weekdays_color is defined
-        color alpha($weekdays_color, 0.54)
-    else
-        color alpha(black, 0.54)
-
+    background $monthBackground
+    color $weekdaysForeground
     line-height 1
     margin 0
-    background $monthBackground
     text-align center
     display block
     flex 1
     font-weight bolder
-    margin 0
 
 
 .dayContainer, .flatpickr-weeks
@@ -436,7 +430,6 @@ span.flatpickr-weekday
         outline 0
 
     if $noCalendarBorder is defined
-        background $monthForeground
         border-left 1px solid $calendarBorderColor
         border-right 1px solid $calendarBorderColor
 
@@ -580,7 +573,8 @@ span.flatpickr-weekday
         padding 0 12px
         if $noCalendarBorder is defined
             border-left 1px solid $calendarBorderColor
-        box-shadow 1px 0 0 $calendarBorderColor
+        else
+            box-shadow 1px 0 0 $calendarBorderColor
 
     .flatpickr-weekday
         float none
