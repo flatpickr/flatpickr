@@ -124,7 +124,7 @@
   color: #fff;
   fill: #fff;
   height: 28px;
-  line-height: 24px;
+  line-height: 1;
   text-align: center;
   position: relative;
   -webkit-user-select: none;
@@ -139,8 +139,8 @@
   cursor: pointer;
   position: absolute;
   top: 0px;
-  height: 28px;
   line-height: 16px;
+  height: 28px;
   padding: 10px calc(3.57% - 1.5px);
   z-index: 3;
 }
@@ -270,7 +270,9 @@
   position: absolute;
   width: 75%;
   left: 12.5%;
-  top: 5px;
+  padding: 7px 0 0 0;
+  line-height: 1;
+  height: 28px;
   display: inline-block;
   text-align: center;
   -webkit-transform: translate3d(0px, 0px, 0px);
@@ -305,7 +307,7 @@
   font-weight: 700;
   color: inherit;
   display: inline-block;
-  margin-left: 7px;
+  margin-left: 0.5ch;
   padding: 0;
 }
 .flatpickr-current-month span.cur-month:hover {
@@ -329,7 +331,7 @@
   cursor: default;
   padding: 0 0 0 0.5ch;
   margin: 0;
-  display: inline;
+  display: inline-block;
   font-size: inherit;
   font-family: inherit;
   font-weight: 300;
@@ -561,12 +563,13 @@ span.flatpickr-weekday {
   float: left;
 }
 .flatpickr-weekwrapper .flatpickr-weeks {
-  padding: 1px 12px 0 12px;
+  padding: 0 12px;
   box-shadow: 1px 0 0 #3f4458;
 }
 .flatpickr-weekwrapper .flatpickr-weekday {
   float: none;
   width: 100%;
+  line-height: 28px;
 }
 .flatpickr-weekwrapper span.flatpickr-day {
   display: block;

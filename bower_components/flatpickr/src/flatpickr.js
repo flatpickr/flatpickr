@@ -75,6 +75,11 @@ function Flatpickr(element, config) {
 		triggerEvent("Ready");
 	}
 
+	/**
+	 * Binds a function to the current flatpickr instance
+	 * @param {Function} fn the function
+	 * @return {Function} the function bound to the instance
+	 */
 	function bindToInstance(fn) {
 		return fn.bind(self);
 	}
@@ -106,6 +111,9 @@ function Flatpickr(element, config) {
 		}
 	}
 
+	/**
+	 * Syncs the selected date object time with user's time input
+	 */
 	function setHoursFromInputs(){
 		if (!self.config.enableTime)
 			return;
@@ -141,6 +149,10 @@ function Flatpickr(element, config) {
 		setHours(hours, minutes, seconds);
 	}
 
+	/**
+	 * Syncs time input values with a date
+	 * @param {Date} dateObj the date to sync with
+	 */
 	function setHoursFromDate(dateObj){
 		const date = dateObj || self.latestSelectedDateObj;
 
@@ -1497,9 +1509,8 @@ function Flatpickr(element, config) {
 		const calendarHeight = self.calendarContainer.offsetHeight,
 			calendarWidth = self.calendarContainer.offsetWidth,
 			configPos = self.config.position,
-			input = self._input,
-			inputBounds = input.getBoundingClientRect(),
-			distanceFromBottom = window.innerHeight - inputBounds.bottom + input.offsetHeight,
+			inputBounds = self._input.getBoundingClientRect(),
+			distanceFromBottom = window.innerHeight - inputBounds.bottom,
 			showOnTop = configPos === "above" || (
 				configPos !== "below"
 				&& distanceFromBottom < calendarHeight
@@ -1507,7 +1518,7 @@ function Flatpickr(element, config) {
 			);
 
 		let top = (window.pageYOffset + inputBounds.top) + (!showOnTop
-			? (input.offsetHeight + 2)
+			? (self._input.offsetHeight + 2)
 			: (- calendarHeight - 2)
 		);
 
@@ -2228,15 +2239,8 @@ Flatpickr.defaultConfig = {
 
 	getWeek (givenDate) {
 		const date = new Date(givenDate.getTime());
-		date.setHours(0, 0, 0, 0);
-
-		// Thursday in current week decides the year.
-		date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
-		// January 4 is always in week 1.
-		const week1 = new Date(date.getFullYear(), 0, 4);
-		// Adjust to Thursday in week 1 and count number of weeks from date to week1.
-		return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 +
-			(week1.getDay() + 6) % 7) / 7);
+		const onejan = new Date(date.getFullYear(), 0, 1);
+		return Math.ceil((((date - onejan) / 86400000) + onejan.getDay() + 1) / 7);
 	},
 
 	// see https://chmln.github.io/flatpickr/#disable
