@@ -220,6 +220,9 @@ function Flatpickr(element, config) {
 		if (event instanceof Array)
 			return event.forEach(ev => bind(element, ev, handler));
 
+		if (element instanceof Array)
+			return element.forEach(el => bind(el, event, handler));
+
 		element.addEventListener(event, handler);
 		self._handlers.push({element, event, handler});
 	}
@@ -304,19 +307,19 @@ function Flatpickr(element, config) {
 		}
 
 		if (self.config.enableTime) {
+			const selText = e => e.target.select();
 			bind(self.timeContainer, ["wheel",  "input", "increment"], updateTime);
 			bind(self.timeContainer, "mousedown", onClick(timeIncrement));
 
 			bind(self.timeContainer, ["wheel", "increment"], self.debouncedChange);
 			bind(self.timeContainer, "input", self.triggerChange);
 
-			bind(self.hourElement, "focus", () => self.hourElement.select());
-			bind(self.minuteElement, "focus", () => self.minuteElement.select());
+			bind([self.hourElement,self.minuteElement], "focus", selText);
 
-			if (self.secondElement)
+			if (self.secondElement !== undefined)
 				bind(self.secondElement, "focus", () => self.secondElement.select());
 
-			if (self.amPM) {
+			if (self.amPM !== undefined) {
 				bind(self.amPM, "mousedown", onClick(e => {
 					updateTime(e);
 					self.triggerChange(e);
