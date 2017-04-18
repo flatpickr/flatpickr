@@ -65,6 +65,11 @@ function Flatpickr(element, config) {
 		triggerEvent("Ready");
 	}
 
+	/**
+  * Binds a function to the current flatpickr instance
+  * @param {Function} fn the function
+  * @return {Function} the function bound to the instance
+  */
 	function bindToInstance(fn) {
 		return fn.bind(self);
 	}
@@ -93,6 +98,9 @@ function Flatpickr(element, config) {
 		}
 	}
 
+	/**
+  * Syncs the selected date object time with user's time input
+  */
 	function setHoursFromInputs() {
 		if (!self.config.enableTime) return;
 
@@ -116,6 +124,10 @@ function Flatpickr(element, config) {
 		setHours(hours, minutes, seconds);
 	}
 
+	/**
+  * Syncs time input values with a date
+  * @param {Date} dateObj the date to sync with
+  */
 	function setHoursFromDate(dateObj) {
 		var date = dateObj || self.latestSelectedDateObj;
 
@@ -1203,12 +1215,11 @@ function Flatpickr(element, config) {
 		var calendarHeight = self.calendarContainer.offsetHeight,
 		    calendarWidth = self.calendarContainer.offsetWidth,
 		    configPos = self.config.position,
-		    input = self._input,
-		    inputBounds = input.getBoundingClientRect(),
-		    distanceFromBottom = window.innerHeight - inputBounds.bottom + input.offsetHeight,
+		    inputBounds = self._input.getBoundingClientRect(),
+		    distanceFromBottom = window.innerHeight - inputBounds.bottom,
 		    showOnTop = configPos === "above" || configPos !== "below" && distanceFromBottom < calendarHeight && inputBounds.top > calendarHeight;
 
-		var top = window.pageYOffset + inputBounds.top + (!showOnTop ? input.offsetHeight + 2 : -calendarHeight - 2);
+		var top = window.pageYOffset + inputBounds.top + (!showOnTop ? self._input.offsetHeight + 2 : -calendarHeight - 2);
 
 		toggleClass(self.calendarContainer, "arrowTop", !showOnTop);
 		toggleClass(self.calendarContainer, "arrowBottom", showOnTop);
