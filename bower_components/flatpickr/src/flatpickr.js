@@ -1020,10 +1020,12 @@ function Flatpickr(element, config) {
 	function destroy(instance) {
 		instance = instance || self;
 
-		for (let i = self._handlers.length; i--;) {
-			const h = self._handlers[i];
+		for (let i = instance._handlers.length; i--;) {
+			const h = instance._handlers[i];
 			h.element.removeEventListener(h.event, h.handler);
 		}
+
+		instance._handlers = [];
 
 		if (instance.mobileInput) {
 			if (instance.mobileInput.parentNode)
