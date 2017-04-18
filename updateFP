@@ -1,2 +1,2 @@
 #!/bin/sh
-cd static && bower update
+cd static && bower update && git add bower_components && git commit -m "update flatpickr"
