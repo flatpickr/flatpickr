@@ -897,7 +897,7 @@ function Flatpickr(element, config) {
 				self._input.blur();
 
 				if (self.config.mode === "range" && self.selectedDates.length === 1) {
-					self.clear();
+					self.clear(false);
 					self.redraw();
 				}
 			}
