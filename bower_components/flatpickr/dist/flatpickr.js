@@ -2,7 +2,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-/*! flatpickr v2.5.6, @license MIT */
+/*! flatpickr v2.5.7, @license MIT */
 function Flatpickr(element, config) {
 	var self = this;
 
@@ -894,9 +894,10 @@ function Flatpickr(element, config) {
 			if (lostFocus) {
 				e.preventDefault();
 				self.close();
+				self._input.blur();
 
 				if (self.config.mode === "range" && self.selectedDates.length === 1) {
-					self.clear();
+					self.clear(false);
 					self.redraw();
 				}
 			}
@@ -2177,7 +2178,7 @@ Flatpickr.prototype = {
 		else if (date.toFixed !== undefined) // timestamp
 				date = new Date(date);else {
 				// date string
-				var format = givenFormat || this.config.dateFormat;
+				var format = givenFormat || (this.config || Flatpickr.defaultConfig).dateFormat;
 				date = String(date).trim();
 
 				if (date === "today") {

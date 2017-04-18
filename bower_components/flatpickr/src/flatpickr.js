@@ -1,4 +1,4 @@
-/*! flatpickr v2.5.6, @license MIT */
+/*! flatpickr v2.5.7, @license MIT */
 function Flatpickr(element, config) {
 	const self = this;
 
@@ -63,8 +63,8 @@ function Flatpickr(element, config) {
 		}
 
 		if (self.config.weekNumbers) {
-			self.calendarContainer.style.width = self.daysContainer.clientWidth
-				+ self.weekWrapper.clientWidth + "px";
+			self.calendarContainer.style.width = self.daysContainer.offsetWidth
+				+ self.weekWrapper.offsetWidth + "px";
 		}
 
 		self.showTimeInput = self.selectedDates.length > 0 || self.config.noCalendar;
@@ -220,6 +220,9 @@ function Flatpickr(element, config) {
 		if (event instanceof Array)
 			return event.forEach(ev => bind(element, ev, handler));
 
+		if (element instanceof Array)
+			return element.forEach(el => bind(el, event, handler));
+
 		element.addEventListener(event, handler);
 		self._handlers.push({element, event, handler});
 	}
@@ -304,19 +307,19 @@ function Flatpickr(element, config) {
 		}
 
 		if (self.config.enableTime) {
+			const selText = e => e.target.select();
 			bind(self.timeContainer, ["wheel",  "input", "increment"], updateTime);
 			bind(self.timeContainer, "mousedown", onClick(timeIncrement));
 
 			bind(self.timeContainer, ["wheel", "increment"], self.debouncedChange);
 			bind(self.timeContainer, "input", self.triggerChange);
 
-			bind(self.hourElement, "focus", () => self.hourElement.select());
-			bind(self.minuteElement, "focus", () => self.minuteElement.select());
+			bind([self.hourElement,self.minuteElement], "focus", selText);
 
-			if (self.secondElement)
+			if (self.secondElement !== undefined)
 				bind(self.secondElement, "focus", () => self.secondElement.select());
 
-			if (self.amPM) {
+			if (self.amPM !== undefined) {
 				bind(self.amPM, "mousedown", onClick(e => {
 					updateTime(e);
 					self.triggerChange(e);
@@ -1080,9 +1083,10 @@ function Flatpickr(element, config) {
 			if(lostFocus) {
 				e.preventDefault();
 				self.close();
+				self._input.blur();
 
 				if (self.config.mode === "range" && self.selectedDates.length === 1) {
-					self.clear();
+					self.clear(false);
 					self.redraw();
 				}
 			}
@@ -2567,7 +2571,7 @@ Flatpickr.prototype = {
 			date = new Date(date);
 
 		else { // date string
-			const format = givenFormat || this.config.dateFormat;
+			const format = givenFormat || (this.config || Flatpickr.defaultConfig).dateFormat;
 			date = String(date).trim();
 
 			if (date === "today") {
