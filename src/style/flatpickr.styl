@@ -195,8 +195,8 @@
     background $monthBackground
     color $monthForeground
     fill $monthForeground
-    height 28px
-    line-height 24px
+    height $monthNavHeight
+    line-height 1
     text-align center
     position relative
     user-select none
@@ -207,8 +207,8 @@
     cursor pointer
     position absolute
     top 0px
-    height 28px
     line-height 16px
+    height $monthNavHeight
     padding 10px calc(3.57% - 1.5px)
     z-index 3
 
@@ -323,7 +323,9 @@
     position absolute
     width 75%
     left 12.5%
-    top 5px
+    padding (0.25*$monthNavHeight) 0 0 0
+    line-height 1
+    height $monthNavHeight
     display inline-block
     text-align center
     transform translate3d(0px, 0px, 0px)
@@ -349,7 +351,7 @@
         font-weight 700
         color inherit
         display inline-block
-        margin-left 7px
+        margin-left 0.5ch
         padding 0
 
         &:hover
@@ -374,8 +376,7 @@
         cursor default
         padding 0 0 0 0.5ch
         margin 0
-
-        display inline
+        display inline-block
         font-size inherit
         font-family inherit
         font-weight 300
@@ -387,7 +388,6 @@
 
         &:focus
             outline 0
-
 
         &[disabled], &[disabled]:hover
             font-size 100%
@@ -402,7 +402,7 @@
     width $calendarWidth
     display flex
     align-items center
-    height 28px
+    height $weekdaysHeight
 
 span.flatpickr-weekday
     cursor default
@@ -421,7 +421,6 @@ span.flatpickr-weekday
     flex 1
     font-weight bolder
     margin 0
-
 
 
 .dayContainer, .flatpickr-weeks
