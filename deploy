@@ -1,0 +1,2 @@
+#!/bin/sh
+hugo -d dist && cd dist && git add --all && git commit -m "deploy" && git push
