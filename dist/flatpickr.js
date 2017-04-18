@@ -2177,7 +2177,7 @@ Flatpickr.prototype = {
 		else if (date.toFixed !== undefined) // timestamp
 				date = new Date(date);else {
 				// date string
-				var format = givenFormat || this.config.dateFormat;
+				var format = givenFormat || (this.config || Flatpickr.defaultConfig).dateFormat;
 				date = String(date).trim();
 
 				if (date === "today") {
