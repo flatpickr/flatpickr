@@ -508,7 +508,7 @@ describe('flatpickr', () => {
 			expect(fp.amPM.textContent).toEqual("PM");
 
 			fp.setDate("");
-			expect(fp.latestSelectedDateObj).toEqual(null);
+			expect(fp.latestSelectedDateObj).toEqual(undefined);
 		});
 
 		it("parses dates in enable[] and disable[]", () => {
@@ -740,7 +740,7 @@ describe('flatpickr', () => {
 		it("year input", () => {
 			createInstance();
 			fp.currentYearElement.value = "2000";
-			simulate("input", fp.currentYearElement);
+			simulate("keyup", fp.currentYearElement);
 
 			expect(fp.currentYear).toEqual(2000);
 			incrementTime("currentYear");
