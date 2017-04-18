@@ -1499,7 +1499,8 @@ function Flatpickr(element, config) {
 			configPos = self.config.position,
 			input = self._input,
 			inputBounds = input.getBoundingClientRect(),
-			distanceFromBottom = window.innerHeight - inputBounds.bottom + input.offsetHeight,
+			timeContainerHeight = self.timeContainer ? self.timeContainer.offsetHeight : 0,
+			distanceFromBottom = window.innerHeight - inputBounds.bottom + input.offsetHeight - timeContainerHeight,
 			showOnTop = configPos === "above" || (
 				configPos !== "below"
 				&& distanceFromBottom < calendarHeight
