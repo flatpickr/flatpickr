@@ -2567,7 +2567,7 @@ Flatpickr.prototype = {
 			date = new Date(date);
 
 		else { // date string
-			const format = givenFormat || this.config.dateFormat;
+			const format = givenFormat || (this.config || Flatpickr.defaultConfig).dateFormat;
 			date = String(date).trim();
 
 			if (date === "today") {
