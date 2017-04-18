@@ -847,10 +847,12 @@ function Flatpickr(element, config) {
 	function destroy(instance) {
 		instance = instance || self;
 
-		for (var i = self._handlers.length; i--;) {
-			var h = self._handlers[i];
+		for (var i = instance._handlers.length; i--;) {
+			var h = instance._handlers[i];
 			h.element.removeEventListener(h.event, h.handler);
 		}
+
+		instance._handlers = [];
 
 		if (instance.mobileInput) {
 			if (instance.mobileInput.parentNode) instance.mobileInput.parentNode.removeChild(instance.mobileInput);
