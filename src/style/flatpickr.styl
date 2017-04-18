@@ -578,7 +578,7 @@ span.flatpickr-weekday
     float left
 
     .flatpickr-weeks
-        padding 1px 12px 0 12px
+        padding 0 12px
         if $noCalendarBorder is defined
             border-left 1px solid $calendarBorderColor
         box-shadow 1px 0 0 $calendarBorderColor
@@ -586,6 +586,7 @@ span.flatpickr-weekday
     .flatpickr-weekday
         float none
         width 100%
+        line-height $weekdaysHeight
 
     span.flatpickr-day
         display block
