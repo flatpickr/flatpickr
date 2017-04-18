@@ -1,0 +1,3 @@
+[submodule "dist"]
+	path = dist
+	url = https://github.com/chmln/flatpickr.git
