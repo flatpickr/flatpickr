@@ -1,6 +1,6 @@
 @require "./_vars.styl"
 
-@keyframes flatpickrFadeInDown
+@keyframes fpFadeInDown
     from
         opacity 0
         transform translate3d(0, -20px, 0)
@@ -9,42 +9,42 @@
         opacity 1
         transform translate3d(0, 0, 0)
 
-@keyframes slideLeft
+@keyframes fpSlideLeft
     from
         transform translate3d(0px, 0px, 0px)
 
     to
         transform translate3d(-100%, 0px, 0px)
 
-@keyframes slideLeftNew
+@keyframes fpSlideLeftNew
     from
         transform translate3d(100%, 0px, 0px)
 
     to
         transform translate3d(0px, 0px, 0px)
 
-@keyframes slideRight
+@keyframes fpSlideRight
     from
         transform translate3d(0, 0, 0px)
 
     to
         transform translate3d(100%, 0px, 0px)
 
-@keyframes slideRightNew
+@keyframes fpSlideRightNew
     from
         transform translate3d(-100%, 0, 0px)
 
     to
         transform translate3d(0, 0, 0px)
 
-@keyframes fadeOut
+@keyframes fpFadeOut
     from
         opacity 1
 
     to
         opacity 0
 
-@keyframes fadeIn
+@keyframes fpFadeIn
     from
         opacity 0
 
@@ -93,7 +93,7 @@
         z-index 99999
 
     &.animate.open
-        animation flatpickrFadeInDown 300ms $bezier
+        animation fpFadeInDown 300ms $bezier
 
     &.inline
         display block
@@ -332,19 +332,19 @@
 
     &.slideLeft
         transform translate3d(-100%, 0px, 0px)
-        animation fadeOut $slideTime ease, slideLeft $slideTime $bezier
+        animation fpFadeOut $slideTime ease, fpSlideLeft $slideTime $bezier
 
     &.slideLeftNew
         transform translate3d(100%, 0px, 0px)
-        animation fadeIn $slideTime ease, slideLeftNew $slideTime $bezier
+        animation fpFadeIn $slideTime ease, fpSlideLeftNew $slideTime $bezier
 
     &.slideRight
         transform translate3d(100%, 0px, 0px)
-        animation fadeOut $slideTime ease, slideRight $slideTime $bezier
+        animation fpFadeOut $slideTime ease, fpSlideRight $slideTime $bezier
 
     &.slideRightNew
         transform translate3d(0, 0, 0px)
-        animation fadeIn $slideTime ease, slideRightNew $slideTime $bezier
+        animation fpFadeIn $slideTime ease, fpSlideRightNew $slideTime $bezier
 
     span.cur-month
         font-family inherit
@@ -455,20 +455,20 @@ span.flatpickr-weekday
 
 .flatpickr-calendar.animate .dayContainer
     &.slideLeft
-        animation fadeOut $slideTime $bezier, slideLeft $slideTime $bezier
+        animation fpFadeOut $slideTime $bezier, fpSlideLeft $slideTime $bezier
 
     &.slideLeft, &.slideLeftNew
         transform: translate3d(-100%, 0px, 0px);
 
     &.slideLeftNew
-        animation fadeIn $slideTime $bezier, slideLeft $slideTime $bezier
+        animation fpFadeIn $slideTime $bezier, fpSlideLeft $slideTime $bezier
 
     &.slideRight
-        animation fadeOut $slideTime $bezier, slideRight $slideTime $bezier
+        animation fpFadeOut $slideTime $bezier, fpSlideRight $slideTime $bezier
         transform: translate3d(100%, 0px, 0px);
 
     &.slideRightNew
-        animation fadeIn $slideTime $bezier, slideRightNew $slideTime $bezier
+        animation fpFadeIn $slideTime $bezier, fpSlideRightNew $slideTime $bezier
 
 .flatpickr-day
     background none
@@ -615,11 +615,9 @@ span.flatpickr-weekday
     overflow hidden
     display flex
 
-
     if $noCalendarBorder is defined
         background $calendarBackground
         border-radius 0 0 5px  5px
-
 
     &:after
         content ""
@@ -679,6 +677,7 @@ span.flatpickr-weekday
         font-weight bold
         width 2%
         user-select none
+        align-self center
 
     .flatpickr-am-pm
         outline 0
