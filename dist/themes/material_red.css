@@ -32,8 +32,8 @@
   z-index: 99999;
 }
 .flatpickr-calendar.animate.open {
-  -webkit-animation: flatpickrFadeInDown 300ms cubic-bezier(0.23, 1, 0.32, 1);
-          animation: flatpickrFadeInDown 300ms cubic-bezier(0.23, 1, 0.32, 1);
+  -webkit-animation: fpFadeInDown 300ms cubic-bezier(0.23, 1, 0.32, 1);
+          animation: fpFadeInDown 300ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 .flatpickr-calendar.inline {
   display: block;
@@ -276,7 +276,7 @@
   position: absolute;
   width: 75%;
   left: 12.5%;
-  padding: 7px 0 0 0;
+  padding: 4.2px 0 0 0;
   line-height: 1;
   height: 28px;
   display: inline-block;
@@ -287,26 +287,26 @@
 .flatpickr-current-month.slideLeft {
   -webkit-transform: translate3d(-100%, 0px, 0px);
           transform: translate3d(-100%, 0px, 0px);
-  -webkit-animation: fadeOut 400ms ease, slideLeft 400ms cubic-bezier(0.23, 1, 0.32, 1);
-          animation: fadeOut 400ms ease, slideLeft 400ms cubic-bezier(0.23, 1, 0.32, 1);
+  -webkit-animation: fpFadeOut 400ms ease, fpSlideLeft 400ms cubic-bezier(0.23, 1, 0.32, 1);
+          animation: fpFadeOut 400ms ease, fpSlideLeft 400ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 .flatpickr-current-month.slideLeftNew {
   -webkit-transform: translate3d(100%, 0px, 0px);
           transform: translate3d(100%, 0px, 0px);
-  -webkit-animation: fadeIn 400ms ease, slideLeftNew 400ms cubic-bezier(0.23, 1, 0.32, 1);
-          animation: fadeIn 400ms ease, slideLeftNew 400ms cubic-bezier(0.23, 1, 0.32, 1);
+  -webkit-animation: fpFadeIn 400ms ease, fpSlideLeftNew 400ms cubic-bezier(0.23, 1, 0.32, 1);
+          animation: fpFadeIn 400ms ease, fpSlideLeftNew 400ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 .flatpickr-current-month.slideRight {
   -webkit-transform: translate3d(100%, 0px, 0px);
           transform: translate3d(100%, 0px, 0px);
-  -webkit-animation: fadeOut 400ms ease, slideRight 400ms cubic-bezier(0.23, 1, 0.32, 1);
-          animation: fadeOut 400ms ease, slideRight 400ms cubic-bezier(0.23, 1, 0.32, 1);
+  -webkit-animation: fpFadeOut 400ms ease, fpSlideRight 400ms cubic-bezier(0.23, 1, 0.32, 1);
+          animation: fpFadeOut 400ms ease, fpSlideRight 400ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 .flatpickr-current-month.slideRightNew {
   -webkit-transform: translate3d(0, 0, 0px);
           transform: translate3d(0, 0, 0px);
-  -webkit-animation: fadeIn 400ms ease, slideRightNew 400ms cubic-bezier(0.23, 1, 0.32, 1);
-          animation: fadeIn 400ms ease, slideRightNew 400ms cubic-bezier(0.23, 1, 0.32, 1);
+  -webkit-animation: fpFadeIn 400ms ease, fpSlideRightNew 400ms cubic-bezier(0.23, 1, 0.32, 1);
+          animation: fpFadeIn 400ms ease, fpSlideRightNew 400ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 .flatpickr-current-month span.cur-month {
   font-family: inherit;
@@ -373,17 +373,16 @@
 span.flatpickr-weekday {
   cursor: default;
   font-size: 90%;
+  background: #ef5350;
   color: rgba(0,0,0,0.54);
   line-height: 1;
   margin: 0;
-  background: #ef5350;
   text-align: center;
   display: block;
   -webkit-flex: 1;
       -ms-flex: 1;
           flex: 1;
   font-weight: bolder;
-  margin: 0;
 }
 .dayContainer,
 .flatpickr-weeks {
@@ -396,7 +395,6 @@ span.flatpickr-weekday {
   display: -ms-flexbox;
   display: flex;
   width: 315px;
-  background: #fff;
   border-left: 1px solid rgba(72,72,72,0.2);
   border-right: 1px solid rgba(72,72,72,0.2);
 }
@@ -426,8 +424,8 @@ span.flatpickr-weekday {
   opacity: 1;
 }
 .flatpickr-calendar.animate .dayContainer.slideLeft {
-  -webkit-animation: fadeOut 400ms cubic-bezier(0.23, 1, 0.32, 1), slideLeft 400ms cubic-bezier(0.23, 1, 0.32, 1);
-          animation: fadeOut 400ms cubic-bezier(0.23, 1, 0.32, 1), slideLeft 400ms cubic-bezier(0.23, 1, 0.32, 1);
+  -webkit-animation: fpFadeOut 400ms cubic-bezier(0.23, 1, 0.32, 1), fpSlideLeft 400ms cubic-bezier(0.23, 1, 0.32, 1);
+          animation: fpFadeOut 400ms cubic-bezier(0.23, 1, 0.32, 1), fpSlideLeft 400ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 .flatpickr-calendar.animate .dayContainer.slideLeft,
 .flatpickr-calendar.animate .dayContainer.slideLeftNew {
@@ -435,18 +433,18 @@ span.flatpickr-weekday {
           transform: translate3d(-100%, 0px, 0px);
 }
 .flatpickr-calendar.animate .dayContainer.slideLeftNew {
-  -webkit-animation: fadeIn 400ms cubic-bezier(0.23, 1, 0.32, 1), slideLeft 400ms cubic-bezier(0.23, 1, 0.32, 1);
-          animation: fadeIn 400ms cubic-bezier(0.23, 1, 0.32, 1), slideLeft 400ms cubic-bezier(0.23, 1, 0.32, 1);
+  -webkit-animation: fpFadeIn 400ms cubic-bezier(0.23, 1, 0.32, 1), fpSlideLeft 400ms cubic-bezier(0.23, 1, 0.32, 1);
+          animation: fpFadeIn 400ms cubic-bezier(0.23, 1, 0.32, 1), fpSlideLeft 400ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 .flatpickr-calendar.animate .dayContainer.slideRight {
-  -webkit-animation: fadeOut 400ms cubic-bezier(0.23, 1, 0.32, 1), slideRight 400ms cubic-bezier(0.23, 1, 0.32, 1);
-          animation: fadeOut 400ms cubic-bezier(0.23, 1, 0.32, 1), slideRight 400ms cubic-bezier(0.23, 1, 0.32, 1);
+  -webkit-animation: fpFadeOut 400ms cubic-bezier(0.23, 1, 0.32, 1), fpSlideRight 400ms cubic-bezier(0.23, 1, 0.32, 1);
+          animation: fpFadeOut 400ms cubic-bezier(0.23, 1, 0.32, 1), fpSlideRight 400ms cubic-bezier(0.23, 1, 0.32, 1);
   -webkit-transform: translate3d(100%, 0px, 0px);
           transform: translate3d(100%, 0px, 0px);
 }
 .flatpickr-calendar.animate .dayContainer.slideRightNew {
-  -webkit-animation: fadeIn 400ms cubic-bezier(0.23, 1, 0.32, 1), slideRightNew 400ms cubic-bezier(0.23, 1, 0.32, 1);
-          animation: fadeIn 400ms cubic-bezier(0.23, 1, 0.32, 1), slideRightNew 400ms cubic-bezier(0.23, 1, 0.32, 1);
+  -webkit-animation: fpFadeIn 400ms cubic-bezier(0.23, 1, 0.32, 1), fpSlideRightNew 400ms cubic-bezier(0.23, 1, 0.32, 1);
+          animation: fpFadeIn 400ms cubic-bezier(0.23, 1, 0.32, 1), fpSlideRightNew 400ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 .flatpickr-day {
   background: none;
@@ -574,7 +572,6 @@ span.flatpickr-weekday {
 .flatpickr-weekwrapper .flatpickr-weeks {
   padding: 0 12px;
   border-left: 1px solid rgba(72,72,72,0.2);
-  box-shadow: 1px 0 0 rgba(72,72,72,0.2);
 }
 .flatpickr-weekwrapper .flatpickr-weekday {
   float: none;
@@ -681,6 +678,10 @@ span.flatpickr-weekday {
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
+  -webkit-align-self: center;
+      -ms-flex-item-align: center;
+              -ms-grid-row-align: center;
+          align-self: center;
 }
 .flatpickr-time .flatpickr-am-pm {
   outline: 0;
@@ -696,7 +697,7 @@ span.flatpickr-weekday {
 .flatpickr-input[readonly] {
   cursor: pointer;
 }
-@-webkit-keyframes flatpickrFadeInDown {
+@-webkit-keyframes fpFadeInDown {
   from {
     opacity: 0;
     -webkit-transform: translate3d(0, -20px, 0);
@@ -708,7 +709,7 @@ span.flatpickr-weekday {
             transform: translate3d(0, 0, 0);
   }
 }
-@keyframes flatpickrFadeInDown {
+@keyframes fpFadeInDown {
   from {
     opacity: 0;
     -webkit-transform: translate3d(0, -20px, 0);
@@ -720,7 +721,7 @@ span.flatpickr-weekday {
             transform: translate3d(0, 0, 0);
   }
 }
-@-webkit-keyframes slideLeft {
+@-webkit-keyframes fpSlideLeft {
   from {
     -webkit-transform: translate3d(0px, 0px, 0px);
             transform: translate3d(0px, 0px, 0px);
@@ -730,7 +731,7 @@ span.flatpickr-weekday {
             transform: translate3d(-100%, 0px, 0px);
   }
 }
-@keyframes slideLeft {
+@keyframes fpSlideLeft {
   from {
     -webkit-transform: translate3d(0px, 0px, 0px);
             transform: translate3d(0px, 0px, 0px);
@@ -740,7 +741,7 @@ span.flatpickr-weekday {
             transform: translate3d(-100%, 0px, 0px);
   }
 }
-@-webkit-keyframes slideLeftNew {
+@-webkit-keyframes fpSlideLeftNew {
   from {
     -webkit-transform: translate3d(100%, 0px, 0px);
             transform: translate3d(100%, 0px, 0px);
@@ -750,7 +751,7 @@ span.flatpickr-weekday {
             transform: translate3d(0px, 0px, 0px);
   }
 }
-@keyframes slideLeftNew {
+@keyframes fpSlideLeftNew {
   from {
     -webkit-transform: translate3d(100%, 0px, 0px);
             transform: translate3d(100%, 0px, 0px);
@@ -760,7 +761,7 @@ span.flatpickr-weekday {
             transform: translate3d(0px, 0px, 0px);
   }
 }
-@-webkit-keyframes slideRight {
+@-webkit-keyframes fpSlideRight {
   from {
     -webkit-transform: translate3d(0, 0, 0px);
             transform: translate3d(0, 0, 0px);
@@ -770,7 +771,7 @@ span.flatpickr-weekday {
             transform: translate3d(100%, 0px, 0px);
   }
 }
-@keyframes slideRight {
+@keyframes fpSlideRight {
   from {
     -webkit-transform: translate3d(0, 0, 0px);
             transform: translate3d(0, 0, 0px);
@@ -780,7 +781,7 @@ span.flatpickr-weekday {
             transform: translate3d(100%, 0px, 0px);
   }
 }
-@-webkit-keyframes slideRightNew {
+@-webkit-keyframes fpSlideRightNew {
   from {
     -webkit-transform: translate3d(-100%, 0, 0px);
             transform: translate3d(-100%, 0, 0px);
@@ -790,7 +791,7 @@ span.flatpickr-weekday {
             transform: translate3d(0, 0, 0px);
   }
 }
-@keyframes slideRightNew {
+@keyframes fpSlideRightNew {
   from {
     -webkit-transform: translate3d(-100%, 0, 0px);
             transform: translate3d(-100%, 0, 0px);
@@ -800,7 +801,7 @@ span.flatpickr-weekday {
             transform: translate3d(0, 0, 0px);
   }
 }
-@-webkit-keyframes fadeOut {
+@-webkit-keyframes fpFadeOut {
   from {
     opacity: 1;
   }
@@ -808,7 +809,7 @@ span.flatpickr-weekday {
     opacity: 0;
   }
 }
-@keyframes fadeOut {
+@keyframes fpFadeOut {
   from {
     opacity: 1;
   }
@@ -816,7 +817,7 @@ span.flatpickr-weekday {
     opacity: 0;
   }
 }
-@-webkit-keyframes fadeIn {
+@-webkit-keyframes fpFadeIn {
   from {
     opacity: 0;
   }
@@ -824,7 +825,7 @@ span.flatpickr-weekday {
     opacity: 1;
   }
 }
-@keyframes fadeIn {
+@keyframes fpFadeIn {
   from {
     opacity: 0;
   }

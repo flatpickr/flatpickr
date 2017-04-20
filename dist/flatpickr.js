@@ -55,7 +55,7 @@ function Flatpickr(element, config) {
 		}
 
 		if (self.config.weekNumbers) {
-			self.calendarContainer.style.width = self.daysContainer.clientWidth + self.weekWrapper.clientWidth + "px";
+			self.calendarContainer.style.width = self.daysContainer.offsetWidth + self.weekWrapper.offsetWidth + "px";
 		}
 
 		self.showTimeInput = self.selectedDates.length > 0 || self.config.noCalendar;
@@ -184,6 +184,10 @@ function Flatpickr(element, config) {
 			return bind(element, ev, handler);
 		});
 
+		if (element instanceof Array) return element.forEach(function (el) {
+			return bind(el, event, handler);
+		});
+
 		element.addEventListener(event, handler);
 		self._handlers.push({ element: element, event: event, handler: handler });
 	}
@@ -270,24 +274,22 @@ function Flatpickr(element, config) {
 		}
 
 		if (self.config.enableTime) {
+			var selText = function selText(e) {
+				return e.target.select();
+			};
 			bind(self.timeContainer, ["wheel", "input", "increment"], updateTime);
 			bind(self.timeContainer, "mousedown", onClick(timeIncrement));
 
 			bind(self.timeContainer, ["wheel", "increment"], self.debouncedChange);
 			bind(self.timeContainer, "input", self.triggerChange);
 
-			bind(self.hourElement, "focus", function () {
-				return self.hourElement.select();
-			});
-			bind(self.minuteElement, "focus", function () {
-				return self.minuteElement.select();
-			});
+			bind([self.hourElement, self.minuteElement], "focus", selText);
 
-			if (self.secondElement) bind(self.secondElement, "focus", function () {
+			if (self.secondElement !== undefined) bind(self.secondElement, "focus", function () {
 				return self.secondElement.select();
 			});
 
-			if (self.amPM) {
+			if (self.amPM !== undefined) {
 				bind(self.amPM, "mousedown", onClick(function (e) {
 					updateTime(e);
 					self.triggerChange(e);
@@ -303,14 +305,14 @@ function Flatpickr(element, config) {
 	function animateDays(e) {
 		if (self.daysContainer.childNodes.length > 1) {
 			switch (e.animationName) {
-				case "slideLeft":
+				case "fpSlideLeft":
 					self.daysContainer.lastChild.classList.remove("slideLeftNew");
 					self.daysContainer.removeChild(self.daysContainer.firstChild);
 					self.days = self.daysContainer.firstChild;
 
 					break;
 
-				case "slideRight":
+				case "fpSlideRight":
 					self.daysContainer.firstChild.classList.remove("slideRightNew");
 					self.daysContainer.removeChild(self.daysContainer.lastChild);
 					self.days = self.daysContainer.firstChild;
@@ -329,8 +331,8 @@ function Flatpickr(element, config) {
   */
 	function animateMonths(e) {
 		switch (e.animationName) {
-			case "slideLeftNew":
-			case "slideRightNew":
+			case "fpSlideLeftNew":
+			case "fpSlideRightNew":
 				self.navigationCurrentMonth.classList.remove("slideLeftNew");
 				self.navigationCurrentMonth.classList.remove("slideRightNew");
 				var nav = self.navigationCurrentMonth;
