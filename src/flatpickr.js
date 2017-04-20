@@ -335,14 +335,14 @@ function Flatpickr(element, config) {
 	function animateDays (e) {
 		if (self.daysContainer.childNodes.length > 1) {
 			switch(e.animationName) {
-				case "slideLeft":
+				case "fpSlideLeft":
 					self.daysContainer.lastChild.classList.remove("slideLeftNew")
 					self.daysContainer.removeChild(self.daysContainer.firstChild);
 					self.days = self.daysContainer.firstChild;
 
 					break;
 
-				case "slideRight":
+				case "fpSlideRight":
 					self.daysContainer.firstChild.classList.remove("slideRightNew")
 					self.daysContainer.removeChild(self.daysContainer.lastChild);
 					self.days = self.daysContainer.firstChild;
@@ -360,8 +360,8 @@ function Flatpickr(element, config) {
 	 */
 	function animateMonths(e){
 		switch(e.animationName) {
-			case "slideLeftNew":
-			case "slideRightNew":
+			case "fpSlideLeftNew":
+			case "fpSlideRightNew":
 				self.navigationCurrentMonth.classList.remove("slideLeftNew");
 				self.navigationCurrentMonth.classList.remove("slideRightNew");
 				const nav = self.navigationCurrentMonth;
