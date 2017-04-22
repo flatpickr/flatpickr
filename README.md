@@ -39,19 +39,17 @@ See also:
 * [angular-flatpickr addon](https://www.npmjs.com/package/angular-flatpickr)
 * [Vue-Blu/datepicker](https://chenz24.github.io/vue-blu/#/components/datepicker)
 
+## Supporting flatpickr
+
+Special thanks to support by:
+
+- BrowserStack for providing indispensable testing utilities
+
+  <a target="_blank" href="https://www.browserstack.com/">
+    <img src="https://cloud.githubusercontent.com/assets/11352152/24872293/ec310d48-1dea-11e7-9d09-8120d5742fba.png">
+  </a>
+
 ---
-
-## Backers
-
-<s>Support us with a monthly donation and help us continue our activities. </s>
-
-flatpickr will be developed indefinitely, until native date inputs are just as capable and aesthetic. It will be maintained regardless of any donations, unconditionally.
-
-You are encouraged to use flatpickr for any commercial and personal purposes alike. 
-
-If you'd like to support the project anyways, the links are below.
-
-[[Become a backer](https://opencollective.com/flatpickr#backer)]
 
 <a href="https://opencollective.com/flatpickr/backer/0/website" target="_blank"><img src="https://opencollective.com/flatpickr/backer/0/avatar.svg"></a>
 <a href="https://opencollective.com/flatpickr/backer/1/website" target="_blank"><img src="https://opencollective.com/flatpickr/backer/1/avatar.svg"></a>
@@ -83,11 +81,6 @@ If you'd like to support the project anyways, the links are below.
 <a href="https://opencollective.com/flatpickr/backer/27/website" target="_blank"><img src="https://opencollective.com/flatpickr/backer/27/avatar.svg"></a>
 <a href="https://opencollective.com/flatpickr/backer/28/website" target="_blank"><img src="https://opencollective.com/flatpickr/backer/28/avatar.svg"></a>
 <a href="https://opencollective.com/flatpickr/backer/29/website" target="_blank"><img src="https://opencollective.com/flatpickr/backer/29/avatar.svg"></a>
-
-
-## Sponsors
-
-Become a sponsor and get your logo on the README. [[Become a sponsor](https://opencollective.com/flatpickr#sponsor)]
 
 <a href="https://opencollective.com/flatpickr/sponsor/0/website" target="_blank"><img src="https://opencollective.com/flatpickr/sponsor/0/avatar.svg"></a>
 <a href="https://opencollective.com/flatpickr/sponsor/1/website" target="_blank"><img src="https://opencollective.com/flatpickr/sponsor/1/avatar.svg"></a>

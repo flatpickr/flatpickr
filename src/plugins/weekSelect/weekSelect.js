@@ -1,57 +1,58 @@
 function weekSelectPlugin(pluginConfig) {
-    return function(fp) {
-        let days;
+	return function(fp) {
+		function onDayHover(event){
+			if (!event.target.classList.contains("flatpickr-day"))
+				return;
 
-        function onDayHover(event){
-            if (!event.target.classList.contains("flatpickr-day"))
-                return;
-                
-            dayIndex = Array.prototype.indexOf.call(days, event.target);
-            fp.weekStartDay = days[7*Math.floor(dayIndex/7)].dateObj;
-            fp.weekEndDay = days[7*Math.ceil(dayIndex/7) - 1].dateObj;
-            
-            for(let i = days.length; i--;) {
-                const date = days[i].dateObj;
-                if (date > fp.weekEndDay || date < fp.weekStartDay)
-                    days[i].classList.remove("inRange");
-                else
-                    days[i].classList.add("inRange");
-            }
-        }
+			const days = event.target.parentNode.childNodes;
+			dayIndex = event.target.$i;
+			const weekStartDay = days[7*Math.floor(dayIndex/7)].dateObj;
+			const weekEndDay = days[7*Math.ceil(dayIndex/7) - 1].dateObj;
 
-        function highlightWeek(){
-            for(let i = days.length; i--;) {
-                const date = days[i].dateObj;
-                if (date >= fp.weekStartDay && date <= fp.weekEndDay)
-                    days[i].classList.add("week", "selected");
-            }
-        }
+			for(let i = days.length; i--;) {
+				const date = days[i].dateObj;
+				if (date > weekEndDay || date < weekStartDay)
+					days[i].classList.remove("inRange");
+				else
+					days[i].classList.add("inRange");
+			}
+		}
 
-        function clearHover() {
-            for(let i = days.length; i--;)
-                days[i].classList.remove("inRange");
-        } 
+		function highlightWeek(){
+			if (fp.selectedDateElem) {
+				fp.weekStartDay = fp.days.childNodes[7*Math.floor(fp.selectedDateElem.$i/7)].dateObj;
+				fp.weekEndDay = fp.days.childNodes[7*Math.ceil(fp.selectedDateElem.$i/7) - 1].dateObj;
+			}
+			const days = fp.days.childNodes;
+			for(let i = days.length; i--;) {
+				const date = days[i].dateObj;
+				if (date >= fp.weekStartDay && date <= fp.weekEndDay)
+					days[i].classList.add("week", "selected");
+			}
+		}
 
-        function formatDate(format, date) {
-            return `Week #${fp.config.getWeek(date)}, ${date.getFullYear()}`;
-        }
+		function clearHover() {
+			const days = fp.days.childNodes;
+			for(let i = days.length; i--;)
+				days[i].classList.remove("inRange");
+		}
 
-        return {
-            formatDate,
-            onChange: highlightWeek,
-            onMonthChange: highlightWeek,
-            onClose: clearHover,            
-            onParseConfig: () => {
-                fp.config.mode = "single";
-                fp.config.enableTime = false;
-            },
-            onReady: [
-                () => { days = fp.days.childNodes; },
-                () => fp.days.addEventListener("mouseover", onDayHover), 
-                highlightWeek
-            ]
-        };
-    }
+		function onReady(){
+			fp.days.parentNode.addEventListener("mouseover", onDayHover);
+		}
+
+		return {
+			onChange: highlightWeek,
+			onMonthChange: () => fp._.afterDayAnim(highlightWeek),
+			onClose: clearHover,
+			onParseConfig: function() {
+				fp.config.mode = "single";
+				fp.config.enableTime = false;
+				fp.config.dateFormat = "\\W\\e\\e\\k #W, Y";
+			},
+			onReady: [onReady, highlightWeek]
+		};
+	}
 }
 
 if (typeof module !== "undefined")
