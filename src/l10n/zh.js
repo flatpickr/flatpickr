@@ -12,6 +12,11 @@ Flatpickr.l10ns.zh.months = {
 	longhand: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
 };
 
+Flatpickr.l10ns.zh.rangeSeparator = ' 至 ';
+Flatpickr.l10ns.zh.weekAbbreviation = '周';
+Flatpickr.l10ns.zh.scrollTitle = '滚动切换';
+Flatpickr.l10ns.zh.toggleTitle = '点击切换 12/24 小时时制';
+
 if (typeof module !== "undefined") {
   module.exports = Flatpickr.l10ns;
 }
