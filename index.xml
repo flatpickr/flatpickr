@@ -40,12 +40,10 @@ Upon date selection, the original input will contain a Y-m-d.</description>
       <pubDate>Fri, 03 Mar 2017 00:00:00 +0000</pubDate>
       
       <guid>https://chmln.github.io/flatpickr/instance-methods-properties-elements/</guid>
-      <description>Properties selectedDates The array of selected dates (Date objects).
-currentYear The year currently displayed on the calendar.
-currentMonth The zero-indexed month number (0-11) currently displayed on the calendar.
-config The configuration object (defaults + user-specified options).
-Methods changeMonth(monthNum, is_offset = true) Changes the current month.
-let calendar = new Flatpickr(yourElement, config); calendar.changeMonth(1); // go a month ahead calendar.changeMonth(-2); // go two months back calendar.changeMonth(0, false); // go to January  clear() Resets the selected dates (if any) and clears the input.</description>
+      <description>Retrieving the flatpickr instance You may store the instance by assigning the result of an invocation to a variable.
+Here are a few ways to do it.
+const fp = flatpickr(&amp;quot;#myID&amp;quot;, {}); // Flatpickr  const myInput = document.querySelector(&amp;quot;.myInput&amp;quot;); const fp = new Flatpickr(myInput, {}); // Flatpickr  const calendars = flatpickr(&amp;quot;.calendar&amp;quot;, {}); calendars[0] // Flatpickr  And if you&amp;rsquo;ve forgot to save the instance to a variable
+flatpickr(&amp;quot;#myInput&amp;quot;, {}); // invocation without saving to a var // .</description>
     </item>
     
     <item>
@@ -113,6 +111,33 @@ confirmDate Provides a visual cue for users after selecting either:
 For webpack builds and similar, you&amp;rsquo;d do something like:
 require(&amp;quot;flatpickr/dist/themes/dark.css&amp;quot;);  Themes in browser environments Otherwise, if you&amp;rsquo;re constrained to a browser, just link the CSS file as a regular stylesheet.
 &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; type=&amp;quot;text/css&amp;quot; href=&amp;quot;https://npmcdn.com/flatpickr/dist/themes/dark.css&amp;quot;&amp;gt;  Available Themes Available theme names are listed in the theme selector on top of the page.</description>
+    </item>
+    
+    <item>
+      <title>Mobile Support</title>
+      <link>https://chmln.github.io/flatpickr/mobile-support/</link>
+      <pubDate>Sun, 23 Apr 2017 20:23:43 -0500</pubDate>
+      
+      <guid>https://chmln.github.io/flatpickr/mobile-support/</guid>
+      <description>Native DateTime Input When flatpickr detects a mobile browser, it turns the date input into a native date/time/datetime input.
+Native datetime selection provides a UX that&amp;rsquo;s familiar to the user and is superior to most web-based solutions.
+There is no extra configuration necessary. However, native datetime selection is limited to the following features:
+ Preloading a date/time/datetime minDate maxDate  Callbacks like onChange work as well.
+Thus due to missing functionality in native datetime selection, using certain features (e.</description>
+    </item>
+    
+    <item>
+      <title>Usage in IE9</title>
+      <link>https://chmln.github.io/flatpickr/ie9/</link>
+      <pubDate>Sun, 23 Apr 2017 20:23:43 -0500</pubDate>
+      
+      <guid>https://chmln.github.io/flatpickr/ie9/</guid>
+      <description>flatpickr should work out-of-the-box in IE10+, Safari 6+, Firefox, and Chrome.
+IE9 flatpickr depends on classList which is absent from IE9, thus if you&amp;rsquo;re targeting IE9 you will need to include a polyfill.
+Additionally, flatpickr has specific styles for IE9.
+Make sure to include that as well, utilizing browser detection.
+For instance,
+&amp;lt;!--[if IE 9]&amp;gt; &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; type=&amp;quot;text/css&amp;quot; href=&amp;quot;https://npmcdn.com/flatpickr/dist/ie.css&amp;quot;&amp;gt; &amp;lt;![endif]--&amp;gt;  If you&amp;rsquo;re using a bundler like webpack, see html-webpack-plugin</description>
     </item>
     
   </channel>

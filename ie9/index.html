@@ -9,18 +9,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=10" />
-    <title>The Flatpickr Instance - flatpickr</title>
+    <title>Usage in IE9 - flatpickr</title>
     <meta name="generator" content="Hugo 0.20.2" />
 
     
     <meta name="description" content="A lightweight and powerful datetimepicker">
     
-    <link rel="canonical" href="https://chmln.github.io/flatpickr/instance-methods-properties-elements/">
+    <link rel="canonical" href="https://chmln.github.io/flatpickr/ie9/">
     
     <meta name="author" content="chmln">
     
 
-    <meta property="og:url" content="https://chmln.github.io/flatpickr/instance-methods-properties-elements/">
+    <meta property="og:url" content="https://chmln.github.io/flatpickr/ie9/">
     <meta property="og:title" content="flatpickr">
     <meta property="og:image" content="https://chmln.github.io/flatpickr/images/logo.png">
     <meta name="apple-mobile-web-app-title" content="flatpickr">
@@ -104,7 +104,7 @@
     </div>
     <div class="stretch">
       <div class="title">
-        The Flatpickr Instance
+        Usage in IE9
       </div>
     </div>
 
@@ -241,14 +241,11 @@
 
 
 
-<a class="current" title="The Flatpickr Instance" href="https://chmln.github.io/flatpickr/instance-methods-properties-elements/">
+<a  title="The Flatpickr Instance" href="https://chmln.github.io/flatpickr/instance-methods-properties-elements/">
 	
 	The Flatpickr Instance
 </a>
 
-
-<ul id="scrollspy">
-</ul>
 
 
   
@@ -388,11 +385,14 @@
 
 
 
-<a  title="IE9" href="https://chmln.github.io/flatpickr/ie9/">
+<a class="current" title="IE9" href="https://chmln.github.io/flatpickr/ie9/">
 	
 	IE9
 </a>
 
+
+<ul id="scrollspy">
+</ul>
 
 
   
@@ -429,173 +429,29 @@
 
 	<article class="article">
 		<div class="wrapper">
-			<h1>The Flatpickr Instance </h1>
+			<h1>Usage in IE9 </h1>
 
 			
 
-<h2 id="retrieving-the-flatpickr-instance">Retrieving the flatpickr instance</h2>
+<p>flatpickr should work out-of-the-box in IE10+, Safari 6+, Firefox, and Chrome.</p>
 
-<p>You may store the instance by assigning the result of an <a href="https://chmln.github.io/flatpickr/getting-started/#usage">invocation</a> to a variable.</p>
+<h3 id="ie9">IE9</h3>
 
-<p>Here are a few ways to do it.</p>
+<p>flatpickr depends on <code>classList</code> which is absent from IE9, thus if you&rsquo;re targeting IE9
+you will need to include a <a href="https://www.npmjs.com/package/classlist-polyfill">polyfill</a>.</p>
 
-<pre><code class="language-js">const fp = flatpickr(&quot;#myID&quot;, {}); // Flatpickr
+<p>Additionally, flatpickr has <a href="https://npmcdn.com/flatpickr/dist/ie.css">specific styles for IE9</a>.</p>
+
+<p>Make sure to include that as well, utilizing browser detection.</p>
+
+<p>For instance,</p>
+
+<pre><code class="language-html">&lt;!--[if IE 9]&gt;
+&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;https://npmcdn.com/flatpickr/dist/ie.css&quot;&gt;
+&lt;![endif]--&gt;
 </code></pre>
 
-<pre><code class="language-js">const myInput = document.querySelector(&quot;.myInput&quot;);
-const fp = new Flatpickr(myInput, {});  // Flatpickr
-</code></pre>
-
-<pre><code class="language-js">const calendars = flatpickr(&quot;.calendar&quot;, {});
-calendars[0] // Flatpickr
-</code></pre>
-
-<p>And if you&rsquo;ve forgot to save the instance to a variable</p>
-
-<pre><code class="language-js">flatpickr(&quot;#myInput&quot;, {}); // invocation without saving to a var
-// ...
-
-const fp = document.querySelector(&quot;#myInput&quot;)._flatpickr;
-</code></pre>
-
-<h2 id="properties">Properties</h2>
-
-<p>Once you&rsquo;ve got the instance in say <code>fp</code>, accessing props is as simple as e.g. <code>fp.currentYear</code></p>
-
-<h3 id="selecteddates">selectedDates</h3>
-
-<p>The array of selected dates (Date objects).</p>
-
-<h3 id="currentyear">currentYear</h3>
-
-<p>The year currently displayed on the calendar.</p>
-
-<h3 id="currentmonth">currentMonth</h3>
-
-<p>The zero-indexed month number (0-11) currently displayed on the calendar.</p>
-
-<h3 id="config">config</h3>
-
-<p>The configuration object (defaults + user-specified options).</p>
-
-<h2 id="methods">Methods</h2>
-
-<h3 id="changemonth-monthnum-is-offset-true">changeMonth(monthNum, is_offset = true)</h3>
-
-<p>Changes the current month.</p>
-
-<pre><code class="language-js">let calendar = new Flatpickr(yourElement, config);
-calendar.changeMonth(1); // go a month ahead
-calendar.changeMonth(-2); // go two months back
-
-calendar.changeMonth(0, false); // go to January
-</code></pre>
-
-<h3 id="clear">clear()</h3>
-
-<p>Resets the selected dates (if any) and clears the input.</p>
-
-<h3 id="close">close()</h3>
-
-<p>Closes the calendar.</p>
-
-<h3 id="destroy">destroy()</h3>
-
-<p>Destroys the Flatpickr instance, cleans up - removes event listeners, restores inputs, etc.</p>
-
-<h3 id="formatdate-dateobj-formatstr">formatDate(dateObj, formatStr)</h3>
-
-<p><code>dateObj</code> is a Date, and <code>formatStr</code> is a string consisting of formatting tokens.</p>
-
-<p><strong>Return Value</strong>
-A string representation of<code>dateObj</code>,  formatted as per <code>formatStr</code></p>
-
-<h3 id="jumptodate-date">jumpToDate(date)</h3>
-
-<p>Sets the calendar view to the year and month of <code>date</code>, which can be a date string, a Date, or nothing.</p>
-
-<p>If<code>date</code>is undefined, the view is set to the latest selected date, the <code>minDate</code>, or today&rsquo;s date</p>
-
-<h3 id="open">open()</h3>
-
-<p>Shows/opens the calendar.</p>
-
-<h3 id="parsedate-datestr-dateformat">parseDate(dateStr, dateFormat)</h3>
-
-<p>Parses a date string or a timestamp, and returns a Date.</p>
-
-<h3 id="redraw">redraw()</h3>
-
-<p>Redraws the calendar. Shouldn&rsquo;t be necessary in most cases.</p>
-
-<h3 id="set-option-value">set(option, value)</h3>
-
-<p>Sets a config option <code>option</code>to <code>value</code>, redrawing the calendar and updating the current view, if necessary.</p>
-
-<h3 id="setdate-date-triggerchange-datestrformat">setDate(date, triggerChange, dateStrFormat)</h3>
-
-<p>Sets the current selected date(s) to<code>date</code>, which can be a date string, a Date, or an<code>Array</code> of the Dates.</p>
-
-<p>Optionally, pass true as the second argument to force any onChange events to fire.
-And if you&rsquo;re passing a date string with a format other than your <code>dateFormat</code>, provide a <code>dateStrFormat</code> e.g. <code>&quot;m/d/Y&quot;</code>.</p>
-
-<h3 id="toggle">toggle()</h3>
-
-<p>Shows/opens the calendar if its closed, hides/closes it otherwise.</p>
-
-<h2 id="elements">Elements</h2>
-
-<h3 id="input">input</h3>
-
-<p>The text <code>input</code> element associated with <code>flatpickr</code>.</p>
-
-<h3 id="calendarcontainer">calendarContainer</h3>
-
-<p>Self-explanatory. This is the <code>div.flatpickr-calendar</code> element.</p>
-
-<h3 id="prevmonthnav">prevMonthNav</h3>
-
-<p>The &ldquo;left arrow&rdquo; element responsible for decrementing the current month.</p>
-
-<h3 id="nextmonthnav">nextMonthNav</h3>
-
-<p>The &ldquo;right arrow&rdquo; element responsible for incrementing the current month.</p>
-
-<h3 id="currentmonthelement">currentMonthElement</h3>
-
-<p>The <code>span</code> holding the current month&rsquo;s name.</p>
-
-<h3 id="currentyearelement">currentYearElement</h3>
-
-<p>The <code>input</code> holding the current year.</p>
-
-<h3 id="days">days</h3>
-
-<p>The container for all the day elements.</p>
-
-<h2 id="useful-prototype-methods">Useful prototype methods</h2>
-
-<p>Flatpickr exposes its date parser and formatter which don&rsquo;t require an instance to work.</p>
-
-<p>While not as powerful as say <code>moment.js</code>, they&rsquo;re functional enough to replace it in most of the basic usecases.</p>
-
-<h3 id="flatpickr-prototype-parsedate-datestr-dateformat">Flatpickr.prototype.parseDate(dateStr, dateFormat)</h3>
-
-<p>Returns a <code>Date</code> object.</p>
-
-<p><code>Flatpickr.prototype.parseDate(&quot;2016-10-20&quot;, &quot;Y-m-d&quot;)</code></p>
-
-<p>Thu Oct 20 2016 00:00:00</p>
-
-<p><code>Flatpickr.prototype.parseDate(&quot;31/01/1995&quot;, &quot;d/m/Y&quot;)</code></p>
-
-<p>Tue Jan 31 1995 00:00:00</p>
-
-<h3 id="flatpickr-prototype-formatdate-dateobj-dateformat">Flatpickr.prototype.formatDate(dateObj, dateFormat)</h3>
-
-<p><code>Flatpickr.prototype.formatDate(new Date(), &quot;Y-m-d h:i K&quot;)</code></p>
-
-<p>&ldquo;2017-04-24 11:56 AM&rdquo;</p>
+<p>If you&rsquo;re using a bundler like webpack, see <a href="https://github.com/jantimon/html-webpack-plugin/issues/155">html-webpack-plugin</a></p>
 
 
 			<aside class="copyright" role="note">
@@ -610,7 +466,7 @@ And if you&rsquo;re passing a date string with a format other than your <code>da
 <nav class="pagination" aria-label="Footer">
   <div class="previous">
   
-      <a href="https://chmln.github.io/flatpickr/examples/" title="Examples">
+      <a href="https://chmln.github.io/flatpickr/mobile-support/" title="Mobile Support">
         <span class="direction">
           Previous
         </span>
@@ -620,7 +476,7 @@ And if you&rsquo;re passing a date string with a format other than your <code>da
           </div>
           <div class="stretch">
             <div class="title">
-              Examples
+              Mobile Support
             </div>
           </div>
         </div>
@@ -630,22 +486,6 @@ And if you&rsquo;re passing a date string with a format other than your <code>da
 
   <div class="next">
 
-  
-      <a href="https://chmln.github.io/flatpickr/events/" title="Events &amp; Hooks">
-        <span class="direction">
-          Next
-        </span>
-        <div class="page">
-          <div class="stretch">
-            <div class="title">
-              Events &amp; Hooks
-            </div>
-          </div>
-          <div class="button button-next" role="button" aria-label="Next">
-            <i class="icon icon-forward"></i>
-          </div>
-        </div>
-      </a>
   
   </div>
 </nav>

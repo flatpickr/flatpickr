@@ -363,6 +363,42 @@
 </li>
 
 
+
+<li>
+  
+    
+
+
+
+<a  title="Mobile Support" href="https://chmln.github.io/flatpickr/mobile-support/">
+	
+	Mobile Support
+</a>
+
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="IE9" href="https://chmln.github.io/flatpickr/ie9/">
+	
+	IE9
+</a>
+
+
+
+  
+</li>
+
+
         </ul>
         
 
@@ -519,7 +555,7 @@
 
 <p><input class=flatpickr type="text" placeholder="Select Date.." data-id="minMaxDateTwoWeeks"></p>
 
-<h2 id="disabling-specific-dates">Disabling specific dates</h2>
+<h2 id="disabling-dates">Disabling dates</h2>
 
 <p>If you&rsquo;d like to make certain dates unavailable for selection, there are multiple methods of doing so.</p>
 
@@ -533,7 +569,7 @@
 
 <hr />
 
-<p>1: Disabling specific dates</p>
+<h3 id="disabling-specific-dates">Disabling specific dates</h3>
 
 <p><input class=flatpickr type="text" placeholder="Select Date.." data-id="disableSpecific"></p>
 
@@ -544,7 +580,7 @@
 
 <hr />
 
-<p>2: Disabling range(s) of dates:</p>
+<h3 id="disabling-range-s-of-dates">Disabling range(s) of dates:</h3>
 
 <p><input class=flatpickr type="text" placeholder="Select Date.." data-id="disableRange"></p>
 
@@ -564,24 +600,27 @@
 
 <hr />
 
-<p>3: Disabling dates by a function:</p>
+<h3 id="disabling-dates-by-a-function">Disabling dates by a function:</h3>
 
-<p>The function takes in a Date object, and should return a boolean value.
+<p>The function takes in a <code>Date</code> object, and should return a <code>boolean</code> value.<br>
 If the function returns <code>true</code>, the date will be disabled.</p>
 
-<p>This flexibility allows you to use any arbitrary logic to disable dates.</p>
+<p>This flexibility allows us to use any arbitrary logic to disable dates.<br>
+The example below disables Saturdays and Sundays.</p>
 
 <p><input class=flatpickr type="text" placeholder="Select Date.." data-id="disableFunction"></p>
 
-<pre><code class="language-js">{
-    disable: [
+<pre><code class="language-javascript">{
+    &quot;disable&quot;: [
         function(date) {
             // return true to disable
-
-            return (date.getMonth() % 2 === 0 &amp;&amp; date.getDate() &lt; 15);
+            return (date.getDay() === 5 || date.getDay() === 6);
 
         }
-    ]
+    ],
+    &quot;locale&quot;: {
+        &quot;firstDayOfWeek&quot;: 1 // start week on Monday
+    }
 }
 </code></pre>
 
@@ -589,7 +628,7 @@ If the function returns <code>true</code>, the date will be disabled.</p>
 
 <p>This is the <code>enable</code> option, which takes in an array of date strings, date ranges and functions. Essentially the same as the <code>disable</code> option above, but reversed.</p>
 
-<p>1: Enabling specific dates</p>
+<h3 id="enabling-specific-dates">Enabling specific dates</h3>
 
 <p><input class=flatpickr type="text" placeholder="Select Date.." data-id="enableSpecific"></p>
 
@@ -600,7 +639,7 @@ If the function returns <code>true</code>, the date will be disabled.</p>
 
 <hr />
 
-<p>2: Enabling range(s) of dates:</p>
+<h3 id="enabling-range-s-of-dates">Enabling range(s) of dates:</h3>
 
 <p><input class=flatpickr type="text" placeholder="Select Date.." data-id="enableRange"></p>
 
@@ -620,7 +659,7 @@ If the function returns <code>true</code>, the date will be disabled.</p>
 
 <hr />
 
-<p>3: Enabling dates by a function:</p>
+<h3 id="enabling-dates-by-a-function">Enabling dates by a function:</h3>
 
 <p><input class=flatpickr type="text" placeholder="Select Date.." data-id="enableFunction"></p>
 
@@ -646,6 +685,17 @@ If the function returns <code>true</code>, the date will be disabled.</p>
 </code></pre>
 
 <p><input class=flatpickr type="text" placeholder="Select Date.." data-id="multiple"></p>
+
+<h3 id="preloading-multiple-dates">Preloading multiple dates</h3>
+
+<pre><code class="language-js">{
+    mode: &quot;multiple&quot;,
+    dateFormat: &quot;Y-m-d&quot;,
+    defaultDate: [&quot;2016-10-20&quot;, &quot;2016-11-04&quot;]
+}
+</code></pre>
+
+<p><input class=flatpickr type="text" placeholder="Select Date.." data-id="multiplePreload"></p>
 
 <h2 id="range-calendar">Range Calendar</h2>
 
@@ -673,6 +723,17 @@ If the function returns <code>true</code>, the date will be disabled.</p>
 </code></pre>
 
 <p><input class=flatpickr type="text" placeholder="Select Date.." data-id="rangeDisable"></p>
+
+<h3 id="preloading-range-dates">Preloading range dates</h3>
+
+<pre><code class="language-js">{
+    mode: &quot;range&quot;,
+    dateFormat: &quot;Y-m-d&quot;,
+    defaultDate: [&quot;2016-10-10&quot;, &quot;2016-10-20&quot;]
+}
+</code></pre>
+
+<p><input class=flatpickr type="text" placeholder="Select Date.." data-id="rangePreload"></p>
 
 <h2 id="inline-calendar">Inline Calendar</h2>
 
@@ -713,7 +774,7 @@ If the function returns <code>true</code>, the date will be disabled.</p>
 <p>This permits additional markup, as well as custom elements to trigger the state of the calendar.</p>
 
 <pre><code class="language-html">&lt;div class=flatpickr&gt;
-    &lt;input type=&quot;text&quot; placeholder=&quot;Select Date..&quot; data-input&gt;
+    &lt;input type=&quot;text&quot; placeholder=&quot;Select Date..&quot; data-input&gt; &lt;!-- input is mandatory --&gt;
 
     &lt;a class=&quot;input-button&quot; title=&quot;toggle&quot; data-toggle&gt;
         &lt;i class=&quot;icon-calendar&quot;&gt;&lt;/i&gt;

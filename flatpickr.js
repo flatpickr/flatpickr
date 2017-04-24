@@ -48,11 +48,14 @@ var configs = {
     },
 
     disableFunction: {
+        locale: {
+            firstDayOfWeek: 1
+        },
         disable: [
             function(date) {
                 // return true to disable
 
-                return (date.getMonth() % 2 === 0 && date.getDate() < 15);
+                return (date.getDay() === 0 || date.getDay() === 6);
 
             }
         ]
@@ -90,6 +93,12 @@ var configs = {
         mode: "multiple"
     },
 
+    multiplePreload: {
+        mode: "multiple",
+        dateFormat: "Y-m-d",
+        defaultDate: ["2016-10-20", "2016-11-04"]
+    },
+
     range: {
         mode: "range"
     },
@@ -103,6 +112,12 @@ var configs = {
                 return !(date.getDate() % 8);
             }
         ]
+    },
+
+    rangePreload: {
+        mode: "range",
+        dateFormat: "Y-m-d",
+        defaultDate: ["2016-10-10", "2016-10-20"]
     },
 
     inline: {
