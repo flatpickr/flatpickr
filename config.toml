@@ -106,6 +106,17 @@ googleAnalytics = ""
     url    = "themes/"
     weight = 11
 
+[[menu.main]]
+    name   = "Mobile Support"
+    url    = "mobile-support/"
+    weight = 12
+
+[[menu.main]]
+    name   = "IE9"
+    url    = "ie9/"
+    weight = 13
+
+
 [blackfriday]
     smartypants = true
     fractions = true
