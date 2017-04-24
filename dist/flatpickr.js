@@ -808,6 +808,8 @@ function Flatpickr(element, config) {
 		updateNavigationCurrentMonth();
 		self.oldCurMonth.firstChild.textContent = self.utils.monthToStr(self.currentMonth - delta);
 
+		triggerEvent("MonthChange");
+
 		if (self._.daysAnimDuration === undefined) {
 			var compStyle = window.getComputedStyle(self.daysContainer.lastChild);
 
@@ -1193,9 +1195,13 @@ function Flatpickr(element, config) {
 
 		for (var i = 0; i < boolOpts.length; i++) {
 			self.config[boolOpts[i]] = self.config[boolOpts[i]] === true || self.config[boolOpts[i]] === "true";
-		}for (var _i = 0; _i < hooks.length; _i++) {
-			self.config[hooks[_i]] = arrayify(self.config[hooks[_i]] || []).map(bindToInstance);
-		}for (var _i2 = 0; _i2 < self.config.plugins.length; _i2++) {
+		}for (var _i = hooks.length; _i--;) {
+			if (self.config[hooks[_i]] !== undefined) {
+				self.config[hooks[_i]] = arrayify(self.config[hooks[_i]] || []).map(bindToInstance);
+			}
+		}
+
+		for (var _i2 = 0; _i2 < self.config.plugins.length; _i2++) {
 			var pluginConf = self.config.plugins[_i2](self) || {};
 			for (var key in pluginConf) {
 
@@ -1552,9 +1558,9 @@ function Flatpickr(element, config) {
 	function triggerEvent(event, data) {
 		var hooks = self.config["on" + event];
 
-		if (hooks) {
+		if (hooks !== undefined && hooks.length > 0) {
 			for (var i = 0; hooks[i] && i < hooks.length; i++) {
-				hooks[i](self.selectedDates, self.input && self.input.value, self, data);
+				hooks[i](self.selectedDates, self._input.value, self, data);
 			}
 		}
 
@@ -1875,33 +1881,33 @@ Flatpickr.defaultConfig = {
 	plugins: [],
 
 	// called every time calendar is closed
-	onClose: [], // function (dateObj, dateStr) {}
+	onClose: undefined, // function (dateObj, dateStr) {}
 
 	// onChange callback when user selects a date or time
-	onChange: [], // function (dateObj, dateStr) {}
+	onChange: undefined, // function (dateObj, dateStr) {}
 
 	// called for every day element
-	onDayCreate: [],
+	onDayCreate: undefined,
 
 	// called every time the month is changed
-	onMonthChange: [],
+	onMonthChange: undefined,
 
 	// called every time calendar is opened
-	onOpen: [], // function (dateObj, dateStr) {}
+	onOpen: undefined, // function (dateObj, dateStr) {}
 
 	// called after the configuration has been parsed
-	onParseConfig: [],
+	onParseConfig: undefined,
 
 	// called after calendar is ready
-	onReady: [], // function (dateObj, dateStr) {}
+	onReady: undefined, // function (dateObj, dateStr) {}
 
 	// called after input value updated
-	onValueUpdate: [],
+	onValueUpdate: undefined,
 
 	// called every time the year is changed
-	onYearChange: [],
+	onYearChange: undefined,
 
-	onKeyDown: []
+	onKeyDown: undefined
 };
 
 /* istanbul ignore next */
