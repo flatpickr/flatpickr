@@ -57,17 +57,37 @@ weight = "6"
             <td>A string of characters which are used to define how the date will be displayed in the input box. The supported characters are defined in the table below.</td>
         </tr>
         <tr>
-            <td>defaultDate</td>
-            <td>string/Date</td>
+            <td><strong>defaultDate</strong></td>
+            <td>string</td>
             <td>null</td>
-            <td>Set the initial selected date. Same as preloading a date string into an input's value attribute, but can also handle a Date object.</td>
+            <td>
+            <p>Sets the initial selected date(s). </p>
+            <p>If you're using <code>mode: "multiple"</code> or a range calendar supply an <code>Array</code> of <code>Date</code> objects or an Array of date strings which follow your <code>dateFormat</code>.</p>
+            <p>Otherwise, you can supply a single Date object or a date string.</p>
+            </td>
         </tr>
+        <tr>
+            <td>defaultHour</td>
+            <td>Number</td>
+            <td>12</td>
+            <td>
+                <p>Initial value of the hour element.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>defaultMinute</td>
+            <td>Number</td>
+            <td>0</td>
+            <td>
+                <p>Initial value of the minute element.</p>
+            </td>
+        </tr>        
         <tr>
             <td>disable</td>
             <td>array</td>
             <td>[]</td>
             <td>
-                See&nbsp;<a href="#disable">Disabling dates</a>
+                See&nbsp;<a href="/examples/#disabling-specific-dates">Disabling dates</a>
             </td>
         </tr>
         <tr>
@@ -82,7 +102,7 @@ weight = "6"
             <td>array</td>
             <td>[]</td>
             <td>
-                See&nbsp;<a href="#enable">Enabling dates</a>
+                See&nbsp;<a href="/examples/#disabling-all-dates-except-select-few">Enabling dates</a>
             </td>
         </tr>
         <tr>
