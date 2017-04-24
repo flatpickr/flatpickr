@@ -120,7 +120,7 @@ See [supplying dates](#supplying-dates-for-flatpickr) for valid date examples.
 <input class=flatpickr type="text" placeholder="Select Date.." data-id="minMaxDateTwoWeeks">
 
 
-## Disabling specific dates
+## Disabling dates
 
 If you'd like to make certain dates unavailable for selection, there are multiple methods of doing so.
 
@@ -132,7 +132,8 @@ All of those are possible with the `disable` option.
 
 ---
 
-1: Disabling specific dates
+### Disabling specific dates
+
 
 <input class=flatpickr type="text" placeholder="Select Date.." data-id="disableSpecific">
 
@@ -144,7 +145,7 @@ All of those are possible with the `disable` option.
 
 ---
 
-2: Disabling range(s) of dates:
+### Disabling range(s) of dates:
 
 <input class=flatpickr type="text" placeholder="Select Date.." data-id="disableRange">
 
@@ -165,25 +166,28 @@ All of those are possible with the `disable` option.
 
 ---
 
-3: Disabling dates by a function:
+### Disabling dates by a function:
 
-The function takes in a Date object, and should return a boolean value.
+The function takes in a `Date` object, and should return a `boolean` value.<br>
 If the function returns `true`, the date will be disabled.
 
-This flexibility allows you to use any arbitrary logic to disable dates.
+This flexibility allows us to use any arbitrary logic to disable dates.<br>
+The example below disables Saturdays and Sundays.
 
 <input class=flatpickr type="text" placeholder="Select Date.." data-id="disableFunction">
 
-```js
+```javascript
 {
-    disable: [
+    "disable": [
         function(date) {
             // return true to disable
-
-            return (date.getMonth() % 2 === 0 && date.getDate() < 15);
+            return (date.getDay() === 5 || date.getDay() === 6);
 
         }
-    ]
+    ],
+    "locale": {
+        "firstDayOfWeek": 1 // start week on Monday
+    }
 }
 ```
 
@@ -192,7 +196,7 @@ This flexibility allows you to use any arbitrary logic to disable dates.
 
 This is the `enable` option, which takes in an array of date strings, date ranges and functions. Essentially the same as the `disable` option above, but reversed.
 
-1: Enabling specific dates
+### Enabling specific dates
 
 <input class=flatpickr type="text" placeholder="Select Date.." data-id="enableSpecific">
 
@@ -204,7 +208,7 @@ This is the `enable` option, which takes in an array of date strings, date range
 
 ---
 
-2: Enabling range(s) of dates:
+### Enabling range(s) of dates:
 
 <input class=flatpickr type="text" placeholder="Select Date.." data-id="enableRange">
 
@@ -225,7 +229,7 @@ This is the `enable` option, which takes in an array of date strings, date range
 
 ---
 
-3: Enabling dates by a function:
+### Enabling dates by a function:
 
 <input class=flatpickr type="text" placeholder="Select Date.." data-id="enableFunction">
 
@@ -253,6 +257,18 @@ It is possible to select multiple dates.
 ```
 
 <input class=flatpickr type="text" placeholder="Select Date.." data-id="multiple">
+
+### Preloading multiple dates
+
+```js
+{
+    mode: "multiple",
+    dateFormat: "Y-m-d",
+    defaultDate: ["2016-10-20", "2016-11-04"]
+}
+```
+
+<input class=flatpickr type="text" placeholder="Select Date.." data-id="multiplePreload">
 
 ## Range Calendar
 
@@ -282,6 +298,18 @@ Note that disabled dates (by either `minDate`, `maxDate`, `enable` or `disable`)
 ```
 
 <input class=flatpickr type="text" placeholder="Select Date.." data-id="rangeDisable">
+
+### Preloading range dates
+
+```js
+{
+    mode: "range",
+    dateFormat: "Y-m-d",
+    defaultDate: ["2016-10-10", "2016-10-20"]
+}
+```
+
+<input class=flatpickr type="text" placeholder="Select Date.." data-id="rangePreload">
 
 ## Inline Calendar
 
@@ -325,7 +353,7 @@ This permits additional markup, as well as custom elements to trigger the state 
 
 ```html
 <div class=flatpickr>
-    <input type="text" placeholder="Select Date.." data-input>
+    <input type="text" placeholder="Select Date.." data-input> <!-- input is mandatory -->
 
     <a class="input-button" title="toggle" data-toggle>
         <i class="icon-calendar"></i>
