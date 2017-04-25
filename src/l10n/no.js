@@ -12,6 +12,8 @@ Flatpickr.l10ns.no.months = {
 	longhand: ['Januar', 'Februar', 'Mars', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Desember']
 };
 
+Flatpickr.l10ns.no.firstDayOfWeek = 1;
+
 Flatpickr.l10ns.no.ordinal = () => {
 	return ".";
 };
