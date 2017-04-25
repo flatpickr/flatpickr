@@ -2572,8 +2572,10 @@ Flatpickr.prototype = {
 
 		const date_orig = date;
 
-		if (date instanceof Date)
+		if (date instanceof Date) {
 			date = new Date(date.getTime()); // create a copy
+			date.fp_isUTC = date_orig.fp_isUTC;
+		}
 
 		else if (date.toFixed !== undefined) // timestamp
 			date = new Date(date);
