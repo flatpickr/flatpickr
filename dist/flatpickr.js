@@ -1566,10 +1566,7 @@ function Flatpickr(element, config) {
   * @return {Event} the created event
   */
 	function createEvent(name) {
-		var existing = self._[name + "Event"];
-		if (existing !== undefined) return existing;
-
-		if (self._supportsEvents) return self._[name + "Event"] = new Event(name, { bubbles: true });
+		if (self._supportsEvents) return new Event(name, { bubbles: true });
 
 		self._[name + "Event"] = document.createEvent("Event");
 		self._[name + "Event"].initEvent(name, true, true);
