@@ -23,7 +23,7 @@ function Flatpickr(element, config) {
 	self.toggle = toggle;
 
 	function init() {
-		if (element._flatpickr) element._flatpickr = undefined;
+		if (element._flatpickr) element._flatpickr.destroy();
 
 		element._flatpickr = self;
 
@@ -108,7 +108,7 @@ function Flatpickr(element, config) {
 		    minutes = (parseInt(self.minuteElement.value, 10) || 0) % 60,
 		    seconds = self.config.enableSeconds ? parseInt(self.secondElement.value, 10) || 0 : 0;
 
-		if (self.amPM) hours = hours % 12 + 12 * (self.amPM.textContent === "PM");
+		if (self.amPM !== undefined) hours = hours % 12 + 12 * (self.amPM.textContent === "PM");
 
 		if (self.minDateHasTime && compareDates(self.latestSelectedDateObj, self.config.minDate) === 0) {
 
@@ -236,35 +236,21 @@ function Flatpickr(element, config) {
 
 		if (!self.config.inline && !self.config.static) bind(window, "resize", self.debouncedResize);
 
-		if (window.ontouchstart) bind(window.document, "touchstart", documentClick);
+		if (window.ontouchstart !== undefined) bind(window.document, "touchstart", documentClick);
 
 		bind(window.document, "mousedown", onClick(documentClick));
 		bind(self._input, "blur", documentClick);
 
-		if (self.config.clickOpens) bind(self._input, "focus", open);
+		if (self.config.clickOpens === true) bind(self._input, "focus", self.open);
 
 		if (!self.config.noCalendar) {
-			bind(self.prevMonthNav, "mousedown", onClick(function () {
-				return changeMonth(-1);
-			}));
-			bind(self.nextMonthNav, "mousedown", onClick(function () {
-				return changeMonth(1);
-			}));
-
 			self.monthNav.addEventListener("wheel", function (e) {
 				return e.preventDefault();
 			});
-
 			bind(self.monthNav, "wheel", debounce(onMonthNavScroll, 10));
 			bind(self.monthNav, "mousedown", onClick(onMonthNavClick));
 
-			bind(self.monthNav, "mousedown", onClick(function (e) {
-				e.preventDefault();
-				if (e.target === self.currentYearElement) self.currentYearElement.select();
-			}));
-
 			bind(self.monthNav, ["keyup", "increment"], onYearInput);
-
 			bind(self.daysContainer, "mousedown", onClick(selectDate));
 
 			if (self.config.animate) {
@@ -1659,7 +1645,13 @@ function Flatpickr(element, config) {
 	}
 
 	function onMonthNavClick(e) {
-		if (e.target.className === "arrowUp") self.changeYear(self.currentYear + 1);else if (e.target.className === "arrowDown") self.changeYear(self.currentYear - 1);
+		var isPrevMonth = self.prevMonthNav.contains(e.target);
+		var isNextMonth = self.nextMonthNav.contains(e.target);
+
+		if (isPrevMonth || isNextMonth) changeMonth(isPrevMonth ? -1 : 1);else if (e.target === self.currentYearElement) {
+			e.preventDefault();
+			self.currentYearElement.select();
+		} else if (e.target.className === "arrowUp") self.changeYear(self.currentYear + 1);else if (e.target.className === "arrowDown") self.changeYear(self.currentYear - 1);
 	}
 
 	/**
@@ -1808,7 +1800,7 @@ Flatpickr.defaultConfig = {
 	altInput: false,
 
 	// the created altInput element will have this class.
-	altInputClass: "flatpickr-input form-control input",
+	altInputClass: "form-control input",
 
 	// same as dateFormat, but for altInput
 	altFormat: "F j, Y", // defaults to e.g. June 10, 2016
