@@ -1729,7 +1729,7 @@ function Flatpickr(element, config) {
 		jumpToDate();
 
 		setHoursFromDate();
-		updateValue();
+		updateValue(triggerChange);
 
 		if (triggerChange)
 			triggerEvent("Change");
@@ -2011,9 +2011,9 @@ function Flatpickr(element, config) {
 	 * Updates the values of inputs associated with the calendar
 	 * @return {void}
 	 */
-	function updateValue() {
+	function updateValue(triggerChange) {
 		if (!self.selectedDates.length)
-			return self.clear();
+			return self.clear(triggerChange);
 
 		if (self.isMobile) {
 			self.mobileInput.value = self.selectedDates.length
@@ -2032,7 +2032,6 @@ function Flatpickr(element, config) {
 				.map(dObj => self.formatDate(dObj, self.config.altFormat))
 				.join(joinChar);
 		}
-
 		triggerEvent("ValueUpdate");
 	}
 
