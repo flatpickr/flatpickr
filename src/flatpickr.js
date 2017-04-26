@@ -124,7 +124,7 @@ function Flatpickr(element, config) {
 				? (parseInt(self.secondElement.value, 10) || 0)
 				: 0;
 
-		if (self.amPM)
+		if (self.amPM !== undefined)
 			hours = (hours % 12) + (12 * (self.amPM.textContent === "PM"));
 
 		if (
@@ -272,13 +272,13 @@ function Flatpickr(element, config) {
 		if (!self.config.inline && !self.config.static)
 			bind(window, "resize", self.debouncedResize);
 
-		if (window.ontouchstart)
+		if (window.ontouchstart !== undefined)
 			bind(window.document, "touchstart", documentClick);
 
 		bind(window.document, "mousedown", onClick(documentClick));
 		bind(self._input, "blur", documentClick);
 
-		if (self.config.clickOpens)
+		if (self.config.clickOpens === true)
 			bind(self._input, "focus", self.open);
 
 		if (!self.config.noCalendar) {
