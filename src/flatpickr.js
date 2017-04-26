@@ -1474,7 +1474,7 @@ function Flatpickr(element, config) {
 			const pluginConf = self.config.plugins[i](self) || {};
 			for (let key in pluginConf) {
 
-				if ((self.config[key] || ~hooks.indexOf(key)) instanceof Array) {
+				if ((self.config[key] instanceof Array) || ~hooks.indexOf(key)) {
 					self.config[key] = arrayify(pluginConf[key])
 						.map(bindToInstance)
 						.concat(self.config[key]);
