@@ -1523,7 +1523,7 @@ function Flatpickr(element, config) {
 		const calendarHeight = self.calendarContainer.offsetHeight,
 			calendarWidth = self.calendarContainer.offsetWidth,
 			configPos = self.config.position,
-			inputBounds = self._input.getBoundingClientRect(),
+			inputBounds = self._positionElement.getBoundingClientRect(),
 			distanceFromBottom = window.innerHeight - inputBounds.bottom,
 			showOnTop = configPos === "above" || (
 				configPos !== "below"
@@ -1532,7 +1532,7 @@ function Flatpickr(element, config) {
 			);
 
 		let top = (window.pageYOffset + inputBounds.top) + (!showOnTop
-			? (self._input.offsetHeight + 2)
+			? (self._positionElement.offsetHeight + 2)
 			: (- calendarHeight - 2)
 		);
 
@@ -1855,6 +1855,8 @@ function Flatpickr(element, config) {
 		self.input = self.config.wrap
 			? self.element.querySelector("[data-input]")
 			: self.element;
+
+		self._positionElement = self.config.positionElement || self.input;
 
 		/* istanbul ignore next */
 		if (!self.input)

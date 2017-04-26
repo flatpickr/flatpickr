@@ -1226,11 +1226,11 @@ function Flatpickr(element, config) {
 		var calendarHeight = self.calendarContainer.offsetHeight,
 		    calendarWidth = self.calendarContainer.offsetWidth,
 		    configPos = self.config.position,
-		    inputBounds = self._input.getBoundingClientRect(),
+		    inputBounds = self._positionElement.getBoundingClientRect(),
 		    distanceFromBottom = window.innerHeight - inputBounds.bottom,
 		    showOnTop = configPos === "above" || configPos !== "below" && distanceFromBottom < calendarHeight && inputBounds.top > calendarHeight;
 
-		var top = window.pageYOffset + inputBounds.top + (!showOnTop ? self._input.offsetHeight + 2 : -calendarHeight - 2);
+		var top = window.pageYOffset + inputBounds.top + (!showOnTop ? self._positionElement.offsetHeight + 2 : -calendarHeight - 2);
 
 		toggleClass(self.calendarContainer, "arrowTop", !showOnTop);
 		toggleClass(self.calendarContainer, "arrowBottom", showOnTop);
@@ -1393,7 +1393,7 @@ function Flatpickr(element, config) {
 		jumpToDate();
 
 		setHoursFromDate();
-		updateValue();
+		updateValue(triggerChange);
 
 		if (triggerChange) triggerEvent("Change");
 	}
@@ -1490,6 +1490,8 @@ function Flatpickr(element, config) {
 
 	function setupInputs() {
 		self.input = self.config.wrap ? self.element.querySelector("[data-input]") : self.element;
+
+		self._positionElement = self.config.positionElement || self.input;
 
 		/* istanbul ignore next */
 		if (!self.input) return console.warn("Error: invalid input element specified", self.input);
@@ -1616,8 +1618,8 @@ function Flatpickr(element, config) {
   * Updates the values of inputs associated with the calendar
   * @return {void}
   */
-	function updateValue() {
-		if (!self.selectedDates.length) return self.clear();
+	function updateValue(triggerChange) {
+		if (!self.selectedDates.length) return self.clear(triggerChange);
 
 		if (self.isMobile) {
 			self.mobileInput.value = self.selectedDates.length ? self.formatDate(self.latestSelectedDateObj, self.mobileFormatStr) : "";
@@ -1634,7 +1636,6 @@ function Flatpickr(element, config) {
 				return self.formatDate(dObj, self.config.altFormat);
 			}).join(joinChar);
 		}
-
 		triggerEvent("ValueUpdate");
 	}
 
@@ -2181,40 +2182,41 @@ Flatpickr.prototype = {
 
 		var date_orig = date;
 
-		if (date instanceof Date) date = new Date(date.getTime()); // create a copy
+		if (date instanceof Date) {
+			date = new Date(date.getTime()); // create a copy
+			date.fp_isUTC = date_orig.fp_isUTC;
+		} else if (date.toFixed !== undefined) // timestamp
+			date = new Date(date);else {
+			// date string
+			var format = givenFormat || (this.config || Flatpickr.defaultConfig).dateFormat;
+			date = String(date).trim();
 
-		else if (date.toFixed !== undefined) // timestamp
-				date = new Date(date);else {
-				// date string
-				var format = givenFormat || (this.config || Flatpickr.defaultConfig).dateFormat;
-				date = String(date).trim();
+			if (date === "today") {
+				date = new Date();
+				timeless = true;
+			} else if (/Z$/.test(date) || /GMT$/.test(date)) // datestrings w/ timezone
+				date = new Date(date);else if (this.config && this.config.parseDate) date = this.config.parseDate(date, format);else {
+				var parsedDate = !this.config || !this.config.noCalendar ? new Date(new Date().getFullYear(), 0, 1, 0, 0, 0, 0) : new Date(new Date().setHours(0, 0, 0, 0));
 
-				if (date === "today") {
-					date = new Date();
-					timeless = true;
-				} else if (/Z$/.test(date) || /GMT$/.test(date)) // datestrings w/ timezone
-					date = new Date(date);else if (this.config && this.config.parseDate) date = this.config.parseDate(date, format);else {
-					var parsedDate = !this.config || !this.config.noCalendar ? new Date(new Date().getFullYear(), 0, 1, 0, 0, 0, 0) : new Date(new Date().setHours(0, 0, 0, 0));
+				var matched = void 0;
 
-					var matched = void 0;
+				for (var i = 0, matchIndex = 0, regexStr = ""; i < format.length; i++) {
+					var token = format[i];
+					var isBackSlash = token === "\\";
+					var escaped = format[i - 1] === "\\" || isBackSlash;
 
-					for (var i = 0, matchIndex = 0, regexStr = ""; i < format.length; i++) {
-						var token = format[i];
-						var isBackSlash = token === "\\";
-						var escaped = format[i - 1] === "\\" || isBackSlash;
-
-						if (this.tokenRegex[token] && !escaped) {
-							regexStr += this.tokenRegex[token];
-							var match = new RegExp(regexStr).exec(date);
-							if (match && (matched = true)) {
-								parsedDate = this.revFormat[token](parsedDate, match[++matchIndex]) || parsedDate;
-							}
-						} else if (!isBackSlash) regexStr += "."; // don't really care
-					}
-
-					date = matched ? parsedDate : null;
+					if (this.tokenRegex[token] && !escaped) {
+						regexStr += this.tokenRegex[token];
+						var match = new RegExp(regexStr).exec(date);
+						if (match && (matched = true)) {
+							parsedDate = this.revFormat[token](parsedDate, match[++matchIndex]) || parsedDate;
+						}
+					} else if (!isBackSlash) regexStr += "."; // don't really care
 				}
+
+				date = matched ? parsedDate : null;
 			}
+		}
 
 		/* istanbul ignore next */
 		if (!(date instanceof Date)) {
