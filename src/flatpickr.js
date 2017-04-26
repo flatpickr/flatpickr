@@ -282,22 +282,11 @@ function Flatpickr(element, config) {
 			bind(self._input, "focus", self.open);
 
 		if (!self.config.noCalendar) {
-			bind(self.prevMonthNav, "mousedown", onClick(() => changeMonth(-1)));
-			bind(self.nextMonthNav, "mousedown", onClick(() => changeMonth(1)));
-
 			self.monthNav.addEventListener("wheel", e => e.preventDefault());
-
 			bind(self.monthNav, "wheel", debounce(onMonthNavScroll, 10));
 			bind(self.monthNav, "mousedown", onClick(onMonthNavClick));
 
-			bind(self.monthNav, "mousedown", onClick(e => {
-				e.preventDefault();
-				if (e.target === self.currentYearElement)
-					self.currentYearElement.select();
-			}));
-
 			bind(self.monthNav, ["keyup", "increment"], onYearInput);
-
 			bind(self.daysContainer, "mousedown", onClick(selectDate));
 
 			if (self.config.animate) {
@@ -2058,12 +2047,23 @@ function Flatpickr(element, config) {
 		}
 	}
 
-	function onMonthNavClick(e) {
-		if (e.target.className === "arrowUp")
+	function onMonthNavClick(e) {		
+		const isPrevMonth = self.prevMonthNav.contains(e.target);
+		const isNextMonth = self.nextMonthNav.contains(e.target);
+
+		if (isPrevMonth || isNextMonth)
+			changeMonth(isPrevMonth ? -1 : 1);
+
+		else if (e.target === self.currentYearElement) {
+			e.preventDefault();
+			self.currentYearElement.select();
+		}
+			
+		else if (e.target.className === "arrowUp")
 			self.changeYear(self.currentYear + 1);
 
 		else if (e.target.className === "arrowDown")
-			self.changeYear(self.currentYear - 1);
+			self.changeYear(self.currentYear - 1);			
 	}
 
 	/**
