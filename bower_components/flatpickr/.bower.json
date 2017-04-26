@@ -24,11 +24,11 @@
     "test",
     "tests"
   ],
-  "_release": "d9028de1c3",
+  "_release": "e5414ba76b",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "d9028de1c3391a2d28d287d468c6e3628008728a"
+    "commit": "e5414ba76b22032c6c9fb3d51644e25119768819"
   },
   "_source": "https://github.com/chmln/flatpickr.git",
   "_target": "master",

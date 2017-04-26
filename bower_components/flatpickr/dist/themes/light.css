@@ -62,13 +62,13 @@
 }
 .flatpickr-calendar.showTimeInput.hasTime .flatpickr-time {
   height: 40px;
-  border-top: 1px solid rgba(72,72,72,0.2);
+  border-top: 1px solid #eceef1;
 }
 .flatpickr-calendar.showTimeInput.hasTime .flatpickr-innerContainer {
   border-bottom: 0;
 }
 .flatpickr-calendar.showTimeInput.hasTime .flatpickr-time {
-  border: 1px solid rgba(72,72,72,0.2);
+  border: 1px solid #eceef1;
 }
 .flatpickr-calendar.noCalendar.hasTime .flatpickr-time {
   height: auto;
@@ -102,20 +102,20 @@
   bottom: 100%;
 }
 .flatpickr-calendar.arrowTop:before {
-  border-bottom-color: rgba(72,72,72,0.2);
+  border-bottom-color: #eceef1;
 }
 .flatpickr-calendar.arrowTop:after {
-  border-bottom-color: #1bbc9b;
+  border-bottom-color: #eceef1;
 }
 .flatpickr-calendar.arrowBottom:before,
 .flatpickr-calendar.arrowBottom:after {
   top: 100%;
 }
 .flatpickr-calendar.arrowBottom:before {
-  border-top-color: rgba(72,72,72,0.2);
+  border-top-color: #eceef1;
 }
 .flatpickr-calendar.arrowBottom:after {
-  border-top-color: #1bbc9b;
+  border-top-color: #eceef1;
 }
 .flatpickr-calendar:focus {
   outline: 0;
@@ -126,9 +126,9 @@
 }
 .flatpickr-month {
   border-radius: 5px 5px 0 0;
-  background: #1bbc9b;
-  color: #fff;
-  fill: #fff;
+  background: #eceef1;
+  color: #5a6171;
+  fill: #5a6171;
   height: 28px;
   line-height: 1;
   text-align: center;
@@ -260,7 +260,7 @@
   height: auto;
 }
 .numInputWrapper span svg path {
-  fill: rgba(255,255,255,0.5);
+  fill: rgba(90,97,113,0.5);
 }
 .numInputWrapper:hover {
   background: rgba(0,0,0,0.05);
@@ -325,10 +325,10 @@
   display: inline-block;
 }
 .flatpickr-current-month .numInputWrapper span.arrowUp:after {
-  border-bottom-color: #fff;
+  border-bottom-color: #5a6171;
 }
 .flatpickr-current-month .numInputWrapper span.arrowDown:after {
-  border-top-color: #fff;
+  border-top-color: #5a6171;
 }
 .flatpickr-current-month input.cur-year {
   background: transparent;
@@ -353,12 +353,12 @@
 .flatpickr-current-month input.cur-year[disabled],
 .flatpickr-current-month input.cur-year[disabled]:hover {
   font-size: 100%;
-  color: rgba(255,255,255,0.5);
+  color: rgba(90,97,113,0.5);
   background: transparent;
   pointer-events: none;
 }
 .flatpickr-weekdays {
-  background: #1bbc9b;
+  background: #eceef1;
   text-align: center;
   overflow: hidden;
   width: 315px;
@@ -373,8 +373,8 @@
 span.flatpickr-weekday {
   cursor: default;
   font-size: 90%;
-  background: #1bbc9b;
-  color: rgba(0,0,0,0.54);
+  background: #eceef1;
+  color: #5a6171;
   line-height: 1;
   margin: 0;
   text-align: center;
@@ -395,8 +395,8 @@ span.flatpickr-weekday {
   display: -ms-flexbox;
   display: flex;
   width: 315px;
-  border-left: 1px solid rgba(72,72,72,0.2);
-  border-right: 1px solid rgba(72,72,72,0.2);
+  border-left: 1px solid #eceef1;
+  border-right: 1px solid #eceef1;
 }
 .flatpickr-days:focus {
   outline: 0;
@@ -513,10 +513,10 @@ span.flatpickr-weekday {
 .flatpickr-day.selected.nextMonthDay,
 .flatpickr-day.startRange.nextMonthDay,
 .flatpickr-day.endRange.nextMonthDay {
-  background: #1bbc9b;
+  background: #ff5a5f;
   box-shadow: none;
   color: #fff;
-  border-color: #1bbc9b;
+  border-color: #ff5a5f;
 }
 .flatpickr-day.selected.startRange,
 .flatpickr-day.startRange.startRange,
@@ -531,7 +531,7 @@ span.flatpickr-weekday {
 .flatpickr-day.selected.startRange + .endRange,
 .flatpickr-day.startRange.startRange + .endRange,
 .flatpickr-day.endRange.startRange + .endRange {
-  box-shadow: -10px 0 0 #1bbc9b;
+  box-shadow: -10px 0 0 #ff5a5f;
 }
 .flatpickr-day.selected.startRange.endRange,
 .flatpickr-day.startRange.startRange.endRange,
@@ -560,7 +560,7 @@ span.flatpickr-weekday {
 }
 .flatpickr-day.week.selected {
   border-radius: 0;
-  box-shadow: -5px 0 0 #1bbc9b, 5px 0 0 #1bbc9b;
+  box-shadow: -5px 0 0 #ff5a5f, 5px 0 0 #ff5a5f;
 }
 .rangeMode .flatpickr-day {
   margin-top: 1px;
@@ -571,7 +571,7 @@ span.flatpickr-weekday {
 }
 .flatpickr-weekwrapper .flatpickr-weeks {
   padding: 0 12px;
-  border-left: 1px solid rgba(72,72,72,0.2);
+  border-left: 1px solid #eceef1;
 }
 .flatpickr-weekwrapper .flatpickr-weekday {
   float: none;
@@ -591,7 +591,7 @@ span.flatpickr-weekday {
   box-sizing: border-box;
   overflow: hidden;
   background: #fff;
-  border-bottom: 1px solid rgba(72,72,72,0.2);
+  border-bottom: 1px solid #eceef1;
 }
 .flatpickr-rContainer {
   display: inline-block;
@@ -832,4 +832,7 @@ span.flatpickr-weekday {
   to {
     opacity: 1;
   }
+}
+span.flatpickr-day.selected {
+  font-weight: bold;
 }
