@@ -20,7 +20,7 @@ function Flatpickr(element, config) {
 
 	function init() {
 		if (element._flatpickr)
-			element._flatpickr = undefined;
+			element._flatpickr.destroy();
 
 		element._flatpickr = self;
 
