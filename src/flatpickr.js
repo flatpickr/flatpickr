@@ -1856,7 +1856,7 @@ function Flatpickr(element, config) {
 			? self.element.querySelector("[data-input]")
 			: self.element;
 
-		self._positionElement = self.config.positionElement ? self.config.positionElement : self.input;
+		self._positionElement = self.config.positionElement || self.input;
 
 		/* istanbul ignore next */
 		if (!self.input)
