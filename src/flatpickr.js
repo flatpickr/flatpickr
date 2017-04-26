@@ -279,7 +279,7 @@ function Flatpickr(element, config) {
 		bind(self._input, "blur", documentClick);
 
 		if (self.config.clickOpens)
-			bind(self._input, "focus", open);
+			bind(self._input, "focus", self.open);
 
 		if (!self.config.noCalendar) {
 			bind(self.prevMonthNav, "mousedown", onClick(() => changeMonth(-1)));
