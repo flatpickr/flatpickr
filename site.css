@@ -2,9 +2,15 @@ input.flatpickr {
     cursor: pointer;
 }
 
-input[type="text"] {
-    border: 1px solid #bbb;
-    padding: 8px;
+input[type="text"], input[type="date"], input[type="datetime-local"], input[type="time"] {
+	border: 1px solid #c3c3c3;
+	height: 36px;
+	line-height: 36px;
+	width: 100%;
+	padding: 8px;
+	max-width: 360px;
+	border-radius: 3px;
+	background: #fff
 }
 
 .color-danger {

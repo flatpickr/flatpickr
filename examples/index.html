@@ -735,6 +735,30 @@ The example below disables Saturdays and Sundays.</p>
 
 <p><input class=flatpickr type="text" placeholder="Select Date.." data-id="rangePreload"></p>
 
+<h2 id="time-picker">Time Picker</h2>
+
+<pre><code class="language-js">{
+    enableTime: true,
+    noCalendar: true,
+
+    enableSeconds: false, // disabled by default
+
+    time_24hr: false, // AM/PM time picker is used by default
+
+    // default format
+    dateFormat: &quot;H:i&quot;, 
+
+    // initial values for time. don't use these to preload a date
+    defaultHour: 12,
+    defaultMinute: 0
+
+    // Preload time with defaultDate instead:
+    // defaultDate: &quot;3:30&quot;
+}
+</code></pre>
+
+<p><input class=flatpickr type="text" placeholder="Select Date.." data-id="timePicker"></p>
+
 <h2 id="inline-calendar">Inline Calendar</h2>
 
 <p>Display the calendar in an always-open state with the <code>inline</code> option.</p>

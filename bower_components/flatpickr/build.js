@@ -199,9 +199,9 @@ function watch(path, cb){
 }
 
 function start(){
-    process.stdout.write('\033c');
     const devMode = process.argv.includes("--dev");
     if (devMode) {
+        process.stdout.write('\033c');
         setupWatchers();
         serve();
         opn("http://localhost:8080");

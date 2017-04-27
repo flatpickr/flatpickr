@@ -120,6 +120,11 @@ var configs = {
         defaultDate: ["2016-10-10", "2016-10-20"]
     },
 
+    timePicker: {
+        enableTime: true,
+        noCalendar: true
+    },
+
     inline: {
         inline: true
     },
