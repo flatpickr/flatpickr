@@ -311,6 +311,31 @@ Note that disabled dates (by either `minDate`, `maxDate`, `enable` or `disable`)
 
 <input class=flatpickr type="text" placeholder="Select Date.." data-id="rangePreload">
 
+## Time Picker
+
+```js
+{
+    enableTime: true,
+    noCalendar: true,
+
+    enableSeconds: false, // disabled by default
+
+    time_24hr: false, // AM/PM time picker is used by default
+
+    // default format
+    dateFormat: "H:i", 
+
+    // initial values for time. don't use these to preload a date
+    defaultHour: 12,
+    defaultMinute: 0
+
+    // Preload time with defaultDate instead:
+    // defaultDate: "3:30"
+}
+```
+
+<input class=flatpickr type="text" placeholder="Select Date.." data-id="timePicker">
+
 ## Inline Calendar
 
 Display the calendar in an always-open state with the `inline` option.
