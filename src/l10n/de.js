@@ -15,6 +15,8 @@ Flatpickr.l10ns.de.months = {
 Flatpickr.l10ns.de.firstDayOfWeek = 1;
 Flatpickr.l10ns.de.weekAbbreviation = 'KW';
 Flatpickr.l10ns.de.rangeSeparator = ' bis ';
+Flatpickr.l10ns.de.scrollTitle = "Zum Ändern scrollen";
+Flatpickr.l10ns.de.toggleTitle = "Zum Umschalten klicken";
 
 if (typeof module !== "undefined") {
 	module.exports = Flatpickr.l10ns;
