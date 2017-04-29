@@ -66,9 +66,10 @@ describe('flatpickr', () => {
 				enableTime: true
 			});
 
-			expect(fp.currentYear).toEqual(2016);
-			expect(fp.currentMonth).toEqual(11);
-			expect(fp.days.querySelector(".selected").textContent).toEqual("27");
+      const date = new Date("2016-12-27T16:16:22.585Z");
+			expect(fp.currentYear).toEqual(date.getFullYear());
+			expect(fp.currentMonth).toEqual(date.getMonth());
+			expect(fp.days.querySelector(".selected").textContent).toEqual(date.getDate() + '');
 		});
 
 		it("should parse UTC defaultDate", () => {
