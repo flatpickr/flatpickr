@@ -2,7 +2,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-/*! flatpickr v2.5.8, @license MIT */
+/*! flatpickr v2.6.1, @license MIT */
 function Flatpickr(element, config) {
 	var self = this;
 
@@ -23,7 +23,7 @@ function Flatpickr(element, config) {
 	self.toggle = toggle;
 
 	function init() {
-		if (element._flatpickr) element._flatpickr = undefined;
+		if (element._flatpickr) element._flatpickr.destroy();
 
 		element._flatpickr = self;
 
@@ -108,7 +108,7 @@ function Flatpickr(element, config) {
 		    minutes = (parseInt(self.minuteElement.value, 10) || 0) % 60,
 		    seconds = self.config.enableSeconds ? parseInt(self.secondElement.value, 10) || 0 : 0;
 
-		if (self.amPM) hours = hours % 12 + 12 * (self.amPM.textContent === "PM");
+		if (self.amPM !== undefined) hours = hours % 12 + 12 * (self.amPM.textContent === "PM");
 
 		if (self.minDateHasTime && compareDates(self.latestSelectedDateObj, self.config.minDate) === 0) {
 
@@ -236,35 +236,21 @@ function Flatpickr(element, config) {
 
 		if (!self.config.inline && !self.config.static) bind(window, "resize", self.debouncedResize);
 
-		if (window.ontouchstart) bind(window.document, "touchstart", documentClick);
+		if (window.ontouchstart !== undefined) bind(window.document, "touchstart", documentClick);
 
 		bind(window.document, "mousedown", onClick(documentClick));
 		bind(self._input, "blur", documentClick);
 
-		if (self.config.clickOpens) bind(self._input, "focus", open);
+		if (self.config.clickOpens === true) bind(self._input, "focus", self.open);
 
 		if (!self.config.noCalendar) {
-			bind(self.prevMonthNav, "mousedown", onClick(function () {
-				return changeMonth(-1);
-			}));
-			bind(self.nextMonthNav, "mousedown", onClick(function () {
-				return changeMonth(1);
-			}));
-
 			self.monthNav.addEventListener("wheel", function (e) {
 				return e.preventDefault();
 			});
-
 			bind(self.monthNav, "wheel", debounce(onMonthNavScroll, 10));
 			bind(self.monthNav, "mousedown", onClick(onMonthNavClick));
 
-			bind(self.monthNav, "mousedown", onClick(function (e) {
-				e.preventDefault();
-				if (e.target === self.currentYearElement) self.currentYearElement.select();
-			}));
-
 			bind(self.monthNav, ["keyup", "increment"], onYearInput);
-
 			bind(self.daysContainer, "mousedown", onClick(selectDate));
 
 			if (self.config.animate) {
@@ -1205,7 +1191,7 @@ function Flatpickr(element, config) {
 			var pluginConf = self.config.plugins[_i2](self) || {};
 			for (var key in pluginConf) {
 
-				if ((self.config[key] || ~hooks.indexOf(key)) instanceof Array) {
+				if (self.config[key] instanceof Array || ~hooks.indexOf(key)) {
 					self.config[key] = arrayify(pluginConf[key]).map(bindToInstance).concat(self.config[key]);
 				} else if (typeof userConfig[key] === "undefined") self.config[key] = pluginConf[key];
 			}
@@ -1226,11 +1212,11 @@ function Flatpickr(element, config) {
 		var calendarHeight = self.calendarContainer.offsetHeight,
 		    calendarWidth = self.calendarContainer.offsetWidth,
 		    configPos = self.config.position,
-		    inputBounds = self._input.getBoundingClientRect(),
+		    inputBounds = self._positionElement.getBoundingClientRect(),
 		    distanceFromBottom = window.innerHeight - inputBounds.bottom,
 		    showOnTop = configPos === "above" || configPos !== "below" && distanceFromBottom < calendarHeight && inputBounds.top > calendarHeight;
 
-		var top = window.pageYOffset + inputBounds.top + (!showOnTop ? self._input.offsetHeight + 2 : -calendarHeight - 2);
+		var top = window.pageYOffset + inputBounds.top + (!showOnTop ? self._positionElement.offsetHeight + 2 : -calendarHeight - 2);
 
 		toggleClass(self.calendarContainer, "arrowTop", !showOnTop);
 		toggleClass(self.calendarContainer, "arrowBottom", showOnTop);
@@ -1393,7 +1379,7 @@ function Flatpickr(element, config) {
 		jumpToDate();
 
 		setHoursFromDate();
-		updateValue();
+		updateValue(triggerChange);
 
 		if (triggerChange) triggerEvent("Change");
 	}
@@ -1512,6 +1498,8 @@ function Flatpickr(element, config) {
 		}
 
 		if (!self.config.allowInput) self._input.setAttribute("readonly", "readonly");
+
+		self._positionElement = self.config.positionElement || self._input;
 	}
 
 	function setupMobile() {
@@ -1578,10 +1566,7 @@ function Flatpickr(element, config) {
   * @return {Event} the created event
   */
 	function createEvent(name) {
-		var existing = self._[name + "Event"];
-		if (existing !== undefined) return existing;
-
-		if (self._supportsEvents) return self._[name + "Event"] = new Event(name, { bubbles: true });
+		if (self._supportsEvents) return new Event(name, { bubbles: true });
 
 		self._[name + "Event"] = document.createEvent("Event");
 		self._[name + "Event"].initEvent(name, true, true);
@@ -1616,8 +1601,8 @@ function Flatpickr(element, config) {
   * Updates the values of inputs associated with the calendar
   * @return {void}
   */
-	function updateValue() {
-		if (!self.selectedDates.length) return self.clear();
+	function updateValue(triggerChange) {
+		if (!self.selectedDates.length) return self.clear(triggerChange);
 
 		if (self.isMobile) {
 			self.mobileInput.value = self.selectedDates.length ? self.formatDate(self.latestSelectedDateObj, self.mobileFormatStr) : "";
@@ -1634,7 +1619,6 @@ function Flatpickr(element, config) {
 				return self.formatDate(dObj, self.config.altFormat);
 			}).join(joinChar);
 		}
-
 		triggerEvent("ValueUpdate");
 	}
 
@@ -1658,7 +1642,13 @@ function Flatpickr(element, config) {
 	}
 
 	function onMonthNavClick(e) {
-		if (e.target.className === "arrowUp") self.changeYear(self.currentYear + 1);else if (e.target.className === "arrowDown") self.changeYear(self.currentYear - 1);
+		var isPrevMonth = self.prevMonthNav.contains(e.target);
+		var isNextMonth = self.nextMonthNav.contains(e.target);
+
+		if (isPrevMonth || isNextMonth) changeMonth(isPrevMonth ? -1 : 1);else if (e.target === self.currentYearElement) {
+			e.preventDefault();
+			self.currentYearElement.select();
+		} else if (e.target.className === "arrowUp") self.changeYear(self.currentYear + 1);else if (e.target.className === "arrowDown") self.changeYear(self.currentYear - 1);
 	}
 
 	/**
@@ -1807,7 +1797,7 @@ Flatpickr.defaultConfig = {
 	altInput: false,
 
 	// the created altInput element will have this class.
-	altInputClass: "flatpickr-input form-control input",
+	altInputClass: "form-control input",
 
 	// same as dateFormat, but for altInput
 	altFormat: "F j, Y", // defaults to e.g. June 10, 2016
@@ -2181,40 +2171,41 @@ Flatpickr.prototype = {
 
 		var date_orig = date;
 
-		if (date instanceof Date) date = new Date(date.getTime()); // create a copy
+		if (date instanceof Date) {
+			date = new Date(date.getTime()); // create a copy
+			date.fp_isUTC = date_orig.fp_isUTC;
+		} else if (date.toFixed !== undefined) // timestamp
+			date = new Date(date);else {
+			// date string
+			var format = givenFormat || (this.config || Flatpickr.defaultConfig).dateFormat;
+			date = String(date).trim();
 
-		else if (date.toFixed !== undefined) // timestamp
-				date = new Date(date);else {
-				// date string
-				var format = givenFormat || (this.config || Flatpickr.defaultConfig).dateFormat;
-				date = String(date).trim();
+			if (date === "today") {
+				date = new Date();
+				timeless = true;
+			} else if (/Z$/.test(date) || /GMT$/.test(date)) // datestrings w/ timezone
+				date = new Date(date);else if (this.config && this.config.parseDate) date = this.config.parseDate(date, format);else {
+				var parsedDate = !this.config || !this.config.noCalendar ? new Date(new Date().getFullYear(), 0, 1, 0, 0, 0, 0) : new Date(new Date().setHours(0, 0, 0, 0));
 
-				if (date === "today") {
-					date = new Date();
-					timeless = true;
-				} else if (/Z$/.test(date) || /GMT$/.test(date)) // datestrings w/ timezone
-					date = new Date(date);else if (this.config && this.config.parseDate) date = this.config.parseDate(date, format);else {
-					var parsedDate = !this.config || !this.config.noCalendar ? new Date(new Date().getFullYear(), 0, 1, 0, 0, 0, 0) : new Date(new Date().setHours(0, 0, 0, 0));
+				var matched = void 0;
 
-					var matched = void 0;
+				for (var i = 0, matchIndex = 0, regexStr = ""; i < format.length; i++) {
+					var token = format[i];
+					var isBackSlash = token === "\\";
+					var escaped = format[i - 1] === "\\" || isBackSlash;
 
-					for (var i = 0, matchIndex = 0, regexStr = ""; i < format.length; i++) {
-						var token = format[i];
-						var isBackSlash = token === "\\";
-						var escaped = format[i - 1] === "\\" || isBackSlash;
-
-						if (this.tokenRegex[token] && !escaped) {
-							regexStr += this.tokenRegex[token];
-							var match = new RegExp(regexStr).exec(date);
-							if (match && (matched = true)) {
-								parsedDate = this.revFormat[token](parsedDate, match[++matchIndex]) || parsedDate;
-							}
-						} else if (!isBackSlash) regexStr += "."; // don't really care
-					}
-
-					date = matched ? parsedDate : null;
+					if (this.tokenRegex[token] && !escaped) {
+						regexStr += this.tokenRegex[token];
+						var match = new RegExp(regexStr).exec(date);
+						if (match && (matched = true)) {
+							parsedDate = this.revFormat[token](parsedDate, match[++matchIndex]) || parsedDate;
+						}
+					} else if (!isBackSlash) regexStr += "."; // don't really care
 				}
+
+				date = matched ? parsedDate : null;
 			}
+		}
 
 		/* istanbul ignore next */
 		if (!(date instanceof Date)) {

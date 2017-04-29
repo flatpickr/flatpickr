@@ -1,4 +1,4 @@
-/*! flatpickr v2.5.8, @license MIT */
+/*! flatpickr v2.6.1, @license MIT */
 function Flatpickr(element, config) {
 	const self = this;
 
@@ -20,7 +20,7 @@ function Flatpickr(element, config) {
 
 	function init() {
 		if (element._flatpickr)
-			element._flatpickr = undefined;
+			element._flatpickr.destroy();
 
 		element._flatpickr = self;
 
@@ -124,7 +124,7 @@ function Flatpickr(element, config) {
 				? (parseInt(self.secondElement.value, 10) || 0)
 				: 0;
 
-		if (self.amPM)
+		if (self.amPM !== undefined)
 			hours = (hours % 12) + (12 * (self.amPM.textContent === "PM"));
 
 		if (
@@ -272,32 +272,21 @@ function Flatpickr(element, config) {
 		if (!self.config.inline && !self.config.static)
 			bind(window, "resize", self.debouncedResize);
 
-		if (window.ontouchstart)
+		if (window.ontouchstart !== undefined)
 			bind(window.document, "touchstart", documentClick);
 
 		bind(window.document, "mousedown", onClick(documentClick));
 		bind(self._input, "blur", documentClick);
 
-		if (self.config.clickOpens)
-			bind(self._input, "focus", open);
+		if (self.config.clickOpens === true)
+			bind(self._input, "focus", self.open);
 
 		if (!self.config.noCalendar) {
-			bind(self.prevMonthNav, "mousedown", onClick(() => changeMonth(-1)));
-			bind(self.nextMonthNav, "mousedown", onClick(() => changeMonth(1)));
-
 			self.monthNav.addEventListener("wheel", e => e.preventDefault());
-
 			bind(self.monthNav, "wheel", debounce(onMonthNavScroll, 10));
 			bind(self.monthNav, "mousedown", onClick(onMonthNavClick));
 
-			bind(self.monthNav, "mousedown", onClick(e => {
-				e.preventDefault();
-				if (e.target === self.currentYearElement)
-					self.currentYearElement.select();
-			}));
-
 			bind(self.monthNav, ["keyup", "increment"], onYearInput);
-
 			bind(self.daysContainer, "mousedown", onClick(selectDate));
 
 			if (self.config.animate) {
@@ -1485,7 +1474,7 @@ function Flatpickr(element, config) {
 			const pluginConf = self.config.plugins[i](self) || {};
 			for (let key in pluginConf) {
 
-				if ((self.config[key] || ~hooks.indexOf(key)) instanceof Array) {
+				if ((self.config[key] instanceof Array) || ~hooks.indexOf(key)) {
 					self.config[key] = arrayify(pluginConf[key])
 						.map(bindToInstance)
 						.concat(self.config[key]);
@@ -1523,7 +1512,7 @@ function Flatpickr(element, config) {
 		const calendarHeight = self.calendarContainer.offsetHeight,
 			calendarWidth = self.calendarContainer.offsetWidth,
 			configPos = self.config.position,
-			inputBounds = self._input.getBoundingClientRect(),
+			inputBounds = self._positionElement.getBoundingClientRect(),
 			distanceFromBottom = window.innerHeight - inputBounds.bottom,
 			showOnTop = configPos === "above" || (
 				configPos !== "below"
@@ -1532,7 +1521,7 @@ function Flatpickr(element, config) {
 			);
 
 		let top = (window.pageYOffset + inputBounds.top) + (!showOnTop
-			? (self._input.offsetHeight + 2)
+			? (self._positionElement.offsetHeight + 2)
 			: (- calendarHeight - 2)
 		);
 
@@ -1729,7 +1718,7 @@ function Flatpickr(element, config) {
 		jumpToDate();
 
 		setHoursFromDate();
-		updateValue();
+		updateValue(triggerChange);
 
 		if (triggerChange)
 			triggerEvent("Change");
@@ -1883,6 +1872,8 @@ function Flatpickr(element, config) {
 
 		if (!self.config.allowInput)
 			self._input.setAttribute("readonly", "readonly");
+
+		self._positionElement = self.config.positionElement || self._input;
 	}
 
 	function setupMobile() {
@@ -1961,12 +1952,8 @@ function Flatpickr(element, config) {
 	 * @return {Event} the created event
 	 */
 	function createEvent(name) {
-		const existing = self._[`${name}Event`];
-		if (existing !== undefined)
-			return existing;
-
 		if (self._supportsEvents)
-			return self._[`${name}Event`] = new Event(name, { bubbles: true });
+			return new Event(name, { bubbles: true });
 
 		self._[`${name}Event`] = document.createEvent("Event");
 		self._[`${name}Event`].initEvent(name, true, true);
@@ -2011,9 +1998,9 @@ function Flatpickr(element, config) {
 	 * Updates the values of inputs associated with the calendar
 	 * @return {void}
 	 */
-	function updateValue() {
+	function updateValue(triggerChange) {
 		if (!self.selectedDates.length)
-			return self.clear();
+			return self.clear(triggerChange);
 
 		if (self.isMobile) {
 			self.mobileInput.value = self.selectedDates.length
@@ -2032,7 +2019,6 @@ function Flatpickr(element, config) {
 				.map(dObj => self.formatDate(dObj, self.config.altFormat))
 				.join(joinChar);
 		}
-
 		triggerEvent("ValueUpdate");
 	}
 
@@ -2057,12 +2043,23 @@ function Flatpickr(element, config) {
 		}
 	}
 
-	function onMonthNavClick(e) {
-		if (e.target.className === "arrowUp")
+	function onMonthNavClick(e) {		
+		const isPrevMonth = self.prevMonthNav.contains(e.target);
+		const isNextMonth = self.nextMonthNav.contains(e.target);
+
+		if (isPrevMonth || isNextMonth)
+			changeMonth(isPrevMonth ? -1 : 1);
+
+		else if (e.target === self.currentYearElement) {
+			e.preventDefault();
+			self.currentYearElement.select();
+		}
+			
+		else if (e.target.className === "arrowUp")
 			self.changeYear(self.currentYear + 1);
 
 		else if (e.target.className === "arrowDown")
-			self.changeYear(self.currentYear - 1);
+			self.changeYear(self.currentYear - 1);			
 	}
 
 	/**
@@ -2231,7 +2228,7 @@ Flatpickr.defaultConfig = {
 	altInput: false,
 
 	// the created altInput element will have this class.
-	altInputClass: "flatpickr-input form-control input",
+	altInputClass: "form-control input",
 
 	// same as dateFormat, but for altInput
 	altFormat: "F j, Y", // defaults to e.g. June 10, 2016
@@ -2572,8 +2569,10 @@ Flatpickr.prototype = {
 
 		const date_orig = date;
 
-		if (date instanceof Date)
+		if (date instanceof Date) {
 			date = new Date(date.getTime()); // create a copy
+			date.fp_isUTC = date_orig.fp_isUTC;
+		}
 
 		else if (date.toFixed !== undefined) // timestamp
 			date = new Date(date);
