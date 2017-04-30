@@ -66,7 +66,7 @@ describe('flatpickr', () => {
 				enableTime: true
 			});
 
-      const date = new Date("2016-12-27T16:16:22.585Z");
+		const date = new Date("2016-12-27T16:16:22.585Z");
 			expect(fp.currentYear).toEqual(date.getFullYear());
 			expect(fp.currentMonth).toEqual(date.getMonth());
 			expect(fp.days.querySelector(".selected").textContent).toEqual(date.getDate() + '');
