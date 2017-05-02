@@ -201,6 +201,7 @@ function Flatpickr(element, config) {
 			return setupMobile();
 
 		self.debouncedResize = debounce(onResize, 50);
+		self.scroll = onScroll;
 		self.triggerChange = () => {
 			triggerEvent("Change");
 		};
@@ -214,8 +215,10 @@ function Flatpickr(element, config) {
 		if (!self.config.static)
 			(self.altInput || self.input).addEventListener("keydown", onKeyDown);
 
-		if (!self.config.inline && !self.config.static)
+		if (!self.config.inline && !self.config.static) {
 			window.addEventListener("resize", self.debouncedResize);
+			window.addEventListener("scroll", self.scroll, true);
+        }
 
 		if (window.ontouchstart)
 			window.document.addEventListener("touchstart", documentClick);
@@ -821,6 +824,7 @@ function Flatpickr(element, config) {
 		instance.clear(false);
 
 		window.removeEventListener("resize", instance.debouncedResize);
+		window.removeEventListener("scroll", instance.scroll, true);
 
 		window.document.removeEventListener("click", documentClick);
 		window.document.removeEventListener("touchstart", documentClick);
@@ -1119,8 +1123,16 @@ function Flatpickr(element, config) {
 	}
 
 	function onResize() {
+        positionFloatableCalendar();
+	}
+
+	function onScroll() {
+		positionFloatableCalendar();
+	}
+
+	function positionFloatableCalendar() {
 		if (self.isOpen && !self.config.static && !self.config.inline)
-			positionCalendar();
+            positionCalendar();
 	}
 
 	function open(e) {
