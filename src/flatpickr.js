@@ -1643,7 +1643,8 @@ function Flatpickr(element, config) {
 
 			else {
 				updateNavigationCurrentMonth();
-				self.close();
+				if (!self.config.enableTime)
+					self.close();
 			}
 		}
 
@@ -2043,7 +2044,7 @@ function Flatpickr(element, config) {
 		}
 	}
 
-	function onMonthNavClick(e) {		
+	function onMonthNavClick(e) {
 		const isPrevMonth = self.prevMonthNav.contains(e.target);
 		const isNextMonth = self.nextMonthNav.contains(e.target);
 
@@ -2054,12 +2055,12 @@ function Flatpickr(element, config) {
 			e.preventDefault();
 			self.currentYearElement.select();
 		}
-			
+
 		else if (e.target.className === "arrowUp")
 			self.changeYear(self.currentYear + 1);
 
 		else if (e.target.className === "arrowDown")
-			self.changeYear(self.currentYear - 1);			
+			self.changeYear(self.currentYear - 1);
 	}
 
 	/**
