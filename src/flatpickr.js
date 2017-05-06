@@ -19,11 +19,6 @@ function Flatpickr(element, config) {
 	self.toggle = toggle;
 
 	function init() {
-		if (element._flatpickr)
-			element._flatpickr.destroy();
-
-		element._flatpickr = self;
-
 		self.element = element;
 		self.instanceConfig = config || {};
 		self.parseDate = Flatpickr.prototype.parseDate.bind(self);
@@ -1011,41 +1006,46 @@ function Flatpickr(element, config) {
 		triggerEvent("Close");
 	}
 
-	function destroy(instance) {
-		instance = instance || self;
-
-		for (let i = instance._handlers.length; i--;) {
-			const h = instance._handlers[i];
+	function destroy() {
+		for (let i = self._handlers.length; i--;) {
+			const h = self._handlers[i];
 			h.element.removeEventListener(h.event, h.handler);
 		}
 
-		instance._handlers = [];
+		self._handlers = [];
 
-		if (instance.mobileInput) {
-			if (instance.mobileInput.parentNode)
-				instance.mobileInput.parentNode.removeChild(instance.mobileInput);
-			instance.mobileInput = undefined;
+		if (self.mobileInput) {
+			if (self.mobileInput.parentNode)
+				self.mobileInput.parentNode.removeChild(self.mobileInput);
+			self.mobileInput = null;
 		}
 
-		else if (instance.calendarContainer && instance.calendarContainer.parentNode)
-			instance.calendarContainer.parentNode.removeChild(instance.calendarContainer);
+		else if (self.calendarContainer && self.calendarContainer.parentNode)
+			self.calendarContainer.parentNode.removeChild(self.calendarContainer);
 
-		if (instance.altInput) {
-			instance.input.type = "text";
-			if (instance.altInput.parentNode)
-				instance.altInput.parentNode.removeChild(instance.altInput);
-			instance.altInput = undefined;
+		if (self.altInput) {
+			self.input.type = "text";
+			if (self.altInput.parentNode)
+				self.altInput.parentNode.removeChild(self.altInput);
+			delete self.altInput;
 		}
 
-		if (instance.input) {
-			instance.input.type = instance.input._type;
-			instance.input.classList.remove("flatpickr-input");
-			instance.input.removeAttribute("readonly");
-			instance.input.value = "";
+		if (self.input) {
+			self.input.type = self.input._type;
+			self.input.classList.remove("flatpickr-input");
+			self.input.removeAttribute("readonly");
+			self.input.value = "";
 		}
 
-		instance.config = undefined;
-		instance.input._flatpickr = undefined;
+		[
+			"_showTimeInput", "latestSelectedDateObj", "_hideNextMonthArrow", "_hidePrevMonthArrow",
+			"__hideNextMonthArrow",	"__hidePrevMonthArrow",	"isMobile",	"isOpen",	"selectedDateElem",
+			"minDateHasTime", "maxDateHasTime", "days", "daysContainer", "_input",
+			"_positionElement", "innerContainer",	"rContainer",	"monthNav",	"todayDateElem",
+			"calendarContainer", "weekdayContainer", "prevMonthNav", "nextMonthNav",
+			"currentMonthElement", "currentYearElement", "navigationCurrentMonth",
+			"selectedDateElem", "config"
+		].forEach(k => delete self[k]);
 	}
 
 	function isCalendarElem(elem) {
