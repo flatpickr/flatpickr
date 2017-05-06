@@ -1307,7 +1307,7 @@ function Flatpickr(element, config) {
 				self._hideNextMonthArrow = self._hideNextMonthArrow || self.maxRangeDate < new Date(self.currentYear, self.currentMonth + 1, 1);
 			} else {
 				updateNavigationCurrentMonth();
-				self.close();
+				if (!self.config.enableTime) self.close();
 			}
 		}
 
