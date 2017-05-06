@@ -2,7 +2,7 @@ const Flatpickr = require("../src/flatpickr.js");
 Flatpickr.l10ns.ru = require("../dist/l10n/ru.js").ru;
 
 Flatpickr.defaultConfig.animate = false;
-
+Flatpickr.defaultConfig.closeOnSelect = true;
 jest.useFakeTimers();
 
 let elem, fp;
@@ -546,26 +546,30 @@ describe('flatpickr', () => {
 		});
 
 		it("documentClick", () => {
-			window.ontouchstart = true;
 			createInstance({
 				mode: "range"
 			});
 
-			window.ontouchstart = null;
+			simulate("focus", fp._input, { which:1, bubbles: true }, CustomEvent);
+			fp._input.focus();
 
-			fp.open();
 			expect(fp.isOpen).toBe(true);
-			simulate("mousedown", window.document.body, { which:1 }, MouseEvent);
+			simulate("mousedown", window.document.body, { which:1 }, CustomEvent);
+			fp._input.blur();
+
 			expect(fp.isOpen).toBe(false);
 			expect(fp.calendarContainer.classList.contains("open")).toBe(false);
 
-			fp.open();
-			simulate("mousedown", fp.days.childNodes[15], { which:1 }, MouseEvent);
-			expect(fp.selectedDates.length).toBe(1);
-			simulate("mousedown", window.document.body, { which:1 }, MouseEvent);
-
 			expect(fp.selectedDates.length).toBe(0);
-			expect(fp.input.value).toBe("");
+			simulate("focus", fp._input);
+			simulate("mousedown", fp.days.childNodes[15], { which:1, bubbles: true }, CustomEvent);
+			expect(fp.selectedDates.length).toBe(1);
+
+			fp.isOpen = true;
+			simulate("mousedown", window.document.body, { which:1 }, CustomEvent);
+			expect(fp.isOpen).toBe(false);
+			expect(fp.selectedDates.length).toBe(0);
+			expect(fp._input.value).toBe("");
 		});
 
 		it("onKeyDown", () => {
