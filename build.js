@@ -105,7 +105,7 @@ function resolveGlob(g) {
             else
                 resolve(files);
         });
-    });    
+    });
 }
 
 function buildExtras(folder){
@@ -121,7 +121,7 @@ function buildExtras(folder){
             })
             .catch(logErr);
         });
-       
+
     }
 }
 
@@ -211,8 +211,8 @@ function start(){
         buildScripts();
         buildStyle();
         buildThemes();
-        buildExtras("l10n");
-        buildExtras("plugins");
+        buildExtras("l10n")();
+        buildExtras("plugins")();
     }
 }
 
