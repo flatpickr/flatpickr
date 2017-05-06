@@ -1305,10 +1305,7 @@ function Flatpickr(element, config) {
 				self._hidePrevMonthArrow = self._hidePrevMonthArrow || self.minRangeDate > self.days.childNodes[0].dateObj;
 
 				self._hideNextMonthArrow = self._hideNextMonthArrow || self.maxRangeDate < new Date(self.currentYear, self.currentMonth + 1, 1);
-			} else {
-				updateNavigationCurrentMonth();
-				if (!self.config.enableTime) self.close();
-			}
+			} else updateNavigationCurrentMonth();
 		}
 
 		triggerEvent("Change");
@@ -1322,7 +1319,7 @@ function Flatpickr(element, config) {
 			return self.hourElement.select();
 		}, 451);
 
-		if (self.config.mode === "single" && !self.config.enableTime) self.close();
+		if (self.config.mode !== "multiple" && !self.config.enableTime && self.config.closeOnSelect) self.close();
 	}
 
 	function set(option, value) {
@@ -1780,6 +1777,12 @@ Flatpickr.defaultConfig = {
  	disable if you wish to open the calendar manually with .open()
  */
 	clickOpens: true,
+
+	/*
+ 	closes calendar after date selection,
+ 	unless 'mode' is 'multiple' or enableTime is true
+ */
+	closeOnSelect: true,
 
 	// display time picker in 24 hour mode
 	time_24hr: false,
