@@ -26,6 +26,4 @@ Flatpickr.l10ns.gr.toggleTitle = "Κάντε κλικ για αλλαγή";
 Flatpickr.l10ns.gr.am = "ΠΜ";
 Flatpickr.l10ns.gr.pm = "ΜΜ";
 
-if (typeof module !== "undefined") {
-	module.exports = Flatpickr.l10ns;
-}
+if (typeof module !== "undefined") module.exports = Flatpickr.l10ns;
