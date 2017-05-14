@@ -451,7 +451,7 @@ function Flatpickr(element, config) {
 
 		dayElement.dateObj = date;
 		dayElement.$i = i;
-		dayElement.setAttribute("aria-label", self.formatDate(date, "F j, Y"));
+		dayElement.setAttribute("aria-label", self.formatDate(date, self.config.ariaDateFormat));
 
 		if (compareDates(date, self.now) === 0) {
 			self.todayDateElem = dayElement;
@@ -1789,6 +1789,9 @@ Flatpickr.defaultConfig = {
 
 	// more date format chars at https://chmln.github.io/flatpickr/#dateformat
 	dateFormat: "Y-m-d",
+
+	// date format used in aria-label for days
+	ariaDateFormat: "F j, Y",
 
 	// altInput - see https://chmln.github.io/flatpickr/#altinput
 	altInput: false,
