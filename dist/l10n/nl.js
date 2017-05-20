@@ -13,10 +13,15 @@ Flatpickr.l10ns.nl.months = {
 };
 
 Flatpickr.l10ns.nl.firstDayOfWeek = 1;
+Flatpickr.l10ns.nl.weekAbbreviation = "wk";
+Flatpickr.l10ns.nl.rangeSeparator = " tot ";
+Flatpickr.l10ns.nl.scrollTitle = "Scroll voor volgende / vorige";
+Flatpickr.l10ns.nl.toggleTitle = "Klik om te wisselen";
 
 Flatpickr.l10ns.nl.ordinal = function (nth) {
 	if (nth === 1 || nth === 8 || nth >= 20) return "ste";
 
 	return "de";
 };
+
 if (typeof module !== "undefined") module.exports = Flatpickr.l10ns;
