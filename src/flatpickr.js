@@ -1201,24 +1201,26 @@ function Flatpickr(element, config) {
 
 				case "ArrowLeft":
 				case "ArrowRight":
-					e.preventDefault();
+					if (!isTimeObj) {
+						e.preventDefault();
 
-					if (self.daysContainer) {
-						const delta = e.key === "ArrowRight" ? 1 : -1;
+						if (self.daysContainer) {
+							const delta = e.key === "ArrowRight" ? 1 : -1;
 
-						if (!e.ctrlKey)
-							focusOnDay(e.target.$i, delta);
+							if (!e.ctrlKey)
+								focusOnDay(e.target.$i, delta);
 
-						else {
-							changeMonth(delta, true);
-							afterDayAnim(() => {
-								focusOnDay(e.target.$i, 0)
-							});
+							else {
+								changeMonth(delta, true);
+								afterDayAnim(() => {
+									focusOnDay(e.target.$i, 0)
+								});
+							}
 						}
-					}
 
-					else if (self.config.enableTime && !isTimeObj)
-						self.hourElement.focus();
+						else if (self.config.enableTime && !isTimeObj)
+							self.hourElement.focus();
+					}
 
 					break;
 
@@ -1262,7 +1264,7 @@ function Flatpickr(element, config) {
 					else if (e.target === self.secondElement) {
 						e.preventDefault();
 						self.amPM.focus();
-					}
+					}				
 
 					break;
 
