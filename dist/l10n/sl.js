@@ -18,6 +18,4 @@ Flatpickr.l10ns.sl.ordinal = function () {
 	return ".";
 };
 
-if (typeof module !== "undefined") 
-	module.exports = Flatpickr.l10ns;
-
+if (typeof module !== "undefined") module.exports = Flatpickr.l10ns;

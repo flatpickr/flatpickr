@@ -1,5 +1,5 @@
 /* Thai locals for flatpickr */
-var Flatpickr = Flatpickr || {l10ns: {}};
+var Flatpickr = Flatpickr || { l10ns: {} };
 Flatpickr.l10ns.th = {};
 
 Flatpickr.l10ns.th.weekdays = {
@@ -17,9 +17,8 @@ Flatpickr.l10ns.th.rangeSeparator = " ถึง ";
 Flatpickr.l10ns.th.scrollTitle = "เลื่อนเพื่อเพิ่มหรือลด";
 Flatpickr.l10ns.th.toggleTitle = "คลิกเพื่อเปลี่ยน";
 
-Flatpickr.l10ns.th.ordinal = () => {
+Flatpickr.l10ns.th.ordinal = function () {
 	return "";
 };
 
-if (typeof module !== "undefined")
-	module.exports = Flatpickr.l10ns;
+if (typeof module !== "undefined") module.exports = Flatpickr.l10ns;
