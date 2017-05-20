@@ -79,12 +79,17 @@ function transpile(src){
 }
 
 function uglify(src) {
-    return uglifyJS.minify(src, {
-        fromString: true,
+    const minified = uglifyJS.minify(src, {
         output: {
             comments: /license/
         }
-    }).code;
+    });
+
+    if (!minified.error)
+        return minified.code;
+    
+    console.error(minified.error);
+    return "";    
 }
 
 async function buildScripts(){
