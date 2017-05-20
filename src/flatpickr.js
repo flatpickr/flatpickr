@@ -1251,7 +1251,15 @@ function Flatpickr(element, config) {
 						self.minuteElement.select();
 					}
 
-					else if (e.target === self.minuteElement && self.amPM) {
+					else if (
+						e.target === self.minuteElement && 
+						(self.secondElement || self.amPM)
+					) {
+						e.preventDefault();
+						(self.secondElement || self.amPM).focus();
+					}
+
+					else if (e.target === self.secondElement) {
 						e.preventDefault();
 						self.amPM.focus();
 					}
