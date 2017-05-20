@@ -102,7 +102,7 @@ function Flatpickr(element, config) {
 
 		var hours = (parseInt(self.hourElement.value, 10) || 0) % (self.amPM ? 12 : 24),
 		    minutes = (parseInt(self.minuteElement.value, 10) || 0) % 60,
-		    seconds = self.config.enableSeconds ? parseInt(self.secondElement.value, 10) || 0 : 0;
+		    seconds = self.config.enableSeconds ? (parseInt(self.secondElement.value, 10) || 0) % 60 : 0;
 
 		if (self.amPM !== undefined) hours = hours % 12 + 12 * (self.amPM.textContent === "PM");
 
@@ -959,18 +959,20 @@ function Flatpickr(element, config) {
 
 				case "ArrowLeft":
 				case "ArrowRight":
-					e.preventDefault();
+					if (!isTimeObj) {
+						e.preventDefault();
 
-					if (self.daysContainer) {
-						var _delta = e.key === "ArrowRight" ? 1 : -1;
+						if (self.daysContainer) {
+							var _delta = e.key === "ArrowRight" ? 1 : -1;
 
-						if (!e.ctrlKey) focusOnDay(e.target.$i, _delta);else {
-							changeMonth(_delta, true);
-							afterDayAnim(function () {
-								focusOnDay(e.target.$i, 0);
-							});
-						}
-					} else if (self.config.enableTime && !isTimeObj) self.hourElement.focus();
+							if (!e.ctrlKey) focusOnDay(e.target.$i, _delta);else {
+								changeMonth(_delta, true);
+								afterDayAnim(function () {
+									focusOnDay(e.target.$i, 0);
+								});
+							}
+						} else if (self.config.enableTime && !isTimeObj) self.hourElement.focus();
+					}
 
 					break;
 
@@ -995,7 +997,10 @@ function Flatpickr(element, config) {
 					if (e.target === self.hourElement) {
 						e.preventDefault();
 						self.minuteElement.select();
-					} else if (e.target === self.minuteElement && self.amPM) {
+					} else if (e.target === self.minuteElement && (self.secondElement || self.amPM)) {
+						e.preventDefault();
+						(self.secondElement || self.amPM).focus();
+					} else if (e.target === self.secondElement) {
 						e.preventDefault();
 						self.amPM.focus();
 					}
