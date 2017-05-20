@@ -14,4 +14,6 @@ Flatpickr.l10ns.vn.months = {
 
 Flatpickr.l10ns.vn.firstDayOfWeek = 1;
 
-if (typeof module !== "undefined") module.exports = Flatpickr.l10ns;
+if (typeof module !== "undefined") 
+	module.exports = Flatpickr.l10ns;
+

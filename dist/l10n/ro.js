@@ -1,5 +1,5 @@
 /* Romanian locals for flatpickr */
-var Flatpickr = Flatpickr || { l10ns: {} };
+var Flatpickr = Flatpickr || {l10ns: {}};
 Flatpickr.l10ns.ro = {};
 
 Flatpickr.l10ns.ro.weekdays = {
@@ -14,8 +14,10 @@ Flatpickr.l10ns.ro.months = {
 
 Flatpickr.l10ns.ro.firstDayOfWeek = 1;
 
-Flatpickr.l10ns.ro.ordinal = function () {
+Flatpickr.l10ns.ro.ordinal = () => {
 	return "";
 };
 
-if (typeof module !== "undefined") module.exports = Flatpickr.l10ns;
+if (typeof module !== "undefined") 
+	module.exports = Flatpickr.l10ns;
+
