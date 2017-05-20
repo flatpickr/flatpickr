@@ -116,7 +116,7 @@ function Flatpickr(element, config) {
 		let hours = (parseInt(self.hourElement.value, 10) || 0) % (self.amPM ? 12 : 24),
 			minutes = (parseInt(self.minuteElement.value, 10) || 0) % 60,
 			seconds = self.config.enableSeconds
-				? (parseInt(self.secondElement.value, 10) || 0)
+				? (parseInt(self.secondElement.value, 10) || 0)  % 60
 				: 0;
 
 		if (self.amPM !== undefined)
