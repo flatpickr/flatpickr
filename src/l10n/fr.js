@@ -1,20 +1,20 @@
 /* French locals for flatpickr */
-var Flatpickr = Flatpickr || {l10ns: {}};
-Flatpickr.l10ns.fr = {};
+var flatpickr = flatpickr || {l10ns: {}};
+flatpickr.l10ns.fr = {};
 
-Flatpickr.l10ns.fr.firstDayOfWeek = 1;
+flatpickr.l10ns.fr.firstDayOfWeek = 1;
 
-Flatpickr.l10ns.fr.weekdays = {
+flatpickr.l10ns.fr.weekdays = {
 	shorthand: ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"],
 	longhand: ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"]
 };
 
-Flatpickr.l10ns.fr.months = {
+flatpickr.l10ns.fr.months = {
 	shorthand: ["Janv", "Févr", "Mars", "Avr", "Mai", "Juin", "Juil", "Août", "Sept", "Oct", "Nov", "Déc"],
 	longhand: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
 };
 
-Flatpickr.l10ns.fr.ordinal = (nth) => {
+flatpickr.l10ns.fr.ordinal = (nth) => {
 	if (nth > 1) 
 		return "ème";
 	
@@ -22,10 +22,10 @@ Flatpickr.l10ns.fr.ordinal = (nth) => {
 	return "er";
 };
 if (typeof module !== "undefined") 
-	module.exports = Flatpickr.l10ns;
+	module.exports = flatpickr.l10ns;
 
 
-Flatpickr.l10ns.fr.rangeSeparator = " au ";
-Flatpickr.l10ns.fr.weekAbbreviation = "Sem";
-Flatpickr.l10ns.fr.scrollTitle = "Défiler pour augmenter la valeur";
-Flatpickr.l10ns.fr.toggleTitle = "Cliquer pour basculer";
+flatpickr.l10ns.fr.rangeSeparator = " au ";
+flatpickr.l10ns.fr.weekAbbreviation = "Sem";
+flatpickr.l10ns.fr.scrollTitle = "Défiler pour augmenter la valeur";
+flatpickr.l10ns.fr.toggleTitle = "Cliquer pour basculer";

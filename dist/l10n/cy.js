@@ -1,20 +1,20 @@
 /* Welsh locals for flatpickr */
-var Flatpickr = Flatpickr || { l10ns: {} };
-Flatpickr.l10ns.cy = {};
+var flatpickr = flatpickr || { l10ns: {} };
+flatpickr.l10ns.cy = {};
 
-Flatpickr.l10ns.cy.weekdays = {
+flatpickr.l10ns.cy.weekdays = {
 	shorthand: ["Sul", "Llun", "Maw", "Mer", "Iau", "Gwe", "Sad"],
 	longhand: ["Dydd Sul", "Dydd Llun", "Dydd Mawrth", "Dydd Mercher", "Dydd Iau", "Dydd Gwener", "Dydd Sadwrn"]
 };
 
-Flatpickr.l10ns.cy.months = {
+flatpickr.l10ns.cy.months = {
 	shorthand: ["Ion", "Chwef", "Maw", "Ebr", "Mai", "Meh", "Gorff", "Awst", "Medi", "Hyd", "Tach", "Rhag"],
 	longhand: ["Ionawr", "Chwefror", "Mawrth", "Ebrill", "Mai", "Mehefin", "Gorffennaf", "Awst", "Medi", "Hydref", "Tachwedd", "Rhagfyr"]
 };
 
-Flatpickr.l10ns.cy.firstDayOfWeek = 1;
+flatpickr.l10ns.cy.firstDayOfWeek = 1;
 
-Flatpickr.l10ns.cy.ordinal = function (nth) {
+flatpickr.l10ns.cy.ordinal = function (nth) {
 	if (nth === 1) return "af";
 
 	if (nth === 2) return "ail";
@@ -33,4 +33,4 @@ Flatpickr.l10ns.cy.ordinal = function (nth) {
 	return "";
 };
 
-if (typeof module !== "undefined") module.exports = Flatpickr.l10ns;
+if (typeof module !== "undefined") module.exports = flatpickr.l10ns;
