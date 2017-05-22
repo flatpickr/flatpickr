@@ -1418,7 +1418,7 @@ function Flatpickr(element, config) {
 
 	function parseConfig() {
 		let boolOpts = [
-			"utc", "wrap", "weekNumbers", "allowInput", "clickOpens", "time_24hr", "enableTime", "noCalendar", "altInput", "shorthandCurrentMonth", "inline", "static", "enableSeconds", "disableMobile"
+			"wrap", "weekNumbers", "allowInput", "clickOpens", "time_24hr", "enableTime", "noCalendar", "altInput", "shorthandCurrentMonth", "inline", "static", "enableSeconds", "disableMobile"
 		];
 
 		let hooks = [
@@ -2212,10 +2212,6 @@ Flatpickr.defaultConfig = {
 
 	animate: window.navigator.userAgent.indexOf("MSIE") === -1,
 
-	/* if true, dates will be parsed, formatted, and displayed in UTC.
-	preloading date strings w/ timezones is recommended but not necessary */
-	utc: false,
-
 	// wrap: see https://chmln.github.io/flatpickr/examples/#flatpickr-external-elements
 	wrap: false,
 
@@ -2608,11 +2604,9 @@ Flatpickr.prototype = {
 
 		const date_orig = date;
 
-		if (date instanceof Date) {
+		if (date instanceof Date) 
 			date = new Date(date.getTime()); // create a copy
-			date.fp_isUTC = date_orig.fp_isUTC;
-		}
-
+		
 		else if (date.toFixed !== undefined) // timestamp
 			date = new Date(date);
 
@@ -2668,9 +2662,6 @@ Flatpickr.prototype = {
 			console.info(this.element);
 			return null;
 		}
-
-		if (this.config && this.config.utc && !date.fp_isUTC)
-			date = date.fp_toUTC();
 
 		if (timeless === true)
 			date.setHours(0, 0, 0, 0);
@@ -2731,20 +2722,5 @@ Date.prototype.fp_incr = function (days) {
 	);
 };
 
-Date.prototype.fp_isUTC = false;
-Date.prototype.fp_toUTC = function () {
-	const newDate = new Date(
-		this.getUTCFullYear(),
-		this.getUTCMonth(),
-		this.getUTCDate(),
-		this.getUTCHours(),
-		this.getUTCMinutes(),
-		this.getUTCSeconds()
-	);
-
-	newDate.fp_isUTC = true;
-	return newDate;
-};
-
 if (typeof module !== "undefined")
-	module.exports = Flatpickr;
+	module.exports = flatpickr;
