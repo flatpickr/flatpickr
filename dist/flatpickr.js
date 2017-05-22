@@ -1318,7 +1318,12 @@ function Flatpickr(element, config) {
 			return self.hourElement.select();
 		}, 451);
 
-		if (self.config.mode !== "multiple" && !self.config.enableTime && self.config.closeOnSelect) self.close();
+		if (self.config.closeOnSelect) {
+			var single = self.config.mode === "single" && !self.config.enableTime;
+			var range = self.config.mode === "range" && self.selectedDates.length === 2 && !self.config.enableTime;
+
+			if (single || range) self.close();
+		}
 	}
 
 	function set(option, value) {
