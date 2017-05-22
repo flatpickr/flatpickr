@@ -114,7 +114,9 @@ function Flatpickr(element, config) {
 			return;
 
 		let hours = (parseInt(self.hourElement.value, 10) || 0) % (self.amPM ? 12 : 24),
-			minutes = (parseInt(self.minuteElement.value, 10) || 0) % 60,
+			minutes = self.config.disableMinutes
+				? 0
+				: (parseInt(self.minuteElement.value, 10) || 0) % 60,
 			seconds = self.config.enableSeconds
 				? (parseInt(self.secondElement.value, 10) || 0)  % 60
 				: 0;
@@ -180,7 +182,8 @@ function Flatpickr(element, config) {
 				: hours
 		);
 
-		self.minuteElement.value = self.pad(minutes);
+		if (self.config.disableMinutes !== true)
+			self.minuteElement.value = self.pad(minutes);
 
 		if (!self.config.time_24hr)
 			self.amPM.textContent = hours >= 12 ? "PM" : "AM";
@@ -299,7 +302,10 @@ function Flatpickr(element, config) {
 			bind(self.timeContainer, ["wheel", "increment"], self.debouncedChange);
 			bind(self.timeContainer, "input", self.triggerChange);
 
-			bind([self.hourElement,self.minuteElement], "focus", selText);
+			bind([self.hourElement], "focus", selText);
+
+			if (self.minuteElement !== undefined)
+				bind(self.minuteElement, "focus", () => self.minuteElement.select());
 
 			if (self.secondElement !== undefined)
 				bind(self.secondElement, "focus", () => self.secondElement.select());
@@ -796,36 +802,34 @@ function Flatpickr(element, config) {
 
 		const hourInput = createNumberInput("flatpickr-hour");
 		self.hourElement =  hourInput.childNodes[0];
-
-		const minuteInput = createNumberInput("flatpickr-minute");
-		self.minuteElement =  minuteInput.childNodes[0];
-
-		self.hourElement.tabIndex = self.minuteElement.tabIndex = -1;
+		self.hourElement.tabIndex = -1
 
 		self.hourElement.value = self.pad(self.latestSelectedDateObj
 			? self.latestSelectedDateObj.getHours()
 			: self.config.defaultHour
 		);
 
-		self.minuteElement.value = self.pad(self.latestSelectedDateObj
-			? self.latestSelectedDateObj.getMinutes()
-			: self.config.defaultMinute
-		);
-
 		self.hourElement.step = self.config.hourIncrement;
-		self.minuteElement.step = self.config.minuteIncrement;
-
 		self.hourElement.min = self.config.time_24hr ? 0 : 1;
 		self.hourElement.max = self.config.time_24hr ? 23 : 12;
-
-		self.minuteElement.min = 0;
-		self.minuteElement.max = 59;
-
-		self.hourElement.title = self.minuteElement.title = self.l10n.scrollTitle;
+		self.hourElement.title = self.l10n.scrollTitle;
 
 		self.timeContainer.appendChild(hourInput);
-		self.timeContainer.appendChild(separator);
-		self.timeContainer.appendChild(minuteInput);
+		if (!self.config.disableMinutes) {
+			self.timeContainer.appendChild(separator);
+			const minuteInput = createNumberInput("flatpickr-minute");
+			self.minuteElement =  minuteInput.childNodes[0];
+			self.minuteElement.tabIndex = -1;
+			self.minuteElement.value = self.pad(self.latestSelectedDateObj
+				? self.latestSelectedDateObj.getMinutes()
+				: self.config.defaultMinute
+			);
+			self.minuteElement.step = self.config.minuteIncrement;
+			self.minuteElement.min = 0;
+			self.minuteElement.max = 59;
+			self.minuteElement.title = self.l10n.scrollTitle;
+			self.timeContainer.appendChild(minuteInput);
+		}
 
 		if (self.config.time_24hr)
 			self.timeContainer.classList.add("time24hr");
@@ -1215,7 +1219,7 @@ function Flatpickr(element, config) {
 							if (!e.ctrlKey)
 								focusOnDay(e.target.$i, delta);
 
-							else 
+							else
 								changeMonth(delta, true);
 						}
 
@@ -1255,7 +1259,7 @@ function Flatpickr(element, config) {
 					}
 
 					else if (
-						e.target === self.minuteElement && 
+						e.target === self.minuteElement &&
 						(self.secondElement || self.amPM)
 					) {
 						e.preventDefault();
@@ -1265,7 +1269,7 @@ function Flatpickr(element, config) {
 					else if (e.target === self.secondElement) {
 						e.preventDefault();
 						self.amPM.focus();
-					}				
+					}
 
 					break;
 
@@ -1418,7 +1422,7 @@ function Flatpickr(element, config) {
 
 	function parseConfig() {
 		let boolOpts = [
-			"wrap", "weekNumbers", "allowInput", "clickOpens", "time_24hr", "enableTime", "noCalendar", "altInput", "shorthandCurrentMonth", "inline", "static", "enableSeconds", "disableMobile"
+			"wrap", "weekNumbers", "allowInput", "clickOpens", "time_24hr", "enableTime", "noCalendar", "altInput", "shorthandCurrentMonth", "inline", "static", "enableSeconds", "disableMinutes", "disableMobile"
 		];
 
 		let hooks = [
@@ -1441,14 +1445,14 @@ function Flatpickr(element, config) {
 
 		if (!userConfig.dateFormat && userConfig.enableTime) {
 			self.config.dateFormat = self.config.noCalendar
-				? "H:i" + (self.config.enableSeconds ? ":S" : "")
-				: Flatpickr.defaultConfig.dateFormat + " H:i" + (self.config.enableSeconds ? ":S" : "");
+				? "H" + (self.config.disableMinutes ? "" : ":i") + (self.config.enableSeconds ? ":S" : "")
+				: Flatpickr.defaultConfig.dateFormat + " H" + (self.config.disableMinutes ? "" : ":i") + (self.config.enableSeconds ? ":S" : "");
 		}
 
 		if (userConfig.altInput && userConfig.enableTime && !userConfig.altFormat) {
 			self.config.altFormat = self.config.noCalendar
-				? "h:i" + (self.config.enableSeconds ? ":S K" : " K")
-				: Flatpickr.defaultConfig.altFormat + ` h:i${self.config.enableSeconds ? ":S" : ""} K`;
+				? "h" + (self.config.disableMinutes ? "" : ":i") + (self.config.enableSeconds ? ":S K" : " K")
+				: Flatpickr.defaultConfig.altFormat + ` h${self.config.disableMinutes ? "" : ":i"}${self.config.enableSeconds ? ":S" : ""} K`;
 		}
 
 		Object.defineProperty(self.config, "minDate", {
@@ -1665,7 +1669,7 @@ function Flatpickr(element, config) {
 
 		if (self.config.enableTime)
 			setTimeout(() => self.hourElement.select(), 451);
-		
+
 		if (self.config.closeOnSelect) {
 			const single = self.config.mode === "single" && !self.config.enableTime;
 			const range = (
@@ -2604,9 +2608,9 @@ Flatpickr.prototype = {
 
 		const date_orig = date;
 
-		if (date instanceof Date) 
+		if (date instanceof Date)
 			date = new Date(date.getTime()); // create a copy
-		
+
 		else if (date.toFixed !== undefined) // timestamp
 			date = new Date(date);
 
