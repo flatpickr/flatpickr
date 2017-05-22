@@ -1148,7 +1148,7 @@ function Flatpickr(element, config) {
 
 		var hooks = ["onChange", "onClose", "onDayCreate", "onKeyDown", "onMonthChange", "onOpen", "onParseConfig", "onReady", "onValueUpdate", "onYearChange"];
 
-		self.config = Object.create(Flatpickr.defaultConfig);
+		self.config = Object.create(flatpickr.defaultConfig);
 
 		var userConfig = _extends({}, self.instanceConfig, JSON.parse(JSON.stringify(self.element.dataset || {})));
 
@@ -1158,11 +1158,11 @@ function Flatpickr(element, config) {
 		_extends(self.config, userConfig);
 
 		if (!userConfig.dateFormat && userConfig.enableTime) {
-			self.config.dateFormat = self.config.noCalendar ? "H:i" + (self.config.enableSeconds ? ":S" : "") : Flatpickr.defaultConfig.dateFormat + " H:i" + (self.config.enableSeconds ? ":S" : "");
+			self.config.dateFormat = self.config.noCalendar ? "H:i" + (self.config.enableSeconds ? ":S" : "") : flatpickr.defaultConfig.dateFormat + " H:i" + (self.config.enableSeconds ? ":S" : "");
 		}
 
 		if (userConfig.altInput && userConfig.enableTime && !userConfig.altFormat) {
-			self.config.altFormat = self.config.noCalendar ? "h:i" + (self.config.enableSeconds ? ":S K" : " K") : Flatpickr.defaultConfig.altFormat + (" h:i" + (self.config.enableSeconds ? ":S" : "") + " K");
+			self.config.altFormat = self.config.noCalendar ? "h:i" + (self.config.enableSeconds ? ":S K" : " K") : flatpickr.defaultConfig.altFormat + (" h:i" + (self.config.enableSeconds ? ":S" : "") + " K");
 		}
 
 		Object.defineProperty(self.config, "minDate", {
@@ -1204,9 +1204,9 @@ function Flatpickr(element, config) {
 	}
 
 	function setupLocale() {
-		if (_typeof(self.config.locale) !== "object" && typeof Flatpickr.l10ns[self.config.locale] === "undefined") console.warn("flatpickr: invalid locale " + self.config.locale);
+		if (_typeof(self.config.locale) !== "object" && typeof flatpickr.l10ns[self.config.locale] === "undefined") console.warn("flatpickr: invalid locale " + self.config.locale);
 
-		self.l10n = _extends(Object.create(Flatpickr.l10ns.default), _typeof(self.config.locale) === "object" ? self.config.locale : self.config.locale !== "default" ? Flatpickr.l10ns[self.config.locale] || {} : {});
+		self.l10n = _extends(Object.create(flatpickr.l10ns.default), _typeof(self.config.locale) === "object" ? self.config.locale : self.config.locale !== "default" ? flatpickr.l10ns[self.config.locale] || {} : {});
 	}
 
 	function positionCalendar() {
@@ -1760,199 +1760,6 @@ function Flatpickr(element, config) {
 	return self;
 }
 
-/* istanbul ignore next */
-Flatpickr.defaultConfig = {
-	mode: "single",
-
-	position: "auto",
-
-	animate: window.navigator.userAgent.indexOf("MSIE") === -1,
-
-	// wrap: see https://chmln.github.io/flatpickr/examples/#flatpickr-external-elements
-	wrap: false,
-
-	// enables week numbers
-	weekNumbers: false,
-
-	// allow manual datetime input
-	allowInput: false,
-
-	/*
- 	clicking on input opens the date(time)picker.
- 	disable if you wish to open the calendar manually with .open()
- */
-	clickOpens: true,
-
-	/*
- 	closes calendar after date selection,
- 	unless 'mode' is 'multiple' or enableTime is true
- */
-	closeOnSelect: true,
-
-	// display time picker in 24 hour mode
-	time_24hr: false,
-
-	// enables the time picker functionality
-	enableTime: false,
-
-	// noCalendar: true will hide the calendar. use for a time picker along w/ enableTime
-	noCalendar: false,
-
-	// more date format chars at https://chmln.github.io/flatpickr/#dateformat
-	dateFormat: "Y-m-d",
-
-	// date format used in aria-label for days
-	ariaDateFormat: "F j, Y",
-
-	// altInput - see https://chmln.github.io/flatpickr/#altinput
-	altInput: false,
-
-	// the created altInput element will have this class.
-	altInputClass: "form-control input",
-
-	// same as dateFormat, but for altInput
-	altFormat: "F j, Y", // defaults to e.g. June 10, 2016
-
-	// defaultDate - either a datestring or a date object. used for datetimepicker"s initial value
-	defaultDate: null,
-
-	// the minimum date that user can pick (inclusive)
-	minDate: null,
-
-	// the maximum date that user can pick (inclusive)
-	maxDate: null,
-
-	// dateparser that transforms a given string to a date object
-	parseDate: null,
-
-	// dateformatter that transforms a given date object to a string, according to passed format
-	formatDate: null,
-
-	getWeek: function getWeek(givenDate) {
-		var date = new Date(givenDate.getTime());
-		var onejan = new Date(date.getFullYear(), 0, 1);
-		return Math.ceil(((date - onejan) / 86400000 + onejan.getDay() + 1) / 7);
-	},
-
-
-	// see https://chmln.github.io/flatpickr/#disable
-	enable: [],
-
-	// see https://chmln.github.io/flatpickr/#disable
-	disable: [],
-
-	// display the short version of month names - e.g. Sep instead of September
-	shorthandCurrentMonth: false,
-
-	// displays calendar inline. see https://chmln.github.io/flatpickr/#inline-calendar
-	inline: false,
-
-	// position calendar inside wrapper and next to the input element
-	// leave at false unless you know what you"re doing
-	"static": false,
-
-	// DOM node to append the calendar to in *static* mode
-	appendTo: null,
-
-	// code for previous/next icons. this is where you put your custom icon code e.g. fontawesome
-	prevArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M5.207 8.471l7.146 7.147-0.707 0.707-7.853-7.854 7.854-7.853 0.707 0.707-7.147 7.146z' /></svg>",
-	nextArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M13.207 8.472l-7.854 7.854-0.707-0.707 7.146-7.146-7.146-7.148 0.707-0.707 7.854 7.854z' /></svg>",
-
-	// enables seconds in the time picker
-	enableSeconds: false,
-
-	// step size used when scrolling/incrementing the hour element
-	hourIncrement: 1,
-
-	// step size used when scrolling/incrementing the minute element
-	minuteIncrement: 5,
-
-	// initial value in the hour element
-	defaultHour: 12,
-
-	// initial value in the minute element
-	defaultMinute: 0,
-
-	// disable native mobile datetime input support
-	disableMobile: false,
-
-	// default locale
-	locale: "default",
-
-	plugins: [],
-
-	// called every time calendar is closed
-	onClose: undefined, // function (dateObj, dateStr) {}
-
-	// onChange callback when user selects a date or time
-	onChange: undefined, // function (dateObj, dateStr) {}
-
-	// called for every day element
-	onDayCreate: undefined,
-
-	// called every time the month is changed
-	onMonthChange: undefined,
-
-	// called every time calendar is opened
-	onOpen: undefined, // function (dateObj, dateStr) {}
-
-	// called after the configuration has been parsed
-	onParseConfig: undefined,
-
-	// called after calendar is ready
-	onReady: undefined, // function (dateObj, dateStr) {}
-
-	// called after input value updated
-	onValueUpdate: undefined,
-
-	// called every time the year is changed
-	onYearChange: undefined,
-
-	onKeyDown: undefined
-};
-
-/* istanbul ignore next */
-Flatpickr.l10ns = {
-	en: {
-		weekdays: {
-			shorthand: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-			longhand: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-		},
-		months: {
-			shorthand: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-			longhand: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-		},
-		daysInMonth: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
-		firstDayOfWeek: 0,
-		ordinal: function ordinal(nth) {
-			var s = nth % 100;
-			if (s > 3 && s < 21) return "th";
-			switch (s % 10) {
-				case 1:
-					return "st";
-				case 2:
-					return "nd";
-				case 3:
-					return "rd";
-				default:
-					return "th";
-			}
-		},
-		rangeSeparator: " to ",
-		weekAbbreviation: "Wk",
-		scrollTitle: "Scroll to increment",
-		toggleTitle: "Click to toggle"
-	}
-};
-
-Flatpickr.l10ns.default = Object.create(Flatpickr.l10ns.en);
-Flatpickr.localize = function (l10n) {
-	return _extends(Flatpickr.l10ns.default, l10n || {});
-};
-Flatpickr.setDefaults = function (config) {
-	return _extends(Flatpickr.defaultConfig, config || {});
-};
-
 Flatpickr.prototype = {
 	formats: {
 		// get the date in UTC
@@ -2196,7 +2003,7 @@ Flatpickr.prototype = {
 		else if (date.toFixed !== undefined) // timestamp
 				date = new Date(date);else {
 				// date string
-				var format = givenFormat || (this.config || Flatpickr.defaultConfig).dateFormat;
+				var format = givenFormat || (this.config || flatpickr.defaultConfig).dateFormat;
 				date = String(date).trim();
 
 				if (date === "today") {
@@ -2277,6 +2084,199 @@ function flatpickr(selector, config) {
 	if (!(selector instanceof HTMLElement)) return _flatpickr(window.document.querySelectorAll(selector), config);
 	return _flatpickr([selector], config);
 }
+
+/* istanbul ignore next */
+flatpickr.defaultConfig = {
+	mode: "single",
+
+	position: "auto",
+
+	animate: window.navigator.userAgent.indexOf("MSIE") === -1,
+
+	// wrap: see https://chmln.github.io/flatpickr/examples/#flatpickr-external-elements
+	wrap: false,
+
+	// enables week numbers
+	weekNumbers: false,
+
+	// allow manual datetime input
+	allowInput: false,
+
+	/*
+ 	clicking on input opens the date(time)picker.
+ 	disable if you wish to open the calendar manually with .open()
+ */
+	clickOpens: true,
+
+	/*
+ 	closes calendar after date selection,
+ 	unless 'mode' is 'multiple' or enableTime is true
+ */
+	closeOnSelect: true,
+
+	// display time picker in 24 hour mode
+	time_24hr: false,
+
+	// enables the time picker functionality
+	enableTime: false,
+
+	// noCalendar: true will hide the calendar. use for a time picker along w/ enableTime
+	noCalendar: false,
+
+	// more date format chars at https://chmln.github.io/flatpickr/#dateformat
+	dateFormat: "Y-m-d",
+
+	// date format used in aria-label for days
+	ariaDateFormat: "F j, Y",
+
+	// altInput - see https://chmln.github.io/flatpickr/#altinput
+	altInput: false,
+
+	// the created altInput element will have this class.
+	altInputClass: "form-control input",
+
+	// same as dateFormat, but for altInput
+	altFormat: "F j, Y", // defaults to e.g. June 10, 2016
+
+	// defaultDate - either a datestring or a date object. used for datetimepicker"s initial value
+	defaultDate: null,
+
+	// the minimum date that user can pick (inclusive)
+	minDate: null,
+
+	// the maximum date that user can pick (inclusive)
+	maxDate: null,
+
+	// dateparser that transforms a given string to a date object
+	parseDate: null,
+
+	// dateformatter that transforms a given date object to a string, according to passed format
+	formatDate: null,
+
+	getWeek: function getWeek(givenDate) {
+		var date = new Date(givenDate.getTime());
+		var onejan = new Date(date.getFullYear(), 0, 1);
+		return Math.ceil(((date - onejan) / 86400000 + onejan.getDay() + 1) / 7);
+	},
+
+
+	// see https://chmln.github.io/flatpickr/#disable
+	enable: [],
+
+	// see https://chmln.github.io/flatpickr/#disable
+	disable: [],
+
+	// display the short version of month names - e.g. Sep instead of September
+	shorthandCurrentMonth: false,
+
+	// displays calendar inline. see https://chmln.github.io/flatpickr/#inline-calendar
+	inline: false,
+
+	// position calendar inside wrapper and next to the input element
+	// leave at false unless you know what you"re doing
+	"static": false,
+
+	// DOM node to append the calendar to in *static* mode
+	appendTo: null,
+
+	// code for previous/next icons. this is where you put your custom icon code e.g. fontawesome
+	prevArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M5.207 8.471l7.146 7.147-0.707 0.707-7.853-7.854 7.854-7.853 0.707 0.707-7.147 7.146z' /></svg>",
+	nextArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M13.207 8.472l-7.854 7.854-0.707-0.707 7.146-7.146-7.146-7.148 0.707-0.707 7.854 7.854z' /></svg>",
+
+	// enables seconds in the time picker
+	enableSeconds: false,
+
+	// step size used when scrolling/incrementing the hour element
+	hourIncrement: 1,
+
+	// step size used when scrolling/incrementing the minute element
+	minuteIncrement: 5,
+
+	// initial value in the hour element
+	defaultHour: 12,
+
+	// initial value in the minute element
+	defaultMinute: 0,
+
+	// disable native mobile datetime input support
+	disableMobile: false,
+
+	// default locale
+	locale: "default",
+
+	plugins: [],
+
+	// called every time calendar is closed
+	onClose: undefined, // function (dateObj, dateStr) {}
+
+	// onChange callback when user selects a date or time
+	onChange: undefined, // function (dateObj, dateStr) {}
+
+	// called for every day element
+	onDayCreate: undefined,
+
+	// called every time the month is changed
+	onMonthChange: undefined,
+
+	// called every time calendar is opened
+	onOpen: undefined, // function (dateObj, dateStr) {}
+
+	// called after the configuration has been parsed
+	onParseConfig: undefined,
+
+	// called after calendar is ready
+	onReady: undefined, // function (dateObj, dateStr) {}
+
+	// called after input value updated
+	onValueUpdate: undefined,
+
+	// called every time the year is changed
+	onYearChange: undefined,
+
+	onKeyDown: undefined
+};
+
+/* istanbul ignore next */
+flatpickr.l10ns = {
+	en: {
+		weekdays: {
+			shorthand: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+			longhand: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+		},
+		months: {
+			shorthand: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+			longhand: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+		},
+		daysInMonth: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
+		firstDayOfWeek: 0,
+		ordinal: function ordinal(nth) {
+			var s = nth % 100;
+			if (s > 3 && s < 21) return "th";
+			switch (s % 10) {
+				case 1:
+					return "st";
+				case 2:
+					return "nd";
+				case 3:
+					return "rd";
+				default:
+					return "th";
+			}
+		},
+		rangeSeparator: " to ",
+		weekAbbreviation: "Wk",
+		scrollTitle: "Scroll to increment",
+		toggleTitle: "Click to toggle"
+	}
+};
+
+flatpickr.l10ns.default = Object.create(flatpickr.l10ns.en);
+flatpickr.localize = function (l10n) {
+	return _extends(flatpickr.l10ns.default, l10n || {});
+};
+flatpickr.setDefaults = function (config) {
+	return _extends(flatpickr.defaultConfig, config || {});
+};
 
 /* istanbul ignore next */
 if (typeof jQuery !== "undefined") {
