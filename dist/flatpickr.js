@@ -282,7 +282,6 @@ function Flatpickr(element, config) {
 	}
 
 	function processPostDayAnimation() {
-		console.log(self._animationLoop.length);
 		for (var i = self._animationLoop.length; i--;) {
 			self._animationLoop[i]();
 			self._animationLoop.splice(i, 1);
