@@ -13,10 +13,13 @@ Flatpickr.l10ns.no.months = {
 };
 
 Flatpickr.l10ns.no.firstDayOfWeek = 1;
+Flatpickr.l10ns.no.rangeSeparator = " til ";
+Flatpickr.l10ns.no.weekAbbreviation = "Uke";
+Flatpickr.l10ns.no.scrollTitle = "Scroll for å endre";
+Flatpickr.l10ns.no.toggleTitle = "Klikk for å veksle";
 
 Flatpickr.l10ns.no.ordinal = () => {
 	return ".";
 };
-if (typeof module !== "undefined") 
+if (typeof module !== "undefined")
 	module.exports = Flatpickr.l10ns;
-
