@@ -1969,6 +1969,11 @@ Flatpickr.prototype = {
 			return this.utils.monthToStr(this.formats.n(date) - 1, false);
 		},
 
+		// padded hour 1-12
+		G: function G(date) {
+			return Flatpickr.prototype.pad(Flatpickr.prototype.formats.h(date));
+		},
+
 		// hours with leading zero e.g. 03
 		H: function H(date) {
 			return Flatpickr.prototype.pad(date.getHours());
@@ -2081,6 +2086,9 @@ Flatpickr.prototype = {
 		F: function F(dateObj, monthName) {
 			dateObj.setMonth(this.l10n.months.longhand.indexOf(monthName));
 		},
+		G: function G(dateObj, hour) {
+			dateObj.setHours(parseFloat(hour));
+		},
 		H: function H(dateObj, hour) {
 			dateObj.setHours(parseFloat(hour));
 		},
@@ -2144,6 +2152,7 @@ Flatpickr.prototype = {
 	tokenRegex: {
 		D: "(\\w+)",
 		F: "(\\w+)",
+		G: "(\\d\\d|\\d)",
 		H: "(\\d\\d|\\d)",
 		J: "(\\d\\d|\\d)\\w+",
 		K: "(\\w+)",
