@@ -1144,7 +1144,7 @@ function Flatpickr(element, config) {
 	}
 
 	function parseConfig() {
-		var boolOpts = ["utc", "wrap", "weekNumbers", "allowInput", "clickOpens", "time_24hr", "enableTime", "noCalendar", "altInput", "shorthandCurrentMonth", "inline", "static", "enableSeconds", "disableMobile"];
+		var boolOpts = ["wrap", "weekNumbers", "allowInput", "clickOpens", "time_24hr", "enableTime", "noCalendar", "altInput", "shorthandCurrentMonth", "inline", "static", "enableSeconds", "disableMobile"];
 
 		var hooks = ["onChange", "onClose", "onDayCreate", "onKeyDown", "onMonthChange", "onOpen", "onParseConfig", "onReady", "onValueUpdate", "onYearChange"];
 
@@ -1768,10 +1768,6 @@ Flatpickr.defaultConfig = {
 
 	animate: window.navigator.userAgent.indexOf("MSIE") === -1,
 
-	/* if true, dates will be parsed, formatted, and displayed in UTC.
- preloading date strings w/ timezones is recommended but not necessary */
-	utc: false,
-
 	// wrap: see https://chmln.github.io/flatpickr/examples/#flatpickr-external-elements
 	wrap: false,
 
@@ -2195,41 +2191,40 @@ Flatpickr.prototype = {
 
 		var date_orig = date;
 
-		if (date instanceof Date) {
-			date = new Date(date.getTime()); // create a copy
-			date.fp_isUTC = date_orig.fp_isUTC;
-		} else if (date.toFixed !== undefined) // timestamp
-			date = new Date(date);else {
-			// date string
-			var format = givenFormat || (this.config || Flatpickr.defaultConfig).dateFormat;
-			date = String(date).trim();
+		if (date instanceof Date) date = new Date(date.getTime()); // create a copy
 
-			if (date === "today") {
-				date = new Date();
-				timeless = true;
-			} else if (/Z$/.test(date) || /GMT$/.test(date)) // datestrings w/ timezone
-				date = new Date(date);else if (this.config && this.config.parseDate) date = this.config.parseDate(date, format);else {
-				var parsedDate = !this.config || !this.config.noCalendar ? new Date(new Date().getFullYear(), 0, 1, 0, 0, 0, 0) : new Date(new Date().setHours(0, 0, 0, 0));
+		else if (date.toFixed !== undefined) // timestamp
+				date = new Date(date);else {
+				// date string
+				var format = givenFormat || (this.config || Flatpickr.defaultConfig).dateFormat;
+				date = String(date).trim();
 
-				var matched = void 0;
+				if (date === "today") {
+					date = new Date();
+					timeless = true;
+				} else if (/Z$/.test(date) || /GMT$/.test(date)) // datestrings w/ timezone
+					date = new Date(date);else if (this.config && this.config.parseDate) date = this.config.parseDate(date, format);else {
+					var parsedDate = !this.config || !this.config.noCalendar ? new Date(new Date().getFullYear(), 0, 1, 0, 0, 0, 0) : new Date(new Date().setHours(0, 0, 0, 0));
 
-				for (var i = 0, matchIndex = 0, regexStr = ""; i < format.length; i++) {
-					var token = format[i];
-					var isBackSlash = token === "\\";
-					var escaped = format[i - 1] === "\\" || isBackSlash;
+					var matched = void 0;
 
-					if (this.tokenRegex[token] && !escaped) {
-						regexStr += this.tokenRegex[token];
-						var match = new RegExp(regexStr).exec(date);
-						if (match && (matched = true)) {
-							parsedDate = this.revFormat[token](parsedDate, match[++matchIndex]) || parsedDate;
-						}
-					} else if (!isBackSlash) regexStr += "."; // don't really care
+					for (var i = 0, matchIndex = 0, regexStr = ""; i < format.length; i++) {
+						var token = format[i];
+						var isBackSlash = token === "\\";
+						var escaped = format[i - 1] === "\\" || isBackSlash;
+
+						if (this.tokenRegex[token] && !escaped) {
+							regexStr += this.tokenRegex[token];
+							var match = new RegExp(regexStr).exec(date);
+							if (match && (matched = true)) {
+								parsedDate = this.revFormat[token](parsedDate, match[++matchIndex]) || parsedDate;
+							}
+						} else if (!isBackSlash) regexStr += "."; // don't really care
+					}
+
+					date = matched ? parsedDate : null;
 				}
-
-				date = matched ? parsedDate : null;
 			}
-		}
 
 		/* istanbul ignore next */
 		if (!(date instanceof Date)) {
@@ -2237,8 +2232,6 @@ Flatpickr.prototype = {
 			console.info(this.element);
 			return null;
 		}
-
-		if (this.config && this.config.utc && !date.fp_isUTC) date = date.fp_toUTC();
 
 		if (timeless === true) date.setHours(0, 0, 0, 0);
 
@@ -2252,6 +2245,11 @@ function _flatpickr(nodeList, config) {
 	var instances = [];
 	for (var i = 0; i < nodes.length; i++) {
 		try {
+			if (nodes[i]._flatpickr) {
+				nodes[i]._flatpickr.destroy();
+				nodes[i]._flatpickr = null;
+			}
+
 			nodes[i]._flatpickr = new Flatpickr(nodes[i], config || {});
 			instances.push(nodes[i]._flatpickr);
 		} catch (e) {
@@ -2276,7 +2274,8 @@ if (typeof HTMLElement !== "undefined") {
 
 /* istanbul ignore next */
 function flatpickr(selector, config) {
-	return _flatpickr(window.document.querySelectorAll(selector), config);
+	if (!(selector instanceof HTMLElement)) return _flatpickr(window.document.querySelectorAll(selector), config);
+	return _flatpickr([selector], config);
 }
 
 /* istanbul ignore next */
@@ -2290,12 +2289,4 @@ Date.prototype.fp_incr = function (days) {
 	return new Date(this.getFullYear(), this.getMonth(), this.getDate() + parseInt(days, 10));
 };
 
-Date.prototype.fp_isUTC = false;
-Date.prototype.fp_toUTC = function () {
-	var newDate = new Date(this.getUTCFullYear(), this.getUTCMonth(), this.getUTCDate(), this.getUTCHours(), this.getUTCMinutes(), this.getUTCSeconds());
-
-	newDate.fp_isUTC = true;
-	return newDate;
-};
-
-if (typeof module !== "undefined") module.exports = Flatpickr;
+if (typeof module !== "undefined") module.exports = flatpickr;
