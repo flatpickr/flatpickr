@@ -206,6 +206,7 @@ function Flatpickr(element, config) {
   */
 	function bindEvents() {
 		self._handlers = [];
+		self._animationLoop = [];
 		if (self.config.wrap) {
 			["open", "close", "toggle", "clear"].forEach(function (evt) {
 				Array.prototype.forEach.call(self.element.querySelectorAll("[data-" + evt + "]"), function (el) {
@@ -280,6 +281,14 @@ function Flatpickr(element, config) {
 		}
 	}
 
+	function processPostDayAnimation() {
+		console.log(self._animationLoop.length);
+		for (var i = self._animationLoop.length; i--;) {
+			self._animationLoop[i]();
+			self._animationLoop.splice(i, 1);
+		}
+	}
+
 	/**
   * Removes the day container that slided out of view
   * @param {Event} e the animation event
@@ -291,6 +300,7 @@ function Flatpickr(element, config) {
 					self.daysContainer.lastChild.classList.remove("slideLeftNew");
 					self.daysContainer.removeChild(self.daysContainer.firstChild);
 					self.days = self.daysContainer.firstChild;
+					processPostDayAnimation();
 
 					break;
 
@@ -298,6 +308,7 @@ function Flatpickr(element, config) {
 					self.daysContainer.firstChild.classList.remove("slideRightNew");
 					self.daysContainer.removeChild(self.daysContainer.lastChild);
 					self.days = self.daysContainer.firstChild;
+					processPostDayAnimation();
 
 					break;
 
@@ -515,8 +526,7 @@ function Flatpickr(element, config) {
 	}
 
 	function afterDayAnim(fn) {
-		if (self.config.animate) return setTimeout(fn, self._.daysAnimDuration + 1);
-		fn();
+		if (self.config.animate) self._animationLoop.push(fn);
 	}
 
 	function buildDays(delta) {
@@ -792,12 +802,11 @@ function Flatpickr(element, config) {
 
 		triggerEvent("MonthChange");
 
-		if (self._.daysAnimDuration === undefined) {
-			var compStyle = window.getComputedStyle(self.daysContainer.lastChild);
-
-			var duration = compStyle.getPropertyValue("animation-duration") || compStyle.getPropertyValue("-webkit-animation-duration");
-
-			self._.daysAnimDuration = parseInt(/(\d+)s/.exec(duration)[1]);
+		if (document.activeElement && document.activeElement.$i) {
+			var index = document.activeElement.$i;
+			afterDayAnim(function () {
+				focusOnDay(index, 0);
+			});
 		}
 	}
 
@@ -965,12 +974,7 @@ function Flatpickr(element, config) {
 						if (self.daysContainer) {
 							var _delta = e.key === "ArrowRight" ? 1 : -1;
 
-							if (!e.ctrlKey) focusOnDay(e.target.$i, _delta);else {
-								changeMonth(_delta, true);
-								afterDayAnim(function () {
-									focusOnDay(e.target.$i, 0);
-								});
-							}
+							if (!e.ctrlKey) focusOnDay(e.target.$i, _delta);else changeMonth(_delta, true);
 						} else if (self.config.enableTime && !isTimeObj) self.hourElement.focus();
 					}
 
