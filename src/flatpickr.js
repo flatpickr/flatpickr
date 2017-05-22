@@ -616,8 +616,9 @@ function Flatpickr(element, config) {
 	}
 
 	function afterDayAnim(fn) {
-		if (self.config.animate)
-			self._animationLoop.push(fn);
+		if (self.config.animate === true)
+			return self._animationLoop.push(fn);
+		fn();
 	}
 
 	function buildDays(delta) {
