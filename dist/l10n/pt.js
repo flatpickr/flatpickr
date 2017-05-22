@@ -1,5 +1,5 @@
 /* Portuguese locals for flatpickr */
-var Flatpickr = Flatpickr || { l10ns: {} };
+var Flatpickr = Flatpickr || {l10ns: {}};
 Flatpickr.l10ns.pt = {};
 
 Flatpickr.l10ns.pt.weekdays = {
@@ -12,6 +12,8 @@ Flatpickr.l10ns.pt.months = {
 	longhand: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
 };
 
-Flatpickr.l10ns.pt.rangeSeparator = " até ";
+Flatpickr.l10ns.pt.rangeSeparator = " até "
 
-if (typeof module !== "undefined") module.exports = Flatpickr.l10ns;
+if (typeof module !== "undefined") 
+	module.exports = Flatpickr.l10ns;
+

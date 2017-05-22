@@ -1,5 +1,5 @@
 /* Swedish locals for flatpickr */
-var Flatpickr = Flatpickr || { l10ns: {} };
+var Flatpickr = Flatpickr || {l10ns: {}};
 Flatpickr.l10ns.sv = {};
 
 Flatpickr.l10ns.sv.firstDayOfWeek = 1;
@@ -15,7 +15,9 @@ Flatpickr.l10ns.sv.months = {
 	longhand: ["Januari", "Februari", "Mars", "April", "Maj", "Juni", "Juli", "Augusti", "September", "Oktober", "November", "December"]
 };
 
-Flatpickr.l10ns.sv.ordinal = function () {
+Flatpickr.l10ns.sv.ordinal = () => {
 	return ".";
 };
-if (typeof module !== "undefined") module.exports = Flatpickr.l10ns;
+if (typeof module !== "undefined") 
+	module.exports = Flatpickr.l10ns;
+
