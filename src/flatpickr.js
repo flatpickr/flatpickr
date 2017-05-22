@@ -1664,9 +1664,19 @@ function Flatpickr(element, config) {
 
 		if (self.config.enableTime)
 			setTimeout(() => self.hourElement.select(), 451);
+		
+		if (self.config.closeOnSelect) {
+			const single = self.config.mode === "single" && !self.config.enableTime;
+			const range = (
+				self.config.mode === "range" &&
+				self.selectedDates.length === 2 &&
+				!self.config.enableTime
+			);
 
-		if (self.config.mode !== "multiple" && !self.config.enableTime && self.config.closeOnSelect)
-			self.close();
+			if (single || range)
+				self.close();
+		}
+
 	}
 
 	function set(option, value) {
