@@ -19,7 +19,7 @@ function Flatpickr(element, config) {
 	self.toggle = toggle;
 
 	function init() {
-		self.element = element;
+		self.element = self.input = element;
 		self.instanceConfig = config || {};
 		self.parseDate = Flatpickr.prototype.parseDate.bind(self);
 		self.formatDate = Flatpickr.prototype.formatDate.bind(self);
@@ -1952,7 +1952,7 @@ function Flatpickr(element, config) {
 
 		if (hooks !== undefined && hooks.length > 0) {
 			for (let i = 0; hooks[i] && i < hooks.length; i++)
-				hooks[i](self.selectedDates, self._input.value, self, data);
+				hooks[i](self.selectedDates, self.input.value, self, data);
 		}
 
 		if (event === "Change") {
