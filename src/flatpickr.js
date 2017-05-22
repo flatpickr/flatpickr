@@ -2711,7 +2711,9 @@ if (typeof HTMLElement !== "undefined") { // browser env
 
 /* istanbul ignore next */
 function flatpickr(selector, config) {
-	return _flatpickr(window.document.querySelectorAll(selector), config);
+	if (!(selector instanceof HTMLElement))
+		return _flatpickr(window.document.querySelectorAll(selector), config);
+	return _flatpickr([selector], config);
 }
 
 /* istanbul ignore next */
