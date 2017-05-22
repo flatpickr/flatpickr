@@ -21,6 +21,5 @@ Flatpickr.l10ns.no.toggleTitle = "Klikk for å veksle";
 Flatpickr.l10ns.no.ordinal = () => {
 	return ".";
 };
-
 if (typeof module !== "undefined")
 	module.exports = Flatpickr.l10ns;
