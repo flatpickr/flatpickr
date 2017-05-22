@@ -1880,6 +1880,7 @@ function Flatpickr(element, config) {
 			);
 			self._input = self.altInput;
 			self.altInput.placeholder = self.input.placeholder;
+			self.altInput.disabled = self.input.disabled;
 			self.altInput.type = "text";
 			self.input.type = "hidden";
 
