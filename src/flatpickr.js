@@ -2676,6 +2676,11 @@ function _flatpickr(nodeList, config) {
 	let instances = [];
 	for (let i = 0; i < nodes.length; i++) {
 		try {
+			if (nodes[i]._flatpickr) {
+				nodes[i]._flatpickr.destroy();
+				nodes[i]._flatpickr = null;
+			}
+
 			nodes[i]._flatpickr = new Flatpickr(nodes[i], config || {});
 			instances.push(nodes[i]._flatpickr);
 		}
