@@ -79,12 +79,17 @@ function transpile(src){
 }
 
 function uglify(src) {
-    return uglifyJS.minify(src, {
-        fromString: true,
+    const minified = uglifyJS.minify(src, {
         output: {
             comments: /license/
         }
-    }).code;
+    });
+
+    if (!minified.error)
+        return minified.code;
+    
+    console.error(minified.error);
+    return "";    
 }
 
 async function buildScripts(){
@@ -105,7 +110,7 @@ function resolveGlob(g) {
             else
                 resolve(files);
         });
-    });    
+    });
 }
 
 function buildExtras(folder){
@@ -121,7 +126,7 @@ function buildExtras(folder){
             })
             .catch(logErr);
         });
-       
+
     }
 }
 
@@ -211,8 +216,8 @@ function start(){
         buildScripts();
         buildStyle();
         buildThemes();
-        buildExtras("l10n");
-        buildExtras("plugins");
+        buildExtras("l10n")();
+        buildExtras("plugins")();
     }
 }
 

@@ -4,7 +4,7 @@ function weekSelectPlugin(pluginConfig) {
 			if (!event.target.classList.contains("flatpickr-day")) return;
 
 			var days = event.target.parentNode.childNodes;
-			dayIndex = event.target.$i;
+			var dayIndex = event.target.$i;
 			var weekStartDay = days[7 * Math.floor(dayIndex / 7)].dateObj;
 			var weekEndDay = days[7 * Math.ceil(dayIndex / 7) - 1].dateObj;
 
