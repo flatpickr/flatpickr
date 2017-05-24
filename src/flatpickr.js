@@ -1215,7 +1215,7 @@ function Flatpickr(element, config) {
 							if (!e.ctrlKey)
 								focusOnDay(e.target.$i, delta);
 
-							else 
+							else
 								changeMonth(delta, true);
 						}
 
@@ -1255,7 +1255,7 @@ function Flatpickr(element, config) {
 					}
 
 					else if (
-						e.target === self.minuteElement && 
+						e.target === self.minuteElement &&
 						(self.secondElement || self.amPM)
 					) {
 						e.preventDefault();
@@ -1265,7 +1265,7 @@ function Flatpickr(element, config) {
 					else if (e.target === self.secondElement) {
 						e.preventDefault();
 						self.amPM.focus();
-					}				
+					}
 
 					break;
 
@@ -1665,7 +1665,7 @@ function Flatpickr(element, config) {
 
 		if (self.config.enableTime)
 			setTimeout(() => self.hourElement.select(), 451);
-		
+
 		if (self.config.closeOnSelect) {
 			const single = self.config.mode === "single" && !self.config.enableTime;
 			const range = (
@@ -2409,9 +2409,9 @@ Flatpickr.prototype = {
 
 		const date_orig = date;
 
-		if (date instanceof Date) 
+		if (date instanceof Date)
 			date = new Date(date.getTime()); // create a copy
-		
+
 		else if (date.toFixed !== undefined) // timestamp
 			date = new Date(date);
 
@@ -2518,7 +2518,7 @@ function flatpickr(selector, config) {
 }
 
 /* istanbul ignore next */
-flatpickr.defaultConfig = {
+flatpickr.defaultConfig = Flatpickr.defaultConfig = {
 	mode: "single",
 
 	position: "auto",
