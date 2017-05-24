@@ -2086,7 +2086,7 @@ function flatpickr(selector, config) {
 }
 
 /* istanbul ignore next */
-flatpickr.defaultConfig = {
+flatpickr.defaultConfig = Flatpickr.defaultConfig = {
 	mode: "single",
 
 	position: "auto",
