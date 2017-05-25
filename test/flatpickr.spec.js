@@ -1046,6 +1046,24 @@ describe('flatpickr', () => {
 			createInstance();
 			expect(fp.l10n.months.longhand[0]).toEqual("Январь");
 		});
+
+		it("correctly formats altInput", () => {
+			createInstance({
+				locale: "ru",
+				altInput: true,
+				altFormat: "F",
+				defaultDate: "2016-12-27T16:16:22.585Z"
+			});
+			expect(fp.altInput.value).toEqual("Декабрь");
+
+			createInstance({
+				locale: "en",
+				altInput: true,
+				altFormat: "F",
+				defaultDate: "2016-12-27T16:16:22.585Z"
+			});
+			expect(fp.altInput.value).toEqual("December");
+		});
 	});
 
 	// afterAll(() => {
