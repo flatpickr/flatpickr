@@ -1,6 +1,7 @@
 function changeDayAtMidnightPlugin() {
 
-  function changeDateIfMidnight(date, ev, fp) {
+  function changeDateIfMidnight(fp, ev) {
+    var date = fp.latestSelectedDateObj;
     var newHours = date.getHours();
 
     // Clock has advanced past the end of the day - advance the date
@@ -18,8 +19,8 @@ function changeDayAtMidnightPlugin() {
 
   return function(fp) {
     return {
-      onTimeChange(dates, _, __, ev) {
-        changeDateIfMidnight(dates[0], ev, fp);
+      onTimeChange(_, __, ___, ev) {
+        changeDateIfMidnight(fp, ev);
       }
     }
   }
