@@ -165,6 +165,12 @@ function Flatpickr(element, config) {
 	 * @param {Number} seconds the seconds (optional)
 	 */
 	function setHours(hours, minutes, seconds) {
+		var old = {
+			"oldHours": self.latestSelectedDateObj.getHours(),
+			"oldMinutes": self.latestSelectedDateObj.getMinutes(),
+			"oldSeconds": self.latestSelectedDateObj.getSeconds()
+		};
+
 		if (self.selectedDates.length) {
 			self.latestSelectedDateObj.setHours(
 				hours % 24, minutes, seconds || 0, 0
@@ -187,6 +193,8 @@ function Flatpickr(element, config) {
 
 		if (self.config.enableSeconds === true)
 			self.secondElement.value = self.pad(seconds);
+
+		triggerEvent("TimeChange", old);
 	}
 
 	/**
@@ -1423,7 +1431,8 @@ function Flatpickr(element, config) {
 
 		let hooks = [
 			"onChange", "onClose", "onDayCreate", "onKeyDown", "onMonthChange",
-			"onOpen", "onParseConfig", "onReady", "onValueUpdate", "onYearChange"
+			"onOpen", "onParseConfig", "onReady", "onValueUpdate", "onYearChange",
+			"onTimeChange"
 		];
 
 		self.config = Object.create(flatpickr.defaultConfig);
@@ -2649,6 +2658,9 @@ flatpickr.defaultConfig = Flatpickr.defaultConfig = {
 
 	// called every time the month is changed
 	onMonthChange: undefined,
+
+	// called every time the time is changed
+	onTimeChange: undefined,
 
 	// called every time calendar is opened
 	onOpen: undefined, // function (dateObj, dateStr) {}
