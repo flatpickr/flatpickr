@@ -346,6 +346,16 @@ function Flatpickr(element, config) {
 				default: break;
 			}
 		}
+		if (self.config.static) return;
+		if (self.config.inline) return;
+		// set the calendar position
+		// even though it's hidden to prevent Safari from jumping to
+		// the top of the page and then scrolling down
+		positionCalendar();
+		// run it again when the page has loaded
+		window.addEventListener("load", function(e) {
+			positionCalendar();
+		});
 	}
 
 	/**
@@ -1351,8 +1361,9 @@ function Flatpickr(element, config) {
 	}
 
 	function onResize() {
-		if (self.isOpen && !self.config.static && !self.config.inline)
-			positionCalendar();
+		if (!self.config.inline) return;
+		if (!self.config.static) return;
+		positionCalendar();
 	}
 
 	function open(e) {
