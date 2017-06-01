@@ -114,7 +114,9 @@ function FlatpickrInstance(element, config) {
 			return;
 
 		let hours = (parseInt(self.hourElement.value, 10) || 0) % (self.amPM ? 12 : 24),
-			minutes = (parseInt(self.minuteElement.value, 10) || 0) % 60,
+			minutes = self.config.disableMinutes
+				? 0
+				: (parseInt(self.minuteElement.value, 10) || 0) % 60,
 			seconds = self.config.enableSeconds
 				? (parseInt(self.secondElement.value, 10) || 0)  % 60
 				: 0;
@@ -180,7 +182,8 @@ function FlatpickrInstance(element, config) {
 				: hours
 		);
 
-		self.minuteElement.value = self.pad(minutes);
+		if (self.config.disableMinutes !== true)
+			self.minuteElement.value = self.pad(minutes);
 
 		if (!self.config.time_24hr)
 			self.amPM.textContent = hours >= 12 ? "PM" : "AM";
@@ -301,7 +304,10 @@ function FlatpickrInstance(element, config) {
 			bind(self.timeContainer, ["wheel", "increment"], self.debouncedChange);
 			bind(self.timeContainer, "input", self.triggerChange);
 
-			bind([self.hourElement,self.minuteElement], "focus", selText);
+			bind([self.hourElement], "focus", selText);
+
+			if (self.minuteElement !== undefined)
+				bind(self.minuteElement, "focus", () => self.minuteElement.select());
 
 			if (self.secondElement !== undefined)
 				bind(self.secondElement, "focus", () => self.secondElement.select());
@@ -798,36 +804,34 @@ function FlatpickrInstance(element, config) {
 
 		const hourInput = createNumberInput("flatpickr-hour");
 		self.hourElement =  hourInput.childNodes[0];
-
-		const minuteInput = createNumberInput("flatpickr-minute");
-		self.minuteElement =  minuteInput.childNodes[0];
-
-		self.hourElement.tabIndex = self.minuteElement.tabIndex = -1;
+		self.hourElement.tabIndex = -1
 
 		self.hourElement.value = self.pad(self.latestSelectedDateObj
 			? self.latestSelectedDateObj.getHours()
 			: self.config.defaultHour
 		);
 
-		self.minuteElement.value = self.pad(self.latestSelectedDateObj
-			? self.latestSelectedDateObj.getMinutes()
-			: self.config.defaultMinute
-		);
-
 		self.hourElement.step = self.config.hourIncrement;
-		self.minuteElement.step = self.config.minuteIncrement;
-
 		self.hourElement.min = self.config.time_24hr ? 0 : 1;
 		self.hourElement.max = self.config.time_24hr ? 23 : 12;
-
-		self.minuteElement.min = 0;
-		self.minuteElement.max = 59;
-
-		self.hourElement.title = self.minuteElement.title = self.l10n.scrollTitle;
+		self.hourElement.title = self.l10n.scrollTitle;
 
 		self.timeContainer.appendChild(hourInput);
-		self.timeContainer.appendChild(separator);
-		self.timeContainer.appendChild(minuteInput);
+		if (!self.config.disableMinutes) {
+			self.timeContainer.appendChild(separator);
+			const minuteInput = createNumberInput("flatpickr-minute");
+			self.minuteElement =  minuteInput.childNodes[0];
+			self.minuteElement.tabIndex = -1;
+			self.minuteElement.value = self.pad(self.latestSelectedDateObj
+				? self.latestSelectedDateObj.getMinutes()
+				: self.config.defaultMinute
+			);
+			self.minuteElement.step = self.config.minuteIncrement;
+			self.minuteElement.min = 0;
+			self.minuteElement.max = 59;
+			self.minuteElement.title = self.l10n.scrollTitle;
+			self.timeContainer.appendChild(minuteInput);
+		}
 
 		if (self.config.time_24hr)
 			self.timeContainer.classList.add("time24hr");
@@ -1420,7 +1424,7 @@ function FlatpickrInstance(element, config) {
 
 	function parseConfig() {
 		let boolOpts = [
-			"wrap", "weekNumbers", "allowInput", "clickOpens", "time_24hr", "enableTime", "noCalendar", "altInput", "shorthandCurrentMonth", "inline", "static", "enableSeconds", "disableMobile"
+			"wrap", "weekNumbers", "allowInput", "clickOpens", "time_24hr", "enableTime", "noCalendar", "altInput", "shorthandCurrentMonth", "inline", "static", "enableSeconds", "disableMinutes", "disableMobile"
 		];
 
 		let hooks = [
@@ -1443,14 +1447,14 @@ function FlatpickrInstance(element, config) {
 
 		if (!userConfig.dateFormat && userConfig.enableTime) {
 			self.config.dateFormat = self.config.noCalendar
-				? "H:i" + (self.config.enableSeconds ? ":S" : "")
-				: flatpickr.defaultConfig.dateFormat + " H:i" + (self.config.enableSeconds ? ":S" : "");
+				? "H" + (self.config.disableMinutes ? "" : ":i") + (self.config.enableSeconds ? ":S" : "")
+				: flatpickr.defaultConfig.dateFormat + " H" + (self.config.disableMinutes ? "" : ":i") + (self.config.enableSeconds ? ":S" : "");
 		}
 
 		if (userConfig.altInput && userConfig.enableTime && !userConfig.altFormat) {
 			self.config.altFormat = self.config.noCalendar
-				? "h:i" + (self.config.enableSeconds ? ":S K" : " K")
-				: flatpickr.defaultConfig.altFormat + ` h:i${self.config.enableSeconds ? ":S" : ""} K`;
+				? "h" + (self.config.disableMinutes ? "" : ":i") + (self.config.enableSeconds ? ":S K" : " K")
+				: flatpickr.defaultConfig.altFormat + ` h${self.config.disableMinutes ? "" : ":i"}${self.config.enableSeconds ? ":S" : ""} K`;
 		}
 
 		Object.defineProperty(self.config, "minDate", {
@@ -2621,6 +2625,9 @@ flatpickr.defaultConfig = FlatpickrInstance.defaultConfig = {
 	// code for previous/next icons. this is where you put your custom icon code e.g. fontawesome
 	prevArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M5.207 8.471l7.146 7.147-0.707 0.707-7.853-7.854 7.854-7.853 0.707 0.707-7.147 7.146z' /></svg>",
 	nextArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M13.207 8.472l-7.854 7.854-0.707-0.707 7.146-7.146-7.146-7.148 0.707-0.707 7.854 7.854z' /></svg>",
+
+	// disable minutes in the time picker
+	disableMinutes: false,
 
 	// enables seconds in the time picker
 	enableSeconds: false,
