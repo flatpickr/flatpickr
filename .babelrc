@@ -1,4 +1,4 @@
 {
-    "presets": [ "es2015" ],
+    "presets": [ "es2015", "flow"],
     "plugins": ["transform-remove-strict-mode", "transform-object-assign"]
 }
