@@ -2,6 +2,8 @@ const fs = require('fs');
 const glob = require("glob");
 
 const babel = require("babel-core");
+
+const babelConfig = JSON.parse(fs.readFileSync("./.babelrc"));
 const uglifyJS = require("uglify-js");
 const ncp = require("ncp");
 const chokidar = require("chokidar");
@@ -72,10 +74,7 @@ async function writeFileAsync(path, content) {
 }
 
 function transpile(src){
-    return babel.transform(src, {
-        "presets": [ "es2015" ],
-        "plugins": ["transform-remove-strict-mode", "transform-object-assign"]
-    }).code;
+    return babel.transform(src, babelConfig).code;
 }
 
 function uglify(src) {
@@ -87,9 +86,9 @@ function uglify(src) {
 
     if (!minified.error)
         return minified.code;
-    
+
     console.error(minified.error);
-    return "";    
+    return "";
 }
 
 async function buildScripts(){
@@ -113,20 +112,17 @@ function resolveGlob(g) {
     });
 }
 
+async function replaceWithTranspiled(path) {
+    const src = await readFileAsync(path).catch(logErr);
+    return writeFileAsync(path, transpile(src))
+}
+
 function buildExtras(folder){
     return async function(){
         await recursiveCopy(`./src/${folder}`, `./dist/${folder}`);
         const paths = await resolveGlob(`./dist/${folder}/**/*.js`);
 
-        paths.forEach(path => {
-            readFileAsync(path)
-            .then(src => {
-                writeFileAsync(path, transpile(src))
-                .catch(logErr);
-            })
-            .catch(logErr);
-        });
-
+        await Promise.all(paths.map(replaceWithTranspiled))
     }
 }
 
