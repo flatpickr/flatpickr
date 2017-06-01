@@ -1850,6 +1850,7 @@ function Flatpickr(element, config) {
 
 	/* istanbul ignore next */
 	function setupFormats() {
+		self.formats = Object.create(Flatpickr.prototype.formats);
 		["D", "F", "J", "M", "W", "l"].forEach(f => {
 			self.formats[f] = Flatpickr.prototype.formats[f].bind(self);
 		});
