@@ -2375,7 +2375,7 @@ Flatpickr.prototype = {
 		G: "(\\d\\d|\\d)",
 		H:"(\\d\\d|\\d)",
 		J:"(\\d\\d|\\d)\\w+",
-		K:"(\\w+)",
+		K:"(am|AM|Am|aM|pm|PM|Pm|pM)",
 		M:"(\\w+)",
 		S:"(\\d\\d|\\d)",
 		U: "(.+)",
