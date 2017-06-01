@@ -3,7 +3,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 /*! flatpickr v2.6.3, @license MIT */
-function Flatpickr(element, config) {
+
+// retain backwards compatibility with v2
+var Flatpickr = flatpickr;
+
+function FlatpickrClass(element, config) {
 	var self = this;
 
 	self._ = {};
@@ -25,8 +29,8 @@ function Flatpickr(element, config) {
 	function init() {
 		self.element = self.input = element;
 		self.instanceConfig = config || {};
-		self.parseDate = Flatpickr.prototype.parseDate.bind(self);
-		self.formatDate = Flatpickr.prototype.formatDate.bind(self);
+		self.parseDate = FlatpickrClass.prototype.parseDate.bind(self);
+		self.formatDate = FlatpickrClass.prototype.formatDate.bind(self);
 
 		setupFormats();
 		parseConfig();
@@ -238,7 +242,10 @@ function Flatpickr(element, config) {
 		bind(window.document, "mousedown", onClick(documentClick));
 		bind(self._input, "blur", documentClick);
 
-		if (self.config.clickOpens === true) bind(self._input, "focus", self.open);
+		if (self.config.clickOpens === true) {
+			bind(self._input, "focus", self.open);
+			bind(self._input, "mousedown", onClick(self.open));
+		}
 
 		if (!self.config.noCalendar) {
 			self.monthNav.addEventListener("wheel", function (e) {
@@ -1471,13 +1478,13 @@ function Flatpickr(element, config) {
 
 	/* istanbul ignore next */
 	function setupFormats() {
-		self.formats = Object.create(Flatpickr.prototype.formats);
+		self.formats = Object.create(FlatpickrClass.prototype.formats);
 		["D", "F", "J", "M", "W", "l"].forEach(function (f) {
-			self.formats[f] = Flatpickr.prototype.formats[f].bind(self);
+			self.formats[f] = FlatpickrClass.prototype.formats[f].bind(self);
 		});
 
-		self.revFormat.F = Flatpickr.prototype.revFormat.F.bind(self);
-		self.revFormat.M = Flatpickr.prototype.revFormat.M.bind(self);
+		self.revFormat.F = FlatpickrClass.prototype.revFormat.F.bind(self);
+		self.revFormat.M = FlatpickrClass.prototype.revFormat.M.bind(self);
 	}
 
 	function setupInputs() {
@@ -1498,6 +1505,7 @@ function Flatpickr(element, config) {
 			self._input = self.altInput;
 			self.altInput.placeholder = self.input.placeholder;
 			self.altInput.disabled = self.input.disabled;
+			self.altInput.required = self.input.required;
 			self.altInput.type = "text";
 			self.input.type = "hidden";
 
@@ -1761,7 +1769,7 @@ function Flatpickr(element, config) {
 	return self;
 }
 
-Flatpickr.prototype = {
+FlatpickrClass.prototype = {
 	formats: {
 		// get the date in UTC
 		Z: function Z(date) {
@@ -1780,12 +1788,12 @@ Flatpickr.prototype = {
 
 		// padded hour 1-12
 		G: function G(date) {
-			return Flatpickr.prototype.pad(Flatpickr.prototype.formats.h(date));
+			return FlatpickrClass.prototype.pad(FlatpickrClass.prototype.formats.h(date));
 		},
 
 		// hours with leading zero e.g. 03
 		H: function H(date) {
-			return Flatpickr.prototype.pad(date.getHours());
+			return FlatpickrClass.prototype.pad(date.getHours());
 		},
 
 		// day (1-30) with ordinal suffix e.g. 1st, 2nd
@@ -1805,7 +1813,7 @@ Flatpickr.prototype = {
 
 		// seconds 00-59
 		S: function S(date) {
-			return Flatpickr.prototype.pad(date.getSeconds());
+			return FlatpickrClass.prototype.pad(date.getSeconds());
 		},
 
 		// unix timestamp
@@ -1824,7 +1832,7 @@ Flatpickr.prototype = {
 
 		// day in month, padded (01-30)
 		d: function d(date) {
-			return Flatpickr.prototype.pad(date.getDate());
+			return FlatpickrClass.prototype.pad(date.getDate());
 		},
 
 		// hour from 1-12 (am/pm)
@@ -1834,7 +1842,7 @@ Flatpickr.prototype = {
 
 		// minutes, padded with leading zero e.g. 09
 		i: function i(date) {
-			return Flatpickr.prototype.pad(date.getMinutes());
+			return FlatpickrClass.prototype.pad(date.getMinutes());
 		},
 
 		// day in month (1-30)
@@ -1849,7 +1857,7 @@ Flatpickr.prototype = {
 
 		// padded month number (01-12)
 		m: function m(date) {
-			return Flatpickr.prototype.pad(date.getMonth() + 1);
+			return FlatpickrClass.prototype.pad(date.getMonth() + 1);
 		},
 
 		// the month number (1-12)
@@ -2058,7 +2066,7 @@ function _flatpickr(nodeList, config) {
 				nodes[i]._flatpickr = null;
 			}
 
-			nodes[i]._flatpickr = new Flatpickr(nodes[i], config || {});
+			nodes[i]._flatpickr = new FlatpickrClass(nodes[i], config || {});
 			instances.push(nodes[i]._flatpickr);
 		} catch (e) {
 			console.warn(e, e.stack);
@@ -2082,7 +2090,9 @@ if (typeof HTMLElement !== "undefined") {
 
 /* istanbul ignore next */
 function flatpickr(selector, config) {
-	if (!(selector instanceof HTMLElement)) return _flatpickr(window.document.querySelectorAll(selector), config);
+	console.log(selector);
+	if (selector instanceof NodeList) return _flatpickr(selector, config);else if (!(selector instanceof HTMLElement)) return _flatpickr(window.document.querySelectorAll(selector), config);
+
 	return _flatpickr([selector], config);
 }
 
