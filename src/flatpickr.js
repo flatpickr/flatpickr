@@ -1,5 +1,9 @@
 /*! flatpickr v2.6.3, @license MIT */
-function Flatpickr(element, config) {
+
+// retain backwards compatibility with v2
+var Flatpickr = flatpickr;
+
+function FlatpickrClass(element, config) {
 	const self = this;
 
 	self._ = {};
@@ -21,8 +25,8 @@ function Flatpickr(element, config) {
 	function init() {
 		self.element = self.input = element;
 		self.instanceConfig = config || {};
-		self.parseDate = Flatpickr.prototype.parseDate.bind(self);
-		self.formatDate = Flatpickr.prototype.formatDate.bind(self);
+		self.parseDate = FlatpickrClass.prototype.parseDate.bind(self);
+		self.formatDate = FlatpickrClass.prototype.formatDate.bind(self);
 
 		setupFormats();
 		parseConfig();
@@ -274,8 +278,10 @@ function Flatpickr(element, config) {
 		bind(window.document, "mousedown", onClick(documentClick));
 		bind(self._input, "blur", documentClick);
 
-		if (self.config.clickOpens === true)
+		if (self.config.clickOpens === true) {
 			bind(self._input, "focus", self.open);
+			bind(self._input, "mousedown", onClick(self.open));
+		}
 
 		if (!self.config.noCalendar) {
 			self.monthNav.addEventListener("wheel", e => e.preventDefault());
@@ -1850,13 +1856,13 @@ function Flatpickr(element, config) {
 
 	/* istanbul ignore next */
 	function setupFormats() {
-		self.formats = Object.create(Flatpickr.prototype.formats);
+		self.formats = Object.create(FlatpickrClass.prototype.formats);
 		["D", "F", "J", "M", "W", "l"].forEach(f => {
-			self.formats[f] = Flatpickr.prototype.formats[f].bind(self);
+			self.formats[f] = FlatpickrClass.prototype.formats[f].bind(self);
 		});
 
-		self.revFormat.F = Flatpickr.prototype.revFormat.F.bind(self);
-		self.revFormat.M = Flatpickr.prototype.revFormat.M.bind(self);
+		self.revFormat.F = FlatpickrClass.prototype.revFormat.F.bind(self);
+		self.revFormat.M = FlatpickrClass.prototype.revFormat.M.bind(self);
 	}
 
 	function setupInputs() {
@@ -2206,7 +2212,7 @@ function Flatpickr(element, config) {
 	return self;
 }
 
-Flatpickr.prototype = {
+FlatpickrClass.prototype = {
 	formats: {
 		// get the date in UTC
 		Z: date => date.toISOString(),
@@ -2223,13 +2229,13 @@ Flatpickr.prototype = {
 
 		// padded hour 1-12
 		G: function (date) {
-			return Flatpickr.prototype.pad(
-				Flatpickr.prototype.formats.h(date)
+			return FlatpickrClass.prototype.pad(
+				FlatpickrClass.prototype.formats.h(date)
 			)
 		},
 
 		// hours with leading zero e.g. 03
-		H: date => Flatpickr.prototype.pad(date.getHours()),
+		H: date => FlatpickrClass.prototype.pad(date.getHours()),
 
 		// day (1-30) with ordinal suffix e.g. 1st, 2nd
 		J: function (date) {
@@ -2245,7 +2251,7 @@ Flatpickr.prototype = {
 		},
 
 		// seconds 00-59
-		S: date => Flatpickr.prototype.pad(date.getSeconds()),
+		S: date => FlatpickrClass.prototype.pad(date.getSeconds()),
 
 		// unix timestamp
 		U: date => date.getTime() / 1000,
@@ -2258,13 +2264,13 @@ Flatpickr.prototype = {
 		Y: date => date.getFullYear(),
 
 		// day in month, padded (01-30)
-		d: date => Flatpickr.prototype.pad(date.getDate()),
+		d: date => FlatpickrClass.prototype.pad(date.getDate()),
 
 		// hour from 1-12 (am/pm)
 		h: date => date.getHours() % 12 ? date.getHours() % 12 : 12,
 
 		// minutes, padded with leading zero e.g. 09
-		i: date => Flatpickr.prototype.pad(date.getMinutes()),
+		i: date => FlatpickrClass.prototype.pad(date.getMinutes()),
 
 		// day in month (1-30)
 		j: date => date.getDate(),
@@ -2275,7 +2281,7 @@ Flatpickr.prototype = {
 		},
 
 		// padded month number (01-12)
-		m: date => Flatpickr.prototype.pad(date.getMonth() + 1),
+		m: date => FlatpickrClass.prototype.pad(date.getMonth() + 1),
 
 		// the month number (1-12)
 		n: date => date.getMonth() + 1,
@@ -2488,7 +2494,7 @@ function _flatpickr(nodeList, config) {
 				nodes[i]._flatpickr = null;
 			}
 
-			nodes[i]._flatpickr = new Flatpickr(nodes[i], config || {});
+			nodes[i]._flatpickr = new FlatpickrClass(nodes[i], config || {});
 			instances.push(nodes[i]._flatpickr);
 		}
 
@@ -2514,8 +2520,13 @@ if (typeof HTMLElement !== "undefined") { // browser env
 
 /* istanbul ignore next */
 function flatpickr(selector, config) {
-	if (!(selector instanceof HTMLElement))
+	console.log(selector)
+	if (selector instanceof NodeList)
+		return _flatpickr(selector, config);
+
+	else if (!(selector instanceof HTMLElement))
 		return _flatpickr(window.document.querySelectorAll(selector), config);
+
 	return _flatpickr([selector], config);
 }
 
