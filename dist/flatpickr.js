@@ -1471,6 +1471,7 @@ function Flatpickr(element, config) {
 
 	/* istanbul ignore next */
 	function setupFormats() {
+		self.formats = Object.create(Flatpickr.prototype.formats);
 		["D", "F", "J", "M", "W", "l"].forEach(function (f) {
 			self.formats[f] = Flatpickr.prototype.formats[f].bind(self);
 		});
@@ -1963,7 +1964,7 @@ Flatpickr.prototype = {
 		G: "(\\d\\d|\\d)",
 		H: "(\\d\\d|\\d)",
 		J: "(\\d\\d|\\d)\\w+",
-		K: "(\\w+)",
+		K: "(am|AM|Am|aM|pm|PM|Pm|pM)",
 		M: "(\\w+)",
 		S: "(\\d\\d|\\d)",
 		U: "(.+)",
