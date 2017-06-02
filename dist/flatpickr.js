@@ -1230,6 +1230,7 @@ function FlatpickrInstance(element, config) {
 		if (self.config.inline) return;
 
 		var left = window.pageXOffset + inputBounds.left;
+		if (self.config.horizontalAlignment == "center") left += (inputBounds.width - calendarWidth) / 2;
 		var right = window.document.body.offsetWidth - inputBounds.right;
 		var rightMost = left + calendarWidth > window.document.body.offsetWidth;
 

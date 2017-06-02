@@ -1,5 +1,5 @@
 /* Mandarin locals for flatpickr */
-var flatpickr = flatpickr || { l10ns: {} };
+var flatpickr = flatpickr || {l10ns: {}};
 flatpickr.l10ns.zh = {};
 
 flatpickr.l10ns.zh.weekdays = {
@@ -17,4 +17,6 @@ flatpickr.l10ns.zh.weekAbbreviation = "周";
 flatpickr.l10ns.zh.scrollTitle = "滚动切换";
 flatpickr.l10ns.zh.toggleTitle = "点击切换 12/24 小时时制";
 
-if (typeof module !== "undefined") module.exports = flatpickr.l10ns;
+if (typeof module !== "undefined") 
+	module.exports = flatpickr.l10ns;
+
