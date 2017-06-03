@@ -38,7 +38,7 @@ function rangePlugin() {
 		return {
 			onParseConfig: function onParseConfig() {
 				fp.config.mode = "range";
-				fp.config.allowInput = false;
+				fp.config.allowInput = true;
 				dateFormat = fp.config.altInput ? fp.config.altFormat : fp.config.dateFormat;
 			},
 			onReady: function onReady() {
