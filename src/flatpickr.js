@@ -1081,7 +1081,7 @@ function FlatpickrInstance(element, config) {
 				? isInput && e.relatedTarget && !isCalendarElem(e.relatedTarget)
 				: !isInput && !isCalendarElement;
 
-			if(lostFocus) {
+			if(lostFocus && self.config.ignoredFocusElements.indexOf(e.target) === -1) {
 				self.close();
 
 				if (self.config.mode === "range" && self.selectedDates.length === 1) {
@@ -2646,6 +2646,8 @@ flatpickr.defaultConfig = FlatpickrInstance.defaultConfig = {
 	locale: "default",
 
 	plugins: [],
+
+	ignoredFocusElements: [],
 
 	// called every time calendar is closed
 	onClose: undefined, // function (dateObj, dateStr) {}
