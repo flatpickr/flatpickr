@@ -57,6 +57,18 @@ function rangePlugin() {
 				});
 			},
 
+			onChange () {
+				if (!fp.selectedDates.length) {
+					setTimeout(() => {
+						if (fp.selectedDates.length)
+							return;
+
+						fp.secondInput.value = "";
+						fp._prevDates = [];
+					}, 10)
+				}
+			},
+
 			onValueUpdate (selDates, dateStr) {
 				if (!fp.secondInput)
 					return;
