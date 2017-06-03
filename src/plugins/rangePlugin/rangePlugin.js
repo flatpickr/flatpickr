@@ -69,6 +69,13 @@ function rangePlugin() {
 				}
 			},
 
+			onDestroy () {
+				fp.secondInput.parentNode.removeChild(fp.secondInput);
+				delete fp._prevDates;
+				delete fp._firstInputFocused;
+				delete fp._secondInputFocused;
+			},
+
 			onValueUpdate (selDates, dateStr) {
 				if (!fp.secondInput)
 					return;
