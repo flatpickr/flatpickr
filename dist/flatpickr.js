@@ -846,6 +846,7 @@ function FlatpickrInstance(element, config) {
 	}
 
 	function destroy() {
+		triggerEvent("Destroy");
 		for (var i = self._handlers.length; i--;) {
 			var h = self._handlers[i];
 			h.element.removeEventListener(h.event, h.handler);
@@ -1151,7 +1152,7 @@ function FlatpickrInstance(element, config) {
 	function parseConfig() {
 		var boolOpts = ["wrap", "weekNumbers", "allowInput", "clickOpens", "time_24hr", "enableTime", "noCalendar", "altInput", "shorthandCurrentMonth", "inline", "static", "enableSeconds", "disableMobile"];
 
-		var hooks = ["onChange", "onClose", "onDayCreate", "onKeyDown", "onMonthChange", "onOpen", "onParseConfig", "onReady", "onValueUpdate", "onYearChange"];
+		var hooks = ["onChange", "onClose", "onDayCreate", "onDestroy", "onKeyDown", "onMonthChange", "onOpen", "onParseConfig", "onReady", "onValueUpdate", "onYearChange"];
 
 		self.config = Object.create(flatpickr.defaultConfig);
 

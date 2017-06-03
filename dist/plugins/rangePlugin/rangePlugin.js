@@ -59,6 +59,22 @@ function rangePlugin() {
 					if (e.key === "Enter") fp.setDate([fp._input.value, fp.selectedDates[1]], true, dateFormat);
 				});
 			},
+			onChange: function onChange() {
+				if (!fp.selectedDates.length) {
+					setTimeout(function () {
+						if (fp.selectedDates.length) return;
+
+						fp.secondInput.value = "";
+						fp._prevDates = [];
+					}, 10);
+				}
+			},
+			onDestroy: function onDestroy() {
+				fp.secondInput.parentNode.removeChild(fp.secondInput);
+				delete fp._prevDates;
+				delete fp._firstInputFocused;
+				delete fp._secondInputFocused;
+			},
 			onValueUpdate: function onValueUpdate(selDates, dateStr) {
 				if (!fp.secondInput) return;
 
