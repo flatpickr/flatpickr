@@ -1359,7 +1359,7 @@ function FlatpickrInstance(element, config) {
 			positionCalendar();
 	}
 
-	function open(e) {
+	function open(e, positionElement) {
 		if (self.isMobile) {
 			if (e) {
 				e.preventDefault();
@@ -1379,7 +1379,7 @@ function FlatpickrInstance(element, config) {
 
 		self.isOpen = true;
 		self.calendarContainer.classList.add("open");
-		positionCalendar();
+		positionCalendar(positionElement);
 		self._input.classList.add("active");
 
 
@@ -1519,14 +1519,14 @@ function FlatpickrInstance(element, config) {
 		);
 	}
 
-	function positionCalendar() {
+	function positionCalendar(positionElement = self._positionElement) {
 		if (self.calendarContainer === undefined)
 			return;
 
 		const calendarHeight = self.calendarContainer.offsetHeight,
 			calendarWidth = self.calendarContainer.offsetWidth,
 			configPos = self.config.position,
-			inputBounds = self._positionElement.getBoundingClientRect(),
+			inputBounds = positionElement.getBoundingClientRect(),
 			distanceFromBottom = window.innerHeight - inputBounds.bottom,
 			showOnTop = configPos === "above" || (
 				configPos !== "below"
@@ -1535,7 +1535,7 @@ function FlatpickrInstance(element, config) {
 			);
 
 		let top = (window.pageYOffset + inputBounds.top) + (!showOnTop
-			? (self._positionElement.offsetHeight + 2)
+			? (positionElement.offsetHeight + 2)
 			: (- calendarHeight - 2)
 		);
 
