@@ -4,6 +4,9 @@ function FlatpickrInstance(element, config) {
 
 	self._ = {};
 	self._.afterDayAnim = afterDayAnim;
+	self._bind = bind;
+	self._compareDates = compareDates;
+	self._setHoursFromDate = setHoursFromDate;
 	self.changeMonth = changeMonth;
 	self.changeYear = changeYear;
 	self.clear = clear;
