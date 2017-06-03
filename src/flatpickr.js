@@ -1017,6 +1017,7 @@ function FlatpickrInstance(element, config) {
 	}
 
 	function destroy() {
+		triggerEvent("Destroy");
 		for (let i = self._handlers.length; i--;) {
 			const h = self._handlers[i];
 			h.element.removeEventListener(h.event, h.handler);
@@ -1426,7 +1427,7 @@ function FlatpickrInstance(element, config) {
 		];
 
 		let hooks = [
-			"onChange", "onClose", "onDayCreate", "onKeyDown", "onMonthChange",
+			"onChange", "onClose", "onDayCreate", "onDestroy", "onKeyDown", "onMonthChange",
 			"onOpen", "onParseConfig", "onReady", "onValueUpdate", "onYearChange"
 		];
 
