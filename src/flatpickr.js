@@ -1079,7 +1079,6 @@ function FlatpickrInstance(element, config) {
 				: !isInput && !isCalendarElement;
 
 			if(lostFocus) {
-				e.preventDefault();
 				self.close();
 
 				if (self.config.mode === "range" && self.selectedDates.length === 1) {
