@@ -2044,7 +2044,9 @@ function FlatpickrInstance(element, config) {
 				.map(dObj => self.formatDate(dObj, self.config.altFormat))
 				.join(joinChar);
 		}
-		triggerEvent("ValueUpdate");
+
+		if (triggerChange !== false)
+			triggerEvent("ValueUpdate");
 	}
 
 	function mouseDelta(e) {
