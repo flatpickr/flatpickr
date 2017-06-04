@@ -47,7 +47,7 @@ googleAnalytics = ""
     [params.font]
         text = "Libre Franklin"
         code = "Roboto Mono"
-
+[taxonomies]
 
 [social]
     twitter = ""
