@@ -81,7 +81,7 @@ weight = "6"
             <td>
                 <p>Initial value of the minute element.</p>
             </td>
-        </tr>        
+        </tr>
         <tr>
             <td>disable</td>
             <td>array</td>
@@ -227,12 +227,6 @@ weight = "6"
             <td>boolean</td>
             <td>false</td>
             <td>Displays time picker in 24 hour mode without AM/PM selection when enabled.</td>
-        </tr>
-        <tr>
-            <td>utc</td>
-            <td>boolean</td>
-            <td>false</td>
-            <td>When true, dates will parsed, formatted, and displayed in UTC. It's recommended that date strings contain the timezone, but not necessary.</td>
         </tr>
         <tr>
             <td>weekNumbers</td>
