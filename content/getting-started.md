@@ -32,30 +32,23 @@ If, for any reason, you are constained to a non-module environment (e.g. no bund
 ```
 
 
-## Usage 
+## Usage
 
-### Using the flatpickr **module**
-
-This is the recommended method if you can `require` packages on front end
-
-```javascript
-const Flatpickr = require("flatpickr");
-new Flatpickr(element, optional_config);
-```
-
-where `element` is a [node](https://developer.mozilla.org/en-US/docs/Web/API/Element). 
-
-Configuration is optional and passed in an object`{}`.
-
-### Non-module environments
-
-The above syntax works just as well for non-module environments. Make sure the flatpickr's script is included, and the `Flatpickr` variable will be available.
-
-Additionally, flatpickr registers a helper function to make invocation easier.
+If you're using a bundler, e.g. `webpack`, you'll need to import flatpickr.
 
 ```js
-flatpickr(".mySelector", optional_config);
+const flatpickr = require("flatpickr");
 ```
+
+All of the following are valid ways to create flatpickr instance.
+
+```javascript
+flatpickr("#myID", {});
+flatpickr(".myClass", {}); // creates multiple instances
+flatpickr(element, {}); // https://developer.mozilla.org/en-US/docs/Web/API/Element
+```
+
+Configuration is optional and passed in an object `{}`.
 
 ### jQuery
 
