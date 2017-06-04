@@ -34,12 +34,8 @@
 
 			<aside class="copyright" role="note">
 				{{ with .Site.Params.copyright }}
-				&copy; {{ $.Now.Format "2006" }} {{ . }} &ndash;
+				&copy; {{ now.Format "2006" }} {{ . }} &ndash;
 				{{ end }}
-				Documentation built with
-				<a href="https://www.gohugo.io" target="_blank">Hugo</a>
-				using the
-				<a href="http://github.com/digitalcraftsman/hugo-material-docs" target="_blank">Material</a> theme.
 			</aside>
 		</div>
 	</article>
