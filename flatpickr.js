@@ -1,4 +1,4 @@
-Flatpickr.defaultConfig.animate = window.navigator.userAgent.indexOf('MSIE') === -1;
+flatpickr.defaultConfig.animate = window.navigator.userAgent.indexOf('MSIE') === -1;
 flatpickr(".flatpickr");
 
 var examples = document.querySelectorAll(".flatpickr");
@@ -168,6 +168,6 @@ var configs = {
 }
 
 for (var i = 0; i < examples.length; i++) {
-    new Flatpickr(examples[i], configs[examples[i].dataset.id] || {});
+    new flatpickr(examples[i], configs[examples[i].dataset.id] || {});
 }
 
