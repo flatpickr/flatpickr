@@ -72,25 +72,6 @@ describe('flatpickr', () => {
 			expect(fp.days.querySelector(".selected").textContent).toEqual(date.getDate() + '');
 		});
 
-		it("should parse UTC defaultDate", () => {
-			createInstance({
-				defaultDate: "2016-12-27T16:16:22.585Z",
-				enableTime: true,
-				utc: true
-			});
-
-			expect(fp.currentYear).toEqual(2016);
-			expect(fp.currentMonth).toEqual(11);
-			expect(fp.days.querySelector(".selected").textContent).toEqual("27");
-
-			expect(fp.showTimeInput).toBe(true);
-
-			expect(fp.hourElement.value).toEqual("04");
-			expect(fp.minuteElement.value).toEqual("16");
-			expect(fp.amPM.textContent).toEqual("PM");
-
-		});
-
 		it("shouldn't parse out-of-bounds defaultDate", () => {
 			createInstance({
 				minDate: "2016-12-28T16:16:22.585Z",
@@ -232,12 +213,12 @@ describe('flatpickr', () => {
 			});
 
 			it('should parse "21:11:12"', () => {
-				elem.value = '21:11:12';
 				createInstance({
 					allowInput: true,
 					enableTime: true,
 					enableSeconds: true,
 					noCalendar: true,
+					defaultDate: '21:11:12'
 				});
 
 				expect(fp.selectedDates[0]).toBeDefined();
@@ -247,12 +228,12 @@ describe('flatpickr', () => {
 			});
 
 			it('should parse "11:59 PM"', () => {
-				elem.value = '11:59 PM';
 				createInstance({
 					allowInput: true,
 					enableTime: true,
 					noCalendar: true,
-					dateFormat: "h:i K"
+					dateFormat: "h:i K",
+					defaultDate: '11:59 PM'
 				});
 
 				expect(fp.selectedDates[0]).toBeDefined();
@@ -260,21 +241,18 @@ describe('flatpickr', () => {
 				expect(fp.selectedDates[0].getMinutes()).toBe(59);
 				expect(fp.selectedDates[0].getSeconds()).toBe(0);
 
-				const amPmElement = fp.amPM;
-
-				expect(amPmElement).toBeDefined();
-				expect(amPmElement.innerHTML).toBe('PM');
+				expect(fp.amPM).toBeDefined();
+				expect(fp.amPM.innerHTML).toBe('PM');
 			});
 
 			it('should parse "3:05:03 PM"', () => {
-
-				elem.value = '3:05:03 PM';
 				createInstance({
 					allowInput: true,
 					enableTime: true,
 					enableSeconds: true,
 					noCalendar: true,
-					dateFormat: "h:i:S K"
+					dateFormat: "h:i:S K",
+					defaultDate: '3:05:03 PM'
 				});
 
 				expect(fp.selectedDates[0]).toBeDefined();
@@ -1068,11 +1046,29 @@ describe('flatpickr', () => {
 			createInstance();
 			expect(fp.l10n.months.longhand[0]).toEqual("Январь");
 		});
+
+		it("correctly formats altInput", () => {
+			createInstance({
+				locale: "ru",
+				altInput: true,
+				altFormat: "F",
+				defaultDate: "2016-12-27T16:16:22.585Z"
+			});
+			expect(fp.altInput.value).toEqual("Декабрь");
+
+			createInstance({
+				locale: "en",
+				altInput: true,
+				altFormat: "F",
+				defaultDate: "2016-12-27T16:16:22.585Z"
+			});
+			expect(fp.altInput.value).toEqual("December");
+		});
 	});
 
-	afterAll(() => {
-		fp.destroy();
-		elem.parentNode.removeChild(elem);
-	});
+	// afterAll(() => {
+	// 	fp.destroy();
+	// 	elem.parentNode.removeChild(elem);
+	// });
 
 });

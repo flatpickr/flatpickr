@@ -1,5 +1,5 @@
-/*! flatpickr v2.6.1, @license MIT */
-function Flatpickr(element, config) {
+/*! flatpickr v2.6.3, @license MIT */
+function FlatpickrInstance(element, config) {
 	const self = this;
 
 	self._ = {};
@@ -19,10 +19,10 @@ function Flatpickr(element, config) {
 	self.toggle = toggle;
 
 	function init() {
-		self.element = element;
+		self.element = self.input = element;
 		self.instanceConfig = config || {};
-		self.parseDate = Flatpickr.prototype.parseDate.bind(self);
-		self.formatDate = Flatpickr.prototype.formatDate.bind(self);
+		self.parseDate = FlatpickrInstance.prototype.parseDate.bind(self);
+		self.formatDate = FlatpickrInstance.prototype.formatDate.bind(self);
 
 		setupFormats();
 		parseConfig();
@@ -116,7 +116,7 @@ function Flatpickr(element, config) {
 		let hours = (parseInt(self.hourElement.value, 10) || 0) % (self.amPM ? 12 : 24),
 			minutes = (parseInt(self.minuteElement.value, 10) || 0) % 60,
 			seconds = self.config.enableSeconds
-				? (parseInt(self.secondElement.value, 10) || 0)
+				? (parseInt(self.secondElement.value, 10) || 0)  % 60
 				: 0;
 
 		if (self.amPM !== undefined)
@@ -238,6 +238,7 @@ function Flatpickr(element, config) {
 	 */
 	function bindEvents() {
 		self._handlers = [];
+		self._animationLoop = [];
 		if (self.config.wrap) {
 			["open", "close", "toggle", "clear"].forEach(evt => {
 				Array.prototype.forEach.call(
@@ -273,8 +274,10 @@ function Flatpickr(element, config) {
 		bind(window.document, "mousedown", onClick(documentClick));
 		bind(self._input, "blur", documentClick);
 
-		if (self.config.clickOpens === true)
+		if (self.config.clickOpens === true) {
 			bind(self._input, "focus", self.open);
+			bind(self._input, "mousedown", onClick(self.open));
+		}
 
 		if (!self.config.noCalendar) {
 			self.monthNav.addEventListener("wheel", e => e.preventDefault());
@@ -312,6 +315,13 @@ function Flatpickr(element, config) {
 		}
 	}
 
+	function processPostDayAnimation() {
+		for(let i = self._animationLoop.length; i--;){
+			self._animationLoop[i]();
+			self._animationLoop.splice(i, 1);
+		}
+	}
+
 	/**
 	 * Removes the day container that slided out of view
 	 * @param {Event} e the animation event
@@ -323,6 +333,7 @@ function Flatpickr(element, config) {
 					self.daysContainer.lastChild.classList.remove("slideLeftNew")
 					self.daysContainer.removeChild(self.daysContainer.firstChild);
 					self.days = self.daysContainer.firstChild;
+					processPostDayAnimation();
 
 					break;
 
@@ -330,6 +341,7 @@ function Flatpickr(element, config) {
 					self.daysContainer.firstChild.classList.remove("slideRightNew")
 					self.daysContainer.removeChild(self.daysContainer.lastChild);
 					self.days = self.daysContainer.firstChild;
+					processPostDayAnimation();
 
 					break;
 
@@ -506,7 +518,7 @@ function Flatpickr(element, config) {
 
 		dayElement.dateObj = date;
 		dayElement.$i = i;
-		dayElement.setAttribute("aria-label", self.formatDate(date, "F j, Y"));
+		dayElement.setAttribute("aria-label", self.formatDate(date, self.config.ariaDateFormat));
 
 		if (compareDates(date, self.now) === 0) {
 			self.todayDateElem = dayElement;
@@ -606,8 +618,8 @@ function Flatpickr(element, config) {
 	}
 
 	function afterDayAnim(fn) {
-		if (self.config.animate)
-			return setTimeout(fn, self._.daysAnimDuration + 1);
+		if (self.config.animate === true)
+			return self._animationLoop.push(fn);
 		fn();
 	}
 
@@ -911,8 +923,6 @@ function Flatpickr(element, config) {
 
 		buildDays(!skipAnimations ? delta : undefined);
 
-
-
 		if (skipAnimations) {
 			triggerEvent("MonthChange");
 			return updateNavigationCurrentMonth();
@@ -939,7 +949,6 @@ function Flatpickr(element, config) {
 				: self.oldCurMonth
 		);
 
-
 		if (delta > 0) {
 			self.daysContainer.firstChild.classList.add("slideLeft");
 			self.daysContainer.lastChild.classList.add("slideLeftNew");
@@ -965,13 +974,11 @@ function Flatpickr(element, config) {
 
 		triggerEvent("MonthChange");
 
-		if (self._.daysAnimDuration === undefined) {
-			const compStyle = window.getComputedStyle(self.daysContainer.lastChild);
-
-			const duration = compStyle.getPropertyValue("animation-duration")
-				|| compStyle.getPropertyValue("-webkit-animation-duration");
-
-			self._.daysAnimDuration = parseInt(/(\d+)s/.exec(duration)[1]);
+		if (document.activeElement && document.activeElement.$i) {
+			const index = document.activeElement.$i;
+			afterDayAnim(() => {
+				focusOnDay(index, 0)
+			});
 		}
 	}
 
@@ -1074,7 +1081,6 @@ function Flatpickr(element, config) {
 			if(lostFocus) {
 				e.preventDefault();
 				self.close();
-				self._input.blur();
 
 				if (self.config.mode === "range" && self.selectedDates.length === 1) {
 					self.clear(false);
@@ -1202,24 +1208,22 @@ function Flatpickr(element, config) {
 
 				case "ArrowLeft":
 				case "ArrowRight":
-					e.preventDefault();
+					if (!isTimeObj) {
+						e.preventDefault();
 
-					if (self.daysContainer) {
-						const delta = e.key === "ArrowRight" ? 1 : -1;
+						if (self.daysContainer) {
+							const delta = e.key === "ArrowRight" ? 1 : -1;
 
-						if (!e.ctrlKey)
-							focusOnDay(e.target.$i, delta);
+							if (!e.ctrlKey)
+								focusOnDay(e.target.$i, delta);
 
-						else {
-							changeMonth(delta, true);
-							afterDayAnim(() => {
-								focusOnDay(e.target.$i, 0)
-							});
+							else
+								changeMonth(delta, true);
 						}
-					}
 
-					else if (self.config.enableTime && !isTimeObj)
-						self.hourElement.focus();
+						else if (self.config.enableTime && !isTimeObj)
+							self.hourElement.focus();
+					}
 
 					break;
 
@@ -1252,7 +1256,15 @@ function Flatpickr(element, config) {
 						self.minuteElement.select();
 					}
 
-					else if (e.target === self.minuteElement && self.amPM) {
+					else if (
+						e.target === self.minuteElement &&
+						(self.secondElement || self.amPM)
+					) {
+						e.preventDefault();
+						(self.secondElement || self.amPM).focus();
+					}
+
+					else if (e.target === self.secondElement) {
 						e.preventDefault();
 						self.amPM.focus();
 					}
@@ -1408,7 +1420,7 @@ function Flatpickr(element, config) {
 
 	function parseConfig() {
 		let boolOpts = [
-			"utc", "wrap", "weekNumbers", "allowInput", "clickOpens", "time_24hr", "enableTime", "noCalendar", "altInput", "shorthandCurrentMonth", "inline", "static", "enableSeconds", "disableMobile"
+			"wrap", "weekNumbers", "allowInput", "clickOpens", "time_24hr", "enableTime", "noCalendar", "altInput", "shorthandCurrentMonth", "inline", "static", "enableSeconds", "disableMobile"
 		];
 
 		let hooks = [
@@ -1416,7 +1428,7 @@ function Flatpickr(element, config) {
 			"onOpen", "onParseConfig", "onReady", "onValueUpdate", "onYearChange"
 		];
 
-		self.config = Object.create(Flatpickr.defaultConfig);
+		self.config = Object.create(flatpickr.defaultConfig);
 
 		let userConfig = Object.assign(
 			{},
@@ -1432,13 +1444,13 @@ function Flatpickr(element, config) {
 		if (!userConfig.dateFormat && userConfig.enableTime) {
 			self.config.dateFormat = self.config.noCalendar
 				? "H:i" + (self.config.enableSeconds ? ":S" : "")
-				: Flatpickr.defaultConfig.dateFormat + " H:i" + (self.config.enableSeconds ? ":S" : "");
+				: flatpickr.defaultConfig.dateFormat + " H:i" + (self.config.enableSeconds ? ":S" : "");
 		}
 
 		if (userConfig.altInput && userConfig.enableTime && !userConfig.altFormat) {
 			self.config.altFormat = self.config.noCalendar
 				? "h:i" + (self.config.enableSeconds ? ":S K" : " K")
-				: Flatpickr.defaultConfig.altFormat + ` h:i${self.config.enableSeconds ? ":S" : ""} K`;
+				: flatpickr.defaultConfig.altFormat + ` h:i${self.config.enableSeconds ? ":S" : ""} K`;
 		}
 
 		Object.defineProperty(self.config, "minDate", {
@@ -1491,16 +1503,16 @@ function Flatpickr(element, config) {
 
 	function setupLocale() {
 		if (typeof self.config.locale !== "object" &&
-			typeof Flatpickr.l10ns[self.config.locale] === "undefined"
+			typeof flatpickr.l10ns[self.config.locale] === "undefined"
 		)
 			console.warn(`flatpickr: invalid locale ${self.config.locale}`);
 
 		self.l10n = Object.assign(
-			Object.create(Flatpickr.l10ns.default),
+			Object.create(flatpickr.l10ns.default),
 			typeof self.config.locale === "object"
 				? self.config.locale
 				: self.config.locale !== "default"
-					? Flatpickr.l10ns[self.config.locale] || {}
+					? flatpickr.l10ns[self.config.locale] || {}
 					: {}
 		);
 	}
@@ -1656,8 +1668,18 @@ function Flatpickr(element, config) {
 		if (self.config.enableTime)
 			setTimeout(() => self.hourElement.select(), 451);
 
-		if (self.config.mode !== "multiple" && !self.config.enableTime && self.config.closeOnSelect)
-			self.close();
+		if (self.config.closeOnSelect) {
+			const single = self.config.mode === "single" && !self.config.enableTime;
+			const range = (
+				self.config.mode === "range" &&
+				self.selectedDates.length === 2 &&
+				!self.config.enableTime
+			);
+
+			if (single || range)
+				self.close();
+		}
+
 	}
 
 	function set(option, value) {
@@ -1830,12 +1852,13 @@ function Flatpickr(element, config) {
 
 	/* istanbul ignore next */
 	function setupFormats() {
+		self.formats = Object.create(FlatpickrInstance.prototype.formats);
 		["D", "F", "J", "M", "W", "l"].forEach(f => {
-			self.formats[f] = Flatpickr.prototype.formats[f].bind(self);
+			self.formats[f] = FlatpickrInstance.prototype.formats[f].bind(self);
 		});
 
-		self.revFormat.F = Flatpickr.prototype.revFormat.F.bind(self);
-		self.revFormat.M = Flatpickr.prototype.revFormat.M.bind(self);
+		self.revFormat.F = FlatpickrInstance.prototype.revFormat.F.bind(self);
+		self.revFormat.M = FlatpickrInstance.prototype.revFormat.M.bind(self);
 	}
 
 	function setupInputs() {
@@ -1861,6 +1884,8 @@ function Flatpickr(element, config) {
 			);
 			self._input = self.altInput;
 			self.altInput.placeholder = self.input.placeholder;
+			self.altInput.disabled = self.input.disabled;
+			self.altInput.required = self.input.required;
 			self.altInput.type = "text";
 			self.input.type = "hidden";
 
@@ -1933,7 +1958,7 @@ function Flatpickr(element, config) {
 
 		if (hooks !== undefined && hooks.length > 0) {
 			for (let i = 0; hooks[i] && i < hooks.length; i++)
-				hooks[i](self.selectedDates, self._input.value, self, data);
+				hooks[i](self.selectedDates, self.input.value, self, data);
 		}
 
 		if (event === "Change") {
@@ -2183,17 +2208,330 @@ function Flatpickr(element, config) {
 	return self;
 }
 
+FlatpickrInstance.prototype = {
+	formats: {
+		// get the date in UTC
+		Z: date => date.toISOString(),
+
+		// weekday name, short, e.g. Thu
+		D: function (date) {
+			return this.l10n.weekdays.shorthand[this.formats.w(date)];
+		},
+
+		// full month name e.g. January
+		F: function (date) {
+			return this.utils.monthToStr(this.formats.n(date) - 1, false);
+		},
+
+		// padded hour 1-12
+		G: function (date) {
+			return FlatpickrInstance.prototype.pad(
+				FlatpickrInstance.prototype.formats.h(date)
+			)
+		},
+
+		// hours with leading zero e.g. 03
+		H: date => FlatpickrInstance.prototype.pad(date.getHours()),
+
+		// day (1-30) with ordinal suffix e.g. 1st, 2nd
+		J: function (date) {
+			return date.getDate() + this.l10n.ordinal(date.getDate())
+		},
+
+		// AM/PM
+		K: date => date.getHours() > 11 ? "PM" : "AM",
+
+		// shorthand month e.g. Jan, Sep, Oct, etc
+		M: function (date) {
+			return this.utils.monthToStr(date.getMonth(), true);
+		},
+
+		// seconds 00-59
+		S: date => FlatpickrInstance.prototype.pad(date.getSeconds()),
+
+		// unix timestamp
+		U: date => date.getTime() / 1000,
+
+		W: function(date) {
+			return this.config.getWeek(date);
+		},
+
+		// full year e.g. 2016
+		Y: date => date.getFullYear(),
+
+		// day in month, padded (01-30)
+		d: date => FlatpickrInstance.prototype.pad(date.getDate()),
+
+		// hour from 1-12 (am/pm)
+		h: date => date.getHours() % 12 ? date.getHours() % 12 : 12,
+
+		// minutes, padded with leading zero e.g. 09
+		i: date => FlatpickrInstance.prototype.pad(date.getMinutes()),
+
+		// day in month (1-30)
+		j: date => date.getDate(),
+
+		// weekday name, full, e.g. Thursday
+		l: function (date) {
+			return this.l10n.weekdays.longhand[date.getDay()];
+		},
+
+		// padded month number (01-12)
+		m: date => FlatpickrInstance.prototype.pad(date.getMonth() + 1),
+
+		// the month number (1-12)
+		n: date => date.getMonth() + 1,
+
+		// seconds 0-59
+		s: date => date.getSeconds(),
+
+		// number of the day of the week
+		w: date => date.getDay(),
+
+		// last two digits of year e.g. 16 for 2016
+		y: date => String(date.getFullYear()).substring(2)
+	},
+
+	/**
+	 * Formats a given Date object into a string based on supplied format
+	 * @param {Date} dateObj the date object
+	 * @param {String} frmt a string composed of formatting tokens e.g. "Y-m-d"
+	 * @return {String} The textual representation of the date e.g. 2017-02-03
+	 */
+	formatDate (dateObj, frmt) {
+		if (this.config !== undefined && this.config.formatDate !== undefined)
+			return this.config.formatDate(dateObj, frmt);
+
+		return frmt.split("").map((c, i, arr) => this.formats[c] && arr[i - 1] !== "\\"
+			? this.formats[c](dateObj)
+			: c !== "\\" ? c : ""
+		).join("");
+	},
+
+	revFormat: {
+		D: () => {},
+		F: function(dateObj, monthName) {
+			dateObj.setMonth(this.l10n.months.longhand.indexOf(monthName));
+		},
+		G: (dateObj, hour) => {
+			dateObj.setHours(parseFloat(hour))
+		},
+		H: (dateObj, hour) => {
+			dateObj.setHours(parseFloat(hour))
+		},
+		J: (dateObj, day) => {
+			dateObj.setDate(parseFloat(day))
+		},
+		K: (dateObj, amPM) => {
+			const hours = dateObj.getHours();
+
+			if (hours !== 12)
+				dateObj.setHours(hours % 12 + 12 * /pm/i.test(amPM));
+		},
+		M: function(dateObj, shortMonth) {
+			dateObj.setMonth(this.l10n.months.shorthand.indexOf(shortMonth));
+		},
+		S: (dateObj, seconds) => {
+			dateObj.setSeconds(seconds);
+		},
+		U: (dateObj, unixSeconds) => new Date(parseFloat(unixSeconds) * 1000),
+
+		W: function(dateObj, weekNumber){
+			weekNumber = parseInt(weekNumber);
+			return new Date(dateObj.getFullYear(), 0, 2 + (weekNumber - 1) * 7, 0, 0, 0, 0, 0);
+		},
+		Y: (dateObj, year) =>  {
+			dateObj.setFullYear(year);
+		},
+		Z: (dateObj, ISODate) => new Date(ISODate),
+
+		d: (dateObj, day) =>  {
+			dateObj.setDate(parseFloat(day))
+		},
+		h: (dateObj, hour) =>  {
+			dateObj.setHours(parseFloat(hour))
+		},
+		i: (dateObj, minutes) =>  {
+			dateObj.setMinutes(parseFloat(minutes))
+		},
+		j: (dateObj, day) =>  {
+			dateObj.setDate(parseFloat(day))
+		},
+		l: () =>  {},
+		m: (dateObj, month) =>  {
+			dateObj.setMonth(parseFloat(month) - 1)
+		},
+		n: (dateObj, month) =>  {
+			dateObj.setMonth(parseFloat(month) - 1)
+		},
+		s: (dateObj, seconds) =>  {
+			dateObj.setSeconds(parseFloat(seconds))
+		},
+		w: () =>  {},
+		y: (dateObj, year) =>  {
+			dateObj.setFullYear(2000 + parseFloat(year))
+		},
+	},
+
+	tokenRegex: {
+		D:"(\\w+)",
+		F:"(\\w+)",
+		G: "(\\d\\d|\\d)",
+		H:"(\\d\\d|\\d)",
+		J:"(\\d\\d|\\d)\\w+",
+		K:"(am|AM|Am|aM|pm|PM|Pm|pM)",
+		M:"(\\w+)",
+		S:"(\\d\\d|\\d)",
+		U: "(.+)",
+		W:"(\\d\\d|\\d)",
+		Y:"(\\d{4})",
+		Z:"(.+)",
+		d:"(\\d\\d|\\d)",
+		h:"(\\d\\d|\\d)",
+		i:"(\\d\\d|\\d)",
+		j:"(\\d\\d|\\d)",
+		l:"(\\w+)",
+		m:"(\\d\\d|\\d)",
+		n:"(\\d\\d|\\d)",
+		s:"(\\d\\d|\\d)",
+		w: "(\\d\\d|\\d)",
+		y:"(\\d{2})"
+	},
+
+	pad: number => `0${number}`.slice(-2),
+
+	/**
+	 * Parses a date(+time) string into a Date object
+	 * @param {String} date the date string, e.g. 2017-02-03 14:45
+	 * @param {String} givenFormat the date format, e.g. Y-m-d H:i
+	 * @param {Boolean} timeless whether to reset the time of Date object
+	 * @return {Date} the parsed Date object
+	 */
+	parseDate (date, givenFormat, timeless) {
+		if (!date)
+			return null;
+
+		const date_orig = date;
+
+		if (date instanceof Date)
+			date = new Date(date.getTime()); // create a copy
+
+		else if (date.toFixed !== undefined) // timestamp
+			date = new Date(date);
+
+		else { // date string
+			const format = givenFormat || (this.config || flatpickr.defaultConfig).dateFormat;
+			date = String(date).trim();
+
+			if (date === "today") {
+				date = new Date();
+				timeless = true;
+			}
+
+			else if (/Z$/.test(date) || /GMT$/.test(date)) // datestrings w/ timezone
+				date = new Date(date);
+
+			else if (this.config && this.config.parseDate)
+				date = this.config.parseDate(date, format);
+
+			else {
+				let parsedDate = !this.config || !this.config.noCalendar
+					? new Date(new Date().getFullYear(), 0, 1, 0, 0, 0 ,0)
+					: new Date(new Date().setHours(0,0,0,0));
+
+				let matched;
+
+				for (let i = 0, matchIndex = 0, regexStr = ""; i < format.length; i++) {
+					const token = format[i];
+					const isBackSlash = token === "\\";
+					const escaped = format[i - 1] === "\\" || isBackSlash;
+
+					if (this.tokenRegex[token] && !escaped) {
+						regexStr += this.tokenRegex[token];
+						const match = new RegExp(regexStr).exec(date);
+						if (match && (matched = true)) {
+							parsedDate =
+								this.revFormat[token](parsedDate, match[++matchIndex])
+								|| parsedDate;
+						}
+					}
+
+					else if (!isBackSlash)
+						regexStr += "."; // don't really care
+
+				}
+
+				date = matched	? parsedDate : null;
+			}
+		}
+
+		/* istanbul ignore next */
+		if (!(date instanceof Date)) {
+			console.warn(`flatpickr: invalid date ${date_orig}`);
+			console.info(this.element);
+			return null;
+		}
+
+		if (timeless === true)
+			date.setHours(0, 0, 0, 0);
+
+		return date;
+	}
+};
+
 /* istanbul ignore next */
-Flatpickr.defaultConfig = {
+function _flatpickr(nodeList, config) {
+	const nodes = Array.prototype.slice.call(nodeList); // static list
+	let instances = [];
+	for (let i = 0; i < nodes.length; i++) {
+		try {
+			if (nodes[i]._flatpickr) {
+				nodes[i]._flatpickr.destroy();
+				nodes[i]._flatpickr = null;
+			}
+
+			nodes[i]._flatpickr = new FlatpickrInstance(nodes[i], config || {});
+			instances.push(nodes[i]._flatpickr);
+		}
+
+		catch (e) {
+			console.warn(e, e.stack);
+		}
+	}
+
+	return instances.length === 1 ? instances[0] : instances;
+}
+
+/* istanbul ignore next */
+if (typeof HTMLElement !== "undefined") { // browser env
+	HTMLCollection.prototype.flatpickr =
+	NodeList.prototype.flatpickr = function (config) {
+		return _flatpickr(this, config);
+	};
+
+	HTMLElement.prototype.flatpickr = function (config) {
+		return _flatpickr([this], config);
+	};
+}
+
+/* istanbul ignore next */
+function flatpickr(selector, config) {
+	if (selector instanceof NodeList)
+		return _flatpickr(selector, config);
+
+	else if (!(selector instanceof HTMLElement))
+		return _flatpickr(window.document.querySelectorAll(selector), config);
+
+	return _flatpickr([selector], config);
+}
+
+/* istanbul ignore next */
+flatpickr.defaultConfig = FlatpickrInstance.defaultConfig = {
 	mode: "single",
 
 	position: "auto",
 
 	animate: window.navigator.userAgent.indexOf("MSIE") === -1,
-
-	/* if true, dates will be parsed, formatted, and displayed in UTC.
-	preloading date strings w/ timezones is recommended but not necessary */
-	utc: false,
 
 	// wrap: see https://chmln.github.io/flatpickr/examples/#flatpickr-external-elements
 	wrap: false,
@@ -2227,6 +2565,9 @@ Flatpickr.defaultConfig = {
 
 	// more date format chars at https://chmln.github.io/flatpickr/#dateformat
 	dateFormat: "Y-m-d",
+
+	// date format used in aria-label for days
+	ariaDateFormat: "F j, Y",
 
 	// altInput - see https://chmln.github.io/flatpickr/#altinput
 	altInput: false,
@@ -2335,7 +2676,7 @@ Flatpickr.defaultConfig = {
 };
 
 /* istanbul ignore next */
-Flatpickr.l10ns = {
+flatpickr.l10ns = {
 	en: {
 		weekdays: {
 			shorthand: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
@@ -2375,309 +2716,9 @@ Flatpickr.l10ns = {
 	}
 };
 
-Flatpickr.l10ns.default = Object.create(Flatpickr.l10ns.en);
-Flatpickr.localize = l10n => Object.assign(Flatpickr.l10ns.default, l10n || {});
-Flatpickr.setDefaults = config => Object.assign(Flatpickr.defaultConfig, config || {});
-
-Flatpickr.prototype = {
-	formats: {
-		// get the date in UTC
-		Z: date => date.toISOString(),
-
-		// weekday name, short, e.g. Thu
-		D: function (date) {
-			return this.l10n.weekdays.shorthand[this.formats.w(date)];
-		},
-
-		// full month name e.g. January
-		F: function (date) {
-			return this.utils.monthToStr(this.formats.n(date) - 1, false);
-		},
-
-		// hours with leading zero e.g. 03
-		H: date => Flatpickr.prototype.pad(date.getHours()),
-
-		// day (1-30) with ordinal suffix e.g. 1st, 2nd
-		J: function (date) {
-			return date.getDate() + this.l10n.ordinal(date.getDate())
-		},
-
-		// AM/PM
-		K: date => date.getHours() > 11 ? "PM" : "AM",
-
-		// shorthand month e.g. Jan, Sep, Oct, etc
-		M: function (date) {
-			return this.utils.monthToStr(date.getMonth(), true);
-		},
-
-		// seconds 00-59
-		S: date => Flatpickr.prototype.pad(date.getSeconds()),
-
-		// unix timestamp
-		U: date => date.getTime() / 1000,
-
-		W: function(date) {
-			return this.config.getWeek(date);
-		},
-
-		// full year e.g. 2016
-		Y: date => date.getFullYear(),
-
-		// day in month, padded (01-30)
-		d: date => Flatpickr.prototype.pad(date.getDate()),
-
-		// hour from 1-12 (am/pm)
-		h: date => date.getHours() % 12 ? date.getHours() % 12 : 12,
-
-		// minutes, padded with leading zero e.g. 09
-		i: date => Flatpickr.prototype.pad(date.getMinutes()),
-
-		// day in month (1-30)
-		j: date => date.getDate(),
-
-		// weekday name, full, e.g. Thursday
-		l: function (date) {
-			return this.l10n.weekdays.longhand[date.getDay()];
-		},
-
-		// padded month number (01-12)
-		m: date => Flatpickr.prototype.pad(date.getMonth() + 1),
-
-		// the month number (1-12)
-		n: date => date.getMonth() + 1,
-
-		// seconds 0-59
-		s: date => date.getSeconds(),
-
-		// number of the day of the week
-		w: date => date.getDay(),
-
-		// last two digits of year e.g. 16 for 2016
-		y: date => String(date.getFullYear()).substring(2)
-	},
-
-	/**
-	 * Formats a given Date object into a string based on supplied format
-	 * @param {Date} dateObj the date object
-	 * @param {String} frmt a string composed of formatting tokens e.g. "Y-m-d"
-	 * @return {String} The textual representation of the date e.g. 2017-02-03
-	 */
-	formatDate (dateObj, frmt) {
-		if (this.config !== undefined && this.config.formatDate !== undefined)
-			return this.config.formatDate(dateObj, frmt);
-
-		return frmt.split("").map((c, i, arr) => this.formats[c] && arr[i - 1] !== "\\"
-			? this.formats[c](dateObj)
-			: c !== "\\" ? c : ""
-		).join("");
-	},
-
-	revFormat: {
-		D: () => {},
-		F: function(dateObj, monthName) {
-			dateObj.setMonth(this.l10n.months.longhand.indexOf(monthName));
-		},
-		H: (dateObj, hour) => {
-			dateObj.setHours(parseFloat(hour))
-		},
-		J: (dateObj, day) => {
-			dateObj.setDate(parseFloat(day))
-		},
-		K: (dateObj, amPM) => {
-			const hours = dateObj.getHours();
-
-			if (hours !== 12)
-				dateObj.setHours(hours % 12 + 12 * /pm/i.test(amPM));
-		},
-		M: function(dateObj, shortMonth) {
-			dateObj.setMonth(this.l10n.months.shorthand.indexOf(shortMonth));
-		},
-		S: (dateObj, seconds) => {
-			dateObj.setSeconds(seconds);
-		},
-		U: (dateObj, unixSeconds) => new Date(parseFloat(unixSeconds) * 1000),
-
-		W: function(dateObj, weekNumber){
-			weekNumber = parseInt(weekNumber);
-			return new Date(dateObj.getFullYear(), 0, 2 + (weekNumber - 1) * 7, 0, 0, 0, 0, 0);
-		},
-		Y: (dateObj, year) =>  {
-			dateObj.setFullYear(year);
-		},
-		Z: (dateObj, ISODate) => new Date(ISODate),
-
-		d: (dateObj, day) =>  {
-			dateObj.setDate(parseFloat(day))
-		},
-		h: (dateObj, hour) =>  {
-			dateObj.setHours(parseFloat(hour))
-		},
-		i: (dateObj, minutes) =>  {
-			dateObj.setMinutes(parseFloat(minutes))
-		},
-		j: (dateObj, day) =>  {
-			dateObj.setDate(parseFloat(day))
-		},
-		l: () =>  {},
-		m: (dateObj, month) =>  {
-			dateObj.setMonth(parseFloat(month) - 1)
-		},
-		n: (dateObj, month) =>  {
-			dateObj.setMonth(parseFloat(month) - 1)
-		},
-		s: (dateObj, seconds) =>  {
-			dateObj.setSeconds(parseFloat(seconds))
-		},
-		w: () =>  {},
-		y: (dateObj, year) =>  {
-			dateObj.setFullYear(2000 + parseFloat(year))
-		},
-	},
-
-	tokenRegex: {
-		D:"(\\w+)",
-		F:"(\\w+)",
-		H:"(\\d\\d|\\d)",
-		J:"(\\d\\d|\\d)\\w+",
-		K:"(\\w+)",
-		M:"(\\w+)",
-		S:"(\\d\\d|\\d)",
-		U: "(.+)",
-		W:"(\\d\\d|\\d)",
-		Y:"(\\d{4})",
-		Z:"(.+)",
-		d:"(\\d\\d|\\d)",
-		h:"(\\d\\d|\\d)",
-		i:"(\\d\\d|\\d)",
-		j:"(\\d\\d|\\d)",
-		l:"(\\w+)",
-		m:"(\\d\\d|\\d)",
-		n:"(\\d\\d|\\d)",
-		s:"(\\d\\d|\\d)",
-		w: "(\\d\\d|\\d)",
-		y:"(\\d{2})"
-	},
-
-	pad: number => `0${number}`.slice(-2),
-
-	/**
-	 * Parses a date(+time) string into a Date object
-	 * @param {String} date the date string, e.g. 2017-02-03 14:45
-	 * @param {String} givenFormat the date format, e.g. Y-m-d H:i
-	 * @param {Boolean} timeless whether to reset the time of Date object
-	 * @return {Date} the parsed Date object
-	 */
-	parseDate (date, givenFormat, timeless) {
-		if (!date)
-			return null;
-
-		const date_orig = date;
-
-		if (date instanceof Date) {
-			date = new Date(date.getTime()); // create a copy
-			date.fp_isUTC = date_orig.fp_isUTC;
-		}
-
-		else if (date.toFixed !== undefined) // timestamp
-			date = new Date(date);
-
-		else { // date string
-			const format = givenFormat || (this.config || Flatpickr.defaultConfig).dateFormat;
-			date = String(date).trim();
-
-			if (date === "today") {
-				date = new Date();
-				timeless = true;
-			}
-
-			else if (/Z$/.test(date) || /GMT$/.test(date)) // datestrings w/ timezone
-				date = new Date(date);
-
-			else if (this.config && this.config.parseDate)
-				date = this.config.parseDate(date, format);
-
-			else {
-				let parsedDate = !this.config || !this.config.noCalendar
-					? new Date(new Date().getFullYear(), 0, 1, 0, 0, 0 ,0)
-					: new Date(new Date().setHours(0,0,0,0));
-
-				let matched;
-
-				for (let i = 0, matchIndex = 0, regexStr = ""; i < format.length; i++) {
-					const token = format[i];
-					const isBackSlash = token === "\\";
-					const escaped = format[i - 1] === "\\" || isBackSlash;
-
-					if (this.tokenRegex[token] && !escaped) {
-						regexStr += this.tokenRegex[token];
-						const match = new RegExp(regexStr).exec(date);
-						if (match && (matched = true)) {
-							parsedDate =
-								this.revFormat[token](parsedDate, match[++matchIndex])
-								|| parsedDate;
-						}
-					}
-
-					else if (!isBackSlash)
-						regexStr += "."; // don't really care
-
-				}
-
-				date = matched	? parsedDate : null;
-			}
-		}
-
-		/* istanbul ignore next */
-		if (!(date instanceof Date)) {
-			console.warn(`flatpickr: invalid date ${date_orig}`);
-			console.info(this.element);
-			return null;
-		}
-
-		if (this.config && this.config.utc && !date.fp_isUTC)
-			date = date.fp_toUTC();
-
-		if (timeless === true)
-			date.setHours(0, 0, 0, 0);
-
-		return date;
-	}
-};
-
-/* istanbul ignore next */
-function _flatpickr(nodeList, config) {
-	const nodes = Array.prototype.slice.call(nodeList); // static list
-	let instances = [];
-	for (let i = 0; i < nodes.length; i++) {
-		try {
-			nodes[i]._flatpickr = new Flatpickr(nodes[i], config || {});
-			instances.push(nodes[i]._flatpickr);
-		}
-
-		catch (e) {
-			console.warn(e, e.stack);
-		}
-	}
-
-	return instances.length === 1 ? instances[0] : instances;
-}
-
-/* istanbul ignore next */
-if (typeof HTMLElement !== "undefined") { // browser env
-	HTMLCollection.prototype.flatpickr =
-	NodeList.prototype.flatpickr = function (config) {
-		return _flatpickr(this, config);
-	};
-
-	HTMLElement.prototype.flatpickr = function (config) {
-		return _flatpickr([this], config);
-	};
-}
-
-/* istanbul ignore next */
-function flatpickr(selector, config) {
-	return _flatpickr(window.document.querySelectorAll(selector), config);
-}
+flatpickr.l10ns.default = Object.create(flatpickr.l10ns.en);
+flatpickr.localize = l10n => Object.assign(flatpickr.l10ns.default, l10n || {});
+flatpickr.setDefaults = config => Object.assign(flatpickr.defaultConfig, config || {});
 
 /* istanbul ignore next */
 if (typeof jQuery !== "undefined") {
@@ -2694,20 +2735,5 @@ Date.prototype.fp_incr = function (days) {
 	);
 };
 
-Date.prototype.fp_isUTC = false;
-Date.prototype.fp_toUTC = function () {
-	const newDate = new Date(
-		this.getUTCFullYear(),
-		this.getUTCMonth(),
-		this.getUTCDate(),
-		this.getUTCHours(),
-		this.getUTCMinutes(),
-		this.getUTCSeconds()
-	);
-
-	newDate.fp_isUTC = true;
-	return newDate;
-};
-
 if (typeof module !== "undefined")
-	module.exports = Flatpickr;
+	module.exports = flatpickr;
