@@ -2408,7 +2408,7 @@ FlatpickrInstance.prototype = {
 	 * @return {Date} the parsed Date object
 	 */
 	parseDate (date, givenFormat, timeless) {
-		if (!date)
+		if (date !== 0 && !date)
 			return null;
 
 		const date_orig = date;
