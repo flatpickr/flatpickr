@@ -1381,7 +1381,7 @@ function FlatpickrInstance(element, config) {
 	}
 
 	function setDate(date, triggerChange, format) {
-		if (!date) return self.clear(triggerChange);
+		if (date !== 0 && !date) return self.clear(triggerChange);
 
 		setSelectedDate(date, format);
 
@@ -2005,7 +2005,7 @@ FlatpickrInstance.prototype = {
   * @return {Date} the parsed Date object
   */
 	parseDate: function parseDate(date, givenFormat, timeless) {
-		if (!date) return null;
+		if (date !== 0 && !date) return null;
 
 		var date_orig = date;
 
