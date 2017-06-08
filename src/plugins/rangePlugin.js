@@ -12,6 +12,7 @@ function rangePlugin() {
 				if (fp.selectedDates[1]) {
 					fp.latestSelectedDateObj = fp.selectedDates[1];
 					fp._setHoursFromDate(fp.selectedDates[1]);
+					fp.jumpToDate(fp.selectedDates[1]);
 				}
 
 				[fp._firstInputFocused, fp._secondInputFocused] = [false, true];
@@ -49,6 +50,7 @@ function rangePlugin() {
 					fp.latestSelectedDateObj = fp.selectedDates[0];
 					fp._setHoursFromDate(fp.selectedDates[0]);
 					[fp._firstInputFocused, fp._secondInputFocused] = [true, false];
+					fp.jumpToDate(fp.selectedDates[0]);
 				});
 
 				fp._bind(fp._input, "keydown", e => {
