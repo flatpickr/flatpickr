@@ -36,7 +36,7 @@ See also:
 * [React Component](https://github.com/coderhaoxin/react-flatpickr)
 * [ember-flatpickr addon](https://www.npmjs.com/package/ember-flatpickr)
 * [angular-flatpickr addon](https://www.npmjs.com/package/angular-flatpickr)
-* [Vue-Blu/datepicker](https://chenz24.github.io/vue-blu/#/components/datepicker)
+* [Vue-Blu/datepicker](https://chenz24.github.io/vue-blu/#/en/components/datepicker)
 
 ## Supporting flatpickr
 
