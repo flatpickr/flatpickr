@@ -58,6 +58,8 @@ function rangePlugin() {
 				fp._bind(fp._input, "keydown", function (e) {
 					if (e.key === "Enter") fp.setDate([fp._input.value, fp.selectedDates[1]], true, dateFormat);
 				});
+
+				fp.setDate(fp.selectedDates);
 			},
 			onChange: function onChange() {
 				if (!fp.selectedDates.length) {
