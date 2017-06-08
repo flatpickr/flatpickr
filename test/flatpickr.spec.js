@@ -457,6 +457,12 @@ describe('flatpickr', () => {
 			expect(fp.hourElement.value).toEqual("03");
 			expect(fp.minuteElement.value).toEqual("00");
 			expect(fp.amPM.textContent).toEqual("AM");
+			
+			fp.setDate(0);
+			expect(fp.selectedDates[0]).toBeDefined();
+			expect(fp.selectedDates[0].getFullYear()).toEqual(1970);
+			expect(fp.selectedDates[0].getMonth()).toEqual(0);
+			expect(fp.selectedDates[0].getDate()).toEqual(1);
 
 			fp.setDate("");
 			expect(fp.selectedDates[0]).not.toBeDefined();
