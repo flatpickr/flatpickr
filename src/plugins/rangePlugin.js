@@ -55,6 +55,8 @@ function rangePlugin() {
 					if (e.key === "Enter")
 						fp.setDate([fp._input.value, fp.selectedDates[1]], true, dateFormat);
 				});
+
+				fp.setDate(fp.selectedDates)
 			},
 
 			onChange () {
