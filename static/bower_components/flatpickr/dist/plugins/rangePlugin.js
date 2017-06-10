@@ -1,13 +1,21 @@
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 function rangePlugin() {
+	var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
 	return function (fp) {
 		var dateFormat = void 0;
 
 		var createSecondInput = function createSecondInput() {
-			fp.secondInput = fp._input.cloneNode();
-			fp.secondInput.removeAttribute("id");
-			fp.secondInput._flatpickr = null;
+			if (config.input) {
+				fp.secondInput = config.input instanceof Element ? config.input : window.document.querySelector(config.input);
+			} else {
+				fp.secondInput = fp._input.cloneNode();
+				fp.secondInput.removeAttribute("id");
+				fp.secondInput._flatpickr = null;
+			}
+
+			fp.secondInput.setAttribute("data-fp-omit", "");
 
 			fp._bind(fp.secondInput, ["focus", "click"], function (e) {
 				fp.open(e, fp.secondInput);
@@ -32,8 +40,7 @@ function rangePlugin() {
 					fp.secondInput.click();
 				}
 			});
-
-			fp._input.parentNode.insertBefore(fp.secondInput, fp._input.nextSibling);
+			if (!config.input) fp._input.parentNode.insertBefore(fp.secondInput, fp._input.nextSibling);
 		};
 
 		return {
@@ -75,7 +82,7 @@ function rangePlugin() {
 				}
 			},
 			onDestroy: function onDestroy() {
-				fp.secondInput.parentNode.removeChild(fp.secondInput);
+				if (!config.input) fp.secondInput.parentNode.removeChild(fp.secondInput);
 				delete fp._prevDates;
 				delete fp._firstInputFocused;
 				delete fp._secondInputFocused;
