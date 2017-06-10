@@ -1444,6 +1444,17 @@ function FlatpickrInstance(element, config) {
 		self.config.parseDate = userConfig.parseDate;
 		self.config.formatDate = userConfig.formatDate;
 
+
+		Object.defineProperty(self.config, "enable", {
+			get: () => self.config._enable || [],
+			set: (dates) => self.config._enable = parseDateRules(dates)
+		});
+
+		Object.defineProperty(self.config, "disable", {
+			get: () => self.config._disable || [],
+			set: (dates) => self.config._disable = parseDateRules(dates)
+		});
+
 		Object.assign(self.config, userConfig);
 
 		if (!userConfig.dateFormat && userConfig.enableTime) {
@@ -1749,29 +1760,23 @@ function FlatpickrInstance(element, config) {
 			triggerEvent("Change");
 	}
 
-	function setupDates() {
-		function parseDateRules(arr) {
-			for (let i = arr.length; i--;) {
-				if (typeof arr[i] === "string" || +arr[i])
-					arr[i] = self.parseDate(arr[i], null, true);
+	function parseDateRules(arr) {
+		for (let i = arr.length; i--;) {
+			if (typeof arr[i] === "string" || +arr[i])
+				arr[i] = self.parseDate(arr[i], null, true);
 
-				else if (arr[i] && arr[i].from && arr[i].to) {
-					arr[i].from = self.parseDate(arr[i].from);
-					arr[i].to = self.parseDate(arr[i].to);
-				}
+			else if (arr[i] && arr[i].from && arr[i].to) {
+				arr[i].from = self.parseDate(arr[i].from);
+				arr[i].to = self.parseDate(arr[i].to);
 			}
-
-			return arr.filter(x => x); // remove falsy values
 		}
 
+		return arr.filter(x => x); // remove falsy values
+	}
+
+	function setupDates() {
 		self.selectedDates = [];
 		self.now = new Date();
-
-		if (self.config.disable.length)
-			self.config.disable = parseDateRules(self.config.disable);
-
-		if (self.config.enable.length)
-			self.config.enable = parseDateRules(self.config.enable);
 
 		const preloadedDate = self.config.defaultDate || self.input.value;
 		if (preloadedDate)
