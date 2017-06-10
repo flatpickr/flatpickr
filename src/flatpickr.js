@@ -1017,7 +1017,9 @@ function FlatpickrInstance(element, config) {
 	}
 
 	function destroy() {
-		triggerEvent("Destroy");
+		if (self.config !== undefined)
+			triggerEvent("Destroy");
+
 		for (let i = self._handlers.length; i--;) {
 			const h = self._handlers[i];
 			h.element.removeEventListener(h.event, h.handler);
@@ -2679,7 +2681,9 @@ flatpickr.defaultConfig = FlatpickrInstance.defaultConfig = {
 	// called every time the year is changed
 	onYearChange: undefined,
 
-	onKeyDown: undefined
+	onKeyDown: undefined,
+
+	onDestroy: undefined
 };
 
 /* istanbul ignore next */
