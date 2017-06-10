@@ -14,6 +14,7 @@ function rangePlugin() {
 				if (fp.selectedDates[1]) {
 					fp.latestSelectedDateObj = fp.selectedDates[1];
 					fp._setHoursFromDate(fp.selectedDates[1]);
+					fp.jumpToDate(fp.selectedDates[1]);
 				}
 
 				var _ref = [false, true];
@@ -53,11 +54,15 @@ function rangePlugin() {
 					var _ref2 = [true, false];
 					fp._firstInputFocused = _ref2[0];
 					fp._secondInputFocused = _ref2[1];
+
+					fp.jumpToDate(fp.selectedDates[0]);
 				});
 
 				fp._bind(fp._input, "keydown", function (e) {
 					if (e.key === "Enter") fp.setDate([fp._input.value, fp.selectedDates[1]], true, dateFormat);
 				});
+
+				fp.setDate(fp.selectedDates);
 			},
 			onChange: function onChange() {
 				if (!fp.selectedDates.length) {

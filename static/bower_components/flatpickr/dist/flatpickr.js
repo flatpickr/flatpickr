@@ -2,7 +2,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-/*! flatpickr v3.0.0, @license MIT */
+/*! flatpickr v3.0.3, @license MIT */
 function FlatpickrInstance(element, config) {
 	var self = this;
 
@@ -846,7 +846,8 @@ function FlatpickrInstance(element, config) {
 	}
 
 	function destroy() {
-		triggerEvent("Destroy");
+		if (self.config !== undefined) triggerEvent("Destroy");
+
 		for (var i = self._handlers.length; i--;) {
 			var h = self._handlers[i];
 			h.element.removeEventListener(h.event, h.handler);
@@ -1381,7 +1382,7 @@ function FlatpickrInstance(element, config) {
 	}
 
 	function setDate(date, triggerChange, format) {
-		if (!date) return self.clear(triggerChange);
+		if (date !== 0 && !date) return self.clear(triggerChange);
 
 		setSelectedDate(date, format);
 
@@ -2005,7 +2006,7 @@ FlatpickrInstance.prototype = {
   * @return {Date} the parsed Date object
   */
 	parseDate: function parseDate(date, givenFormat, timeless) {
-		if (!date) return null;
+		if (date !== 0 && !date) return null;
 
 		var date_orig = date;
 
@@ -2247,7 +2248,9 @@ flatpickr.defaultConfig = FlatpickrInstance.defaultConfig = {
 	// called every time the year is changed
 	onYearChange: undefined,
 
-	onKeyDown: undefined
+	onKeyDown: undefined,
+
+	onDestroy: undefined
 };
 
 /* istanbul ignore next */
