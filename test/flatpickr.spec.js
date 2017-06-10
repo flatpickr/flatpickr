@@ -313,16 +313,16 @@ describe("flatpickr", () => {
 						return "MAAAGIC.*^*." + segs.map(seg => {
 							let mapped = null;
 							switch (seg) {
-									case "DAYOFMONTH":
-										mapped = date.getDate();
-										break;
-									case "MONTH":
-										mapped = date.getMonth() + 1;
-										break;
-									case "YEAR":
-										mapped = date.getFullYear();
-										break;
-								}
+								case "DAYOFMONTH":
+									mapped = date.getDate();
+									break;
+								case "MONTH":
+									mapped = date.getMonth() + 1;
+									break;
+								case "YEAR":
+									mapped = date.getFullYear();
+									break;
+							}
 							return "" + mapped;
 						}).join(".*^*.");
 					}
@@ -394,8 +394,8 @@ describe("flatpickr", () => {
 			createInstance({
 				altInput: true,
 				onKeyDown: [() => {
-fired = true;
-}]
+					fired = true;
+				}]
 			});
 
 			expect(input.type).toEqual("hidden");
@@ -955,7 +955,9 @@ fired = true;
 			expect(instance.selectedDates.length).toEqual(1);
 
 			expect(instance.selectedDateElem).toBeDefined();
-			expect(parseInt(instance.selectedDateElem.textContent)).toEqual(new Date().getDate());
+			expect(parseInt(instance.selectedDateElem.textContent)).toEqual(
+				new Date().getDate()
+			);
 
 			simulate("mousedown", wrapper.childNodes[4], { which:1 }, MouseEvent); // clear
 			expect(instance.selectedDates.length).toEqual(0);
