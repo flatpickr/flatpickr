@@ -1,4 +1,4 @@
-/*! flatpickr v3.0.5, @license MIT */
+/*! flatpickr v3.0.5-1, @license MIT */
 function FlatpickrInstance(element, config) {
 	const self = this;
 
@@ -61,6 +61,12 @@ function FlatpickrInstance(element, config) {
 		}
 
 		self.showTimeInput = self.selectedDates.length > 0 || self.config.noCalendar;
+
+		if (self.config.weekNumbers) {
+			self.calendarContainer.style.width = self.daysContainer.offsetWidth
+				+ self.weekWrapper.offsetWidth + "px";
+		}
+
 
 		if (!self.isMobile)
 			positionCalendar();
