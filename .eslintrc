@@ -1,0 +1,71 @@
+{
+  "rules": {
+    "brace-style": [
+      "error",
+      "stroustrup"
+    ],
+    "space-in-parens": 1,
+    "max-len": [
+      "error",
+      95,
+      {
+        "ignoreRegExpLiterals": true,
+        "ignoreComments": true,
+        "ignoreStrings": true
+      }
+    ],
+    "no-extra-bind": 2,
+    "no-eq-null": 1,
+    "no-unreachable": 2,
+    "comma-dangle": [
+      "error",
+      "only-multiline"
+    ],
+    "quotes": [
+      "error",
+      "double"
+    ],
+    "space-infix-ops": "warn",
+    "no-prototype-builtins": "warn",
+    "no-invalid-regexp": 1,
+    "no-duplicate-case": 2,
+    "no-redeclare": 2,
+    "no-constant-condition": 2,
+    "no-undef": "warn",
+    "no-extra-semi": 2,
+    "no-dupe-keys": 2,
+    "indent": [
+      "error",
+      "tab",
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "no-caller": 2,
+    "curly": [
+      "warn",
+      "multi-or-nest"
+    ],
+    "no-global-assign": "warn",
+    "no-extra-boolean-cast": 1,
+    "no-ex-assign": 2,
+    "no-unused-expressions": "warn",
+    "no-mixed-spaces-and-tabs": 2,
+    "no-unsafe-negation": "warn",
+    "valid-typeof": 2,
+    "no-sparse-arrays": 2,
+    "no-fallthrough": 2
+  },
+  "parser": "babel-eslint",
+  "env": {
+    "jquery": true,
+    "es6": true,
+    "commonjs": true,
+    "browser": true,
+    "jest": true
+  },
+  "plugins": [
+    "flowtype",
+    "jest"
+  ]
+}
