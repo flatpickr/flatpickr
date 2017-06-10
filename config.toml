@@ -116,6 +116,11 @@ googleAnalytics = ""
     url    = "ie9/"
     weight = 13
 
+[[menu.main]]
+    name   = "Updating from v2"
+    url    = "updating-from-v2/"
+    weight = 14
+
 
 [blackfriday]
     smartypants = true
