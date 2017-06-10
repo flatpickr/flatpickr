@@ -2064,6 +2064,8 @@ function _flatpickr(nodeList, config) {
 	var instances = [];
 	for (var i = 0; i < nodes.length; i++) {
 		try {
+			if (nodes[i].getAttribute("data-fp-omit") !== null) continue;
+
 			if (nodes[i]._flatpickr) {
 				nodes[i]._flatpickr.destroy();
 				nodes[i]._flatpickr = null;
