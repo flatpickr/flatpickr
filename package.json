@@ -23,6 +23,7 @@
     "coveralls": "latest",
     "eslint": "latest",
     "eslint-plugin-flowtype": "^2.34.0",
+    "eslint-plugin-jest": "^20.0.3",
     "glob": "latest",
     "http-server": "latest",
     "jest": "latest",
