@@ -1,11 +1,21 @@
-function rangePlugin() {
+function rangePlugin(config = {}) {
 	return function(fp) {
 		let dateFormat;
 
 		const createSecondInput = () => {
-			fp.secondInput = fp._input.cloneNode();
-			fp.secondInput.removeAttribute("id");
-			fp.secondInput._flatpickr = null;
+			if (config.input) {
+				fp.secondInput = config.input instanceof Element
+					? config.input
+					: window.document.querySelector(config.input)
+			}
+
+			else {
+				fp.secondInput = fp._input.cloneNode();
+				fp.secondInput.removeAttribute("id");
+				fp.secondInput._flatpickr = null;
+			}
+
+			fp.secondInput.setAttribute("data-fp-omit", "");
 
 			fp._bind(fp.secondInput, ["focus", "click"], e => {
 				fp.open(e, fp.secondInput);
@@ -29,8 +39,8 @@ function rangePlugin() {
 
 				}
 			});
-
-			fp._input.parentNode.insertBefore(fp.secondInput, fp._input.nextSibling);
+			if (!config.input)
+				fp._input.parentNode.insertBefore(fp.secondInput, fp._input.nextSibling);
 		}
 
 		return {
@@ -74,7 +84,8 @@ function rangePlugin() {
 			},
 
 			onDestroy () {
-				fp.secondInput.parentNode.removeChild(fp.secondInput);
+				if (!config.input)
+					fp.secondInput.parentNode.removeChild(fp.secondInput);
 				delete fp._prevDates;
 				delete fp._firstInputFocused;
 				delete fp._secondInputFocused;
