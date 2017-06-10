@@ -1,4 +1,4 @@
-/*! flatpickr v3.0.5-1, @license MIT */
+/*! flatpickr v3.0.5, @license MIT */
 function FlatpickrInstance(element, config) {
 	const self = this;
 
