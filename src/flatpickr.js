@@ -62,6 +62,12 @@ function FlatpickrInstance(element, config) {
 
 		self.showTimeInput = self.selectedDates.length > 0 || self.config.noCalendar;
 
+		if (self.config.weekNumbers) {
+			self.calendarContainer.style.width = self.daysContainer.offsetWidth
+				+ self.weekWrapper.offsetWidth + "px";
+		}
+
+
 		if (!self.isMobile)
 			positionCalendar();
 
