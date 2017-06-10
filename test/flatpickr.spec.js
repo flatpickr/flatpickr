@@ -9,8 +9,8 @@ let elem, fp;
 const UA = navigator.userAgent;
 let mockAgent = null;
 
-navigator.__defineGetter__('userAgent', function(){
-    return mockAgent || UA;
+navigator.__defineGetter__("userAgent", function(){
+	return mockAgent || UA;
 });
 
 function createInstance(config) {
@@ -56,7 +56,7 @@ function simulate(eventType, onElement, options, type) {
 	onElement.dispatchEvent(evt);
 }
 
-describe('flatpickr', () => {
+describe("flatpickr", () => {
 	beforeEach(beforeEachTest);
 
 	describe("init", () => {
@@ -66,10 +66,10 @@ describe('flatpickr', () => {
 				enableTime: true
 			});
 
-		const date = new Date("2016-12-27T16:16:22.585Z");
+			const date = new Date("2016-12-27T16:16:22.585Z");
 			expect(fp.currentYear).toEqual(date.getFullYear());
 			expect(fp.currentMonth).toEqual(date.getMonth());
-			expect(fp.days.querySelector(".selected").textContent).toEqual(date.getDate() + '');
+			expect(fp.days.querySelector(".selected").textContent).toEqual(date.getDate() + "");
 		});
 
 		it("shouldn't parse out-of-bounds defaultDate", () => {
@@ -81,12 +81,12 @@ describe('flatpickr', () => {
 			expect(fp.days.querySelector(".selected")).toEqual(null);
 
 			createInstance({
-				defaultDate: '2016-12-27T16:16:22.585Z',
+				defaultDate: "2016-12-27T16:16:22.585Z",
 				enableTime: true
 			});
 
-			fp.set('maxDate', '2016-12-25');
-			fp.set('minDate', '2016-12-24');
+			fp.set("maxDate", "2016-12-25");
+			fp.set("minDate", "2016-12-24");
 
 			expect(fp.currentMonth).toEqual(11);
 			expect(fp.days.querySelector(".selected")).toEqual(null);
@@ -98,8 +98,8 @@ describe('flatpickr', () => {
 			expect(enabledDays[1].textContent).toEqual("25");
 
 			createInstance({
-				defaultDate: '2016-12-27T16:16:22.585Z',
-				minDate: '2016-12-27T16:26:22.585Z',
+				defaultDate: "2016-12-27T16:16:22.585Z",
+				minDate: "2016-12-27T16:26:22.585Z",
 				enableTime: true
 			});
 
@@ -118,7 +118,7 @@ describe('flatpickr', () => {
 
 	describe("datetimestring parser", () => {
 		describe("date string parser", () => {
-			it('should parse timestamp', () => {
+			it("should parse timestamp", () => {
 
 				createInstance({
 					defaultDate: 1477111633771
@@ -130,7 +130,7 @@ describe('flatpickr', () => {
 				expect(fp.selectedDates[0].getDate()).toEqual(22);
 			});
 
-			it('should parse unix time', () => {
+			it("should parse unix time", () => {
 				createInstance({
 					defaultDate: "1477111633.771", // shouldnt parse as a timestamp
 					dateFormat: "U"
@@ -143,7 +143,7 @@ describe('flatpickr', () => {
 				expect(parsedDate.getDate()).toEqual(22);
 			});
 
-			it('should parse "2016-10"', () => {
+			it("should parse \"2016-10\"", () => {
 				createInstance({
 					defaultDate: "2016-10"
 				});
@@ -153,7 +153,7 @@ describe('flatpickr', () => {
 				expect(fp.selectedDates[0].getMonth()).toEqual(9);
 			});
 
-			it('should parse "2016-10-20 3:30"', () => {
+			it("should parse \"2016-10-20 3:30\"", () => {
 				createInstance({
 					defaultDate: "2016-10-20 3:30",
 					enableTime: true
@@ -167,7 +167,7 @@ describe('flatpickr', () => {
 				expect(fp.selectedDates[0].getMinutes()).toEqual(30);
 			});
 
-			it('should parse ISO8601', () => {
+			it("should parse ISO8601", () => {
 				createInstance({
 					defaultDate: "2007-03-04T21:08:12",
 					enableTime: true,
@@ -183,7 +183,7 @@ describe('flatpickr', () => {
 				expect(fp.selectedDates[0].getSeconds()).toEqual(12);
 			});
 
-			it('should parse "today"', () => {
+			it("should parse \"today\"", () => {
 				createInstance();
 				expect(fp.parseDate("today")).toBeDefined();
 				expect(fp.parseDate("today", true).getHours()).toBe(0);
@@ -199,9 +199,9 @@ describe('flatpickr', () => {
 		});
 
 		describe("time string parser", () => {
-			it('should parse "21:11"', () => {
+			it("should parse \"21:11\"", () => {
 				createInstance({
-					defaultDate: '21:11',
+					defaultDate: "21:11",
 					allowInput: true,
 					enableTime: true,
 					noCalendar: true,
@@ -212,13 +212,13 @@ describe('flatpickr', () => {
 				expect(fp.selectedDates[0].getMinutes()).toEqual(11);
 			});
 
-			it('should parse "21:11:12"', () => {
+			it("should parse \"21:11:12\"", () => {
 				createInstance({
 					allowInput: true,
 					enableTime: true,
 					enableSeconds: true,
 					noCalendar: true,
-					defaultDate: '21:11:12'
+					defaultDate: "21:11:12"
 				});
 
 				expect(fp.selectedDates[0]).toBeDefined();
@@ -227,13 +227,13 @@ describe('flatpickr', () => {
 				expect(fp.selectedDates[0].getSeconds()).toEqual(12);
 			});
 
-			it('should parse "11:59 PM"', () => {
+			it("should parse \"11:59 PM\"", () => {
 				createInstance({
 					allowInput: true,
 					enableTime: true,
 					noCalendar: true,
 					dateFormat: "h:i K",
-					defaultDate: '11:59 PM'
+					defaultDate: "11:59 PM"
 				});
 
 				expect(fp.selectedDates[0]).toBeDefined();
@@ -242,17 +242,17 @@ describe('flatpickr', () => {
 				expect(fp.selectedDates[0].getSeconds()).toBe(0);
 
 				expect(fp.amPM).toBeDefined();
-				expect(fp.amPM.innerHTML).toBe('PM');
+				expect(fp.amPM.innerHTML).toBe("PM");
 			});
 
-			it('should parse "3:05:03 PM"', () => {
+			it("should parse \"3:05:03 PM\"", () => {
 				createInstance({
 					allowInput: true,
 					enableTime: true,
 					enableSeconds: true,
 					noCalendar: true,
 					dateFormat: "h:i:S K",
-					defaultDate: '3:05:03 PM'
+					defaultDate: "3:05:03 PM"
 				});
 
 				expect(fp.selectedDates[0]).toBeDefined();
@@ -263,68 +263,68 @@ describe('flatpickr', () => {
 				const amPmElement = fp.amPM;
 
 				expect(amPmElement).toBeDefined();
-				expect(amPmElement.innerHTML).toBe('PM');
+				expect(amPmElement.innerHTML).toBe("PM");
 			});
 
 		});
 
 	});
 
-	describe('date formatting', () => {
-		const DATE_STR = '2016-10-20 09:19:59';
+	describe("date formatting", () => {
+		const DATE_STR = "2016-10-20 09:19:59";
 
-		describe('default formatter', () => {
+		describe("default formatter", () => {
 			const
-				DEFAULT_FORMAT_1 = 'd.m.y H:i:S',
-				DEFAULT_FORMAT_2 = 'D j F, \'y';
+				DEFAULT_FORMAT_1 = "d.m.y H:i:S",
+				DEFAULT_FORMAT_2 = "D j F, 'y";
 
 			it(`should format the date with the pattern "${DEFAULT_FORMAT_1}"`, () => {
-				const RESULT = '20.10.16 09:19:59';
+				const RESULT = "20.10.16 09:19:59";
 				createInstance({
 					dateFormat: DEFAULT_FORMAT_1
 				});
 
-				fp.setDate('20.10.16 09:19:59');
+				fp.setDate("20.10.16 09:19:59");
 				expect(fp.input.value).toEqual(RESULT);
-				fp.setDate('2015.11.21 19:29:49');
+				fp.setDate("2015.11.21 19:29:49");
 				expect(fp.input.value).not.toEqual(RESULT);
 			});
 
 			it(`should format the date with the pattern "${DEFAULT_FORMAT_2}"`, () => {
-				const RESULT = 'Thu 20 October, \'16';
+				const RESULT = "Thu 20 October, '16";
 				createInstance({
 					dateFormat: DEFAULT_FORMAT_2
 				});
 
 				fp.setDate("Thu 20 October, '16");
 				expect(fp.input.value).toEqual(RESULT);
-				fp.setDate('2015-11-21 19:29:49');
+				fp.setDate("2015-11-21 19:29:49");
 				expect(fp.input.value).not.toEqual(RESULT);
 			});
 		});
 
-		describe('custom formatter', () => {
-			it('should format the date using the custom formatter', () => {
-				const RESULT = 'MAAAGIC.*^*.2016.*^*.20.*^*.10';
+		describe("custom formatter", () => {
+			it("should format the date using the custom formatter", () => {
+				const RESULT = "MAAAGIC.*^*.2016.*^*.20.*^*.10";
 				createInstance({
-					dateFormat: 'YEAR-DAYOFMONTH-MONTH',
+					dateFormat: "YEAR-DAYOFMONTH-MONTH",
 					formatDate(date, formatStr) {
-						let segs = formatStr.split('-');
-						return 'MAAAGIC.*^*.' + segs.map(seg => {
-								let mapped = null;
-								switch (seg) {
-									case 'DAYOFMONTH':
+						let segs = formatStr.split("-");
+						return "MAAAGIC.*^*." + segs.map(seg => {
+							let mapped = null;
+							switch (seg) {
+									case "DAYOFMONTH":
 										mapped = date.getDate();
 										break;
-									case 'MONTH':
+									case "MONTH":
 										mapped = date.getMonth() + 1;
 										break;
-									case 'YEAR':
+									case "YEAR":
 										mapped = date.getFullYear();
 										break;
 								}
-								return '' + mapped;
-							}).join('.*^*.');
+							return "" + mapped;
+						}).join(".*^*.");
 					}
 				});
 
@@ -393,7 +393,9 @@ describe('flatpickr', () => {
 
 			createInstance({
 				altInput: true,
-				onKeyDown: [() => {fired = true;}]
+				onKeyDown: [() => {
+fired = true;
+}]
 			});
 
 			expect(input.type).toEqual("hidden");
@@ -457,12 +459,10 @@ describe('flatpickr', () => {
 			expect(fp.hourElement.value).toEqual("03");
 			expect(fp.minuteElement.value).toEqual("00");
 			expect(fp.amPM.textContent).toEqual("AM");
-			
+
 			fp.setDate(0);
 			expect(fp.selectedDates[0]).toBeDefined();
-			expect(fp.selectedDates[0].getFullYear()).toEqual(1970);
-			expect(fp.selectedDates[0].getMonth()).toEqual(0);
-			expect(fp.selectedDates[0].getDate()).toEqual(1);
+			expect(fp.selectedDates[0].getFullYear()).toBeLessThan(1971)
 
 			fp.setDate("");
 			expect(fp.selectedDates[0]).not.toBeDefined();
@@ -709,7 +709,7 @@ describe('flatpickr', () => {
 				expect(fp.hourElement.value).toEqual("03");
 				expect(fp.minuteElement.value).toEqual("30");
 				expect(fp.amPM.textContent).toEqual("AM");
-			};
+			}
 
 			createInstance({
 				enableTime: true,
@@ -980,9 +980,9 @@ describe('flatpickr', () => {
 			expect(fp.days.childNodes[21].classList.contains("startRange")).toEqual(true);
 			expect(fp.days.childNodes[32].classList.contains("endRange")).toEqual(true);
 
-			for (let i = 22; i < 32; i++) {
+			for (let i = 22; i < 32; i++)
 				expect(fp.days.childNodes[i].classList.contains("inRange")).toEqual(true);
-			}
+
 
 			fp.clear();
 			fp.set("disable", ["2016-1-12", "2016-1-20"]);
@@ -993,9 +993,9 @@ describe('flatpickr', () => {
 			expect(fp.days.childNodes[24].classList.contains("disabled")).toEqual(true);
 			expect(fp.days.childNodes[25].classList.contains("notAllowed")).toEqual(true);
 
-			for (let i = 25; i < 32; i++) {
+			for (let i = 25; i < 32; i++)
 				expect(fp.days.childNodes[i].classList.contains("inRange")).toEqual(false);
-			}
+
 
 			for (let i = 17; i < 22; i++) {
 				expect(fp.days.childNodes[i].classList.contains("notAllowed")).toEqual(false);
