@@ -1,6 +1,6 @@
 {
   "name": "flatpickr",
-  "version": "3.0.0",
+  "version": "3.0.3",
   "description": "A lightweight, powerful javascript datetime picker",
   "scripts": {
     "start": "nodemon --watch build.js build.js -- --dev",
@@ -23,6 +23,7 @@
     "coveralls": "latest",
     "eslint": "latest",
     "eslint-plugin-flowtype": "^2.34.0",
+    "eslint-plugin-jest": "^20.0.3",
     "glob": "latest",
     "http-server": "latest",
     "jest": "latest",

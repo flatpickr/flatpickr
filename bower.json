@@ -9,9 +9,6 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "flatpickr": "github:chmln/flatpickr#next"
-  },
-  "resolutions": {
-    "flatpickr": "next"
+    "flatpickr": "github:chmln/flatpickr#master"
   }
 }

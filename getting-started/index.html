@@ -459,26 +459,19 @@ yarn add flatpickr
 
 <h2 id="usage">Usage</h2>
 
-<h3 id="using-the-flatpickr-module">Using the flatpickr <strong>module</strong></h3>
+<p>If you&rsquo;re using a bundler, e.g. <code>webpack</code>, you&rsquo;ll need to import flatpickr.</p>
 
-<p>This is the recommended method if you can <code>require</code> packages on front end</p>
-
-<pre><code class="language-javascript">const Flatpickr = require(&quot;flatpickr&quot;);
-new Flatpickr(element, optional_config);
+<pre><code class="language-js">const flatpickr = require(&quot;flatpickr&quot;);
 </code></pre>
 
-<p>where <code>element</code> is a <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element">node</a>.</p>
+<p>All of the following are valid ways to create flatpickr instance.</p>
 
-<p>Configuration is optional and passed in an object<code>{}</code>.</p>
-
-<h3 id="non-module-environments-1">Non-module environments</h3>
-
-<p>The above syntax works just as well for non-module environments. Make sure the flatpickr&rsquo;s script is included, and the <code>Flatpickr</code> variable will be available.</p>
-
-<p>Additionally, flatpickr registers a helper function to make invocation easier.</p>
-
-<pre><code class="language-js">flatpickr(&quot;.mySelector&quot;, optional_config);
+<pre><code class="language-javascript">flatpickr(&quot;#myID&quot;, {});
+flatpickr(&quot;.myClass&quot;, {}); // creates multiple instances
+flatpickr(element, {}); // https://developer.mozilla.org/en-US/docs/Web/API/Element
 </code></pre>
+
+<p>Configuration is optional and passed in an object <code>{}</code>.</p>
 
 <h3 id="jquery">jQuery</h3>
 

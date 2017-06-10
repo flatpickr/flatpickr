@@ -1,4 +1,4 @@
-/*! flatpickr v3.0.0, @license MIT */
+/*! flatpickr v3.0.3, @license MIT */
 function FlatpickrInstance(element, config) {
 	const self = this;
 
@@ -1017,7 +1017,9 @@ function FlatpickrInstance(element, config) {
 	}
 
 	function destroy() {
-		triggerEvent("Destroy");
+		if (self.config !== undefined)
+			triggerEvent("Destroy");
+
 		for (let i = self._handlers.length; i--;) {
 			const h = self._handlers[i];
 			h.element.removeEventListener(h.event, h.handler);
@@ -1729,7 +1731,7 @@ function FlatpickrInstance(element, config) {
 	}
 
 	function setDate(date, triggerChange, format) {
-		if (!date)
+		if (date !== 0 && !date)
 			return self.clear(triggerChange);
 
 		setSelectedDate(date, format);
@@ -2413,7 +2415,7 @@ FlatpickrInstance.prototype = {
 	 * @return {Date} the parsed Date object
 	 */
 	parseDate (date, givenFormat, timeless) {
-		if (!date)
+		if (date !== 0 && !date)
 			return null;
 
 		const date_orig = date;
@@ -2679,7 +2681,9 @@ flatpickr.defaultConfig = FlatpickrInstance.defaultConfig = {
 	// called every time the year is changed
 	onYearChange: undefined,
 
-	onKeyDown: undefined
+	onKeyDown: undefined,
+
+	onDestroy: undefined
 };
 
 /* istanbul ignore next */
