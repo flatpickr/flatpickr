@@ -6,8 +6,10 @@ function weekSelectPlugin(pluginConfig) {
 
 			const days = event.target.parentNode.childNodes;
 			const dayIndex = event.target.$i;
-			const weekStartDay = days[7 * Math.floor(dayIndex / 7)].dateObj;
-			const weekEndDay = days[7 * Math.ceil(dayIndex / 7) - 1].dateObj;
+
+			const dayIndSeven = dayIndex / 7;
+			const weekStartDay = days[7 * Math.floor(dayIndSeven)].dateObj;
+			const weekEndDay = days[7 * Math.ceil(dayIndSeven + 0.01) - 1].dateObj;
 
 			for(let i = days.length; i--;) {
 				const date = days[i].dateObj;
@@ -24,7 +26,7 @@ function weekSelectPlugin(pluginConfig) {
           7 * Math.floor(fp.selectedDateElem.$i / 7)
         ].dateObj;
 				fp.weekEndDay = fp.days.childNodes[
-          7 * Math.ceil(fp.selectedDateElem.$i / 7) - 1
+          7 * Math.ceil(fp.selectedDateElem.$i / 7 + 0.01) - 1
         ].dateObj;
 			}
 			const days = fp.days.childNodes;
@@ -53,6 +55,7 @@ function weekSelectPlugin(pluginConfig) {
 				fp.config.mode = "single";
 				fp.config.enableTime = false;
 				fp.config.dateFormat = "\\W\\e\\e\\k #W, Y";
+				fp.config.altFormat = "\\W\\e\\e\\k #W, Y";
 			},
 			onReady: [onReady, highlightWeek]
 		};

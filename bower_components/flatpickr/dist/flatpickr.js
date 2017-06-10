@@ -2,7 +2,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-/*! flatpickr v3.0.3, @license MIT */
+/*! flatpickr v3.0.5, @license MIT */
 function FlatpickrInstance(element, config) {
 	var self = this;
 
@@ -51,10 +51,6 @@ function FlatpickrInstance(element, config) {
 				setHoursFromDate(self.config.noCalendar ? self.latestSelectedDateObj || self.config.minDate : null);
 			}
 			updateValue();
-		}
-
-		if (self.config.weekNumbers) {
-			self.calendarContainer.style.width = self.daysContainer.offsetWidth + self.weekWrapper.offsetWidth + "px";
 		}
 
 		self.showTimeInput = self.selectedDates.length > 0 || self.config.noCalendar;
@@ -1162,6 +1158,24 @@ function FlatpickrInstance(element, config) {
 		self.config.parseDate = userConfig.parseDate;
 		self.config.formatDate = userConfig.formatDate;
 
+		Object.defineProperty(self.config, "enable", {
+			get: function get() {
+				return self.config._enable || [];
+			},
+			set: function set(dates) {
+				return self.config._enable = parseDateRules(dates);
+			}
+		});
+
+		Object.defineProperty(self.config, "disable", {
+			get: function get() {
+				return self.config._disable || [];
+			},
+			set: function set(dates) {
+				return self.config._disable = parseDateRules(dates);
+			}
+		});
+
 		_extends(self.config, userConfig);
 
 		if (!userConfig.dateFormat && userConfig.enableTime) {
@@ -1398,26 +1412,22 @@ function FlatpickrInstance(element, config) {
 		if (triggerChange) triggerEvent("Change");
 	}
 
-	function setupDates() {
-		function parseDateRules(arr) {
-			for (var i = arr.length; i--;) {
-				if (typeof arr[i] === "string" || +arr[i]) arr[i] = self.parseDate(arr[i], null, true);else if (arr[i] && arr[i].from && arr[i].to) {
-					arr[i].from = self.parseDate(arr[i].from);
-					arr[i].to = self.parseDate(arr[i].to);
-				}
+	function parseDateRules(arr) {
+		for (var i = arr.length; i--;) {
+			if (typeof arr[i] === "string" || +arr[i]) arr[i] = self.parseDate(arr[i], null, true);else if (arr[i] && arr[i].from && arr[i].to) {
+				arr[i].from = self.parseDate(arr[i].from);
+				arr[i].to = self.parseDate(arr[i].to);
 			}
-
-			return arr.filter(function (x) {
-				return x;
-			}); // remove falsy values
 		}
 
+		return arr.filter(function (x) {
+			return x;
+		}); // remove falsy values
+	}
+
+	function setupDates() {
 		self.selectedDates = [];
 		self.now = new Date();
-
-		if (self.config.disable.length) self.config.disable = parseDateRules(self.config.disable);
-
-		if (self.config.enable.length) self.config.enable = parseDateRules(self.config.enable);
 
 		var preloadedDate = self.config.defaultDate || self.input.value;
 		if (preloadedDate) setSelectedDate(preloadedDate, self.config.dateFormat);
@@ -2064,6 +2074,8 @@ function _flatpickr(nodeList, config) {
 	var instances = [];
 	for (var i = 0; i < nodes.length; i++) {
 		try {
+			if (nodes[i].getAttribute("data-fp-omit") !== null) continue;
+
 			if (nodes[i]._flatpickr) {
 				nodes[i]._flatpickr.destroy();
 				nodes[i]._flatpickr = null;
