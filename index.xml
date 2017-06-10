@@ -140,5 +140,16 @@ For instance,
 &amp;lt;!--[if IE 9]&amp;gt; &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; type=&amp;quot;text/css&amp;quot; href=&amp;quot;https://npmcdn.com/flatpickr/dist/ie.css&amp;quot;&amp;gt; &amp;lt;![endif]--&amp;gt;  If you&amp;rsquo;re using a bundler like webpack, see html-webpack-plugin</description>
     </item>
     
+    <item>
+      <title>Updating from flatpickr v2</title>
+      <link>https://chmln.github.io/flatpickr/updating-from-v2/</link>
+      <pubDate>Sun, 23 Apr 2017 20:23:43 -0500</pubDate>
+      
+      <guid>https://chmln.github.io/flatpickr/updating-from-v2/</guid>
+      <description>Breaking changes in flatpickr v3 have been kept to a minimum to ensure an easy upgrade path for users.
+Deprecation of the utc option Motivation The utc option was a hack using date manipulation. It didn&amp;rsquo;t yield the correct timezone. Resulting dates were not always accurate.
+Upgrade path Use the dateFormat: &amp;quot;Z&amp;quot; option, which is a shortcut for the ISO date format. It contains the correct timezone information and is supported by nearly every database.</description>
+    </item>
+    
   </channel>
 </rss>
