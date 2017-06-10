@@ -1,9 +1,12 @@
-/*! flatpickr v2.6.3, @license MIT */
+/*! flatpickr v3.0.3, @license MIT */
 function FlatpickrInstance(element, config) {
 	const self = this;
 
 	self._ = {};
 	self._.afterDayAnim = afterDayAnim;
+	self._bind = bind;
+	self._compareDates = compareDates;
+	self._setHoursFromDate = setHoursFromDate;
 	self.changeMonth = changeMonth;
 	self.changeYear = changeYear;
 	self.clear = clear;
@@ -1014,6 +1017,9 @@ function FlatpickrInstance(element, config) {
 	}
 
 	function destroy() {
+		if (self.config !== undefined)
+			triggerEvent("Destroy");
+
 		for (let i = self._handlers.length; i--;) {
 			const h = self._handlers[i];
 			h.element.removeEventListener(h.event, h.handler);
@@ -1078,8 +1084,7 @@ function FlatpickrInstance(element, config) {
 				? isInput && e.relatedTarget && !isCalendarElem(e.relatedTarget)
 				: !isInput && !isCalendarElement;
 
-			if(lostFocus) {
-				e.preventDefault();
+			if(lostFocus && self.config.ignoredFocusElements.indexOf(e.target) === -1) {
 				self.close();
 
 				if (self.config.mode === "range" && self.selectedDates.length === 1) {
@@ -1357,7 +1362,7 @@ function FlatpickrInstance(element, config) {
 			positionCalendar();
 	}
 
-	function open(e) {
+	function open(e, positionElement) {
 		if (self.isMobile) {
 			if (e) {
 				e.preventDefault();
@@ -1377,7 +1382,7 @@ function FlatpickrInstance(element, config) {
 
 		self.isOpen = true;
 		self.calendarContainer.classList.add("open");
-		positionCalendar();
+		positionCalendar(positionElement);
 		self._input.classList.add("active");
 
 
@@ -1424,7 +1429,7 @@ function FlatpickrInstance(element, config) {
 		];
 
 		let hooks = [
-			"onChange", "onClose", "onDayCreate", "onKeyDown", "onMonthChange",
+			"onChange", "onClose", "onDayCreate", "onDestroy", "onKeyDown", "onMonthChange",
 			"onOpen", "onParseConfig", "onReady", "onValueUpdate", "onYearChange"
 		];
 
@@ -1517,14 +1522,14 @@ function FlatpickrInstance(element, config) {
 		);
 	}
 
-	function positionCalendar() {
+	function positionCalendar(positionElement = self._positionElement) {
 		if (self.calendarContainer === undefined)
 			return;
 
 		const calendarHeight = self.calendarContainer.offsetHeight,
 			calendarWidth = self.calendarContainer.offsetWidth,
 			configPos = self.config.position,
-			inputBounds = self._positionElement.getBoundingClientRect(),
+			inputBounds = positionElement.getBoundingClientRect(),
 			distanceFromBottom = window.innerHeight - inputBounds.bottom,
 			showOnTop = configPos === "above" || (
 				configPos !== "below"
@@ -1533,7 +1538,7 @@ function FlatpickrInstance(element, config) {
 			);
 
 		let top = (window.pageYOffset + inputBounds.top) + (!showOnTop
-			? (self._positionElement.offsetHeight + 2)
+			? (positionElement.offsetHeight + 2)
 			: (- calendarHeight - 2)
 		);
 
@@ -2042,7 +2047,9 @@ function FlatpickrInstance(element, config) {
 				.map(dObj => self.formatDate(dObj, self.config.altFormat))
 				.join(joinChar);
 		}
-		triggerEvent("ValueUpdate");
+
+		if (triggerChange !== false)
+			triggerEvent("ValueUpdate");
 	}
 
 	function mouseDelta(e) {
@@ -2645,6 +2652,8 @@ flatpickr.defaultConfig = FlatpickrInstance.defaultConfig = {
 
 	plugins: [],
 
+	ignoredFocusElements: [],
+
 	// called every time calendar is closed
 	onClose: undefined, // function (dateObj, dateStr) {}
 
@@ -2672,7 +2681,9 @@ flatpickr.defaultConfig = FlatpickrInstance.defaultConfig = {
 	// called every time the year is changed
 	onYearChange: undefined,
 
-	onKeyDown: undefined
+	onKeyDown: undefined,
+
+	onDestroy: undefined
 };
 
 /* istanbul ignore next */
