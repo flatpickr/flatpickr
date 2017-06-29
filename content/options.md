@@ -54,7 +54,7 @@ weight = "6"
             <td>dateFormat</td>
             <td>string</td>
             <td>"Y-m-d"</td>
-            <td>A string of characters which are used to define how the date will be displayed in the input box. The supported characters are defined in the table below.</td>
+            <td>A string of characters which are used to define how the date will be displayed in the input box. The supported characters are defined in&nbsp;<a href="/formatting">the table below</a>.</td>
         </tr>
         <tr>
             <td><strong>defaultDate</strong></td>
