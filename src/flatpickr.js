@@ -1012,6 +1012,7 @@ function FlatpickrInstance(element, config) {
 		if (!self.isMobile) {
 			self.calendarContainer.classList.remove("open");
 			self._input.classList.remove("active");
+			self._input.blur()
 		}
 
 		triggerEvent("Close");
