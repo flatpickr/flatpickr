@@ -234,7 +234,8 @@ function Flatpickr(element, config) {
 		return evt => {
 			if (window.ontouchstart !== undefined) {
 				if (evt.type !== "touchstart") return;
-			} else if (evt.which !== 1) return;
+			}
+			else if (evt.which !== 1) return;
 
 			return handler(evt);
 		}
