@@ -223,14 +223,21 @@ function Flatpickr(element, config) {
 	}
 
 	/**
-	 * A mousedown handler which mimics click.
+	 * A mousedown/touchstart handler which mimics click.
 	 * Minimizes latency, since we don't need to wait for mouseup in most cases.
-	 * Also, avoids handling right clicks.
+	 * Handles touchstart events with drowning mousedown in this case.
+	 * Also, avoids handling right clicks
 	 *
 	 * @param {Function} handler the event handler
 	 */
 	function onClick(handler) {
-		return evt => evt.which === 1 && (handler(evt));
+		return evt => {
+			if (window.ontouchstart !== undefined) {
+				if (evt.type !== "touchstart") return;
+			} else if (evt.which !== 1) return;
+
+			return handler(evt);
+		}
 	}
 
 	/**
@@ -243,7 +250,9 @@ function Flatpickr(element, config) {
 			["open", "close", "toggle", "clear"].forEach(evt => {
 				Array.prototype.forEach.call(
 					self.element.querySelectorAll(`[data-${evt}]`),
-					el => bind(el, "mousedown", onClick(self[evt]))
+					el => {
+						bind(el, ["mousedown", "touchstart"], onClick(self[evt]));
+					}
 				)
 			});
 		}
@@ -268,10 +277,7 @@ function Flatpickr(element, config) {
 		if (!self.config.inline && !self.config.static)
 			bind(window, "resize", self.debouncedResize);
 
-		if (window.ontouchstart !== undefined)
-			bind(window.document, "touchstart", documentClick);
-
-		bind(window.document, "mousedown", onClick(documentClick));
+		bind(window.document, ["mousedown", "touchstart"], onClick(documentClick));
 		bind(self._input, "blur", documentClick);
 
 		if (self.config.clickOpens === true)
@@ -280,10 +286,10 @@ function Flatpickr(element, config) {
 		if (!self.config.noCalendar) {
 			self.monthNav.addEventListener("wheel", e => e.preventDefault());
 			bind(self.monthNav, "wheel", debounce(onMonthNavScroll, 10));
-			bind(self.monthNav, "mousedown", onClick(onMonthNavClick));
+			bind(self.monthNav, ["mousedown", "touchstart"], onClick(onMonthNavClick));
 
 			bind(self.monthNav, ["keyup", "increment"], onYearInput);
-			bind(self.daysContainer, "mousedown", onClick(selectDate));
+			bind(self.daysContainer, ["mousedown", "touchstart"], onClick(selectDate));
 
 			if (self.config.animate) {
 				bind(self.daysContainer, ["webkitAnimationEnd","animationend"], animateDays);
@@ -293,8 +299,8 @@ function Flatpickr(element, config) {
 
 		if (self.config.enableTime) {
 			const selText = e => e.target.select();
-			bind(self.timeContainer, ["wheel",  "input", "increment"], updateTime);
-			bind(self.timeContainer, "mousedown", onClick(timeIncrement));
+			bind(self.timeContainer, ["wheel", "input", "increment"], updateTime);
+			bind(self.timeContainer, ["mousedown", "touchstart"], onClick(timeIncrement));
 
 			bind(self.timeContainer, ["wheel", "increment"], self.debouncedChange);
 			bind(self.timeContainer, "input", self.triggerChange);
@@ -305,7 +311,7 @@ function Flatpickr(element, config) {
 				bind(self.secondElement, "focus", () => self.secondElement.select());
 
 			if (self.amPM !== undefined) {
-				bind(self.amPM, "mousedown", onClick(e => {
+				bind(self.amPM, ["mousedown", "touchstart"], onClick(e => {
 					updateTime(e);
 					self.triggerChange(e);
 				}));
@@ -1476,7 +1482,7 @@ function Flatpickr(element, config) {
 				self.config[hooks[i]] = arrayify(
 					self.config[hooks[i]] || []
 				)
-				.map(bindToInstance);
+					.map(bindToInstance);
 			}
 		}
 
