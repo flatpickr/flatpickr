@@ -1252,6 +1252,7 @@ function FlatpickrInstance(element, config) {
 						if (!isTimeObj)
 							self.hourElement.focus();
 						updateTime(e);
+						self.debouncedChange();					
 					}
 
 					break;
