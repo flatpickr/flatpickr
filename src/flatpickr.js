@@ -1059,7 +1059,10 @@ function FlatpickrInstance(element, config) {
 			"calendarContainer", "weekdayContainer", "prevMonthNav", "nextMonthNav",
 			"currentMonthElement", "currentYearElement", "navigationCurrentMonth",
 			"selectedDateElem", "config"
-		].forEach(k => delete self[k]);
+		].forEach(k => {
+			try { delete self[k] }
+			catch (e) {}
+		})
 	}
 
 	function isCalendarElem(elem) {
