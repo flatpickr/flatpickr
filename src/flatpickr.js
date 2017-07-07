@@ -1916,7 +1916,7 @@ function FlatpickrInstance(element, config) {
 			: "date";
 
 		self.mobileInput = createElement("input", self.input.className + " flatpickr-mobile");
-		self.mobileInput.step = "any";
+		self.mobileInput.step = self.input.getAttribute("step") || "any";
 		self.mobileInput.tabIndex = 1;
 		self.mobileInput.type = inputType;
 		self.mobileInput.disabled = self.input.disabled;
