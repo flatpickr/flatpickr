@@ -190,6 +190,7 @@
     display inline-block
 
 .flatpickr-month
+    display flex
     if $noCalendarBorder is defined
         border-radius 5px 5px 0 0
     background $monthBackground
@@ -205,8 +206,7 @@
 .flatpickr-prev-month, .flatpickr-next-month
     text-decoration none
     cursor pointer
-    position absolute
-    top 0px
+    flex 0 1 0
     line-height 16px
     height $monthNavHeight
     padding 10px calc(3.57% - 1.5px)
@@ -214,25 +214,6 @@
 
     i
         position relative
-
-    &.flatpickr-prev-month
-        /*!
-        /*rtl:begin:ignore*//*
-        */
-        left 0
-        /*!
-        /*rtl:end:ignore*//*
-        */
-
-
-    &.flatpickr-next-month
-        /*!
-        /*rtl:begin:ignore*//*
-        */
-        right 0
-        /*!
-        /*rtl:end:ignore*//*
-        */
 
     &:hover
         color $todayColor
@@ -320,13 +301,10 @@
     line-height inherit
     font-weight 300
     color inherit
-    position absolute
-    width 75%
-    left 12.5%
+    flex 1 1 auto
     padding (0.22*$monthNavHeight) 0 0 0
     line-height 1
     height $monthNavHeight
-    display inline-block
     text-align center
     transform translate3d(0px, 0px, 0px)
 
@@ -442,7 +420,6 @@ span.flatpickr-weekday
     min-width ($daysWidth)
     max-width ($daysWidth)
     box-sizing border-box
-    display inline-block
     display -ms-flexbox
     display flex
     flex-wrap wrap
@@ -588,7 +565,6 @@ span.flatpickr-weekday
 
 
 .flatpickr-innerContainer
-    display block
     display flex
     box-sizing border-box
     overflow: hidden;
@@ -607,7 +583,6 @@ span.flatpickr-weekday
 .flatpickr-time
     text-align center
     outline 0
-    display block
     height 0 // hide initially
     line-height $timeHeight
     max-height $timeHeight
@@ -628,7 +603,6 @@ span.flatpickr-weekday
         flex 1
         width 40%
         height $timeHeight
-        float left
 
         span.arrowUp:after
             border-bottom-color $dayForeground
@@ -671,7 +645,6 @@ span.flatpickr-weekday
     .flatpickr-time-separator, .flatpickr-am-pm
         height inherit
         display inline-block
-        float left
         line-height inherit
         color $dayForeground
         font-weight bold
