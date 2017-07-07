@@ -57,7 +57,7 @@ function FlatpickrInstance(element, config) {
 					? self.latestSelectedDateObj || self.config.minDate
 					: null);
 			}
-			updateValue();
+			updateValue(false);
 		}
 
 		self.showTimeInput = self.selectedDates.length > 0 || self.config.noCalendar;
