@@ -17,6 +17,7 @@ flatpickr.l10ns.es.ordinal = function () {
 };
 
 flatpickr.l10ns.es.firstDayOfWeek = 1;
-if (typeof module !== "undefined") module.exports = flatpickr.l10ns;
 
 flatpickr.l10ns.es.rangeSeparator = " a ";
+
+if (typeof module !== "undefined") module.exports = flatpickr.l10ns;
