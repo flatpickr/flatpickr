@@ -2472,11 +2472,12 @@ FlatpickrInstance.prototype = {
 					if (this.tokenRegex[token] && !escaped) {
 						regexStr += this.tokenRegex[token];
 						const match = new RegExp(regexStr).exec(date);
-						if (match && (matched = true))
-							{ops[token !== "Y" ? "push" : "unshift"]({
+						if (match && (matched = true)) {
+							ops[token !== "Y" ? "push" : "unshift"]({
 								fn: this.revFormat[token],
 								val: match[++matchIndex]
-							});}
+							});
+						}
 						}
 
 					else if (!isBackSlash)
