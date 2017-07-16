@@ -1060,7 +1060,9 @@ function FlatpickrInstance(element, config) {
 			"currentMonthElement", "currentYearElement", "navigationCurrentMonth",
 			"selectedDateElem", "config"
 		].forEach(k => {
-			try { delete self[k] }
+			try {
+				delete self[k] 
+			}
 			catch (e) {}
 		})
 	}
@@ -1744,7 +1746,7 @@ function FlatpickrInstance(element, config) {
 		}
 
 		self.selectedDates = self.selectedDates.filter(
-			d => d instanceof Date && isEnabled(d, false)
+			d => d instanceof Date
 		);
 
 		self.selectedDates.sort((a,b) => a.getTime() - b.getTime());
