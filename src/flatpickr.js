@@ -1060,7 +1060,9 @@ function FlatpickrInstance(element, config) {
 			"currentMonthElement", "currentYearElement", "navigationCurrentMonth",
 			"selectedDateElem", "config"
 		].forEach(k => {
-			try { delete self[k] }
+			try {
+				delete self[k];
+			}
 			catch (e) {}
 		})
 	}
@@ -2460,7 +2462,7 @@ FlatpickrInstance.prototype = {
 					? new Date(new Date().getFullYear(), 0, 1, 0, 0, 0 ,0)
 					: new Date(new Date().setHours(0,0,0,0));
 
-				let matched;
+				let matched, ops = [];
 
 				for (let i = 0, matchIndex = 0, regexStr = ""; i < format.length; i++) {
 					const token = format[i];
@@ -2470,19 +2472,23 @@ FlatpickrInstance.prototype = {
 					if (this.tokenRegex[token] && !escaped) {
 						regexStr += this.tokenRegex[token];
 						const match = new RegExp(regexStr).exec(date);
-						if (match && (matched = true)) {
-							parsedDate =
-								this.revFormat[token](parsedDate, match[++matchIndex])
-								|| parsedDate;
+						if (match && (matched = true))
+							{ops[token !== "Y" ? "push" : "unshift"]({
+								fn: this.revFormat[token],
+								val: match[++matchIndex]
+							});}
 						}
-					}
 
 					else if (!isBackSlash)
 						regexStr += "."; // don't really care
 
+					ops.forEach(
+						({ fn, val }) => parsedDate = fn(parsedDate, val) || parsedDate
+					)
+
 				}
 
-				date = matched	? parsedDate : null;
+				date = matched ? parsedDate : null;
 			}
 		}
 
