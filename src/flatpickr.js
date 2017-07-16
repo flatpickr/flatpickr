@@ -842,8 +842,11 @@ function FlatpickrInstance(element, config) {
 			const secondInput = createNumberInput("flatpickr-second");
 			self.secondElement =  secondInput.childNodes[0];
 
-			self.secondElement.value =
-				self.latestSelectedDateObj ? self.pad(self.latestSelectedDateObj.getSeconds()) : "00";
+			self.secondElement.value = self.pad(
+				self.latestSelectedDateObj
+					? self.latestSelectedDateObj.getSeconds()
+					: self.config.defaultSeconds
+				);
 
 			self.secondElement.step = self.minuteElement.step;
 			self.secondElement.min = self.minuteElement.min;
@@ -2669,6 +2672,9 @@ flatpickr.defaultConfig = FlatpickrInstance.defaultConfig = {
 
 	// initial value in the minute element
 	defaultMinute: 0,
+
+	// initial value in the seconds element
+	defaultSeconds: 0,
 
 	// disable native mobile datetime input support
 	disableMobile: false,
