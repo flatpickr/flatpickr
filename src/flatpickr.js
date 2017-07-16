@@ -810,7 +810,7 @@ function FlatpickrInstance(element, config) {
 
 		self.hourElement.value = self.pad(self.latestSelectedDateObj
 			? self.latestSelectedDateObj.getHours()
-			: self.config.defaultHour
+			: self.config.defaultHour % (self.time_24hr ? 24 : 12)
 		);
 
 		self.minuteElement.value = self.pad(self.latestSelectedDateObj
@@ -859,7 +859,9 @@ function FlatpickrInstance(element, config) {
 			self.amPM = createElement(
 				"span",
 				"flatpickr-am-pm",
-				["AM", "PM"][(self.hourElement.value > 11) | 0]
+				["AM", "PM"][((self.latestSelectedDateObj
+					? self.hourElement.value
+					: self.config.defaultHour) > 11) | 0]
 			);
 			self.amPM.title = self.l10n.toggleTitle;
 			self.amPM.tabIndex = -1;
