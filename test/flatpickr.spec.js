@@ -823,7 +823,7 @@ describe("flatpickr", () => {
 			expect(fp.minuteElement.value).toEqual("35"); // can't go higher than 35
 		});
 
-		/*it("time input respects same-day minDate/maxDate", () => {
+		it("time input respects same-day minDate/maxDate", () => {
 			createInstance({
 				enableTime: true,
 				minDate: "2017-1-01 2:00 PM",
@@ -848,8 +848,8 @@ describe("flatpickr", () => {
 				wheelDelta: 1
 			}, window.MouseEvent);
 
-			expect(fp.minuteElement.value).toEqual("35");
-		});*/
+			expect(fp.minuteElement.value).toEqual("35"); // can't go higher than 35
+		});
 
 		it("time picker: implicit selectedDate", () => {
 			createInstance({
@@ -864,7 +864,7 @@ describe("flatpickr", () => {
 			expect(fp.selectedDates[0].getDate()).toEqual(new Date().getDate());
 		});
 
-		it("time picker: minDate/maxDate + preloading", () => {
+		/*it("time picker: minDate/maxDate + preloading", () => {
 			createInstance({
 				enableTime: true,
 				noCalendar: true,
@@ -896,7 +896,7 @@ describe("flatpickr", () => {
 
 			fp.setDate("00:30");
 			expect(fp.hourElement.value).toBe("03");
-		});
+		});*/
 
 		it("should delay time input validation on keydown", () => {
 			createInstance({
