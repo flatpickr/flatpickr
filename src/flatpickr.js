@@ -2485,7 +2485,7 @@ FlatpickrInstance.prototype = {
 								val: match[++matchIndex]
 							});
 						}
-						}
+					}
 
 					else if (!isBackSlash)
 						regexStr += "."; // don't really care
