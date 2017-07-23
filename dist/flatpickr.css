@@ -319,7 +319,7 @@
 }
 .flatpickr-current-month .numInputWrapper {
   width: 6ch;
-  width: 7ch\0;
+  width: 7ch;
   display: inline-block;
 }
 .flatpickr-current-month .numInputWrapper span.arrowUp:after {
