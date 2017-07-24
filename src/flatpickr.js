@@ -641,7 +641,7 @@ function FlatpickrInstance(element, config) {
 		const daysInMonth = self.utils.getDaysinMonth(),
 			days = window.document.createDocumentFragment();
 
-		let	dayNumber = self.prevMonthDays + 1 - firstOfMonth,
+		let dayNumber = self.prevMonthDays + 1 - firstOfMonth,
 			dayIndex = 0;
 
 		if (self.config.weekNumbers && self.weekNumbers.firstChild)
@@ -749,7 +749,7 @@ function FlatpickrInstance(element, config) {
 		if (self.config.maxDate) {
 			self.currentYearElement.max = self.config.maxDate.getFullYear();
 
-			self.currentYearElement.disabled = self.config.minDate	&&
+			self.currentYearElement.disabled = self.config.minDate  &&
 				self.config.minDate.getFullYear() === self.config.maxDate.getFullYear();
 		}
 
@@ -879,7 +879,7 @@ function FlatpickrInstance(element, config) {
 			self.weekdayContainer = createElement("div", "flatpickr-weekdays");
 
 		const firstDayOfWeek = self.l10n.firstDayOfWeek;
-		let	weekdays = self.l10n.weekdays.shorthand.slice();
+		let weekdays = self.l10n.weekdays.shorthand.slice();
 
 		if (firstDayOfWeek > 0 && firstDayOfWeek < weekdays.length) {
 			weekdays = [].concat(
@@ -1058,9 +1058,9 @@ function FlatpickrInstance(element, config) {
 
 		[
 			"_showTimeInput", "latestSelectedDateObj", "_hideNextMonthArrow", "_hidePrevMonthArrow",
-			"__hideNextMonthArrow",	"__hidePrevMonthArrow",	"isMobile",	"isOpen",	"selectedDateElem",
+			"__hideNextMonthArrow", "__hidePrevMonthArrow", "isMobile", "isOpen", "selectedDateElem",
 			"minDateHasTime", "maxDateHasTime", "days", "daysContainer", "_input",
-			"_positionElement", "innerContainer",	"rContainer",	"monthNav",	"todayDateElem",
+			"_positionElement", "innerContainer", "rContainer", "monthNav", "todayDateElem",
 			"calendarContainer", "weekdayContainer", "prevMonthNav", "nextMonthNav",
 			"currentMonthElement", "currentYearElement", "navigationCurrentMonth",
 			"selectedDateElem", "config"
@@ -1119,7 +1119,7 @@ function FlatpickrInstance(element, config) {
 
 		self.currentYear = newYearNum || self.currentYear;
 
-		if (self.config.maxDate	&& self.currentYear === self.config.maxDate.getFullYear()) {
+		if (self.config.maxDate && self.currentYear === self.config.maxDate.getFullYear()) {
 			self.currentMonth = Math.min(
 				self.config.maxDate.getMonth(),
 				self.currentMonth
@@ -1262,7 +1262,7 @@ function FlatpickrInstance(element, config) {
 						if (!isTimeObj)
 							self.hourElement.focus();
 						updateTime(e);
-						self.debouncedChange();					
+						self.debouncedChange();
 					}
 
 					break;
@@ -1660,7 +1660,7 @@ function FlatpickrInstance(element, config) {
 
 		buildDays();
 
-		if (self.minDateHasTime	&& self.config.enableTime
+		if (self.minDateHasTime && self.config.enableTime
 			&& compareDates(selectedDate, self.config.minDate) === 0
 		)
 			setHoursFromDate(self.config.minDate);
@@ -1711,11 +1711,11 @@ function FlatpickrInstance(element, config) {
 	}
 
 	function set(option, value) {
-		if (option !== null && typeof option === "object") 
+		if (option !== null && typeof option === "object")
 			Object.assign(self.config, option)
 		else
 			self.config[option] = value;
-		
+
 		self.redraw();
 		jumpToDate();
 	}
@@ -2483,7 +2483,7 @@ FlatpickrInstance.prototype = {
 								val: match[++matchIndex]
 							});
 						}
-						}
+					}
 
 					else if (!isBackSlash)
 						regexStr += "."; // don't really care
@@ -2735,7 +2735,7 @@ flatpickr.l10ns = {
 				"Sep", "Oct", "Nov", "Dec"
 			],
 			longhand: [
-				"January", "February", "March",	"April",
+				"January", "February", "March", "April",
 				"May", "June", "July", "August",
 				"September", "October", "November", "December"
 			]
