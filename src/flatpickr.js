@@ -1574,6 +1574,7 @@ function FlatpickrInstance(element, config) {
 		const left = window.pageXOffset + inputBounds.left;
 		const right = window.document.body.offsetWidth - inputBounds.right;
 		const rightMost = left + calendarWidth > window.document.body.offsetWidth;
+		const centerMost = right + calendarWidth > window.document.body.offsetWidth;
 
 		toggleClass(self.calendarContainer, "rightMost", rightMost);
 
@@ -1588,8 +1589,27 @@ function FlatpickrInstance(element, config) {
 		}
 
 		else {
-			self.calendarContainer.style.left = "auto";
-			self.calendarContainer.style.right = `${right}px`;
+			if (!centerMost) {
+				self.calendarContainer.style.left = "auto";
+				self.calendarContainer.style.right = `${right}px`;
+			}
+
+			else {
+				const doc = document.styleSheets[0];
+				const bodyWidth = window.document.body.offsetWidth;
+				const centerLeft = Math.max(0, ((bodyWidth / 2) - (calendarWidth / 2)));
+				const centerBefore = ".flatpickr-calendar.centerMost:before";
+				const centerAfter = ".flatpickr-calendar.centerMost:after";
+				const centerIndex = doc.cssRules.length;
+				const centerStyle = `{left:${inputBounds.left}px;right:auto;}`;
+
+				toggleClass(self.calendarContainer, "rightMost", false);
+				toggleClass(self.calendarContainer, "centerMost", true);
+				doc.insertRule(`${centerBefore},${centerAfter}${centerStyle}`, centerIndex);
+
+				self.calendarContainer.style.left =  `${centerLeft}px`;
+				self.calendarContainer.style.right = "auto";
+			}
 		}
 	}
 
