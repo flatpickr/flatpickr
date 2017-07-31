@@ -94,6 +94,4 @@ var l10n = {
 	zh: zh
 };
 
-if (typeof module !== "undefined") {
-	module.exports = l10n;
-}
+if (typeof module !== "undefined") module.exports = l10n;

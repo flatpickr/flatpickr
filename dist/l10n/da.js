@@ -12,8 +12,6 @@ flatpickr.l10ns.da.months = {
 	longhand: ["Januar", "Februar", "Marts", "April", "Maj", "Juni", "Juli", "August", "September", "Oktober", "November", "December"]
 };
 
-flatpickr.l10ns.da.firstDayOfWeek = 1; // Set it to monday (Mandag)
-
 flatpickr.l10ns.da.ordinal = function () {
 	return ".";
 };

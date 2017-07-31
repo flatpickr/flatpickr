@@ -50,7 +50,7 @@ function FlatpickrInstance(element, config) {
 			if (self.config.enableTime) {
 				setHoursFromDate(self.config.noCalendar ? self.latestSelectedDateObj || self.config.minDate : null);
 			}
-			updateValue();
+			updateValue(false);
 		}
 
 		self.showTimeInput = self.selectedDates.length > 0 || self.config.noCalendar;
@@ -673,7 +673,7 @@ function FlatpickrInstance(element, config) {
 
 		self.hourElement.tabIndex = self.minuteElement.tabIndex = -1;
 
-		self.hourElement.value = self.pad(self.latestSelectedDateObj ? self.latestSelectedDateObj.getHours() : self.config.defaultHour);
+		self.hourElement.value = self.pad(self.latestSelectedDateObj ? self.latestSelectedDateObj.getHours() : self.config.defaultHour % (self.time_24hr ? 24 : 12));
 
 		self.minuteElement.value = self.pad(self.latestSelectedDateObj ? self.latestSelectedDateObj.getMinutes() : self.config.defaultMinute);
 
@@ -700,7 +700,7 @@ function FlatpickrInstance(element, config) {
 			var secondInput = createNumberInput("flatpickr-second");
 			self.secondElement = secondInput.childNodes[0];
 
-			self.secondElement.value = self.latestSelectedDateObj ? self.pad(self.latestSelectedDateObj.getSeconds()) : "00";
+			self.secondElement.value = self.pad(self.latestSelectedDateObj ? self.latestSelectedDateObj.getSeconds() : self.config.defaultSeconds);
 
 			self.secondElement.step = self.minuteElement.step;
 			self.secondElement.min = self.minuteElement.min;
@@ -712,7 +712,7 @@ function FlatpickrInstance(element, config) {
 
 		if (!self.config.time_24hr) {
 			// add self.amPM if appropriate
-			self.amPM = createElement("span", "flatpickr-am-pm", ["AM", "PM"][self.hourElement.value > 11 | 0]);
+			self.amPM = createElement("span", "flatpickr-am-pm", ["AM", "PM"][(self.latestSelectedDateObj ? self.hourElement.value : self.config.defaultHour) > 11 | 0]);
 			self.amPM.title = self.l10n.toggleTitle;
 			self.amPM.tabIndex = -1;
 			self.timeContainer.appendChild(self.amPM);
@@ -874,7 +874,9 @@ function FlatpickrInstance(element, config) {
 		}
 
 		["_showTimeInput", "latestSelectedDateObj", "_hideNextMonthArrow", "_hidePrevMonthArrow", "__hideNextMonthArrow", "__hidePrevMonthArrow", "isMobile", "isOpen", "selectedDateElem", "minDateHasTime", "maxDateHasTime", "days", "daysContainer", "_input", "_positionElement", "innerContainer", "rContainer", "monthNav", "todayDateElem", "calendarContainer", "weekdayContainer", "prevMonthNav", "nextMonthNav", "currentMonthElement", "currentYearElement", "navigationCurrentMonth", "selectedDateElem", "config"].forEach(function (k) {
-			return delete self[k];
+			try {
+				delete self[k];
+			} catch (e) {}
 		});
 	}
 
@@ -973,6 +975,11 @@ function FlatpickrInstance(element, config) {
 					self.close();
 					break;
 
+				case "Backspace":
+				case "Delete":
+					if (!self.config.allowInput) self.clear();
+					break;
+
 				case "ArrowLeft":
 				case "ArrowRight":
 					if (!isTimeObj) {
@@ -1000,6 +1007,7 @@ function FlatpickrInstance(element, config) {
 					} else if (self.config.enableTime) {
 						if (!isTimeObj) self.hourElement.focus();
 						updateTime(e);
+						self.debouncedChange();
 					}
 
 					break;
@@ -1342,7 +1350,7 @@ function FlatpickrInstance(element, config) {
 
 		// maintain focus
 		if (!shouldChangeMonth) focusOnDay(e.target.$i, 0);else afterDayAnim(function () {
-			return self.selectedDateElem.focus();
+			return self.selectedDateElem && self.selectedDateElem.focus();
 		});
 
 		if (self.config.enableTime) setTimeout(function () {
@@ -1358,7 +1366,8 @@ function FlatpickrInstance(element, config) {
 	}
 
 	function set(option, value) {
-		self.config[option] = value;
+		if (option !== null && (typeof option === "undefined" ? "undefined" : _typeof(option)) === "object") _extends(self.config, option);else self.config[option] = value;
+
 		self.redraw();
 		jumpToDate();
 	}
@@ -1537,7 +1546,7 @@ function FlatpickrInstance(element, config) {
 		var inputType = self.config.enableTime ? self.config.noCalendar ? "time" : "datetime-local" : "date";
 
 		self.mobileInput = createElement("input", self.input.className + " flatpickr-mobile");
-		self.mobileInput.step = "any";
+		self.mobileInput.step = self.input.getAttribute("step") || "any";
 		self.mobileInput.tabIndex = 1;
 		self.mobileInput.type = inputType;
 		self.mobileInput.disabled = self.input.disabled;
@@ -2020,6 +2029,8 @@ FlatpickrInstance.prototype = {
   * @return {Date} the parsed Date object
   */
 	parseDate: function parseDate(date, givenFormat, timeless) {
+		var _this2 = this;
+
 		if (date !== 0 && !date) return null;
 
 		var date_orig = date;
@@ -2037,25 +2048,37 @@ FlatpickrInstance.prototype = {
 					timeless = true;
 				} else if (/Z$/.test(date) || /GMT$/.test(date)) // datestrings w/ timezone
 					date = new Date(date);else if (this.config && this.config.parseDate) date = this.config.parseDate(date, format);else {
-					var parsedDate = !this.config || !this.config.noCalendar ? new Date(new Date().getFullYear(), 0, 1, 0, 0, 0, 0) : new Date(new Date().setHours(0, 0, 0, 0));
+					(function () {
+						var parsedDate = !_this2.config || !_this2.config.noCalendar ? new Date(new Date().getFullYear(), 0, 1, 0, 0, 0, 0) : new Date(new Date().setHours(0, 0, 0, 0));
 
-					var matched = void 0;
+						var matched = void 0,
+						    ops = [];
 
-					for (var i = 0, matchIndex = 0, regexStr = ""; i < format.length; i++) {
-						var token = format[i];
-						var isBackSlash = token === "\\";
-						var escaped = format[i - 1] === "\\" || isBackSlash;
+						for (var i = 0, matchIndex = 0, regexStr = ""; i < format.length; i++) {
+							var token = format[i];
+							var isBackSlash = token === "\\";
+							var escaped = format[i - 1] === "\\" || isBackSlash;
 
-						if (this.tokenRegex[token] && !escaped) {
-							regexStr += this.tokenRegex[token];
-							var match = new RegExp(regexStr).exec(date);
-							if (match && (matched = true)) {
-								parsedDate = this.revFormat[token](parsedDate, match[++matchIndex]) || parsedDate;
-							}
-						} else if (!isBackSlash) regexStr += "."; // don't really care
-					}
+							if (_this2.tokenRegex[token] && !escaped) {
+								regexStr += _this2.tokenRegex[token];
+								var match = new RegExp(regexStr).exec(date);
+								if (match && (matched = true)) {
+									ops[token !== "Y" ? "push" : "unshift"]({
+										fn: _this2.revFormat[token],
+										val: match[++matchIndex]
+									});
+								}
+							} else if (!isBackSlash) regexStr += "."; // don't really care
 
-					date = matched ? parsedDate : null;
+							ops.forEach(function (_ref) {
+								var fn = _ref.fn,
+								    val = _ref.val;
+								return parsedDate = fn(parsedDate, val) || parsedDate;
+							});
+						}
+
+						date = matched ? parsedDate : null;
+					})();
 				}
 			}
 
@@ -2226,6 +2249,9 @@ flatpickr.defaultConfig = FlatpickrInstance.defaultConfig = {
 
 	// initial value in the minute element
 	defaultMinute: 0,
+
+	// initial value in the seconds element
+	defaultSeconds: 0,
 
 	// disable native mobile datetime input support
 	disableMobile: false,
