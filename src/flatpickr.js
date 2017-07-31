@@ -1222,6 +1222,12 @@ function FlatpickrInstance(element, config) {
 					self.close();
 					break;
 
+				case "Backspace":
+				case "Delete":
+					if (!self.config.allowInput)
+						self.clear();
+					break;
+
 				case "ArrowLeft":
 				case "ArrowRight":
 					if (!isTimeObj) {
