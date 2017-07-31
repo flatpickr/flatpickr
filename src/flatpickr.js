@@ -846,7 +846,7 @@ function FlatpickrInstance(element, config) {
 				self.latestSelectedDateObj
 					? self.latestSelectedDateObj.getSeconds()
 					: self.config.defaultSeconds
-				);
+			);
 
 			self.secondElement.step = self.minuteElement.step;
 			self.secondElement.min = self.minuteElement.min;
@@ -1511,8 +1511,7 @@ function FlatpickrInstance(element, config) {
 			if (self.config[hooks[i]] !== undefined) {
 				self.config[hooks[i]] = arrayify(
 					self.config[hooks[i]] || []
-				)
-				.map(bindToInstance);
+				).map(bindToInstance);
 			}
 		}
 

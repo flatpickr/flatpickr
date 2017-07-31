@@ -23,11 +23,11 @@ function weekSelectPlugin(pluginConfig) {
 		function highlightWeek(){
 			if (fp.selectedDateElem) {
 				fp.weekStartDay = fp.days.childNodes[
-          7 * Math.floor(fp.selectedDateElem.$i / 7)
-        ].dateObj;
+					7 * Math.floor(fp.selectedDateElem.$i / 7)
+				].dateObj;
 				fp.weekEndDay = fp.days.childNodes[
-          7 * Math.ceil(fp.selectedDateElem.$i / 7 + 0.01) - 1
-        ].dateObj;
+					7 * Math.ceil(fp.selectedDateElem.$i / 7 + 0.01) - 1
+				].dateObj;
 			}
 			const days = fp.days.childNodes;
 			for(let i = days.length; i--;) {

@@ -65,7 +65,6 @@
     "jest": true
   },
   "plugins": [
-    "flowtype",
     "jest"
   ]
 }
