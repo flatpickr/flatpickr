@@ -1262,7 +1262,7 @@ function FlatpickrInstance(element, config) {
 						if (!isTimeObj)
 							self.hourElement.focus();
 						updateTime(e);
-						self.debouncedChange();					
+						self.debouncedChange();
 					}
 
 					break;
@@ -1691,7 +1691,7 @@ function FlatpickrInstance(element, config) {
 		if (!shouldChangeMonth)
 			focusOnDay(e.target.$i, 0);
 		else
-			afterDayAnim(() => self.selectedDateElem.focus());
+			afterDayAnim(() => self.selectedDateElem && self.selectedDateElem.focus());
 
 		if (self.config.enableTime)
 			setTimeout(() => self.hourElement.select(), 451);
@@ -1711,11 +1711,11 @@ function FlatpickrInstance(element, config) {
 	}
 
 	function set(option, value) {
-		if (option !== null && typeof option === "object") 
+		if (option !== null && typeof option === "object")
 			Object.assign(self.config, option)
 		else
 			self.config[option] = value;
-		
+
 		self.redraw();
 		jumpToDate();
 	}
