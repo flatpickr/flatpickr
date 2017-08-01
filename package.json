@@ -6,7 +6,8 @@
     "start": "nodemon --watch build.js build.js -- --dev",
     "build": "node build.js",
     "lint": "eslint src/",
-    "test": "npm run lint && jest --bail",
+    "test": "npm run lint && jest --bail && npm run test-ssr",
+    "test-ssr": "node -e 'require(\"./src/flatpickr.js\")'",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "release": "jest --bail --silent && ./release"
   },
