@@ -757,8 +757,12 @@ function FlatpickrInstance(element, config) {
 		self.nextMonthNav.innerHTML = self.config.nextArrow;
 
 		self.navigationCurrentMonth = createElement("span", "flatpickr-current-month");
-		self.navigationCurrentMonth.appendChild(self.currentMonthElement);
-		self.navigationCurrentMonth.appendChild(yearInput);
+		self.currentMonthElement = self.navigationCurrentMonth
+			.appendChild(self.currentMonthElement);
+		if (self.config.yearFirst)
+			self.navigationCurrentMonth.insertBefore(yearInput, self.currentMonthElement);
+		else
+			self.navigationCurrentMonth.appendChild(yearInput);
 
 		monthNavFragment.appendChild(self.prevMonthNav);
 		monthNavFragment.appendChild(self.navigationCurrentMonth);
@@ -974,8 +978,10 @@ function FlatpickrInstance(element, config) {
 			self.navigationCurrentMonth.classList.add("slideRightNew");
 		}
 
-		self.currentMonthElement = self.navigationCurrentMonth.firstChild;
-		self.currentYearElement = self.navigationCurrentMonth.lastChild.childNodes[0];
+		self.currentMonthElement =
+			self.navigationCurrentMonth.childNodes[self.config.yearFist ? 1 : 0];
+		self.currentYearElement =
+			self.navigationCurrentMonth.childNodes[self.config.yearFist ? 0 : 1].childNodes[0];
 
 		updateNavigationCurrentMonth();
 		self.oldCurMonth.firstChild.textContent =
@@ -1443,7 +1449,7 @@ function FlatpickrInstance(element, config) {
 
 	function parseConfig() {
 		let boolOpts = [
-			"wrap", "weekNumbers", "allowInput", "clickOpens", "time_24hr", "enableTime", "noCalendar", "altInput", "shorthandCurrentMonth", "inline", "static", "enableSeconds", "disableMobile"
+			"wrap", "weekNumbers", "allowInput", "clickOpens", "time_24hr", "enableTime", "noCalendar", "altInput", "shorthandCurrentMonth", "inline", "static", "enableSeconds", "disableMobile", "yearFirst"
 		];
 
 		let hooks = [
@@ -2683,6 +2689,10 @@ flatpickr.defaultConfig = FlatpickrInstance.defaultConfig = {
 
 	// disable native mobile datetime input support
 	disableMobile: false,
+
+	// if true, the order in current month navigator is Y m
+	// instead of m Y
+	yearFirst: false,
 
 	// default locale
 	locale: "default",
