@@ -2143,7 +2143,7 @@ flatpickr.defaultConfig = FlatpickrInstance.defaultConfig = {
 
 	position: "auto",
 
-	animate: window.navigator.userAgent.indexOf("MSIE") === -1,
+	animate: typeof window !== "undefined" && window.navigator.userAgent.indexOf("MSIE") === -1,
 
 	// wrap: see https://chmln.github.io/flatpickr/examples/#flatpickr-external-elements
 	wrap: false,
