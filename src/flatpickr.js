@@ -1195,15 +1195,20 @@ function FlatpickrInstance(element, config) {
 		const allowKeydown = self.isOpen && (!allowInput || !isInput);
 		const allowInlineKeydown = self.config.inline && isInput && !allowInput;
 
-		if (e.key === "Enter" && allowInput && isInput) {
-			self.setDate(
-				self._input.value,
-				true,
-				e.target === self.altInput
-					? self.config.altFormat
-					: self.config.dateFormat
-			);
-			return e.target.blur();
+		if (e.key === "Enter" && isInput) {
+			if (allowInput) {
+				self.setDate(
+					self._input.value,
+					true,
+					e.target === self.altInput
+						? self.config.altFormat
+						: self.config.dateFormat
+				);
+				return e.target.blur();
+			}
+
+			else
+				self.open();
 		}
 
 		else if (calendarElem || allowKeydown || allowInlineKeydown) {
