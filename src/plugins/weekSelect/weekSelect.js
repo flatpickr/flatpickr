@@ -52,7 +52,7 @@ function weekSelectPlugin(pluginConfig) {
 		}
 
 		return {
-			onChange: highlightWeek,
+			onValueUpdate: highlightWeek,
 			onMonthChange: highlightWeek,
 			onYearChange: highlightWeek,
 			onClose: clearHover,
