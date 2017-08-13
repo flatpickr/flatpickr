@@ -2356,10 +2356,7 @@ FlatpickrInstance.prototype = {
 			dateObj.setDate(parseFloat(day))
 		},
 		K: (dateObj, amPM) => {
-			const hours = dateObj.getHours();
-
-			if (hours !== 12)
-				dateObj.setHours(hours % 12 + 12 * /pm/i.test(amPM));
+			dateObj.setHours(dateObj.getHours() % 12 + 12 * /pm/i.test(amPM));
 		},
 		M: function(dateObj, shortMonth) {
 			dateObj.setMonth(this.l10n.months.shorthand.indexOf(shortMonth));
