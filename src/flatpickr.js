@@ -2764,6 +2764,8 @@ flatpickr.l10ns = {
 flatpickr.l10ns.default = Object.create(flatpickr.l10ns.en);
 flatpickr.localize = l10n => Object.assign(flatpickr.l10ns.default, l10n || {});
 flatpickr.setDefaults = config => Object.assign(flatpickr.defaultConfig, config || {});
+flatpickr.parseDate = FlatpickrInstance.prototype.parseDate
+flatpickr.formatDate = FlatpickrInstance.prototype.formatDate
 
 /* istanbul ignore next */
 if (typeof jQuery !== "undefined") {
