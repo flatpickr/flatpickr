@@ -17,7 +17,7 @@ flatpickr.l10ns.da.ordinal = () => {
 };
 
 flatpickr.l10ns.da.firstDayOfWeek = 1; // Set it to monday (Mandag)
-flatpickr.l10ns.da.rangeSeparator = ' til ';
+flatpickr.l10ns.da.rangeSeparator = " til ";
 
 if (typeof module !== "undefined") 
 	module.exports = flatpickr.l10ns;
