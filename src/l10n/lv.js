@@ -15,3 +15,5 @@ flatpickr.l10ns.lv.months = {
 };
 if (typeof module !== "undefined") 
 	module.exports = flatpickr.l10ns;
+
+flatpickr.l10ns.fr.rangeSeparator = " līdz ";
