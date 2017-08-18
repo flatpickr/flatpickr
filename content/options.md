@@ -179,7 +179,7 @@ weight = "6"
             <td>function, [functions]</td>
             <td>null</td>
             <td>
-                Function(s) to trigger on every time the calendar is closed. See&nbsp;<a href="#eventsAPI">Events API</a>
+                Function(s) to trigger on every time the calendar is closed. See&nbsp;<a href="/events/#onclose">Events API</a>
             </td>
         </tr>
         <tr>
@@ -187,7 +187,7 @@ weight = "6"
             <td>function, [functions]</td>
             <td>null</td>
             <td>
-                Function(s) to trigger on every time the calendar is opened. See&nbsp;<a href="#eventsAPI">Events API</a>
+                Function(s) to trigger on every time the calendar is opened. See&nbsp;<a href="/events/#onopen">Events API</a>
             </td>
         </tr>
         <tr>
@@ -195,7 +195,7 @@ weight = "6"
             <td>function, [functions]</td>
             <td>null</td>
             <td>
-                Function to trigger when the calendar is ready. See&nbsp;<a href="#eventsAPI">Events API</a>
+                Function to trigger when the calendar is ready. See&nbsp;<a href="/events/#onready">Events API</a>
             </td>
         </tr>
         <tr>
@@ -239,7 +239,7 @@ weight = "6"
             <td>Boolean</td>
             <td>false</td>
             <td>
-                <a href="https://chmln.github.io/flatpickr/#example-strap">Custom elements and input groups</a>
+                <a href="/examples/#flatpickr-external-elements">Custom elements and input groups</a>
             </td>
         </tr>
     </tbody>
