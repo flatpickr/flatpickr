@@ -140,7 +140,7 @@ describe("flatpickr", () => {
 				expect(parsedDate).toBeDefined();
 				expect(parsedDate.getFullYear()).toEqual(2016);
 				expect(parsedDate.getMonth()).toEqual(9);
-				expect(parsedDate.getDate()).toEqual(22);
+				expect(parsedDate.getDate()).toEqual(21);
 			});
 
 			it("should parse \"2016-10\"", () => {
