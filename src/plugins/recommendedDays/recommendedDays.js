@@ -13,7 +13,7 @@ function recommendedDaysPlugin(pluginConfig) {
 		function parseReccomendedDays() {
 			var reccomendedDays = this.instanceConfig.reccomendedDays;
 			for(var i = reccomendedDays.length; i--;){
-				reccomendedDays[i] = fp.parseDate(reccomendedDays[i], "m/d/Y", true);
+				reccomendedDays[i] = fp.parseDate(reccomendedDays[i], fp.config.dateFormat, true);
 			}
 			fp.config.reccomendedDays = reccomendedDays;
 		}
