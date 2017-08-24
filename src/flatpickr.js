@@ -222,7 +222,7 @@ function FlatpickrInstance(element, config) {
 		if (element instanceof Array)
 			return element.forEach(el => bind(el, event, handler));
 
-		element.addEventListener(event, handler);
+		element.addEventListener(event, handler, { passive: true });
 		self._handlers.push({element, event, handler});
 	}
 
@@ -284,7 +284,7 @@ function FlatpickrInstance(element, config) {
 		}
 
 		if (!self.config.noCalendar) {
-			self.monthNav.addEventListener("wheel", e => e.preventDefault());
+			self.monthNav.addEventListener("wheel", e => e.preventDefault(), { passive: true });
 			bind(self.monthNav, "wheel", debounce(onMonthNavScroll, 10));
 			bind(self.monthNav, "mousedown", onClick(onMonthNavClick));
 
@@ -1982,6 +1982,8 @@ function FlatpickrInstance(element, config) {
 			self.setDate(e.target.value, false, self.mobileFormatStr);
 			triggerEvent("Change");
 			triggerEvent("Close");
+		}, {
+			passive: true
 		});
 	}
 
