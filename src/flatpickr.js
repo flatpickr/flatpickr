@@ -264,10 +264,12 @@ function FlatpickrInstance(element, config) {
 		if (self.config.mode === "range" && self.daysContainer)
 			bind(self.daysContainer, "mouseover", e => onMouseOver(e.target));
 
-		bind(window.document.body, "keydown", onKeyDown);
+		if (self.config.allowKeyboard) {
+			bind(window.document.body, "keydown", onKeyDown);
 
-		if (!self.config.static)
-			bind(self._input, "keydown", onKeyDown);
+			if (!self.config.static)
+				bind(self._input, "keydown", onKeyDown);	
+		}
 
 		if (!self.config.inline && !self.config.static)
 			bind(window, "resize", self.debouncedResize);
@@ -2580,6 +2582,8 @@ flatpickr.defaultConfig = FlatpickrInstance.defaultConfig = {
 
 	// wrap: see https://chmln.github.io/flatpickr/examples/#flatpickr-external-elements
 	wrap: false,
+	
+	allowKeyboard: true,
 
 	// enables week numbers
 	weekNumbers: false,
