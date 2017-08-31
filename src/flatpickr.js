@@ -771,7 +771,7 @@ function FlatpickrInstance(element, config) {
 			},
 			set (bool) {
 				if (this.__hidePrevMonthArrow !== bool)
-					self.prevMonthNav.style.display = bool ? "none" : "block";
+					self.prevMonthNav.style.visibility = bool ? "visible" : "hidden";
 				this.__hidePrevMonthArrow = bool;
 			}
 		});
@@ -782,7 +782,7 @@ function FlatpickrInstance(element, config) {
 			},
 			set (bool) {
 				if (this.__hideNextMonthArrow !== bool)
-					self.nextMonthNav.style.display = bool ? "none" : "block";
+					self.nextMonthNav.style.visibility = bool ? "visible" : "hidden";
 				this.__hideNextMonthArrow = bool;
 			}
 		});
