@@ -202,6 +202,11 @@ function FlatpickrInstance(element, config) {
 		if (event.delta)
 			year = (parseInt(year) + event.delta).toString();
 
+		// make sure that 'year' is a string - in some cases the type of 'year' in IE11 is undefined/null
+		if (typeof year === 'undefined' || year === null) {
+			year = ''
+		}
+		
 		if (year.length === 4 || event.key === "Enter") {
 			self.currentYearElement.blur();
 			if (!/[^\d]/.test(year))
