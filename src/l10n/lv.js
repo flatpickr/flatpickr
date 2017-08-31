@@ -13,7 +13,8 @@ flatpickr.l10ns.lv.months = {
 	shorthand: ["Jan", "Feb", "Mar", "Mai", "Apr", "Jūn", "Jūl", "Aug", "Sep", "Okt", "Nov", "Dec"],
 	longhand: ["Janvāris", "Februāris", "Marts", "Aprīlis", "Maijs", "Jūnijs", "Jūlijs", "Augusts", "Septembris", "Oktobris", "Novembris", "Decembris"]
 };
-if (typeof module !== "undefined") 
-	module.exports = flatpickr.l10ns;
 
 flatpickr.l10ns.fr.rangeSeparator = " līdz ";
+
+if (typeof module !== "undefined") 
+	module.exports = flatpickr.l10ns;
