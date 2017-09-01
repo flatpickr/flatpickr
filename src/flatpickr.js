@@ -1789,17 +1789,19 @@ function FlatpickrInstance(element, config) {
 	}
 
 	function parseDateRules(arr) {
-		for (let i = arr.length; i--;) {
-			if (typeof arr[i] === "string" || +arr[i])
-				arr[i] = self.parseDate(arr[i], null, true);
+		const rules = arr.slice();
 
-			else if (arr[i] && arr[i].from && arr[i].to) {
-				arr[i].from = self.parseDate(arr[i].from);
-				arr[i].to = self.parseDate(arr[i].to);
+		for (let i = rules.length; i--;) {
+			if (typeof rules[i] === "string" || +rules[i])
+				rules[i] = self.parseDate(rules[i], null, true);
+
+			else if (rules[i] && rules[i].from && rules[i].to) {
+				rules[i].from = self.parseDate(rules[i].from);
+				rules[i].to = self.parseDate(rules[i].to);
 			}
 		}
 
-		return arr.filter(x => x); // remove falsy values
+		return rules.filter(x => x); // remove falsy values
 	}
 
 	function setupDates() {

@@ -1089,6 +1089,38 @@ describe("flatpickr", () => {
 		});
 	});
 
+	describe("Other", () => {
+		it("does not change the value of the passed enable[] and disable[] variables", () => {
+			let data = [
+				{from: "2016-11-20", to: "2016-12-20"},
+				"2016-12-21",
+				null
+			], copiedData = data.slice();
+
+			createInstance({
+				disable: data
+			});
+
+			expect(data).toEqual(copiedData);
+
+			fp.set("disable", []);
+			fp.clear();
+
+			data = [
+				{from: "2016-11-20", to: "2016-12-20"},
+				"2016-12-21",
+				null
+			];
+			copiedData = data.slice();
+
+			createInstance({
+				disable: data
+			});
+
+			expect(data).toEqual(copiedData);
+		});
+	});
+
 	// afterAll(() => {
 	// 	fp.destroy();
 	// 	elem.parentNode.removeChild(elem);
