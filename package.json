@@ -10,7 +10,9 @@
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "release": "jest --bail --silent && ./release"
   },
-  "dependencies": {},
+  "dependencies": {
+    "typescript": "^2.5.1"
+  },
   "devDependencies": {
     "autoprefixer-stylus": "latest",
     "babel-cli": "latest",

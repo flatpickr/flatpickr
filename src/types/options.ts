@@ -107,6 +107,7 @@ export interface Options {
   onDestroy?: Hook | Hook[]
 };
 export interface ParsedOptions{
+  [k: string]: any,
   mode: "single" | "multiple" | "range",
   position: "auto" | "below" | "above",
   animate: boolean,
