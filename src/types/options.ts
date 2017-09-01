@@ -1,7 +1,7 @@
 import { Instance } from "./instance"
 
-type DateOption = Date | string | number
-type DateLimit<D = DateOption> = D | { from: D, to: D }
+export type DateOption = Date | string | number
+export type DateLimit<D = DateOption> = D | { from: D, to: D }
 type Hook = (dates: Date[], currentDateString: string, self: Instance, data?: any) => void
 
 export interface Options {
