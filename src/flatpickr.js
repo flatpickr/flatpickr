@@ -1629,6 +1629,8 @@ function FlatpickrInstance(element, config) {
 			= self.latestSelectedDateObj
 			= new Date(e.target.dateObj.getTime());
 
+		self.selectedDate = selectedDate; 
+		
 		const shouldChangeMonth = selectedDate.getMonth() !== self.currentMonth
 			&& self.config.mode !== "range";
 
