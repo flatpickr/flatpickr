@@ -4,32 +4,59 @@ export interface Instance {
   // Elements
   element: HTMLElement,
   input: HTMLInputElement
+  altInput?: HTMLInputElement
+  _input: HTMLInputElement
   mobileInput?: HTMLInputElement
-  selectedDateElem?: HTMLSpanElement
+  mobileFormatStr?: string
 
+
+  selectedDateElem?: HTMLSpanElement
+  todayDateElem?: HTMLSpanElement
+
+  _positionElement: HTMLElement
   calendarContainer: HTMLDivElement
+  innerContainer?: HTMLDivElement
+  rContainer?: HTMLDivElement
   daysContainer: HTMLDivElement
+  days: HTMLDivElement
+
+  timeContainer?: HTMLDivElement
   weekWrapper?: HTMLDivElement
 
+  oldCurMonth: HTMLDivElement
+  navigationCurrentMonth: HTMLDivElement
+  monthNav: HTMLDivElement
   currentYearElement: HTMLInputElement
+  currentMonthElement: HTMLInputElement
+  _hidePrevMonthArrow: boolean
+  _hideNextMonthArrow: boolean
+
   hourElement?: HTMLInputElement
   minuteElement?: HTMLInputElement
   secondElement?: HTMLInputElement
-
-  // State
-  l10n: Locale
-  now: Date
   amPM?: HTMLSpanElement
-  config: ParsedOptions
-  currentYear: number
-  currentMonth: number
-  isOpen: boolean
-  isMobile: boolean
+
+  // Dates
+  minRangeDate?: Date
+  maxRangeDate?: Date
+  now: Date
   latestSelectedDateObj?: Date
   _selectedDateObj?: Date
+    selectedDates: Date[]
+
+  // State
+  config: ParsedOptions
+  l10n: Locale
+
+  currentYear: number
+  currentMonth: number
+
+  isOpen: boolean
+  isMobile: boolean
+
   minDateHasTime: boolean
   maxDateHasTime: boolean
-  selectedDates: Date[]
+
   showTimeInput: boolean
   _showTimeInput: boolean
 
@@ -51,8 +78,14 @@ export interface Instance {
   parseDate: (date: Date | string | number, givenFormat?: string, timeless?: boolean) => Date | undefined,
   formatDate: (dateObj: Date, frmt: string) => string,
 
-  // Internal Methods
+  // Internals
   _bind: (element: HTMLElement, event: string, handler: (e: Event) => void) => void
   _createElement: (tag: string, className: string, content?: string) => HTMLElement
   _setHoursFromDate: (date: Date) => void
+
+  utils: {
+    getDaysInMonth: (month?: number, year?: number) => number
+  }
 }
+
+export type DayElement = HTMLSpanElement & { dateObj: Date, $i: number }

@@ -4,8 +4,8 @@ export function toggleClass(elem: HTMLElement, className: string, bool: boolean)
   elem.classList.remove(className);
 }
 
-export function createElement(tag: string, className: string, content?: string) {
-  const e = window.document.createElement(tag);
+export function createElement<T extends HTMLElement>(tag: keyof HTMLElementTagNameMap, className: string, content?: string): T {
+  const e = window.document.createElement(tag) as T;
   className = className || "";
   content = content || "";
 
@@ -23,10 +23,10 @@ export function clearNode(node: HTMLElement) {
 }
 
 export function createNumberInput(inputClassName: string) {
-  const wrapper = createElement("div", "numInputWrapper"),
-    numInput = createElement("input", "numInput " + inputClassName),
-    arrowUp = createElement("span", "arrowUp"),
-    arrowDown = createElement("span", "arrowDown");
+  const wrapper = createElement<HTMLDivElement>("div", "numInputWrapper"),
+    numInput = createElement<HTMLInputElement>("input", "numInput " + inputClassName),
+    arrowUp = createElement<HTMLSpanElement>("span", "arrowUp"),
+    arrowDown = createElement<HTMLSpanElement>("span", "arrowDown");
 
   numInput.type = "text";
   numInput.pattern = "\\d*";

@@ -1,11 +1,13 @@
+import { int, pad } from "utils"
+import { Locale } from "types/locale"
 export type token = "D" | "F" | "G" | "H" | "J" | "K" | "M" | "S" | "U" | "W" | "Y" | "Z" | "d" | "h" | "i" | "j" | "l" | "m" | "n" | "s" | "w" | "y"
 
 const do_nothing = () => undefined;
 
-export const revFormat: Record<string, (date: Date, data: string) => Date | void | undefined> =  {
+export const revFormat: Record<string, (date: Date, data: string, locale?: Locale) => Date | void | undefined> =  {
   D: do_nothing,
-  F: function(dateObj: Date, monthName: string) {
-    dateObj.setMonth(this.l10n.months.longhand.indexOf(monthName));
+  F: function(dateObj: Date, monthName: string, locale: Locale) {
+    dateObj.setMonth(locale.months.longhand.indexOf(monthName));
   },
   G: (dateObj: Date, hour: string) => {
     dateObj.setHours(parseFloat(hour))
@@ -20,10 +22,10 @@ export const revFormat: Record<string, (date: Date, data: string) => Date | void
     const hours = dateObj.getHours();
 
     if (hours !== 12)
-      dateObj.setHours(hours % 12 + 12 * /pm/i.test(amPM));
+      dateObj.setHours(hours % 12 + 12 * int(/pm/i.test(amPM)));
   },
-  M: function(dateObj: Date, shortMonth: string) {
-    dateObj.setMonth(this.l10n.months.shorthand.indexOf(shortMonth));
+  M: function(dateObj: Date, shortMonth: string, locale: Locale) {
+    dateObj.setMonth(locale.months.shorthand.indexOf(shortMonth));
   },
   S: (dateObj: Date, seconds: string) => {
     dateObj.setSeconds(parseFloat(seconds));
@@ -67,7 +69,8 @@ export const revFormat: Record<string, (date: Date, data: string) => Date | void
   },
 }
 
-export const tokenRegex: Record<token, string> = {
+export type TokenRegex = Record<token, string>
+export const tokenRegex: TokenRegex = {
   D:"(\\w+)",
   F:"(\\w+)",
   G: "(\\d\\d|\\d)",
@@ -92,33 +95,36 @@ export const tokenRegex: Record<token, string> = {
   y:"(\\d{2})"
 }
 
-export const formats: Record<token, (date: Date) => string | number> =  {
+export type Formats = Record<token, (date: Date, locale: Locale) => string | number>
+export const formats: Formats =  {
   // get the date in UTC
   Z: (date: Date) => date.toISOString(),
 
   // weekday name, short, e.g. Thu
-  D: function (date: Date) {
-    return self.l10n.weekdays.shorthand[formats.w(date)];
+  D: function (date: Date, locale: Locale) {
+    return locale.weekdays.shorthand[formats.w(date, locale) as number];
   },
 
   // full month name e.g. January
-  F: function (date: Date) {
-    return self.utils.monthToStr(formats.n(date) - 1, false);
+  F: function (date: Date, locale: Locale) {
+    return self.utils.monthToStr(formats.n(date, locale) as number - 1, false);
   },
 
   // padded hour 1-12
-  G: function (date: Date) {
-    return FlatpickrInstance.prototype.pad(
-      FlatpickrInstance.prototype.formats.h(date)
+  G: function (date: Date, locale: Locale) {
+    return pad(
+      formats.h(date, locale)
     )
   },
 
   // hours with leading zero e.g. 03
-  H: (date: Date) => FlatpickrInstance.prototype.pad(date.getHours()),
+  H: (date: Date) => pad(date.getHours()),
 
   // day (1-30) with ordinal suffix e.g. 1st, 2nd
-  J: function (date: Date) {
-    return date.getDate() + self.l10n.ordinal(date.getDate())
+  J: function (date: Date, locale: Locale) {
+    return locale.ordinal !== undefined
+      ? date.getDate() + locale.ordinal(date.getDate())
+      : date.getDate()
   },
 
   // AM/PM
@@ -130,7 +136,7 @@ export const formats: Record<token, (date: Date) => string | number> =  {
   },
 
   // seconds 00-59
-  S: (date: Date) => FlatpickrInstance.prototype.pad(date.getSeconds()),
+  S: (date: Date) => pad(date.getSeconds()),
 
   // unix timestamp
   U: (date: Date) => date.getTime() / 1000,
@@ -143,24 +149,24 @@ export const formats: Record<token, (date: Date) => string | number> =  {
   Y: (date: Date) => date.getFullYear(),
 
   // day in month, padded (01-30)
-  d: (date: Date) => FlatpickrInstance.prototype.pad(date.getDate()),
+  d: (date: Date) => pad(date.getDate()),
 
   // hour from 1-12 (am/pm)
   h: (date: Date) => date.getHours() % 12 ? date.getHours() % 12 : 12,
 
   // minutes, padded with leading zero e.g. 09
-  i: (date: Date) => FlatpickrInstance.prototype.pad(date.getMinutes()),
+  i: (date: Date) => pad(date.getMinutes()),
 
   // day in month (1-30)
   j: (date: Date) => date.getDate(),
 
   // weekday name, full, e.g. Thursday
-  l: function (date: Date) {
-    return self.l10n.weekdays.longhand[date.getDay()];
+  l: function (date: Date, locale: Locale) {
+    return locale.weekdays.longhand[date.getDay()];
   },
 
   // padded month number (01-12)
-  m: (date: Date) => FlatpickrInstance.prototype.pad(date.getMonth() + 1),
+  m: (date: Date) => pad(date.getMonth() + 1),
 
   // the month number (1-12)
   n: (date: Date) => date.getMonth() + 1,

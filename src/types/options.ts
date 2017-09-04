@@ -1,111 +1,66 @@
 import { Instance } from "./instance"
-
 export type DateOption = Date | string | number
-export type DateLimit<D = DateOption> = D | { from: D, to: D }
+export type DateRangeLimit<D = DateOption> = { from: D, to: D }
+export type DateLimit<D = DateOption> = D | DateRangeLimit<D>
+
 type Hook = (dates: Date[], currentDateString: string, self: Instance, data?: any) => void
 
 export interface Options {
   "mode"?: "single" | "multiple" | "range"
   "position"?: "auto" | "above" | "below"
   animate?: boolean
-  // wrap: see https://chmln.github.io/flatpickr/examples/#flatpickr-external-elements
   wrap?: boolean
-  // enables week numbers
   weekNumbers?: boolean
-  // allow manual datetime input
   allowInput?: boolean
-  /*
-    clicking on input opens the date(time)picker.
-    disable if you wish to open the calendar manually with .open()
-  */
   clickOpens?: boolean
-  /*
-    closes calendar after date selection
-    unless 'mode' is 'multiple' or enableTime is true
-  */
   closeOnSelect?: boolean
-  // display time picker in number hour mode
   time_numberhr?: boolean
-  // enables the time picker functionality
   enableTime?: boolean
-  // noCalendar: true will hide the calendar. use for a time picker along w/ enableTime
   noCalendar?: boolean
-  // more date format chars at https://chmln.github.io/flatpickr/#dateformat
   dateFormat?: string
-  // date format used in aria-label for days
   ariaDateFormat?: string
-  // altInput - see https://chmln.github.io/flatpickr/#altinput
   altInput?: boolean
-  // the created altInput element will have this class.
   altInputClass?: string
-  // same as dateFormat but for altInput
-  altFormat?: string // defaults to e.g. June number number
-  // defaultDate - either a datestring or a date object. used for datetimepicker"s initial value
+  altFormat?: string
   defaultDate?: DateOption
-  // the minimum date that user can pick (inclusive)
   minDate?: DateOption
-  // the maximum date that user can pick (inclusive)
   maxDate?: DateOption
-  // dateparser that transforms a given string to a date object
   parseDate?: (date: string, format: string) => Date
-  // dateformatter that transforms a given date object to a string according to passed format
   formatDate?: (date: Date, format: string) => string
   getWeek?: (date: Date) => string | number
-  // see https://chmln.github.io/flatpickr/#disable
   enable?: DateLimit[]
-  // see https://chmln.github.io/flatpickr/#disable
   disable?: DateLimit[]
-  // display the short version of month names - e.g. Sep instead of September
   shorthandCurrentMonth?: boolean
-  // displays calendar inline. see https://chmln.github.io/flatpickr/#inline-calendar
   inline?: boolean
-  // position calendar inside wrapper and next to the input element
-  // leave at false unless you know what you"re doing
+
   "static": boolean
-  // DOM node to append the calendar to in *static* mode
   appendTo?: HTMLElement
-  // code for previous/next icons. this is where you put your custom icon code e.g. fontawesome
   prevArrow?: string
   nextArrow?: string
-  // enables seconds in the time picker
   enableSeconds?: boolean
-  // step size used when scrolling/incrementing the hour element
   hourIncrement?: number
-  // step size used when scrolling/incrementing the minute element
   minuteIncrement?: number
-  // initial value in the hour element
   defaultHour?: number
-  // initial value in the minute element
   defaultMinute?: number
-  // initial value in the seconds element
   defaultSeconds?: number
-  // disable native mobile datetime input support
   disableMobile?: boolean
-  // default locale
   locale?: string
   plugins?: object[]
   ignoredFocusElements?: HTMLElement[]
-  // called every time calendar is closed
-  onClose?: Hook | Hook[] // function (dateObj dateStr) {}
-  // onChange callback when user selects a date or time
-  onChange?: Hook | Hook[] // function (dateObj dateStr) {}
-  // called for every day element
+  onClose?: Hook | Hook[]
+  onChange?: Hook | Hook[]
   onDayCreate?: Hook | Hook[]
-  // called every time the month is changed
   onMonthChange?: Hook | Hook[]
-  // called every time calendar is opened
-  onOpen?: Hook | Hook[] // function (dateObj dateStr) {}
-  // called after the configuration has been parsed
+  onOpen?: Hook | Hook[]
   onParseConfig?: Hook | Hook[]
-  // called after calendar is ready
   onReady?: Hook  | Hook[]// function (dateObj dateStr) {}
-  // called after input value updated
   onValueUpdate?: Hook | Hook[]
-  // called every time the year is changed
   onYearChange?: Hook | Hook[]
   onKeyDown?: Hook | Hook[]
   onDestroy?: Hook | Hook[]
+  time_24hr?: boolean
 };
+
 export interface ParsedOptions{
   [k: string]: any,
   mode: "single" | "multiple" | "range",
@@ -129,7 +84,7 @@ export interface ParsedOptions{
   maxDate?: Date,
   parseDate?: Options["parseDate"],
   formatDate?: Options["formatDate"],
-  getWeek: (date: Date) => string,
+  getWeek: (date: Date) => number,
   enable: DateLimit<Date>[],
   disable: DateLimit<Date>[],
   shorthandCurrentMonth: boolean,
@@ -159,4 +114,44 @@ export interface ParsedOptions{
   onYearChange: Hook[],
   onKeyDown: Hook[],
   onDestroy: Hook[]
+}
+
+export const defaults: Options = {
+  mode: "single",
+  position: "auto",
+  animate: window.navigator.userAgent.indexOf("MSIE") === -1,
+  wrap: false,
+  weekNumbers: false,
+  allowInput: false,
+  clickOpens: true,
+  closeOnSelect: true,
+  time_24hr: false,
+  enableTime: false,
+  noCalendar: false,
+  dateFormat: "Y-m-d",
+  ariaDateFormat: "F j, Y",
+  altInput: false,
+  altInputClass: "form-control input",
+  altFormat: "F j, Y",
+  getWeek (givenDate: Date) {
+    const onejan = new Date(givenDate.getFullYear(), 0, 1);
+    return Math.ceil((((givenDate.getTime() - onejan.getTime()) / 86400000) + onejan.getDay() + 1) / 7);
+  },
+  enable: [],
+  disable: [],
+  shorthandCurrentMonth: false,
+  inline: false,
+  "static": false,
+  prevArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M5.207 8.471l7.146 7.147-0.707 0.707-7.853-7.854 7.854-7.853 0.707 0.707-7.147 7.146z' /></svg>",
+  nextArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M13.207 8.472l-7.854 7.854-0.707-0.707 7.146-7.146-7.146-7.148 0.707-0.707 7.854 7.854z' /></svg>",
+  enableSeconds: false,
+  hourIncrement: 1,
+  minuteIncrement: 5,
+  defaultHour: 12,
+  defaultMinute: 0,
+  defaultSeconds: 0,
+  disableMobile: false,
+  locale: "default",
+  plugins: [],
+  ignoredFocusElements: [],
 }
