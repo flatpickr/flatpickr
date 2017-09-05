@@ -1,0 +1,18 @@
+import { Options } from "./options"
+import { Instance } from "./instance"
+
+declare global {
+  interface HTMLElement {
+    flatpickr: (config: Options) => Instance | Instance[]
+    _flatpickr?: Instance
+  }
+
+  interface NodeList {
+    flatpickr: (config: Options) => Instance | Instance[]
+  }
+
+  interface HTMLCollection {
+    flatpickr: (config: Options) => Instance | Instance[]
+  }
+}
+

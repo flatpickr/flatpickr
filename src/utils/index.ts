@@ -21,4 +21,4 @@ export const arrayify = <T>(obj: T | T[]): T[] => (obj instanceof Array
 
 export const mouseDelta = (e: MouseWheelEvent) => Math.max(-1, Math.min(1, (e.wheelDelta || -e.deltaY)))
 
-export type IncrementEvent = Event & { delta: number }
+export type IncrementEvent = MouseEvent & { delta: number, type: "increment" }

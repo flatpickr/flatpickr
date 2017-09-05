@@ -1,7 +1,10 @@
 import { Instance } from "./instance"
+import { getWeek } from "utils/dates"
+
 export type DateOption = Date | string | number
 export type DateRangeLimit<D = DateOption> = { from: D, to: D }
-export type DateLimit<D = DateOption> = D | DateRangeLimit<D>
+type DateRangeFn = (date: Date) => boolean
+export type DateLimit<D = DateOption> = D | DateRangeLimit<D> | DateRangeFn;
 
 type Hook = (dates: Date[], currentDateString: string, self: Instance, data?: any) => void
 
@@ -33,7 +36,7 @@ export interface Options {
   shorthandCurrentMonth?: boolean
   inline?: boolean
 
-  "static": boolean
+  "static"?: boolean
   appendTo?: HTMLElement
   prevArrow?: string
   nextArrow?: string
@@ -84,8 +87,10 @@ export interface ParsedOptions{
   maxDate?: Date,
   parseDate?: Options["parseDate"],
   formatDate?: Options["formatDate"],
-  getWeek: (date: Date) => number,
+  getWeek: (date: Date) => string | number,
+  _enable: DateLimit<Date>[]
   enable: DateLimit<Date>[],
+  _disable: DateLimit<Date>[]
   disable: DateLimit<Date>[],
   shorthandCurrentMonth: boolean,
   inline: boolean,
@@ -101,7 +106,7 @@ export interface ParsedOptions{
   defaultSeconds: number
   disableMobile: boolean,
   locale: string
-  plugins: {}[],
+  plugins: Array<(fp: Instance) => Options>,
   ignoredFocusElements: HTMLElement[],
   onClose: Hook[],
   onChange: Hook[],
@@ -116,7 +121,7 @@ export interface ParsedOptions{
   onDestroy: Hook[]
 }
 
-export const defaults: Options = {
+export const defaults: ParsedOptions = {
   mode: "single",
   position: "auto",
   animate: window.navigator.userAgent.indexOf("MSIE") === -1,
@@ -133,11 +138,10 @@ export const defaults: Options = {
   altInput: false,
   altInputClass: "form-control input",
   altFormat: "F j, Y",
-  getWeek (givenDate: Date) {
-    const onejan = new Date(givenDate.getFullYear(), 0, 1);
-    return Math.ceil((((givenDate.getTime() - onejan.getTime()) / 86400000) + onejan.getDay() + 1) / 7);
-  },
+  getWeek,
+  _enable: [],
   enable: [],
+  _disable: [],
   disable: [],
   shorthandCurrentMonth: false,
   inline: false,
@@ -154,4 +158,18 @@ export const defaults: Options = {
   locale: "default",
   plugins: [],
   ignoredFocusElements: [],
+
+  onClose: [],
+  onChange: [],
+  onDayCreate: [],
+  onMonthChange: [],
+  onOpen: [],
+  onParseConfig: [],
+  onReady: [],
+  onValueUpdate: [],
+  onYearChange: [],
+  onKeyDown: [],
+  onDestroy: []
+
+
 }

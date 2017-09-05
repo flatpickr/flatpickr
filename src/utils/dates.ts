@@ -16,6 +16,11 @@ export const monthToStr = (monthNumber: number, shorthand: boolean, locale: Loca
   locale.months[shorthand ? "shorthand" : "longhand"][monthNumber]
 )
 
+export const getWeek = (givenDate: Date) => {
+  const onejan = new Date(givenDate.getFullYear(), 0, 1);
+  return Math.ceil((((givenDate.getTime() - onejan.getTime()) / 86400000) + onejan.getDay() + 1) / 7);
+}
+
 export const duration = {
   DAY: 86400000,
 }

@@ -1,10 +1,15 @@
 import { int, pad } from "utils"
 import { Locale } from "types/locale"
+import { ParsedOptions } from "types/options"
+import { monthToStr } from "utils/dates"
+
 export type token = "D" | "F" | "G" | "H" | "J" | "K" | "M" | "S" | "U" | "W" | "Y" | "Z" | "d" | "h" | "i" | "j" | "l" | "m" | "n" | "s" | "w" | "y"
 
 const do_nothing = () => undefined;
 
-export const revFormat: Record<string, (date: Date, data: string, locale?: Locale) => Date | void | undefined> =  {
+export type RevFormatFn = (date: Date, data: string, locale?: Locale) => Date | void | undefined
+export type RevFormat = Record<string, RevFormatFn>
+export const revFormat: RevFormat =  {
   D: do_nothing,
   F: function(dateObj: Date, monthName: string, locale: Locale) {
     dateObj.setMonth(locale.months.longhand.indexOf(monthName));
@@ -69,7 +74,9 @@ export const revFormat: Record<string, (date: Date, data: string, locale?: Local
   },
 }
 
-export type TokenRegex = Record<token, string>
+export type TokenRegex = {
+  [k in token]: string
+}
 export const tokenRegex: TokenRegex = {
   D:"(\\w+)",
   F:"(\\w+)",
@@ -95,25 +102,25 @@ export const tokenRegex: TokenRegex = {
   y:"(\\d{2})"
 }
 
-export type Formats = Record<token, (date: Date, locale: Locale) => string | number>
+export type Formats = Record<token, (date: Date, locale: Locale, options: ParsedOptions) => string | number>
 export const formats: Formats =  {
   // get the date in UTC
   Z: (date: Date) => date.toISOString(),
 
   // weekday name, short, e.g. Thu
-  D: function (date: Date, locale: Locale) {
-    return locale.weekdays.shorthand[formats.w(date, locale) as number];
+  D: function (date: Date, locale: Locale, options: ParsedOptions) {
+    return locale.weekdays.shorthand[formats.w(date, locale, options) as number];
   },
 
   // full month name e.g. January
-  F: function (date: Date, locale: Locale) {
-    return self.utils.monthToStr(formats.n(date, locale) as number - 1, false);
+  F: function (date: Date, locale: Locale, options: ParsedOptions) {
+    return monthToStr(formats.n(date, locale, options) as number - 1, false, locale);
   },
 
   // padded hour 1-12
-  G: function (date: Date, locale: Locale) {
+  G: function (date: Date, locale: Locale, options: ParsedOptions) {
     return pad(
-      formats.h(date, locale)
+      formats.h(date, locale, options)
     )
   },
 
@@ -131,8 +138,8 @@ export const formats: Formats =  {
   K: (date: Date) => date.getHours() > 11 ? "PM" : "AM",
 
   // shorthand month e.g. Jan, Sep, Oct, etc
-  M: function (date: Date) {
-    return self.utils.monthToStr(date.getMonth(), true);
+  M: function (date: Date, locale: Locale) {
+    return monthToStr(date.getMonth(), true, locale);
   },
 
   // seconds 00-59
@@ -141,8 +148,8 @@ export const formats: Formats =  {
   // unix timestamp
   U: (date: Date) => date.getTime() / 1000,
 
-  W: function (date: Date) {
-    return self.config.getWeek(date);
+  W: function (date: Date, _: Locale, options: ParsedOptions) {
+    return options.getWeek(date);
   },
 
   // full year e.g. 2016

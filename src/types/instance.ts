@@ -1,7 +1,9 @@
-import { Options, ParsedOptions } from "./options"
+import { DateOption, Options, ParsedOptions } from "./options"
 import { Locale } from "./locale"
-export interface Instance {
-  // Elements
+
+import { RevFormat, Formats, TokenRegex } from "utils/formatting"
+
+interface Elements {
   element: HTMLElement,
   input: HTMLInputElement
   altInput?: HTMLInputElement
@@ -9,40 +11,51 @@ export interface Instance {
   mobileInput?: HTMLInputElement
   mobileFormatStr?: string
 
-
   selectedDateElem?: HTMLSpanElement
   todayDateElem?: HTMLSpanElement
 
   _positionElement: HTMLElement
+  weekdayContainer: HTMLDivElement
   calendarContainer: HTMLDivElement
   innerContainer?: HTMLDivElement
   rContainer?: HTMLDivElement
-  daysContainer: HTMLDivElement
+  daysContainer?: HTMLDivElement
   days: HTMLDivElement
 
-  timeContainer?: HTMLDivElement
   weekWrapper?: HTMLDivElement
+  weekNumbers?: HTMLDivElement
 
-  oldCurMonth: HTMLDivElement
+  oldCurMonth?: HTMLDivElement
   navigationCurrentMonth: HTMLDivElement
   monthNav: HTMLDivElement
   currentYearElement: HTMLInputElement
   currentMonthElement: HTMLInputElement
   _hidePrevMonthArrow: boolean
   _hideNextMonthArrow: boolean
+  prevMonthNav: HTMLElement
+  nextMonthNav: HTMLElement
 
+  timeContainer?: HTMLDivElement
   hourElement?: HTMLInputElement
   minuteElement?: HTMLInputElement
   secondElement?: HTMLInputElement
   amPM?: HTMLSpanElement
+}
 
+interface Formatting {
+  revFormat: RevFormat
+  formats: Formats
+  tokenRegex: TokenRegex
+}
+
+export type Instance = Elements & Formatting & {
   // Dates
   minRangeDate?: Date
   maxRangeDate?: Date
   now: Date
   latestSelectedDateObj?: Date
   _selectedDateObj?: Date
-    selectedDates: Date[]
+  selectedDates: Date[]
 
   // State
   config: ParsedOptions
@@ -66,8 +79,8 @@ export interface Instance {
   clear: (emitChangeEvent?: boolean) => void
   close: () => void
   destroy: () => void
-  isEnabled: (date: Date, timeless?: boolean) => boolean
-  jumpToDate: (date: Date) => void
+  isEnabled: (date: DateOption, timeless?: boolean) => boolean
+  jumpToDate: (date?: DateOption) => void
   open: (e?: Event, positionElement?: HTMLElement) => void
   redraw: () => void
   set: (option: keyof Options, value: any) => void
@@ -79,9 +92,13 @@ export interface Instance {
   formatDate: (dateObj: Date, frmt: string) => string,
 
   // Internals
+  _animationLoop: Function[]
+  _handlers: { event: string, element: Element, handler: EventListener }[]
+
   _bind: (element: HTMLElement, event: string, handler: (e: Event) => void) => void
   _createElement: (tag: string, className: string, content?: string) => HTMLElement
   _setHoursFromDate: (date: Date) => void
+  _debouncedChange: () => void
 
   utils: {
     getDaysInMonth: (month?: number, year?: number) => number
