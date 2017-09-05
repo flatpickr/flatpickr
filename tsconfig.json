@@ -8,8 +8,12 @@
     "moduleResolution": "node",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "pretty": true,
-    "types":[ "dom" ],
+    "pretty": false,
+    "types": ["jquery", "jest"],
+    "lib": [
+      "es2015",
+      "dom"
+    ],
     "baseUrl": "src"
   }
 }
