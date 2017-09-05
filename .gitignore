@@ -1,9 +1,5 @@
-.DS_Store
 *.log
 /node_modules/
-*.sublime-project
-*.sublime-workspace
-.idea/index.html
 index.html
 coverage
-.tern-port
+/.rpt2_cache
