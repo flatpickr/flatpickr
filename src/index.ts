@@ -25,6 +25,7 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig: Options): Insta
   self.changeYear = changeYear;
   self.clear = clear;
   self.close = close;
+
   self._createElement = createElement;
   self.destroy = destroy;
   self.isEnabled = isEnabled;
@@ -95,18 +96,12 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig: Options): Insta
     triggerEvent("Ready");
   }
 
-  /**
-   * Binds a function to the current flatpickr instance
-   * @param {Function} fn the function
-   * @return {Function} the function bound to the instance
-   */
   function bindToInstance<F extends Function>(fn: F): F {
     return fn.bind(self);
   }
 
   /**
    * The handler for all events targeting the time inputs
-   * @param {Event} e the event - "input", "wheel", "increment", etc
    */
   function updateTime(e: MouseEvent | WheelEvent | IncrementEvent | KeyboardEvent) {
     if (self.config.noCalendar && !self.selectedDates.length)
@@ -171,7 +166,6 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig: Options): Insta
 
   /**
    * Syncs time input values with a date
-   * @param {Date} dateObj the date to sync with
    */
   function setHoursFromDate(dateObj?: Date){
     const date = dateObj || self.latestSelectedDateObj;

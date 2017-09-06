@@ -1,24 +1,22 @@
 const fs = require('fs');
 const glob = require("glob");
 
-const babel = require("babel-core");
-
-const babelConfig = JSON.parse(fs.readFileSync("./.babelrc"));
 const uglifyJS = require("uglify-js");
 const ncp = require("ncp");
 const chokidar = require("chokidar");
 const stylus = require("stylus");
 const stylus_autoprefixer = require("autoprefixer-stylus");
 
-const eslint = new (require("eslint").CLIEngine)();
-const lintFormatter = eslint.getFormatter();
-
 const livereload = require("livereload");
 const server = require("http-server");
 const opn = require("opn");
 
+const typescript = require("typescript");
+const tsconfig = require("./tsconfig.json");
+tsconfig.compilerOptions.outFile = "./out.js"
+
 const paths = {
-    script: "./src/flatpickr.js",
+    script: "./src/index.ts",
     themes: "./src/style/themes/*.styl",
     style: "./src/style/flatpickr.styl",
     plugins: "./src/plugins",
@@ -29,25 +27,9 @@ function logErr(e){
     console.error(e);
 }
 
-function lint(code, filename){
-    const report = eslint.executeOnText(code, filename);
-    if (report.errorCount || report.warningCount)
-        process.stdout.write(
-            lintFormatter(report.results)
-        );
-
-    else
-        console.info("Linting: OK ✓")
-}
-
 async function recursiveCopy(src, dest) {
     return new Promise((resolve, reject) => {
-        ncp(src, dest, err => {
-            if (!err)
-                resolve();
-            else
-                reject();
-        });
+        ncp(src, dest, err => !err ? resolve() : reject());
     })
 }
 
@@ -73,8 +55,8 @@ async function writeFileAsync(path, content) {
     })
 }
 
-function transpile(src){
-    return babel.transform(src, babelConfig).code;
+function compile(src){
+    return typescript.transpileModule(src, tsconfig).outputText;
 }
 
 function uglify(src) {
@@ -93,8 +75,7 @@ function uglify(src) {
 
 async function buildScripts(){
     const src = await readFileAsync(paths.script).catch(logErr);
-    lint(src, paths.script);
-    const transpiled = transpile(src);
+    const transpiled = compile(src);
 
     writeFileAsync("./dist/flatpickr.js", transpiled).catch(logErr);
     writeFileAsync("./dist/flatpickr.min.js", uglify(transpiled)).catch(logErr);
@@ -102,19 +83,13 @@ async function buildScripts(){
 
 function resolveGlob(g) {
     return new Promise((resolve, reject) => {
-        glob(g, (err, files) =>{
-            if (err)
-                reject(err);
-
-            else
-                resolve(files);
-        });
+        glob(g, (err, files) => err ? reject(err) : resolve(files));
     });
 }
 
 async function replaceWithTranspiled(path) {
     const src = await readFileAsync(path).catch(logErr);
-    return writeFileAsync(path, transpile(src))
+    return writeFileAsync(path, compile(src))
 }
 
 function buildExtras(folder){

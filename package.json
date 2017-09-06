@@ -5,9 +5,9 @@
   "scripts": {
     "start": "rollup -w -c",
     "build": "rollup -c",
-    "test": "npm run lint && jest --bail",
+    "test": "jest --bail --config .jest.json",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
-    "release": "jest --bail --silent && ./release"
+    "release": "npm run test -- --silent && ./release"
   },
   "dependencies": {},
   "devDependencies": {
