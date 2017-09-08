@@ -1,5 +1,5 @@
 import { DateOption, Options, ParsedOptions } from "./options"
-import { Locale } from "./locale"
+import { Locale, CustomLocale } from "./locale"
 
 import { RevFormat, Formats, TokenRegex } from "utils/formatting"
 
@@ -103,6 +103,14 @@ export type Instance = Elements & Formatting & {
   utils: {
     getDaysInMonth: (month?: number, year?: number) => number
   }
+}
+
+export interface FlatpickrFn {
+  (selector: NodeList | HTMLElement | string, config: Options): Instance | Instance[]
+  defaultConfig: Options
+  l10ns: Record<string, CustomLocale>
+  localize: (l10n: CustomLocale) => void
+  setDefaults:  (config: Options) => void
 }
 
 export type DayElement = HTMLSpanElement & { dateObj: Date, $i: number }

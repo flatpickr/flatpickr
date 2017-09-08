@@ -1,5 +1,6 @@
 import { Instance } from "./instance"
 import { getWeek } from "utils/dates"
+import { CustomLocale } from "./locale"
 
 export type DateOption = Date | string | number
 export type DateRangeLimit<D = DateOption> = { from: D, to: D }
@@ -47,7 +48,7 @@ export interface Options {
   defaultMinute?: number
   defaultSeconds?: number
   disableMobile?: boolean
-  locale?: string
+  locale?: string | CustomLocale
   plugins?: object[]
   ignoredFocusElements?: HTMLElement[]
   onClose?: Hook | Hook[]
@@ -105,7 +106,7 @@ export interface ParsedOptions{
   defaultMinute: number
   defaultSeconds: number
   disableMobile: boolean,
-  locale: string
+  locale: string | CustomLocale
   plugins: Array<(fp: Instance) => Options>,
   ignoredFocusElements: HTMLElement[],
   onClose: Hook[],

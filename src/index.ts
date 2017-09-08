@@ -1,9 +1,9 @@
 /*! flatpickr v3.0.99, @license MIT */
-import { Instance, DayElement } from "types/instance"
+import { Instance, FlatpickrFn, DayElement } from "types/instance"
 import { Options, ParsedOptions, DateLimit, DateRangeLimit, DateOption, defaults as defaultOptions } from "types/options"
 
-import { Locale } from "types/locale"
-import English from "l10n/en"
+import { Locale, CustomLocale } from "types/locale"
+import English from "l10n/default"
 
 import { arrayify, debounce, int, mouseDelta, pad, IncrementEvent } from "utils"
 import { clearNode, createElement, createNumberInput, toggleClass } from "utils/dom"
@@ -11,7 +11,7 @@ import { compareDates, duration, monthToStr } from "utils/dates"
 
 import { token, RevFormatFn, revFormat, tokenRegex, formats } from "utils/formatting"
 
-function FlatpickrInstance(element: HTMLElement, instanceConfig: Options): Instance {
+function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Instance {
   let self = {} as Instance;
 
   self.parseDate = parseDate;
@@ -49,24 +49,13 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig: Options): Insta
 
   function init() {
     self.element = self.input = element as HTMLInputElement;
+    self.isOpen = false;
 
     parseConfig();
     setupLocale();
     setupInputs();
     setupDates();
     setupHelperFunctions();
-
-    self.isOpen = false;
-
-    self.isMobile = (
-      !self.config.disableMobile &&
-      !self.config.inline &&
-      self.config.mode === "single" &&
-      !self.config.disable.length &&
-      !self.config.enable.length &&
-      !self.config.weekNumbers &&
-      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-    );
 
     if (!self.isMobile)
       build();
@@ -213,7 +202,7 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig: Options): Insta
    * @param {Event} event the keyup or increment event
    */
   function onYearInput(event: KeyboardEvent & IncrementEvent) {
-    let year = parseInt((event.target as HTMLInputElement).value) + event.delta || 0;
+    const year = parseInt((event.target as HTMLInputElement).value) + (event.delta || 0);
 
     if (year.toString().length === 4 || event.key === "Enter") {
       self.currentYearElement.blur();
@@ -395,7 +384,7 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig: Options): Insta
   function jumpToDate(jumpDate?: DateOption) {
     const jumpTo = jumpDate !== undefined
     ? parseDate(jumpDate)
-    : (self.latestSelectedDateObj || (self.config.minDate && self.config.minDate > self.now)
+    : self.latestSelectedDateObj || (self.config.minDate && self.config.minDate > self.now
         ? self.config.minDate as Date
         : self.config.maxDate && self.config.maxDate < self.now
           ? self.config.maxDate
@@ -542,13 +531,14 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig: Options): Insta
           toggleClass(
             dayElement,
             "startRange",
-            compareDates(date, self.selectedDates[0]) === 0
+            self.selectedDates[0]  && compareDates(date, self.selectedDates[0]) === 0
           );
 
           toggleClass(
             dayElement,
             "endRange",
-            compareDates(date, self.selectedDates[1]) === 0
+            self.selectedDates[1]
+            && compareDates(date, self.selectedDates[1]) === 0
           );
         }
       }
@@ -1154,8 +1144,8 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig: Options): Insta
     }
   }
 
-  function isEnabled(date: DateOption, timeless?: boolean): boolean {
-    const dateToCheck = self.parseDate(date, undefined, true); // timeless
+  function isEnabled(date: DateOption, timeless: boolean = true): boolean {
+    const dateToCheck = self.parseDate(date, undefined, timeless); // timeless
 
     if (
       (self.config.minDate && dateToCheck && compareDates(
@@ -1199,7 +1189,7 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig: Options): Insta
 
       else if ( // disabled by range
         typeof d === "object" && dateToCheck !== undefined && (d as DateRangeLimit).from && (d as DateRangeLimit).to &&
-        dateToCheck >= (d as DateRangeLimit).from && dateToCheck <= (d as DateRangeLimit).to
+        dateToCheck.getTime() >= (d as DateRangeLimit<Date>).from.getTime() && dateToCheck.getTime() <= (d as DateRangeLimit<Date>).to.getTime()
       )
         return bool;
     }
@@ -1226,8 +1216,9 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig: Options): Insta
     }
 
     else if (calendarElem || allowKeydown || allowInlineKeydown) {
-      const isTimeObj = self.timeContainer
+      const isTimeObj = !!self.timeContainer
         && self.timeContainer.contains(e.target as HTMLElement);
+
       switch (e.key) {
         case "Enter":
           if (isTimeObj)
@@ -1245,7 +1236,7 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig: Options): Insta
 
         case "Backspace":
         case "Delete":
-          if (!self.config.allowInput)
+          if (isInput && !self.config.allowInput)
             self.clear();
           break;
 
@@ -1254,7 +1245,7 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig: Options): Insta
           if (!isTimeObj) {
             e.preventDefault();
 
-            if (self.daysContainer && (e.target as DayElement).$i !== undefined) {
+            if (self.daysContainer) {
               const delta = e.key === "ArrowRight" ? 1 : -1;
 
               if (!e.ctrlKey)
@@ -1429,18 +1420,16 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig: Options): Insta
     positionCalendar(positionElement);
     self._input.classList.add("active");
 
-
     triggerEvent("Open");
   }
 
   function minMaxDateSetter(type: "min" | "max") {
-    return function(date: DateOption) {
+    return (date: DateOption) => {
       const dateObj = self.config[`_${type}Date`] = self.parseDate(date);
       const inverseDateObj = self.config[`_${type === "min" ? "max" : "min"}Date`];
 
       if (dateObj !== undefined) {
-        let hasTime = type === "min" ? self.minDateHasTime : self.maxDateHasTime
-        hasTime = (dateObj as Date).getHours() > 0
+        self[type === "min" ? "minDateHasTime" : "maxDateHasTime"] = (dateObj as Date).getHours() > 0
           || (dateObj as Date).getMinutes() > 0
           || (dateObj as Date).getSeconds() > 0;
       }
@@ -1480,41 +1469,38 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig: Options): Insta
       ...flatpickr.defaultConfig,
     } as ParsedOptions
 
-    let userConfig = {
+    const userConfig = {
       ...instanceConfig,
       ...JSON.parse(JSON.stringify(element.dataset || {}))
-    };
+    } as Options;
 
-    self.config.parseDate = userConfig.parseDate;
-    self.config.formatDate = userConfig.formatDate;
+    const formats = {} as Record<"dateFormat" | "altFormat", string>;
+
+    // self.config.parseDate = userConfig.parseDate;
+    // self.config.formatDate = userConfig.formatDate;
 
 
     Object.defineProperty(self.config, "enable", {
       get: () => self.config._enable || [],
-      set: (dates) => self.config._enable = parseDateRules(dates)
+      set: (dates) => { self.config._enable = parseDateRules(dates) }
     });
 
     Object.defineProperty(self.config, "disable", {
       get: () => self.config._disable || [],
-      set: (dates) => self.config._disable = parseDateRules(dates)
+      set: (dates) => { self.config._disable = parseDateRules(dates) }
     });
 
-    Object.assign(self.config, userConfig);
-
     if (!userConfig.dateFormat && userConfig.enableTime) {
-      self.config.dateFormat = self.config.noCalendar
-        ? "H:i" + (self.config.enableSeconds ? ":S" : "")
-        : flatpickr.defaultConfig.dateFormat + " H:i" + (self.config.enableSeconds ? ":S" : "");
+      formats.dateFormat = userConfig.noCalendar
+        ? "H:i" + (userConfig.enableSeconds ? ":S" : "")
+        : flatpickr.defaultConfig.dateFormat + " H:i" + (userConfig.enableSeconds ? ":S" : "");
     }
 
     if (userConfig.altInput && userConfig.enableTime && !userConfig.altFormat) {
-      self.config.altFormat = self.config.noCalendar
-        ? "h:i" + (self.config.enableSeconds ? ":S K" : " K")
-        : flatpickr.defaultConfig.altFormat + ` h:i${self.config.enableSeconds ? ":S" : ""} K`;
+      formats.altFormat = userConfig.noCalendar
+        ? "h:i" + (userConfig.enableSeconds ? ":S K" : " K")
+        : flatpickr.defaultConfig.altFormat + ` h:i${userConfig.enableSeconds ? ":S" : ""} K`;
     }
-
-    self.config.minDate = userConfig.minDate;
-    self.config.maxDate = userConfig.maxDate;
 
     Object.defineProperty(self.config, "minDate", {
       get: function() {
@@ -1530,7 +1516,7 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig: Options): Insta
       set: minMaxDateSetter("max")
     });
 
-
+    Object.assign(self.config, formats, userConfig);
 
     for (let i = 0; i < boolOpts.length; i++)
       self.config[boolOpts[i]] = (self.config[boolOpts[i]] === true) || self.config[boolOpts[i]] === "true";
@@ -1552,10 +1538,20 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig: Options): Insta
             .concat(self.config[key]);
         }
 
-        else if (typeof userConfig[key] === "undefined")
+        else if (typeof userConfig[key as keyof Options] === "undefined")
           self.config[key] = pluginConf[key as keyof Options];
       }
     }
+
+    self.isMobile = (
+      !self.config.disableMobile &&
+      !self.config.inline &&
+      self.config.mode === "single" &&
+      !self.config.disable.length &&
+      !self.config.enable.length &&
+      !self.config.weekNumbers &&
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+    );
 
     triggerEvent("ParseConfig");
   }
@@ -1567,12 +1563,13 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig: Options): Insta
       console.warn(`flatpickr: invalid locale ${self.config.locale}`);
 
     self.l10n = {
-      ...flatpickr.l10ns.default,
-      ...typeof self.config.locale === "object"
+      ...flatpickr.l10ns.default as Locale,
+      ...(typeof self.config.locale === "object"
       ? self.config.locale
       : self.config.locale !== "default"
-        ? flatpickr.l10ns[self.config.locale] || {}
-        : {}
+        ? flatpickr.l10ns[self.config.locale]
+        : undefined
+      )
     }
   }
 
@@ -1812,23 +1809,19 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig: Options): Insta
   }
 
   function parseDateRules(arr: DateLimit[]): DateLimit<Date>[] {
-    const parsedDateRules: (DateLimit<Date>)[] = [];
-
-    for (let i = arr.length; i--;) {
-      const rule = arr[i];
-
-      if (typeof rule === "string" || typeof rule === "number" || arr instanceof Date) {
-        const parsed = self.parseDate((rule as Date | string | number), undefined, true);
-        parsedDateRules[i] = parsed as Date;
+    return arr.map(rule => {
+      if (typeof rule === "string" || typeof rule === "number" || rule instanceof Date) {
+        return self.parseDate((rule as Date | string | number), undefined, true) as Date;
       }
 
-      else if (typeof rule === "object" && (rule as DateRangeLimit).from && (rule as DateRangeLimit).to) {
-        (rule as DateRangeLimit<Date | undefined>).from = self.parseDate((rule as DateRangeLimit).from);
-        (rule as DateRangeLimit<Date | undefined>).to = self.parseDate((rule as DateRangeLimit).to);
-      }
-    }
+      else if (rule && typeof rule === "object" && (rule as DateRangeLimit).from && (rule as DateRangeLimit).to)
+        return {
+          from: self.parseDate((rule as DateRangeLimit).from, undefined) as Date,
+          to: self.parseDate((rule as DateRangeLimit).to, undefined) as Date,
+        }
 
-    return parsedDateRules.filter(x => x); // remove falsy values
+      return rule;
+    }).filter(x => x) as DateLimit<Date>[]; // remove falsy values
   }
 
   function setupDates() {
@@ -2009,30 +2002,30 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig: Options): Insta
       ? (self.config.noCalendar ? "time" : "datetime-local")
       : "date";
 
-    const mobileInput = createElement<HTMLInputElement>("input", self.input.className + " flatpickr-mobile");
-    mobileInput.step = self.input.getAttribute("step") || "any";
-    mobileInput.tabIndex = 1;
-    mobileInput.type = inputType;
-    mobileInput.disabled = self.input.disabled;
-    mobileInput.placeholder = self.input.placeholder;
+    self.mobileInput = createElement<HTMLInputElement>("input", self.input.className + " flatpickr-mobile");
+    self.mobileInput.step = self.input.getAttribute("step") || "any";
+    self.mobileInput.tabIndex = 1;
+    self.mobileInput.type = inputType;
+    self.mobileInput.disabled = self.input.disabled;
+    self.mobileInput.placeholder = self.input.placeholder;
 
-    const mobileFormatStr = inputType === "datetime-local"
+    self.mobileFormatStr = inputType === "datetime-local"
       ? "Y-m-d\\TH:i:S"
       : inputType === "date"
         ? "Y-m-d"
         : "H:i:S";
 
     if (self.selectedDates.length) {
-      mobileInput.defaultValue
-      = mobileInput.value
-      = self.formatDate(self.selectedDates[0], mobileFormatStr);
+      self.mobileInput.defaultValue
+      = self.mobileInput.value
+      = self.formatDate(self.selectedDates[0], self.mobileFormatStr);
     }
 
     if (self.config.minDate)
-      mobileInput.min = self.formatDate(self.config.minDate, "Y-m-d");
+      self.mobileInput.min = self.formatDate(self.config.minDate, "Y-m-d");
 
     if (self.config.maxDate)
-      mobileInput.max = self.formatDate(self.config.maxDate, "Y-m-d");
+      self.mobileInput.max = self.formatDate(self.config.maxDate, "Y-m-d");
 
     self.input.type = "hidden";
     if (self.altInput !== undefined)
@@ -2040,20 +2033,15 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig: Options): Insta
 
     try {
     if (self.input.parentNode)
-      self.input.parentNode.insertBefore(mobileInput, self.input.nextSibling);
+      self.input.parentNode.insertBefore(self.mobileInput, self.input.nextSibling);
     }
     catch {}
 
-    mobileInput.addEventListener("change", (e: KeyboardEvent) => {
-      self.setDate((e.target as HTMLInputElement).value, false, mobileFormatStr);
+    self.mobileInput.addEventListener("change", (e: KeyboardEvent) => {
+      self.setDate((e.target as HTMLInputElement).value, false, self.mobileFormatStr);
       triggerEvent("Change");
       triggerEvent("Close");
     });
-
-    return {
-      mobileInput,
-      mobileFormatStr,
-    }
   }
 
   function toggle() {
@@ -2243,7 +2231,7 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig: Options): Insta
 }
 
 /* istanbul ignore next */
-function _flatpickr(nodeList: NodeList | HTMLElement[], config: Options): Instance | Instance[] {
+function _flatpickr(nodeList: NodeList | HTMLElement[], config?: Options): Instance | Instance[] {
   const nodes: HTMLElement[] = Array.prototype.slice.call(nodeList); // static list
   let instances = [];
   for (let i = 0; i < nodes.length; i++) {
@@ -2281,17 +2269,11 @@ if (typeof HTMLElement !== "undefined") { // browser env
   };
 }
 
-interface FlatpickrFn {
-  (selector: NodeList | HTMLElement | string, config: Options): Instance | Instance[]
-  defaultConfig: Options
-  l10ns: Record<string, Locale>
-  localize: (l10n: Locale) => void
-  setDefaults:  (config: Options) => void
-}
+
 
 /* istanbul ignore next */
 var flatpickr: FlatpickrFn;
-flatpickr = function(selector: NodeList | HTMLElement | string, config: Options) {
+flatpickr = function(selector: NodeList | HTMLElement | string, config?: Options) {
   if (selector instanceof NodeList)
     return _flatpickr(selector, config);
 
@@ -2301,16 +2283,18 @@ flatpickr = function(selector: NodeList | HTMLElement | string, config: Options)
   return _flatpickr([selector], config);
 } as FlatpickrFn
 
+window.flatpickr = flatpickr;
+
 /* istanbul ignore next */
 flatpickr.defaultConfig = defaultOptions;
 
 
 flatpickr.l10ns = {
-  en: English,
+  en: { ...English },
   default: { ...English }
 };
 
-flatpickr.localize = (l10n: Locale) => {
+flatpickr.localize = (l10n: CustomLocale) => {
   flatpickr.l10ns.default = {
     ...flatpickr.l10ns.default,
     ...l10n
