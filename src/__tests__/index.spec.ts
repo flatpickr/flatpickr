@@ -197,6 +197,21 @@ describe("flatpickr", () => {
         today && expect(today.getHours()).toBe(0);
       });
 
+      it("should parse AM/PM", () => {
+        createInstance({
+          dateFormat: 'm/d/Y h:i K',
+          enableTime: true,
+          defaultDate: "8/3/2017 12:00 AM"
+        });
+
+        expect(fp.selectedDates[0]).toBeDefined();
+        expect(fp.selectedDates[0].getFullYear()).toEqual(2017);
+        expect(fp.selectedDates[0].getMonth()).toEqual(7);
+        expect(fp.selectedDates[0].getDate()).toEqual(3);
+        expect(fp.selectedDates[0].getHours()).toEqual(0);
+        expect(fp.selectedDates[0].getMinutes()).toEqual(0);
+      });
+
       it ("should parse JSON datestrings", () => {
         createInstance({});
 

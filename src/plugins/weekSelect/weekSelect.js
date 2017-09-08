@@ -47,9 +47,14 @@ function weekSelectPlugin(pluginConfig) {
 			fp.days.parentNode.addEventListener("mouseover", onDayHover);
 		}
 
+		function onDestroy() {
+			fp.days.parentNode.removeEventListener("mouseover", onDayHover);
+		}
+
 		return {
-			onChange: highlightWeek,
-			onMonthChange: () => fp._.afterDayAnim(highlightWeek),
+			onValueUpdate: highlightWeek,
+			onMonthChange: highlightWeek,
+			onYearChange: highlightWeek,
 			onClose: clearHover,
 			onParseConfig: function() {
 				fp.config.mode = "single";
@@ -57,7 +62,8 @@ function weekSelectPlugin(pluginConfig) {
 				fp.config.dateFormat = "\\W\\e\\e\\k #W, Y";
 				fp.config.altFormat = "\\W\\e\\e\\k #W, Y";
 			},
-			onReady: [onReady, highlightWeek]
+			onReady: [onReady, highlightWeek],
+			onDestroy,
 		};
 	}
 }

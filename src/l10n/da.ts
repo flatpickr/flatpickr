@@ -18,6 +18,9 @@ export const Danish: CustomLocale = {
   ordinal: () => {
   	return "."
   },
+
+  firstDayOfWeek: 1,
+  rangeSeparator: " til "
 }
 
 fp.l10ns.da = Danish

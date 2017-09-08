@@ -125,7 +125,7 @@ export interface ParsedOptions{
 export const defaults: ParsedOptions = {
   mode: "single",
   position: "auto",
-  animate: window.navigator.userAgent.indexOf("MSIE") === -1,
+  animate: window && window.navigator.userAgent.indexOf("MSIE") === -1,
   wrap: false,
   weekNumbers: false,
   allowInput: false,

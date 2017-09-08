@@ -1,4 +1,4 @@
-/*! flatpickr v3.0.99, @license MIT */
+/*! flatpickr v3.0.7, @license MIT */
 import { Instance, FlatpickrFn, DayElement } from "types/instance"
 import { Options, ParsedOptions, DateLimit, DateRangeLimit, DateOption, defaults as defaultOptions } from "types/options"
 
@@ -12,7 +12,7 @@ import { compareDates, duration, monthToStr } from "utils/dates"
 import { token, RevFormatFn, revFormat, tokenRegex, formats } from "utils/formatting"
 
 function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Instance {
-  let self = {} as Instance;
+  const self = {} as Instance;
 
   self.parseDate = parseDate;
   self.formatDate = formatDate;
@@ -1204,15 +1204,20 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
     const allowKeydown = self.isOpen && (!allowInput || !isInput);
     const allowInlineKeydown = self.config.inline && isInput && !allowInput;
 
-    if (e.key === "Enter" && allowInput && isInput) {
-      self.setDate(
-        self._input.value,
-        true,
-        e.target === self.altInput
-          ? self.config.altFormat
-          : self.config.dateFormat
-      );
-      return (e.target as HTMLElement).blur();
+    if (e.key === "Enter" && isInput) {
+      if (allowInput) {
+        self.setDate(
+          self._input.value,
+          true,
+          e.target === self.altInput
+            ? self.config.altFormat
+            : self.config.dateFormat
+        );
+        return (e.target as HTMLElement).blur();
+      }
+
+      else
+        self.open();
     }
 
     else if (calendarElem || allowKeydown || allowInlineKeydown) {

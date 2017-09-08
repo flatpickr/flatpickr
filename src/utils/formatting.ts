@@ -24,10 +24,7 @@ export const revFormat: RevFormat =  {
     dateObj.setDate(parseFloat(day))
   },
   K: (dateObj: Date, amPM: string) => {
-    const hours = dateObj.getHours();
-
-    if (hours !== 12)
-      dateObj.setHours(hours % 12 + 12 * int(/pm/i.test(amPM)));
+    dateObj.setHours(dateObj.getHours() % 12 + 12 * int(/pm/i.test(amPM)));
   },
   M: function(dateObj: Date, shortMonth: string, locale: Locale) {
     dateObj.setMonth(locale.months.shorthand.indexOf(shortMonth));

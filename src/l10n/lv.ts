@@ -16,6 +16,8 @@ export const Latvian: CustomLocale = {
   	shorthand: ["Jan", "Feb", "Mar", "Mai", "Apr", "Jūn", "Jūl", "Aug", "Sep", "Okt", "Nov", "Dec"],
   	longhand: ["Janvāris", "Februāris", "Marts", "Aprīlis", "Maijs", "Jūnijs", "Jūlijs", "Augusts", "Septembris", "Oktobris", "Novembris", "Decembris"]
   },
+
+  rangeSeparator: " līdz "
 }
 
 fp.l10ns.lv = Latvian;
