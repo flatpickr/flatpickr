@@ -22,6 +22,8 @@ export default {
     livereload()
   ],
   watch: {
-    include: 'src/**'
+    include: 'src/**',
+    chokidar: true,
+    exclude: ['node_modules/**']
   }
 }
