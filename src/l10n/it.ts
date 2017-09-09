@@ -1,19 +1,54 @@
 /* Italian locals for flatpickr */
-import { CustomLocale } from "types/locale"
-import { FlatpickrFn } from "types/instance"
+import { CustomLocale } from "types/locale";
+import { FlatpickrFn } from "types/instance";
 
-const fp: FlatpickrFn = ((window as any).flatpickr as FlatpickrFn) || { l10ns: {}}
+const fp: FlatpickrFn = ((window as any).flatpickr as FlatpickrFn) || {
+  l10ns: {},
+};
 
 export const Italian: CustomLocale = {
-
   weekdays: {
-  	shorthand: ["Dom", "Lun", "Mar", "Mer", "Gio", "Ven", "Sab"],
-  	longhand: ["Domenica", "Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato"]
+    shorthand: ["Dom", "Lun", "Mar", "Mer", "Gio", "Ven", "Sab"],
+    longhand: [
+      "Domenica",
+      "Lunedì",
+      "Martedì",
+      "Mercoledì",
+      "Giovedì",
+      "Venerdì",
+      "Sabato",
+    ],
   },
 
   months: {
-  	shorthand: ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ott", "Nov", "Dic"],
-  	longhand: ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"]
+    shorthand: [
+      "Gen",
+      "Feb",
+      "Mar",
+      "Apr",
+      "Mag",
+      "Giu",
+      "Lug",
+      "Ago",
+      "Set",
+      "Ott",
+      "Nov",
+      "Dic",
+    ],
+    longhand: [
+      "Gennaio",
+      "Febbraio",
+      "Marzo",
+      "Aprile",
+      "Maggio",
+      "Giugno",
+      "Luglio",
+      "Agosto",
+      "Settembre",
+      "Ottobre",
+      "Novembre",
+      "Dicembre",
+    ],
   },
 
   firstDayOfWeek: 1,
@@ -25,9 +60,8 @@ export const Italian: CustomLocale = {
   scrollTitle: "Scrolla per aumentare",
 
   toggleTitle: "Clicca per cambiare",
-}
+};
 
 fp.l10ns.it = Italian;
 
-export default fp.l10ns
-
+export default fp.l10ns;

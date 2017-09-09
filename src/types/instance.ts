@@ -1,116 +1,139 @@
-import { DateOption, Options, ParsedOptions } from "./options"
-import { Locale, CustomLocale } from "./locale"
+import { DateOption, Options, ParsedOptions } from "./options";
+import { Locale, CustomLocale } from "./locale";
 
-import { RevFormat, Formats, TokenRegex } from "utils/formatting"
+import { RevFormat, Formats, TokenRegex } from "utils/formatting";
 
 interface Elements {
-  element: HTMLElement,
-  input: HTMLInputElement
-  altInput?: HTMLInputElement
-  _input: HTMLInputElement
-  mobileInput?: HTMLInputElement
-  mobileFormatStr?: string
+  element: HTMLElement;
+  input: HTMLInputElement;
+  altInput?: HTMLInputElement;
+  _input: HTMLInputElement;
+  mobileInput?: HTMLInputElement;
+  mobileFormatStr?: string;
 
-  selectedDateElem?: HTMLSpanElement
-  todayDateElem?: HTMLSpanElement
+  selectedDateElem?: HTMLSpanElement;
+  todayDateElem?: HTMLSpanElement;
 
-  _positionElement: HTMLElement
-  weekdayContainer: HTMLDivElement
-  calendarContainer: HTMLDivElement
-  innerContainer?: HTMLDivElement
-  rContainer?: HTMLDivElement
-  daysContainer?: HTMLDivElement
-  days: HTMLDivElement
+  _positionElement: HTMLElement;
+  weekdayContainer: HTMLDivElement;
+  calendarContainer: HTMLDivElement;
+  innerContainer?: HTMLDivElement;
+  rContainer?: HTMLDivElement;
+  daysContainer?: HTMLDivElement;
+  days: HTMLDivElement;
 
-  weekWrapper?: HTMLDivElement
-  weekNumbers?: HTMLDivElement
+  weekWrapper?: HTMLDivElement;
+  weekNumbers?: HTMLDivElement;
 
-  oldCurMonth?: HTMLDivElement
-  navigationCurrentMonth: HTMLDivElement
-  monthNav: HTMLDivElement
-  currentYearElement: HTMLInputElement
-  currentMonthElement: HTMLInputElement
-  _hidePrevMonthArrow: boolean
-  _hideNextMonthArrow: boolean
-  prevMonthNav: HTMLElement
-  nextMonthNav: HTMLElement
+  oldCurMonth?: HTMLDivElement;
+  navigationCurrentMonth: HTMLDivElement;
+  monthNav: HTMLDivElement;
+  currentYearElement: HTMLInputElement;
+  currentMonthElement: HTMLInputElement;
+  _hidePrevMonthArrow: boolean;
+  _hideNextMonthArrow: boolean;
+  prevMonthNav: HTMLElement;
+  nextMonthNav: HTMLElement;
 
-  timeContainer?: HTMLDivElement
-  hourElement?: HTMLInputElement
-  minuteElement?: HTMLInputElement
-  secondElement?: HTMLInputElement
-  amPM?: HTMLSpanElement
+  timeContainer?: HTMLDivElement;
+  hourElement?: HTMLInputElement;
+  minuteElement?: HTMLInputElement;
+  secondElement?: HTMLInputElement;
+  amPM?: HTMLSpanElement;
 }
 
 interface Formatting {
-  revFormat: RevFormat
-  formats: Formats
-  tokenRegex: TokenRegex
+  revFormat: RevFormat;
+  formats: Formats;
+  tokenRegex: TokenRegex;
 }
 
-export type Instance = Elements & Formatting & {
-  // Dates
-  minRangeDate?: Date
-  maxRangeDate?: Date
-  now: Date
-  latestSelectedDateObj?: Date
-  _selectedDateObj?: Date
-  selectedDates: Date[]
+export type Instance = Elements &
+  Formatting & {
+    // Dates
+    minRangeDate?: Date;
+    maxRangeDate?: Date;
+    now: Date;
+    latestSelectedDateObj?: Date;
+    _selectedDateObj?: Date;
+    selectedDates: Date[];
 
-  // State
-  config: ParsedOptions
-  l10n: Locale
+    // State
+    config: ParsedOptions;
+    l10n: Locale;
 
-  currentYear: number
-  currentMonth: number
+    currentYear: number;
+    currentMonth: number;
 
-  isOpen: boolean
-  isMobile: boolean
+    isOpen: boolean;
+    isMobile: boolean;
 
-  minDateHasTime: boolean
-  maxDateHasTime: boolean
+    minDateHasTime: boolean;
+    maxDateHasTime: boolean;
 
-  showTimeInput: boolean
-  _showTimeInput: boolean
+    showTimeInput: boolean;
+    _showTimeInput: boolean;
 
-  // Methods
-  changeMonth: (value: number, is_offset?: boolean, animate?: boolean) => void
-  changeYear: (year: number) => void
-  clear: (emitChangeEvent?: boolean) => void
-  close: () => void
-  destroy: () => void
-  isEnabled: (date: DateOption, timeless?: boolean) => boolean
-  jumpToDate: (date?: DateOption) => void
-  open: (e?: Event, positionElement?: HTMLElement) => void
-  redraw: () => void
-  set: (option: keyof Options, value: any) => void
-  setDate: (date: DateOption | DateOption[], triggerChange?: boolean, format?: string) => void
-  toggle: () => void
+    // Methods
+    changeMonth: (
+      value: number,
+      is_offset?: boolean,
+      animate?: boolean
+    ) => void;
+    changeYear: (year: number) => void;
+    clear: (emitChangeEvent?: boolean) => void;
+    close: () => void;
+    destroy: () => void;
+    isEnabled: (date: DateOption, timeless?: boolean) => boolean;
+    jumpToDate: (date?: DateOption) => void;
+    open: (e?: Event, positionElement?: HTMLElement) => void;
+    redraw: () => void;
+    set: (option: keyof Options, value: any) => void;
+    setDate: (
+      date: DateOption | DateOption[],
+      triggerChange?: boolean,
+      format?: string
+    ) => void;
+    toggle: () => void;
 
-  pad: (num: string | number) => string
-  parseDate: (date: Date | string | number, givenFormat?: string, timeless?: boolean) => Date | undefined,
-  formatDate: (dateObj: Date, frmt: string) => string,
+    pad: (num: string | number) => string;
+    parseDate: (
+      date: Date | string | number,
+      givenFormat?: string,
+      timeless?: boolean
+    ) => Date | undefined;
+    formatDate: (dateObj: Date, frmt: string) => string;
 
-  // Internals
-  _animationLoop: Function[]
-  _handlers: { event: string, element: Element, handler: EventListener }[]
+    // Internals
+    _animationLoop: Function[];
+    _handlers: { event: string; element: Element; handler: EventListener }[];
 
-  _bind: <F extends EventListener, E extends Element>(element: E | E[], event: string | string[], handler: F) => void
-  _createElement: (tag: string, className: string, content?: string) => HTMLElement
-  _setHoursFromDate: (date: Date) => void
-  _debouncedChange: () => void
+    _bind: <F extends EventListener, E extends Element>(
+      element: E | E[],
+      event: string | string[],
+      handler: F
+    ) => void;
+    _createElement: (
+      tag: string,
+      className: string,
+      content?: string
+    ) => HTMLElement;
+    _setHoursFromDate: (date: Date) => void;
+    _debouncedChange: () => void;
 
-  utils: {
-    getDaysInMonth: (month?: number, year?: number) => number
-  }
-}
+    utils: {
+      getDaysInMonth: (month?: number, year?: number) => number;
+    };
+  };
 
 export interface FlatpickrFn {
-  (selector: NodeList | HTMLElement | string, config: Options): Instance | Instance[]
-  defaultConfig: Options
-  l10ns: Record<string, CustomLocale>
-  localize: (l10n: CustomLocale) => void
-  setDefaults:  (config: Options) => void
+  (selector: NodeList | HTMLElement | string, config: Options):
+    | Instance
+    | Instance[];
+  defaultConfig: Options;
+  l10ns: Record<string, CustomLocale>;
+  localize: (l10n: CustomLocale) => void;
+  setDefaults: (config: Options) => void;
 }
 
-export type DayElement = HTMLSpanElement & { dateObj: Date, $i: number }
+export type DayElement = HTMLSpanElement & { dateObj: Date; $i: number };

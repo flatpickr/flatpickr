@@ -1,27 +1,61 @@
 /* Polish locals for flatpickr */
-import { CustomLocale } from "types/locale"
-import { FlatpickrFn } from "types/instance"
+import { CustomLocale } from "types/locale";
+import { FlatpickrFn } from "types/instance";
 
-const fp: FlatpickrFn = ((window as any).flatpickr as FlatpickrFn) || { l10ns: {}}
+const fp: FlatpickrFn = ((window as any).flatpickr as FlatpickrFn) || {
+  l10ns: {},
+};
 
 export const Polish: CustomLocale = {
+  weekdays: {
+    shorthand: ["Nd", "Pn", "Wt", "Śr", "Cz", "Pt", "So"],
+    longhand: [
+      "Niedziela",
+      "Poniedziałek",
+      "Wtorek",
+      "Środa",
+      "Czwartek",
+      "Piątek",
+      "Sobota",
+    ],
+  },
 
-weekdays: {
-	shorthand: ["Nd", "Pn", "Wt", "Śr", "Cz", "Pt", "So"],
-	longhand: ["Niedziela", "Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota"]
-},
+  months: {
+    shorthand: [
+      "Sty",
+      "Lut",
+      "Mar",
+      "Kwi",
+      "Maj",
+      "Cze",
+      "Lip",
+      "Sie",
+      "Wrz",
+      "Paź",
+      "Lis",
+      "Gru",
+    ],
+    longhand: [
+      "Styczeń",
+      "Luty",
+      "Marzec",
+      "Kwiecień",
+      "Maj",
+      "Czerwiec",
+      "Lipiec",
+      "Sierpień",
+      "Wrzesień",
+      "Październik",
+      "Listopad",
+      "Grudzień",
+    ],
+  },
 
-months: {
-	shorthand: ["Sty", "Lut", "Mar", "Kwi", "Maj", "Cze", "Lip", "Sie", "Wrz", "Paź", "Lis", "Gru"],
-	longhand: ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"]
-},
-
-ordinal: () => {
-	return "."
-}
-}
+  ordinal: () => {
+    return ".";
+  },
+};
 
 fp.l10ns.pl = Polish;
 
-export default fp.l10ns
-
+export default fp.l10ns;

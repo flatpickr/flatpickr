@@ -1,33 +1,67 @@
 /* Lithuanian locals for flatpickr */
-import { CustomLocale } from "types/locale"
-import { FlatpickrFn } from "types/instance"
+import { CustomLocale } from "types/locale";
+import { FlatpickrFn } from "types/instance";
 
-const fp: FlatpickrFn = ((window as any).flatpickr as FlatpickrFn) || { l10ns: {}}
+const fp: FlatpickrFn = ((window as any).flatpickr as FlatpickrFn) || {
+  l10ns: {},
+};
 
 export const Lithuanian: CustomLocale = {
-
   weekdays: {
-  	shorthand: ["S", "Pr", "A", "T", "K", "Pn", "Š"],
-  	longhand: ["Sekmadienis", "Pirmadienis", "Antradienis", "Trečiadienis", "Ketvirtadienis", "Penktadienis", "Šeštadienis"]
+    shorthand: ["S", "Pr", "A", "T", "K", "Pn", "Š"],
+    longhand: [
+      "Sekmadienis",
+      "Pirmadienis",
+      "Antradienis",
+      "Trečiadienis",
+      "Ketvirtadienis",
+      "Penktadienis",
+      "Šeštadienis",
+    ],
   },
 
   months: {
-  	shorthand: ["Sau", "Vas", "Kov", "Bal", "Geg", "Bir", "Lie", "Rgp", "Rgs", "Spl", "Lap", "Grd"],
-  	longhand: ["Sausis", "Vasaris", "Kovas", "Balandis", "Gegužė", "Birželis", "Liepa", "Rugpjūtis", "Rugsėjis", "Spalis", "Lapkritis", "Gruodis"]
+    shorthand: [
+      "Sau",
+      "Vas",
+      "Kov",
+      "Bal",
+      "Geg",
+      "Bir",
+      "Lie",
+      "Rgp",
+      "Rgs",
+      "Spl",
+      "Lap",
+      "Grd",
+    ],
+    longhand: [
+      "Sausis",
+      "Vasaris",
+      "Kovas",
+      "Balandis",
+      "Gegužė",
+      "Birželis",
+      "Liepa",
+      "Rugpjūtis",
+      "Rugsėjis",
+      "Spalis",
+      "Lapkritis",
+      "Gruodis",
+    ],
   },
 
   firstDayOfWeek: 1,
 
   ordinal: function() {
-  	return "-a"
+    return "-a";
   },
 
   weekAbbreviation: "Sav",
   scrollTitle: "Keisti laiką pelės rateliu",
   toggleTitle: "Perjungti laiko formatą",
-}
+};
 
 fp.l10ns.lt = Lithuanian;
 
-export default fp.l10ns
-
+export default fp.l10ns;

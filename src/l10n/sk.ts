@@ -1,27 +1,62 @@
 /* Slovak locals for flatpickr */
-import { CustomLocale } from "types/locale"
-import { FlatpickrFn } from "types/instance"
+import { CustomLocale } from "types/locale";
+import { FlatpickrFn } from "types/instance";
 
-const fp: FlatpickrFn = ((window as any).flatpickr as FlatpickrFn) || { l10ns: {}}
+const fp: FlatpickrFn = ((window as any).flatpickr as FlatpickrFn) || {
+  l10ns: {},
+};
 
 export const Slovak: CustomLocale = {
+  weekdays: {
+    shorthand: ["Ned", "Pon", "Ut", "Str", "Štv", "Pia", "Sob"],
+    longhand: [
+      "Nedeľa",
+      "Pondelok",
+      "Utorok",
+      "Streda",
+      "Štvrtok",
+      "Piatok",
+      "Sobota",
+    ],
+  },
 
-weekdays: {
-	shorthand: ["Ned", "Pon", "Ut", "Str", "Štv", "Pia", "Sob"],
-	longhand: ["Nedeľa", "Pondelok", "Utorok", "Streda", "Štvrtok", "Piatok", "Sobota"]
-},
+  months: {
+    shorthand: [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "Máj",
+      "Jún",
+      "Júl",
+      "Aug",
+      "Sep",
+      "Okt",
+      "Nov",
+      "Dec",
+    ],
+    longhand: [
+      "Január",
+      "Február",
+      "Marec",
+      "Apríl",
+      "Máj",
+      "Jún",
+      "Júl",
+      "August",
+      "September",
+      "Október",
+      "November",
+      "December",
+    ],
+  },
 
-months: {
-	shorthand: ["Jan", "Feb", "Mar", "Apr", "Máj", "Jún", "Júl", "Aug", "Sep", "Okt", "Nov", "Dec"],
-	longhand: ["Január", "Február", "Marec", "Apríl", "Máj", "Jún", "Júl", "August", "September", "Október", "November", "December"]
-},
-
-firstDayOfWeek: 1,
-rangeSeparator: " do ",
-ordinal: function () {
-	return "."
-},
-}
+  firstDayOfWeek: 1,
+  rangeSeparator: " do ",
+  ordinal: function() {
+    return ".";
+  },
+};
 
 fp.l10ns.sk = Slovak;
 

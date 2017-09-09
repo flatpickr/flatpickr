@@ -1,17 +1,46 @@
 /*! flatpickr v3.0.7, @license MIT */
-import { Instance, FlatpickrFn, DayElement } from "types/instance"
-import { Options, ParsedOptions, DateLimit, DateRangeLimit, DateOption, defaults as defaultOptions } from "types/options"
+import { Instance, FlatpickrFn, DayElement } from "types/instance";
+import {
+  Options,
+  ParsedOptions,
+  DateLimit,
+  DateRangeLimit,
+  DateOption,
+  defaults as defaultOptions,
+} from "types/options";
 
-import { Locale, CustomLocale } from "types/locale"
-import English from "l10n/default"
+import { Locale, CustomLocale } from "types/locale";
+import English from "l10n/default";
 
-import { arrayify, debounce, int, mouseDelta, pad, IncrementEvent } from "utils"
-import { clearNode, createElement, createNumberInput, findParent, toggleClass } from "utils/dom"
-import { compareDates, duration, monthToStr } from "utils/dates"
+import {
+  arrayify,
+  debounce,
+  int,
+  mouseDelta,
+  pad,
+  IncrementEvent,
+} from "utils";
+import {
+  clearNode,
+  createElement,
+  createNumberInput,
+  findParent,
+  toggleClass,
+} from "utils/dom";
+import { compareDates, duration, monthToStr } from "utils/dates";
 
-import { token, RevFormatFn, revFormat, tokenRegex, formats } from "utils/formatting"
+import {
+  token,
+  RevFormatFn,
+  revFormat,
+  tokenRegex,
+  formats,
+} from "utils/formatting";
 
-function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Instance {
+function FlatpickrInstance(
+  element: HTMLElement,
+  instanceConfig?: Options
+): Instance {
   const self = {} as Instance;
 
   self.parseDate = parseDate;
@@ -38,13 +67,13 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
 
   function setupHelperFunctions() {
     self.utils = {
-      getDaysInMonth (month = self.currentMonth, yr = self.currentYear) {
-        if (month === 1 && (((yr % 4 === 0) && (yr % 100 !== 0)) || (yr % 400 === 0)))
+      getDaysInMonth(month = self.currentMonth, yr = self.currentYear) {
+        if (month === 1 && ((yr % 4 === 0 && yr % 100 !== 0) || yr % 400 === 0))
           return 29;
 
         return self.l10n.daysInMonth[month];
-      }
-    }
+      },
+    };
   }
 
   function init() {
@@ -57,30 +86,30 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
     setupDates();
     setupHelperFunctions();
 
-    if (!self.isMobile)
-      build();
+    if (!self.isMobile) build();
 
     bindEvents();
 
     if (self.selectedDates.length || self.config.noCalendar) {
       if (self.config.enableTime) {
-        setHoursFromDate(self.config.noCalendar
-          ? self.latestSelectedDateObj || self.config.minDate
-          : undefined);
+        setHoursFromDate(
+          self.config.noCalendar
+            ? self.latestSelectedDateObj || self.config.minDate
+            : undefined
+        );
       }
       updateValue(false);
     }
 
-    self.showTimeInput = self.selectedDates.length > 0 || self.config.noCalendar;
+    self.showTimeInput =
+      self.selectedDates.length > 0 || self.config.noCalendar;
 
     if (self.weekWrapper !== undefined && self.daysContainer !== undefined) {
-      self.calendarContainer.style.width = self.daysContainer.offsetWidth
-        + self.weekWrapper.offsetWidth + "px";
+      self.calendarContainer.style.width =
+        self.daysContainer.offsetWidth + self.weekWrapper.offsetWidth + "px";
     }
 
-
-    if (!self.isMobile)
-      positionCalendar();
+    if (!self.isMobile) positionCalendar();
 
     triggerEvent("Ready");
   }
@@ -92,23 +121,26 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
   /**
    * The handler for all events targeting the time inputs
    */
-  function updateTime(e: MouseEvent | WheelEvent | IncrementEvent | KeyboardEvent) {
+  function updateTime(
+    e: MouseEvent | WheelEvent | IncrementEvent | KeyboardEvent
+  ) {
     if (self.config.noCalendar && !self.selectedDates.length)
       // picking time only
       self.selectedDates = [self.now];
 
     timeWrapper(e);
 
-    if (!self.selectedDates.length)
-      return;
+    if (!self.selectedDates.length) return;
 
-    if (!self.minDateHasTime || e.type !== "input" || (e.target as HTMLInputElement).value.length >= 2) {
+    if (
+      !self.minDateHasTime ||
+      e.type !== "input" ||
+      (e.target as HTMLInputElement).value.length >= 2
+    ) {
       setHoursFromInputs();
       updateValue();
-    }
-
-    else {
-      setTimeout(function(){
+    } else {
+      setTimeout(function() {
         setHoursFromInputs();
         updateValue();
       }, 1000);
@@ -118,32 +150,37 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
   /**
    * Syncs the selected date object time with user's time input
    */
-  function setHoursFromInputs(){
+  function setHoursFromInputs() {
     if (self.hourElement === undefined || self.minuteElement === undefined)
       return;
 
-    let hours = (parseInt(self.hourElement.value, 10) || 0) % (self.amPM ? 12 : 24),
+    let hours =
+        (parseInt(self.hourElement.value, 10) || 0) % (self.amPM ? 12 : 24),
       minutes = (parseInt(self.minuteElement.value, 10) || 0) % 60,
-      seconds = self.secondElement !== undefined
-        ? (parseInt(self.secondElement.value, 10) || 0)  % 60
-        : 0;
+      seconds =
+        self.secondElement !== undefined
+          ? (parseInt(self.secondElement.value, 10) || 0) % 60
+          : 0;
 
     if (self.amPM !== undefined)
-      hours = (hours % 12) + (12 * int(self.amPM.textContent === "PM"));
+      hours = hours % 12 + 12 * int(self.amPM.textContent === "PM");
 
     if (
-      self.config.minDate && self.minDateHasTime
-      && self.latestSelectedDateObj && compareDates(self.latestSelectedDateObj, self.config.minDate) === 0
+      self.config.minDate &&
+      self.minDateHasTime &&
+      self.latestSelectedDateObj &&
+      compareDates(self.latestSelectedDateObj, self.config.minDate) === 0
     ) {
-
       hours = Math.max(hours, self.config.minDate.getHours());
       if (hours === self.config.minDate.getHours())
         minutes = Math.max(minutes, self.config.minDate.getMinutes());
     }
 
     if (
-      self.config.maxDate && self.maxDateHasTime
-      && self.latestSelectedDateObj && compareDates(self.latestSelectedDateObj, self.config.maxDate) === 0
+      self.config.maxDate &&
+      self.maxDateHasTime &&
+      self.latestSelectedDateObj &&
+      compareDates(self.latestSelectedDateObj, self.config.maxDate) === 0
     ) {
       hours = Math.min(hours, self.config.maxDate.getHours());
       if (hours === self.config.maxDate.getHours())
@@ -156,11 +193,10 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
   /**
    * Syncs time input values with a date
    */
-  function setHoursFromDate(dateObj?: Date){
+  function setHoursFromDate(dateObj?: Date) {
     const date = dateObj || self.latestSelectedDateObj;
 
-    if (date)
-      setHours(date.getHours(), date.getMinutes(), date.getSeconds());
+    if (date) setHours(date.getHours(), date.getMinutes(), date.getSeconds());
   }
 
   /**
@@ -174,13 +210,10 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
    */
   function setHours(hours: number, minutes: number, seconds: number) {
     if (self.latestSelectedDateObj !== undefined) {
-      self.latestSelectedDateObj.setHours(
-        hours % 24, minutes, seconds || 0, 0
-      );
+      self.latestSelectedDateObj.setHours(hours % 24, minutes, seconds || 0, 0);
     }
 
-    if (!self.hourElement || !self.minuteElement || self.isMobile)
-      return;
+    if (!self.hourElement || !self.minuteElement || self.isMobile) return;
 
     self.hourElement.value = pad(
       !self.config.time_24hr
@@ -202,12 +235,12 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
    * @param {Event} event the keyup or increment event
    */
   function onYearInput(event: KeyboardEvent & IncrementEvent) {
-    const year = parseInt((event.target as HTMLInputElement).value) + (event.delta || 0);
+    const year =
+      parseInt((event.target as HTMLInputElement).value) + (event.delta || 0);
 
     if (year.toString().length === 4 || event.key === "Enter") {
       self.currentYearElement.blur();
-      if (!/[^\d]/.test(year.toString()))
-        changeYear(year);
+      if (!/[^\d]/.test(year.toString())) changeYear(year);
     }
   }
 
@@ -217,7 +250,11 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
    * @param {String} event the event name
    * @param {Function} handler the event handler
    */
-  function bind<F extends EventListener, E extends Element>(element: E | E[], event: string | string[], handler: F): void {
+  function bind<F extends EventListener, E extends Element>(
+    element: E | E[],
+    event: string | string[],
+    handler: F
+  ): void {
     if (event instanceof Array)
       return event.forEach(ev => bind(element, ev, handler));
 
@@ -225,7 +262,7 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
       return element.forEach(el => bind(el, event, handler));
 
     element.addEventListener(event, handler);
-    self._handlers.push({element, event, handler});
+    self._handlers.push({ element, event, handler });
   }
 
   /**
@@ -235,11 +272,13 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
    *
    * @param {Function} handler the event handler
    */
-  function onClick<E extends MouseEvent>(handler: (e: E) => void): (e: E) => void {
-    return evt => evt.which === 1 && (handler(evt));
+  function onClick<E extends MouseEvent>(
+    handler: (e: E) => void
+  ): (e: E) => void {
+    return evt => evt.which === 1 && handler(evt);
   }
 
-  function triggerChange () {
+  function triggerChange() {
     triggerEvent("Change");
   }
 
@@ -251,8 +290,15 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
       ["open", "close", "toggle", "clear"].forEach(evt => {
         Array.prototype.forEach.call(
           self.element.querySelectorAll(`[data-${evt}]`),
-          (el: HTMLElement) => bind(el, "mousedown", onClick(self[evt as "open" | "close" | "toggle" | "clear"] as EventListener))
-        )
+          (el: HTMLElement) =>
+            bind(
+              el,
+              "mousedown",
+              onClick(self[
+                evt as "open" | "close" | "toggle" | "clear"
+              ] as EventListener)
+            )
+        );
       });
     }
 
@@ -264,12 +310,13 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
     const debouncedResize = debounce(onResize, 50);
 
     if (self.config.mode === "range" && self.daysContainer)
-      bind(self.daysContainer, "mouseover", e => onMouseOver(e.target as DayElement));
+      bind(self.daysContainer, "mouseover", e =>
+        onMouseOver(e.target as DayElement)
+      );
 
     bind(window.document.body, "keydown", onKeyDown);
 
-    if (!self.config.static)
-      bind(self._input, "keydown", onKeyDown);
+    if (!self.config.static) bind(self._input, "keydown", onKeyDown);
 
     if (!self.config.inline && !self.config.static)
       bind(window.document.body, "resize", debouncedResize);
@@ -294,29 +341,50 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
       bind(self.daysContainer, "mousedown", onClick(selectDate));
 
       if (self.config.animate) {
-        bind(self.daysContainer, ["webkitAnimationEnd","animationend"], animateDays);
-        bind(self.monthNav, ["webkitAnimationEnd","animationend"], animateMonths);
+        bind(
+          self.daysContainer,
+          ["webkitAnimationEnd", "animationend"],
+          animateDays
+        );
+        bind(
+          self.monthNav,
+          ["webkitAnimationEnd", "animationend"],
+          animateMonths
+        );
       }
     }
 
-    if (self.timeContainer !== undefined && self.minuteElement !== undefined && self.hourElement !== undefined) {
-      const selText = (e: FocusEvent) => (e.target as HTMLInputElement).select();
-      bind(self.timeContainer, ["wheel",  "input", "increment"], updateTime);
+    if (
+      self.timeContainer !== undefined &&
+      self.minuteElement !== undefined &&
+      self.hourElement !== undefined
+    ) {
+      const selText = (e: FocusEvent) =>
+        (e.target as HTMLInputElement).select();
+      bind(self.timeContainer, ["wheel", "input", "increment"], updateTime);
       bind(self.timeContainer, "mousedown", onClick(timeIncrement));
 
       bind(self.timeContainer, ["wheel", "increment"], self._debouncedChange);
       bind(self.timeContainer, "input", triggerChange);
 
-      bind([self.hourElement,self.minuteElement], "focus", selText);
+      bind([self.hourElement, self.minuteElement], "focus", selText);
 
       if (self.secondElement !== undefined)
-        bind(self.secondElement, "focus", () => self.secondElement && self.secondElement.select());
+        bind(
+          self.secondElement,
+          "focus",
+          () => self.secondElement && self.secondElement.select()
+        );
 
       if (self.amPM !== undefined) {
-        bind(self.amPM, "mousedown", onClick(e => {
-          updateTime(e);
-          triggerChange();
-        }));
+        bind(
+          self.amPM,
+          "mousedown",
+          onClick(e => {
+            updateTime(e);
+            triggerChange();
+          })
+        );
       }
     }
   }
@@ -330,26 +398,35 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
    * Removes the day container that slided out of view
    * @param {Event} e the animation event
    */
-  function animateDays (e: AnimationEvent) {
+  function animateDays(e: AnimationEvent) {
     if (self.daysContainer && self.daysContainer.childNodes.length > 1) {
-      switch(e.animationName) {
+      switch (e.animationName) {
         case "fpSlideLeft":
-          self.daysContainer.lastChild && (self.daysContainer.lastChild as Element).classList.remove("slideLeftNew")
-          self.daysContainer.removeChild(self.daysContainer.firstChild as Element);
+          self.daysContainer.lastChild &&
+            (self.daysContainer.lastChild as Element).classList.remove(
+              "slideLeftNew"
+            );
+          self.daysContainer.removeChild(self.daysContainer
+            .firstChild as Element);
           self.days = self.daysContainer.firstChild as HTMLDivElement;
           processPostDayAnimation();
 
           break;
 
         case "fpSlideRight":
-          self.daysContainer.firstChild && (self.daysContainer.firstChild as Element).classList.remove("slideRightNew")
-          self.daysContainer.removeChild(self.daysContainer.lastChild as Element);
+          self.daysContainer.firstChild &&
+            (self.daysContainer.firstChild as Element).classList.remove(
+              "slideRightNew"
+            );
+          self.daysContainer.removeChild(self.daysContainer
+            .lastChild as Element);
           self.days = self.daysContainer.firstChild as HTMLDivElement;
           processPostDayAnimation();
 
           break;
 
-        default: break;
+        default:
+          break;
       }
     }
   }
@@ -358,18 +435,24 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
    * Removes the month element that animated out of view
    * @param {Event} e the animation event
    */
-  function animateMonths(e: AnimationEvent){
-    switch(e.animationName) {
+  function animateMonths(e: AnimationEvent) {
+    switch (e.animationName) {
       case "fpSlideLeftNew":
       case "fpSlideRightNew":
         self.navigationCurrentMonth.classList.remove("slideLeftNew");
         self.navigationCurrentMonth.classList.remove("slideRightNew");
         const nav = self.navigationCurrentMonth;
 
-        while (nav.nextSibling && /curr/.test((nav.nextSibling as Element).className))
+        while (
+          nav.nextSibling &&
+          /curr/.test((nav.nextSibling as Element).className)
+        )
           self.monthNav.removeChild(nav.nextSibling);
 
-        while (nav.previousSibling && /curr/.test((nav.previousSibling as Element).className))
+        while (
+          nav.previousSibling &&
+          /curr/.test((nav.previousSibling as Element).className)
+        )
           self.monthNav.removeChild(nav.previousSibling);
 
         self.oldCurMonth = undefined;
@@ -382,23 +465,22 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
    * @param {Date} jumpDate the date to set the view to
    */
   function jumpToDate(jumpDate?: DateOption) {
-    const jumpTo = jumpDate !== undefined
-    ? parseDate(jumpDate)
-    : self.latestSelectedDateObj || (self.config.minDate && self.config.minDate > self.now
-        ? self.config.minDate as Date
-        : self.config.maxDate && self.config.maxDate < self.now
-          ? self.config.maxDate
-          : self.now
-      );
+    const jumpTo =
+      jumpDate !== undefined
+        ? parseDate(jumpDate)
+        : self.latestSelectedDateObj ||
+          (self.config.minDate && self.config.minDate > self.now
+            ? self.config.minDate as Date
+            : self.config.maxDate && self.config.maxDate < self.now
+              ? self.config.maxDate
+              : self.now);
 
     try {
       if (jumpTo !== undefined) {
         self.currentYear = jumpTo.getFullYear();
         self.currentMonth = jumpTo.getMonth();
       }
-    }
-
-    catch (e) {
+    } catch (e) {
       /* istanbul ignore next */
       console.error(e.stack);
       /* istanbul ignore next */
@@ -414,7 +496,10 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
    */
   function timeIncrement(e: KeyboardEvent | MouseEvent) {
     if (~(e.target as Element).className.indexOf("arrow"))
-      incrementNumInput(e, (e.target as Element).classList.contains("arrowUp") ? 1 : -1);
+      incrementNumInput(
+        e,
+        (e.target as Element).classList.contains("arrowUp") ? 1 : -1
+      );
   }
 
   /**
@@ -426,9 +511,15 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
    * @param {Number} delta the diff (usually 1 or -1)
    * @param {Element} inputElem the input element
    */
-  function incrementNumInput(e: KeyboardEvent | MouseEvent | undefined, delta: number, inputElem?: HTMLInputElement) {
-    const target = e && e.target as Element;
-    const input = inputElem || target && target.parentNode && target.parentNode.firstChild;
+  function incrementNumInput(
+    e: KeyboardEvent | MouseEvent | undefined,
+    delta: number,
+    inputElem?: HTMLInputElement
+  ) {
+    const target = e && (e.target as Element);
+    const input =
+      inputElem ||
+      (target && target.parentNode && target.parentNode.firstChild);
     const event = createEvent("increment") as IncrementEvent;
     event.delta = delta;
     input && input.dispatchEvent(event);
@@ -436,12 +527,18 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
 
   function build() {
     const fragment = window.document.createDocumentFragment();
-    self.calendarContainer = createElement<HTMLDivElement>("div", "flatpickr-calendar");
+    self.calendarContainer = createElement<HTMLDivElement>(
+      "div",
+      "flatpickr-calendar"
+    );
     self.calendarContainer.tabIndex = -1;
 
     if (!self.config.noCalendar) {
       fragment.appendChild(buildMonthNav());
-      self.innerContainer = createElement<HTMLDivElement>("div", "flatpickr-innerContainer")
+      self.innerContainer = createElement<HTMLDivElement>(
+        "div",
+        "flatpickr-innerContainer"
+      );
 
       if (self.config.weekNumbers) {
         const { weekWrapper, weekNumbers } = buildWeeks();
@@ -450,11 +547,17 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
         self.weekWrapper = weekWrapper;
       }
 
-      self.rContainer = createElement<HTMLDivElement>("div", "flatpickr-rContainer");
+      self.rContainer = createElement<HTMLDivElement>(
+        "div",
+        "flatpickr-rContainer"
+      );
       self.rContainer.appendChild(buildWeekdays());
 
       if (!self.daysContainer) {
-        self.daysContainer = createElement<HTMLDivElement>("div", "flatpickr-days");
+        self.daysContainer = createElement<HTMLDivElement>(
+          "div",
+          "flatpickr-days"
+        );
         self.daysContainer.tabIndex = -1;
       }
 
@@ -469,16 +572,22 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
       fragment.appendChild(buildTime());
     }
 
-    toggleClass(self.calendarContainer, "rangeMode", self.config.mode === "range");
+    toggleClass(
+      self.calendarContainer,
+      "rangeMode",
+      self.config.mode === "range"
+    );
     toggleClass(self.calendarContainer, "animate", self.config.animate);
 
     self.calendarContainer.appendChild(fragment);
 
-    const customAppend = self.config.appendTo !== undefined && self.config.appendTo.nodeType;
+    const customAppend =
+      self.config.appendTo !== undefined && self.config.appendTo.nodeType;
 
     if (self.config.inline || self.config.static) {
-      self.calendarContainer.classList.add(self.config.inline ? "inline" : "static");
-
+      self.calendarContainer.classList.add(
+        self.config.inline ? "inline" : "static"
+      );
 
       if (self.config.inline && !customAppend && self.element.parentNode) {
         self.element.parentNode.insertBefore(
@@ -487,25 +596,30 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
         );
       }
 
-      if (self.config.static){
+      if (self.config.static) {
         const wrapper = createElement("div", "flatpickr-wrapper");
         if (self.element.parentNode)
           self.element.parentNode.insertBefore(wrapper, self.element);
         wrapper.appendChild(self.element);
 
-        if(self.altInput)
-          wrapper.appendChild(self.altInput);
+        if (self.altInput) wrapper.appendChild(self.altInput);
 
         wrapper.appendChild(self.calendarContainer);
       }
     }
 
     if (!self.config.static && !self.config.inline)
-      (self.config.appendTo !== undefined ? self.config.appendTo : window.document.body)
-        .appendChild(self.calendarContainer);
+      (self.config.appendTo !== undefined
+        ? self.config.appendTo
+        : window.document.body).appendChild(self.calendarContainer);
   }
 
-  function createDay(className: string, date: Date, dayNumber: number, i: number) {
+  function createDay(
+    className: string,
+    date: Date,
+    dayNumber: number,
+    i: number
+  ) {
     const dateIsEnabled = isEnabled(date, true),
       dayElement = createElement<DayElement>(
         "span",
@@ -515,7 +629,10 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
 
     dayElement.dateObj = date;
     dayElement.$i = i;
-    dayElement.setAttribute("aria-label", self.formatDate(date, self.config.ariaDateFormat));
+    dayElement.setAttribute(
+      "aria-label",
+      self.formatDate(date, self.config.ariaDateFormat)
+    );
 
     if (compareDates(date, self.now) === 0) {
       self.todayDateElem = dayElement;
@@ -524,42 +641,39 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
 
     if (dateIsEnabled) {
       dayElement.tabIndex = -1;
-      if (isDateSelected(date)){
+      if (isDateSelected(date)) {
         dayElement.classList.add("selected");
         self.selectedDateElem = dayElement;
         if (self.config.mode === "range") {
           toggleClass(
             dayElement,
             "startRange",
-            self.selectedDates[0]  && compareDates(date, self.selectedDates[0]) === 0
+            self.selectedDates[0] &&
+              compareDates(date, self.selectedDates[0]) === 0
           );
 
           toggleClass(
             dayElement,
             "endRange",
-            self.selectedDates[1]
-            && compareDates(date, self.selectedDates[1]) === 0
+            self.selectedDates[1] &&
+              compareDates(date, self.selectedDates[1]) === 0
           );
         }
       }
-    }
-
-    else {
+    } else {
       dayElement.classList.add("disabled");
       if (
-        self.selectedDates[0]
-        && self.minRangeDate
-        && date > self.minRangeDate
-        && date < self.selectedDates[0]
+        self.selectedDates[0] &&
+        self.minRangeDate &&
+        date > self.minRangeDate &&
+        date < self.selectedDates[0]
       )
-
         self.minRangeDate = date;
-
       else if (
-        self.selectedDates[0]
-        && self.maxRangeDate
-        && date < self.maxRangeDate
-        && date > self.selectedDates[0]
+        self.selectedDates[0] &&
+        self.maxRangeDate &&
+        date < self.maxRangeDate &&
+        date > self.selectedDates[0]
       )
         self.maxRangeDate = date;
     }
@@ -570,17 +684,23 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
 
       if (
         self.selectedDates.length === 1 &&
-        self.minRangeDate !== undefined  &&
+        self.minRangeDate !== undefined &&
         self.maxRangeDate !== undefined &&
         (date < self.minRangeDate || date > self.maxRangeDate)
       )
         dayElement.classList.add("notAllowed");
     }
 
-    if (self.weekNumbers && className !== "prevMonthDay" && dayNumber % 7 === 1) {
+    if (
+      self.weekNumbers &&
+      className !== "prevMonthDay" &&
+      dayNumber % 7 === 1
+    ) {
       self.weekNumbers.insertAdjacentHTML(
         "beforeend",
-        "<span class='disabled flatpickr-day'>" + self.config.getWeek(date) + "</span>"
+        "<span class='disabled flatpickr-day'>" +
+          self.config.getWeek(date) +
+          "</span>"
       );
     }
 
@@ -593,23 +713,22 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
     let newIndex = currentIndex + offset || 0,
       targetNode = (currentIndex !== undefined
         ? self.days.childNodes[newIndex]
-        : self.selectedDateElem || self.todayDateElem || self.days.childNodes[0])   as DayElement;
+        : self.selectedDateElem ||
+          self.todayDateElem ||
+          self.days.childNodes[0]) as DayElement;
 
-      const focus = () => {
-        targetNode = (targetNode || self.days.childNodes[newIndex]) ;
-        targetNode.focus();
+    const focus = () => {
+      targetNode = targetNode || self.days.childNodes[newIndex];
+      targetNode.focus();
 
-        if (self.config.mode === "range")
-          onMouseOver(targetNode);
-      };
+      if (self.config.mode === "range") onMouseOver(targetNode);
+    };
 
     if (targetNode === undefined && offset !== 0) {
       if (offset > 0) {
         self.changeMonth(1);
         newIndex = newIndex % 42;
-      }
-
-      else if (offset < 0) {
+      } else if (offset < 0) {
         self.changeMonth(-1);
         newIndex += 42;
       }
@@ -621,9 +740,7 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
   }
 
   function afterDayAnim<F extends Function>(fn: F) {
-    self.config.animate === true
-      ? self._animationLoop.push(fn)
-      : fn();
+    self.config.animate === true ? self._animationLoop.push(fn) : fn();
   }
 
   function buildDays(delta?: number) {
@@ -631,18 +748,21 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
       return;
     }
 
-    const firstOfMonth = (
-        new Date(self.currentYear, self.currentMonth, 1).getDay() -
-        self.l10n.firstDayOfWeek + 7
-      ) % 7,
+    const firstOfMonth =
+        (new Date(self.currentYear, self.currentMonth, 1).getDay() -
+          self.l10n.firstDayOfWeek +
+          7) %
+        7,
       isRangeMode = self.config.mode === "range";
 
-    const prevMonthDays = self.utils.getDaysInMonth((self.currentMonth - 1 + 12) % 12);
+    const prevMonthDays = self.utils.getDaysInMonth(
+      (self.currentMonth - 1 + 12) % 12
+    );
 
     const daysInMonth = self.utils.getDaysInMonth(),
       days = window.document.createDocumentFragment();
 
-    let  dayNumber = prevMonthDays + 1 - firstOfMonth,
+    let dayNumber = prevMonthDays + 1 - firstOfMonth,
       dayIndex = 0;
 
     if (self.weekNumbers && self.weekNumbers.firstChild)
@@ -650,7 +770,11 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
 
     if (isRangeMode) {
       // const dateLimits = self.config.enable.length || self.config.disable.length || self.config.mixDate || self.config.maxDate;
-      self.minRangeDate = new Date(self.currentYear, self.currentMonth - 1, dayNumber);
+      self.minRangeDate = new Date(
+        self.currentYear,
+        self.currentMonth - 1,
+        dayNumber
+      );
       self.maxRangeDate = new Date(
         self.currentYear,
         self.currentMonth + 1,
@@ -683,11 +807,19 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
     }
 
     // append days from the next month
-    for (let dayNum = daysInMonth + 1; dayNum <= 42 - firstOfMonth; dayNum++, dayIndex++) {
+    for (
+      let dayNum = daysInMonth + 1;
+      dayNum <= 42 - firstOfMonth;
+      dayNum++, dayIndex++
+    ) {
       days.appendChild(
         createDay(
           "nextMonthDay",
-          new Date(self.currentYear, self.currentMonth + 1, dayNum % daysInMonth),
+          new Date(
+            self.currentYear,
+            self.currentMonth + 1,
+            dayNum % daysInMonth
+          ),
           dayNum,
           dayIndex
         )
@@ -695,33 +827,34 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
     }
 
     if (isRangeMode && self.selectedDates.length === 1 && days.childNodes[0]) {
-      self._hidePrevMonthArrow = self._hidePrevMonthArrow ||
-        (!!self.minRangeDate && self.minRangeDate > (days.childNodes[0] as DayElement).dateObj);
+      self._hidePrevMonthArrow =
+        self._hidePrevMonthArrow ||
+        (!!self.minRangeDate &&
+          self.minRangeDate > (days.childNodes[0] as DayElement).dateObj);
 
-      self._hideNextMonthArrow = self._hideNextMonthArrow ||
-        (!!self.maxRangeDate && self.maxRangeDate < new Date(self.currentYear, self.currentMonth + 1, 1));
-    }
-
-    else
-      updateNavigationCurrentMonth();
-
-
+      self._hideNextMonthArrow =
+        self._hideNextMonthArrow ||
+        (!!self.maxRangeDate &&
+          self.maxRangeDate <
+            new Date(self.currentYear, self.currentMonth + 1, 1));
+    } else updateNavigationCurrentMonth();
 
     const dayContainer = createElement<HTMLDivElement>("div", "dayContainer");
     dayContainer.appendChild(days);
 
     if (!self.config.animate || delta === undefined)
       clearNode(self.daysContainer);
-
     else {
       while (self.daysContainer.childNodes.length > 1)
         self.daysContainer.removeChild(self.daysContainer.firstChild as Node);
     }
 
-    if (delta && delta >= 0)
-      self.daysContainer.appendChild(dayContainer);
+    if (delta && delta >= 0) self.daysContainer.appendChild(dayContainer);
     else
-      self.daysContainer.insertBefore(dayContainer, self.daysContainer.firstChild);
+      self.daysContainer.insertBefore(
+        dayContainer,
+        self.daysContainer.firstChild
+      );
 
     self.days = self.daysContainer.childNodes[0] as HTMLDivElement;
   }
@@ -730,30 +863,41 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
     const monthNavFragment = window.document.createDocumentFragment();
     self.monthNav = createElement("div", "flatpickr-month");
 
-    self.prevMonthNav = createElement<HTMLSpanElement>("span", "flatpickr-prev-month");
+    self.prevMonthNav = createElement<HTMLSpanElement>(
+      "span",
+      "flatpickr-prev-month"
+    );
     self.prevMonthNav.innerHTML = self.config.prevArrow;
 
     self.currentMonthElement = createElement("span", "cur-month");
     self.currentMonthElement.title = self.l10n.scrollTitle;
 
     const yearInput = createNumberInput("cur-year");
-    self.currentYearElement =  yearInput.childNodes[0] as HTMLInputElement;
+    self.currentYearElement = yearInput.childNodes[0] as HTMLInputElement;
     self.currentYearElement.title = self.l10n.scrollTitle;
 
     if (self.config.minDate)
-      self.currentYearElement.min = self.config.minDate.getFullYear().toString();
+      self.currentYearElement.min = self.config.minDate
+        .getFullYear()
+        .toString();
 
     if (self.config.maxDate) {
-      self.currentYearElement.max = self.config.maxDate.getFullYear().toString();
+      self.currentYearElement.max = self.config.maxDate
+        .getFullYear()
+        .toString();
 
-      self.currentYearElement.disabled = !!self.config.minDate  &&
+      self.currentYearElement.disabled =
+        !!self.config.minDate &&
         self.config.minDate.getFullYear() === self.config.maxDate.getFullYear();
     }
 
     self.nextMonthNav = createElement("span", "flatpickr-next-month");
     self.nextMonthNav.innerHTML = self.config.nextArrow;
 
-    self.navigationCurrentMonth = createElement("span", "flatpickr-current-month");
+    self.navigationCurrentMonth = createElement(
+      "span",
+      "flatpickr-current-month"
+    );
     self.navigationCurrentMonth.appendChild(self.currentMonthElement);
     self.navigationCurrentMonth.appendChild(yearInput);
 
@@ -763,25 +907,25 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
     self.monthNav.appendChild(monthNavFragment);
 
     Object.defineProperty(self, "_hidePrevMonthArrow", {
-      get () {
+      get() {
         return this.__hidePrevMonthArrow;
       },
-      set (bool) {
+      set(bool) {
         if (this.__hidePrevMonthArrow !== bool)
           self.prevMonthNav.style.display = bool ? "none" : "block";
         this.__hidePrevMonthArrow = bool;
-      }
+      },
     });
 
     Object.defineProperty(self, "_hideNextMonthArrow", {
-      get () {
+      get() {
         return this.__hideNextMonthArrow;
       },
-      set (bool) {
+      set(bool) {
         if (this.__hideNextMonthArrow !== bool)
           self.nextMonthNav.style.display = bool ? "none" : "block";
         this.__hideNextMonthArrow = bool;
-      }
+      },
     });
 
     updateNavigationCurrentMonth();
@@ -802,18 +946,20 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
     self.hourElement = hourInput.childNodes[0] as HTMLInputElement;
 
     const minuteInput = createNumberInput("flatpickr-minute");
-    self.minuteElement =  minuteInput.childNodes[0] as HTMLInputElement;
+    self.minuteElement = minuteInput.childNodes[0] as HTMLInputElement;
 
     self.hourElement.tabIndex = self.minuteElement.tabIndex = -1;
 
-    self.hourElement.value = pad(self.latestSelectedDateObj
-      ? self.latestSelectedDateObj.getHours()
-      : self.config.defaultHour % (self.config.time_24hr ? 24 : 12)
+    self.hourElement.value = pad(
+      self.latestSelectedDateObj
+        ? self.latestSelectedDateObj.getHours()
+        : self.config.defaultHour % (self.config.time_24hr ? 24 : 12)
     );
 
-    self.minuteElement.value = pad(self.latestSelectedDateObj
-      ? self.latestSelectedDateObj.getMinutes()
-      : self.config.defaultMinute
+    self.minuteElement.value = pad(
+      self.latestSelectedDateObj
+        ? self.latestSelectedDateObj.getMinutes()
+        : self.config.defaultMinute
     );
 
     self.hourElement.step = self.config.hourIncrement.toString();
@@ -831,14 +977,13 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
     self.timeContainer.appendChild(separator);
     self.timeContainer.appendChild(minuteInput);
 
-    if (self.config.time_24hr)
-      self.timeContainer.classList.add("time24hr");
+    if (self.config.time_24hr) self.timeContainer.classList.add("time24hr");
 
     if (self.config.enableSeconds) {
       self.timeContainer.classList.add("hasSeconds");
 
       const secondInput = createNumberInput("flatpickr-second");
-      self.secondElement =  secondInput.childNodes[0] as HTMLInputElement;
+      self.secondElement = secondInput.childNodes[0] as HTMLInputElement;
 
       self.secondElement.value = pad(
         self.latestSelectedDateObj
@@ -856,13 +1001,18 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
       self.timeContainer.appendChild(secondInput);
     }
 
-    if (!self.config.time_24hr) { // add self.amPM if appropriate
+    if (!self.config.time_24hr) {
+      // add self.amPM if appropriate
       self.amPM = createElement(
         "span",
         "flatpickr-am-pm",
-        self.l10n.amPM[int((self.latestSelectedDateObj
-          ? self.hourElement.value
-          : self.config.defaultHour) > 11)]
+        self.l10n.amPM[
+          int(
+            (self.latestSelectedDateObj
+              ? self.hourElement.value
+              : self.config.defaultHour) > 11
+          )
+        ]
       );
       self.amPM.title = self.l10n.toggleTitle;
       self.amPM.tabIndex = -1;
@@ -877,12 +1027,12 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
       self.weekdayContainer = createElement("div", "flatpickr-weekdays");
 
     const firstDayOfWeek = self.l10n.firstDayOfWeek;
-    let weekdays = [ ...self.l10n.weekdays.shorthand ];
+    let weekdays = [...self.l10n.weekdays.shorthand];
 
     if (firstDayOfWeek > 0 && firstDayOfWeek < weekdays.length) {
       weekdays = [
         ...weekdays.splice(firstDayOfWeek, weekdays.length),
-        ...weekdays.splice(0, firstDayOfWeek)
+        ...weekdays.splice(0, firstDayOfWeek),
       ];
     }
 
@@ -898,7 +1048,10 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
   /* istanbul ignore next */
   function buildWeeks() {
     self.calendarContainer.classList.add("hasWeeks");
-    const weekWrapper = createElement<HTMLDivElement>("div", "flatpickr-weekwrapper");
+    const weekWrapper = createElement<HTMLDivElement>(
+      "div",
+      "flatpickr-weekwrapper"
+    );
     weekWrapper.appendChild(
       createElement("span", "flatpickr-weekday", self.l10n.weekAbbreviation)
     );
@@ -907,8 +1060,8 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
 
     return {
       weekWrapper,
-      weekNumbers
-    }
+      weekNumbers,
+    };
   }
 
   function changeMonth(value: number, is_offset = true, animate?: boolean) {
@@ -924,7 +1077,7 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
     self.currentMonth += delta;
 
     if (self.currentMonth < 0 || self.currentMonth > 11) {
-      self.currentYear += (self.currentMonth > 11 ? 1 : -1);
+      self.currentYear += self.currentMonth > 11 ? 1 : -1;
       self.currentMonth = (self.currentMonth + 12) % 12;
 
       triggerEvent("YearChange");
@@ -939,13 +1092,17 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
 
     // remove possible remnants from clicking too fast
     const nav = self.navigationCurrentMonth;
-    if(delta < 0) {
-      while (nav.nextSibling && /curr/.test((nav.nextSibling as HTMLElement).className))
+    if (delta < 0) {
+      while (
+        nav.nextSibling &&
+        /curr/.test((nav.nextSibling as HTMLElement).className)
+      )
         self.monthNav.removeChild(nav.nextSibling);
-    }
-
-    else if (delta > 0) {
-      while (nav.previousSibling && /curr/.test((nav.previousSibling as HTMLElement).className))
+    } else if (delta > 0) {
+      while (
+        nav.previousSibling &&
+        /curr/.test((nav.previousSibling as HTMLElement).className)
+      )
         self.monthNav.removeChild(nav.previousSibling);
     }
 
@@ -953,9 +1110,7 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
 
     self.navigationCurrentMonth = self.monthNav.insertBefore(
       self.oldCurMonth.cloneNode(true),
-      delta > 0
-        ? self.oldCurMonth.nextSibling
-        : self.oldCurMonth
+      delta > 0 ? self.oldCurMonth.nextSibling : self.oldCurMonth
     ) as HTMLDivElement;
 
     const daysContainer = self.daysContainer as HTMLDivElement;
@@ -966,9 +1121,7 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
 
         self.oldCurMonth.classList.add("slideLeft");
         self.navigationCurrentMonth.classList.add("slideLeftNew");
-      }
-
-      else if (delta < 0) {
+      } else if (delta < 0) {
         (daysContainer.firstChild as Element).classList.add("slideRightNew");
         (daysContainer.lastChild as Element).classList.add("slideRight");
 
@@ -977,19 +1130,25 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
       }
     }
 
-    self.currentMonthElement = self.navigationCurrentMonth.firstChild as HTMLInputElement;
-    self.currentYearElement = (self.navigationCurrentMonth.lastChild as Node).childNodes[0] as HTMLInputElement;
+    self.currentMonthElement = self.navigationCurrentMonth
+      .firstChild as HTMLInputElement;
+    self.currentYearElement = (self.navigationCurrentMonth.lastChild as Node)
+      .childNodes[0] as HTMLInputElement;
 
     updateNavigationCurrentMonth();
     if (self.oldCurMonth.firstChild)
-     self.oldCurMonth.firstChild.textContent = monthToStr(self.currentMonth - delta, self.config.shorthandCurrentMonth, self.l10n);
+      self.oldCurMonth.firstChild.textContent = monthToStr(
+        self.currentMonth - delta,
+        self.config.shorthandCurrentMonth,
+        self.l10n
+      );
 
     triggerEvent("MonthChange");
 
     if (document.activeElement && (document.activeElement as DayElement).$i) {
       const index = (document.activeElement as DayElement).$i;
       afterDayAnim(() => {
-        focusOnDay(index, 0)
+        focusOnDay(index, 0);
       });
     }
   }
@@ -997,11 +1156,9 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
   function clear(triggerChangeEvent = true) {
     self.input.value = "";
 
-    if (self.altInput)
-      self.altInput.value = "";
+    if (self.altInput) self.altInput.value = "";
 
-    if (self.mobileInput)
-      self.mobileInput.value = "";
+    if (self.mobileInput) self.mobileInput.value = "";
 
     self.selectedDates = [];
     self.latestSelectedDateObj = undefined;
@@ -1026,10 +1183,9 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
   }
 
   function destroy() {
-    if (self.config !== undefined)
-      triggerEvent("Destroy");
+    if (self.config !== undefined) triggerEvent("Destroy");
 
-    for (let i = self._handlers.length; i--;) {
+    for (let i = self._handlers.length; i--; ) {
       const h = self._handlers[i];
       h.element.removeEventListener(h.event, h.handler);
     }
@@ -1040,9 +1196,7 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
       if (self.mobileInput.parentNode)
         self.mobileInput.parentNode.removeChild(self.mobileInput);
       self.mobileInput = undefined;
-    }
-
-    else if (self.calendarContainer && self.calendarContainer.parentNode)
+    } else if (self.calendarContainer && self.calendarContainer.parentNode)
       self.calendarContainer.parentNode.removeChild(self.calendarContainer);
 
     if (self.altInput) {
@@ -1060,19 +1214,39 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
     }
 
     ([
-      "_showTimeInput", "latestSelectedDateObj", "_hideNextMonthArrow", "_hidePrevMonthArrow",
-      "__hideNextMonthArrow",  "__hidePrevMonthArrow",  "isMobile",  "isOpen",  "selectedDateElem",
-      "minDateHasTime", "maxDateHasTime", "days", "daysContainer", "_input",
-      "_positionElement", "innerContainer",  "rContainer",  "monthNav",  "todayDateElem",
-      "calendarContainer", "weekdayContainer", "prevMonthNav", "nextMonthNav",
-      "currentMonthElement", "currentYearElement", "navigationCurrentMonth",
-      "selectedDateElem", "config"
+      "_showTimeInput",
+      "latestSelectedDateObj",
+      "_hideNextMonthArrow",
+      "_hidePrevMonthArrow",
+      "__hideNextMonthArrow",
+      "__hidePrevMonthArrow",
+      "isMobile",
+      "isOpen",
+      "selectedDateElem",
+      "minDateHasTime",
+      "maxDateHasTime",
+      "days",
+      "daysContainer",
+      "_input",
+      "_positionElement",
+      "innerContainer",
+      "rContainer",
+      "monthNav",
+      "todayDateElem",
+      "calendarContainer",
+      "weekdayContainer",
+      "prevMonthNav",
+      "nextMonthNav",
+      "currentMonthElement",
+      "currentYearElement",
+      "navigationCurrentMonth",
+      "selectedDateElem",
+      "config",
     ] as Array<keyof Instance>).forEach(k => {
       try {
         delete self[k];
-      }
-      catch (e) {}
-    })
+      } catch (e) {}
+    });
   }
 
   function isCalendarElem(elem: HTMLElement) {
@@ -1085,21 +1259,28 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
   function documentClick(e: MouseEvent) {
     if (self.isOpen && !self.config.inline) {
       const isCalendarElement = isCalendarElem(e.target as HTMLElement);
-      const isInput = e.target === self.input
-        || e.target === self.altInput
-        || self.element.contains(e.target as HTMLElement)
-        || (
-          // web components
-          // e.path is not present in all browsers. circumventing typechecks
-          (e as any).path && (e as any).path.indexOf &&
-          (~(e as any).path.indexOf(self.input) || ~(e as any).path.indexOf(self.altInput))
-        );
+      const isInput =
+        e.target === self.input ||
+        e.target === self.altInput ||
+        self.element.contains(e.target as HTMLElement) ||
+        // web components
+        // e.path is not present in all browsers. circumventing typechecks
+        ((e as any).path &&
+          (e as any).path.indexOf &&
+          (~(e as any).path.indexOf(self.input) ||
+            ~(e as any).path.indexOf(self.altInput)));
 
-      const lostFocus = e.type === "blur"
-        ? isInput && e.relatedTarget && !isCalendarElem(e.relatedTarget as HTMLElement)
-        : !isInput && !isCalendarElement;
+      const lostFocus =
+        e.type === "blur"
+          ? isInput &&
+            e.relatedTarget &&
+            !isCalendarElem(e.relatedTarget as HTMLElement)
+          : !isInput && !isCalendarElement;
 
-      if(lostFocus && self.config.ignoredFocusElements.indexOf(e.target as HTMLElement) === -1) {
+      if (
+        lostFocus &&
+        self.config.ignoredFocusElements.indexOf(e.target as HTMLElement) === -1
+      ) {
         self.close();
 
         if (self.config.mode === "range" && self.selectedDates.length === 1) {
@@ -1112,9 +1293,11 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
 
   function changeYear(newYear: number) {
     if (
-      !newYear
-      || (self.currentYearElement.min && newYear < parseInt(self.currentYearElement.min))
-      || (self.currentYearElement.max && newYear > parseInt(self.currentYearElement.max))
+      !newYear ||
+      (self.currentYearElement.min &&
+        newYear < parseInt(self.currentYearElement.min)) ||
+      (self.currentYearElement.max &&
+        newYear > parseInt(self.currentYearElement.max))
     )
       return;
 
@@ -1123,15 +1306,18 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
 
     self.currentYear = newYearNum || self.currentYear;
 
-    if (self.config.maxDate  && self.currentYear === self.config.maxDate.getFullYear()) {
+    if (
+      self.config.maxDate &&
+      self.currentYear === self.config.maxDate.getFullYear()
+    ) {
       self.currentMonth = Math.min(
         self.config.maxDate.getMonth(),
         self.currentMonth
       );
-    }
-
-    else if (
-      self.config.minDate && self.currentYear === self.config.minDate.getFullYear()) {
+    } else if (
+      self.config.minDate &&
+      self.currentYear === self.config.minDate.getFullYear()
+    ) {
       self.currentMonth = Math.max(
         self.config.minDate.getMonth(),
         self.currentMonth
@@ -1148,24 +1334,26 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
     const dateToCheck = self.parseDate(date, undefined, timeless); // timeless
 
     if (
-      (self.config.minDate && dateToCheck && compareDates(
-        dateToCheck,
-        self.config.minDate,
-        timeless !== undefined ? timeless : !self.minDateHasTime
-      ) < 0) || (self.config.maxDate && dateToCheck && compareDates(
-        dateToCheck,
-        self.config.maxDate,
-        timeless !== undefined ? timeless : !self.maxDateHasTime
-      ) > 0)
+      (self.config.minDate &&
+        dateToCheck &&
+        compareDates(
+          dateToCheck,
+          self.config.minDate,
+          timeless !== undefined ? timeless : !self.minDateHasTime
+        ) < 0) ||
+      (self.config.maxDate &&
+        dateToCheck &&
+        compareDates(
+          dateToCheck,
+          self.config.maxDate,
+          timeless !== undefined ? timeless : !self.maxDateHasTime
+        ) > 0)
     )
       return false;
 
-    if (!self.config.enable.length && !self.config.disable.length)
-      return true;
+    if (!self.config.enable.length && !self.config.disable.length) return true;
 
-    if (dateToCheck === undefined)
-      return false;
-
+    if (dateToCheck === undefined) return false;
 
     const bool = self.config.enable.length > 0,
       array = bool ? self.config.enable : self.config.disable;
@@ -1173,23 +1361,32 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
     for (let i = 0, d; i < array.length; i++) {
       d = array[i];
 
-      if (typeof d === "function" && d(dateToCheck)) // disabled by function
+      if (
+        typeof d === "function" &&
+        d(dateToCheck) // disabled by function
+      )
         return bool;
-
-      else if (d instanceof Date && dateToCheck !== undefined && d.getTime() === dateToCheck.getTime())
+      else if (
+        d instanceof Date &&
+        dateToCheck !== undefined &&
+        d.getTime() === dateToCheck.getTime()
+      )
         // disabled by date
         return bool;
-
       else if (typeof d === "string" && dateToCheck !== undefined) {
         // disabled by date string
         const parsed = self.parseDate(d, undefined, true);
-        return parsed && parsed.getTime() === dateToCheck.getTime() ? bool : !bool
-
-      }
-
-      else if ( // disabled by range
-        typeof d === "object" && dateToCheck !== undefined && (d as DateRangeLimit).from && (d as DateRangeLimit).to &&
-        dateToCheck.getTime() >= (d as DateRangeLimit<Date>).from.getTime() && dateToCheck.getTime() <= (d as DateRangeLimit<Date>).to.getTime()
+        return parsed && parsed.getTime() === dateToCheck.getTime()
+          ? bool
+          : !bool;
+      } else if (
+        // disabled by range
+        typeof d === "object" &&
+        dateToCheck !== undefined &&
+        (d as DateRangeLimit).from &&
+        (d as DateRangeLimit).to &&
+        dateToCheck.getTime() >= (d as DateRangeLimit<Date>).from.getTime() &&
+        dateToCheck.getTime() <= (d as DateRangeLimit<Date>).to.getTime()
       )
         return bool;
     }
@@ -1214,23 +1411,16 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
             : self.config.dateFormat
         );
         return (e.target as HTMLElement).blur();
-      }
-
-      else
-        self.open();
-    }
-
-    else if (calendarElem || allowKeydown || allowInlineKeydown) {
-      const isTimeObj = !!self.timeContainer
-        && self.timeContainer.contains(e.target as HTMLElement);
+      } else self.open();
+    } else if (calendarElem || allowKeydown || allowInlineKeydown) {
+      const isTimeObj =
+        !!self.timeContainer &&
+        self.timeContainer.contains(e.target as HTMLElement);
 
       switch (e.key) {
         case "Enter":
-          if (isTimeObj)
-            updateValue();
-
-          else
-            selectDate(e);
+          if (isTimeObj) updateValue();
+          else selectDate(e);
 
           break;
 
@@ -1241,8 +1431,7 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
 
         case "Backspace":
         case "Delete":
-          if (isInput && !self.config.allowInput)
-            self.clear();
+          if (isInput && !self.config.allowInput) self.clear();
           break;
 
         case "ArrowLeft":
@@ -1253,15 +1442,9 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
             if (self.daysContainer) {
               const delta = e.key === "ArrowRight" ? 1 : -1;
 
-              if (!e.ctrlKey)
-                focusOnDay((e.target as DayElement).$i, delta);
-
-              else
-                changeMonth(delta, true);
-            }
-
-            else if (self.hourElement && !isTimeObj)
-              self.hourElement.focus();
+              if (!e.ctrlKey) focusOnDay((e.target as DayElement).$i, delta);
+              else changeMonth(delta, true);
+            } else if (self.hourElement && !isTimeObj) self.hourElement.focus();
           }
 
           break;
@@ -1275,15 +1458,10 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
             if (e.ctrlKey) {
               changeYear(self.currentYear - delta);
               focusOnDay((e.target as DayElement).$i, 0);
-            }
-
-            else if (!isTimeObj)
+            } else if (!isTimeObj)
               focusOnDay((e.target as DayElement).$i, delta * 7);
-          }
-
-          else if (self.config.enableTime) {
-            if (!isTimeObj && self.hourElement)
-              self.hourElement.focus();
+          } else if (self.config.enableTime) {
+            if (!isTimeObj && self.hourElement) self.hourElement.focus();
             updateTime(e);
             self._debouncedChange();
           }
@@ -1295,21 +1473,14 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
             e.preventDefault();
             // can't have hour elem without minute element
             (self.minuteElement as HTMLInputElement).select();
-          }
-
-          else if (
+          } else if (
             e.target === self.minuteElement &&
             (self.secondElement || self.amPM)
           ) {
             e.preventDefault();
-            if (self.secondElement !== undefined)
-              self.secondElement.focus();
-
-            else if (self.amPM !== undefined)
-              self.amPM.focus();
-          }
-
-          else if (e.target === self.secondElement && self.amPM) {
+            if (self.secondElement !== undefined) self.secondElement.focus();
+            else if (self.amPM !== undefined) self.amPM.focus();
+          } else if (e.target === self.secondElement && self.amPM) {
             e.preventDefault();
             self.amPM.focus();
           }
@@ -1332,8 +1503,8 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
           }
           break;
 
-        default: break;
-
+        default:
+          break;
       }
 
       triggerEvent("KeyDown", e);
@@ -1341,13 +1512,28 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
   }
 
   function onMouseOver(elem: DayElement) {
-    if (self.selectedDates.length !== 1 || !elem.classList.contains("flatpickr-day") || self.minRangeDate === undefined || self.maxRangeDate === undefined)
+    if (
+      self.selectedDates.length !== 1 ||
+      !elem.classList.contains("flatpickr-day") ||
+      self.minRangeDate === undefined ||
+      self.maxRangeDate === undefined
+    )
       return;
 
     let hoverDate = elem.dateObj,
-      initialDate = self.parseDate(self.selectedDates[0], undefined, true) as Date,
-      rangeStartDate = Math.min(hoverDate.getTime(), self.selectedDates[0].getTime()),
-      rangeEndDate = Math.max(hoverDate.getTime(), self.selectedDates[0].getTime()),
+      initialDate = self.parseDate(
+        self.selectedDates[0],
+        undefined,
+        true
+      ) as Date,
+      rangeStartDate = Math.min(
+        hoverDate.getTime(),
+        self.selectedDates[0].getTime()
+      ),
+      rangeEndDate = Math.max(
+        hoverDate.getTime(),
+        self.selectedDates[0].getTime()
+      ),
       containsDisabled = false;
 
     for (let t = rangeStartDate; t < rangeEndDate; t += duration.DAY) {
@@ -1358,37 +1544,40 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
     }
 
     for (
-      let timestamp = (self.days.childNodes[0] as DayElement).dateObj.getTime(), i = 0;
+      let timestamp = (self.days.childNodes[0] as DayElement).dateObj.getTime(),
+        i = 0;
       i < 42;
       i++, timestamp += duration.DAY
     ) {
-      const outOfRange = timestamp < self.minRangeDate.getTime()
-        || timestamp > self.maxRangeDate.getTime(),
+      const outOfRange =
+          timestamp < self.minRangeDate.getTime() ||
+          timestamp > self.maxRangeDate.getTime(),
         dayElem = self.days.childNodes[i] as DayElement;
 
       if (outOfRange) {
         dayElem.classList.add("notAllowed");
         ["inRange", "startRange", "endRange"].forEach(c => {
-          dayElem.classList.remove(c)
+          dayElem.classList.remove(c);
         });
         continue;
-      }
-
-      else if (containsDisabled && !outOfRange)
-        continue;
+      } else if (containsDisabled && !outOfRange) continue;
 
       ["startRange", "inRange", "endRange", "notAllowed"].forEach(c => {
-        dayElem.classList.remove(c)
+        dayElem.classList.remove(c);
       });
 
-      const minRangeDate = Math.max(self.minRangeDate.getTime(), rangeStartDate),
+      const minRangeDate = Math.max(
+          self.minRangeDate.getTime(),
+          rangeStartDate
+        ),
         maxRangeDate = Math.min(self.maxRangeDate.getTime(), rangeEndDate);
 
-      elem.classList.add(hoverDate < self.selectedDates[0] ? "startRange" : "endRange");
+      elem.classList.add(
+        hoverDate < self.selectedDates[0] ? "startRange" : "endRange"
+      );
 
       if (initialDate < hoverDate && timestamp === initialDate.getTime())
         dayElem.classList.add("startRange");
-
       else if (initialDate > hoverDate && timestamp === initialDate.getTime())
         dayElem.classList.add("endRange");
 
@@ -1417,8 +1606,7 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
       return;
     }
 
-    if (self.isOpen || self._input.disabled || self.config.inline)
-      return;
+    if (self.isOpen || self._input.disabled || self.config.inline) return;
 
     self.isOpen = true;
     self.calendarContainer.classList.add("open");
@@ -1430,13 +1618,15 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
 
   function minMaxDateSetter(type: "min" | "max") {
     return (date: DateOption) => {
-      const dateObj = self.config[`_${type}Date`] = self.parseDate(date);
-      const inverseDateObj = self.config[`_${type === "min" ? "max" : "min"}Date`];
+      const dateObj = (self.config[`_${type}Date`] = self.parseDate(date));
+      const inverseDateObj =
+        self.config[`_${type === "min" ? "max" : "min"}Date`];
 
       if (dateObj !== undefined) {
-        self[type === "min" ? "minDateHasTime" : "maxDateHasTime"] = (dateObj as Date).getHours() > 0
-          || (dateObj as Date).getMinutes() > 0
-          || (dateObj as Date).getSeconds() > 0;
+        self[type === "min" ? "minDateHasTime" : "maxDateHasTime"] =
+          (dateObj as Date).getHours() > 0 ||
+          (dateObj as Date).getMinutes() > 0 ||
+          (dateObj as Date).getSeconds() > 0;
       }
 
       if (self.selectedDates) {
@@ -1446,37 +1636,59 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
         updateValue();
       }
 
-      if(self.daysContainer) {
+      if (self.daysContainer) {
         redraw();
 
-        if(dateObj !== undefined)
+        if (dateObj !== undefined)
           self.currentYearElement[type] = dateObj.getFullYear().toString();
-        else
-          self.currentYearElement.removeAttribute(type);
+        else self.currentYearElement.removeAttribute(type);
 
-        self.currentYearElement.disabled = !!inverseDateObj && dateObj !== undefined &&
+        self.currentYearElement.disabled =
+          !!inverseDateObj &&
+          dateObj !== undefined &&
           inverseDateObj.getFullYear() === dateObj.getFullYear();
       }
-    }
+    };
   }
 
   function parseConfig() {
     let boolOpts: Array<keyof Options> = [
-      "wrap", "weekNumbers", "allowInput", "clickOpens", "time_24hr", "enableTime", "noCalendar", "altInput", "shorthandCurrentMonth", "inline", "static", "enableSeconds", "disableMobile"
+      "wrap",
+      "weekNumbers",
+      "allowInput",
+      "clickOpens",
+      "time_24hr",
+      "enableTime",
+      "noCalendar",
+      "altInput",
+      "shorthandCurrentMonth",
+      "inline",
+      "static",
+      "enableSeconds",
+      "disableMobile",
     ];
 
     let hooks: Array<keyof Options> = [
-      "onChange", "onClose", "onDayCreate", "onDestroy", "onKeyDown", "onMonthChange",
-      "onOpen", "onParseConfig", "onReady", "onValueUpdate", "onYearChange"
+      "onChange",
+      "onClose",
+      "onDayCreate",
+      "onDestroy",
+      "onKeyDown",
+      "onMonthChange",
+      "onOpen",
+      "onParseConfig",
+      "onReady",
+      "onValueUpdate",
+      "onYearChange",
     ];
 
     self.config = {
       ...flatpickr.defaultConfig,
-    } as ParsedOptions
+    } as ParsedOptions;
 
     const userConfig = {
       ...instanceConfig,
-      ...JSON.parse(JSON.stringify(element.dataset || {}))
+      ...JSON.parse(JSON.stringify(element.dataset || {})),
     } as Options;
 
     const formats = {} as Record<"dateFormat" | "altFormat", string>;
@@ -1484,125 +1696,132 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
     // self.config.parseDate = userConfig.parseDate;
     // self.config.formatDate = userConfig.formatDate;
 
-
     Object.defineProperty(self.config, "enable", {
       get: () => self.config._enable || [],
-      set: (dates) => { self.config._enable = parseDateRules(dates) }
+      set: dates => {
+        self.config._enable = parseDateRules(dates);
+      },
     });
 
     Object.defineProperty(self.config, "disable", {
       get: () => self.config._disable || [],
-      set: (dates) => { self.config._disable = parseDateRules(dates) }
+      set: dates => {
+        self.config._disable = parseDateRules(dates);
+      },
     });
 
     if (!userConfig.dateFormat && userConfig.enableTime) {
       formats.dateFormat = userConfig.noCalendar
         ? "H:i" + (userConfig.enableSeconds ? ":S" : "")
-        : flatpickr.defaultConfig.dateFormat + " H:i" + (userConfig.enableSeconds ? ":S" : "");
+        : flatpickr.defaultConfig.dateFormat +
+          " H:i" +
+          (userConfig.enableSeconds ? ":S" : "");
     }
 
     if (userConfig.altInput && userConfig.enableTime && !userConfig.altFormat) {
       formats.altFormat = userConfig.noCalendar
         ? "h:i" + (userConfig.enableSeconds ? ":S K" : " K")
-        : flatpickr.defaultConfig.altFormat + ` h:i${userConfig.enableSeconds ? ":S" : ""} K`;
+        : flatpickr.defaultConfig.altFormat +
+          ` h:i${userConfig.enableSeconds ? ":S" : ""} K`;
     }
 
     Object.defineProperty(self.config, "minDate", {
       get: function() {
         return this._minDate;
       },
-      set: minMaxDateSetter("min")
+      set: minMaxDateSetter("min"),
     });
 
     Object.defineProperty(self.config, "maxDate", {
       get: function() {
         return this._maxDate;
       },
-      set: minMaxDateSetter("max")
+      set: minMaxDateSetter("max"),
     });
 
     Object.assign(self.config, formats, userConfig);
 
     for (let i = 0; i < boolOpts.length; i++)
-      self.config[boolOpts[i]] = (self.config[boolOpts[i]] === true) || self.config[boolOpts[i]] === "true";
+      self.config[boolOpts[i]] =
+        self.config[boolOpts[i]] === true ||
+        self.config[boolOpts[i]] === "true";
 
-    for (let i = hooks.length; i--;) {
+    for (let i = hooks.length; i--; ) {
       if (self.config[hooks[i]] !== undefined) {
-        self.config[hooks[i]] = arrayify(
-          self.config[hooks[i]] || []
-        ).map(bindToInstance);
+        self.config[hooks[i]] = arrayify(self.config[hooks[i]] || []).map(
+          bindToInstance
+        );
       }
     }
 
     for (let i = 0; i < self.config.plugins.length; i++) {
-      const pluginConf = self.config.plugins[i](self) || {} as Options;
+      const pluginConf = self.config.plugins[i](self) || ({} as Options);
       for (let key in pluginConf) {
         if (~hooks.indexOf(key as keyof Options)) {
-          self.config[key] = arrayify(pluginConf[key as keyof Options] as () => void)
+          self.config[key] = arrayify(pluginConf[
+            key as keyof Options
+          ] as () => void)
             .map(bindToInstance)
             .concat(self.config[key]);
-        }
-
-        else if (typeof userConfig[key as keyof Options] === "undefined")
+        } else if (typeof userConfig[key as keyof Options] === "undefined")
           self.config[key] = pluginConf[key as keyof Options];
       }
     }
 
-    self.isMobile = (
+    self.isMobile =
       !self.config.disableMobile &&
       !self.config.inline &&
       self.config.mode === "single" &&
       !self.config.disable.length &&
       !self.config.enable.length &&
       !self.config.weekNumbers &&
-      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-    );
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      );
 
     triggerEvent("ParseConfig");
   }
 
   function setupLocale() {
-    if (typeof self.config.locale !== "object" &&
+    if (
+      typeof self.config.locale !== "object" &&
       typeof flatpickr.l10ns[self.config.locale] === "undefined"
     )
       console.warn(`flatpickr: invalid locale ${self.config.locale}`);
 
     self.l10n = {
       ...flatpickr.l10ns.default as Locale,
-      ...(typeof self.config.locale === "object"
-      ? self.config.locale
-      : self.config.locale !== "default"
-        ? flatpickr.l10ns[self.config.locale]
-        : undefined
-      )
-    }
+      ...typeof self.config.locale === "object"
+        ? self.config.locale
+        : self.config.locale !== "default"
+          ? flatpickr.l10ns[self.config.locale]
+          : undefined,
+    };
   }
 
   function positionCalendar(positionElement = self._positionElement) {
-    if (self.calendarContainer === undefined)
-      return;
+    if (self.calendarContainer === undefined) return;
 
     const calendarHeight = self.calendarContainer.offsetHeight,
       calendarWidth = self.calendarContainer.offsetWidth,
       configPos = self.config.position,
       inputBounds = positionElement.getBoundingClientRect(),
       distanceFromBottom = window.innerHeight - inputBounds.bottom,
-      showOnTop = configPos === "above" || (
-        configPos !== "below"
-        && distanceFromBottom < calendarHeight
-        && inputBounds.top > calendarHeight
-      );
+      showOnTop =
+        configPos === "above" ||
+        (configPos !== "below" &&
+          distanceFromBottom < calendarHeight &&
+          inputBounds.top > calendarHeight);
 
-    let top = (window.pageYOffset + inputBounds.top) + (!showOnTop
-      ? (positionElement.offsetHeight + 2)
-      : (- calendarHeight - 2)
-    );
+    let top =
+      window.pageYOffset +
+      inputBounds.top +
+      (!showOnTop ? positionElement.offsetHeight + 2 : -calendarHeight - 2);
 
     toggleClass(self.calendarContainer, "arrowTop", !showOnTop);
     toggleClass(self.calendarContainer, "arrowBottom", showOnTop);
 
-    if (self.config.inline)
-      return;
+    if (self.config.inline) return;
 
     const left = window.pageXOffset + inputBounds.left;
     const right = window.document.body.offsetWidth - inputBounds.right;
@@ -1610,25 +1829,21 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
 
     toggleClass(self.calendarContainer, "rightMost", rightMost);
 
-    if (self.config.static)
-      return;
+    if (self.config.static) return;
 
     self.calendarContainer.style.top = `${top}px`;
 
     if (!rightMost) {
       self.calendarContainer.style.left = `${left}px`;
       self.calendarContainer.style.right = "auto";
-    }
-
-    else {
+    } else {
       self.calendarContainer.style.left = "auto";
       self.calendarContainer.style.right = `${right}px`;
     }
   }
 
   function redraw() {
-    if (self.config.noCalendar || self.isMobile)
-      return;
+    if (self.config.noCalendar || self.isMobile) return;
 
     buildWeekdays();
     updateNavigationCurrentMonth();
@@ -1639,48 +1854,41 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
     e.preventDefault();
     e.stopPropagation();
 
-    const isSelectable = (day: Element) => day.classList.contains("flatpickr-day") &&
+    const isSelectable = (day: Element) =>
+      day.classList.contains("flatpickr-day") &&
       !day.classList.contains("disabled") &&
-      !day.classList.contains("notAllowed")
+      !day.classList.contains("notAllowed");
 
-    const t = findParent(e.target as Node, isSelectable)
+    const t = findParent(e.target as Node, isSelectable);
 
-    if (t === undefined)
-      return;
+    if (t === undefined) return;
 
     const target = t as DayElement;
 
-    const selectedDate
-      = self.latestSelectedDateObj
-      = new Date(target.dateObj.getTime());
+    const selectedDate = (self.latestSelectedDateObj = new Date(
+      target.dateObj.getTime()
+    ));
 
-    const shouldChangeMonth = selectedDate.getMonth() !== self.currentMonth
-      && self.config.mode !== "range";
+    const shouldChangeMonth =
+      selectedDate.getMonth() !== self.currentMonth &&
+      self.config.mode !== "range";
 
     self.selectedDateElem = target;
 
-    if (self.config.mode === "single")
-      self.selectedDates = [selectedDate];
-
+    if (self.config.mode === "single") self.selectedDates = [selectedDate];
     else if (self.config.mode === "multiple") {
       const selectedIndex = isDateSelected(selectedDate);
 
-      if (selectedIndex)
-        self.selectedDates.splice(parseInt(selectedIndex), 1);
-
-      else
-        self.selectedDates.push(selectedDate);
-    }
-
-    else if (self.config.mode === "range") {
-      if (self.selectedDates.length === 2)
-        self.clear();
+      if (selectedIndex) self.selectedDates.splice(parseInt(selectedIndex), 1);
+      else self.selectedDates.push(selectedDate);
+    } else if (self.config.mode === "range") {
+      if (self.selectedDates.length === 2) self.clear();
 
       self.selectedDates.push(selectedDate);
 
       // unless selecting same date twice, sort ascendingly
       if (compareDates(selectedDate, self.selectedDates[0], true) !== 0)
-        self.selectedDates.sort((a,b) => a.getTime() - b.getTime());
+        self.selectedDates.sort((a, b) => a.getTime() - b.getTime());
     }
 
     setHoursFromInputs();
@@ -1690,82 +1898,88 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
       self.currentYear = selectedDate.getFullYear();
       self.currentMonth = selectedDate.getMonth();
 
-      if (isNewYear)
-        triggerEvent("YearChange");
+      if (isNewYear) triggerEvent("YearChange");
 
       triggerEvent("MonthChange");
     }
 
     buildDays();
 
-    if (self.config.minDate && self.minDateHasTime  && self.config.enableTime
-      && compareDates(selectedDate, self.config.minDate) === 0
+    if (
+      self.config.minDate &&
+      self.minDateHasTime &&
+      self.config.enableTime &&
+      compareDates(selectedDate, self.config.minDate) === 0
     )
       setHoursFromDate(self.config.minDate);
 
     updateValue();
 
     if (self.config.enableTime)
-      setTimeout(() => self.showTimeInput = true, 50);
+      setTimeout(() => (self.showTimeInput = true), 50);
 
     if (self.config.mode === "range") {
-      if(self.selectedDates.length === 1) {
+      if (self.selectedDates.length === 1) {
         onMouseOver(target);
 
-        self._hidePrevMonthArrow = self._hidePrevMonthArrow ||
-          self.minRangeDate !== undefined && self.minRangeDate > (self.days.childNodes[0] as DayElement).dateObj;
+        self._hidePrevMonthArrow =
+          self._hidePrevMonthArrow ||
+          (self.minRangeDate !== undefined &&
+            self.minRangeDate >
+              (self.days.childNodes[0] as DayElement).dateObj);
 
-        self._hideNextMonthArrow = self._hideNextMonthArrow ||
-          self.maxRangeDate !== undefined && self.maxRangeDate < new Date(self.currentYear, self.currentMonth + 1, 1);
-      }
-
-      else
-        updateNavigationCurrentMonth();
+        self._hideNextMonthArrow =
+          self._hideNextMonthArrow ||
+          (self.maxRangeDate !== undefined &&
+            self.maxRangeDate <
+              new Date(self.currentYear, self.currentMonth + 1, 1));
+      } else updateNavigationCurrentMonth();
     }
 
     triggerEvent("Change");
 
     // maintain focus
-    if (!shouldChangeMonth)
-      focusOnDay(target.$i, 0);
+    if (!shouldChangeMonth) focusOnDay(target.$i, 0);
     else
-      afterDayAnim(() => self.selectedDateElem && self.selectedDateElem.focus());
+      afterDayAnim(
+        () => self.selectedDateElem && self.selectedDateElem.focus()
+      );
 
     if (self.hourElement !== undefined)
-      setTimeout(() => self.hourElement !== undefined && self.hourElement.select(), 451);
+      setTimeout(
+        () => self.hourElement !== undefined && self.hourElement.select(),
+        451
+      );
 
     if (self.config.closeOnSelect) {
       const single = self.config.mode === "single" && !self.config.enableTime;
-      const range = (
+      const range =
         self.config.mode === "range" &&
         self.selectedDates.length === 2 &&
-        !self.config.enableTime
-      );
+        !self.config.enableTime;
 
-      if (single || range)
-        self.close();
+      if (single || range) self.close();
     }
-
   }
 
   function set(option: Record<keyof Options, any> | keyof Options, value: any) {
     if (option !== null && typeof option === "object")
-      Object.assign(self.config, option)
-    else
-      self.config[option] = value;
+      Object.assign(self.config, option);
+    else self.config[option] = value;
 
     self.redraw();
     jumpToDate();
   }
 
-  function setSelectedDate(inputDate: DateOption | DateOption[], format?: string) {
+  function setSelectedDate(
+    inputDate: DateOption | DateOption[],
+    format?: string
+  ) {
     let dates: Array<Date | undefined> = [];
     if (inputDate instanceof Array)
       dates = inputDate.map(d => self.parseDate(d, format));
-
     else if (inputDate instanceof Date || typeof inputDate === "number")
       dates = [self.parseDate(inputDate, format)];
-
     else if (typeof inputDate === "string") {
       switch (self.config.mode) {
         case "single":
@@ -1785,7 +1999,8 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
 
           break;
 
-        default: break;
+        default:
+          break;
       }
     }
 
@@ -1793,12 +2008,15 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
       d => d instanceof Date && isEnabled(d, false)
     ) as Date[];
 
-    self.selectedDates.sort((a,b) => a.getTime() - b.getTime());
+    self.selectedDates.sort((a, b) => a.getTime() - b.getTime());
   }
 
-  function setDate(date: DateOption | DateOption[], triggerChange = false, format = undefined) {
-    if (date !== 0 && !date)
-      return self.clear(triggerChange);
+  function setDate(
+    date: DateOption | DateOption[],
+    triggerChange = false,
+    format = undefined
+  ) {
+    if (date !== 0 && !date) return self.clear(triggerChange);
 
     setSelectedDate(date, format);
 
@@ -1811,24 +2029,39 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
     setHoursFromDate();
     updateValue(triggerChange);
 
-    if (triggerChange)
-      triggerEvent("Change");
+    if (triggerChange) triggerEvent("Change");
   }
 
   function parseDateRules(arr: DateLimit[]): DateLimit<Date>[] {
-    return arr.map(rule => {
-      if (typeof rule === "string" || typeof rule === "number" || rule instanceof Date) {
-        return self.parseDate((rule as Date | string | number), undefined, true) as Date;
-      }
+    return arr
+      .map(rule => {
+        if (
+          typeof rule === "string" ||
+          typeof rule === "number" ||
+          rule instanceof Date
+        ) {
+          return self.parseDate(
+            rule as Date | string | number,
+            undefined,
+            true
+          ) as Date;
+        } else if (
+          rule &&
+          typeof rule === "object" &&
+          (rule as DateRangeLimit).from &&
+          (rule as DateRangeLimit).to
+        )
+          return {
+            from: self.parseDate(
+              (rule as DateRangeLimit).from,
+              undefined
+            ) as Date,
+            to: self.parseDate((rule as DateRangeLimit).to, undefined) as Date,
+          };
 
-      else if (rule && typeof rule === "object" && (rule as DateRangeLimit).from && (rule as DateRangeLimit).to)
-        return {
-          from: self.parseDate((rule as DateRangeLimit).from, undefined) as Date,
-          to: self.parseDate((rule as DateRangeLimit).to, undefined) as Date,
-        }
-
-      return rule;
-    }).filter(x => x) as DateLimit<Date>[]; // remove falsy values
+        return rule;
+      })
+      .filter(x => x) as DateLimit<Date>[]; // remove falsy values
   }
 
   function setupDates() {
@@ -1836,17 +2069,17 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
     self.now = new Date();
 
     const preloadedDate = self.config.defaultDate || self.input.value;
-    if (preloadedDate)
-      setSelectedDate(preloadedDate, self.config.dateFormat);
+    if (preloadedDate) setSelectedDate(preloadedDate, self.config.dateFormat);
 
-    const initialDate = (self.selectedDates.length
+    const initialDate = self.selectedDates.length
       ? self.selectedDates[0]
-      : self.config.minDate && self.config.minDate.getTime() > self.now.getTime()
+      : self.config.minDate &&
+        self.config.minDate.getTime() > self.now.getTime()
         ? self.config.minDate
-        : self.config.maxDate && self.config.maxDate.getTime() < self.now.getTime()
+        : self.config.maxDate &&
+          self.config.maxDate.getTime() < self.now.getTime()
           ? self.config.maxDate
-          : self.now
-    );
+          : self.now;
 
     self.currentYear = initialDate.getFullYear();
     self.currentMonth = initialDate.getMonth();
@@ -1854,76 +2087,90 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
     if (self.selectedDates.length)
       self.latestSelectedDateObj = self.selectedDates[0];
 
-    self.minDateHasTime = !!self.config.minDate && (
-      self.config.minDate.getHours() > 0
-      || self.config.minDate.getMinutes() > 0
-      || self.config.minDate.getSeconds() > 0);
+    self.minDateHasTime =
+      !!self.config.minDate &&
+      (self.config.minDate.getHours() > 0 ||
+        self.config.minDate.getMinutes() > 0 ||
+        self.config.minDate.getSeconds() > 0);
 
-    self.maxDateHasTime = !!self.config.maxDate && (
-      self.config.maxDate.getHours() > 0
-      || self.config.maxDate.getMinutes() > 0
-      || self.config.maxDate.getSeconds() > 0);
+    self.maxDateHasTime =
+      !!self.config.maxDate &&
+      (self.config.maxDate.getHours() > 0 ||
+        self.config.maxDate.getMinutes() > 0 ||
+        self.config.maxDate.getSeconds() > 0);
 
     Object.defineProperty(self, "showTimeInput", {
-        get: () => self._showTimeInput,
-        set (bool: boolean) {
-          self._showTimeInput = bool;
-          if (self.calendarContainer)
-            toggleClass(self.calendarContainer, "showTimeInput", bool);
-          positionCalendar();
-        }
-      }
-    )
+      get: () => self._showTimeInput,
+      set(bool: boolean) {
+        self._showTimeInput = bool;
+        if (self.calendarContainer)
+          toggleClass(self.calendarContainer, "showTimeInput", bool);
+        positionCalendar();
+      },
+    });
   }
 
-  function formatDate (dateObj: Date, frmt: string): string {
+  function formatDate(dateObj: Date, frmt: string): string {
     if (self.config !== undefined && self.config.formatDate !== undefined)
       return self.config.formatDate(dateObj, frmt);
 
-    return frmt.split("").map((c, i, arr) => formats[c as token] && arr[i - 1] !== "\\"
-      ? formats[c as token](dateObj, self.l10n, self.config)
-      : c !== "\\" ? c : ""
-    ).join("");
+    return frmt
+      .split("")
+      .map(
+        (c, i, arr) =>
+          formats[c as token] && arr[i - 1] !== "\\"
+            ? formats[c as token](dateObj, self.l10n, self.config)
+            : c !== "\\" ? c : ""
+      )
+      .join("");
   }
 
-  function parseDate (date: Date | string | number, givenFormat?: string, timeless?: boolean): Date | undefined {
-    if (date !== 0 && !date)
-      return undefined;
+  function parseDate(
+    date: Date | string | number,
+    givenFormat?: string,
+    timeless?: boolean
+  ): Date | undefined {
+    if (date !== 0 && !date) return undefined;
 
     let parsedDate: Date | undefined;
     const date_orig = date;
 
-    if (date instanceof Date)
-      parsedDate = new Date(date.getTime()); // create a copy
+    if (date instanceof Date) parsedDate = new Date(date.getTime());
+    else if (
+      typeof date !== "string" &&
+      date.toFixed !== undefined // timestamp
+    )
+      // create a copy
 
-    else if (typeof date !== "string" && date.toFixed !== undefined) // timestamp
       parsedDate = new Date(date);
-
-    else if (typeof date === "string") { // date string
-      const format = givenFormat || (self.config || flatpickr.defaultConfig).dateFormat;
+    else if (typeof date === "string") {
+      // date string
+      const format =
+        givenFormat || (self.config || flatpickr.defaultConfig).dateFormat;
       const datestr = String(date).trim();
 
       if (datestr === "today") {
         parsedDate = new Date();
         timeless = true;
-      }
-
-      else if (/Z$/.test(datestr) || /GMT$/.test(datestr)) // datestrings w/ timezone
+      } else if (
+        /Z$/.test(datestr) ||
+        /GMT$/.test(datestr) // datestrings w/ timezone
+      )
         parsedDate = new Date(date);
-
       else if (self.config && self.config.parseDate)
         parsedDate = self.config.parseDate(date, format);
-
       else {
-        parsedDate = !self.config || !self.config.noCalendar
-          ? new Date(new Date().getFullYear(), 0, 1, 0, 0, 0 ,0)
-          : new Date(new Date().setHours(0,0,0,0)) as Date;
+        parsedDate =
+          !self.config || !self.config.noCalendar
+            ? new Date(new Date().getFullYear(), 0, 1, 0, 0, 0, 0)
+            : new Date(new Date().setHours(0, 0, 0, 0)) as Date;
 
-        let matched, ops: { fn: RevFormatFn, val: string }[] = [];
+        let matched,
+          ops: { fn: RevFormatFn; val: string }[] = [];
 
         for (let i = 0, matchIndex = 0, regexStr = ""; i < format.length; i++) {
           const token = format[i] as token;
-          const isBackSlash = token as string === "\\";
+          const isBackSlash = (token as string) === "\\";
           const escaped = format[i - 1] === "\\" || isBackSlash;
 
           if (tokenRegex[token] && !escaped) {
@@ -1932,18 +2179,16 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
             if (match && (matched = true)) {
               ops[token !== "Y" ? "push" : "unshift"]({
                 fn: revFormat[token],
-                val: match[++matchIndex]
+                val: match[++matchIndex],
               });
             }
-          }
-
-          else if (!isBackSlash)
-            regexStr += "."; // don't really care
+          } else if (!isBackSlash) regexStr += "."; // don't really care
 
           ops.forEach(
-            ({ fn, val }) => parsedDate = fn(parsedDate as Date, val, self.l10n) || parsedDate
-          )
-
+            ({ fn, val }) =>
+              (parsedDate =
+                fn(parsedDate as Date, val, self.l10n) || parsedDate)
+          );
         }
 
         parsedDate = matched ? parsedDate : undefined;
@@ -1957,8 +2202,7 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
       return undefined;
     }
 
-    if (timeless === true)
-      parsedDate.setHours(0, 0, 0, 0);
+    if (timeless === true) parsedDate.setHours(0, 0, 0, 0);
 
     return parsedDate;
   }
@@ -1995,37 +2239,43 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
       self.input.type = "hidden";
 
       if (!self.config.static && self.input.parentNode)
-        self.input.parentNode.insertBefore(self.altInput, self.input.nextSibling);
+        self.input.parentNode.insertBefore(
+          self.altInput,
+          self.input.nextSibling
+        );
     }
 
     if (!self.config.allowInput)
       self._input.setAttribute("readonly", "readonly");
 
-    self._positionElement = self.config.positionElement || self._input
+    self._positionElement = self.config.positionElement || self._input;
   }
 
   function setupMobile() {
     const inputType = self.config.enableTime
-      ? (self.config.noCalendar ? "time" : "datetime-local")
+      ? self.config.noCalendar ? "time" : "datetime-local"
       : "date";
 
-    self.mobileInput = createElement<HTMLInputElement>("input", self.input.className + " flatpickr-mobile");
+    self.mobileInput = createElement<HTMLInputElement>(
+      "input",
+      self.input.className + " flatpickr-mobile"
+    );
     self.mobileInput.step = self.input.getAttribute("step") || "any";
     self.mobileInput.tabIndex = 1;
     self.mobileInput.type = inputType;
     self.mobileInput.disabled = self.input.disabled;
     self.mobileInput.placeholder = self.input.placeholder;
 
-    self.mobileFormatStr = inputType === "datetime-local"
-      ? "Y-m-d\\TH:i:S"
-      : inputType === "date"
-        ? "Y-m-d"
-        : "H:i:S";
+    self.mobileFormatStr =
+      inputType === "datetime-local"
+        ? "Y-m-d\\TH:i:S"
+        : inputType === "date" ? "Y-m-d" : "H:i:S";
 
     if (self.selectedDates.length) {
-      self.mobileInput.defaultValue
-      = self.mobileInput.value
-      = self.formatDate(self.selectedDates[0], self.mobileFormatStr);
+      self.mobileInput.defaultValue = self.mobileInput.value = self.formatDate(
+        self.selectedDates[0],
+        self.mobileFormatStr
+      );
     }
 
     if (self.config.minDate)
@@ -2035,25 +2285,29 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
       self.mobileInput.max = self.formatDate(self.config.maxDate, "Y-m-d");
 
     self.input.type = "hidden";
-    if (self.altInput !== undefined)
-      self.altInput.type = "hidden";
+    if (self.altInput !== undefined) self.altInput.type = "hidden";
 
     try {
-    if (self.input.parentNode)
-      self.input.parentNode.insertBefore(self.mobileInput, self.input.nextSibling);
-    }
-    catch {}
+      if (self.input.parentNode)
+        self.input.parentNode.insertBefore(
+          self.mobileInput,
+          self.input.nextSibling
+        );
+    } catch {}
 
     self.mobileInput.addEventListener("change", (e: KeyboardEvent) => {
-      self.setDate((e.target as HTMLInputElement).value, false, self.mobileFormatStr);
+      self.setDate(
+        (e.target as HTMLInputElement).value,
+        false,
+        self.mobileFormatStr
+      );
       triggerEvent("Change");
       triggerEvent("Close");
     });
   }
 
   function toggle() {
-    if (self.isOpen)
-      return self.close();
+    if (self.isOpen) return self.close();
     self.open();
   }
 
@@ -2074,40 +2328,47 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
   }
 
   function createEvent(name: string): Event {
-    const e =  document.createEvent("Event");
+    const e = document.createEvent("Event");
     e.initEvent(name, true, true);
     return e;
   }
 
   function isDateSelected(date: Date) {
     for (let i = 0; i < self.selectedDates.length; i++) {
-      if (compareDates(self.selectedDates[i], date) === 0)
-        return "" + i;
+      if (compareDates(self.selectedDates[i], date) === 0) return "" + i;
     }
 
     return false;
   }
 
-  function isDateInRange(date: Date){
+  function isDateInRange(date: Date) {
     if (self.config.mode !== "range" || self.selectedDates.length < 2)
       return false;
-    return compareDates(date,self.selectedDates[0]) >= 0
-      && compareDates(date,self.selectedDates[1]) <= 0;
+    return (
+      compareDates(date, self.selectedDates[0]) >= 0 &&
+      compareDates(date, self.selectedDates[1]) <= 0
+    );
   }
 
   function updateNavigationCurrentMonth() {
-    if (self.config.noCalendar || self.isMobile || !self.monthNav)
-      return;
+    if (self.config.noCalendar || self.isMobile || !self.monthNav) return;
 
-    self.currentMonthElement.textContent = monthToStr(self.currentMonth, self.config.shorthandCurrentMonth, self.l10n) + " ";
+    self.currentMonthElement.textContent =
+      monthToStr(
+        self.currentMonth,
+        self.config.shorthandCurrentMonth,
+        self.l10n
+      ) + " ";
     self.currentYearElement.value = self.currentYear.toString();
 
-    self._hidePrevMonthArrow = self.config.minDate !== undefined &&
-        (self.currentYear === self.config.minDate.getFullYear()
-          ? self.currentMonth <= self.config.minDate.getMonth()
-          : self.currentYear < self.config.minDate.getFullYear());
+    self._hidePrevMonthArrow =
+      self.config.minDate !== undefined &&
+      (self.currentYear === self.config.minDate.getFullYear()
+        ? self.currentMonth <= self.config.minDate.getMonth()
+        : self.currentYear < self.config.minDate.getFullYear());
 
-    self._hideNextMonthArrow = self.config.maxDate !== undefined &&
+    self._hideNextMonthArrow =
+      self.config.maxDate !== undefined &&
       (self.currentYear === self.config.maxDate.getFullYear()
         ? self.currentMonth + 1 > self.config.maxDate.getMonth()
         : self.currentYear > self.config.maxDate.getFullYear());
@@ -2118,16 +2379,17 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
    * @return {void}
    */
   function updateValue(triggerChange: boolean = true) {
-    if (!self.selectedDates.length)
-      return self.clear(triggerChange);
+    if (!self.selectedDates.length) return self.clear(triggerChange);
 
     if (self.mobileInput !== undefined && self.mobileFormatStr) {
-      self.mobileInput.value = self.latestSelectedDateObj !== undefined
-        ? self.formatDate(self.latestSelectedDateObj, self.mobileFormatStr)
-        : "";
+      self.mobileInput.value =
+        self.latestSelectedDateObj !== undefined
+          ? self.formatDate(self.latestSelectedDateObj, self.mobileFormatStr)
+          : "";
     }
 
-    const joinChar = self.config.mode !== "range" ? "; " : self.l10n.rangeSeparator;
+    const joinChar =
+      self.config.mode !== "range" ? "; " : self.l10n.rangeSeparator;
 
     self.input.value = self.selectedDates
       .map(dObj => self.formatDate(dObj, self.config.dateFormat))
@@ -2139,26 +2401,22 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
         .join(joinChar);
     }
 
-    if (triggerChange !== false)
-      triggerEvent("ValueUpdate");
+    if (triggerChange !== false) triggerEvent("ValueUpdate");
   }
-
-
 
   function onMonthNavScroll(e: MouseWheelEvent) {
     e.preventDefault();
-    const isYear = self.currentYearElement.parentNode && self.currentYearElement.parentNode.contains(e.target as Node);
+    const isYear =
+      self.currentYearElement.parentNode &&
+      self.currentYearElement.parentNode.contains(e.target as Node);
 
     if (e.target === self.currentMonthElement || isYear) {
-
       const delta = mouseDelta(e);
 
       if (isYear) {
         changeYear(self.currentYear + delta);
         (e.target as HTMLInputElement).value = self.currentYear.toString();
-      }
-      else
-        self.changeMonth(delta, true, false);
+      } else self.changeMonth(delta, true, false);
     }
   }
 
@@ -2166,68 +2424,73 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
     const isPrevMonth = self.prevMonthNav.contains(e.target as Node);
     const isNextMonth = self.nextMonthNav.contains(e.target as Node);
 
-    if (isPrevMonth || isNextMonth)
-      changeMonth(isPrevMonth ? -1 : 1);
-
+    if (isPrevMonth || isNextMonth) changeMonth(isPrevMonth ? -1 : 1);
     else if (e.target === self.currentYearElement) {
       e.preventDefault();
       self.currentYearElement.select();
-    }
-
-    else if ((e.target as Element).className === "arrowUp")
+    } else if ((e.target as Element).className === "arrowUp")
       self.changeYear(self.currentYear + 1);
-
     else if ((e.target as Element).className === "arrowDown")
       self.changeYear(self.currentYear - 1);
   }
 
-  function timeWrapper(e: MouseEvent | WheelEvent | KeyboardEvent | IncrementEvent): void {
+  function timeWrapper(
+    e: MouseEvent | WheelEvent | KeyboardEvent | IncrementEvent
+  ): void {
     e.preventDefault();
 
     const isKeyDown = e.type === "keydown",
       input = e.target as HTMLInputElement;
 
     if (self.amPM !== undefined && e.target === self.amPM)
-      self.amPM.textContent = self.l10n.amPM[self.amPM.textContent === "AM" ? 1 : 0];
+      self.amPM.textContent =
+        self.l10n.amPM[self.amPM.textContent === "AM" ? 1 : 0];
 
     const min = Number(input.min),
       max = Number(input.max),
       step = Number(input.step),
       curValue = parseInt(input.value, 10),
-      delta = (e as IncrementEvent).delta || (isKeyDown
-        ? e.which === 38 ? 1 : -1
-        : Math.max(-1, Math.min(1, ((e as WheelEvent).wheelDelta || -(e as WheelEvent).deltaY))) || 0);
+      delta =
+        (e as IncrementEvent).delta ||
+        (isKeyDown
+          ? e.which === 38 ? 1 : -1
+          : Math.max(
+              -1,
+              Math.min(
+                1,
+                (e as WheelEvent).wheelDelta || -(e as WheelEvent).deltaY
+              )
+            ) || 0);
 
     let newValue = curValue + step * delta;
 
-    if (typeof(input.value) !== "undefined" && input.value.length === 2) {
+    if (typeof input.value !== "undefined" && input.value.length === 2) {
       const isHourElem = input === self.hourElement,
         isMinuteElem = input === self.minuteElement;
 
       if (newValue < min) {
-        newValue = max + newValue + int(!isHourElem)
-          + (int(isHourElem) && int(!self.amPM));
+        newValue =
+          max +
+          newValue +
+          int(!isHourElem) +
+          (int(isHourElem) && int(!self.amPM));
 
-        if (isMinuteElem)
-          incrementNumInput(undefined, -1, self.hourElement)
-      }
+        if (isMinuteElem) incrementNumInput(undefined, -1, self.hourElement);
+      } else if (newValue > max) {
+        newValue =
+          input === self.hourElement ? newValue - max - int(!self.amPM) : min;
 
-      else if (newValue > max) {
-        newValue = input === self.hourElement
-          ? newValue - max - int(!self.amPM)
-          : min;
-
-        if (isMinuteElem)
-          incrementNumInput(undefined, 1, self.hourElement);
+        if (isMinuteElem) incrementNumInput(undefined, 1, self.hourElement);
       }
 
       if (
-        self.amPM && isHourElem && (step === 1
+        self.amPM &&
+        isHourElem &&
+        (step === 1
           ? newValue + curValue === 23
           : Math.abs(newValue - curValue) > step)
       )
         self.amPM.textContent = self.amPM.textContent === "PM" ? "AM" : "PM";
-
 
       input.value = pad(newValue);
     }
@@ -2238,14 +2501,16 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
 }
 
 /* istanbul ignore next */
-function _flatpickr(nodeList: NodeList | HTMLElement[], config?: Options): Instance | Instance[] {
+function _flatpickr(
+  nodeList: NodeList | HTMLElement[],
+  config?: Options
+): Instance | Instance[] {
   const nodes: HTMLElement[] = Array.prototype.slice.call(nodeList); // static list
   let instances = [];
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i];
     try {
-      if (node.getAttribute("data-fp-omit") !== null)
-        continue;
+      if (node.getAttribute("data-fp-omit") !== null) continue;
 
       if (node._flatpickr !== undefined) {
         node._flatpickr.destroy();
@@ -2254,9 +2519,7 @@ function _flatpickr(nodeList: NodeList | HTMLElement[], config?: Options): Insta
 
       node._flatpickr = FlatpickrInstance(node, config || {});
       instances.push(node._flatpickr);
-    }
-
-    catch (e) {
+    } catch (e) {
       console.warn(e, e.stack);
     }
   }
@@ -2265,55 +2528,55 @@ function _flatpickr(nodeList: NodeList | HTMLElement[], config?: Options): Insta
 }
 
 /* istanbul ignore next */
-if (typeof HTMLElement !== "undefined") { // browser env
-  HTMLCollection.prototype.flatpickr =
-  NodeList.prototype.flatpickr = function (config: Options) {
+if (typeof HTMLElement !== "undefined") {
+  // browser env
+  HTMLCollection.prototype.flatpickr = NodeList.prototype.flatpickr = function(
+    config: Options
+  ) {
     return _flatpickr(this, config);
   };
 
-  HTMLElement.prototype.flatpickr = function (config: Options) {
+  HTMLElement.prototype.flatpickr = function(config: Options) {
     return _flatpickr([this], config);
   };
 }
 
-
-
 /* istanbul ignore next */
 var flatpickr: FlatpickrFn;
-flatpickr = function(selector: NodeList | HTMLElement | string, config?: Options) {
-  if (selector instanceof NodeList)
-    return _flatpickr(selector, config);
-
+flatpickr = function(
+  selector: NodeList | HTMLElement | string,
+  config?: Options
+) {
+  if (selector instanceof NodeList) return _flatpickr(selector, config);
   else if (typeof selector === "string")
     return _flatpickr(window.document.querySelectorAll(selector), config);
 
   return _flatpickr([selector], config);
-} as FlatpickrFn
+} as FlatpickrFn;
 
 window.flatpickr = flatpickr;
 
 /* istanbul ignore next */
 flatpickr.defaultConfig = defaultOptions;
 
-
 flatpickr.l10ns = {
   en: { ...English },
-  default: { ...English }
+  default: { ...English },
 };
 
 flatpickr.localize = (l10n: CustomLocale) => {
   flatpickr.l10ns.default = {
     ...flatpickr.l10ns.default,
-    ...l10n
+    ...l10n,
   };
-}
+};
 flatpickr.setDefaults = (config: Options) => {
-  flatpickr.defaultConfig = { ...flatpickr.defaultConfig, ...config }
-}
+  flatpickr.defaultConfig = { ...flatpickr.defaultConfig, ...config };
+};
 
 /* istanbul ignore next */
 if (typeof jQuery !== "undefined") {
-  (jQuery.fn as any).flatpickr = function (config: Options) {
+  (jQuery.fn as any).flatpickr = function(config: Options) {
     return _flatpickr(this, config);
   };
 }

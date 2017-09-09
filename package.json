@@ -27,6 +27,7 @@
     "nodemon": "latest",
     "npm-run-all": "latest",
     "opn": "latest",
+    "prettier": "^1.6.1",
     "rollup": "^0.49.2",
     "rollup-plugin-livereload": "^0.6.0",
     "rollup-plugin-serve": "^0.4.2",

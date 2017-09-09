@@ -1,19 +1,54 @@
 /* German locals for flatpickr */
-import { CustomLocale } from "types/locale"
-import { FlatpickrFn } from "types/instance"
+import { CustomLocale } from "types/locale";
+import { FlatpickrFn } from "types/instance";
 
-const fp: FlatpickrFn = ((window as any).flatpickr as FlatpickrFn) || { l10ns: {}}
+const fp: FlatpickrFn = ((window as any).flatpickr as FlatpickrFn) || {
+  l10ns: {},
+};
 
 export const German: CustomLocale = {
-
   weekdays: {
-  	shorthand: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
-  	longhand: ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"]
+    shorthand: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
+    longhand: [
+      "Sonntag",
+      "Montag",
+      "Dienstag",
+      "Mittwoch",
+      "Donnerstag",
+      "Freitag",
+      "Samstag",
+    ],
   },
 
   months: {
-  	shorthand: ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"],
-  	longhand: ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"]
+    shorthand: [
+      "Jan",
+      "Feb",
+      "Mär",
+      "Apr",
+      "Mai",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Okt",
+      "Nov",
+      "Dez",
+    ],
+    longhand: [
+      "Januar",
+      "Februar",
+      "März",
+      "April",
+      "Mai",
+      "Juni",
+      "Juli",
+      "August",
+      "September",
+      "Oktober",
+      "November",
+      "Dezember",
+    ],
   },
 
   firstDayOfWeek: 1,
@@ -21,9 +56,8 @@ export const German: CustomLocale = {
   rangeSeparator: " bis ",
   scrollTitle: "Zum Ändern scrollen",
   toggleTitle: "Zum Umschalten klicken",
-}
+};
 
 fp.l10ns.de = German;
 
-export default fp.l10ns
-
+export default fp.l10ns;

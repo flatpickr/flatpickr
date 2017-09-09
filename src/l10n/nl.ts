@@ -1,19 +1,54 @@
 /* Dutch locals for flatpickr */
-import { CustomLocale } from "types/locale"
-import { FlatpickrFn } from "types/instance"
+import { CustomLocale } from "types/locale";
+import { FlatpickrFn } from "types/instance";
 
-const fp: FlatpickrFn = ((window as any).flatpickr as FlatpickrFn) || { l10ns: {}}
+const fp: FlatpickrFn = ((window as any).flatpickr as FlatpickrFn) || {
+  l10ns: {},
+};
 
 export const Dutch: CustomLocale = {
-
   weekdays: {
-  	shorthand: ["zo", "ma", "di", "wo", "do", "vr", "za"],
-  	longhand: ["zondag", "maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag"]
+    shorthand: ["zo", "ma", "di", "wo", "do", "vr", "za"],
+    longhand: [
+      "zondag",
+      "maandag",
+      "dinsdag",
+      "woensdag",
+      "donderdag",
+      "vrijdag",
+      "zaterdag",
+    ],
   },
 
   months: {
-  	shorthand: ["jan", "feb", "mrt", "apr", "mei", "jun", "jul", "aug", "sept", "okt", "nov", "dec"],
-  	longhand: ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"]
+    shorthand: [
+      "jan",
+      "feb",
+      "mrt",
+      "apr",
+      "mei",
+      "jun",
+      "jul",
+      "aug",
+      "sept",
+      "okt",
+      "nov",
+      "dec",
+    ],
+    longhand: [
+      "januari",
+      "februari",
+      "maart",
+      "april",
+      "mei",
+      "juni",
+      "juli",
+      "augustus",
+      "september",
+      "oktober",
+      "november",
+      "december",
+    ],
   },
 
   firstDayOfWeek: 1,
@@ -23,13 +58,12 @@ export const Dutch: CustomLocale = {
   toggleTitle: "Klik om te wisselen",
 
   ordinal: nth => {
-  	if (nth === 1 || nth === 8 || nth >= 20)
-  		return "ste"
+    if (nth === 1 || nth === 8 || nth >= 20) return "ste";
 
-  	return "de"
+    return "de";
   },
-}
+};
 
 fp.l10ns.nl = Dutch;
 
-export default fp.l10ns
+export default fp.l10ns;
