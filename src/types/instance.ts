@@ -113,11 +113,11 @@ export type Instance = Elements &
       event: string | string[],
       handler: F
     ) => void;
-    _createElement: (
-      tag: string,
+    _createElement: <E = Element>(
+      tag: keyof HTMLElementTagNameMap,
       className: string,
       content?: string
-    ) => HTMLElement;
+    ) => E;
     _setHoursFromDate: (date: Date) => void;
     _debouncedChange: () => void;
 
