@@ -1,51 +1,54 @@
-const ar = require("./ar")["ar"];
-const bg = require("./bg")["bg"];
-const bn = require("./bn")["bn"];
-const cat = require("./cat")["cat"];
-const cs = require("./cs")["cs"];
-const cy = require("./cy")["cy"];
-const da = require("./da")["da"];
-const de = require("./de")["de"];
-const eo = require("./eo")["eo"];
-const es = require("./es")["es"];
-const et = require("./et")["et"];
-const fa = require("./fa")["fa"];
-const fi = require("./fi")["fi"];
-const fr = require("./fr")["fr"];
-const gr = require("./gr")["gr"];
-const he = require("./he")["he"];
-const hi = require("./hi")["hi"];
-const hr = require("./hr")["hr"];
-const hu = require("./hu")["hu"];
-const id = require("./id")["id"];
-const it = require("./it")["it"];
-const ja = require("./ja")["ja"];
-const ko = require("./ko")["ko"];
-const lt = require("./lt")["lt"];
-const lv = require("./lv")["lv"];
-const mk = require("./mk")["mk"];
-const ms = require("./ms")["ms"];
-const my = require("./my")["my"];
-const nl = require("./nl")["nl"];
-const no = require("./no")["no"];
-const pa = require("./pa")["pa"];
-const pl = require("./pl")["pl"];
-const pt = require("./pt")["pt"];
-const ro = require("./ro")["ro"];
-const ru = require("./ru")["ru"];
-const si = require("./si")["si"];
-const sk = require("./sk")["sk"];
-const sl = require("./sl")["sl"];
-const sq = require("./sq")["sq"];
-const sr = require("./sr")["sr"];
-const sv = require("./sv")["sv"];
-const th = require("./th")["th"];
-const tr = require("./tr")["tr"];
-const uk = require("./uk")["uk"];
-const vn = require("./vn")["vn"];
-const zh = require("./zh")["zh"];
+import { key, CustomLocale } from "types/locale";
 
-const l10n = {
+import { Arabic as ar } from "./ar";
+import { Bulgarian as bg } from "./bg";
+import { Bangla as bn } from "./bn";
+import { Catalan as cat } from "./cat";
+import { Czech as cs } from "./cs";
+import { Welsh as cy } from "./cy";
+import { Danish as da } from "./da";
+import { German as de } from "./de";
+import { english as en } from "./default";
+import { Esperanto as eo } from "./eo";
+import { Spanish as es } from "./es";
+import { Estonian as et } from "./et";
+import { Persian as fa } from "./fa";
+import { Finnish as fi } from "./fi";
+import { French as fr } from "./fr";
+import { Greek as gr } from "./gr";
+import { Hebrew as he } from "./he";
+import { Hindi as hi } from "./hi";
+import { Croatian as hr } from "./hr";
+import { Hungarian as hu } from "./hu";
+import { Indonesian as id } from "./id";
+import { Italian as it } from "./it";
+import { Japanese as ja } from "./ja";
+import { Korean as ko } from "./ko";
+import { Lithuanian as lt } from "./lt";
+import { Latvian as lv } from "./lv";
+import { Macedonian as mk } from "./mk";
+import { Malaysian as ms } from "./ms";
+import { Burmese as my } from "./my";
+import { Dutch as nl } from "./nl";
+import { Norwegian as no } from "./no";
+import { Punjabi as pa } from "./pa";
+import { Polish as pl } from "./pl";
+import { Portuguese as pt } from "./pt";
+import { Romanian as ro } from "./ro";
+import { Russian as ru } from "./ru";
+import { Sinhala as si } from "./si";
+import { Slovak as sk } from "./sk";
+import { Slovenian as sl } from "./sl";
+import { Albanian as sq } from "./sq";
+import { Serbian as sr } from "./sr";
+import { Swedish as sv } from "./sv";
+import { Thai as th } from "./th";
+import { Turkish as tr } from "./tr";
+import { Ukrainian as uk } from "./uk";
+import { Vietnamese as vn } from "./vn";
+import { Mandarin as zh } from "./zh";
+
+const l10n: Record<key, CustomLocale> = {
   ar,
   bg,
   bn,
@@ -54,6 +57,7 @@ const l10n = {
   cy,
   da,
   de,
+  en,
   eo,
   es,
   et,
@@ -94,4 +98,4 @@ const l10n = {
   zh,
 };
 
-if (typeof module !== "undefined") module.exports = l10n;
+export default l10n;

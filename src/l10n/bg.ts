@@ -6,7 +6,7 @@ const fp: FlatpickrFn = ((window as any).flatpickr as FlatpickrFn) || {
   l10ns: {},
 };
 
-export const bg: CustomLocale = {
+export const Bulgarian: CustomLocale = {
   weekdays: {
     shorthand: ["Нд", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
     longhand: [

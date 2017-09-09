@@ -11,7 +11,7 @@ interface Elements {
   mobileInput?: HTMLInputElement;
   mobileFormatStr?: string;
 
-  selectedDateElem?: HTMLSpanElement;
+  selectedDateElem?: DayElement;
   todayDateElem?: HTMLSpanElement;
 
   _positionElement: HTMLElement;

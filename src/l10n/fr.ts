@@ -6,7 +6,7 @@ const fp: FlatpickrFn = ((window as any).flatpickr as FlatpickrFn) || {
   l10ns: {},
 };
 
-const French: CustomLocale = {
+export const French: CustomLocale = {
   firstDayOfWeek: 1,
 
   weekdays: {
