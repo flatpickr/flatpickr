@@ -9,9 +9,7 @@
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "release": "npm run test -- --silent && ./release"
   },
-  "dependencies": {
-    "jest": "^21.0.2"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/jest": "^20.0.8",
     "@types/jquery": "^3.2.12",
@@ -20,6 +18,7 @@
     "coveralls": "latest",
     "glob": "latest",
     "http-server": "latest",
+    "jest": "^21.0.2",
     "livereload": "latest",
     "ncp": "latest",
     "nodemon": "latest",
