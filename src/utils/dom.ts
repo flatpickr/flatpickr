@@ -22,6 +22,13 @@ export function clearNode(node: HTMLElement) {
     node.removeChild(node.firstChild);
 }
 
+export function findParent(node: Node, condition: (n: Node) => boolean): Node | undefined {
+  if (condition(node)) return node;
+  else if (node.parentNode) return findParent(node.parentNode, condition);
+
+  return undefined; // nothing found
+}
+
 export function createNumberInput(inputClassName: string) {
   const wrapper = createElement<HTMLDivElement>("div", "numInputWrapper"),
     numInput = createElement<HTMLInputElement>("input", "numInput " + inputClassName),

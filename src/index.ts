@@ -6,7 +6,7 @@ import { Locale, CustomLocale } from "types/locale"
 import English from "l10n/default"
 
 import { arrayify, debounce, int, mouseDelta, pad, IncrementEvent } from "utils"
-import { clearNode, createElement, createNumberInput, toggleClass } from "utils/dom"
+import { clearNode, createElement, createNumberInput, findParent, toggleClass } from "utils/dom"
 import { compareDates, duration, monthToStr } from "utils/dates"
 
 import { token, RevFormatFn, revFormat, tokenRegex, formats } from "utils/formatting"
@@ -1639,14 +1639,16 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
     e.preventDefault();
     e.stopPropagation();
 
-    const target = e.target as DayElement;
+    const isSelectable = (day: Element) => day.classList.contains("flatpickr-day") &&
+      !day.classList.contains("disabled") &&
+      !day.classList.contains("notAllowed")
 
-    if (
-      !target.classList.contains("flatpickr-day") ||
-      target.classList.contains("disabled") ||
-      target.classList.contains("notAllowed")
-    )
+    const t = findParent(e.target as Node, isSelectable)
+
+    if (t === undefined)
       return;
+
+    const target = t as DayElement;
 
     const selectedDate
       = self.latestSelectedDateObj
