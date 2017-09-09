@@ -84,7 +84,7 @@ export type Instance = Elements & Formatting & {
   open: (e?: Event, positionElement?: HTMLElement) => void
   redraw: () => void
   set: (option: keyof Options, value: any) => void
-  setDate: (date: Date | string | number, triggerChange?: boolean, format?: string) => void
+  setDate: (date: DateOption | DateOption[], triggerChange?: boolean, format?: string) => void
   toggle: () => void
 
   pad: (num: string | number) => string
@@ -95,7 +95,7 @@ export type Instance = Elements & Formatting & {
   _animationLoop: Function[]
   _handlers: { event: string, element: Element, handler: EventListener }[]
 
-  _bind: (element: HTMLElement, event: string, handler: (e: Event) => void) => void
+  _bind: <F extends EventListener, E extends Element>(element: E | E[], event: string | string[], handler: F) => void
   _createElement: (tag: string, className: string, content?: string) => HTMLElement
   _setHoursFromDate: (date: Date) => void
   _debouncedChange: () => void

@@ -860,7 +860,7 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
       self.amPM = createElement(
         "span",
         "flatpickr-am-pm",
-        ["AM", "PM"][int((self.latestSelectedDateObj
+        self.l10n.amPM[int((self.latestSelectedDateObj
           ? self.hourElement.value
           : self.config.defaultHour) > 11)]
       );
@@ -1758,7 +1758,7 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
     jumpToDate();
   }
 
-  function setSelectedDate(inputDate: DateOption, format?: string) {
+  function setSelectedDate(inputDate: DateOption | DateOption[], format?: string) {
     let dates: Array<Date | undefined> = [];
     if (inputDate instanceof Array)
       dates = inputDate.map(d => self.parseDate(d, format));
@@ -1796,7 +1796,7 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
     self.selectedDates.sort((a,b) => a.getTime() - b.getTime());
   }
 
-  function setDate(date: DateOption, triggerChange = false, format = undefined) {
+  function setDate(date: DateOption | DateOption[], triggerChange = false, format = undefined) {
     if (date !== 0 && !date)
       return self.clear(triggerChange);
 
@@ -2188,7 +2188,7 @@ function FlatpickrInstance(element: HTMLElement, instanceConfig?: Options): Inst
       input = e.target as HTMLInputElement;
 
     if (self.amPM !== undefined && e.target === self.amPM)
-      self.amPM.textContent = ["AM", "PM"][self.amPM.textContent === "AM" ? 1 : 0];
+      self.amPM.textContent = self.l10n.amPM[self.amPM.textContent === "AM" ? 1 : 0];
 
     const min = Number(input.min),
       max = Number(input.max),

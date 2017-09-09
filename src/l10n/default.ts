@@ -35,7 +35,8 @@ export const english: CustomLocale =  {
   rangeSeparator: " to ",
   weekAbbreviation: "Wk",
   scrollTitle: "Scroll to increment",
-  toggleTitle: "Click to toggle"
+  toggleTitle: "Click to toggle",
+  amPM: ["AM", "PM", ]
 }
 
 export default english

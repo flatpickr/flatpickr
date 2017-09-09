@@ -26,8 +26,7 @@ export const Greek: CustomLocale = {
   scrollTitle: "Μετακυλήστε για προσαύξηση",
   toggleTitle: "Κάντε κλικ για αλλαγή",
 
-  am: "ΠΜ",
-  pm: "ΜΜ",
+  amPM: ["ΠΜ","ΜΜ",]
 }
 
 fp.l10ns.gr = Greek;

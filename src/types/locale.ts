@@ -28,6 +28,7 @@ export type Locale = MonthsWeekDays & {
   weekAbbreviation: string,
   scrollTitle: string,
   toggleTitle: string
+  amPM: [string, string]
 }
 
 export type CustomLocale = MonthsWeekDays & {
@@ -36,6 +37,7 @@ export type CustomLocale = MonthsWeekDays & {
   firstDayOfWeek?: Locale["firstDayOfWeek"]
   rangeSeparator?: Locale["rangeSeparator"]
   weekAbbreviation?: Locale["weekAbbreviation"]
-  scrollTitle?: Locale["scrollTitle"]
   toggleTitle?: Locale["toggleTitle"]
+  scrollTitle?: Locale["scrollTitle"]
+  amPM?: Locale["amPM"]
 }

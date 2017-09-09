@@ -9,6 +9,8 @@ export type DateLimit<D = DateOption> = D | DateRangeLimit<D> | DateRangeFn;
 
 type Hook = (dates: Date[], currentDateString: string, self: Instance, data?: any) => void
 
+export type Plugin = (fp: Instance) => Options
+
 export interface Options {
   "mode"?: "single" | "multiple" | "range"
   "position"?: "auto" | "above" | "below"
@@ -49,7 +51,7 @@ export interface Options {
   defaultSeconds?: number
   disableMobile?: boolean
   locale?: string | CustomLocale
-  plugins?: object[]
+  plugins?: Plugin[]
   ignoredFocusElements?: HTMLElement[]
   onClose?: Hook | Hook[]
   onChange?: Hook | Hook[]
@@ -107,7 +109,7 @@ export interface ParsedOptions{
   defaultSeconds: number
   disableMobile: boolean,
   locale: string | CustomLocale
-  plugins: Array<(fp: Instance) => Options>,
+  plugins: Plugin[],
   ignoredFocusElements: HTMLElement[],
   onClose: Hook[],
   onChange: Hook[],

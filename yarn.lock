@@ -2,6 +2,16 @@
 # yarn lockfile v1
 
 
+"@types/acorn@*":
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/@types/acorn/-/acorn-4.0.2.tgz#5c37dade857a53c14258c914d43e634076aec3fd"
+  dependencies:
+    "@types/estree" "*"
+
+"@types/estree@*":
+  version "0.0.37"
+  resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.37.tgz#48949c1516d46139c1e521195f9e12993b69d751"
+
 "@types/jest@^20.0.8":
   version "20.0.8"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-20.0.8.tgz#7f8c97f73d20d3bf5448fbe33661a342002b5954"
@@ -9,6 +19,17 @@
 "@types/jquery@^3.2.12":
   version "3.2.12"
   resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.2.12.tgz#f496823108c3874c97c9a822e675a3926ee64b46"
+
+"@types/rollup@^0.41.1":
+  version "0.41.1"
+  resolved "https://registry.yarnpkg.com/@types/rollup/-/rollup-0.41.1.tgz#0a88eb8715bbe70a87287098f2cd76716c60137f"
+  dependencies:
+    "@types/acorn" "*"
+    "@types/source-map" "*"
+
+"@types/source-map@*":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@types/source-map/-/source-map-0.5.1.tgz#7e74db5d06ab373a712356eebfaea2fad0ea2367"
 
 abab@^1.0.3:
   version "1.0.3"
