@@ -7,7 +7,7 @@ export function debounce<F extends Function>(
   wait: number,
   immediate: boolean = false
 ) {
-  let timeout: number | null;
+  let timeout: NodeJS.Timer | null;
   return function(this: Function) {
     let context = this,
       args = arguments;
