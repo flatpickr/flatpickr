@@ -8,7 +8,7 @@
     "noUnusedParameters": true,
     "pretty": false,
     "removeComments": true,
-    "types": ["jquery", "jest", "node"],
+    "types": ["jquery", "jest"],
     "lib": [
       "es2015",
       "dom"
