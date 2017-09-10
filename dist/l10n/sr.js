@@ -1,19 +1,55 @@
-/* Serbian locals for flatpickr */
-var flatpickr = flatpickr || { l10ns: {} };
-flatpickr.l10ns.sr = {};
-
-flatpickr.l10ns.sr.weekdays = {
-	shorthand: ["Ned", "Pon", "Uto", "Sre", "Čet", "Pet", "Sub", "Ned"],
-	longhand: ["Nedelja", "Ponedeljak", "Utorak", "Sreda", "Četvrtak", "Petak", "Subota", "Nedelja"]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var fp = (typeof window !== "undefined" && window.flatpickr !== undefined) ? window.flatpickr : {
+    l10ns: {},
 };
-
-flatpickr.l10ns.sr.months = {
-	shorthand: ["Jan", "Feb", "Mar", "Apr", "Maj", "Jun", "Jul", "Avg", "Sep", "Okt", "Nov", "Dec"],
-	longhand: ["Januar", "Februar", "Mart", "April", "Maj", "Jun", "Jul", "Avgust", "Septembar", "Oktobar", "Novembar", "Decembar"]
+exports.Serbian = {
+    weekdays: {
+        shorthand: ["Ned", "Pon", "Uto", "Sre", "Čet", "Pet", "Sub", "Ned"],
+        longhand: [
+            "Nedelja",
+            "Ponedeljak",
+            "Utorak",
+            "Sreda",
+            "Četvrtak",
+            "Petak",
+            "Subota",
+            "Nedelja",
+        ],
+    },
+    months: {
+        shorthand: [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "Maj",
+            "Jun",
+            "Jul",
+            "Avg",
+            "Sep",
+            "Okt",
+            "Nov",
+            "Dec",
+        ],
+        longhand: [
+            "Januar",
+            "Februar",
+            "Mart",
+            "April",
+            "Maj",
+            "Jun",
+            "Jul",
+            "Avgust",
+            "Septembar",
+            "Oktobar",
+            "Novembar",
+            "Decembar",
+        ],
+    },
+    firstDayOfWeek: 1,
+    weekAbbreviation: "Ned.",
+    rangeSeparator: " do ",
 };
-
-flatpickr.l10ns.sr.firstDayOfWeek = 1;
-flatpickr.l10ns.sr.weekAbbreviation = "Ned.";
-flatpickr.l10ns.sr.rangeSeparator = " do ";
-
-if (typeof module !== "undefined") module.exports = flatpickr.l10ns;
+fp.l10ns.sr = exports.Serbian;
+exports.default = fp.l10ns;

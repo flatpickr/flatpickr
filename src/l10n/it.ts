@@ -2,9 +2,12 @@
 import { CustomLocale } from "types/locale";
 import { FlatpickrFn } from "types/instance";
 
-const fp: FlatpickrFn = ((window as any).flatpickr as FlatpickrFn) || {
-  l10ns: {},
-};
+const fp: FlatpickrFn =
+  typeof window !== "undefined" && window.flatpickr !== undefined
+    ? window.flatpickr
+    : {
+        l10ns: {},
+      } as FlatpickrFn;
 
 export const Italian: CustomLocale = {
   weekdays: {

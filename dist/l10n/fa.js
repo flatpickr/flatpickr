@@ -1,18 +1,54 @@
-/* Farsi (Persian) locals for flatpickr */
-var flatpickr = flatpickr || { l10ns: {} };
-flatpickr.l10ns.fa = {};
-
-flatpickr.l10ns.fa.weekdays = {
-	shorthand: ["یک", "دو", "سه", "چهار", "پنج", "آدینه", "شنبه"],
-	longhand: ["یک‌شنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنچ‌شنبه", "آدینه", "شنبه"]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var fp = (typeof window !== "undefined" && window.flatpickr !== undefined) ? window.flatpickr : {
+    l10ns: {},
 };
-
-flatpickr.l10ns.fa.months = {
-	shorthand: ["ژانویه", "فوریه", "مارس", "آوریل", "مه", "ژوئن", "ژوئیه", "اوت", "سپتامبر", "اکتبر", "نوامبر", "دسامبر"],
-	longhand: ["ژانویه", "فوریه", "مارس", "آوریل", "مه", "ژوئن", "ژوئیه", "اوت", "سپتامبر", "اکتبر", "نوامبر", "دسامبر"]
+exports.Persian = {
+    weekdays: {
+        shorthand: ["یک", "دو", "سه", "چهار", "پنج", "آدینه", "شنبه"],
+        longhand: [
+            "یک‌شنبه",
+            "دوشنبه",
+            "سه‌شنبه",
+            "چهارشنبه",
+            "پنچ‌شنبه",
+            "آدینه",
+            "شنبه",
+        ],
+    },
+    months: {
+        shorthand: [
+            "ژانویه",
+            "فوریه",
+            "مارس",
+            "آوریل",
+            "مه",
+            "ژوئن",
+            "ژوئیه",
+            "اوت",
+            "سپتامبر",
+            "اکتبر",
+            "نوامبر",
+            "دسامبر",
+        ],
+        longhand: [
+            "ژانویه",
+            "فوریه",
+            "مارس",
+            "آوریل",
+            "مه",
+            "ژوئن",
+            "ژوئیه",
+            "اوت",
+            "سپتامبر",
+            "اکتبر",
+            "نوامبر",
+            "دسامبر",
+        ],
+    },
+    ordinal: function () {
+        return "";
+    },
 };
-
-flatpickr.l10ns.fa.ordinal = function () {
-	return "";
-};
-if (typeof module !== "undefined") module.exports = flatpickr.l10ns;
+fp.l10ns.fa = exports.Persian;
+exports.default = fp.l10ns;

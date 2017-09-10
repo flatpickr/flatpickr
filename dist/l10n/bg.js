@@ -1,14 +1,51 @@
-/* Bulgarian locals for flatpickr */
-var flatpickr = flatpickr || { l10ns: {} };
-flatpickr.l10ns.bg = {};
-
-flatpickr.l10ns.bg.weekdays = {
-	shorthand: ["Нд", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
-	longhand: ["Неделя", "Понеделник", "Вторник", "Сряда", "Четвъртък", "Петък", "Събота"]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var fp = (typeof window !== "undefined" && window.flatpickr !== undefined) ? window.flatpickr : {
+    l10ns: {},
 };
-
-flatpickr.l10ns.bg.months = {
-	shorthand: ["Яну", "Фев", "Март", "Апр", "Май", "Юни", "Юли", "Авг", "Сеп", "Окт", "Ное", "Дек"],
-	longhand: ["Януари", "Февруари", "Март", "Април", "Май", "Юни", "Юли", "Август", "Септември", "Октомври", "Ноември", "Декември"]
+exports.Bulgarian = {
+    weekdays: {
+        shorthand: ["Нд", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
+        longhand: [
+            "Неделя",
+            "Понеделник",
+            "Вторник",
+            "Сряда",
+            "Четвъртък",
+            "Петък",
+            "Събота",
+        ],
+    },
+    months: {
+        shorthand: [
+            "Яну",
+            "Фев",
+            "Март",
+            "Апр",
+            "Май",
+            "Юни",
+            "Юли",
+            "Авг",
+            "Сеп",
+            "Окт",
+            "Ное",
+            "Дек",
+        ],
+        longhand: [
+            "Януари",
+            "Февруари",
+            "Март",
+            "Април",
+            "Май",
+            "Юни",
+            "Юли",
+            "Август",
+            "Септември",
+            "Октомври",
+            "Ноември",
+            "Декември",
+        ],
+    },
 };
-if (typeof module !== "undefined") module.exports = flatpickr.l10ns;
+fp.l10ns.bg = exports.Bulgarian;
+exports.default = fp.l10ns;
