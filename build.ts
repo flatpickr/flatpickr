@@ -123,7 +123,7 @@ async function transpileStyle(src: string, compress = false) {
       .include(`${__dirname}/src/style/themes`)
       .use(
         stylus_autoprefixer({
-          browsers: ["ie >= 9", "last 2 versions", "safari >= 7"],
+          browsers: pkg.browserslist,
         })
       )
       .render(
