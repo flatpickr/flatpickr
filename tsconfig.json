@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "es5",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "pretty": false,
+    "types": ["jquery", "jest"],
+    "lib": [
+      "es2015",
+      "dom"
+    ],
+    "baseUrl": "src"
+  }
+}
