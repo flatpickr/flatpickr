@@ -7,7 +7,8 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "pretty": false,
-    "types": ["jquery", "jest"],
+    "removeComments": true,
+    "types": ["jquery", "jest", "node"],
     "lib": [
       "es2015",
       "dom"
