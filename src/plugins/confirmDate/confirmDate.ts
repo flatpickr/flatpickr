@@ -21,7 +21,7 @@ function confirmDatePlugin(pluginConfig: Config) {
 
   return function(fp: Instance) {
     const hooks = {
-      onKeyDown(_, __, ___, e) {
+      onKeyDown(_: Date[], __: string, ___: Instance, e: KeyboardEvent) {
         if (fp.config.enableTime && e.key === "Tab" && e.target === fp.amPM) {
           e.preventDefault();
           confirmContainer.focus();

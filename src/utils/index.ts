@@ -8,7 +8,7 @@ export function debounce<F extends Function>(
   immediate: boolean = false
 ) {
   let timeout: number | null;
-  return function() {
+  return function(this: Function) {
     let context = this,
       args = arguments;
     timeout !== null && clearTimeout(timeout);

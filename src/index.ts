@@ -9,7 +9,7 @@ import {
   defaults as defaultOptions,
 } from "types/options";
 
-import { Locale, CustomLocale } from "types/locale";
+import { Locale, CustomLocale, key as LocaleKey } from "types/locale";
 import English from "l10n/default";
 
 import {
@@ -907,24 +907,20 @@ function FlatpickrInstance(
     self.monthNav.appendChild(monthNavFragment);
 
     Object.defineProperty(self, "_hidePrevMonthArrow", {
-      get() {
-        return this.__hidePrevMonthArrow;
-      },
-      set(bool) {
-        if (this.__hidePrevMonthArrow !== bool)
+      get: () => self.__hidePrevMonthArrow,
+      set(bool: boolean) {
+        if (self.__hidePrevMonthArrow !== bool)
           self.prevMonthNav.style.display = bool ? "none" : "block";
-        this.__hidePrevMonthArrow = bool;
+        self.__hidePrevMonthArrow = bool;
       },
     });
 
     Object.defineProperty(self, "_hideNextMonthArrow", {
-      get() {
-        return this.__hideNextMonthArrow;
-      },
-      set(bool) {
-        if (this.__hideNextMonthArrow !== bool)
+      get: () => self.__hideNextMonthArrow,
+      set(bool: boolean) {
+        if (self.__hideNextMonthArrow !== bool)
           self.nextMonthNav.style.display = bool ? "none" : "block";
-        this.__hideNextMonthArrow = bool;
+        self.__hideNextMonthArrow = bool;
       },
     });
 
@@ -1726,16 +1722,12 @@ function FlatpickrInstance(
     }
 
     Object.defineProperty(self.config, "minDate", {
-      get: function() {
-        return this._minDate;
-      },
+      get: () => self.config._minDate,
       set: minMaxDateSetter("min"),
     });
 
     Object.defineProperty(self.config, "maxDate", {
-      get: function() {
-        return this._maxDate;
-      },
+      get: () => self.config._maxDate,
       set: minMaxDateSetter("max"),
     });
 
@@ -1785,7 +1777,7 @@ function FlatpickrInstance(
   function setupLocale() {
     if (
       typeof self.config.locale !== "object" &&
-      typeof flatpickr.l10ns[self.config.locale] === "undefined"
+      typeof flatpickr.l10ns[self.config.locale as LocaleKey] === "undefined"
     )
       console.warn(`flatpickr: invalid locale ${self.config.locale}`);
 
@@ -1794,7 +1786,7 @@ function FlatpickrInstance(
       ...typeof self.config.locale === "object"
         ? self.config.locale
         : self.config.locale !== "default"
-          ? flatpickr.l10ns[self.config.locale]
+          ? flatpickr.l10ns[self.config.locale as LocaleKey]
           : undefined,
     };
   }

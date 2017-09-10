@@ -1,5 +1,5 @@
 import { DateOption, Options, ParsedOptions } from "./options";
-import { Locale, CustomLocale } from "./locale";
+import { Locale, CustomLocale, key as LocaleKey } from "./locale";
 
 import { RevFormat, Formats, TokenRegex } from "utils/formatting";
 
@@ -113,13 +113,15 @@ export type Instance = Elements &
       event: string | string[],
       handler: F
     ) => void;
-    _createElement: <E = Element>(
+    _createElement: <E extends HTMLElement>(
       tag: keyof HTMLElementTagNameMap,
       className: string,
       content?: string
     ) => E;
     _setHoursFromDate: (date: Date) => void;
     _debouncedChange: () => void;
+    __hideNextMonthArrow: boolean;
+    __hidePrevMonthArrow: boolean;
 
     utils: {
       getDaysInMonth: (month?: number, year?: number) => number;
@@ -131,7 +133,7 @@ export interface FlatpickrFn {
     | Instance
     | Instance[];
   defaultConfig: Options;
-  l10ns: Record<string, CustomLocale>;
+  l10ns: { [k in LocaleKey]?: CustomLocale } & { default: Locale };
   localize: (l10n: CustomLocale) => void;
   setDefaults: (config: Options) => void;
 }

@@ -8,11 +8,11 @@ type InstancePlusWeeks = Instance & {
 function weekSelectPlugin() {
   return function(fp: InstancePlusWeeks) {
     function onDayHover(event: MouseEvent) {
-      if (!(event.target as Element).classList.contains("flatpickr-day"))
-        return;
+      const day = event.target as DayElement;
+      if (!day.classList.contains("flatpickr-day")) return;
 
       const days = fp.days.childNodes;
-      const dayIndex = event.target.$i;
+      const dayIndex = day.$i;
 
       const dayIndSeven = dayIndex / 7;
       const weekStartDay = (days[7 * Math.floor(dayIndSeven)] as DayElement)

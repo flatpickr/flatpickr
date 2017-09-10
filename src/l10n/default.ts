@@ -1,6 +1,6 @@
-import { CustomLocale } from "types/locale";
+import { Locale } from "types/locale";
 
-export const english: CustomLocale = {
+export const english: Locale = {
   weekdays: {
     shorthand: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
     longhand: [

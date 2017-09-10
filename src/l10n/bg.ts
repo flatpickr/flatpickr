@@ -52,5 +52,5 @@ export const Bulgarian: CustomLocale = {
   },
 };
 
-fp.l10ns.bg = bg;
+fp.l10ns.bg = Bulgarian;
 export default fp.l10ns;
