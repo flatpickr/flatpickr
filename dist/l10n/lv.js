@@ -1,16 +1,53 @@
-/* Latvian locals for flatpickr */
-var flatpickr = flatpickr || { l10ns: {} };
-flatpickr.l10ns.lv = {};
-
-flatpickr.l10ns.lv.firstDayOfWeek = 1;
-
-flatpickr.l10ns.lv.weekdays = {
-	shorthand: ["Sv", "P", "Ot", "Tr", "Ce", "Pk", "Se"],
-	longhand: ["Svētdiena", "Pirmdiena", "Otrdiena", "Trešdiena", "Ceturtdiena", "Piektdiena", "Sestdiena"]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var fp = (typeof window !== "undefined" && window.flatpickr !== undefined) ? window.flatpickr : {
+    l10ns: {},
 };
-
-flatpickr.l10ns.lv.months = {
-	shorthand: ["Jan", "Feb", "Mar", "Mai", "Apr", "Jūn", "Jūl", "Aug", "Sep", "Okt", "Nov", "Dec"],
-	longhand: ["Janvāris", "Februāris", "Marts", "Aprīlis", "Maijs", "Jūnijs", "Jūlijs", "Augusts", "Septembris", "Oktobris", "Novembris", "Decembris"]
+exports.Latvian = {
+    firstDayOfWeek: 1,
+    weekdays: {
+        shorthand: ["Sv", "P", "Ot", "Tr", "Ce", "Pk", "Se"],
+        longhand: [
+            "Svētdiena",
+            "Pirmdiena",
+            "Otrdiena",
+            "Trešdiena",
+            "Ceturtdiena",
+            "Piektdiena",
+            "Sestdiena",
+        ],
+    },
+    months: {
+        shorthand: [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Mai",
+            "Apr",
+            "Jūn",
+            "Jūl",
+            "Aug",
+            "Sep",
+            "Okt",
+            "Nov",
+            "Dec",
+        ],
+        longhand: [
+            "Janvāris",
+            "Februāris",
+            "Marts",
+            "Aprīlis",
+            "Maijs",
+            "Jūnijs",
+            "Jūlijs",
+            "Augusts",
+            "Septembris",
+            "Oktobris",
+            "Novembris",
+            "Decembris",
+        ],
+    },
+    rangeSeparator: " līdz ",
 };
-if (typeof module !== "undefined") module.exports = flatpickr.l10ns;
+fp.l10ns.lv = exports.Latvian;
+exports.default = fp.l10ns;

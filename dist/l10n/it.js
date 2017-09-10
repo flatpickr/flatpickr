@@ -1,25 +1,56 @@
-/* Italian locals for flatpickr */
-var flatpickr = flatpickr || { l10ns: {} };
-flatpickr.l10ns.it = {};
-
-flatpickr.l10ns.it.weekdays = {
-	shorthand: ["Dom", "Lun", "Mar", "Mer", "Gio", "Ven", "Sab"],
-	longhand: ["Domenica", "Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato"]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var fp = (typeof window !== "undefined" && window.flatpickr !== undefined) ? window.flatpickr : {
+    l10ns: {},
 };
-
-flatpickr.l10ns.it.months = {
-	shorthand: ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ott", "Nov", "Dic"],
-	longhand: ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"]
+exports.Italian = {
+    weekdays: {
+        shorthand: ["Dom", "Lun", "Mar", "Mer", "Gio", "Ven", "Sab"],
+        longhand: [
+            "Domenica",
+            "Lunedì",
+            "Martedì",
+            "Mercoledì",
+            "Giovedì",
+            "Venerdì",
+            "Sabato",
+        ],
+    },
+    months: {
+        shorthand: [
+            "Gen",
+            "Feb",
+            "Mar",
+            "Apr",
+            "Mag",
+            "Giu",
+            "Lug",
+            "Ago",
+            "Set",
+            "Ott",
+            "Nov",
+            "Dic",
+        ],
+        longhand: [
+            "Gennaio",
+            "Febbraio",
+            "Marzo",
+            "Aprile",
+            "Maggio",
+            "Giugno",
+            "Luglio",
+            "Agosto",
+            "Settembre",
+            "Ottobre",
+            "Novembre",
+            "Dicembre",
+        ],
+    },
+    firstDayOfWeek: 1,
+    ordinal: function () { return "°"; },
+    weekAbbreviation: "Se",
+    scrollTitle: "Scrolla per aumentare",
+    toggleTitle: "Clicca per cambiare",
 };
-
-flatpickr.l10ns.it.firstDayOfWeek = 1;
-
-flatpickr.l10ns.it.ordinal = "°";
-
-flatpickr.l10ns.it.weekAbbreviation = "Se";
-
-flatpickr.l10ns.it.scrollTitle = "Scrolla per aumentare";
-
-flatpickr.l10ns.it.toggleTitle = "Clicca per cambiare";
-
-if (typeof module !== "undefined") module.exports = flatpickr.l10ns;
+fp.l10ns.it = exports.Italian;
+exports.default = fp.l10ns;
