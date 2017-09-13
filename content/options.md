@@ -45,6 +45,12 @@ weight = "6"
             <td>Instead of&nbsp;<code>body</code>, appends the calendar to the specified node instead.</td>
         </tr>
         <tr>
+            <td>ariaDateFormat</td>
+            <td>string</td>
+            <td>"F j, Y"</td>
+            <td>Defines how the date will be formatted in the&nbsp;<code>aria-label</code> for calendar days, using the same tokens as&nbsp;<code>dateFormat</code>. If you change this, you should choose a value that will make sense if a screen reader reads it out loud.</td>
+        </tr>
+        <tr>
             <td>clickOpens</td>
             <td>boolean</td>
             <td>true</td>
@@ -116,6 +122,12 @@ weight = "6"
             <td>boolean</td>
             <td>false</td>
             <td>Enables seconds in the time picker.</td>
+        </tr>
+        <tr>
+            <td>formatDate</td>
+            <td>function</td>
+            <td>null</td>
+            <td>Allows using a custom date formatting function instead of the built-in handling for date formats using&nbsp;<code>dateFormat</code>,&nbsp;<code>altFormat</code>, etc.</td>
         </tr>
         <tr>
             <td>hourIncrement</td>
