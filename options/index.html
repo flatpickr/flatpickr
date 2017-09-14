@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=10" />
     <title>Options - flatpickr</title>
-    <meta name="generator" content="Hugo 0.21" />
+    <meta name="generator" content="Hugo 0.27.1" />
 
     
     <meta name="description" content="A lightweight and powerful datetimepicker">
@@ -490,6 +490,12 @@
             <td>Instead of&nbsp;<code>body</code>, appends the calendar to the specified node instead.</td>
         </tr>
         <tr>
+            <td>ariaDateFormat</td>
+            <td>string</td>
+            <td>"F j, Y"</td>
+            <td>Defines how the date will be formatted in the&nbsp;<code>aria-label</code> for calendar days, using the same tokens as&nbsp;<code>dateFormat</code>. If you change this, you should choose a value that will make sense if a screen reader reads it out loud.</td>
+        </tr>
+        <tr>
             <td>clickOpens</td>
             <td>boolean</td>
             <td>true</td>
@@ -499,7 +505,7 @@
             <td>dateFormat</td>
             <td>string</td>
             <td>"Y-m-d"</td>
-            <td>A string of characters which are used to define how the date will be displayed in the input box. The supported characters are defined in the table below.</td>
+            <td>A string of characters which are used to define how the date will be displayed in the input box. The supported characters are defined in&nbsp;<a href="https://chmln.github.io/flatpickr/formatting">the table below</a>.</td>
         </tr>
         <tr>
             <td><strong>defaultDate</strong></td>
@@ -563,6 +569,12 @@
             <td>Enables seconds in the time picker.</td>
         </tr>
         <tr>
+            <td>formatDate</td>
+            <td>function</td>
+            <td>null</td>
+            <td>Allows using a custom date formatting function instead of the built-in handling for date formats using&nbsp;<code>dateFormat</code>,&nbsp;<code>altFormat</code>, etc.</td>
+        </tr>
+        <tr>
             <td>hourIncrement</td>
             <td>integer</td>
             <td>1</td>
@@ -624,7 +636,7 @@
             <td>function, [functions]</td>
             <td>null</td>
             <td>
-                Function(s) to trigger on every time the calendar is closed. See&nbsp;<a href="#eventsAPI">Events API</a>
+                Function(s) to trigger on every time the calendar is closed. See&nbsp;<a href="https://chmln.github.io/flatpickr/events/#onclose">Events API</a>
             </td>
         </tr>
         <tr>
@@ -632,7 +644,7 @@
             <td>function, [functions]</td>
             <td>null</td>
             <td>
-                Function(s) to trigger on every time the calendar is opened. See&nbsp;<a href="#eventsAPI">Events API</a>
+                Function(s) to trigger on every time the calendar is opened. See&nbsp;<a href="https://chmln.github.io/flatpickr/events/#onopen">Events API</a>
             </td>
         </tr>
         <tr>
@@ -640,7 +652,7 @@
             <td>function, [functions]</td>
             <td>null</td>
             <td>
-                Function to trigger when the calendar is ready. See&nbsp;<a href="#eventsAPI">Events API</a>
+                Function to trigger when the calendar is ready. See&nbsp;<a href="https://chmln.github.io/flatpickr/events/#onready">Events API</a>
             </td>
         </tr>
         <tr>
@@ -684,7 +696,7 @@
             <td>Boolean</td>
             <td>false</td>
             <td>
-                <a href="https://chmln.github.io/flatpickr/#example-strap">Custom elements and input groups</a>
+                <a href="https://chmln.github.io/flatpickr/examples/#flatpickr-external-elements">Custom elements and input groups</a>
             </td>
         </tr>
     </tbody>
