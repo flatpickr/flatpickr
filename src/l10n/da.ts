@@ -60,6 +60,7 @@ export const Danish: CustomLocale = {
 
   firstDayOfWeek: 1,
   rangeSeparator: " til ",
+  weekAbbreviation: "Uge"
 };
 
 fp.l10ns.da = Danish;
