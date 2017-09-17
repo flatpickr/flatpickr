@@ -16,7 +16,7 @@ const defaultConfig: Config = {
 };
 
 function confirmDatePlugin(pluginConfig: Config) {
-  const config = { ...defaultConfig, pluginConfig };
+  const config = { ...defaultConfig, ...pluginConfig };
   let confirmContainer: HTMLDivElement;
 
   return function(fp: Instance) {
