@@ -815,27 +815,94 @@ describe("flatpickr", () => {
       expect(fp.element.parentNode.childNodes[1]).toEqual(fp.calendarContainer);
     });
 
-    it("mobile calendar", () => {
-      mockAgent = "Android";
-      createInstance({
-        enableTime: true,
+    describe("mobile calendar", () => {
+      describe(".isMobile", () => {
+        it("returns true", () => {
+          mockAgent = "Android";
+          createInstance();
+
+          expect(fp.isMobile).toBe(true);
+        });
       });
 
-      expect(fp.isMobile).toBe(true);
+      describe("init", () => {
+        it("with value", () => {
+          mockAgent = "Android";
+          createInstance({
+            enableTime: true,
+          });
 
-      const mobileInput = fp.mobileInput as HTMLInputElement;
-      mobileInput.value = "2016-10-20T02:30";
-      simulate("change", mobileInput);
+          const mobileInput = fp.mobileInput as HTMLInputElement;
+          mobileInput.value = "2016-10-20T02:30";
+          simulate("change", mobileInput);
 
-      expect(fp.selectedDates.length).toBe(1);
-      expect(fp.latestSelectedDateObj).toBeDefined();
+          expect(fp.selectedDates.length).toBe(1);
+          expect(fp.latestSelectedDateObj).toBeDefined();
 
-      if (!fp.latestSelectedDateObj) return;
-      expect(fp.latestSelectedDateObj.getFullYear()).toBe(2016);
-      expect(fp.latestSelectedDateObj.getMonth()).toBe(9);
-      expect(fp.latestSelectedDateObj.getDate()).toBe(20);
-      expect(fp.latestSelectedDateObj.getHours()).toBe(2);
-      expect(fp.latestSelectedDateObj.getMinutes()).toBe(30);
+          if (!fp.latestSelectedDateObj) return;
+          expect(fp.latestSelectedDateObj.getFullYear()).toBe(2016);
+          expect(fp.latestSelectedDateObj.getMonth()).toBe(9);
+          expect(fp.latestSelectedDateObj.getDate()).toBe(20);
+          expect(fp.latestSelectedDateObj.getHours()).toBe(2);
+          expect(fp.latestSelectedDateObj.getMinutes()).toBe(30);
+        });
+
+        it("copy className and adds own", () => {
+          const el = document.createElement("input");
+          el.className = "foo bar";
+
+          mockAgent = "Android";
+          createInstance({}, el);
+
+          const mobileInput = fp.mobileInput as HTMLInputElement;
+
+          expect(mobileInput.classList).toContain("foo");
+          expect(mobileInput.classList).toContain("bar");
+          expect(mobileInput.classList).toContain("flatpickr-mobile");
+        });
+
+        describe("step attribute", () => {
+          it("copy value if setted", () => {
+            const el = document.createElement("input");
+            el.setAttribute("step", "3");
+
+            mockAgent = "Android";
+            createInstance({}, el);
+
+            const mobileInput = fp.mobileInput as HTMLInputElement;
+
+            expect(mobileInput.getAttribute("step")).toBe("3");
+          });
+
+          it("set 'any' value if not setted", () => {
+            const el = document.createElement("input");
+            el.removeAttribute("step");
+
+            mockAgent = "Android";
+            createInstance({}, el);
+
+            const mobileInput = fp.mobileInput as HTMLInputElement;
+
+            expect(mobileInput.getAttribute("step")).toBe("any");
+          });
+        });
+
+        it("with other attributes", () => {
+          const el = document.createElement("input");
+          el.placeholder = "foo";
+          el.disabled = true;
+          el.required = true;
+
+          mockAgent = "Android";
+          createInstance({}, el);
+
+          const mobileInput = fp.mobileInput as HTMLInputElement;
+
+          expect(mobileInput.placeholder).toBe("foo");
+          expect(mobileInput.disabled).toBe(true);
+          expect(mobileInput.required).toBe(true);
+        });
+      });
     });
 
     it("selectDate() + onChange() through GUI", () => {
