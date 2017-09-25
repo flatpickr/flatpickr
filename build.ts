@@ -72,7 +72,8 @@ async function readFileAsync(path: string) {
 }
 
 function compile(src: string, config = tsconfig) {
-  return typescript.transpileModule(src, config).outputText;
+  //return typescript.transpileModule(src, config).outputText;
+  return typescript.transpile(src, config);
 }
 
 function uglify(src: string) {
@@ -97,20 +98,32 @@ async function buildScripts() {
   }
 }
 
+const extrasConfig = {
+  ...tsconfig,
+  compilerOptions: {
+    ...tsconfig.compilerOptions,
+    module: "none",
+  },
+};
+delete extrasConfig.compilerOptions.module;
+
 function buildExtras(folder: "plugins" | "l10n") {
   return async function() {
+    console.log(`building ${folder}...`);
     await recursiveCopy(`./src/${folder}`, `./dist/${folder}`);
     const paths = await resolveGlob(`./dist/${folder}/**/*.ts`);
 
-    Promise.all(
+    await Promise.all(
       paths.map(async p => {
         await writeFileAsync(
           p.replace(".ts", ".js"),
-          compile(await readFileAsync(p))
+          compile(await readFileAsync(p), extrasConfig)
         );
         return removeFile(p);
       })
     );
+
+    console.log("done.");
   };
 }
 
