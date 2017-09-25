@@ -4,6 +4,12 @@ interface Config {
   input?: string | HTMLInputElement;
 }
 
+declare global {
+  interface Window {
+    rangePlugin: (config?: Config) => void;
+  }
+}
+
 function rangePlugin(config: Config = {}) {
   return function(fp: Instance) {
     let dateFormat = "",

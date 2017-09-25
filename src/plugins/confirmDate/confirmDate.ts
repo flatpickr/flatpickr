@@ -3,7 +3,7 @@ import { Instance } from "types/instance";
 interface Config {
   confirmIcon?: string;
   confirmText?: string;
-  showAlways: boolean;
+  showAlways?: boolean;
   theme?: string;
 }
 
