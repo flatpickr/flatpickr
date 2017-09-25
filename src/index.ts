@@ -861,7 +861,7 @@ function FlatpickrInstance(
 
   function buildMonthNav() {
     const monthNavFragment = window.document.createDocumentFragment();
-    self.monthNav = createElement("div", "flatpickr-month");
+    self.monthNav = createElement<HTMLDivElement>("div", "flatpickr-month");
 
     self.prevMonthNav = createElement<HTMLSpanElement>(
       "span",
@@ -869,7 +869,10 @@ function FlatpickrInstance(
     );
     self.prevMonthNav.innerHTML = self.config.prevArrow;
 
-    self.currentMonthElement = createElement("span", "cur-month");
+    self.currentMonthElement = createElement<HTMLSpanElement>(
+      "span",
+      "cur-month"
+    );
     self.currentMonthElement.title = self.l10n.scrollTitle;
 
     const yearInput = createNumberInput("cur-year");
@@ -894,7 +897,7 @@ function FlatpickrInstance(
     self.nextMonthNav = createElement("span", "flatpickr-next-month");
     self.nextMonthNav.innerHTML = self.config.nextArrow;
 
-    self.navigationCurrentMonth = createElement(
+    self.navigationCurrentMonth = createElement<HTMLSpanElement>(
       "span",
       "flatpickr-current-month"
     );
@@ -1020,7 +1023,10 @@ function FlatpickrInstance(
 
   function buildWeekdays() {
     if (!self.weekdayContainer)
-      self.weekdayContainer = createElement("div", "flatpickr-weekdays");
+      self.weekdayContainer = createElement<HTMLDivElement>(
+        "div",
+        "flatpickr-weekdays"
+      );
 
     const firstDayOfWeek = self.l10n.firstDayOfWeek;
     let weekdays = [...self.l10n.weekdays.shorthand];
@@ -1240,8 +1246,8 @@ function FlatpickrInstance(
       "config",
     ] as Array<keyof Instance>).forEach(k => {
       try {
-        delete self[k];
-      } catch (e) {}
+        delete self[k as keyof Instance];
+      } catch (_) {}
     });
   }
 
@@ -1847,6 +1853,7 @@ function FlatpickrInstance(
     e.stopPropagation();
 
     const isSelectable = (day: Element) =>
+      day.classList &&
       day.classList.contains("flatpickr-day") &&
       !day.classList.contains("disabled") &&
       !day.classList.contains("notAllowed");
