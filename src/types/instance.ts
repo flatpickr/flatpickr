@@ -25,11 +25,11 @@ interface Elements {
   weekWrapper?: HTMLDivElement;
   weekNumbers?: HTMLDivElement;
 
-  oldCurMonth?: HTMLDivElement;
-  navigationCurrentMonth: HTMLDivElement;
+  oldCurMonth?: HTMLSpanElement;
+  navigationCurrentMonth: HTMLSpanElement;
   monthNav: HTMLDivElement;
   currentYearElement: HTMLInputElement;
-  currentMonthElement: HTMLInputElement;
+  currentMonthElement: HTMLSpanElement;
   _hidePrevMonthArrow: boolean;
   _hideNextMonthArrow: boolean;
   prevMonthNav: HTMLElement;
