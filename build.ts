@@ -30,18 +30,22 @@ function logErr(e: Error | string) {
 const writeFileAsync = promisify(fs.writeFile);
 const removeFile = promisify(fs.unlink);
 
-async function startRollup(dev = false) {
-  execCommand(
-    `npm run rollup:${dev ? "start" : "build"}`,
-    (error, stdout, stderr) => {
-      if (error) {
-        console.error(`exec error: ${error}`);
-        return;
+function startRollup(dev = false) {
+  return new Promise((resolve, reject) => {
+    execCommand(
+      `npm run rollup:${dev ? "start" : "build"}`,
+      (error, stdout, stderr) => {
+        if (error) {
+          console.error(`exec error: ${error}`);
+          return reject();
+        }
+
+        console.log(stdout);
+        console.log(stderr);
+        resolve();
       }
-      console.log(stdout);
-      console.log(stderr);
-    }
-  );
+    );
+  });
 }
 
 function resolveGlob(g: string) {
@@ -198,12 +202,11 @@ function watch<F extends () => void>(path: string, cb: F) {
 
 function start() {
   const devMode = process.argv.indexOf("--dev") > -1;
-  startRollup(devMode);
+  startRollup(devMode).then(buildScripts);
 
   if (devMode) {
     setupWatchers();
   } else {
-    buildScripts();
     buildStyle();
     buildThemes();
     buildExtras("l10n")();
