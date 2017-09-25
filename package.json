@@ -9,8 +9,9 @@
     "start": "npm run build -- --dev",
     "rollup:start": "rollup -w -c",
     "rollup:build": "rollup -c",
-    "test": "jest --config .jest.json",
-    "typecheck": "tsc -p ./ --noEmit",
+    "test": "run-s test:typecheck test:unit",
+    "test:typecheck": "tsc -p ./ --noEmit",
+    "test:unit": "jest --config .jest.json",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "precommit": "lint-staged --silent"
   },
