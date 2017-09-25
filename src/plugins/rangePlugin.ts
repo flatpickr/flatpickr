@@ -33,13 +33,12 @@ function rangePlugin(config: Config = {}) {
       secondInput.setAttribute("data-fp-omit", "");
 
       fp._bind(secondInput, ["focus", "click"], e => {
-        fp.open(e, secondInput);
         if (fp.selectedDates[1]) {
           fp.latestSelectedDateObj = fp.selectedDates[1];
           fp._setHoursFromDate(fp.selectedDates[1]);
           fp.jumpToDate(fp.selectedDates[1]);
         }
-
+        fp.open(e, secondInput);
         [_firstInputFocused, _secondInputFocused] = [false, true];
       });
 
@@ -123,10 +122,14 @@ function rangePlugin(config: Config = {}) {
 
         if (_prevDates.length > selDates.length) {
           const newSelectedDate = selDates[0];
+          const newDates =
+            Math.abs(newSelectedDate.getTime() - _prevDates[1].getTime()) <
+            Math.abs(newSelectedDate.getTime() - _prevDates[0].getTime())
+              ? [_prevDates[0], newSelectedDate]
+              : [newSelectedDate, _prevDates[1]];
 
-          if (_firstInputFocused) fp.setDate([newSelectedDate, _prevDates[1]]);
-          else if (_secondInputFocused)
-            fp.setDate([_prevDates[0], newSelectedDate]);
+          fp.setDate(newDates, false);
+          _prevDates = [...newDates];
         }
 
         [
