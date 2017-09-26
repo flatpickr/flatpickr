@@ -412,6 +412,19 @@ describe("flatpickr", () => {
       expect(fp.currentMonth).toEqual(2);
     });
 
+    it("monthScroll: 0 < abs(delta) < 1", () => {
+      createInstance();
+      fp.changeMonth(1, false);
+
+      fp.open();
+      simulate("wheel", fp.currentMonthElement, {
+        deltaY: -0.3,
+      });
+
+      jest.runAllTimers();
+      expect(fp.currentMonth).toEqual(2);
+    });
+
     it("yearScroll", () => {
       createInstance();
       const now = new Date();
