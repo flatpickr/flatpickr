@@ -50,6 +50,7 @@
   },
   "main": "dist/flatpickr.js",
   "style": "dist/flatpickr.css",
+  "types": "./index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/chmln/flatpickr.git"
