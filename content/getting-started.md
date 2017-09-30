@@ -24,9 +24,14 @@ yarn add flatpickr
 
 ### Non-module environments
 
-If, for any reason, you are constained to a non-module environment (e.g. no bundlers such as webpack) - don't fret. I suggest simply pulling the latest version of `flatpickr` from `unpkg`.
+If, for any reason, you are constained to a non-module environment (e.g. no bundlers such as webpack) - don't fret. I suggest simply pulling the latest version of `flatpickr` from `jsdelivr` or `unpkg`.
 
 ```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<!-- or -->
+
 <link rel="stylesheet" href="https://unpkg.com/flatpickr/dist/flatpickr.min.css">
 <script src="https://unpkg.com/flatpickr"></script>
 ```
