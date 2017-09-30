@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=10" />
     <title>Events &amp; Hooks - flatpickr</title>
-    <meta name="generator" content="Hugo 0.27.1" />
+    <meta name="generator" content="Hugo 0.29" />
 
     
     <meta name="description" content="A lightweight and powerful datetimepicker">
@@ -50,7 +50,7 @@
     <link rel="stylesheet" href="https://chmln.github.io/flatpickr/stylesheets/application.css">
     <link rel="stylesheet" href="https://chmln.github.io/flatpickr/stylesheets/temporary.css">
     <link rel="stylesheet" href="https://chmln.github.io/flatpickr/stylesheets/palettes.css">
-    <link rel="stylesheet" href="https://chmln.github.io/flatpickr/stylesheets/highlight/highlight.css">
+    
 
     
     
@@ -482,26 +482,23 @@
 <h3 id="onyearchange"><code>onYearChange</code></h3>
 
 <p>onMonthChange gets triggered when the year is changed, either by the user or programmatically.</p>
-
-<pre><code class="language-javascript">
-{
-    onChange: function(selectedDates, dateStr, instance) {
-        //...
-    },
-    onOpen: [
-        function(selectedDates, dateStr, instance){
-            //...
-        },
-        function(selectedDates, dateStr, instance){
-            //...
-        }
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">{
+    onChange<span style="color:#555">:</span> <span style="color:#069;font-weight:bold">function</span>(selectedDates, dateStr, instance) {
+        <span style="color:#09f;font-style:italic">//...
+</span><span style="color:#09f;font-style:italic"></span>    },
+    onOpen<span style="color:#555">:</span> [
+        <span style="color:#069;font-weight:bold">function</span>(selectedDates, dateStr, instance){
+            <span style="color:#09f;font-style:italic">//...
+</span><span style="color:#09f;font-style:italic"></span>        },
+        <span style="color:#069;font-weight:bold">function</span>(selectedDates, dateStr, instance){
+            <span style="color:#09f;font-style:italic">//...
+</span><span style="color:#09f;font-style:italic"></span>        }
     ],
-    onClose: function(selectedDates, dateStr, instance){
-       // ...
-    }
-}
-</code></pre>
-
+    onClose<span style="color:#555">:</span> <span style="color:#069;font-weight:bold">function</span>(selectedDates, dateStr, instance){
+       <span style="color:#09f;font-style:italic">// ...
+</span><span style="color:#09f;font-style:italic"></span>    }
+}</code></pre>
+</div>
 <h3 id="onready"><code>onReady</code></h3>
 
 <p>onReady gets triggered once the calendar is in a ready state.</p>
@@ -513,40 +510,36 @@
 <h3 id="ondaycreate"><code>onDayCreate</code></h3>
 
 <p>Take full control of every date cell with the<code>onDayCreate()</code>hook.</p>
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">{
+    onDayCreate<span style="color:#555">:</span> <span style="color:#069;font-weight:bold">function</span>(dObj, dStr, fp, dayElem){
+        <span style="color:#09f;font-style:italic">// Utilize dayElem.dateObj, which is the corresponding Date
+</span><span style="color:#09f;font-style:italic"></span>
+        <span style="color:#09f;font-style:italic">// dummy logic
+</span><span style="color:#09f;font-style:italic"></span>        <span style="color:#069;font-weight:bold">if</span> (<span style="color:#366">Math</span>.random() <span style="color:#555">&lt;</span> <span style="color:#f60">0.15</span>)
+            dayElem.innerHTML <span style="color:#555">+=</span> <span style="color:#c30">&#34;&lt;span class=&#39;event&#39;&gt;&lt;/span&gt;&#34;</span>;
 
-<pre><code class="language-js">{
-    onDayCreate: function(dObj, dStr, fp, dayElem){
-        // Utilize dayElem.dateObj, which is the corresponding Date
-
-        // dummy logic
-        if (Math.random() &lt; 0.15)
-            dayElem.innerHTML += &quot;&lt;span class='event'&gt;&lt;/span&gt;&quot;;
-
-        else if (Math.random() &gt; 0.85)
-            dayElem.innerHTML += &quot;&lt;span class='event busy'&gt;&lt;/span&gt;&quot;;
+        <span style="color:#069;font-weight:bold">else</span> <span style="color:#069;font-weight:bold">if</span> (<span style="color:#366">Math</span>.random() <span style="color:#555">&gt;</span> <span style="color:#f60">0.85</span>)
+            dayElem.innerHTML <span style="color:#555">+=</span> <span style="color:#c30">&#34;&lt;span class=&#39;event busy&#39;&gt;&lt;/span&gt;&#34;</span>;
     }
-}
-</code></pre>
-
+}</code></pre>
+</div>
 <p>Every flatpickr day has <code>relative</code> positioning, which makes it easier to position indicators as we&rsquo;d like.</p>
-
-<pre><code class="language-css">.event {
-    position: absolute;
-    width: 3px;
-    height: 3px;
-    border-radius: 150px;
-    bottom: 3px;
-    left: calc(50% - 1.5px);
-    content: &quot; &quot;;
-    display: block;
-    background: #3d8eb9;
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">.<span style="color:#0a8;font-weight:bold">event</span> {
+    <span style="color:#069;font-weight:bold">position</span>: <span style="color:#069;font-weight:bold">absolute</span>;
+    <span style="color:#069;font-weight:bold">width</span>: <span style="color:#f60">3</span><span style="color:#078;font-weight:bold">px</span>;
+    <span style="color:#069;font-weight:bold">height</span>: <span style="color:#f60">3</span><span style="color:#078;font-weight:bold">px</span>;
+    <span style="color:#069;font-weight:bold">border-radius</span>: <span style="color:#f60">150</span><span style="color:#078;font-weight:bold">px</span>;
+    <span style="color:#069;font-weight:bold">bottom</span>: <span style="color:#f60">3</span><span style="color:#078;font-weight:bold">px</span>;
+    <span style="color:#069;font-weight:bold">left</span>: <span style="color:#366">calc</span>(<span style="color:#f60">50</span><span style="color:#078;font-weight:bold">%</span> <span style="color:#555">-</span> <span style="color:#f60">1.5</span><span style="color:#078;font-weight:bold">px</span>);
+    <span style="color:#069;font-weight:bold">content</span>: <span style="color:#c30">&#34; &#34;</span>;
+    <span style="color:#069;font-weight:bold">display</span>: <span style="color:#069;font-weight:bold">block</span>;
+    <span style="color:#069;font-weight:bold">background</span>: <span style="color:#f60">#3d8eb9</span>;
 }
 
-.event.busy {
-    background: #f64747;
-}
-</code></pre>
-
+.<span style="color:#0a8;font-weight:bold">event</span>.<span style="color:#0a8;font-weight:bold">busy</span> {
+    <span style="color:#069;font-weight:bold">background</span>: <span style="color:#f60">#f64747</span>;
+}</code></pre>
+</div>
 <style>
 .event {
     position: absolute;
@@ -647,11 +640,15 @@
 
     <script src="https://chmln.github.io/flatpickr/javascripts/application.js"></script>
     
+    <script src="https://chmln.github.io/flatpickr/init.js"></script>
+    
     <script src="https://chmln.github.io/flatpickr/bower_components/flatpickr/dist/flatpickr.js"></script>
     
     <script src="https://chmln.github.io/flatpickr/bower_components/flatpickr/dist/plugins/confirmDate/confirmDate.js"></script>
     
     <script src="https://chmln.github.io/flatpickr/bower_components/flatpickr/dist/plugins/weekSelect/weekSelect.js"></script>
+    
+    <script src="https://chmln.github.io/flatpickr/bower_components/flatpickr/dist/plugins/rangePlugin.js"></script>
     
     <script src="https://chmln.github.io/flatpickr/flatpickr.js"></script>
     
@@ -696,10 +693,7 @@
       }
     </script>
 
-    
 
-    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
   </body>
 </html>
 

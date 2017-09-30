@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=10" />
     <title>Plugins - flatpickr</title>
-    <meta name="generator" content="Hugo 0.27.1" />
+    <meta name="generator" content="Hugo 0.29" />
 
     
     <meta name="description" content="A lightweight and powerful datetimepicker">
@@ -50,7 +50,7 @@
     <link rel="stylesheet" href="https://chmln.github.io/flatpickr/stylesheets/application.css">
     <link rel="stylesheet" href="https://chmln.github.io/flatpickr/stylesheets/temporary.css">
     <link rel="stylesheet" href="https://chmln.github.io/flatpickr/stylesheets/palettes.css">
-    <link rel="stylesheet" href="https://chmln.github.io/flatpickr/stylesheets/highlight/highlight.css">
+    
 
     
     
@@ -463,48 +463,56 @@
 <li>date + time</li>
 <li>multiple dates</li>
 </ul>
-
-<pre><code class="language-js">{
-    &quot;enableTime&quot;: true,
-    &quot;plugins&quot;: [new confirmDatePlugin({})]
-}
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">{
+    <span style="color:#c30">&#34;enableTime&#34;</span><span style="color:#555">:</span> <span style="color:#069;font-weight:bold">true</span>,
+    <span style="color:#c30">&#34;plugins&#34;</span><span style="color:#555">:</span> [<span style="color:#069;font-weight:bold">new</span> confirmDatePlugin({})]
+}</code></pre>
+</div>
 <p><input class=flatpickr type="text" placeholder="Select Date.." data-id="confirmDate"></p>
 
 <p>A spiffy SVG icon is included, along with sane defaults, but you can customize them.</p>
 
 <p>Here are all the available options:</p>
-
-<pre><code class="language-js">{
-    confirmIcon: &quot;&lt;i class='fa fa-check'&gt;&lt;/i&gt;&quot;, // your icon's html, if you wish to override
-    confirmText: &quot;OK &quot;,
-    showAlways: false,
-    theme: &quot;light&quot; // or &quot;dark&quot;
-}
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">{
+    confirmIcon<span style="color:#555">:</span> <span style="color:#c30">&#34;&lt;i class=&#39;fa fa-check&#39;&gt;&lt;/i&gt;&#34;</span>, <span style="color:#09f;font-style:italic">// your icon&#39;s html, if you wish to override
+</span><span style="color:#09f;font-style:italic"></span>    confirmText<span style="color:#555">:</span> <span style="color:#c30">&#34;OK &#34;</span>,
+    showAlways<span style="color:#555">:</span> <span style="color:#069;font-weight:bold">false</span>,
+    theme<span style="color:#555">:</span> <span style="color:#c30">&#34;light&#34;</span> <span style="color:#09f;font-style:italic">// or &#34;dark&#34;
+</span><span style="color:#09f;font-style:italic"></span>}</code></pre>
+</div>
 <h2 id="weekselect"><code>weekSelect</code></h2>
 
 <p>For selecting a week.</p>
-
-<pre><code class="language-js">new Flatpickr({
-    &quot;plugins&quot;: [new weekSelectPlugin({})],
-    &quot;onChange&quot;: [function(){
-        // extract the week number
-        // note: &quot;this&quot; is bound to the flatpickr instance
-        const weekNumber = this.selectedDates[0]
-            ? this.config.getWeek(this.selectedDates[0])
-            : null;
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">flatpickr({
+    <span style="color:#c30">&#34;plugins&#34;</span><span style="color:#555">:</span> [<span style="color:#069;font-weight:bold">new</span> weekSelectPlugin({})],
+    <span style="color:#c30">&#34;onChange&#34;</span><span style="color:#555">:</span> [<span style="color:#069;font-weight:bold">function</span>(){
+        <span style="color:#09f;font-style:italic">// extract the week number
+</span><span style="color:#09f;font-style:italic"></span>        <span style="color:#09f;font-style:italic">// note: &#34;this&#34; is bound to the flatpickr instance
+</span><span style="color:#09f;font-style:italic"></span>        <span style="color:#069;font-weight:bold">const</span> weekNumber <span style="color:#555">=</span> <span style="color:#069;font-weight:bold">this</span>.selectedDates[<span style="color:#f60">0</span>]
+            <span style="color:#555">?</span> <span style="color:#069;font-weight:bold">this</span>.config.getWeek(<span style="color:#069;font-weight:bold">this</span>.selectedDates[<span style="color:#f60">0</span>])
+            <span style="color:#555">:</span> <span style="color:#069;font-weight:bold">null</span>;
 
         console.log(weekNumber);
     }]
-});
-
-
-</code></pre>
-
+});</code></pre>
+</div>
 <p><input class=flatpickr type="text" placeholder="Select Date.." data-id="weekSelect"></p>
+
+<h2 id="rangeplugin-beta"><code>rangePlugin (beta)</code></h2>
+
+<p>Range selection using two inputs.</p>
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">flatpickr({
+    <span style="color:#c30">&#34;plugins&#34;</span><span style="color:#555">:</span> [<span style="color:#069;font-weight:bold">new</span> rangePlugin({ input<span style="color:#555">:</span> <span style="color:#c30">&#34;#secondRangeInput&#34;</span>})]
+});</code></pre>
+</div>
+<div style="display: flex; margin-top: 1.6rem">
+ <div style="width: 49%; max-width: 300px; margin-right: 1em"   >
+<label><div><b>Date 1</b></div>
+<input class=flatpickr type="text" placeholder="Select Date.." data-id="rangePlugin"></label></div>
+<div style="width: 49%; max-width: 300px;">
+<label><div><b>Date 2</b></div>
+<input type="text" placeholder="Select Date.." id="secondRangeInput"></label></div>
+</div>
 
 
 			<aside class="copyright" role="note">
@@ -586,11 +594,15 @@
 
     <script src="https://chmln.github.io/flatpickr/javascripts/application.js"></script>
     
+    <script src="https://chmln.github.io/flatpickr/init.js"></script>
+    
     <script src="https://chmln.github.io/flatpickr/bower_components/flatpickr/dist/flatpickr.js"></script>
     
     <script src="https://chmln.github.io/flatpickr/bower_components/flatpickr/dist/plugins/confirmDate/confirmDate.js"></script>
     
     <script src="https://chmln.github.io/flatpickr/bower_components/flatpickr/dist/plugins/weekSelect/weekSelect.js"></script>
+    
+    <script src="https://chmln.github.io/flatpickr/bower_components/flatpickr/dist/plugins/rangePlugin.js"></script>
     
     <script src="https://chmln.github.io/flatpickr/flatpickr.js"></script>
     
@@ -635,10 +647,7 @@
       }
     </script>
 
-    
 
-    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
   </body>
 </html>
 

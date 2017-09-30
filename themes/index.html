@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=10" />
     <title>Themes - flatpickr</title>
-    <meta name="generator" content="Hugo 0.27.1" />
+    <meta name="generator" content="Hugo 0.29" />
 
     
     <meta name="description" content="A lightweight and powerful datetimepicker">
@@ -50,7 +50,7 @@
     <link rel="stylesheet" href="https://chmln.github.io/flatpickr/stylesheets/application.css">
     <link rel="stylesheet" href="https://chmln.github.io/flatpickr/stylesheets/temporary.css">
     <link rel="stylesheet" href="https://chmln.github.io/flatpickr/stylesheets/palettes.css">
-    <link rel="stylesheet" href="https://chmln.github.io/flatpickr/stylesheets/highlight/highlight.css">
+    
 
     
     
@@ -465,17 +465,13 @@
 <p>To use a theme of your choice, simply load its corresponding CSS file.</p>
 
 <p>For webpack builds and similar, you&rsquo;d do something like:</p>
-
-<pre><code class="language-js">require(&quot;flatpickr/dist/themes/dark.css&quot;);
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">require(<span style="color:#c30">&#34;flatpickr/dist/themes/dark.css&#34;</span>);</code></pre>
+</div>
 <h3 id="themes-in-browser-environments">Themes in browser environments</h3>
 
 <p>Otherwise, if you&rsquo;re constrained to a browser, just link the CSS file as a regular stylesheet.</p>
-
-<pre><code class="language-html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;https://npmcdn.com/flatpickr/dist/themes/dark.css&quot;&gt;
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#309;font-weight:bold">link</span> <span style="color:#309">rel</span><span style="color:#555">=</span><span style="color:#c30">&#34;stylesheet&#34;</span> <span style="color:#309">type</span><span style="color:#555">=</span><span style="color:#c30">&#34;text/css&#34;</span> <span style="color:#309">href</span><span style="color:#555">=</span><span style="color:#c30">&#34;https://npmcdn.com/flatpickr/dist/themes/dark.css&#34;</span>&gt;</code></pre>
+</div>
 <h2 id="available-themes">Available Themes</h2>
 
 <p>Available theme names are listed in the theme selector on top of the page.</p>
@@ -560,11 +556,15 @@
 
     <script src="https://chmln.github.io/flatpickr/javascripts/application.js"></script>
     
+    <script src="https://chmln.github.io/flatpickr/init.js"></script>
+    
     <script src="https://chmln.github.io/flatpickr/bower_components/flatpickr/dist/flatpickr.js"></script>
     
     <script src="https://chmln.github.io/flatpickr/bower_components/flatpickr/dist/plugins/confirmDate/confirmDate.js"></script>
     
     <script src="https://chmln.github.io/flatpickr/bower_components/flatpickr/dist/plugins/weekSelect/weekSelect.js"></script>
+    
+    <script src="https://chmln.github.io/flatpickr/bower_components/flatpickr/dist/plugins/rangePlugin.js"></script>
     
     <script src="https://chmln.github.io/flatpickr/flatpickr.js"></script>
     
@@ -609,10 +609,7 @@
       }
     </script>
 
-    
 
-    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
   </body>
 </html>
 

@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=10" />
     <title>Usage in IE9 - flatpickr</title>
-    <meta name="generator" content="Hugo 0.27.1" />
+    <meta name="generator" content="Hugo 0.29" />
 
     
     <meta name="description" content="A lightweight and powerful datetimepicker">
@@ -50,7 +50,7 @@
     <link rel="stylesheet" href="https://chmln.github.io/flatpickr/stylesheets/application.css">
     <link rel="stylesheet" href="https://chmln.github.io/flatpickr/stylesheets/temporary.css">
     <link rel="stylesheet" href="https://chmln.github.io/flatpickr/stylesheets/palettes.css">
-    <link rel="stylesheet" href="https://chmln.github.io/flatpickr/stylesheets/highlight/highlight.css">
+    
 
     
     
@@ -463,12 +463,10 @@ you will need to include a <a href="https://www.npmjs.com/package/classlist-poly
 <p>Make sure to include that as well, utilizing browser detection.</p>
 
 <p>For instance,</p>
-
-<pre><code class="language-html">&lt;!--[if IE 9]&gt;
-&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;https://npmcdn.com/flatpickr/dist/ie.css&quot;&gt;
-&lt;![endif]--&gt;
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="color:#09f;font-style:italic">&lt;!--[if IE 9]&gt;
+</span><span style="color:#09f;font-style:italic">&lt;link rel=&#34;stylesheet&#34; type=&#34;text/css&#34; href=&#34;https://npmcdn.com/flatpickr/dist/ie.css&#34;&gt;
+</span><span style="color:#09f;font-style:italic">&lt;![endif]--&gt;</span></code></pre>
+</div>
 <p>If you&rsquo;re using a bundler like webpack, see <a href="https://github.com/jantimon/html-webpack-plugin/issues/155">html-webpack-plugin</a></p>
 
 
@@ -551,11 +549,15 @@ you will need to include a <a href="https://www.npmjs.com/package/classlist-poly
 
     <script src="https://chmln.github.io/flatpickr/javascripts/application.js"></script>
     
+    <script src="https://chmln.github.io/flatpickr/init.js"></script>
+    
     <script src="https://chmln.github.io/flatpickr/bower_components/flatpickr/dist/flatpickr.js"></script>
     
     <script src="https://chmln.github.io/flatpickr/bower_components/flatpickr/dist/plugins/confirmDate/confirmDate.js"></script>
     
     <script src="https://chmln.github.io/flatpickr/bower_components/flatpickr/dist/plugins/weekSelect/weekSelect.js"></script>
+    
+    <script src="https://chmln.github.io/flatpickr/bower_components/flatpickr/dist/plugins/rangePlugin.js"></script>
     
     <script src="https://chmln.github.io/flatpickr/flatpickr.js"></script>
     
@@ -600,10 +602,7 @@ you will need to include a <a href="https://www.npmjs.com/package/classlist-poly
       }
     </script>
 
-    
 
-    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
   </body>
 </html>
 

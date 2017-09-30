@@ -1,21 +1,58 @@
-/* Slovak locals for flatpickr */
-var flatpickr = flatpickr || { l10ns: {} };
-flatpickr.l10ns.sk = {};
-
-flatpickr.l10ns.sk.weekdays = {
-	shorthand: ["Ned", "Pon", "Ut", "Str", "Štv", "Pia", "Sob"],
-	longhand: ["Nedeľa", "Pondelok", "Utorok", "Streda", "Štvrtok", "Piatok", "Sobota"]
+"use strict";
+exports.__esModule = true;
+var fp = typeof window !== "undefined" && window.flatpickr !== undefined
+    ? window.flatpickr
+    : {
+        l10ns: {}
+    };
+exports.Slovak = {
+    weekdays: {
+        shorthand: ["Ned", "Pon", "Ut", "Str", "Štv", "Pia", "Sob"],
+        longhand: [
+            "Nedeľa",
+            "Pondelok",
+            "Utorok",
+            "Streda",
+            "Štvrtok",
+            "Piatok",
+            "Sobota",
+        ]
+    },
+    months: {
+        shorthand: [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "Máj",
+            "Jún",
+            "Júl",
+            "Aug",
+            "Sep",
+            "Okt",
+            "Nov",
+            "Dec",
+        ],
+        longhand: [
+            "Január",
+            "Február",
+            "Marec",
+            "Apríl",
+            "Máj",
+            "Jún",
+            "Júl",
+            "August",
+            "September",
+            "Október",
+            "November",
+            "December",
+        ]
+    },
+    firstDayOfWeek: 1,
+    rangeSeparator: " do ",
+    ordinal: function () {
+        return ".";
+    }
 };
-
-flatpickr.l10ns.sk.months = {
-	shorthand: ["Jan", "Feb", "Mar", "Apr", "Máj", "Jún", "Júl", "Aug", "Sep", "Okt", "Nov", "Dec"],
-	longhand: ["Január", "Február", "Marec", "Apríl", "Máj", "Jún", "Júl", "August", "September", "Október", "November", "December"]
-};
-
-flatpickr.l10ns.sk.firstDayOfWeek = 1;
-flatpickr.l10ns.sk.rangeSeparator = " do ";
-flatpickr.l10ns.sk.ordinal = function () {
-	return ".";
-};
-
-if (typeof module !== "undefined") module.exports = flatpickr.l10ns;
+fp.l10ns.sk = exports.Slovak;
+exports["default"] = fp.l10ns;
