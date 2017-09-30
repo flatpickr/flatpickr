@@ -27,7 +27,7 @@ var configs = {
 
     minMaxDateTwoWeeks: {
         minDate: "today",
-        maxDate: new Date().fp_incr(14)
+        maxDate: new Date().setDate(new Date().getDate() + 14)
     },
 
     disableSpecific: {
@@ -164,10 +164,13 @@ var configs = {
 
             console.log(weekNumber);
         }]
+    },
+    rangePlugin: {
+        "plugins": [new rangePlugin({ input: "#secondRangeInput"})]
     }
 }
 
 for (var i = 0; i < examples.length; i++) {
-    new flatpickr(examples[i], configs[examples[i].dataset.id] || {});
+    flatpickr(examples[i], configs[examples[i].dataset.id] || {});
 }
 

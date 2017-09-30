@@ -42,7 +42,7 @@ Here are all the available options:
 For selecting a week.
 
 ```js
-new Flatpickr({
+flatpickr({
     "plugins": [new weekSelectPlugin({})],
     "onChange": [function(){
         // extract the week number
@@ -59,3 +59,24 @@ new Flatpickr({
 ```
 
 <input class=flatpickr type="text" placeholder="Select Date.." data-id="weekSelect">
+
+## `rangePlugin (beta)`
+
+Range selection using two inputs.
+
+```js
+flatpickr({
+    "plugins": [new rangePlugin({ input: "#secondRangeInput"})]
+});
+
+
+```
+
+<div style="display: flex; margin-top: 1.6rem">
+ <div style="width: 49%; max-width: 300px; margin-right: 1em"   >
+<label><div><b>Date 1</b></div>
+<input class=flatpickr type="text" placeholder="Select Date.." data-id="rangePlugin"></label></div>
+<div style="width: 49%; max-width: 300px;">
+<label><div><b>Date 2</b></div>
+<input type="text" placeholder="Select Date.." id="secondRangeInput"></label></div>
+</div>
