@@ -70,11 +70,6 @@
     "picker",
     "lightweight"
   ],
-  "collective": {
-    "type": "opencollective",
-    "url": "https://opencollective.com/flatpickr",
-    "logo": "https://opencollective.com/opencollective/logo.txt"
-  },
   "browserslist": [
     "ie >= 9",
     "last 2 versions",
