@@ -53,6 +53,8 @@ export const Czech: CustomLocale = {
       "Prosinec",
     ],
   },
+  
+  rangeSeparator: ' do ',
 
   firstDayOfWeek: 1,
 
