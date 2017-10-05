@@ -27,7 +27,7 @@ import { Korean as ko } from "./ko";
 import { Lithuanian as lt } from "./lt";
 import { Latvian as lv } from "./lv";
 import { Macedonian as mk } from "./mk";
-import { Mongolia as mn } from "./mn";
+import { Mongolian as mn } from "./mn";
 import { Malaysian as ms } from "./ms";
 import { Burmese as my } from "./my";
 import { Dutch as nl } from "./nl";
