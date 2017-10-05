@@ -98,6 +98,7 @@ export type key =
   | "lt"
   | "lv"
   | "mk"
+  | "mn"
   | "ms"
   | "my"
   | "nl"
