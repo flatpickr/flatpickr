@@ -140,7 +140,6 @@ function FlatpickrInstance(
 
     timeWrapper(e);
     if (self.selectedDates.length === 0) return;
-    console.log((e.target as HTMLInputElement).value);
 
     if (
       !self.minDateHasTime ||
@@ -384,7 +383,6 @@ function FlatpickrInstance(
       self.minuteElement !== undefined &&
       self.hourElement !== undefined
     ) {
-      console.log("bind time");
       const selText = (e: FocusEvent) =>
         (e.target as HTMLInputElement).select();
       bind(self.timeContainer, ["wheel", "input", "increment"], updateTime);
@@ -976,10 +974,6 @@ function FlatpickrInstance(
 
     self.hourElement.tabIndex = self.minuteElement.tabIndex = -1;
 
-    console.log(
-      self.config.defaultHour,
-      military2ampm(self.config.defaultHour)
-    );
     self.hourElement.value = pad(
       self.latestSelectedDateObj
         ? self.latestSelectedDateObj.getHours()
