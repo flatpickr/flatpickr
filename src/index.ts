@@ -184,7 +184,7 @@ function FlatpickrInstance(
         self.secondElement !== undefined
           ? (parseInt(self.secondElement.value, 10) || 0) % 60
           : 0;
-    console.log(hours);
+
     if (self.amPM !== undefined)
       hours = ampm2military(hours, self.amPM.textContent as "AM" | "PM");
 
