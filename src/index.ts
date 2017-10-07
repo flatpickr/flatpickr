@@ -178,13 +178,13 @@ function FlatpickrInstance(
     if (self.hourElement === undefined || self.minuteElement === undefined)
       return;
 
-    let hours = (parseInt(self.hourElement.value, 10) || 0) % 24,
+    let hours = (parseInt(self.hourElement.value.slice(-2), 10) || 0) % 24,
       minutes = (parseInt(self.minuteElement.value, 10) || 0) % 60,
       seconds =
         self.secondElement !== undefined
           ? (parseInt(self.secondElement.value, 10) || 0) % 60
           : 0;
-
+    console.log(hours);
     if (self.amPM !== undefined)
       hours = ampm2military(hours, self.amPM.textContent as "AM" | "PM");
 
@@ -273,7 +273,7 @@ function FlatpickrInstance(
    * @param {String} event the event name
    * @param {Function} handler the event handler
    */
-  function bind<F extends EventListener, E extends Element>(
+  function bind<F extends EventListener, E extends Element | Window>(
     element: E | E[],
     event: string | string[],
     handler: F
@@ -285,7 +285,7 @@ function FlatpickrInstance(
       return element.forEach(el => bind(el, event, handler));
 
     element.addEventListener(event, handler);
-    self._handlers.push({ element, event, handler });
+    self._handlers.push({ element: element as Element, event, handler });
   }
 
   /**
@@ -343,7 +343,7 @@ function FlatpickrInstance(
     if (!self.config.static) bind(self._input, "keydown", onKeyDown);
 
     if (!self.config.inline && !self.config.static)
-      bind(window.document.body, "resize", debouncedResize);
+      bind(window, "resize", debouncedResize);
 
     if (window.ontouchstart !== undefined)
       bind(window.document.body, "touchstart", documentClick);
@@ -391,7 +391,7 @@ function FlatpickrInstance(
       bind(self.timeContainer, ["wheel", "increment"], self._debouncedChange);
       bind(self.timeContainer, "input", triggerChange);
 
-      bind([self.hourElement, self.minuteElement], "focus", selText);
+      bind([self.hourElement, self.minuteElement], ["focus", "click"], selText);
 
       if (self.secondElement !== undefined)
         bind(
