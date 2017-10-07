@@ -11,46 +11,46 @@ const fp: FlatpickrFn =
 
 export const Danish: CustomLocale = {
   weekdays: {
-    shorthand: ["Søn", "Man", "Tir", "Ons", "Tors", "Fre", "Lør"],
+    shorthand: ["søn", "man", "tir", "ons", "tors", "fre", "lør"],
     longhand: [
-      "Søndag",
-      "Mandag",
-      "Tirsdag",
-      "Onsdag",
-      "Torsdag",
-      "Fredag",
-      "Lørdag",
+      "søndag",
+      "mandag",
+      "tirsdag",
+      "onsdag",
+      "torsdag",
+      "fredag",
+      "lørdag",
     ],
   },
 
   months: {
     shorthand: [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "Maj",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Okt",
-      "Nov",
-      "Dec",
+      "jan",
+      "feb",
+      "mar",
+      "apr",
+      "maj",
+      "jun",
+      "jul",
+      "aug",
+      "sep",
+      "okt",
+      "nov",
+      "dec",
     ],
     longhand: [
-      "Januar",
-      "Februar",
-      "Marts",
-      "April",
-      "Maj",
-      "Juni",
-      "Juli",
-      "August",
-      "September",
-      "Oktober",
-      "November",
-      "December",
+      "januar",
+      "februar",
+      "marts",
+      "april",
+      "maj",
+      "juni",
+      "juli",
+      "august",
+      "september",
+      "oktober",
+      "november",
+      "december",
     ],
   },
 
@@ -60,7 +60,7 @@ export const Danish: CustomLocale = {
 
   firstDayOfWeek: 1,
   rangeSeparator: " til ",
-  weekAbbreviation: "Uge"
+  weekAbbreviation: "uge"
 };
 
 fp.l10ns.da = Danish;
