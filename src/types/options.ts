@@ -1,6 +1,6 @@
 import { Instance } from "./instance";
 import { getWeek } from "utils/dates";
-import { CustomLocale } from "./locale";
+import { CustomLocale, key as LocaleKey } from "./locale";
 
 export type DateOption = Date | string | number;
 export type DateRangeLimit<D = DateOption> = { from: D; to: D };
@@ -61,45 +61,128 @@ export interface Options {
 
   /* Initial value of the hour element. */
   defaultHour?: number;
+
+  /* Initial value of the minute element. */
   defaultMinute?: number;
+
+  /* Initial value of the seconds element. */
   defaultSeconds?: number;
+
+  /*
+    Disables certain dates, preventing them from being selected.
+    See https://chmln.github.io/flatpickr/examples/#disabling-specific-dates */
   disable?: DateLimit[];
+
+  /* Set this to true to always use the non-native picker on mobile devices.
+By default, Flatpickr utilizes native datetime widgets unless certain options (e.g. disable) are used. */
   disableMobile?: boolean;
+
+  /* Disables all dates except these specified. See https://chmln.github.io/flatpickr/examples/#disabling-all-dates-except-select-few */
   enable?: DateLimit[];
+
+  /* Enables seconds selection in the time picker.
+ */
   enableSeconds?: boolean;
+
+  /* Enables the time picker */
   enableTime?: boolean;
+
+  /* Allows using a custom date formatting function instead of the built-in. Generally unnecessary.  */
   formatDate?: (date: Date, format: string) => string;
+
+  /* If "weekNumbers" are enabled, this is the function that outputs the week number for a given dates, optionally along with other text  */
   getWeek?: (date: Date) => string | number;
+
+  /*   Adjusts the step for the hour input (incl. scrolling) */
   hourIncrement?: number;
+
+  /* By default, clicking anywhere outside of calendar/input will close the calendar.
+  Clicking on elements specified in this option will not close the calendar */
   ignoredFocusElements?: HTMLElement[];
+
+  /* Displays the calendar inline */
   inline?: boolean;
-  locale?: string | CustomLocale;
+
+  /* The locale, either as a string (e.g. "ru", "en") or as an object */
+  locale?: LocaleKey | CustomLocale;
+
+  /* The maximum date that a user can pick to (inclusive). */
   maxDate?: DateOption;
+
+  /* The minimum date that a user can start picking from (inclusive). */
   minDate?: DateOption;
+
+  /* Adjusts the step for the minute input (incl. scrolling) */
   minuteIncrement?: number;
+
+  /* Date selection mode */
   mode?: "single" | "multiple" | "range";
+
+  /* HTML for the right arrow icon, used to switch months. */
   nextArrow?: string;
+
+  /* Hides the day selection in calendar.
+Use it along with "enableTime" to create a time picker. */
   noCalendar?: boolean;
+
+  /* Fires when the selected dates have changed - when a date is picked or cleared, by user or programmatically */
   onChange?: Hook | Hook[];
+
+  /* Fires when the calendar is closed */
   onClose?: Hook | Hook[];
+
+  /* Fires for every day cell in the calendar, where the fourth argument is the html element of the cell. See https://chmln.github.io/flatpickr/events/#ondaycreate*/
   onDayCreate?: Hook | Hook[];
+
+  /* Fires before the calendar instance is destroyed */
   onDestroy?: Hook | Hook[];
+
+  /* Fires when valid keyboard input for calendar is detected */
   onKeyDown?: Hook | Hook[];
+
+  /* Fires after the month has changed */
   onMonthChange?: Hook | Hook[];
+
+  /* Fires after the calendar is opened */
   onOpen?: Hook | Hook[];
+
+  /* Fires after the configuration for the calendar is parsed */
   onParseConfig?: Hook | Hook[];
+
+  /* Fires once the calendar instance is ready */
   onReady?: Hook | Hook[];
+
+  /* Like onChange, but fires immediately after any date changes */
   onValueUpdate?: Hook | Hook[];
+
+  /* Fires after the year has changed */
   onYearChange?: Hook | Hook[];
+
+  /* A custom datestring parser */
   parseDate?: (date: string, format: string) => Date;
+
+  /* Plugins. See https://chmln.github.io/flatpickr/plugins/ */
   plugins?: Plugin[];
+
+  /* How the calendar should be positioned with regards to the input. Defaults to "auto" */
   position?: "auto" | "above" | "below";
+
+  /* HTML for the left arrow icon, used to switch months. */
   prevArrow?: string;
+
+  /* Whether to display the current month name in shorthand mode, e.g. "Sep" instead "September" */
   shorthandCurrentMonth?: boolean;
+
+  /* Creates a wrapper to position the calendar. Use this if the input is inside a scrollable element */
   static?: boolean;
+
+  /* Displays time picker in 24 hour mode without AM/PM selection when enabled.*/
   time_24hr?: boolean;
-  time_numberhr?: boolean;
+
+  /* Display week numbers left of the calendar. */
   weekNumbers?: boolean;
+
+  /* See https://chmln.github.io/flatpickr/examples/#flatpickr-external-elements */
   wrap?: boolean;
 }
 
