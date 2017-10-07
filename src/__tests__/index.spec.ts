@@ -1126,15 +1126,15 @@ describe("flatpickr", () => {
 
       expect(instance.input).toEqual(input);
 
-      simulate("mousedown", wrapper.childNodes[1], { which: 1 }, MouseEvent); // open
+      simulate("click", wrapper.childNodes[1], { which: 1 }, MouseEvent); // open
       expect(instance.isOpen).toEqual(true);
 
-      simulate("mousedown", wrapper.childNodes[2], { which: 1 }, MouseEvent); // close
+      simulate("click", wrapper.childNodes[2], { which: 1 }, MouseEvent); // close
       expect(instance.isOpen).toEqual(false);
 
-      simulate("mousedown", wrapper.childNodes[3], { which: 1 }, MouseEvent); // toggle
+      simulate("click", wrapper.childNodes[3], { which: 1 }, MouseEvent); // toggle
       expect(instance.isOpen).toEqual(true);
-      simulate("mousedown", wrapper.childNodes[3], { which: 1 }, MouseEvent);
+      simulate("click", wrapper.childNodes[3], { which: 1 }, MouseEvent);
       expect(instance.isOpen).toEqual(false);
 
       instance.setDate(new Date());
@@ -1146,7 +1146,7 @@ describe("flatpickr", () => {
           parseInt(instance.selectedDateElem.textContent as string)
         ).toEqual(new Date().getDate());
 
-      simulate("mousedown", wrapper.childNodes[4], { which: 1 }, MouseEvent); // clear
+      simulate("click", wrapper.childNodes[4], { which: 1 }, MouseEvent); // clear
       expect(instance.selectedDates.length).toEqual(0);
       expect(instance.input.value).toEqual("");
 
