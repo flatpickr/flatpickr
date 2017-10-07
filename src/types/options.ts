@@ -4,8 +4,10 @@ import { CustomLocale, key as LocaleKey } from "./locale";
 
 export type DateOption = Date | string | number;
 export type DateRangeLimit<D = DateOption> = { from: D; to: D };
-type DateRangeFn = (date: Date) => boolean;
-export type DateLimit<D = DateOption> = D | DateRangeLimit<D> | DateRangeFn;
+export type DateLimit<D = DateOption> =
+  | D
+  | DateRangeLimit<D>
+  | ((date: Date) => boolean);
 
 type Hook = (
   dates: Date[],
@@ -59,26 +61,26 @@ export interface Options {
   /* The initial selected date(s). */
   defaultDate?: DateOption | DateOption[];
 
-  /* Initial value of the hour element. */
+  /* Initial value of the hour element, when no date is selected */
   defaultHour?: number;
 
-  /* Initial value of the minute element. */
+  /* Initial value of the minute element, when no date is selected */
   defaultMinute?: number;
 
-  /* Initial value of the seconds element. */
+  /* Initial value of the seconds element, when no date is selected */
   defaultSeconds?: number;
 
   /*
     Disables certain dates, preventing them from being selected.
     See https://chmln.github.io/flatpickr/examples/#disabling-specific-dates */
-  disable?: DateLimit[];
+  disable?: DateLimit<DateOption>[];
 
   /* Set this to true to always use the non-native picker on mobile devices.
 By default, Flatpickr utilizes native datetime widgets unless certain options (e.g. disable) are used. */
   disableMobile?: boolean;
 
   /* Disables all dates except these specified. See https://chmln.github.io/flatpickr/examples/#disabling-all-dates-except-select-few */
-  enable?: DateLimit[];
+  enable?: DateLimit<DateOption>[];
 
   /* Enables seconds selection in the time picker.
  */
@@ -103,7 +105,8 @@ By default, Flatpickr utilizes native datetime widgets unless certain options (e
   /* Displays the calendar inline */
   inline?: boolean;
 
-  /* The locale, either as a string (e.g. "ru", "en") or as an object */
+  /* The locale, either as a string (e.g. "ru", "en") or as an object.
+  See https://chmln.github.io/flatpickr/localization/ */
   locale?: LocaleKey | CustomLocale;
 
   /* The maximum date that a user can pick to (inclusive). */
@@ -112,10 +115,11 @@ By default, Flatpickr utilizes native datetime widgets unless certain options (e
   /* The minimum date that a user can start picking from (inclusive). */
   minDate?: DateOption;
 
-  /* Adjusts the step for the minute input (incl. scrolling) */
+  /* Adjusts the step for the minute input (incl. scrolling)
+  Defaults to 5 */
   minuteIncrement?: number;
 
-  /* Date selection mode */
+  /* Date selection mode, defaults to "single" */
   mode?: "single" | "multiple" | "range";
 
   /* HTML for the right arrow icon, used to switch months. */
@@ -200,7 +204,7 @@ export interface ParsedOptions {
   clickOpens: boolean;
   closeOnSelect: boolean;
   dateFormat: string;
-  defaultDate?: Date;
+  defaultDate?: Date | Date[];
   defaultHour: number;
   defaultMinute: number;
   defaultSeconds: number;
@@ -214,7 +218,7 @@ export interface ParsedOptions {
   hourIncrement: number;
   ignoredFocusElements: HTMLElement[];
   inline: boolean;
-  locale: string | CustomLocale;
+  locale: LocaleKey | "default" | CustomLocale;
   maxDate?: Date;
   minDate?: Date;
   minuteIncrement: number;

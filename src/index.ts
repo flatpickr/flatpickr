@@ -1701,7 +1701,7 @@ function FlatpickrInstance(
       "disableMobile",
     ];
 
-    let hooks: Array<keyof Options> = [
+    let hooks = [
       "onChange",
       "onClose",
       "onDayCreate",
@@ -2601,7 +2601,10 @@ flatpickr.localize = (l10n: CustomLocale) => {
   };
 };
 flatpickr.setDefaults = (config: Options) => {
-  flatpickr.defaultConfig = { ...flatpickr.defaultConfig, ...config };
+  flatpickr.defaultConfig = {
+    ...flatpickr.defaultConfig,
+    ...(config as ParsedOptions),
+  };
 };
 
 /* istanbul ignore next */

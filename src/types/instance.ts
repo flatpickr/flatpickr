@@ -133,7 +133,7 @@ export interface FlatpickrFn {
   (selector: NodeList | HTMLElement | string, config: Options):
     | Instance
     | Instance[];
-  defaultConfig: Options;
+  defaultConfig: ParsedOptions;
   l10ns: { [k in LocaleKey]?: CustomLocale } & { default: Locale };
   localize: (l10n: CustomLocale) => void;
   setDefaults: (config: Options) => void;
