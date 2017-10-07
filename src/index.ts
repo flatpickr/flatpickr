@@ -747,10 +747,10 @@ function FlatpickrInstance(
 
     if (targetNode === undefined && offset !== 0) {
       if (offset > 0) {
-        self.changeMonth(1);
+        self.changeMonth(1, true, undefined, true);
         newIndex = newIndex % 42;
       } else if (offset < 0) {
-        self.changeMonth(-1);
+        self.changeMonth(-1, true, undefined, true);
         newIndex += 42;
       }
 
@@ -1089,9 +1089,13 @@ function FlatpickrInstance(
     };
   }
 
-  function changeMonth(value: number, is_offset = true, animate?: boolean) {
+  function changeMonth(
+    value: number,
+    is_offset = true,
+    animate = self.config.animate,
+    from_keyboard = false
+  ) {
     const delta = is_offset ? value : value - self.currentMonth;
-    const skipAnimations = !self.config.animate || animate === false;
 
     if (
       (delta < 0 && self._hidePrevMonthArrow) ||
@@ -1108,9 +1112,9 @@ function FlatpickrInstance(
       triggerEvent("YearChange");
     }
 
-    buildDays(!skipAnimations ? delta : undefined);
+    buildDays(animate ? delta : undefined);
 
-    if (skipAnimations) {
+    if (!animate) {
       triggerEvent("MonthChange");
       return updateNavigationCurrentMonth();
     }
@@ -1170,7 +1174,11 @@ function FlatpickrInstance(
 
     triggerEvent("MonthChange");
 
-    if (document.activeElement && (document.activeElement as DayElement).$i) {
+    if (
+      from_keyboard &&
+      document.activeElement &&
+      (document.activeElement as DayElement).$i
+    ) {
       const index = (document.activeElement as DayElement).$i;
       afterDayAnim(() => {
         focusOnDay(index, 0);
@@ -1468,9 +1476,9 @@ function FlatpickrInstance(
               const delta = e.key === "ArrowRight" ? 1 : -1;
 
               if (!e.ctrlKey) focusOnDay((e.target as DayElement).$i, delta);
-              else changeMonth(delta, true);
-            } else if (self.hourElement && !isTimeObj) self.hourElement.focus();
-          }
+              else changeMonth(delta, true, undefined, true);
+            }
+          } else if (self.hourElement) self.hourElement.focus();
 
           break;
 
