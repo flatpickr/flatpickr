@@ -1,7 +1,7 @@
 +++
 weight = "4"
 date = "2017-03-03"
-title = "The Flatpickr Instance"
+title = "The flatpickr Instance"
 slug = "instance-methods-properties-elements"
 description = "Methods and properties of flatpickr instances"
 +++
@@ -13,17 +13,17 @@ You may store the instance by assigning the result of an [invocation](/getting-s
 Here are a few ways to do it.
 
 ```js
-const fp = flatpickr("#myID", {}); // Flatpickr
+const fp = flatpickr("#myID", {}); // flatpickr
 ```
 
 ```js
 const myInput = document.querySelector(".myInput");
-const fp = new Flatpickr(myInput, {});  // Flatpickr
+const fp = flatpickr(myInput, {});  // flatpickr
 ```
 
 ```js
 const calendars = flatpickr(".calendar", {});
-calendars[0] // Flatpickr
+calendars[0] // flatpickr
 ```
 
 And if you've forgot to save the instance to a variable
@@ -57,7 +57,7 @@ The configuration object (defaults + user-specified options).
 
 Changes the current month.
 ```js
-let calendar = new Flatpickr(yourElement, config);
+let calendar = flatpickr(yourElement, config);
 calendar.changeMonth(1); // go a month ahead
 calendar.changeMonth(-2); // go two months back
 
@@ -74,7 +74,7 @@ Closes the calendar.
 
 ### destroy()
 
-Destroys the Flatpickr instance, cleans up - removes event listeners, restores inputs, etc.
+Destroys the flatpickr instance, cleans up - removes event listeners, restores inputs, etc.
 
 ### formatDate(dateObj, formatStr)
 
@@ -147,23 +147,23 @@ The container for all the day elements.
 
 ## Useful prototype methods
 
-Flatpickr exposes its date parser and formatter which don't require an instance to work.
+flatpickr exposes its date parser and formatter which don't require an instance to work.
 
 While not as powerful as say `moment.js`, they're functional enough to replace it in most of the basic usecases.
 
-### Flatpickr.prototype.parseDate(dateStr, dateFormat)
+### flatpickr.prototype.parseDate(dateStr, dateFormat)
 
 Returns a `Date` object.
 
-`Flatpickr.prototype.parseDate("2016-10-20", "Y-m-d")`
+`flatpickr.prototype.parseDate("2016-10-20", "Y-m-d")`
 
 Thu Oct 20 2016 00:00:00
 
-`Flatpickr.prototype.parseDate("31/01/1995", "d/m/Y")`
+`flatpickr.prototype.parseDate("31/01/1995", "d/m/Y")`
 
 Tue Jan 31 1995 00:00:00
 
-### Flatpickr.prototype.formatDate(dateObj, dateFormat)
-`Flatpickr.prototype.formatDate(new Date(), "Y-m-d h:i K")`
+### flatpickr.prototype.formatDate(dateObj, dateFormat)
+`flatpickr.prototype.formatDate(new Date(), "Y-m-d h:i K")`
 
 "2017-04-24 11:56 AM"

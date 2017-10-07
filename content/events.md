@@ -7,13 +7,13 @@ date="2017-03-03"
 
 ## Events
 
-Flatpickr has 5 event hooks for the most common and useful actions. For each hook, you may specify a single function, or an array of functions. Callback arguments are explained below.
+flatpickr has 5 event hooks for the most common and useful actions. For each hook, you may specify a single function, or an array of functions. Callback arguments are explained below.
 
 `selectedDates` is an array of Date objects selected by the user. When there are no dates selected, the array is empty.
 
 `dateStr` is a string representation of the latest selected Date object by the user. The string is formatted as per the`dateFormat`option.
 
-`instance` is the Flatpickr object, containing various methods and properties.
+`instance` is the flatpickr object, containing various methods and properties.
 
 ## Hooks
 

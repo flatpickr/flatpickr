@@ -25,7 +25,7 @@ Additionally I recommend using the `altInput: true` option to display a nicer da
 ### Motivation
 
 In `v2`, users would often get confused about which invocation syntax to use.
-<br>There was `new Flatpickr()` which only supported elements and `flatpickr()` which only supported selector strings.
+<br>There was `flatpickr()` which only supported elements and `flatpickr()` which only supported selector strings.
 
 It wasn't always easy to remember, and the two are now merged in `v3`.
 

@@ -4,6 +4,8 @@ title = "Options"
 weight = "6"
 +++
 
+An always up-to-date list of options may be found at <a href="https://github.com/chmln/flatpickr/blob/master/src/types/options.ts#L19" target="_blank">`options.ts`</a>
+
 <table class="options">
     <thead>
         <tr>
@@ -101,7 +103,7 @@ weight = "6"
             <td>Boolean</td>
             <td>false</td>
             <td>Set&nbsp;<code>disableMobile</code>&nbsp;to true to always use the non-native picker.<br>
-            By default, Flatpickr utilizes native datetime widgets unless certain options (e.g. disable) are used.</td>
+            By default, flatpickr utilizes native datetime widgets unless certain options (e.g. disable) are used.</td>
         </tr>
         <tr>
             <td>enable</td>
