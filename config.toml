@@ -19,7 +19,7 @@ pygmentsStyle = "manni"
     provider = "GitHub"
     repo_url = "https://github.com/chmln/flatpickr"
 
-    version = ""
+    version = "v3"
     logo = "images/logo.png"
     favicon = "images/logo.png"
 
@@ -28,21 +28,18 @@ pygmentsStyle = "manni"
     # Custom assets
     custom_css = [
         "site.css",
-        "bower_components/flatpickr/dist/flatpickr.css",
-        "bower_components/flatpickr/dist/plugins/confirmDate/confirmDate.css"
+        "https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.css",
+        "https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/confirmDate/confirmDate.css"
     ]
     custom_js  = [
         "init.js",
-        "bower_components/flatpickr/dist/flatpickr.js",
-        "bower_components/flatpickr/dist/plugins/confirmDate/confirmDate.js",
-        "bower_components/flatpickr/dist/plugins/weekSelect/weekSelect.js",
-        "bower_components/flatpickr/dist/plugins/rangePlugin.js",
+        "https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.js",
+        "https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/confirmDate/confirmDate.js",
+        "https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/weekSelect/weekSelect.js",
+        "https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/rangePlugin.js",
         "flatpickr.js",
         "themer.js"
     ]
-
-    # Syntax highlighting theme
-    highlight_css  = ""
 
     [params.palette]
         primary = "blue"
