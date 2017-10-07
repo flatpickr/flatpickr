@@ -314,13 +314,9 @@ function FlatpickrInstance(
         Array.prototype.forEach.call(
           self.element.querySelectorAll(`[data-${evt}]`),
           (el: HTMLElement) =>
-            bind(
-              el,
-              "mousedown",
-              onClick(self[
-                evt as "open" | "close" | "toggle" | "clear"
-              ] as EventListener)
-            )
+            bind(el, "click", self[
+              evt as "open" | "close" | "toggle" | "clear"
+            ] as EventListener)
         );
       });
     }
@@ -1620,7 +1616,8 @@ function FlatpickrInstance(
       positionCalendar();
   }
 
-  function open(e?: Event, positionElement?: HTMLElement) {
+  function open(e?: Event, positionElement: HTMLElement = self._input) {
+    console.log("open", self.isOpen);
     if (self.isMobile) {
       if (e) {
         e.preventDefault();
@@ -1635,6 +1632,7 @@ function FlatpickrInstance(
       return;
     }
 
+    console.log(self.isOpen || self._input.disabled || self.config.inline);
     if (self.isOpen || self._input.disabled || self.config.inline) return;
 
     self.isOpen = true;
