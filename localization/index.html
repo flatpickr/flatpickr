@@ -68,9 +68,9 @@
     
     <link rel="stylesheet" href="https://chmln.github.io/flatpickr/site.css">
     
-    <link rel="stylesheet" href="https://chmln.github.io/flatpickr/bower_components/flatpickr/dist/flatpickr.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.css">
     
-    <link rel="stylesheet" href="https://chmln.github.io/flatpickr/bower_components/flatpickr/dist/plugins/confirmDate/confirmDate.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/confirmDate/confirmDate.css">
     
 
     <script src="https://chmln.github.io/flatpickr/javascripts/modernizr.js"></script>
@@ -145,7 +145,7 @@
         </div>
       
       <div class="name">
-        <strong>flatpickr </strong>
+        <strong>flatpickr <span class="version">v3</span></strong>
         
           <br>
           chmln/flatpickr
@@ -451,42 +451,42 @@
 
 			
 
-<p><a href="https://github.com/chmln/flatpickr/tree/master/dist/l10n">Dozens of locales</a> are available.</p>
+<p><a href="https://github.com/chmln/flatpickr/tree/master/src/l10n">Dozens of locales</a> are available.</p>
 
-<p>Flatpickr can be localized per-instance, or globally.</p>
+<p>flatpickr can be localized per-instance, or globally.</p>
 
 <h2 id="using-modules">Using Modules</h2>
-<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#069;font-weight:bold">const</span> Flatpickr <span style="color:#555">=</span> require(<span style="color:#c30">&#34;flatpickr&#34;</span>);
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#069;font-weight:bold">const</span> flatpickr <span style="color:#555">=</span> require(<span style="color:#c30">&#34;flatpickr&#34;</span>);
 <span style="color:#069;font-weight:bold">const</span> Russian <span style="color:#555">=</span> require(<span style="color:#c30">&#34;flatpickr/dist/l10n/ru.js&#34;</span>).ru;
 <span style="color:#09f;font-style:italic">// or.. import {ru} from &#34;flatpickr/dist/l10n/ru.js&#34;
 </span><span style="color:#09f;font-style:italic"></span>
-<span style="color:#069;font-weight:bold">new</span> Flatpickr(myElem, {
+flatpickr(myElem, {
     <span style="color:#c30">&#34;locale&#34;</span><span style="color:#555">:</span> Russian <span style="color:#09f;font-style:italic">// locale for this instance only
 </span><span style="color:#09f;font-style:italic"></span>});</code></pre>
 </div>
 <p>Localize globally (for all instances):</p>
 <div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#069;font-weight:bold">const</span> Russian <span style="color:#555">=</span> require(<span style="color:#c30">&#34;flatpickr/dist/l10n/ru.js&#34;</span>).ru;
-Flatpickr.localize(Russian); <span style="color:#09f;font-style:italic">// default locale is now Russian
+flatpickr.localize(Russian); <span style="color:#09f;font-style:italic">// default locale is now Russian
 </span><span style="color:#09f;font-style:italic"></span>
-<span style="color:#069;font-weight:bold">new</span> Flatpickr(myElem);</code></pre>
+flatpickr(myElem);</code></pre>
 </div>
 <h2 id="localization-in-a-browser-environment">Localization in a Browser Environment</h2>
 <div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#309;font-weight:bold">script</span> <span style="color:#309">src</span><span style="color:#555">=</span><span style="color:#c30">&#34;https://npmcdn.com/flatpickr/dist/flatpickr.min.js&#34;</span>&gt;&lt;/<span style="color:#309;font-weight:bold">script</span>&gt;
 &lt;<span style="color:#309;font-weight:bold">script</span> <span style="color:#309">src</span><span style="color:#555">=</span><span style="color:#c30">&#34;https://npmcdn.com/flatpickr/dist/l10n/ru.js&#34;</span>&gt;&lt;/<span style="color:#309;font-weight:bold">script</span>&gt;</code></pre>
-</div><div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#069;font-weight:bold">new</span> Flatpickr(myElement, {
+</div><div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">flatpickr(myElement, {
     <span style="color:#c30">&#34;locale&#34;</span><span style="color:#555">:</span> <span style="color:#c30">&#34;ru&#34;</span>  <span style="color:#09f;font-style:italic">// locale for this instance only
 </span><span style="color:#09f;font-style:italic"></span>});</code></pre>
 </div>
 <p>Localize globally (for all instances):</p>
-<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">Flatpickr.localize(Flatpickr.l10ns.ru);
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">flatpickr.localize(flatpickr.l10ns.ru);
 flatpickr(<span style="color:#c30">&#34;mySelector&#34;</span>);</code></pre>
 </div>
 <p>You may also wish to modify only certain values of locale.
 For instance, to set the first day of the week to Monday:</p>
-<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">Flatpickr.l10ns.<span style="color:#069;font-weight:bold">default</span>.firstDayOfWeek <span style="color:#555">=</span> <span style="color:#f60">1</span>; <span style="color:#a00;background-color:#faa">// Monday</span></code></pre>
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">flatpickr.l10ns.<span style="color:#069;font-weight:bold">default</span>.firstDayOfWeek <span style="color:#555">=</span> <span style="color:#f60">1</span>; <span style="color:#a00;background-color:#faa">// Monday</span></code></pre>
 </div>
 <p>If you&rsquo;d like the option to persist regardless of locale, use the <code>locale</code> option to override specific fields:</p>
-<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#069;font-weight:bold">new</span> Flatpickr(myElem, {
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">flatpickr(myElem, {
     locale<span style="color:#555">:</span> {
         firstDayOfWeek<span style="color:#555">:</span> <span style="color:#f60">2</span>
     }
@@ -574,13 +574,13 @@ For instance, to set the first day of the week to Monday:</p>
     
     <script src="https://chmln.github.io/flatpickr/init.js"></script>
     
-    <script src="https://chmln.github.io/flatpickr/bower_components/flatpickr/dist/flatpickr.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.js"></script>
     
-    <script src="https://chmln.github.io/flatpickr/bower_components/flatpickr/dist/plugins/confirmDate/confirmDate.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/confirmDate/confirmDate.js"></script>
     
-    <script src="https://chmln.github.io/flatpickr/bower_components/flatpickr/dist/plugins/weekSelect/weekSelect.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/weekSelect/weekSelect.js"></script>
     
-    <script src="https://chmln.github.io/flatpickr/bower_components/flatpickr/dist/plugins/rangePlugin.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/rangePlugin.js"></script>
     
     <script src="https://chmln.github.io/flatpickr/flatpickr.js"></script>
     

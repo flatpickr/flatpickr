@@ -9,7 +9,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=10" />
-    <title>The Flatpickr Instance - flatpickr</title>
+    <title>The flatpickr Instance - flatpickr</title>
     <meta name="generator" content="Hugo 0.29" />
 
     
@@ -68,9 +68,9 @@
     
     <link rel="stylesheet" href="https://chmln.github.io/flatpickr/site.css">
     
-    <link rel="stylesheet" href="https://chmln.github.io/flatpickr/bower_components/flatpickr/dist/flatpickr.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.css">
     
-    <link rel="stylesheet" href="https://chmln.github.io/flatpickr/bower_components/flatpickr/dist/plugins/confirmDate/confirmDate.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/confirmDate/confirmDate.css">
     
 
     <script src="https://chmln.github.io/flatpickr/javascripts/modernizr.js"></script>
@@ -104,7 +104,7 @@
     </div>
     <div class="stretch">
       <div class="title">
-        The Flatpickr Instance
+        The flatpickr Instance
       </div>
     </div>
 
@@ -145,7 +145,7 @@
         </div>
       
       <div class="name">
-        <strong>flatpickr </strong>
+        <strong>flatpickr <span class="version">v3</span></strong>
         
           <br>
           chmln/flatpickr
@@ -447,7 +447,7 @@
 
 	<article class="article">
 		<div class="wrapper">
-			<h1>The Flatpickr Instance </h1>
+			<h1>The flatpickr Instance </h1>
 
 			
 
@@ -456,11 +456,11 @@
 <p>You may store the instance by assigning the result of an <a href="https://chmln.github.io/flatpickr/getting-started/#usage">invocation</a> to a variable.</p>
 
 <p>Here are a few ways to do it.</p>
-<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#069;font-weight:bold">const</span> fp <span style="color:#555">=</span> flatpickr(<span style="color:#c30">&#34;#myID&#34;</span>, {}); <span style="color:#a00;background-color:#faa">// Flatpickr</span></code></pre>
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#069;font-weight:bold">const</span> fp <span style="color:#555">=</span> flatpickr(<span style="color:#c30">&#34;#myID&#34;</span>, {}); <span style="color:#a00;background-color:#faa">// flatpickr</span></code></pre>
 </div><div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#069;font-weight:bold">const</span> myInput <span style="color:#555">=</span> <span style="color:#366">document</span>.querySelector(<span style="color:#c30">&#34;.myInput&#34;</span>);
-<span style="color:#069;font-weight:bold">const</span> fp <span style="color:#555">=</span> <span style="color:#069;font-weight:bold">new</span> Flatpickr(myInput, {});  <span style="color:#a00;background-color:#faa">// Flatpickr</span></code></pre>
+<span style="color:#069;font-weight:bold">const</span> fp <span style="color:#555">=</span> flatpickr(myInput, {});  <span style="color:#a00;background-color:#faa">// flatpickr</span></code></pre>
 </div><div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#069;font-weight:bold">const</span> calendars <span style="color:#555">=</span> flatpickr(<span style="color:#c30">&#34;.calendar&#34;</span>, {});
-calendars[<span style="color:#f60">0</span>] <span style="color:#a00;background-color:#faa">// Flatpickr</span></code></pre>
+calendars[<span style="color:#f60">0</span>] <span style="color:#a00;background-color:#faa">// flatpickr</span></code></pre>
 </div>
 <p>And if you&rsquo;ve forgot to save the instance to a variable</p>
 <div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">flatpickr(<span style="color:#c30">&#34;#myInput&#34;</span>, {}); <span style="color:#09f;font-style:italic">// invocation without saving to a var
@@ -493,7 +493,7 @@ calendars[<span style="color:#f60">0</span>] <span style="color:#a00;background-
 <h3 id="changemonth-monthnum-is-offset-true">changeMonth(monthNum, is_offset = true)</h3>
 
 <p>Changes the current month.</p>
-<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#069;font-weight:bold">let</span> calendar <span style="color:#555">=</span> <span style="color:#069;font-weight:bold">new</span> Flatpickr(yourElement, config);
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#069;font-weight:bold">let</span> calendar <span style="color:#555">=</span> flatpickr(yourElement, config);
 calendar.changeMonth(<span style="color:#f60">1</span>); <span style="color:#09f;font-style:italic">// go a month ahead
 </span><span style="color:#09f;font-style:italic"></span>calendar.changeMonth(<span style="color:#555">-</span><span style="color:#f60">2</span>); <span style="color:#09f;font-style:italic">// go two months back
 </span><span style="color:#09f;font-style:italic"></span>
@@ -509,7 +509,7 @@ calendar.changeMonth(<span style="color:#f60">0</span>, <span style="color:#069;
 
 <h3 id="destroy">destroy()</h3>
 
-<p>Destroys the Flatpickr instance, cleans up - removes event listeners, restores inputs, etc.</p>
+<p>Destroys the flatpickr instance, cleans up - removes event listeners, restores inputs, etc.</p>
 
 <h3 id="formatdate-dateobj-formatstr">formatDate(dateObj, formatStr)</h3>
 
@@ -583,25 +583,25 @@ And if you&rsquo;re passing a date string with a format other than your <code>da
 
 <h2 id="useful-prototype-methods">Useful prototype methods</h2>
 
-<p>Flatpickr exposes its date parser and formatter which don&rsquo;t require an instance to work.</p>
+<p>flatpickr exposes its date parser and formatter which don&rsquo;t require an instance to work.</p>
 
 <p>While not as powerful as say <code>moment.js</code>, they&rsquo;re functional enough to replace it in most of the basic usecases.</p>
 
-<h3 id="flatpickr-prototype-parsedate-datestr-dateformat">Flatpickr.prototype.parseDate(dateStr, dateFormat)</h3>
+<h3 id="flatpickr-prototype-parsedate-datestr-dateformat">flatpickr.prototype.parseDate(dateStr, dateFormat)</h3>
 
 <p>Returns a <code>Date</code> object.</p>
 
-<p><code>Flatpickr.prototype.parseDate(&quot;2016-10-20&quot;, &quot;Y-m-d&quot;)</code></p>
+<p><code>flatpickr.prototype.parseDate(&quot;2016-10-20&quot;, &quot;Y-m-d&quot;)</code></p>
 
 <p>Thu Oct 20 2016 00:00:00</p>
 
-<p><code>Flatpickr.prototype.parseDate(&quot;31/01/1995&quot;, &quot;d/m/Y&quot;)</code></p>
+<p><code>flatpickr.prototype.parseDate(&quot;31/01/1995&quot;, &quot;d/m/Y&quot;)</code></p>
 
 <p>Tue Jan 31 1995 00:00:00</p>
 
-<h3 id="flatpickr-prototype-formatdate-dateobj-dateformat">Flatpickr.prototype.formatDate(dateObj, dateFormat)</h3>
+<h3 id="flatpickr-prototype-formatdate-dateobj-dateformat">flatpickr.prototype.formatDate(dateObj, dateFormat)</h3>
 
-<p><code>Flatpickr.prototype.formatDate(new Date(), &quot;Y-m-d h:i K&quot;)</code></p>
+<p><code>flatpickr.prototype.formatDate(new Date(), &quot;Y-m-d h:i K&quot;)</code></p>
 
 <p>&ldquo;2017-04-24 11:56 AM&rdquo;</p>
 
@@ -687,13 +687,13 @@ And if you&rsquo;re passing a date string with a format other than your <code>da
     
     <script src="https://chmln.github.io/flatpickr/init.js"></script>
     
-    <script src="https://chmln.github.io/flatpickr/bower_components/flatpickr/dist/flatpickr.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.js"></script>
     
-    <script src="https://chmln.github.io/flatpickr/bower_components/flatpickr/dist/plugins/confirmDate/confirmDate.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/confirmDate/confirmDate.js"></script>
     
-    <script src="https://chmln.github.io/flatpickr/bower_components/flatpickr/dist/plugins/weekSelect/weekSelect.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/weekSelect/weekSelect.js"></script>
     
-    <script src="https://chmln.github.io/flatpickr/bower_components/flatpickr/dist/plugins/rangePlugin.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/rangePlugin.js"></script>
     
     <script src="https://chmln.github.io/flatpickr/flatpickr.js"></script>
     

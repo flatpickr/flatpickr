@@ -35,14 +35,14 @@ Upon date selection, the original input will contain a Y-m-d.</description>
     </item>
     
     <item>
-      <title>The Flatpickr Instance</title>
+      <title>The flatpickr Instance</title>
       <link>https://chmln.github.io/flatpickr/instance-methods-properties-elements/</link>
       <pubDate>Fri, 03 Mar 2017 00:00:00 +0000</pubDate>
       
       <guid>https://chmln.github.io/flatpickr/instance-methods-properties-elements/</guid>
       <description>Retrieving the flatpickr instance You may store the instance by assigning the result of an invocation to a variable.
 Here are a few ways to do it.
-const fp = flatpickr(&amp;#34;#myID&amp;#34;, {}); // Flatpickr const myInput = document.querySelector(&amp;#34;.myInput&amp;#34;); const fp = new Flatpickr(myInput, {}); // Flatpickr const calendars = flatpickr(&amp;#34;.calendar&amp;#34;, {}); calendars[0] // Flatpickr  And if you&amp;rsquo;ve forgot to save the instance to a variable
+const fp = flatpickr(&amp;#34;#myID&amp;#34;, {}); // flatpickr const myInput = document.querySelector(&amp;#34;.myInput&amp;#34;); const fp = flatpickr(myInput, {}); // flatpickr const calendars = flatpickr(&amp;#34;.calendar&amp;#34;, {}); calendars[0] // flatpickr  And if you&amp;rsquo;ve forgot to save the instance to a variable
 flatpickr(&amp;#34;#myInput&amp;#34;, {}); // invocation without saving to a var // .</description>
     </item>
     
@@ -52,7 +52,7 @@ flatpickr(&amp;#34;#myInput&amp;#34;, {}); // invocation without saving to a var
       <pubDate>Fri, 03 Mar 2017 00:00:00 +0000</pubDate>
       
       <guid>https://chmln.github.io/flatpickr/events/</guid>
-      <description>Events Flatpickr has 5 event hooks for the most common and useful actions. For each hook, you may specify a single function, or an array of functions. Callback arguments are explained below.
+      <description>Events flatpickr has 5 event hooks for the most common and useful actions. For each hook, you may specify a single function, or an array of functions. Callback arguments are explained below.
 selectedDates is an array of Date objects selected by the user. When there are no dates selected, the array is empty.
 dateStr is a string representation of the latest selected Date object by the user. The string is formatted as per thedateFormatoption.</description>
     </item>
@@ -63,7 +63,8 @@ dateStr is a string representation of the latest selected Date object by the us
       <pubDate>Fri, 03 Mar 2017 20:23:43 -0500</pubDate>
       
       <guid>https://chmln.github.io/flatpickr/options/</guid>
-      <description>Config Option Type Default Description     altFormat string &#34;F j, Y&#34; Exactly the same as date format, but for the altInput field   altInput Boolean false Show the user a readable date (as per altFormat), but return something totally different to the server.   altInputClass String &#34;&#34; This class will be added to the input element created by the altInput option. &amp;nbsp;Note that&amp;nbsp;altInput&amp;nbsp;already inherits classes from the original input.</description>
+      <description>An always up-to-date list of options may be found at options.ts
+  Config Option Type Default Description     altFormat string &#34;F j, Y&#34; Exactly the same as date format, but for the altInput field   altInput Boolean false Show the user a readable date (as per altFormat), but return something totally different to the server.   altInputClass String &#34;&#34; This class will be added to the input element created by the altInput option.</description>
     </item>
     
     <item>
@@ -83,9 +84,9 @@ Date Formatting Tokens    Character Description Example     d Day of the month, 
       
       <guid>https://chmln.github.io/flatpickr/localization/</guid>
       <description>Dozens of locales are available.
-Flatpickr can be localized per-instance, or globally.
-Using Modules const Flatpickr = require(&amp;#34;flatpickr&amp;#34;); const Russian = require(&amp;#34;flatpickr/dist/l10n/ru.js&amp;#34;).ru; // or.. import {ru} from &amp;#34;flatpickr/dist/l10n/ru.js&amp;#34;  new Flatpickr(myElem, { &amp;#34;locale&amp;#34;: Russian // locale for this instance only });  Localize globally (for all instances):
-const Russian = require(&amp;#34;flatpickr/dist/l10n/ru.js&amp;#34;).ru; Flatpickr.localize(Russian); // default locale is now Russian  new Flatpickr(myElem);  Localization in a Browser Environment &amp;lt;script src=&amp;#34;https://npmcdn.com/flatpickr/dist/flatpickr.min.js&amp;#34;&amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script src=&amp;#34;https://npmcdn.</description>
+flatpickr can be localized per-instance, or globally.
+Using Modules const flatpickr = require(&amp;#34;flatpickr&amp;#34;); const Russian = require(&amp;#34;flatpickr/dist/l10n/ru.js&amp;#34;).ru; // or.. import {ru} from &amp;#34;flatpickr/dist/l10n/ru.js&amp;#34;  flatpickr(myElem, { &amp;#34;locale&amp;#34;: Russian // locale for this instance only });  Localize globally (for all instances):
+const Russian = require(&amp;#34;flatpickr/dist/l10n/ru.js&amp;#34;).ru; flatpickr.localize(Russian); // default locale is now Russian  flatpickr(myElem);  Localization in a Browser Environment &amp;lt;script src=&amp;#34;https://npmcdn.com/flatpickr/dist/flatpickr.min.js&amp;#34;&amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script src=&amp;#34;https://npmcdn.com/flatpickr/dist/l10n/ru.js&amp;#34;&amp;gt;&amp;lt;/script&amp;gt; flatpickr(myElement, { &amp;#34;locale&amp;#34;: &amp;#34;ru&amp;#34; // locale for this instance only });  Localize globally (for all instances):</description>
     </item>
     
     <item>
