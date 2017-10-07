@@ -306,6 +306,33 @@ describe("flatpickr", () => {
         expect(fp.amPM).toBeDefined();
         fp.amPM && expect(fp.amPM.innerHTML).toBe("PM");
       });
+
+      it("should parse defaultHour", () => {
+        createInstance({
+          enableTime: true,
+          noCalendar: true,
+          defaultHour: 0,
+        });
+
+        expect((fp.hourElement as HTMLInputElement).value).toEqual("12");
+
+        createInstance({
+          enableTime: true,
+          noCalendar: true,
+          defaultHour: 12,
+        });
+
+        expect((fp.hourElement as HTMLInputElement).value).toEqual("12");
+
+        createInstance({
+          enableTime: true,
+          noCalendar: true,
+          defaultHour: 23,
+          time_24hr: true,
+        });
+
+        expect((fp.hourElement as HTMLInputElement).value).toEqual("23");
+      });
     });
   });
 
@@ -1237,9 +1264,4 @@ describe("flatpickr", () => {
       expect((fp.altInput as HTMLInputElement).value).toEqual("December");
     });
   });
-
-  // afterAll(() => {
-  //   fp.destroy();
-  //   elem.parentNode.removeChild(elem);
-  // });
 });

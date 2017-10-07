@@ -124,13 +124,23 @@ function FlatpickrInstance(
   function updateTime(
     e: MouseEvent | WheelEvent | IncrementEvent | KeyboardEvent
   ) {
-    if (self.config.noCalendar && !self.selectedDates.length)
+    if (self.config.noCalendar && !self.selectedDates.length) {
       // picking time only
-      self.selectedDates = [self.now];
+      self.setDate(
+        new Date().setHours(
+          self.config.defaultHour,
+          self.config.defaultMinute,
+          self.config.defaultSeconds
+        ),
+        false
+      );
+      setHoursFromInputs();
+      updateValue();
+    }
 
     timeWrapper(e);
-
-    if (!self.selectedDates.length) return;
+    if (self.selectedDates.length === 0) return;
+    console.log((e.target as HTMLInputElement).value);
 
     if (
       !self.minDateHasTime ||
@@ -147,6 +157,21 @@ function FlatpickrInstance(
     }
   }
 
+  function ampm2military(hour: number, amPM: "AM" | "PM") {
+    return hour % 12 + 12 * int(amPM === "PM");
+  }
+
+  function military2ampm(hour: number) {
+    switch (hour % 24) {
+      case 0:
+      case 12:
+        return 12;
+
+      default:
+        return hour % 12;
+    }
+  }
+
   /**
    * Syncs the selected date object time with user's time input
    */
@@ -154,8 +179,7 @@ function FlatpickrInstance(
     if (self.hourElement === undefined || self.minuteElement === undefined)
       return;
 
-    let hours =
-        (parseInt(self.hourElement.value, 10) || 0) % (self.amPM ? 12 : 24),
+    let hours = (parseInt(self.hourElement.value, 10) || 0) % 24,
       minutes = (parseInt(self.minuteElement.value, 10) || 0) % 60,
       seconds =
         self.secondElement !== undefined
@@ -163,7 +187,7 @@ function FlatpickrInstance(
           : 0;
 
     if (self.amPM !== undefined)
-      hours = hours % 12 + 12 * int(self.amPM.textContent === "PM");
+      hours = ampm2military(hours, self.amPM.textContent as "AM" | "PM");
 
     if (
       self.config.minDate &&
@@ -308,6 +332,7 @@ function FlatpickrInstance(
     }
 
     const debouncedResize = debounce(onResize, 50);
+    self._debouncedChange = debounce(triggerChange, 300);
 
     if (self.config.mode === "range" && self.daysContainer)
       bind(self.daysContainer, "mouseover", e =>
@@ -359,6 +384,7 @@ function FlatpickrInstance(
       self.minuteElement !== undefined &&
       self.hourElement !== undefined
     ) {
+      console.log("bind time");
       const selText = (e: FocusEvent) =>
         (e.target as HTMLInputElement).select();
       bind(self.timeContainer, ["wheel", "input", "increment"], updateTime);
@@ -611,7 +637,8 @@ function FlatpickrInstance(
     if (!self.config.static && !self.config.inline)
       (self.config.appendTo !== undefined
         ? self.config.appendTo
-        : window.document.body).appendChild(self.calendarContainer);
+        : window.document.body
+      ).appendChild(self.calendarContainer);
   }
 
   function createDay(
@@ -949,10 +976,16 @@ function FlatpickrInstance(
 
     self.hourElement.tabIndex = self.minuteElement.tabIndex = -1;
 
+    console.log(
+      self.config.defaultHour,
+      military2ampm(self.config.defaultHour)
+    );
     self.hourElement.value = pad(
       self.latestSelectedDateObj
         ? self.latestSelectedDateObj.getHours()
-        : self.config.defaultHour % (self.config.time_24hr ? 24 : 12)
+        : self.config.time_24hr
+          ? self.config.defaultHour
+          : military2ampm(self.config.defaultHour)
     );
 
     self.minuteElement.value = pad(
@@ -1788,7 +1821,7 @@ function FlatpickrInstance(
       console.warn(`flatpickr: invalid locale ${self.config.locale}`);
 
     self.l10n = {
-      ...flatpickr.l10ns.default as Locale,
+      ...(flatpickr.l10ns.default as Locale),
       ...typeof self.config.locale === "object"
         ? self.config.locale
         : self.config.locale !== "default"
