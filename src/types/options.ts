@@ -9,12 +9,25 @@ export type DateLimit<D = DateOption> =
   | DateRangeLimit<D>
   | ((date: Date) => boolean);
 
-type Hook = (
+export type Hook = (
   dates: Date[],
   currentDateString: string,
   self: Instance,
   data?: any
 ) => void;
+
+export type HookKey =
+  | "onChange"
+  | "onClose"
+  | "onDayCreate"
+  | "onDestroy"
+  | "onKeyDown"
+  | "onMonthChange"
+  | "onOpen"
+  | "onParseConfig"
+  | "onReady"
+  | "onValueUpdate"
+  | "onYearChange";
 
 export type Plugin = (fp: Instance) => Options;
 
@@ -51,6 +64,12 @@ export interface Options {
 
   /* Whether calendar should close after date selection */
   closeOnSelect?: boolean;
+
+  /*
+    If "mode" is "multiple", this string will be used to join
+    selected dates together for the date input value.
+  */
+  conjunction?: string;
 
   /*
     A string of characters which are used to define how the date will be displayed in the input box.
@@ -171,6 +190,12 @@ Use it along with "enableTime" to create a time picker. */
   /* How the calendar should be positioned with regards to the input. Defaults to "auto" */
   position?: "auto" | "above" | "below";
 
+  /*
+    The element off of which the calendar will be positioned.
+    Defaults to the date input
+  */
+  positionElement?: Element;
+
   /* HTML for the left arrow icon, used to switch months. */
   prevArrow?: string;
 
@@ -191,9 +216,10 @@ Use it along with "enableTime" to create a time picker. */
 }
 
 export interface ParsedOptions {
-  [k: string]: any;
   _disable: DateLimit<Date>[];
   _enable: DateLimit<Date>[];
+  _maxDate?: Date;
+  _minDate?: Date;
   allowInput: boolean;
   altFormat: string;
   altInput: boolean;
@@ -203,6 +229,7 @@ export interface ParsedOptions {
   ariaDateFormat: string;
   clickOpens: boolean;
   closeOnSelect: boolean;
+  conjunction: string;
   dateFormat: string;
   defaultDate?: Date | Date[];
   defaultHour: number;
@@ -218,7 +245,7 @@ export interface ParsedOptions {
   hourIncrement: number;
   ignoredFocusElements: HTMLElement[];
   inline: boolean;
-  locale: LocaleKey | "default" | CustomLocale;
+  locale: LocaleKey | CustomLocale;
   maxDate?: Date;
   minDate?: Date;
   minuteIncrement: number;
@@ -239,6 +266,7 @@ export interface ParsedOptions {
   parseDate?: Options["parseDate"];
   plugins: Plugin[];
   position: "auto" | "below" | "above";
+  positionElement: HTMLElement;
   prevArrow: string;
   shorthandCurrentMonth: boolean;
   static: boolean;
@@ -258,6 +286,7 @@ export const defaults: ParsedOptions = {
   ariaDateFormat: "F j, Y",
   clickOpens: true,
   closeOnSelect: true,
+  conjunction: ", ",
   dateFormat: "Y-m-d",
   defaultHour: 12,
   defaultMinute: 0,
@@ -290,6 +319,7 @@ export const defaults: ParsedOptions = {
   onYearChange: [],
   plugins: [],
   position: "auto",
+  positionElement: window.document.body,
   prevArrow:
     "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M5.207 8.471l7.146 7.147-0.707 0.707-7.853-7.854 7.854-7.853 0.707 0.707-7.147 7.146z' /></svg>",
   shorthandCurrentMonth: false,
