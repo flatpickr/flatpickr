@@ -16,7 +16,8 @@ export default {
 
   plugins: [
     typescript({
-      abortOnError: false
+      abortOnError: false,
+      cacheRoot: `/tmp/.rpt2_cache`
     }),
     ...process.env.ROLLUP_WATCH ? [serve({
       open: true,
