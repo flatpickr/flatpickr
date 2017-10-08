@@ -145,25 +145,25 @@ The `input` holding the current year.
 ### days
 The container for all the day elements. 
 
-## Useful prototype methods
+## Useful static methods
 
 flatpickr exposes its date parser and formatter which don't require an instance to work.
 
 While not as powerful as say `moment.js`, they're functional enough to replace it in most of the basic usecases.
 
-### flatpickr.prototype.parseDate(dateStr, dateFormat)
+### flatpickr.parseDate(dateStr, dateFormat)
 
 Returns a `Date` object.
 
-`flatpickr.prototype.parseDate("2016-10-20", "Y-m-d")`
+`flatpickr.parseDate("2016-10-20", "Y-m-d")`
 
 Thu Oct 20 2016 00:00:00
 
-`flatpickr.prototype.parseDate("31/01/1995", "d/m/Y")`
+`flatpickr.parseDate("31/01/1995", "d/m/Y")`
 
 Tue Jan 31 1995 00:00:00
 
-### flatpickr.prototype.formatDate(dateObj, dateFormat)
-`flatpickr.prototype.formatDate(new Date(), "Y-m-d h:i K")`
+### flatpickr.formatDate(dateObj, dateFormat)
+`flatpickr.formatDate(new Date(), "Y-m-d h:i K")`
 
 "2017-04-24 11:56 AM"
