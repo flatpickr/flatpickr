@@ -58,6 +58,7 @@ const l10n: Record<key, CustomLocale> = {
   cy,
   da,
   de,
+  default: { ...en },
   en,
   eo,
   es,

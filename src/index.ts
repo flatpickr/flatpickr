@@ -7,6 +7,8 @@ import {
   DateRangeLimit,
   DateOption,
   defaults as defaultOptions,
+  Hook,
+  HookKey,
 } from "types/options";
 
 import { Locale, CustomLocale, key as LocaleKey } from "types/locale";
@@ -111,7 +113,7 @@ function FlatpickrInstance(
 
     if (!self.isMobile) positionCalendar();
 
-    triggerEvent("Ready");
+    triggerEvent("onReady");
   }
 
   function bindToInstance<F extends Function>(fn: F): F {
@@ -302,7 +304,7 @@ function FlatpickrInstance(
   }
 
   function triggerChange() {
-    triggerEvent("Change");
+    triggerEvent("onChange");
   }
 
   /**
@@ -725,7 +727,7 @@ function FlatpickrInstance(
       );
     }
 
-    triggerEvent("DayCreate", dayElement);
+    triggerEvent("onDayCreate", dayElement);
 
     return dayElement;
   }
@@ -1109,13 +1111,13 @@ function FlatpickrInstance(
       self.currentYear += self.currentMonth > 11 ? 1 : -1;
       self.currentMonth = (self.currentMonth + 12) % 12;
 
-      triggerEvent("YearChange");
+      triggerEvent("onYearChange");
     }
 
     buildDays(animate ? delta : undefined);
 
     if (!animate) {
-      triggerEvent("MonthChange");
+      triggerEvent("onMonthChange");
       return updateNavigationCurrentMonth();
     }
 
@@ -1172,7 +1174,7 @@ function FlatpickrInstance(
         self.l10n
       );
 
-    triggerEvent("MonthChange");
+    triggerEvent("onMonthChange");
 
     if (
       from_keyboard &&
@@ -1201,7 +1203,7 @@ function FlatpickrInstance(
 
     if (triggerChangeEvent === true)
       // triggerChangeEvent is true (default) or an Event
-      triggerEvent("Change");
+      triggerEvent("onChange");
   }
 
   function close() {
@@ -1212,11 +1214,11 @@ function FlatpickrInstance(
       self._input.classList.remove("active");
     }
 
-    triggerEvent("Close");
+    triggerEvent("onClose");
   }
 
   function destroy() {
-    if (self.config !== undefined) triggerEvent("Destroy");
+    if (self.config !== undefined) triggerEvent("onDestroy");
 
     for (let i = self._handlers.length; i--; ) {
       const h = self._handlers[i];
@@ -1359,7 +1361,7 @@ function FlatpickrInstance(
 
     if (isNewYear) {
       self.redraw();
-      triggerEvent("YearChange");
+      triggerEvent("onYearChange");
     }
   }
 
@@ -1540,7 +1542,7 @@ function FlatpickrInstance(
           break;
       }
 
-      triggerEvent("KeyDown", e);
+      triggerEvent("onKeyDown", e);
     }
   }
 
@@ -1635,7 +1637,7 @@ function FlatpickrInstance(
         self.mobileInput !== undefined && self.mobileInput.click();
       }, 0);
 
-      triggerEvent("Open");
+      triggerEvent("onOpen");
       return;
     }
 
@@ -1646,14 +1648,18 @@ function FlatpickrInstance(
     positionCalendar(positionElement);
     self._input.classList.add("active");
 
-    triggerEvent("Open");
+    triggerEvent("onOpen");
   }
 
   function minMaxDateSetter(type: "min" | "max") {
     return (date: DateOption) => {
-      const dateObj = (self.config[`_${type}Date`] = self.parseDate(date));
+      const dateObj = (self.config[
+        `_${type}Date` as "_minDate" | "_maxDate"
+      ] = self.parseDate(date));
       const inverseDateObj =
-        self.config[`_${type === "min" ? "max" : "min"}Date`];
+        self.config[
+          `_${type === "min" ? "max" : "min"}Date` as "_minDate" | "_maxDate"
+        ];
 
       if (dateObj !== undefined) {
         self[type === "min" ? "minDateHasTime" : "maxDateHasTime"] =
@@ -1701,7 +1707,7 @@ function FlatpickrInstance(
       "disableMobile",
     ];
 
-    let hooks = [
+    let hooks: HookKey[] = [
       "onChange",
       "onClose",
       "onDayCreate",
@@ -1785,15 +1791,17 @@ function FlatpickrInstance(
 
     for (let i = 0; i < self.config.plugins.length; i++) {
       const pluginConf = self.config.plugins[i](self) || ({} as Options);
-      for (let key in pluginConf) {
-        if (~hooks.indexOf(key as keyof Options)) {
-          self.config[key] = arrayify(pluginConf[
-            key as keyof Options
-          ] as () => void)
+      for (const key in pluginConf) {
+        if (~hooks.indexOf(key as HookKey)) {
+          self.config[key as keyof Options] = arrayify(pluginConf[
+            key as HookKey
+          ] as Hook)
             .map(bindToInstance)
-            .concat(self.config[key]);
+            .concat(self.config[key as HookKey]);
         } else if (typeof userConfig[key as keyof Options] === "undefined")
-          self.config[key] = pluginConf[key as keyof Options];
+          self.config[key as keyof ParsedOptions] = pluginConf[
+            key as keyof Options
+          ] as any;
       }
     }
 
@@ -1808,7 +1816,7 @@ function FlatpickrInstance(
         navigator.userAgent
       );
 
-    triggerEvent("ParseConfig");
+    triggerEvent("onParseConfig");
   }
 
   function setupLocale() {
@@ -1928,9 +1936,9 @@ function FlatpickrInstance(
       self.currentYear = selectedDate.getFullYear();
       self.currentMonth = selectedDate.getMonth();
 
-      if (isNewYear) triggerEvent("YearChange");
+      if (isNewYear) triggerEvent("onYearChange");
 
-      triggerEvent("MonthChange");
+      triggerEvent("onMonthChange");
     }
 
     buildDays();
@@ -1966,7 +1974,7 @@ function FlatpickrInstance(
       } else updateNavigationCurrentMonth();
     }
 
-    triggerEvent("Change");
+    triggerEvent("onChange");
 
     // maintain focus
     if (!shouldChangeMonth) focusOnDay(target.$i, 0);
@@ -2059,7 +2067,7 @@ function FlatpickrInstance(
     setHoursFromDate();
     updateValue(triggerChange);
 
-    if (triggerChange) triggerEvent("Change");
+    if (triggerChange) triggerEvent("onChange");
   }
 
   function parseDateRules(arr: DateLimit[]): DateLimit<Date>[] {
@@ -2331,8 +2339,8 @@ function FlatpickrInstance(
         false,
         self.mobileFormatStr
       );
-      triggerEvent("Change");
-      triggerEvent("Close");
+      triggerEvent("onChange");
+      triggerEvent("onClose");
     });
   }
 
@@ -2341,15 +2349,15 @@ function FlatpickrInstance(
     self.open();
   }
 
-  function triggerEvent(event: string, data?: any) {
-    const hooks = self.config["on" + event];
+  function triggerEvent(event: HookKey, data?: any) {
+    const hooks = self.config[event];
 
     if (hooks !== undefined && hooks.length > 0) {
       for (let i = 0; hooks[i] && i < hooks.length; i++)
         hooks[i](self.selectedDates, self.input.value, self, data);
     }
 
-    if (event === "Change") {
+    if (event === "onChange") {
       self.input.dispatchEvent(createEvent("change"));
 
       // many front-end frameworks bind to the input event
@@ -2419,7 +2427,9 @@ function FlatpickrInstance(
     }
 
     const joinChar =
-      self.config.mode !== "range" ? "; " : self.l10n.rangeSeparator;
+      self.config.mode !== "range"
+        ? self.config.conjunction
+        : self.l10n.rangeSeparator;
 
     self.input.value = self.selectedDates
       .map(dObj => self.formatDate(dObj, self.config.dateFormat))
@@ -2431,7 +2441,7 @@ function FlatpickrInstance(
         .join(joinChar);
     }
 
-    if (triggerChange !== false) triggerEvent("ValueUpdate");
+    if (triggerChange !== false) triggerEvent("onValueUpdate");
   }
 
   function onMonthNavScroll(e: MouseWheelEvent) {

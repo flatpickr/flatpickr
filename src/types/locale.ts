@@ -79,6 +79,7 @@ export type key =
   | "cy"
   | "da"
   | "de"
+  | "default"
   | "en"
   | "eo"
   | "es"
