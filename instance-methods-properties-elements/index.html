@@ -581,27 +581,27 @@ And if you&rsquo;re passing a date string with a format other than your <code>da
 
 <p>The container for all the day elements.</p>
 
-<h2 id="useful-prototype-methods">Useful prototype methods</h2>
+<h2 id="useful-static-methods">Useful static methods</h2>
 
 <p>flatpickr exposes its date parser and formatter which don&rsquo;t require an instance to work.</p>
 
 <p>While not as powerful as say <code>moment.js</code>, they&rsquo;re functional enough to replace it in most of the basic usecases.</p>
 
-<h3 id="flatpickr-prototype-parsedate-datestr-dateformat">flatpickr.prototype.parseDate(dateStr, dateFormat)</h3>
+<h3 id="flatpickr-parsedate-datestr-dateformat">flatpickr.parseDate(dateStr, dateFormat)</h3>
 
 <p>Returns a <code>Date</code> object.</p>
 
-<p><code>flatpickr.prototype.parseDate(&quot;2016-10-20&quot;, &quot;Y-m-d&quot;)</code></p>
+<p><code>flatpickr.parseDate(&quot;2016-10-20&quot;, &quot;Y-m-d&quot;)</code></p>
 
 <p>Thu Oct 20 2016 00:00:00</p>
 
-<p><code>flatpickr.prototype.parseDate(&quot;31/01/1995&quot;, &quot;d/m/Y&quot;)</code></p>
+<p><code>flatpickr.parseDate(&quot;31/01/1995&quot;, &quot;d/m/Y&quot;)</code></p>
 
 <p>Tue Jan 31 1995 00:00:00</p>
 
-<h3 id="flatpickr-prototype-formatdate-dateobj-dateformat">flatpickr.prototype.formatDate(dateObj, dateFormat)</h3>
+<h3 id="flatpickr-formatdate-dateobj-dateformat">flatpickr.formatDate(dateObj, dateFormat)</h3>
 
-<p><code>flatpickr.prototype.formatDate(new Date(), &quot;Y-m-d h:i K&quot;)</code></p>
+<p><code>flatpickr.formatDate(new Date(), &quot;Y-m-d h:i K&quot;)</code></p>
 
 <p>&ldquo;2017-04-24 11:56 AM&rdquo;</p>
 
