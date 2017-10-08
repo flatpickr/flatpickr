@@ -1,6 +1,6 @@
 if (window.navigator.userAgent.indexOf('MSIE') > -1){
 	var iestyle = document.createElement("link");
-	iestyle.setAttribute("href", "/flatpickr/bower_components/flatpickr/dist/ie.css");
+	iestyle.setAttribute("href", "https://cdn.jsdelivr.net/npm/flatpickr/dist/ie.css");
 	iestyle.setAttribute("rel", "stylesheet");
 	iestyle.setAttribute("type", "text/css");
 	document.head.appendChild(iestyle);
@@ -10,10 +10,7 @@ if (window.navigator.userAgent.indexOf('MSIE') > -1){
 function themer() {
 	var theme_sel = document.getElementById("themes"),
 		stylesheet = document.head.querySelector(
-			"link[href='https://chmln.github.io/flatpickr/bower_components/flatpickr/dist/flatpickr.css']"
-		) ||
-		document.head.querySelector(
-			"link[href='http://localhost:1313/flatpickr/bower_components/flatpickr/dist/flatpickr.css']"
+			"link[href='https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.css']"
 		),
 		themes = [
 			"dark",
@@ -38,9 +35,9 @@ function themer() {
 		theme_sel.blur();
 
 		if (!e.target.value || e.target.value === "default")
-			return (stylesheet.href="/flatpickr/bower_components/flatpickr/dist/flatpickr.css");
+			return (stylesheet.href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.css");
 
-		stylesheet.href="/flatpickr/bower_components/flatpickr/dist/themes/" + e.target.value +".css";
+		stylesheet.href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/" + e.target.value +".css";
 	});
 };
 
