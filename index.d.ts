@@ -1,7 +1,5 @@
-declare module "flatpickr" {
-  import { FlatpickrFn } from "types/instance";
-  export { Instance } from "types/instance";
-  export { Options, Plugin } from "types/options";
+import { FlatpickrFn } from "./src/types/instance";
+export { Instance } from "./src/types/instance";
+export { Options, Plugin } from "./src/types/options";
 
-  export default FlatpickrFn;
-}
+export default FlatpickrFn;
