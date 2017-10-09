@@ -1,0 +1,53 @@
+"use strict";
+exports.__esModule = true;
+var fp = typeof window !== "undefined" && window.flatpickr !== undefined
+    ? window.flatpickr
+    : {
+        l10ns: {}
+    };
+exports.Punjabi = {
+    weekdays: {
+        shorthand: ["ਐਤ", "ਸੋਮ", "ਮੰਗਲ", "ਬੁੱਧ", "ਵੀਰ", "ਸ਼ੁੱਕਰ", "ਸ਼ਨਿੱਚਰ"],
+        longhand: [
+            "ਐਤਵਾਰ",
+            "ਸੋਮਵਾਰ",
+            "ਮੰਗਲਵਾਰ",
+            "ਬੁੱਧਵਾਰ",
+            "ਵੀਰਵਾਰ",
+            "ਸ਼ੁੱਕਰਵਾਰ",
+            "ਸ਼ਨਿੱਚਰਵਾਰ",
+        ]
+    },
+    months: {
+        shorthand: [
+            "ਜਨ",
+            "ਫ਼ਰ",
+            "ਮਾਰ",
+            "ਅਪ੍ਰੈ",
+            "ਮਈ",
+            "ਜੂਨ",
+            "ਜੁਲਾ",
+            "ਅਗ",
+            "ਸਤੰ",
+            "ਅਕ",
+            "ਨਵੰ",
+            "ਦਸੰ",
+        ],
+        longhand: [
+            "ਜਨਵਰੀ",
+            "ਫ਼ਰਵਰੀ",
+            "ਮਾਰਚ",
+            "ਅਪ੍ਰੈਲ",
+            "ਮਈ",
+            "ਜੂਨ",
+            "ਜੁਲਾਈ",
+            "ਅਗਸਤ",
+            "ਸਤੰਬਰ",
+            "ਅਕਤੂਬਰ",
+            "ਨਵੰਬਰ",
+            "ਦਸੰਬਰ",
+        ]
+    }
+};
+fp.l10ns.pa = exports.Punjabi;
+exports["default"] = fp.l10ns;
