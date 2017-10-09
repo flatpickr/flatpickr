@@ -6,3 +6,4 @@
 !src
 !src/**/*
 !index.d.ts
+!tsconfig.json
