@@ -456,17 +456,27 @@
 <p>flatpickr can be localized per-instance, or globally.</p>
 
 <h2 id="using-modules">Using Modules</h2>
+
+<p>ES modules (if your environment supports it)</p>
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#069;font-weight:bold">import</span> flatpickr from <span style="color:#c30">&#34;flatpickr&#34;</span>
+<span style="color:#069;font-weight:bold">import</span> { Russian } from <span style="color:#c30">&#34;flatpickr/dist/l10n/ru.js&#34;</span>
+
+flatpickr(myElem, {
+    <span style="color:#c30">&#34;locale&#34;</span><span style="color:#555">:</span> Russian <span style="color:#09f;font-style:italic">// locale for this instance only
+</span><span style="color:#09f;font-style:italic"></span>});</code></pre>
+</div>
+<p>Using plain <code>require()</code></p>
 <div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#069;font-weight:bold">const</span> flatpickr <span style="color:#555">=</span> require(<span style="color:#c30">&#34;flatpickr&#34;</span>);
-<span style="color:#069;font-weight:bold">const</span> Russian <span style="color:#555">=</span> require(<span style="color:#c30">&#34;flatpickr/dist/l10n/ru.js&#34;</span>).ru;
-<span style="color:#09f;font-style:italic">// or.. import {ru} from &#34;flatpickr/dist/l10n/ru.js&#34;
-</span><span style="color:#09f;font-style:italic"></span>
+<span style="color:#069;font-weight:bold">const</span> Russian <span style="color:#555">=</span> require(<span style="color:#c30">&#34;flatpickr/dist/l10n/ru.js&#34;</span>).<span style="color:#069;font-weight:bold">default</span>.ru;
+
 flatpickr(myElem, {
     <span style="color:#c30">&#34;locale&#34;</span><span style="color:#555">:</span> Russian <span style="color:#09f;font-style:italic">// locale for this instance only
 </span><span style="color:#09f;font-style:italic"></span>});</code></pre>
 </div>
 <p>Localize globally (for all instances):</p>
-<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#069;font-weight:bold">const</span> Russian <span style="color:#555">=</span> require(<span style="color:#c30">&#34;flatpickr/dist/l10n/ru.js&#34;</span>).ru;
-flatpickr.localize(Russian); <span style="color:#09f;font-style:italic">// default locale is now Russian
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#069;font-weight:bold">const</span> Russian <span style="color:#555">=</span> require(<span style="color:#c30">&#34;flatpickr/dist/l10n/ru.js&#34;</span>).<span style="color:#069;font-weight:bold">default</span>.ru;
+<span style="color:#09f;font-style:italic">// or import { Russian } from &#34;flatpickr/dist/l10n/ru.js&#34;
+</span><span style="color:#09f;font-style:italic"></span>flatpickr.localize(Russian); <span style="color:#09f;font-style:italic">// default locale is now Russian
 </span><span style="color:#09f;font-style:italic"></span>
 flatpickr(myElem);</code></pre>
 </div>

@@ -85,8 +85,9 @@ Date Formatting Tokens    Character Description Example     d Day of the month, 
       <guid>https://chmln.github.io/flatpickr/localization/</guid>
       <description>Dozens of locales are available.
 flatpickr can be localized per-instance, or globally.
-Using Modules const flatpickr = require(&amp;#34;flatpickr&amp;#34;); const Russian = require(&amp;#34;flatpickr/dist/l10n/ru.js&amp;#34;).ru; // or.. import {ru} from &amp;#34;flatpickr/dist/l10n/ru.js&amp;#34;  flatpickr(myElem, { &amp;#34;locale&amp;#34;: Russian // locale for this instance only });  Localize globally (for all instances):
-const Russian = require(&amp;#34;flatpickr/dist/l10n/ru.js&amp;#34;).ru; flatpickr.localize(Russian); // default locale is now Russian  flatpickr(myElem);  Localization in a Browser Environment &amp;lt;script src=&amp;#34;https://npmcdn.com/flatpickr/dist/flatpickr.min.js&amp;#34;&amp;gt;&amp;lt;/script&amp;gt; &amp;lt;script src=&amp;#34;https://npmcdn.com/flatpickr/dist/l10n/ru.js&amp;#34;&amp;gt;&amp;lt;/script&amp;gt; flatpickr(myElement, { &amp;#34;locale&amp;#34;: &amp;#34;ru&amp;#34; // locale for this instance only });  Localize globally (for all instances):</description>
+Using Modules ES modules (if your environment supports it)
+import flatpickr from &amp;#34;flatpickr&amp;#34; import { Russian } from &amp;#34;flatpickr/dist/l10n/ru.js&amp;#34; flatpickr(myElem, { &amp;#34;locale&amp;#34;: Russian // locale for this instance only });  Using plain require()
+const flatpickr = require(&amp;#34;flatpickr&amp;#34;); const Russian = require(&amp;#34;flatpickr/dist/l10n/ru.js&amp;#34;).default.ru; flatpickr(myElem, { &amp;#34;locale&amp;#34;: Russian // locale for this instance only });  Localize globally (for all instances):</description>
     </item>
     
     <item>
