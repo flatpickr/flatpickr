@@ -18,4 +18,8 @@ declare global {
   interface Window {
     flatpickr: FlatpickrFn;
   }
+
+  interface Date {
+    fp_incr: (n: number) => Date;
+  }
 }
