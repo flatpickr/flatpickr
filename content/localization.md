@@ -11,10 +11,20 @@ flatpickr can be localized per-instance, or globally.
 
 ## Using Modules
 
+ES modules (if your environment supports it)
+```js
+import flatpickr from "flatpickr"
+import { Russian } from "flatpickr/dist/l10n/ru.js"
+
+flatpickr(myElem, {
+    "locale": Russian // locale for this instance only
+});
+```
+
+Using plain `require()`
 ```js
 const flatpickr = require("flatpickr");
-const Russian = require("flatpickr/dist/l10n/ru.js").ru;
-// or.. import {ru} from "flatpickr/dist/l10n/ru.js"
+const Russian = require("flatpickr/dist/l10n/ru.js").default.ru;
 
 flatpickr(myElem, {
     "locale": Russian // locale for this instance only
@@ -24,7 +34,8 @@ flatpickr(myElem, {
 Localize globally (for all instances):
 
 ```js
-const Russian = require("flatpickr/dist/l10n/ru.js").ru;
+const Russian = require("flatpickr/dist/l10n/ru.js").default.ru;
+// or import { Russian } from "flatpickr/dist/l10n/ru.js"
 flatpickr.localize(Russian); // default locale is now Russian
 
 flatpickr(myElem);
