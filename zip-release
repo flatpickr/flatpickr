@@ -1,0 +1,2 @@
+#!/bin/sh
+zip dist.tar src/**/* dist/**/* tsconfig.json package.json index.d.ts README.md LICENSE.md CONTRIBUTING.md .gitignore .jest.json
