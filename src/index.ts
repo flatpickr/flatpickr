@@ -1,4 +1,4 @@
-/*! flatpickr v3.1.4, @license MIT */
+/*! flatpickr v3.1.5, @license MIT */
 import { Instance, FlatpickrFn, DayElement } from "types/instance";
 import {
   Options,
