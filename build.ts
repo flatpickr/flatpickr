@@ -5,13 +5,15 @@ import { exec as execCommand } from "child_process";
 import * as glob from "glob";
 
 import * as uglifyJS from "uglify-js";
-import { ncp } from "ncp";
+
 import * as chokidar from "chokidar";
 import * as stylus from "stylus";
 import * as stylus_autoprefixer from "autoprefixer-stylus";
 
-import * as typescript from "typescript";
-const tsconfig = require("./tsconfig.json");
+import * as rollup from "rollup";
+import * as rollup_typescript from "rollup-plugin-typescript2";
+
+import * as path from "path";
 
 const pkg = require("./package.json");
 const version = `/* flatpickr v${pkg.version},, @license MIT */`;
@@ -23,12 +25,28 @@ const paths = {
   l10n: "./src/l10n",
 };
 
+const rollupConfig = {
+  inputOptions: {
+    input: "",
+    plugins: [
+      (rollup_typescript as any)({
+        abortOnError: false,
+        cacheRoot: `/tmp/.rpt2_cache`,
+      }),
+    ],
+  },
+  outputOptions: {
+    file: "",
+    format: "umd",
+    banner: `/* flatpickr v${pkg.version}, @license MIT */`,
+  },
+};
+
 function logErr(e: Error | string) {
   console.error(e);
 }
 
 const writeFileAsync = promisify(fs.writeFile);
-const removeFile = promisify(fs.unlink);
 
 function startRollup(dev = false) {
   return new Promise((resolve, reject) => {
@@ -52,17 +70,8 @@ function resolveGlob(g: string) {
   return new Promise<string[]>((resolve, reject) => {
     glob(
       g,
-      (err: Error, files: string[]) => (err ? reject(err) : resolve(files))
-    );
-  });
-}
-
-async function recursiveCopy(src: string, dest: string) {
-  return new Promise((resolve, reject) => {
-    ncp(
-      src,
-      dest,
-      (err: Error | undefined) => (!err ? resolve() : reject(err))
+      (err: Error | null, files: string[]) =>
+        err ? reject(err) : resolve(files)
     );
   });
 }
@@ -73,11 +82,6 @@ async function readFileAsync(path: string) {
       err ? reject(err) : resolve(buffer.toString());
     });
   });
-}
-
-function compile(src: string, config = tsconfig) {
-  //return typescript.transpileModule(src, config).outputText;
-  return typescript.transpile(src, config);
 }
 
 function uglify(src: string) {
@@ -102,28 +106,22 @@ async function buildScripts() {
   }
 }
 
-const extrasConfig = {
-  ...tsconfig,
-  compilerOptions: {
-    ...tsconfig.compilerOptions,
-    module: "none",
-  },
-};
-delete extrasConfig.compilerOptions.module;
-
 function buildExtras(folder: "plugins" | "l10n") {
   return async function() {
     console.log(`building ${folder}...`);
-    await recursiveCopy(`./src/${folder}`, `./dist/${folder}`);
-    const paths = await resolveGlob(`./dist/${folder}/**/*.ts`);
+    const src_paths = await resolveGlob(`./src/${folder}/**/*.ts`);
 
     await Promise.all(
-      paths.map(async p => {
-        await writeFileAsync(
-          p.replace(".ts", ".js"),
-          compile(await readFileAsync(p), extrasConfig)
-        );
-        return removeFile(p);
+      src_paths.map(async sourcePath => {
+        const bundle = await rollup.rollup({
+          ...rollupConfig.inputOptions,
+          input: sourcePath,
+        } as any);
+        return bundle.write({
+          ...rollupConfig.outputOptions,
+          file: sourcePath.replace("src", "dist").replace(".ts", ".js"),
+          name: path.basename(sourcePath, path.extname(sourcePath)),
+        } as any);
       })
     );
 
