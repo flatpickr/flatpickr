@@ -39,6 +39,8 @@ import {
   formats,
 } from "utils/formatting";
 
+import "utils/polyfills";
+
 function FlatpickrInstance(
   element: HTMLElement,
   instanceConfig?: Options
