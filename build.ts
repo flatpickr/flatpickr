@@ -109,10 +109,13 @@ async function buildScripts() {
 function buildExtras(folder: "plugins" | "l10n") {
   return async function() {
     console.log(`building ${folder}...`);
-    const src_paths = await resolveGlob(`./src/${folder}/**/*.ts`);
+    const [src_paths, css_paths] = await Promise.all([
+      resolveGlob(`./src/${folder}/**/*.ts`),
+      resolveGlob(`./src/${folder}/**/*.css`),
+    ]);
 
-    await Promise.all(
-      src_paths.map(async sourcePath => {
+    await Promise.all([
+      ...src_paths.map(async sourcePath => {
         const bundle = await rollup.rollup({
           ...rollupConfig.inputOptions,
           input: sourcePath,
@@ -122,8 +125,13 @@ function buildExtras(folder: "plugins" | "l10n") {
           file: sourcePath.replace("src", "dist").replace(".ts", ".js"),
           name: path.basename(sourcePath, path.extname(sourcePath)),
         } as any);
-      })
-    );
+      }),
+      ...css_paths.map(async p => {
+        fs
+          .createReadStream(p)
+          .pipe(fs.createWriteStream(p.replace("src", "dist")));
+      }),
+    ]);
 
     console.log("done.");
   };
