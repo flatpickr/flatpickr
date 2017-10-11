@@ -1,13 +1,14 @@
 @require "./_vars.styl"
 
-span.flatpickr-weekday 
-    display: inline-block;
-    width: 14.2857143%
+span.flatpickr-weekday
+  display: inline-block;
+  width: 14.2857143%
 
-span.flatpickr-current-month 
-    top: 0px !important
 
-span.flatpickr-day 
-    width: 14.2857143%;
-    margin: 0 (($daysWidth - $daySize*7)/14)
+span.flatpickr-day
+  width: 14.2857143%;
+  margin: 0 (($daysWidth - $daySize*7)/14)
 
+@media screen and (min-width:unquote("0\0"))
+  span.flatpickr-current-month
+      padding-top: 0px !important
