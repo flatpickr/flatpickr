@@ -611,11 +611,14 @@ function FlatpickrInstance(
         self.config.inline ? "inline" : "static"
       );
 
-      if (self.config.inline && !customAppend && self.element.parentNode) {
-        self.element.parentNode.insertBefore(
-          self.calendarContainer,
-          self._input.nextSibling
-        );
+      if (self.config.inline) {
+        if (!customAppend && self.element.parentNode)
+          self.element.parentNode.insertBefore(
+            self.calendarContainer,
+            self._input.nextSibling
+          );
+        else if (self.config.appendTo !== undefined)
+          self.config.appendTo.appendChild(self.calendarContainer);
       }
 
       if (self.config.static) {
