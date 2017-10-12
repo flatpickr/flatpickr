@@ -151,10 +151,10 @@ var configs = {
 
     confirmDate: {
         "enableTime": true,
-        "plugins": [new confirmDatePlugin({})]
+        "plugins": [new confirmDate({})]
     },
     weekSelect: {
-        "plugins": [new weekSelectPlugin({})],
+        "plugins": [new weekSelect({})],
         "onChange": [function(){
             // extract the week number
             // note: "this" is bound to the flatpickr instance
