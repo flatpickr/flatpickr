@@ -43,7 +43,8 @@ function rangePlugin(config: Config = {}) {
       });
 
       fp._bind(secondInput, "blur", () => {
-        fp.isOpen = false;
+        fp.close();
+        //fp.isOpen = false;
       });
 
       fp._bind(secondInput, "keydown", e => {
@@ -61,7 +62,7 @@ function rangePlugin(config: Config = {}) {
           fp._input.parentNode.insertBefore(secondInput, fp._input.nextSibling);
     };
 
-    return {
+    const plugin = {
       onParseConfig() {
         fp.config.mode = "range";
         fp.config.allowInput = true;
@@ -93,6 +94,7 @@ function rangePlugin(config: Config = {}) {
         });
 
         fp.setDate(fp.selectedDates);
+        plugin.onValueUpdate(fp.selectedDates);
       },
 
       onChange() {
@@ -138,6 +140,8 @@ function rangePlugin(config: Config = {}) {
         ] = fp.selectedDates.map(d => fp.formatDate(d, dateFormat));
       },
     };
+
+    return plugin;
   };
 }
 
