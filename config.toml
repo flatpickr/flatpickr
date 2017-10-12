@@ -28,15 +28,15 @@ pygmentsStyle = "manni"
     # Custom assets
     custom_css = [
         "site.css",
-        "https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.css",
-        "https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/confirmDate/confirmDate.css"
+        "https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/flatpickr.css",
+        "https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/plugins/confirmDate/confirmDate.css"
     ]
     custom_js  = [
         "init.js",
-        "https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.js",
-        "https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/confirmDate/confirmDate.js",
-        "https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/weekSelect/weekSelect.js",
-        "https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/rangePlugin.js",
+        "https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/flatpickr.js",
+        "https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/plugins/confirmDate/confirmDate.js",
+        "https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/plugins/weekSelect/weekSelect.js",
+        "https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/plugins/rangePlugin.js",
         "flatpickr.js",
         "themer.js"
     ]
