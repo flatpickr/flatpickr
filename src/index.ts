@@ -1646,7 +1646,7 @@ function FlatpickrInstance(
       return;
     }
 
-    if (self.isOpen || self._input.disabled || self.config.inline) return;
+    if (self._input.disabled || self.config.inline) return;
 
     self.isOpen = true;
     self.calendarContainer.classList.add("open");
