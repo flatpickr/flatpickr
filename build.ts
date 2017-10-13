@@ -107,10 +107,11 @@ async function buildScripts() {
 }
 
 function buildExtras(folder: "plugins" | "l10n") {
-  return async function() {
-    console.log(`building ${folder}...`);
+  return async function(changed_path?: string) {
     const [src_paths, css_paths] = await Promise.all([
-      resolveGlob(`./src/${folder}/**/*.ts`),
+      changed_path !== undefined
+        ? [changed_path]
+        : resolveGlob(`./src/${folder}/**/*.ts`),
       resolveGlob(`./src/${folder}/**/*.css`),
     ]);
 
