@@ -10,7 +10,7 @@ if (window.navigator.userAgent.indexOf('MSIE') > -1){
 function themer() {
 	var theme_sel = document.getElementById("themes"),
 		stylesheet = document.head.querySelector(
-			"link[href='https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.css']"
+			"link[href='https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/flatpickr.css']"
 		),
 		themes = [
 			"dark",
