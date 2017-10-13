@@ -42,9 +42,9 @@ function rangePlugin(config: Config = {}) {
         [_firstInputFocused, _secondInputFocused] = [false, true];
       });
 
-      fp._bind(secondInput, "blur", () => {
-        fp.close();
-        //fp.isOpen = false;
+      fp._bind(fp._input, "focus", () => {
+        if (fp.isOpen) fp.calendarContainer.classList.remove("open");
+        setTimeout(fp.open, 0);
       });
 
       fp._bind(secondInput, "keydown", e => {
@@ -124,11 +124,9 @@ function rangePlugin(config: Config = {}) {
 
         if (_prevDates.length > selDates.length) {
           const newSelectedDate = selDates[0];
-          const newDates =
-            Math.abs(newSelectedDate.getTime() - _prevDates[1].getTime()) <
-            Math.abs(newSelectedDate.getTime() - _prevDates[0].getTime())
-              ? [_prevDates[0], newSelectedDate]
-              : [newSelectedDate, _prevDates[1]];
+          const newDates = _secondInputFocused
+            ? [_prevDates[0], newSelectedDate]
+            : [newSelectedDate, _prevDates[1]];
 
           fp.setDate(newDates, false);
           _prevDates = [...newDates];
