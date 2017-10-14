@@ -1,7 +1,7 @@
-import { int, pad } from "utils";
-import { Locale } from "types/locale";
-import { ParsedOptions } from "types/options";
-import { monthToStr } from "utils/dates";
+import { int, pad } from "../utils";
+import { Locale } from "../types/locale";
+import { ParsedOptions } from "../types/options";
+import { monthToStr } from "../utils/dates";
 
 export type token =
   | "D"

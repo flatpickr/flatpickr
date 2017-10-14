@@ -1,4 +1,4 @@
-import { Locale } from "types/locale";
+import { Locale } from "../types/locale";
 /**
  * Compute the difference in dates, measured in ms
  */

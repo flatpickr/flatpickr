@@ -1,5 +1,5 @@
 import { Instance } from "./instance";
-import { getWeek } from "utils/dates";
+import { getWeek } from "../utils/dates";
 import { CustomLocale, key as LocaleKey } from "./locale";
 
 export type DateOption = Date | string | number;
