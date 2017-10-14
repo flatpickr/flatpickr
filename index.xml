@@ -64,7 +64,7 @@ dateStr is a string representation of the latest selected Date object by the us
       
       <guid>https://chmln.github.io/flatpickr/options/</guid>
       <description>An always up-to-date list of options may be found at options.ts
-  Config Option Type Default Description     altFormat string &#34;F j, Y&#34; Exactly the same as date format, but for the altInput field   altInput Boolean false Show the user a readable date (as per altFormat), but return something totally different to the server.   altInputClass String &#34;&#34; This class will be added to the input element created by the altInput option.</description>
+  Config Option Type Default Description     altFormat String &#34;F j, Y&#34; Exactly the same as date format, but for the altInput field   altInput Boolean false Show the user a readable date (as per altFormat), but return something totally different to the server.   altInputClass String &#34;&#34; This class will be added to the input element created by the altInput option.</description>
     </item>
     
     <item>
