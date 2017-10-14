@@ -1206,7 +1206,7 @@ function FlatpickrInstance(
 
     self.redraw();
 
-    if (triggerChangeEvent === true)
+    if (triggerChangeEvent)
       // triggerChangeEvent is true (default) or an Event
       triggerEvent("onChange");
   }
