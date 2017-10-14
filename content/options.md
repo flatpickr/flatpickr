@@ -18,7 +18,7 @@ An always up-to-date list of options may be found at <a href="https://github.com
     <tbody>
         <tr>
             <td>altFormat</td>
-            <td>string</td>
+            <td>String</td>
             <td>"F j, Y"</td>
             <td>Exactly the same as date format, but for the altInput field</td>
         </tr>
@@ -36,7 +36,7 @@ An always up-to-date list of options may be found at <a href="https://github.com
         </tr>
         <tr>
             <td>allowInput</td>
-            <td>boolean</td>
+            <td>Boolean</td>
             <td>false</td>
             <td>Allows the user to enter a date directly input the input field. By default, direct entry is disabled.</td>
         </tr>
@@ -48,25 +48,25 @@ An always up-to-date list of options may be found at <a href="https://github.com
         </tr>
         <tr>
             <td>ariaDateFormat</td>
-            <td>string</td>
+            <td>String</td>
             <td>"F j, Y"</td>
             <td>Defines how the date will be formatted in the&nbsp;<code>aria-label</code> for calendar days, using the same tokens as&nbsp;<code>dateFormat</code>. If you change this, you should choose a value that will make sense if a screen reader reads it out loud.</td>
         </tr>
         <tr>
             <td>clickOpens</td>
-            <td>boolean</td>
+            <td>Boolean</td>
             <td>true</td>
             <td>Whether clicking on the input should open the picker. You could disable this if you wish to open the calendar manually with<code>.open()</code></td>
         </tr>
         <tr>
             <td>dateFormat</td>
-            <td>string</td>
+            <td>String</td>
             <td>"Y-m-d"</td>
             <td>A string of characters which are used to define how the date will be displayed in the input box. The supported characters are defined in&nbsp;<a href="/formatting">the table below</a>.</td>
         </tr>
         <tr>
             <td><strong>defaultDate</strong></td>
-            <td>string</td>
+            <td>String</td>
             <td>null</td>
             <td>
             <p>Sets the initial selected date(s). </p>
@@ -92,7 +92,7 @@ An always up-to-date list of options may be found at <a href="https://github.com
         </tr>
         <tr>
             <td>disable</td>
-            <td>array</td>
+            <td>Array</td>
             <td>[]</td>
             <td>
                 See&nbsp;<a href="/examples/#disabling-specific-dates">Disabling dates</a>
@@ -107,7 +107,7 @@ An always up-to-date list of options may be found at <a href="https://github.com
         </tr>
         <tr>
             <td>enable</td>
-            <td>array</td>
+            <td>Array</td>
             <td>[]</td>
             <td>
                 See&nbsp;<a href="/examples/#disabling-all-dates-except-select-few">Enabling dates</a>
@@ -115,31 +115,31 @@ An always up-to-date list of options may be found at <a href="https://github.com
         </tr>
         <tr>
             <td>enableTime</td>
-            <td>boolean</td>
+            <td>Boolean</td>
             <td>false</td>
             <td>Enables time picker</td>
         </tr>
         <tr>
             <td>enableSeconds</td>
-            <td>boolean</td>
+            <td>Boolean</td>
             <td>false</td>
             <td>Enables seconds in the time picker.</td>
         </tr>
         <tr>
             <td>formatDate</td>
-            <td>function</td>
+            <td>Function</td>
             <td>null</td>
             <td>Allows using a custom date formatting function instead of the built-in handling for date formats using&nbsp;<code>dateFormat</code>,&nbsp;<code>altFormat</code>, etc.</td>
         </tr>
         <tr>
             <td>hourIncrement</td>
-            <td>integer</td>
+            <td>Integer</td>
             <td>1</td>
             <td>Adjusts the step for the hour input (incl. scrolling)</td>
         </tr>
         <tr>
             <td>inline</td>
-            <td>boolean</td>
+            <td>Boolean</td>
             <td>false</td>
             <td>Displays the calendar inline</td>
         </tr>
@@ -157,7 +157,7 @@ An always up-to-date list of options may be found at <a href="https://github.com
         </tr>
         <tr>
             <td>minuteIncrement</td>
-            <td>integer</td>
+            <td>Integer</td>
             <td>5</td>
             <td>Adjusts the step for the minute input (incl. scrolling)</td>
         </tr>
@@ -169,20 +169,20 @@ An always up-to-date list of options may be found at <a href="https://github.com
         </tr>
         <tr>
             <td>nextArrow</td>
-            <td>string</td>
+            <td>String</td>
             <td><code>&gt;</code></td>
             <td>HTML for the arrow icon, used to switch months.</td>
         </tr>
         <tr>
             <td>noCalendar</td>
-            <td>boolean</td>
+            <td>Boolean</td>
             <td>false</td>
             <td>Hides the day selection in calendar.<br>
             Use it along with&nbsp;<code>enableTime</code>&nbsp;to create a time picker.</td>
         </tr>
         <tr>
             <td>onChange</td>
-            <td>function, [functions]</td>
+            <td>Function, [functions]</td>
             <td>null</td>
             <td>
                 Function(s) to trigger on every date selection. See&nbsp;<a href="#eventsAPI">Events API</a>
@@ -190,7 +190,7 @@ An always up-to-date list of options may be found at <a href="https://github.com
         </tr>
         <tr>
             <td>onClose</td>
-            <td>function, [functions]</td>
+            <td>Function, [functions]</td>
             <td>null</td>
             <td>
                 Function(s) to trigger on every time the calendar is closed. See&nbsp;<a href="/events/#onclose">Events API</a>
@@ -198,7 +198,7 @@ An always up-to-date list of options may be found at <a href="https://github.com
         </tr>
         <tr>
             <td>onOpen</td>
-            <td>function, [functions]</td>
+            <td>Function, [functions]</td>
             <td>null</td>
             <td>
                 Function(s) to trigger on every time the calendar is opened. See&nbsp;<a href="/events/#onopen">Events API</a>
@@ -206,7 +206,7 @@ An always up-to-date list of options may be found at <a href="https://github.com
         </tr>
         <tr>
             <td>onReady</td>
-            <td>function, [functions]</td>
+            <td>Function, [functions]</td>
             <td>null</td>
             <td>
                 Function to trigger when the calendar is ready. See&nbsp;<a href="/events/#onready">Events API</a>
@@ -214,25 +214,25 @@ An always up-to-date list of options may be found at <a href="https://github.com
         </tr>
         <tr>
             <td>parseDate</td>
-            <td>function</td>
+            <td>Function</td>
             <td>false</td>
             <td>Function that expects a date string and must return a Date object</td>
         </tr>
         <tr>
             <td>prevArrow</td>
-            <td>string</td>
+            <td>String</td>
             <td><code>&lt;</code></td>
             <td>HTML for the left arrow icon.</td>
         </tr>
         <tr>
             <td>shorthandCurrentMonth</td>
-            <td>boolean</td>
+            <td>Boolean</td>
             <td>false</td>
             <td>Show the month using the shorthand version (ie, Sep instead of September).</td>
         </tr>
         <tr>
             <td>static</td>
-            <td>boolean</td>
+            <td>Boolean</td>
             <td>false</td>
             <td>Position the calendar inside the wrapper and next to the input element. (Leave<code>false</code>unless you know what you're doing.</td>
         </tr>
@@ -244,7 +244,7 @@ An always up-to-date list of options may be found at <a href="https://github.com
         </tr>
         <tr>
             <td>weekNumbers</td>
-            <td>boolean</td>
+            <td>Boolean</td>
             <td>false</td>
             <td>Enables display of week numbers in calendar.</td>
         </tr>
