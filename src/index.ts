@@ -2599,7 +2599,7 @@ flatpickr = function(
   return _flatpickr([selector], config);
 } as FlatpickrFn;
 
-window.flatpickr = flatpickr;
+if (typeof window === "object") window.flatpickr = flatpickr;
 
 /* istanbul ignore next */
 flatpickr.defaultConfig = defaultOptions;
