@@ -7,12 +7,12 @@ export function debounce<F extends Function>(
   wait: number,
   immediate: boolean = false
 ) {
-  let timeout: NodeJS.Timer | null;
+  let timeout: number | null;
   return function(this: Function) {
     let context = this,
       args = arguments;
     timeout !== null && clearTimeout(timeout);
-    timeout = setTimeout(function() {
+    timeout = window.setTimeout(function() {
       timeout = null;
       if (!immediate) func.apply(context, args);
     }, wait);
