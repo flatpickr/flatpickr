@@ -1648,12 +1648,15 @@ function FlatpickrInstance(
 
     if (self._input.disabled || self.config.inline) return;
 
+    const wasOpen = self.isOpen;
+
     self.isOpen = true;
-    self.calendarContainer.classList.add("open");
     positionCalendar(positionElement);
+
+    self.calendarContainer.classList.add("open");
     self._input.classList.add("active");
 
-    triggerEvent("onOpen");
+    !wasOpen && triggerEvent("onOpen");
   }
 
   function minMaxDateSetter(type: "min" | "max") {
