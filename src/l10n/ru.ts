@@ -55,6 +55,10 @@ export const Russian: CustomLocale = {
       "Декабрь",
     ],
   },
+  
+  rangeSeparator: " — ",
+  scrollTitle: "Прокрутите для увеличения",
+  toggleTitle: "Нажмите для переключения",
 };
 
 fp.l10ns.ru = Russian;
