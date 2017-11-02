@@ -1584,11 +1584,16 @@ function FlatpickrInstance(
     }
 
     for (
-      let timestamp = (self.days.childNodes[0] as DayElement).dateObj.getTime(),
-        i = 0;
+      let i = 0;
       i < 42;
-      i++, timestamp += duration.DAY
+      i++
     ) {
+	
+	  let d = (self.days.childNodes[0] as DayElement).dateObj;
+	  d.setDate(d.getDate() + i);
+			 
+	  let timestamp = d.getTime();
+			 
       const outOfRange =
           timestamp < self.minRangeDate.getTime() ||
           timestamp > self.maxRangeDate.getTime(),
