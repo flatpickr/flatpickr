@@ -1,4 +1,4 @@
-interface MonthsWeekDays {
+export interface MonthsWeekDays {
   weekdays: {
     shorthand: [string, string, string, string, string, string, string];
     longhand: [string, string, string, string, string, string, string];

@@ -3,7 +3,7 @@ import { Locale, CustomLocale, key as LocaleKey } from "./locale";
 
 import { RevFormat, Formats, TokenRegex } from "../utils/formatting";
 
-interface Elements {
+export interface Elements {
   element: HTMLElement;
   input: HTMLInputElement;
   altInput?: HTMLInputElement;
@@ -42,7 +42,7 @@ interface Elements {
   amPM?: HTMLSpanElement;
 }
 
-interface Formatting {
+export interface Formatting {
   revFormat: RevFormat;
   formats: Formats;
   tokenRegex: TokenRegex;
