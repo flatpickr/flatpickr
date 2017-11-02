@@ -25,6 +25,10 @@ const paths = {
   l10n: "./src/l10n",
 };
 
+const customModuleNames: Record<string, string> = {
+  confirmDate: "confirmDatePlugin",
+};
+
 const rollupConfig = {
   inputOptions: {
     input: "",
@@ -121,10 +125,13 @@ function buildExtras(folder: "plugins" | "l10n") {
           ...rollupConfig.inputOptions,
           input: sourcePath,
         } as any);
+
+        const fileName = path.basename(sourcePath, path.extname(sourcePath));
+
         return bundle.write({
           ...rollupConfig.outputOptions,
           file: sourcePath.replace("src", "dist").replace(".ts", ".js"),
-          name: path.basename(sourcePath, path.extname(sourcePath)),
+          name: customModuleNames[fileName] || fileName,
         } as any);
       }),
       ...css_paths.map(async p => {
