@@ -1589,7 +1589,7 @@ function FlatpickrInstance(
       i++
     ) {
 	
-	  let d = (self.days.childNodes[0] as DayElement).dateObj;
+	  let d = new Date((self.days.childNodes[0] as DayElement).dateObj);
 	  d.setDate(d.getDate() + i);
 			 
 	  let timestamp = d.getTime();
