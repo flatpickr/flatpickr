@@ -32,7 +32,7 @@ function rangePlugin(config: Config = {}) {
 
       secondInput.setAttribute("data-fp-omit", "");
 
-      fp._bind(secondInput, ["focus", "click"], e => {
+      fp._bind(secondInput, ["focus", "click"], (e: Event) => {
         if (fp.selectedDates[1]) {
           fp.latestSelectedDateObj = fp.selectedDates[1];
           fp._setHoursFromDate(fp.selectedDates[1]);
@@ -47,7 +47,7 @@ function rangePlugin(config: Config = {}) {
         setTimeout(fp.open, 0);
       });
 
-      fp._bind(secondInput, "keydown", e => {
+      fp._bind(secondInput, "keydown", (e: KeyboardEvent) => {
         if ((e as KeyboardEvent).key === "Enter") {
           fp.setDate(
             [fp.selectedDates[0], secondInput.value],
@@ -84,7 +84,7 @@ function rangePlugin(config: Config = {}) {
           fp.jumpToDate(fp.selectedDates[0]);
         });
 
-        fp._bind(fp._input, "keydown", e => {
+        fp._bind(fp._input, "keydown", (e: KeyboardEvent) => {
           if ((e as KeyboardEvent).key === "Enter")
             fp.setDate(
               [fp._input.value, fp.selectedDates[1]],

@@ -277,10 +277,10 @@ function FlatpickrInstance(
    * @param {String} event the event name
    * @param {Function} handler the event handler
    */
-  function bind<F extends EventListener, E extends Element | Window>(
+  function bind<E extends Element | Window>(
     element: E | E[],
     event: string | string[],
-    handler: F
+    handler: ((e?: any) => void)
   ): void {
     if (event instanceof Array)
       return event.forEach(ev => bind(element, ev, handler));
@@ -288,7 +288,7 @@ function FlatpickrInstance(
     if (element instanceof Array)
       return element.forEach(el => bind(el, event, handler));
 
-    element.addEventListener(event, handler);
+    element.addEventListener(event, handler as EventListener);
     self._handlers.push({ element: element as Element, event, handler });
   }
 
@@ -318,9 +318,11 @@ function FlatpickrInstance(
         Array.prototype.forEach.call(
           self.element.querySelectorAll(`[data-${evt}]`),
           (el: HTMLElement) =>
-            bind(el, "click", self[
-              evt as "open" | "close" | "toggle" | "clear"
-            ] as EventListener)
+            bind(
+              el,
+              "click",
+              self[evt as "open" | "close" | "toggle" | "clear"]
+            )
         );
       });
     }
@@ -334,7 +336,7 @@ function FlatpickrInstance(
     self._debouncedChange = debounce(triggerChange, 300);
 
     if (self.config.mode === "range" && self.daysContainer)
-      bind(self.daysContainer, "mouseover", e =>
+      bind(self.daysContainer, "mouseover", (e: MouseEvent) =>
         onMouseOver(e.target as DayElement)
       );
 
@@ -1227,7 +1229,7 @@ function FlatpickrInstance(
 
     for (let i = self._handlers.length; i--; ) {
       const h = self._handlers[i];
-      h.element.removeEventListener(h.event, h.handler);
+      h.element.removeEventListener(h.event, h.handler as EventListener);
     }
 
     self._handlers = [];
@@ -2063,7 +2065,7 @@ function FlatpickrInstance(
   function setDate(
     date: DateOption | DateOption[],
     triggerChange = false,
-    format = undefined
+    format?: string
   ) {
     if (date !== 0 && !date) return self.clear(triggerChange);
 
@@ -2568,7 +2570,7 @@ function _flatpickr(
         node._flatpickr = undefined;
       }
 
-      node._flatpickr = FlatpickrInstance(node, config || {});
+      node._flatpickr = FlatpickrInstance(node, config || {}) as Instance;
       instances.push(node._flatpickr);
     } catch (e) {
       console.warn(e, e.stack);

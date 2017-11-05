@@ -107,12 +107,16 @@ export type Instance = Elements &
 
     // Internals
     _animationLoop: Function[];
-    _handlers: { event: string; element: Element; handler: EventListener }[];
+    _handlers: {
+      event: string;
+      element: Element;
+      handler: (e?: Event) => void;
+    }[];
 
-    _bind: <F extends EventListener, E extends Element>(
+    _bind: <E extends Element>(
       element: E | E[],
       event: string | string[],
-      handler: F
+      handler: Function
     ) => void;
     _createElement: <E extends HTMLElement>(
       tag: keyof HTMLElementTagNameMap,

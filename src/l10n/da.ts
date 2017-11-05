@@ -2,7 +2,7 @@
 import { CustomLocale } from "types/locale";
 import { FlatpickrFn } from "types/instance";
 
-const fp: FlatpickrFn =
+const fp =
   typeof window !== "undefined" && window.flatpickr !== undefined
     ? window.flatpickr
     : {
@@ -60,7 +60,7 @@ export const Danish: CustomLocale = {
 
   firstDayOfWeek: 1,
   rangeSeparator: " til ",
-  weekAbbreviation: "uge"
+  weekAbbreviation: "uge",
 };
 
 fp.l10ns.da = Danish;

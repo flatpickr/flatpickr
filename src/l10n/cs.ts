@@ -2,7 +2,7 @@
 import { CustomLocale } from "types/locale";
 import { FlatpickrFn } from "types/instance";
 
-const fp: FlatpickrFn =
+const fp =
   typeof window !== "undefined" && window.flatpickr !== undefined
     ? window.flatpickr
     : {
@@ -53,8 +53,8 @@ export const Czech: CustomLocale = {
       "Prosinec",
     ],
   },
-  
-  rangeSeparator: ' do ',
+
+  rangeSeparator: " do ",
 
   firstDayOfWeek: 1,
 
