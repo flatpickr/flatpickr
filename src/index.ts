@@ -2039,7 +2039,7 @@ function FlatpickrInstance(
 
         case "multiple":
           dates = inputDate
-            .split("; ")
+            .split(self.config.conjunction)
             .map(date => self.parseDate(date, format));
           break;
 
