@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=10" />
     <title>Getting Started - flatpickr</title>
-    <meta name="generator" content="Hugo 0.29" />
+    <meta name="generator" content="Hugo 0.30" />
 
     
     <meta name="description" content="A lightweight and powerful datetimepicker">
@@ -463,8 +463,7 @@
 </span><span style="color:#09f;font-style:italic"></span>bower install flatpickr-calendar --save
 
 <span style="color:#09f;font-style:italic"># or, if you like yarn better
-</span><span style="color:#09f;font-style:italic"></span>yarn add flatpickr</code></pre>
-</div>
+</span><span style="color:#09f;font-style:italic"></span>yarn add flatpickr</code></pre></div>
 <h3 id="non-module-environments">Non-module environments</h3>
 
 <p>If, for any reason, you are constained to a non-module environment (e.g. no bundlers such as webpack) - don&rsquo;t fret. I suggest simply pulling the latest version of <code>flatpickr</code> from <code>jsdelivr</code> or <code>unpkg</code>.</p>
@@ -474,26 +473,22 @@
 <span style="color:#09f;font-style:italic">&lt;!-- or --&gt;</span>
 
 &lt;<span style="color:#309;font-weight:bold">link</span> <span style="color:#309">rel</span><span style="color:#555">=</span><span style="color:#c30">&#34;stylesheet&#34;</span> <span style="color:#309">href</span><span style="color:#555">=</span><span style="color:#c30">&#34;https://unpkg.com/flatpickr/dist/flatpickr.min.css&#34;</span>&gt;
-&lt;<span style="color:#309;font-weight:bold">script</span> <span style="color:#309">src</span><span style="color:#555">=</span><span style="color:#c30">&#34;https://unpkg.com/flatpickr&#34;</span>&gt;&lt;/<span style="color:#309;font-weight:bold">script</span>&gt;</code></pre>
-</div>
+&lt;<span style="color:#309;font-weight:bold">script</span> <span style="color:#309">src</span><span style="color:#555">=</span><span style="color:#c30">&#34;https://unpkg.com/flatpickr&#34;</span>&gt;&lt;/<span style="color:#309;font-weight:bold">script</span>&gt;</code></pre></div>
 <h2 id="usage">Usage</h2>
 
 <p>If you&rsquo;re using a bundler, e.g. <code>webpack</code>, you&rsquo;ll need to import flatpickr.</p>
-<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#069;font-weight:bold">const</span> flatpickr <span style="color:#555">=</span> require(<span style="color:#c30">&#34;flatpickr&#34;</span>);</code></pre>
-</div>
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#069;font-weight:bold">const</span> flatpickr <span style="color:#555">=</span> require(<span style="color:#c30">&#34;flatpickr&#34;</span>);</code></pre></div>
 <p>All of the following are valid ways to create flatpickr instance.</p>
 <div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">flatpickr(<span style="color:#c30">&#34;#myID&#34;</span>, {});
 flatpickr(<span style="color:#c30">&#34;.myClass&#34;</span>, {}); <span style="color:#09f;font-style:italic">// creates multiple instances
-</span><span style="color:#09f;font-style:italic"></span>flatpickr(element, {}); <span style="color:#a00;background-color:#faa">// https://developer.mozilla.org/en-US/docs/Web/API/Element</span></code></pre>
-</div>
+</span><span style="color:#09f;font-style:italic"></span>flatpickr(element, {}); <span style="color:#a00;background-color:#faa">// https://developer.mozilla.org/en-US/docs/Web/API/Element</span></code></pre></div>
 <p>Configuration is optional and passed in an object <code>{}</code>.</p>
 
 <h3 id="jquery">jQuery</h3>
 
 <p>If you have jQuery, flatpickr is available as a plugin.
 Simply</p>
-<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">$(<span style="color:#c30">&#34;.selector&#34;</span>).flatpickr(optional_config);</code></pre>
-</div>
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">$(<span style="color:#c30">&#34;.selector&#34;</span>).flatpickr(optional_config);</code></pre></div>
 
 			<aside class="copyright" role="note">
 				

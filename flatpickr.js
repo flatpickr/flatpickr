@@ -151,7 +151,7 @@ var configs = {
 
     confirmDate: {
         "enableTime": true,
-        "plugins": [new confirmDate({})]
+        "plugins": [new confirmDatePlugin({})]
     },
     weekSelect: {
         "plugins": [new weekSelect({})],

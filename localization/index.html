@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=10" />
     <title>Localization - flatpickr</title>
-    <meta name="generator" content="Hugo 0.29" />
+    <meta name="generator" content="Hugo 0.30" />
 
     
     <meta name="description" content="A lightweight and powerful datetimepicker">
@@ -463,45 +463,37 @@
 
 flatpickr(myElem, {
     <span style="color:#c30">&#34;locale&#34;</span><span style="color:#555">:</span> Russian <span style="color:#09f;font-style:italic">// locale for this instance only
-</span><span style="color:#09f;font-style:italic"></span>});</code></pre>
-</div>
+</span><span style="color:#09f;font-style:italic"></span>});</code></pre></div>
 <p>Using plain <code>require()</code></p>
 <div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#069;font-weight:bold">const</span> flatpickr <span style="color:#555">=</span> require(<span style="color:#c30">&#34;flatpickr&#34;</span>);
 <span style="color:#069;font-weight:bold">const</span> Russian <span style="color:#555">=</span> require(<span style="color:#c30">&#34;flatpickr/dist/l10n/ru.js&#34;</span>).<span style="color:#069;font-weight:bold">default</span>.ru;
 
 flatpickr(myElem, {
     <span style="color:#c30">&#34;locale&#34;</span><span style="color:#555">:</span> Russian <span style="color:#09f;font-style:italic">// locale for this instance only
-</span><span style="color:#09f;font-style:italic"></span>});</code></pre>
-</div>
+</span><span style="color:#09f;font-style:italic"></span>});</code></pre></div>
 <p>Localize globally (for all instances):</p>
 <div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#069;font-weight:bold">const</span> Russian <span style="color:#555">=</span> require(<span style="color:#c30">&#34;flatpickr/dist/l10n/ru.js&#34;</span>).<span style="color:#069;font-weight:bold">default</span>.ru;
 <span style="color:#09f;font-style:italic">// or import { Russian } from &#34;flatpickr/dist/l10n/ru.js&#34;
 </span><span style="color:#09f;font-style:italic"></span>flatpickr.localize(Russian); <span style="color:#09f;font-style:italic">// default locale is now Russian
 </span><span style="color:#09f;font-style:italic"></span>
-flatpickr(myElem);</code></pre>
-</div>
+flatpickr(myElem);</code></pre></div>
 <h2 id="localization-in-a-browser-environment">Localization in a Browser Environment</h2>
 <div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#309;font-weight:bold">script</span> <span style="color:#309">src</span><span style="color:#555">=</span><span style="color:#c30">&#34;https://npmcdn.com/flatpickr/dist/flatpickr.min.js&#34;</span>&gt;&lt;/<span style="color:#309;font-weight:bold">script</span>&gt;
-&lt;<span style="color:#309;font-weight:bold">script</span> <span style="color:#309">src</span><span style="color:#555">=</span><span style="color:#c30">&#34;https://npmcdn.com/flatpickr/dist/l10n/ru.js&#34;</span>&gt;&lt;/<span style="color:#309;font-weight:bold">script</span>&gt;</code></pre>
-</div><div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">flatpickr(myElement, {
+&lt;<span style="color:#309;font-weight:bold">script</span> <span style="color:#309">src</span><span style="color:#555">=</span><span style="color:#c30">&#34;https://npmcdn.com/flatpickr/dist/l10n/ru.js&#34;</span>&gt;&lt;/<span style="color:#309;font-weight:bold">script</span>&gt;</code></pre></div><div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">flatpickr(myElement, {
     <span style="color:#c30">&#34;locale&#34;</span><span style="color:#555">:</span> <span style="color:#c30">&#34;ru&#34;</span>  <span style="color:#09f;font-style:italic">// locale for this instance only
-</span><span style="color:#09f;font-style:italic"></span>});</code></pre>
-</div>
+</span><span style="color:#09f;font-style:italic"></span>});</code></pre></div>
 <p>Localize globally (for all instances):</p>
 <div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">flatpickr.localize(flatpickr.l10ns.ru);
-flatpickr(<span style="color:#c30">&#34;mySelector&#34;</span>);</code></pre>
-</div>
+flatpickr(<span style="color:#c30">&#34;mySelector&#34;</span>);</code></pre></div>
 <p>You may also wish to modify only certain values of locale.
 For instance, to set the first day of the week to Monday:</p>
-<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">flatpickr.l10ns.<span style="color:#069;font-weight:bold">default</span>.firstDayOfWeek <span style="color:#555">=</span> <span style="color:#f60">1</span>; <span style="color:#a00;background-color:#faa">// Monday</span></code></pre>
-</div>
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">flatpickr.l10ns.<span style="color:#069;font-weight:bold">default</span>.firstDayOfWeek <span style="color:#555">=</span> <span style="color:#f60">1</span>; <span style="color:#a00;background-color:#faa">// Monday</span></code></pre></div>
 <p>If you&rsquo;d like the option to persist regardless of locale, use the <code>locale</code> option to override specific fields:</p>
 <div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">flatpickr(myElem, {
     locale<span style="color:#555">:</span> {
         firstDayOfWeek<span style="color:#555">:</span> <span style="color:#f60">2</span>
     }
-});</code></pre>
-</div>
+});</code></pre></div>
 
 			<aside class="copyright" role="note">
 				

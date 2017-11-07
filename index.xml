@@ -19,7 +19,7 @@
       
       <guid>https://chmln.github.io/flatpickr/getting-started/</guid>
       <description>Installation Installing a flatpickr module flatpickr is available on npm and bower. Use either one to easily stay up to date with new features and (inevitably) bugfixes.
-# using npm install npm i flatpickr --save # bower bower install flatpickr-calendar --save # or, if you like yarn better yarn add flatpickr  Non-module environments If, for any reason, you are constained to a non-module environment (e.g. no bundlers such as webpack) - don&amp;rsquo;t fret.</description>
+# using npm install npm i flatpickr --save # bower bower install flatpickr-calendar --save # or, if you like yarn better yarn add flatpickr Non-module environments If, for any reason, you are constained to a non-module environment (e.g. no bundlers such as webpack) - don&amp;rsquo;t fret.</description>
     </item>
     
     <item>
@@ -30,7 +30,7 @@
       <guid>https://chmln.github.io/flatpickr/examples/</guid>
       <description>Unless otherwise specified, the markup for examples below consists of just an input element, and flatpickr invocation with a given config.
 Basic flatpickr without any config. Some features right off the bat:
- The year is scrollable and can be typed in The month name is scrollable  DateTime { enableTime: true }  Human-friendly Dates altInput hides your original input and creates a new one.
+ The year is scrollable and can be typed in The month name is scrollable  DateTime { enableTime: true } Human-friendly Dates altInput hides your original input and creates a new one.
 Upon date selection, the original input will contain a Y-m-d.</description>
     </item>
     
@@ -42,7 +42,7 @@ Upon date selection, the original input will contain a Y-m-d.</description>
       <guid>https://chmln.github.io/flatpickr/instance-methods-properties-elements/</guid>
       <description>Retrieving the flatpickr instance You may store the instance by assigning the result of an invocation to a variable.
 Here are a few ways to do it.
-const fp = flatpickr(&amp;#34;#myID&amp;#34;, {}); // flatpickr const myInput = document.querySelector(&amp;#34;.myInput&amp;#34;); const fp = flatpickr(myInput, {}); // flatpickr const calendars = flatpickr(&amp;#34;.calendar&amp;#34;, {}); calendars[0] // flatpickr  And if you&amp;rsquo;ve forgot to save the instance to a variable
+const fp = flatpickr(&amp;#34;#myID&amp;#34;, {}); // flatpickrconst myInput = document.querySelector(&amp;#34;.myInput&amp;#34;); const fp = flatpickr(myInput, {}); // flatpickrconst calendars = flatpickr(&amp;#34;.calendar&amp;#34;, {}); calendars[0] // flatpickr And if you&amp;rsquo;ve forgot to save the instance to a variable
 flatpickr(&amp;#34;#myInput&amp;#34;, {}); // invocation without saving to a var // .</description>
     </item>
     
@@ -86,8 +86,8 @@ Date Formatting Tokens    Character Description Example     d Day of the month, 
       <description>Dozens of locales are available.
 flatpickr can be localized per-instance, or globally.
 Using Modules ES modules (if your environment supports it)
-import flatpickr from &amp;#34;flatpickr&amp;#34; import { Russian } from &amp;#34;flatpickr/dist/l10n/ru.js&amp;#34; flatpickr(myElem, { &amp;#34;locale&amp;#34;: Russian // locale for this instance only });  Using plain require()
-const flatpickr = require(&amp;#34;flatpickr&amp;#34;); const Russian = require(&amp;#34;flatpickr/dist/l10n/ru.js&amp;#34;).default.ru; flatpickr(myElem, { &amp;#34;locale&amp;#34;: Russian // locale for this instance only });  Localize globally (for all instances):</description>
+import flatpickr from &amp;#34;flatpickr&amp;#34; import { Russian } from &amp;#34;flatpickr/dist/l10n/ru.js&amp;#34; flatpickr(myElem, { &amp;#34;locale&amp;#34;: Russian // locale for this instance only }); Using plain require()
+const flatpickr = require(&amp;#34;flatpickr&amp;#34;); const Russian = require(&amp;#34;flatpickr/dist/l10n/ru.js&amp;#34;).default.ru; flatpickr(myElem, { &amp;#34;locale&amp;#34;: Russian // locale for this instance only }); Localize globally (for all instances):</description>
     </item>
     
     <item>
@@ -99,7 +99,7 @@ const flatpickr = require(&amp;#34;flatpickr&amp;#34;); const Russian = require(
       <description>Plugins are in essentially a set of hooks, that receive a config object (optionally) and a flatpickr instance
 Functionality requested by users that doesn&amp;rsquo;t make it to core usually ends up in a plugin. The flatpickr repo comes with a few plugins.
 confirmDate Provides a visual cue for users after selecting either:
- date + time multiple dates  { &amp;#34;enableTime&amp;#34;: true, &amp;#34;plugins&amp;#34;: [new confirmDatePlugin({})] }  A spiffy SVG icon is included, along with sane defaults, but you can customize them.</description>
+ date + time multiple dates  { &amp;#34;enableTime&amp;#34;: true, &amp;#34;plugins&amp;#34;: [new confirmDatePlugin({})] } A spiffy SVG icon is included, along with sane defaults, but you can customize them.</description>
     </item>
     
     <item>
@@ -111,8 +111,8 @@ confirmDate Provides a visual cue for users after selecting either:
       <description>Select Theme: Default 
  Usage To use a theme of your choice, simply load its corresponding CSS file.
 For webpack builds and similar, you&amp;rsquo;d do something like:
-require(&amp;#34;flatpickr/dist/themes/dark.css&amp;#34;);  Themes in browser environments Otherwise, if you&amp;rsquo;re constrained to a browser, just link the CSS file as a regular stylesheet.
-&amp;lt;link rel=&amp;#34;stylesheet&amp;#34; type=&amp;#34;text/css&amp;#34; href=&amp;#34;https://npmcdn.com/flatpickr/dist/themes/dark.css&amp;#34;&amp;gt;  Available Themes Available theme names are listed in the theme selector on top of the page.</description>
+require(&amp;#34;flatpickr/dist/themes/dark.css&amp;#34;); Themes in browser environments Otherwise, if you&amp;rsquo;re constrained to a browser, just link the CSS file as a regular stylesheet.
+&amp;lt;link rel=&amp;#34;stylesheet&amp;#34; type=&amp;#34;text/css&amp;#34; href=&amp;#34;https://npmcdn.com/flatpickr/dist/themes/dark.css&amp;#34;&amp;gt; Available Themes Available theme names are listed in the theme selector on top of the page.</description>
     </item>
     
     <item>
@@ -139,7 +139,7 @@ IE9 flatpickr depends on classList which is absent from IE9, thus if you&amp;rsq
 Additionally, flatpickr has specific styles for IE9.
 Make sure to include that as well, utilizing browser detection.
 For instance,
-&amp;lt;!--[if IE 9]&amp;gt; &amp;lt;link rel=&amp;#34;stylesheet&amp;#34; type=&amp;#34;text/css&amp;#34; href=&amp;#34;https://npmcdn.com/flatpickr/dist/ie.css&amp;#34;&amp;gt; &amp;lt;![endif]--&amp;gt;  If you&amp;rsquo;re using a bundler like webpack, see html-webpack-plugin</description>
+&amp;lt;!--[if IE 9]&amp;gt; &amp;lt;link rel=&amp;#34;stylesheet&amp;#34; type=&amp;#34;text/css&amp;#34; href=&amp;#34;https://npmcdn.com/flatpickr/dist/ie.css&amp;#34;&amp;gt; &amp;lt;![endif]--&amp;gt; If you&amp;rsquo;re using a bundler like webpack, see html-webpack-plugin</description>
     </item>
     
     <item>
