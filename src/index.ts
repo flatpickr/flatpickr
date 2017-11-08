@@ -175,20 +175,20 @@ function FlatpickrInstance(
     }
   }
 
-  function numberifyTextInput(val?: string = "0"): number {
+  function numberifyTextInput(val: string = "0"): number {
     val = (val || "0").slice(-2);
     let num = parseInt(val, 10);
     if (!isFinite(num)) return 0;
     return num;
   }
 
-  function convertMinutesAndSeconds(val?: string = "0"): number {
+  function convertMinutesAndSeconds(val: string = "0"): number {
     let num = numberifyTextInput(val);
     if (num >= 60) num = parseInt(val.slice(-1), 10);
     return num;
   }
 
-  function convertHours(val?: string = "0", ampm?: "AM" | "PM"): number {
+  function convertHours(val: string = "0", ampm?: "AM" | "PM"): number {
     let num = numberifyTextInput(val);
     if (ampm) {
       if (num > 12) num = parseInt(val.slice(-1), 10);
@@ -206,13 +206,21 @@ function FlatpickrInstance(
     if (self.hourElement === undefined || self.minuteElement === undefined)
       return;
 
-    let hours = convertHours(
-      self.hourElement.value,
-      self.amPM && self.amPM.textContent
-    );
+    let hours;
+    if (
+      self.amPM &&
+      (self.amPM.textContent === "AM" || self.amPM.textContent === "PM")
+    ) {
+      hours = convertHours(
+        self.hourElement.value,
+        self.amPM && self.amPM.textContent
+      );
+    } else {
+      hours = convertHours(self.hourElement.value);
+    }
     let minutes = convertMinutesAndSeconds(self.minuteElement.value);
     let seconds = convertMinutesAndSeconds(
-      (self.secondElement && self.secondElement.value) || "0"
+      self.secondElement && self.secondElement.value
     );
 
     if (
