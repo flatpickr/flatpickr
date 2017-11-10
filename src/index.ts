@@ -927,8 +927,8 @@ function FlatpickrInstance(
     self.nextMonthNav = createElement("span", "flatpickr-next-month");
     self.nextMonthNav.innerHTML = self.config.nextArrow;
 
-    self.navigationCurrentMonth = createElement<HTMLSpanElement>(
-      "span",
+    self.navigationCurrentMonth = createElement<HTMLDivElement>(
+      "div",
       "flatpickr-current-month"
     );
     self.navigationCurrentMonth.appendChild(self.currentMonthElement);
