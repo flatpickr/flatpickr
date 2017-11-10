@@ -1181,7 +1181,7 @@ function FlatpickrInstance(
         self.l10n
       );
 
-    triggerEvent("onMonthChange");
+    afterDayAnim(() => triggerEvent("onMonthChange"));
 
     if (
       from_keyboard &&
