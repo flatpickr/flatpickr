@@ -4,7 +4,7 @@
   "description": "A lightweight, powerful javascript datetime picker",
   "scripts": {
     "build": "run-s build:pre build:build",
-    "build:pre": "mkdir dist || true && mkdir dist/themes | true ",
+    "build:pre": "mkdir -p dist/themes",
     "build:build": "ts-node build.ts",
     "start": "npm run build:build -- --dev",
     "rollup:start": "rollup -w -c",
