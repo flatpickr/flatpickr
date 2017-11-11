@@ -12,24 +12,20 @@ Resorting to @ts-ignore until this is resolved.
 
 declare global {
   interface HTMLElement {
-    //@ts-ignore
     flatpickr: (config?: Options) => Instance | Instance[];
-    //@ts-ignore
+
     _flatpickr?: Instance;
   }
 
   interface NodeList {
-    //@ts-ignore
     flatpickr: (config?: Options) => Instance | Instance[];
   }
 
   interface HTMLCollection {
-    //@ts-ignore
     flatpickr: (config?: Options) => Instance | Instance[];
   }
 
   interface Window {
-    //@ts-ignore
     flatpickr: FlatpickrFn;
   }
 

@@ -28,11 +28,12 @@ export function clearNode(node: HTMLElement) {
 }
 
 export function findParent(
-  node: Node,
-  condition: (n: Node) => boolean
-): Node | undefined {
+  node: Element,
+  condition: (n: Element) => boolean
+): Element | undefined {
   if (condition(node)) return node;
-  else if (node.parentNode) return findParent(node.parentNode, condition);
+  else if (node.parentNode)
+    return findParent(node.parentNode as Element, condition);
 
   return undefined; // nothing found
 }
