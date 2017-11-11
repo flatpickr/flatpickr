@@ -302,7 +302,9 @@ function FlatpickrInstance(
   function onClick<E extends MouseEvent>(
     handler: (e: E) => void
   ): (e: E) => void {
-    return evt => evt.which === 1 && handler(evt);
+    return evt => {
+      evt.which === 1 && handler(evt);
+    };
   }
 
   function triggerChange() {
