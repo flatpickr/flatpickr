@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "strict": true,
-    "strictFunctionTypes": false,
+    "strictFunctionTypes": true,
     "target": "es5",
     "module": "commonjs",
     "moduleResolution": "node",

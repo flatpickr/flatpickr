@@ -1910,7 +1910,7 @@ function FlatpickrInstance(
       !day.classList.contains("disabled") &&
       !day.classList.contains("notAllowed");
 
-    const t = findParent(e.target as Node, isSelectable);
+    const t = findParent(e.target as Element, isSelectable);
 
     if (t === undefined) return;
 
@@ -2346,7 +2346,7 @@ function FlatpickrInstance(
         );
     } catch {}
 
-    self.mobileInput.addEventListener("change", (e: KeyboardEvent) => {
+    bind(self.mobileInput, "change", (e: KeyboardEvent) => {
       self.setDate(
         (e.target as HTMLInputElement).value,
         false,
@@ -2584,12 +2584,12 @@ function _flatpickr(
 if (typeof HTMLElement !== "undefined") {
   // browser env
   HTMLCollection.prototype.flatpickr = NodeList.prototype.flatpickr = function(
-    config: Options
+    config?: Options
   ) {
     return _flatpickr(this, config);
   };
 
-  HTMLElement.prototype.flatpickr = function(config: Options) {
+  HTMLElement.prototype.flatpickr = function(config?: Options) {
     return _flatpickr([this], config);
   };
 }

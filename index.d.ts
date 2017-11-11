@@ -1,7 +1,11 @@
 import { FlatpickrFn } from "./src/types/instance";
-export { Instance } from "./src/types/instance";
-export * from "./src/types/options";
+import { Instance as fpInstance } from "./src/types/instance";
+import * as Options from "./src/types/options";
 
 declare var flatpickr: FlatpickrFn;
 
-export default flatpickr;
+declare namespace flatpickr {
+  export type Instance = fpInstance;
+}
+
+export = flatpickr;
