@@ -10,7 +10,6 @@ const fp =
       } as FlatpickrFn;
 
 export const Turkish: CustomLocale = {
-  firstDayOfWeek: 1,
 
   weekdays: {
     shorthand: ["Paz", "Pzt", "Sal", "Çar", "Per", "Cum", "Cmt"],
@@ -55,6 +54,15 @@ export const Turkish: CustomLocale = {
       "Aralık",
     ],
   },
+  firstDayOfWeek: 1,
+  ordinal: () => {
+    return ".";
+  },
+  rangeSeparator: " - ",
+  weekAbbreviation: "Hf",
+  scrollTitle: "Artırmak için kaydırın",
+  toggleTitle: "Aç/Kapa",
+  amPM: ["ÖÖ", "ÖS"],
 };
 
 fp.l10ns.tr = Turkish;
