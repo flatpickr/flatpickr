@@ -39,7 +39,7 @@
     "rollup": "^0.51.5",
     "rollup-plugin-livereload": "^0.6.0",
     "rollup-plugin-serve": "^0.4.2",
-    "rollup-plugin-typescript2": "^0.8.0",
+    "rollup-plugin-typescript2": "github:ezolenko/rollup-plugin-typescript2",
     "rtlcss": "latest",
     "stylus": "latest",
     "ts-jest": "^21.2.2",
