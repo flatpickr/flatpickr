@@ -128,13 +128,16 @@ function FlatpickrInstance(
   function updateTime(
     e: MouseEvent | WheelEvent | IncrementEvent | KeyboardEvent
   ) {
-    if (self.config.noCalendar && !self.selectedDates.length) {
+    if (self.config.noCalendar && self.selectedDates.length === 0) {
       // picking time only
+      const minDate = self.config.minDate;
       self.setDate(
         new Date().setHours(
-          self.config.defaultHour,
-          self.config.defaultMinute,
-          self.config.defaultSeconds
+          !minDate ? self.config.defaultHour : minDate.getHours(),
+          !minDate ? self.config.defaultMinute : minDate.getMinutes(),
+          !minDate || !self.config.enableSeconds
+            ? self.config.defaultSeconds
+            : minDate.getSeconds()
         ),
         false
       );
@@ -498,7 +501,7 @@ function FlatpickrInstance(
         ? parseDate(jumpDate)
         : self.latestSelectedDateObj ||
           (self.config.minDate && self.config.minDate > self.now
-            ? self.config.minDate as Date
+            ? (self.config.minDate as Date)
             : self.config.maxDate && self.config.maxDate < self.now
               ? self.config.maxDate
               : self.now);
@@ -2216,7 +2219,7 @@ function FlatpickrInstance(
         parsedDate =
           !self.config || !self.config.noCalendar
             ? new Date(new Date().getFullYear(), 0, 1, 0, 0, 0, 0)
-            : new Date(new Date().setHours(0, 0, 0, 0)) as Date;
+            : (new Date(new Date().setHours(0, 0, 0, 0)) as Date);
 
         let matched,
           ops: { fn: RevFormatFn; val: string }[] = [];
@@ -2262,8 +2265,8 @@ function FlatpickrInstance(
 
   function setupInputs() {
     self.input = self.config.wrap
-      ? element.querySelector("[data-input]") as HTMLInputElement
-      : element as HTMLInputElement;
+      ? (element.querySelector("[data-input]") as HTMLInputElement)
+      : (element as HTMLInputElement);
 
     /* istanbul ignore next */
     if (!self.input) {
