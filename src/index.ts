@@ -2581,10 +2581,10 @@ function _flatpickr(
         node._flatpickr = undefined;
       }
 
-      node._flatpickr = FlatpickrInstance(node, config || {}) as Instance;
+      node._flatpickr = FlatpickrInstance(node, config || {});
       instances.push(node._flatpickr);
     } catch (e) {
-      self.config.errorHandler(e);
+      console.error(e);
     }
   }
 
