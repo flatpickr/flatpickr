@@ -108,6 +108,8 @@ By default, Flatpickr utilizes native datetime widgets unless certain options (e
   /* Enables the time picker */
   enableTime?: boolean;
 
+  errorHandler?: (e: Error) => void;
+
   /* Allows using a custom date formatting function instead of the built-in. Generally unnecessary.  */
   formatDate?: (date: Date, format: string) => string;
 
@@ -240,6 +242,7 @@ export interface ParsedOptions {
   enable: DateLimit<Date>[];
   enableSeconds: boolean;
   enableTime: boolean;
+  errorHandler: (err: Error) => void;
   formatDate?: Options["formatDate"];
   getWeek: (date: Date) => string | number;
   hourIncrement: number;
@@ -298,6 +301,7 @@ export const defaults: ParsedOptions = {
   enable: [],
   enableSeconds: false,
   enableTime: false,
+  errorHandler: console.warn,
   getWeek,
   hourIncrement: 1,
   ignoredFocusElements: [],

@@ -513,9 +513,8 @@ function FlatpickrInstance(
       }
     } catch (e) {
       /* istanbul ignore next */
-      console.error(e.stack);
-      /* istanbul ignore next */
-      console.warn("Invalid date supplied: " + jumpTo);
+      e.message = "Invalid date supplied: " + jumpTo;
+      self.config.errorHandler(e);
     }
 
     self.redraw();
@@ -1842,7 +1841,9 @@ function FlatpickrInstance(
       typeof self.config.locale !== "object" &&
       typeof flatpickr.l10ns[self.config.locale as LocaleKey] === "undefined"
     )
-      console.warn(`flatpickr: invalid locale ${self.config.locale}`);
+      self.config.errorHandler(
+        new Error(`flatpickr: invalid locale ${self.config.locale}`)
+      );
 
     self.l10n = {
       ...(flatpickr.l10ns.default as Locale),
@@ -2058,7 +2059,10 @@ function FlatpickrInstance(
         default:
           break;
       }
-    }
+    } else
+      self.config.errorHandler(
+        new Error(`Invalid date supplied: ${JSON.stringify(inputDate)}`)
+      );
 
     self.selectedDates = dates.filter(
       d => d instanceof Date && isEnabled(d, false)
@@ -2125,6 +2129,7 @@ function FlatpickrInstance(
     self.now = new Date();
 
     const preloadedDate = self.config.defaultDate || self.input.value;
+
     if (preloadedDate) setSelectedDate(preloadedDate, self.config.dateFormat);
 
     const initialDate = self.selectedDates.length
@@ -2253,8 +2258,9 @@ function FlatpickrInstance(
 
     /* istanbul ignore next */
     if (!(parsedDate instanceof Date)) {
-      console.warn(`flatpickr: invalid date ${date_orig}`);
-      console.info(self.element);
+      self.config.errorHandler(
+        new Error(`Invalid date provided: ${date_orig}`)
+      );
       return undefined;
     }
 
@@ -2270,7 +2276,7 @@ function FlatpickrInstance(
 
     /* istanbul ignore next */
     if (!self.input) {
-      console.warn("Error: invalid input element specified", self.input);
+      self.config.errorHandler(new Error("Invalid input element specified"));
       return;
     }
 
@@ -2578,7 +2584,7 @@ function _flatpickr(
       node._flatpickr = FlatpickrInstance(node, config || {}) as Instance;
       instances.push(node._flatpickr);
     } catch (e) {
-      console.warn(e, e.stack);
+      self.config.errorHandler(e);
     }
   }
 
