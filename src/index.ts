@@ -108,7 +108,11 @@ function FlatpickrInstance(
     self.showTimeInput =
       self.selectedDates.length > 0 || self.config.noCalendar;
 
-    if (self.weekWrapper !== undefined && self.daysContainer !== undefined) {
+    if (
+      !self.config.weekNumbers &&
+      self.weekWrapper !== undefined &&
+      self.daysContainer !== undefined
+    ) {
       self.calendarContainer.style.width =
         self.daysContainer.offsetWidth + self.weekWrapper.offsetWidth + "px";
     }
