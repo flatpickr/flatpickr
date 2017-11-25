@@ -27,7 +27,7 @@ export type token =
   | "w"
   | "y";
 
-const do_nothing = () => undefined;
+const do_nothing = (): void => undefined;
 
 export type RevFormatFn = (
   date: Date,
