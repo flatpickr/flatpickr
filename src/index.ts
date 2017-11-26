@@ -426,10 +426,8 @@ function FlatpickrInstance(
     else bind(window.document, "click", documentClick);
     bind(window.document, "focus", documentClick, { capture: true });
 
-    if (self.config.clickOpens === true) {
-      bind(self._input, "focus", self.open);
-      bind(self._input, "click", self.open);
-    }
+    bind(self._input, "focus", self.open);
+    bind(self._input, "click", self.open);
 
     if (self.daysContainer !== undefined) {
       bind(self.monthNav, "click", onMonthNavClick);
@@ -1883,7 +1881,8 @@ function FlatpickrInstance(
       return;
     }
 
-    if (self._input.disabled || self.config.inline) return;
+    if (self._input.disabled || self.config.inline || !self.config.clickOpens)
+      return;
 
     const wasOpen = self.isOpen;
 
