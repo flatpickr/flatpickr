@@ -116,7 +116,7 @@ export type Instance = Elements &
     _bind: <E extends Element>(
       element: E | E[],
       event: string | string[],
-      handler: Function
+      handler: (e?: any) => void
     ) => void;
     _createElement: <E extends HTMLElement>(
       tag: keyof HTMLElementTagNameMap,

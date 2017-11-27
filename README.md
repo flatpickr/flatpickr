@@ -40,12 +40,18 @@ See also:
 
 ## Supporting flatpickr
 
-Special thanks to support by:
+flatpickr will never change its license, pester users for donations, or engage in other user-hostile behavior.
 
-- BrowserStack for providing indispensable testing utilities
+Nevertheless, if you enjoyed working with this library or if its made your life easier, you can buy me a cup of coffee :)
+
+<a href='https://ko-fi.com/A3381DJ9' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi4.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+
+---
+
+Special thanks to support by BrowserStack for providing indispensable testing utilities
 
   <a target="_blank" href="https://www.browserstack.com/">
     <img src="https://cloud.githubusercontent.com/assets/11352152/24872293/ec310d48-1dea-11e7-9d09-8120d5742fba.png">
   </a>
 
----
+

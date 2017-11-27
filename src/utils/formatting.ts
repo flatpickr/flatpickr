@@ -27,12 +27,12 @@ export type token =
   | "w"
   | "y";
 
-const do_nothing = () => undefined;
+const do_nothing = (): undefined => undefined;
 
 export type RevFormatFn = (
   date: Date,
   data: string,
-  locale?: Locale
+  locale: Locale
 ) => Date | void | undefined;
 export type RevFormat = Record<string, RevFormatFn>;
 export const revFormat: RevFormat = {

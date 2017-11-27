@@ -341,7 +341,9 @@ describe("flatpickr", () => {
       const DEFAULT_FORMAT_1 = "d.m.y H:i:S",
         DEFAULT_FORMAT_2 = "D j F, 'y";
 
-      it(`should format the date with the pattern "${DEFAULT_FORMAT_1}"`, () => {
+      it(`should format the date with the pattern "${
+        DEFAULT_FORMAT_1
+      }"`, () => {
         const RESULT = "20.10.16 09:19:59";
         createInstance({
           dateFormat: DEFAULT_FORMAT_1,
@@ -353,7 +355,9 @@ describe("flatpickr", () => {
         expect(fp.input.value).not.toEqual(RESULT);
       });
 
-      it(`should format the date with the pattern "${DEFAULT_FORMAT_2}"`, () => {
+      it(`should format the date with the pattern "${
+        DEFAULT_FORMAT_2
+      }"`, () => {
         const RESULT = "Thu 20 October, '16";
         createInstance({
           dateFormat: DEFAULT_FORMAT_2,
@@ -1036,6 +1040,26 @@ describe("flatpickr", () => {
 
       expect(fp.selectedDates.length).toEqual(1);
       expect(fp.selectedDates[0].getDate()).toEqual(new Date().getDate());
+    });
+
+    it("time picker: minDate", () => {
+      createInstance({
+        noCalendar: true,
+        enableTime: true,
+        dateFormat: "H:i",
+        minDate: "23:59",
+      });
+
+      simulate(
+        "wheel",
+        fp.minuteElement as Node,
+        {
+          wheelDelta: 1,
+        },
+        MouseEvent
+      );
+
+      expect(fp.input.value.length).toBeGreaterThan(0);
     });
 
     it("time picker: minDate/maxDate + preloading", () => {

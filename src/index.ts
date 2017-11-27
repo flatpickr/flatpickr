@@ -1,4 +1,4 @@
-/*! flatpickr v4.0.7, @license MIT */
+/*! flatpickr v4.1.2, @license MIT */
 import { Instance, FlatpickrFn, DayElement } from "types/instance";
 import {
   Options,
@@ -128,13 +128,16 @@ function FlatpickrInstance(
   function updateTime(
     e: MouseEvent | WheelEvent | IncrementEvent | KeyboardEvent
   ) {
-    if (self.config.noCalendar && !self.selectedDates.length) {
+    if (self.config.noCalendar && self.selectedDates.length === 0) {
       // picking time only
+      const minDate = self.config.minDate;
       self.setDate(
         new Date().setHours(
-          self.config.defaultHour,
-          self.config.defaultMinute,
-          self.config.defaultSeconds
+          !minDate ? self.config.defaultHour : minDate.getHours(),
+          !minDate ? self.config.defaultMinute : minDate.getMinutes(),
+          !minDate || !self.config.enableSeconds
+            ? self.config.defaultSeconds
+            : minDate.getSeconds()
         ),
         false
       );
@@ -337,7 +340,9 @@ function FlatpickrInstance(
   function onClick<E extends MouseEvent>(
     handler: (e: E) => void
   ): (e: E) => void {
-    return evt => evt.which === 1 && handler(evt);
+    return evt => {
+      evt.which === 1 && handler(evt);
+    };
   }
 
   function triggerChange() {
@@ -370,7 +375,7 @@ function FlatpickrInstance(
     const debouncedResize = debounce(onResize, 50);
     self._debouncedChange = debounce(triggerChange, 300);
 
-    if (self.config.mode === "range" && self.daysContainer)
+    if (self.config.mode === "range" && self.daysContainer && !/iPhone|iPad|iPod/i.test(navigator.userAgent))
       bind(self.daysContainer, "mouseover", (e: MouseEvent) =>
         onMouseOver(e.target as DayElement)
       );
@@ -543,9 +548,8 @@ function FlatpickrInstance(
       }
     } catch (e) {
       /* istanbul ignore next */
-      console.error(e.stack);
-      /* istanbul ignore next */
-      console.warn("Invalid date supplied: " + jumpTo);
+      e.message = "Invalid date supplied: " + jumpTo;
+      self.config.errorHandler(e);
     }
 
     self.redraw();
@@ -962,8 +966,8 @@ function FlatpickrInstance(
     self.nextMonthNav = createElement("span", "flatpickr-next-month");
     self.nextMonthNav.innerHTML = self.config.nextArrow;
 
-    self.navigationCurrentMonth = createElement<HTMLSpanElement>(
-      "span",
+    self.navigationCurrentMonth = createElement<HTMLDivElement>(
+      "div",
       "flatpickr-current-month"
     );
     self.navigationCurrentMonth.appendChild(self.currentMonthElement);
@@ -1216,7 +1220,7 @@ function FlatpickrInstance(
         self.l10n
       );
 
-    triggerEvent("onMonthChange");
+    afterDayAnim(() => triggerEvent("onMonthChange"));
 
     if (
       from_keyboard &&
@@ -1872,7 +1876,9 @@ function FlatpickrInstance(
       typeof self.config.locale !== "object" &&
       typeof flatpickr.l10ns[self.config.locale as LocaleKey] === "undefined"
     )
-      console.warn(`flatpickr: invalid locale ${self.config.locale}`);
+      self.config.errorHandler(
+        new Error(`flatpickr: invalid locale ${self.config.locale}`)
+      );
 
     self.l10n = {
       ...(flatpickr.l10ns.default as Locale),
@@ -1945,7 +1951,7 @@ function FlatpickrInstance(
       !day.classList.contains("disabled") &&
       !day.classList.contains("notAllowed");
 
-    const t = findParent(e.target as Node, isSelectable);
+    const t = findParent(e.target as Element, isSelectable);
 
     if (t === undefined) return;
 
@@ -2088,7 +2094,10 @@ function FlatpickrInstance(
         default:
           break;
       }
-    }
+    } else
+      self.config.errorHandler(
+        new Error(`Invalid date supplied: ${JSON.stringify(inputDate)}`)
+      );
 
     self.selectedDates = dates.filter(
       d => d instanceof Date && isEnabled(d, false)
@@ -2155,6 +2164,7 @@ function FlatpickrInstance(
     self.now = new Date();
 
     const preloadedDate = self.config.defaultDate || self.input.value;
+
     if (preloadedDate) setSelectedDate(preloadedDate, self.config.dateFormat);
 
     const initialDate = self.selectedDates.length
@@ -2283,8 +2293,9 @@ function FlatpickrInstance(
 
     /* istanbul ignore next */
     if (!(parsedDate instanceof Date)) {
-      console.warn(`flatpickr: invalid date ${date_orig}`);
-      console.info(self.element);
+      self.config.errorHandler(
+        new Error(`Invalid date provided: ${date_orig}`)
+      );
       return undefined;
     }
 
@@ -2300,7 +2311,7 @@ function FlatpickrInstance(
 
     /* istanbul ignore next */
     if (!self.input) {
-      console.warn("Error: invalid input element specified", self.input);
+      self.config.errorHandler(new Error("Invalid input element specified"));
       return;
     }
 
@@ -2381,7 +2392,7 @@ function FlatpickrInstance(
         );
     } catch {}
 
-    self.mobileInput.addEventListener("change", (e: KeyboardEvent) => {
+    bind(self.mobileInput, "change", (e: KeyboardEvent) => {
       self.setDate(
         (e.target as HTMLInputElement).value,
         false,
@@ -2605,10 +2616,10 @@ function _flatpickr(
         node._flatpickr = undefined;
       }
 
-      node._flatpickr = FlatpickrInstance(node, config || {}) as Instance;
+      node._flatpickr = FlatpickrInstance(node, config || {});
       instances.push(node._flatpickr);
     } catch (e) {
-      console.warn(e, e.stack);
+      console.error(e);
     }
   }
 
@@ -2619,12 +2630,12 @@ function _flatpickr(
 if (typeof HTMLElement !== "undefined") {
   // browser env
   HTMLCollection.prototype.flatpickr = NodeList.prototype.flatpickr = function(
-    config: Options
+    config?: Options
   ) {
     return _flatpickr(this, config);
   };
 
-  HTMLElement.prototype.flatpickr = function(config: Options) {
+  HTMLElement.prototype.flatpickr = function(config?: Options) {
     return _flatpickr([this], config);
   };
 }
