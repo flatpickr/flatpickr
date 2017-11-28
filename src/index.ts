@@ -108,7 +108,11 @@ function FlatpickrInstance(
     self.showTimeInput =
       self.selectedDates.length > 0 || self.config.noCalendar;
 
-    if (self.weekWrapper !== undefined && self.daysContainer !== undefined) {
+    if (
+      !self.config.weekNumbers &&
+      self.weekWrapper !== undefined &&
+      self.daysContainer !== undefined
+    ) {
       self.calendarContainer.style.width =
         self.daysContainer.offsetWidth + self.weekWrapper.offsetWidth + "px";
     }
@@ -340,7 +344,11 @@ function FlatpickrInstance(
     const debouncedResize = debounce(onResize, 50);
     self._debouncedChange = debounce(triggerChange, 300);
 
-    if (self.config.mode === "range" && self.daysContainer && !/iPhone|iPad|iPod/i.test(navigator.userAgent))
+    if (
+      self.config.mode === "range" &&
+      self.daysContainer &&
+      !/iPhone|iPad|iPod/i.test(navigator.userAgent)
+    )
       bind(self.daysContainer, "mouseover", (e: MouseEvent) =>
         onMouseOver(e.target as DayElement)
       );
