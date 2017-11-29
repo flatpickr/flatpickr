@@ -233,10 +233,12 @@ function FlatpickrInstance(
       compareDates(self.latestSelectedDateObj, self.config.minDate) === 0
     ) {
       hours = Math.max(hours, self.config.minDate.getHours());
-      if (hours === self.config.minDate.getHours())
+      if (hours === self.config.minDate.getHours()) {
         minutes = Math.max(minutes, self.config.minDate.getMinutes());
-      if (minutes === self.config.minDate.getMinutes())
-        seconds = Math.max(seconds, self.config.minDate.getSeconds());
+        if (minutes === self.config.minDate.getMinutes()) {
+          seconds = Math.max(seconds, self.config.minDate.getSeconds());
+        }
+      }
     }
 
     if (
@@ -246,10 +248,12 @@ function FlatpickrInstance(
       compareDates(self.latestSelectedDateObj, self.config.maxDate) === 0
     ) {
       hours = Math.min(hours, self.config.maxDate.getHours());
-      if (hours === self.config.maxDate.getHours())
+      if (hours === self.config.maxDate.getHours()) {
         minutes = Math.min(minutes, self.config.maxDate.getMinutes());
-      if (minutes === self.config.maxDate.getMinutes())
-        seconds = Math.min(seconds, self.config.maxDate.getSeconds());
+        if (minutes === self.config.maxDate.getMinutes()) {
+          seconds = Math.min(seconds, self.config.maxDate.getSeconds());
+        }
+      }
     }
 
     setHours(hours, minutes, seconds);
@@ -375,7 +379,11 @@ function FlatpickrInstance(
     const debouncedResize = debounce(onResize, 50);
     self._debouncedChange = debounce(triggerChange, 300);
 
-    if (self.config.mode === "range" && self.daysContainer && !/iPhone|iPad|iPod/i.test(navigator.userAgent))
+    if (
+      self.config.mode === "range" &&
+      self.daysContainer &&
+      !/iPhone|iPad|iPod/i.test(navigator.userAgent)
+    )
       bind(self.daysContainer, "mouseover", (e: MouseEvent) =>
         onMouseOver(e.target as DayElement)
       );
