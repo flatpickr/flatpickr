@@ -178,6 +178,30 @@ function FlatpickrInstance(
     }
   }
 
+  function numberifyTextInput(val: string = "0"): number {
+    val = (val || "0").slice(-2);
+    let num = parseInt(val, 10);
+    if (!isFinite(num)) return 0;
+    return num;
+  }
+
+  function convertMinutesAndSeconds(val: string = "0"): number {
+    let num = numberifyTextInput(val);
+    if (num >= 60) num = parseInt(val.slice(-1), 10);
+    return num;
+  }
+
+  function convertHours(val: string = "0", ampm?: "AM" | "PM"): number {
+    let num = numberifyTextInput(val);
+    if (ampm) {
+      if (num > 12) num = parseInt(val.slice(-1), 10);
+      num = ampm2military(num, ampm);
+    } else if (num >= 24) {
+      num = parseInt(val.slice(-1), 10);
+    }
+    return num;
+  }
+
   /**
    * Syncs the selected date object time with user's time input
    */
@@ -185,15 +209,22 @@ function FlatpickrInstance(
     if (self.hourElement === undefined || self.minuteElement === undefined)
       return;
 
-    let hours = (parseInt(self.hourElement.value.slice(-2), 10) || 0) % 24,
-      minutes = (parseInt(self.minuteElement.value, 10) || 0) % 60,
-      seconds =
-        self.secondElement !== undefined
-          ? (parseInt(self.secondElement.value, 10) || 0) % 60
-          : 0;
-
-    if (self.amPM !== undefined)
-      hours = ampm2military(hours, self.amPM.textContent as "AM" | "PM");
+    let hours;
+    if (
+      self.amPM &&
+      (self.amPM.textContent === "AM" || self.amPM.textContent === "PM")
+    ) {
+      hours = convertHours(
+        self.hourElement.value,
+        self.amPM && self.amPM.textContent
+      );
+    } else {
+      hours = convertHours(self.hourElement.value);
+    }
+    let minutes = convertMinutesAndSeconds(self.minuteElement.value);
+    let seconds = convertMinutesAndSeconds(
+      self.secondElement && self.secondElement.value
+    );
 
     if (
       self.config.minDate &&
@@ -202,8 +233,12 @@ function FlatpickrInstance(
       compareDates(self.latestSelectedDateObj, self.config.minDate) === 0
     ) {
       hours = Math.max(hours, self.config.minDate.getHours());
-      if (hours === self.config.minDate.getHours())
+      if (hours === self.config.minDate.getHours()) {
         minutes = Math.max(minutes, self.config.minDate.getMinutes());
+        if (minutes === self.config.minDate.getMinutes()) {
+          seconds = Math.max(seconds, self.config.minDate.getSeconds());
+        }
+      }
     }
 
     if (
@@ -213,8 +248,12 @@ function FlatpickrInstance(
       compareDates(self.latestSelectedDateObj, self.config.maxDate) === 0
     ) {
       hours = Math.min(hours, self.config.maxDate.getHours());
-      if (hours === self.config.maxDate.getHours())
+      if (hours === self.config.maxDate.getHours()) {
         minutes = Math.min(minutes, self.config.maxDate.getMinutes());
+        if (minutes === self.config.maxDate.getMinutes()) {
+          seconds = Math.min(seconds, self.config.maxDate.getSeconds());
+        }
+      }
     }
 
     setHours(hours, minutes, seconds);
@@ -340,7 +379,11 @@ function FlatpickrInstance(
     const debouncedResize = debounce(onResize, 50);
     self._debouncedChange = debounce(triggerChange, 300);
 
-    if (self.config.mode === "range" && self.daysContainer && !/iPhone|iPad|iPod/i.test(navigator.userAgent))
+    if (
+      self.config.mode === "range" &&
+      self.daysContainer &&
+      !/iPhone|iPad|iPod/i.test(navigator.userAgent)
+    )
       bind(self.daysContainer, "mouseover", (e: MouseEvent) =>
         onMouseOver(e.target as DayElement)
       );
