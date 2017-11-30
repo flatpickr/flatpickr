@@ -518,8 +518,7 @@
 
 <ul>
 <li><code>dateFormat</code> defaults to <code>YYYY-MM-DD HH:MM</code></li>
-<li>This means that <code>&quot;2016&quot;</code> <code>&quot;2016-10&quot;</code>, <code>&quot;2016-10-20&quot;</code>, <code>&quot;2016-10-20 15&quot;</code>, <code>&quot;2016-10-20 15:30&quot;</code> are all valid date strings
-<br /></li>
+<li>This means that <code>&quot;2016&quot;</code> <code>&quot;2016-10&quot;</code>, <code>&quot;2016-10-20&quot;</code>, <code>&quot;2016-10-20 15&quot;</code>, <code>&quot;2016-10-20 15:30&quot;</code> are all valid date strings</li>
 </ul></li>
 
 <li><p>The shortcut <code>&quot;today&quot;</code></p></li>
@@ -706,22 +705,37 @@ The example below disables Saturdays and Sundays.</p>
 <div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">{
     enableTime<span style="color:#555">:</span> <span style="color:#069;font-weight:bold">true</span>,
     noCalendar<span style="color:#555">:</span> <span style="color:#069;font-weight:bold">true</span>,
-
-    enableSeconds<span style="color:#555">:</span> <span style="color:#069;font-weight:bold">false</span>, <span style="color:#09f;font-style:italic">// disabled by default
-</span><span style="color:#09f;font-style:italic"></span>
-    time_24hr<span style="color:#555">:</span> <span style="color:#069;font-weight:bold">false</span>, <span style="color:#09f;font-style:italic">// AM/PM time picker is used by default
-</span><span style="color:#09f;font-style:italic"></span>
-    <span style="color:#09f;font-style:italic">// default format
-</span><span style="color:#09f;font-style:italic"></span>    dateFormat<span style="color:#555">:</span> <span style="color:#c30">&#34;H:i&#34;</span>, 
-
-    <span style="color:#09f;font-style:italic">// initial values for time. don&#39;t use these to preload a date
-</span><span style="color:#09f;font-style:italic"></span>    defaultHour<span style="color:#555">:</span> <span style="color:#f60">12</span>,
-    defaultMinute<span style="color:#555">:</span> <span style="color:#f60">0</span>
-
-    <span style="color:#09f;font-style:italic">// Preload time with defaultDate instead:
-</span><span style="color:#09f;font-style:italic"></span>    <span style="color:#09f;font-style:italic">// defaultDate: &#34;3:30&#34;
-</span><span style="color:#09f;font-style:italic"></span>}</code></pre></div>
+    dateFormat<span style="color:#555">:</span> <span style="color:#c30">&#34;H:i&#34;</span>,
+}</code></pre></div>
 <p><input class=flatpickr type="text" placeholder="Select Date.." data-id="timePicker"></p>
+
+<h3 id="24-hour-time-picker">24-hour Time Picker</h3>
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">{
+    enableTime<span style="color:#555">:</span> <span style="color:#069;font-weight:bold">true</span>,
+    noCalendar<span style="color:#555">:</span> <span style="color:#069;font-weight:bold">true</span>,
+    dateFormat<span style="color:#555">:</span> <span style="color:#c30">&#34;H:i&#34;</span>,
+    time_24hr<span style="color:#555">:</span> <span style="color:#069;font-weight:bold">true</span>
+}</code></pre></div>
+<p><input class=flatpickr type="text" placeholder="Select Date.." data-id="timePicker24"></p>
+
+<h3 id="time-picker-w-limits">Time Picker w/ Limits</h3>
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">{
+    enableTime<span style="color:#555">:</span> <span style="color:#069;font-weight:bold">true</span>,
+    noCalendar<span style="color:#555">:</span> <span style="color:#069;font-weight:bold">true</span>,
+    dateFormat<span style="color:#555">:</span> <span style="color:#c30">&#34;H:i&#34;</span>,
+    minDate<span style="color:#555">:</span> <span style="color:#c30">&#34;16:00&#34;</span>,
+    maxDate<span style="color:#555">:</span> <span style="color:#c30">&#34;22:30&#34;</span>,
+}</code></pre></div>
+<p><input class=flatpickr type="text" placeholder="Select Date.." data-id="timePickerMinMaxHours"></p>
+
+<h3 id="preloading-time">Preloading Time</h3>
+<div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">{
+    enableTime<span style="color:#555">:</span> <span style="color:#069;font-weight:bold">true</span>,
+    noCalendar<span style="color:#555">:</span> <span style="color:#069;font-weight:bold">true</span>,
+    dateFormat<span style="color:#555">:</span> <span style="color:#c30">&#34;H:i&#34;</span>,
+    defaultDate<span style="color:#555">:</span> <span style="color:#c30">&#34;13:45&#34;</span>
+}</code></pre></div>
+<p><input class=flatpickr type="text" placeholder="Select Date.." data-id="timePickerPreloading"></p>
 
 <h2 id="inline-calendar">Inline Calendar</h2>
 
@@ -737,7 +751,7 @@ The example below disables Saturdays and Sundays.</p>
 <div class="highlight"><pre style="background-color:#f0f3f3;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">{
     weekNumbers<span style="color:#555">:</span> <span style="color:#069;font-weight:bold">true</span>,
     <span style="color:#09f;font-style:italic">/*
-</span><span style="color:#09f;font-style:italic">        optionally, you may override the function that 
+</span><span style="color:#09f;font-style:italic">        optionally, you may override the function that
 </span><span style="color:#09f;font-style:italic">        extracts the week numbers from a Date by
 </span><span style="color:#09f;font-style:italic">        supplying a getWeek function. It takes in a date
 </span><span style="color:#09f;font-style:italic">        as a parameter and should return a corresponding string
