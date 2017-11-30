@@ -117,12 +117,33 @@ var configs = {
     rangePreload: {
         mode: "range",
         dateFormat: "Y-m-d",
-        defaultDate: ["2016-10-10", "2016-10-20"]
+        defaultDate: ["2016-10-10", "2016-10-20"],
     },
 
     timePicker: {
         enableTime: true,
-        noCalendar: true
+        noCalendar: true,
+    },
+
+    timePickerMinMaxHours: {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "H:i",
+        minDate: "16:00",
+        maxDate: "22:30",
+    },
+
+    "timePicker24": {
+        enableTime: true,
+        noCalendar: true,
+        time_24hr: true,
+    },
+
+    "timePickerPreloading": {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "H:i",
+        defaultDate: "13:45"
     },
 
     inline: {

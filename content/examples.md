@@ -28,7 +28,7 @@ Unless otherwise specified, the markup for examples below consists of just an in
 
 ## Human-friendly Dates
 
-`altInput` hides your original input and creates a new one. 
+`altInput` hides your original input and creates a new one.
 
 Upon date selection, the original input will contain a `Y-m-d...` string, while the `altInput` will display the date in a more legible, customizable format.
 
@@ -51,7 +51,7 @@ flatpickr has numerous options that accept date values in a variety of formats. 
 - maxDate
 - enable/disable
 
-The values accepted by these options all follow the same guidelines. 
+The values accepted by these options all follow the same guidelines.
 
 You may specify those dates in a variety of formats:
 
@@ -64,7 +64,7 @@ You may specify those dates in a variety of formats:
 - Date Strings, which **must match the `dateFormat`** chronologically
     + `dateFormat` defaults to `YYYY-MM-DD HH:MM`
     + This means that `"2016"` `"2016-10"`, `"2016-10-20"`, `"2016-10-20 15"`, `"2016-10-20 15:30"` are all valid date strings
-    
+
 - The shortcut `"today"`
 
 
@@ -317,24 +317,51 @@ Note that disabled dates (by either `minDate`, `maxDate`, `enable` or `disable`)
 {
     enableTime: true,
     noCalendar: true,
-
-    enableSeconds: false, // disabled by default
-
-    time_24hr: false, // AM/PM time picker is used by default
-
-    // default format
-    dateFormat: "H:i", 
-
-    // initial values for time. don't use these to preload a date
-    defaultHour: 12,
-    defaultMinute: 0
-
-    // Preload time with defaultDate instead:
-    // defaultDate: "3:30"
+    dateFormat: "H:i",
 }
 ```
 
 <input class=flatpickr type="text" placeholder="Select Date.." data-id="timePicker">
+
+### 24-hour Time Picker
+
+```js
+{
+    enableTime: true,
+    noCalendar: true,
+    dateFormat: "H:i",
+    time_24hr: true
+}
+```
+
+<input class=flatpickr type="text" placeholder="Select Date.." data-id="timePicker24">
+
+### Time Picker w/ Limits
+
+```js
+{
+    enableTime: true,
+    noCalendar: true,
+    dateFormat: "H:i",
+    minDate: "16:00",
+    maxDate: "22:30",
+}
+```
+
+<input class=flatpickr type="text" placeholder="Select Date.." data-id="timePickerMinMaxHours">
+
+### Preloading Time
+
+```js
+{
+    enableTime: true,
+    noCalendar: true,
+    dateFormat: "H:i",
+    defaultDate: "13:45"
+}
+```
+
+<input class=flatpickr type="text" placeholder="Select Date.." data-id="timePickerPreloading">
 
 ## Inline Calendar
 
@@ -356,7 +383,7 @@ Enable the `weekNumbers` option to display the week number in a column left to t
 {
     weekNumbers: true,
     /*
-        optionally, you may override the function that 
+        optionally, you may override the function that
         extracts the week numbers from a Date by
         supplying a getWeek function. It takes in a date
         as a parameter and should return a corresponding string
