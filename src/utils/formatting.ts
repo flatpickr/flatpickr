@@ -49,8 +49,11 @@ export const revFormat: RevFormat = {
   J: (dateObj: Date, day: string) => {
     dateObj.setDate(parseFloat(day));
   },
-  K: (dateObj: Date, amPM: string) => {
-    dateObj.setHours(dateObj.getHours() % 12 + 12 * int(/pm/i.test(amPM)));
+  K: (dateObj: Date, amPM: string, locale: Locale) => {
+    dateObj.setHours(
+      dateObj.getHours() % 12 +
+        12 * int(new RegExp(locale.amPM[1], "i").test(amPM))
+    );
   },
   M: function(dateObj: Date, shortMonth: string, locale: Locale) {
     dateObj.setMonth(locale.months.shorthand.indexOf(shortMonth));
@@ -112,7 +115,7 @@ export const tokenRegex: TokenRegex = {
   G: "(\\d\\d|\\d)",
   H: "(\\d\\d|\\d)",
   J: "(\\d\\d|\\d)\\w+",
-  K: "(am|AM|Am|aM|pm|PM|Pm|pM)",
+  K: "", // locale-dependent, setup on runtime
   M: "(\\w+)",
   S: "(\\d\\d|\\d)",
   U: "(.+)",
@@ -171,7 +174,7 @@ export const formats: Formats = {
   },
 
   // AM/PM
-  K: (date: Date) => (date.getHours() > 11 ? "PM" : "AM"),
+  K: (date: Date, locale: Locale) => locale.amPM[int(date.getHours() > 11)],
 
   // shorthand month e.g. Jan, Sep, Oct, etc
   M: function(date: Date, locale: Locale) {

@@ -163,8 +163,8 @@ function FlatpickrInstance(
     }
   }
 
-  function ampm2military(hour: number, amPM: "AM" | "PM") {
-    return hour % 12 + 12 * int(amPM === "PM");
+  function ampm2military(hour: number, amPM: string) {
+    return hour % 12 + 12 * int(amPM === self.l10n.amPM[1]);
   }
 
   function military2ampm(hour: number) {
@@ -193,7 +193,7 @@ function FlatpickrInstance(
           : 0;
 
     if (self.amPM !== undefined)
-      hours = ampm2military(hours, self.amPM.textContent as "AM" | "PM");
+      hours = ampm2military(hours, self.amPM.textContent as string);
 
     if (
       self.config.minDate &&
@@ -254,7 +254,7 @@ function FlatpickrInstance(
     self.minuteElement.value = pad(minutes);
 
     if (self.amPM !== undefined)
-      self.amPM.textContent = hours >= 12 ? "PM" : "AM";
+      self.amPM.textContent = self.l10n.amPM[int(hours >= 12)];
 
     if (self.secondElement !== undefined)
       self.secondElement.value = pad(seconds);
@@ -340,7 +340,11 @@ function FlatpickrInstance(
     const debouncedResize = debounce(onResize, 50);
     self._debouncedChange = debounce(triggerChange, 300);
 
-    if (self.config.mode === "range" && self.daysContainer && !/iPhone|iPad|iPod/i.test(navigator.userAgent))
+    if (
+      self.config.mode === "range" &&
+      self.daysContainer &&
+      !/iPhone|iPad|iPod/i.test(navigator.userAgent)
+    )
       bind(self.daysContainer, "mouseover", (e: MouseEvent) =>
         onMouseOver(e.target as DayElement)
       );
@@ -1533,17 +1537,17 @@ function FlatpickrInstance(
 
           break;
 
-        case "a":
+        case self.l10n.amPM[0].charAt(0):
           if (self.amPM !== undefined && e.target === self.amPM) {
-            self.amPM.textContent = "AM";
+            self.amPM.textContent = self.l10n.amPM[0];
             setHoursFromInputs();
             updateValue();
           }
           break;
 
-        case "p":
+        case self.l10n.amPM[1].charAt(0):
           if (self.amPM !== undefined && e.target === self.amPM) {
-            self.amPM.textContent = "PM";
+            self.amPM.textContent = self.l10n.amPM[1];
             setHoursFromInputs();
             updateValue();
           }
@@ -1853,6 +1857,10 @@ function FlatpickrInstance(
           ? flatpickr.l10ns[self.config.locale as LocaleKey]
           : undefined,
     };
+
+    tokenRegex.K = `(${self.l10n.amPM[0]}|${
+      self.l10n.amPM[1]
+    }|${self.l10n.amPM[0].toLowerCase()}|${self.l10n.amPM[1].toLowerCase()})`;
   }
 
   function positionCalendar(positionElement = self._positionElement) {
@@ -2506,9 +2514,10 @@ function FlatpickrInstance(
     const isKeyDown = e.type === "keydown",
       input = e.target as HTMLInputElement;
 
-    if (self.amPM !== undefined && e.target === self.amPM)
+    if (self.amPM !== undefined && e.target === self.amPM) {
       self.amPM.textContent =
-        self.l10n.amPM[self.amPM.textContent === "AM" ? 1 : 0];
+        self.l10n.amPM[int(self.amPM.textContent === self.l10n.amPM[0])];
+    }
 
     const min = Number(input.min),
       max = Number(input.max),
@@ -2553,8 +2562,10 @@ function FlatpickrInstance(
         (step === 1
           ? newValue + curValue === 23
           : Math.abs(newValue - curValue) > step)
-      )
-        self.amPM.textContent = self.amPM.textContent === "PM" ? "AM" : "PM";
+      ) {
+        self.amPM.textContent =
+          self.l10n.amPM[int(self.amPM.textContent === self.l10n.amPM[0])];
+      }
 
       input.value = pad(newValue);
     }
