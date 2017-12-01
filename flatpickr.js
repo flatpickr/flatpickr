@@ -192,6 +192,6 @@ var configs = {
 }
 
 for (var i = 0; i < examples.length; i++) {
-    flatpickr(examples[i], configs[examples[i].dataset.id] || {});
+    flatpickr(examples[i], configs[examples[i].getAttribute("data-id")] || {});
 }
 
