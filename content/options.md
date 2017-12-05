@@ -185,7 +185,7 @@ An always up-to-date list of options may be found at <a href="https://github.com
             <td>Function, [functions]</td>
             <td>null</td>
             <td>
-                Function(s) to trigger on every date selection. See&nbsp;<a href="#eventsAPI">Events API</a>
+                Function(s) to trigger on every date selection. See&nbsp;<a href="/events/#onchange">Events API</a>
             </td>
         </tr>
         <tr>
