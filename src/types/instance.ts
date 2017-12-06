@@ -84,6 +84,7 @@ export type Instance = Elements &
     changeYear: (year: number) => void;
     clear: (emitChangeEvent?: boolean) => void;
     close: () => void;
+    compareDates: (date1: Date, date2: Date, timeless?: boolean) => number;
     destroy: () => void;
     isEnabled: (date: DateOption, timeless?: boolean) => boolean;
     jumpToDate: (date?: DateOption) => void;
