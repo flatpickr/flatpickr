@@ -918,14 +918,16 @@ function FlatpickrInstance(
     self.currentYearElement.title = self.l10n.scrollTitle;
 
     if (self.config.minDate)
-      self.currentYearElement.min = self.config.minDate
-        .getFullYear()
-        .toString();
+      self.currentYearElement.setAttribute(
+        "data-min",
+        self.config.minDate.getFullYear().toString()
+      );
 
     if (self.config.maxDate) {
-      self.currentYearElement.max = self.config.maxDate
-        .getFullYear()
-        .toString();
+      self.currentYearElement.setAttribute(
+        "data-max",
+        self.config.maxDate.getFullYear().toString()
+      );
 
       self.currentYearElement.disabled =
         !!self.config.minDate &&
@@ -1001,14 +1003,26 @@ function FlatpickrInstance(
         : self.config.defaultMinute
     );
 
-    self.hourElement.step = self.config.hourIncrement.toString();
-    self.minuteElement.step = self.config.minuteIncrement.toString();
+    self.hourElement.setAttribute(
+      "data-step",
+      self.config.hourIncrement.toString()
+    );
+    self.minuteElement.setAttribute(
+      "data-step",
+      self.config.minuteIncrement.toString()
+    );
 
-    self.hourElement.min = self.config.time_24hr ? "0" : "1";
-    self.hourElement.max = self.config.time_24hr ? "23" : "12";
+    self.hourElement.setAttribute(
+      "data-min",
+      self.config.time_24hr ? "0" : "1"
+    );
+    self.hourElement.setAttribute(
+      "data-max",
+      self.config.time_24hr ? "23" : "12"
+    );
 
-    self.minuteElement.min = "0";
-    self.minuteElement.max = "59";
+    self.minuteElement.setAttribute("data-min", "0");
+    self.minuteElement.setAttribute("data-max", "59");
 
     self.hourElement.title = self.minuteElement.title = self.l10n.scrollTitle;
 
@@ -1030,9 +1044,18 @@ function FlatpickrInstance(
           : self.config.defaultSeconds
       );
 
-      self.secondElement.step = self.minuteElement.step;
-      self.secondElement.min = self.minuteElement.min;
-      self.secondElement.max = self.minuteElement.max;
+      self.secondElement.setAttribute(
+        "data-step",
+        self.minuteElement.getAttribute("data-step") as string
+      );
+      self.secondElement.setAttribute(
+        "data-min",
+        self.minuteElement.getAttribute("data-min") as string
+      );
+      self.secondElement.setAttribute(
+        "data-max",
+        self.minuteElement.getAttribute("data-max") as string
+      );
 
       self.timeContainer.appendChild(
         createElement("span", "flatpickr-time-separator", ":")
@@ -1344,10 +1367,14 @@ function FlatpickrInstance(
   function changeYear(newYear: number) {
     if (
       !newYear ||
-      (self.currentYearElement.min &&
-        newYear < parseInt(self.currentYearElement.min)) ||
-      (self.currentYearElement.max &&
-        newYear > parseInt(self.currentYearElement.max))
+      (self.currentYearElement.getAttribute("data-min") &&
+        newYear <
+          parseInt(self.currentYearElement.getAttribute(
+            "data-min"
+          ) as string)) ||
+      (self.currentYearElement.getAttribute("data-max") &&
+        newYear >
+          parseInt(self.currentYearElement.getAttribute("data-max") as string))
     )
       return;
 
@@ -2519,9 +2546,9 @@ function FlatpickrInstance(
         self.l10n.amPM[int(self.amPM.textContent === self.l10n.amPM[0])];
     }
 
-    const min = Number(input.min),
-      max = Number(input.max),
-      step = Number(input.step),
+    const min = parseFloat(input.getAttribute("data-min") as string),
+      max = parseFloat(input.getAttribute("data-max") as string),
+      step = parseFloat(input.getAttribute("data-step") as string),
       curValue = parseInt(input.value, 10),
       delta =
         (e as IncrementEvent).delta ||
