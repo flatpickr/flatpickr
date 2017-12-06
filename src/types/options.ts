@@ -133,8 +133,14 @@ By default, Flatpickr utilizes native datetime widgets unless certain options (e
   /* The maximum date that a user can pick to (inclusive). */
   maxDate?: DateOption;
 
+  /* The maximum time that a user can pick to (inclusive). */
+  maxTime?: DateOption;
+
   /* The minimum date that a user can start picking from (inclusive). */
   minDate?: DateOption;
+
+  /* The minimum time that a user can start picking from (inclusive). */
+  minTime?: DateOption;
 
   /* Adjusts the step for the minute input (incl. scrolling)
   Defaults to 5 */
@@ -221,7 +227,9 @@ export interface ParsedOptions {
   _disable: DateLimit<Date>[];
   _enable: DateLimit<Date>[];
   _maxDate?: Date;
+  _maxTime?: Date;
   _minDate?: Date;
+  _minTime?: Date;
   allowInput: boolean;
   altFormat: string;
   altInput: boolean;
@@ -250,7 +258,9 @@ export interface ParsedOptions {
   inline: boolean;
   locale: LocaleKey | CustomLocale;
   maxDate?: Date;
+  maxTime?: Date;
   minDate?: Date;
+  minTime?: Date;
   minuteIncrement: number;
   mode: "single" | "multiple" | "range";
   nextArrow: string;

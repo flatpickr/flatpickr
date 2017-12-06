@@ -49,6 +49,7 @@ function FlatpickrInstance(
 
   self.parseDate = parseDate;
   self.formatDate = formatDate;
+  self.compareDates = compareDates;
 
   self._animationLoop = [];
   self._handlers = [];
@@ -195,26 +196,38 @@ function FlatpickrInstance(
     if (self.amPM !== undefined)
       hours = ampm2military(hours, self.amPM.textContent as string);
 
-    if (
-      self.config.minDate &&
-      self.minDateHasTime &&
-      self.latestSelectedDateObj &&
-      compareDates(self.latestSelectedDateObj, self.config.minDate) === 0
-    ) {
-      hours = Math.max(hours, self.config.minDate.getHours());
-      if (hours === self.config.minDate.getHours())
-        minutes = Math.max(minutes, self.config.minDate.getMinutes());
+    const limitMinHours =
+      self.config.minTime !== undefined ||
+      (self.config.minDate &&
+        self.minDateHasTime &&
+        self.latestSelectedDateObj &&
+        compareDates(self.latestSelectedDateObj, self.config.minDate) === 0);
+
+    if (limitMinHours) {
+      const minTime =
+        self.config.minTime !== undefined
+          ? self.config.minTime
+          : (self.config.minDate as Date);
+      hours = Math.max(hours, minTime.getHours());
+      if (hours === minTime.getHours())
+        minutes = Math.max(minutes, minTime.getMinutes());
     }
 
-    if (
-      self.config.maxDate &&
-      self.maxDateHasTime &&
-      self.latestSelectedDateObj &&
-      compareDates(self.latestSelectedDateObj, self.config.maxDate) === 0
-    ) {
-      hours = Math.min(hours, self.config.maxDate.getHours());
-      if (hours === self.config.maxDate.getHours())
-        minutes = Math.min(minutes, self.config.maxDate.getMinutes());
+    const limitMaxHours =
+      self.config.maxTime !== undefined ||
+      (self.config.maxDate &&
+        self.maxDateHasTime &&
+        self.latestSelectedDateObj &&
+        compareDates(self.latestSelectedDateObj, self.config.maxDate) === 0);
+
+    if (limitMaxHours) {
+      const maxTime =
+        self.config.maxTime !== undefined
+          ? self.config.maxTime
+          : (self.config.minDate as Date);
+      hours = Math.min(hours, maxTime.getHours());
+      if (hours === maxTime.getHours())
+        minutes = Math.min(minutes, maxTime.getMinutes());
     }
 
     setHours(hours, minutes, seconds);
@@ -1822,6 +1835,23 @@ function FlatpickrInstance(
       set: minMaxDateSetter("max"),
     });
 
+    const minMaxTimeSetter = (type: string) => (val: any) => {
+      self.config[type === "min" ? "_minTime" : "_maxTime"] = parseDate(
+        val,
+        "H:i"
+      );
+    };
+
+    Object.defineProperty(self.config, "minTime", {
+      get: () => self.config._minTime,
+      set: minMaxTimeSetter("min"),
+    });
+
+    Object.defineProperty(self.config, "maxTime", {
+      get: () => self.config._maxTime,
+      set: minMaxTimeSetter("max"),
+    });
+
     Object.assign(self.config, formats, userConfig);
 
     for (let i = 0; i < boolOpts.length; i++)
@@ -2182,6 +2212,12 @@ function FlatpickrInstance(
 
     if (self.selectedDates.length)
       self.latestSelectedDateObj = self.selectedDates[0];
+
+    if (self.config.minTime !== undefined)
+      self.config.minTime = parseDate(self.config.minTime, "H:i");
+
+    if (self.config.maxTime !== undefined)
+      self.config.maxTime = parseDate(self.config.maxTime, "H:i");
 
     self.minDateHasTime =
       !!self.config.minDate &&
