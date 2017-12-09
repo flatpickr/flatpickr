@@ -84,7 +84,6 @@ export type Instance = Elements &
     changeYear: (year: number) => void;
     clear: (emitChangeEvent?: boolean) => void;
     close: () => void;
-    compareDates: (date1: Date, date2: Date, timeless?: boolean) => number;
     destroy: () => void;
     isEnabled: (date: DateOption, timeless?: boolean) => boolean;
     jumpToDate: (date?: DateOption) => void;
@@ -142,6 +141,12 @@ export interface FlatpickrFn {
   l10ns: { [k in LocaleKey]?: CustomLocale } & { default: Locale };
   localize: (l10n: CustomLocale) => void;
   setDefaults: (config: Options) => void;
+  parseDate: (
+    date: DateOption,
+    format?: string,
+    timeless?: boolean
+  ) => Date | undefined;
+  formatDate: (date: Date, format: string) => string;
 }
 
 export type DayElement = HTMLSpanElement & { dateObj: Date; $i: number };

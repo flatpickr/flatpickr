@@ -29,15 +29,15 @@ import {
   findParent,
   toggleClass,
 } from "utils/dom";
-import { compareDates, duration, monthToStr } from "utils/dates";
-
 import {
-  token,
-  RevFormatFn,
-  revFormat,
-  tokenRegex,
-  formats,
-} from "utils/formatting";
+  compareDates,
+  duration,
+  monthToStr,
+  createDateParser,
+  createDateFormatter,
+} from "utils/dates";
+
+import { tokenRegex } from "utils/formatting";
 
 import "utils/polyfills";
 
@@ -46,10 +46,7 @@ function FlatpickrInstance(
   instanceConfig?: Options
 ): Instance {
   const self = {} as Instance;
-
-  self.parseDate = parseDate;
-  self.formatDate = formatDate;
-  self.compareDates = compareDates;
+  self.parseDate = createDateParser(self);
 
   self._animationLoop = [];
   self._handlers = [];
@@ -224,7 +221,7 @@ function FlatpickrInstance(
       const maxTime =
         self.config.maxTime !== undefined
           ? self.config.maxTime
-          : (self.config.minDate as Date);
+          : (self.config.maxDate as Date);
       hours = Math.min(hours, maxTime.getHours());
       if (hours === maxTime.getHours())
         minutes = Math.min(minutes, maxTime.getMinutes());
@@ -515,7 +512,7 @@ function FlatpickrInstance(
   function jumpToDate(jumpDate?: DateOption) {
     const jumpTo =
       jumpDate !== undefined
-        ? parseDate(jumpDate)
+        ? self.parseDate(jumpDate)
         : self.latestSelectedDateObj ||
           (self.config.minDate && self.config.minDate > self.now
             ? (self.config.minDate as Date)
@@ -1716,7 +1713,8 @@ function FlatpickrInstance(
     return (date: DateOption) => {
       const dateObj = (self.config[
         `_${type}Date` as "_minDate" | "_maxDate"
-      ] = self.parseDate(date));
+      ] = self.parseDate(date, self.config.dateFormat));
+
       const inverseDateObj =
         self.config[
           `_${type === "min" ? "max" : "min"}Date` as "_minDate" | "_maxDate"
@@ -1793,8 +1791,8 @@ function FlatpickrInstance(
 
     const formats = {} as Record<"dateFormat" | "altFormat", string>;
 
-    // self.config.parseDate = userConfig.parseDate;
-    // self.config.formatDate = userConfig.formatDate;
+    self.config.parseDate = userConfig.parseDate;
+    self.config.formatDate = userConfig.formatDate;
 
     Object.defineProperty(self.config, "enable", {
       get: () => self.config._enable || [],
@@ -1836,7 +1834,7 @@ function FlatpickrInstance(
     });
 
     const minMaxTimeSetter = (type: string) => (val: any) => {
-      self.config[type === "min" ? "_minTime" : "_maxTime"] = parseDate(
+      self.config[type === "min" ? "_minTime" : "_maxTime"] = self.parseDate(
         val,
         "H:i"
       );
@@ -1918,6 +1916,8 @@ function FlatpickrInstance(
     tokenRegex.K = `(${self.l10n.amPM[0]}|${
       self.l10n.amPM[1]
     }|${self.l10n.amPM[0].toLowerCase()}|${self.l10n.amPM[1].toLowerCase()})`;
+
+    self.formatDate = createDateFormatter(self);
   }
 
   function positionCalendar(positionElement = self._positionElement) {
@@ -2058,8 +2058,6 @@ function FlatpickrInstance(
       } else updateNavigationCurrentMonth();
     }
 
-    triggerEvent("onChange");
-
     // maintain focus
     if (!shouldChangeMonth) focusOnDay(target.$i, 0);
     else
@@ -2139,7 +2137,7 @@ function FlatpickrInstance(
   function setDate(
     date: DateOption | DateOption[],
     triggerChange = false,
-    format?: string
+    format = self.config.dateFormat
   ) {
     if (date !== 0 && !date) return self.clear(triggerChange);
 
@@ -2214,10 +2212,10 @@ function FlatpickrInstance(
       self.latestSelectedDateObj = self.selectedDates[0];
 
     if (self.config.minTime !== undefined)
-      self.config.minTime = parseDate(self.config.minTime, "H:i");
+      self.config.minTime = self.parseDate(self.config.minTime, "H:i");
 
     if (self.config.maxTime !== undefined)
-      self.config.maxTime = parseDate(self.config.maxTime, "H:i");
+      self.config.maxTime = self.parseDate(self.config.maxTime, "H:i");
 
     self.minDateHasTime =
       !!self.config.minDate &&
@@ -2240,104 +2238,6 @@ function FlatpickrInstance(
         positionCalendar();
       },
     });
-  }
-
-  function formatDate(dateObj: Date, frmt: string): string {
-    if (self.config !== undefined && self.config.formatDate !== undefined)
-      return self.config.formatDate(dateObj, frmt);
-
-    return frmt
-      .split("")
-      .map(
-        (c, i, arr) =>
-          formats[c as token] && arr[i - 1] !== "\\"
-            ? formats[c as token](dateObj, self.l10n, self.config)
-            : c !== "\\" ? c : ""
-      )
-      .join("");
-  }
-
-  function parseDate(
-    date: Date | string | number,
-    givenFormat?: string,
-    timeless?: boolean
-  ): Date | undefined {
-    if (date !== 0 && !date) return undefined;
-
-    let parsedDate: Date | undefined;
-    const date_orig = date;
-
-    if (date instanceof Date) parsedDate = new Date(date.getTime());
-    else if (
-      typeof date !== "string" &&
-      date.toFixed !== undefined // timestamp
-    )
-      // create a copy
-
-      parsedDate = new Date(date);
-    else if (typeof date === "string") {
-      // date string
-      const format =
-        givenFormat || (self.config || flatpickr.defaultConfig).dateFormat;
-      const datestr = String(date).trim();
-
-      if (datestr === "today") {
-        parsedDate = new Date();
-        timeless = true;
-      } else if (
-        /Z$/.test(datestr) ||
-        /GMT$/.test(datestr) // datestrings w/ timezone
-      )
-        parsedDate = new Date(date);
-      else if (self.config && self.config.parseDate)
-        parsedDate = self.config.parseDate(date, format);
-      else {
-        parsedDate =
-          !self.config || !self.config.noCalendar
-            ? new Date(new Date().getFullYear(), 0, 1, 0, 0, 0, 0)
-            : (new Date(new Date().setHours(0, 0, 0, 0)) as Date);
-
-        let matched,
-          ops: { fn: RevFormatFn; val: string }[] = [];
-
-        for (let i = 0, matchIndex = 0, regexStr = ""; i < format.length; i++) {
-          const token = format[i] as token;
-          const isBackSlash = (token as string) === "\\";
-          const escaped = format[i - 1] === "\\" || isBackSlash;
-
-          if (tokenRegex[token] && !escaped) {
-            regexStr += tokenRegex[token];
-            const match = new RegExp(regexStr).exec(date);
-            if (match && (matched = true)) {
-              ops[token !== "Y" ? "push" : "unshift"]({
-                fn: revFormat[token],
-                val: match[++matchIndex],
-              });
-            }
-          } else if (!isBackSlash) regexStr += "."; // don't really care
-
-          ops.forEach(
-            ({ fn, val }) =>
-              (parsedDate =
-                fn(parsedDate as Date, val, self.l10n) || parsedDate)
-          );
-        }
-
-        parsedDate = matched ? parsedDate : undefined;
-      }
-    }
-
-    /* istanbul ignore next */
-    if (!(parsedDate instanceof Date)) {
-      self.config.errorHandler(
-        new Error(`Invalid date provided: ${date_orig}`)
-      );
-      return undefined;
-    }
-
-    if (timeless === true) parsedDate.setHours(0, 0, 0, 0);
-
-    return parsedDate;
   }
 
   function setupInputs() {
@@ -2511,7 +2411,7 @@ function FlatpickrInstance(
    * Updates the values of inputs associated with the calendar
    * @return {void}
    */
-  function updateValue(triggerChange: boolean = true) {
+  function updateValue(triggerChange = true) {
     if (!self.selectedDates.length) return self.clear(triggerChange);
 
     if (self.mobileInput !== undefined && self.mobileFormatStr) {
@@ -2714,6 +2614,9 @@ flatpickr.setDefaults = (config: Options) => {
     ...(config as ParsedOptions),
   };
 };
+
+flatpickr.parseDate = createDateParser({});
+flatpickr.formatDate = createDateFormatter({});
 
 /* istanbul ignore next */
 if (typeof jQuery !== "undefined") {

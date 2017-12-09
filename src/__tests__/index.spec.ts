@@ -341,9 +341,7 @@ describe("flatpickr", () => {
       const DEFAULT_FORMAT_1 = "d.m.y H:i:S",
         DEFAULT_FORMAT_2 = "D j F, 'y";
 
-      it(`should format the date with the pattern "${
-        DEFAULT_FORMAT_1
-      }"`, () => {
+      it(`should format the date with the pattern "${DEFAULT_FORMAT_1}"`, () => {
         const RESULT = "20.10.16 09:19:59";
         createInstance({
           dateFormat: DEFAULT_FORMAT_1,
@@ -355,9 +353,7 @@ describe("flatpickr", () => {
         expect(fp.input.value).not.toEqual(RESULT);
       });
 
-      it(`should format the date with the pattern "${
-        DEFAULT_FORMAT_2
-      }"`, () => {
+      it(`should format the date with the pattern "${DEFAULT_FORMAT_2}"`, () => {
         const RESULT = "Thu 20 October, '16";
         createInstance({
           dateFormat: DEFAULT_FORMAT_2,
@@ -1271,6 +1267,7 @@ describe("flatpickr", () => {
         locale: Russian,
         altInput: true,
         altFormat: "F",
+        dateFormat: "Z",
         defaultDate: "2016-12-27T16:16:22.585Z",
       });
 
