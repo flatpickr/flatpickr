@@ -198,7 +198,8 @@ function FlatpickrInstance(
       (self.config.minDate &&
         self.minDateHasTime &&
         self.latestSelectedDateObj &&
-        compareDates(self.latestSelectedDateObj, self.config.minDate) === 0);
+        compareDates(self.latestSelectedDateObj, self.config.minDate, true) ===
+          0);
 
     if (limitMinHours) {
       const minTime =
@@ -215,7 +216,8 @@ function FlatpickrInstance(
       (self.config.maxDate &&
         self.maxDateHasTime &&
         self.latestSelectedDateObj &&
-        compareDates(self.latestSelectedDateObj, self.config.maxDate) === 0);
+        compareDates(self.latestSelectedDateObj, self.config.maxDate, true) ===
+          0);
 
     if (limitMaxHours) {
       const maxTime =
@@ -2617,6 +2619,7 @@ flatpickr.setDefaults = (config: Options) => {
 
 flatpickr.parseDate = createDateParser({});
 flatpickr.formatDate = createDateFormatter({});
+flatpickr.compareDates = compareDates;
 
 /* istanbul ignore next */
 if (typeof jQuery !== "undefined") {

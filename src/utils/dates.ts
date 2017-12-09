@@ -108,7 +108,7 @@ export const createDateParser = ({ config = defaults, l10n = english }) => (
 /**
  * Compute the difference in dates, measured in ms
  */
-export function compareDates(date1: Date, date2: Date, timeless?: boolean) {
+export function compareDates(date1: Date, date2: Date, timeless = true) {
   if (timeless !== false) {
     return (
       new Date(date1.getTime()).setHours(0, 0, 0, 0) -

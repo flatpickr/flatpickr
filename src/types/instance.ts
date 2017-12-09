@@ -147,6 +147,7 @@ export interface FlatpickrFn {
     timeless?: boolean
   ) => Date | undefined;
   formatDate: (date: Date, format: string) => string;
+  compareDates: (date1: Date, date2: Date, timeless?: boolean) => number;
 }
 
 export type DayElement = HTMLSpanElement & { dateObj: Date; $i: number };
