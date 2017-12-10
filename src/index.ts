@@ -2085,7 +2085,10 @@ function FlatpickrInstance(
     triggerChange();
   }
 
-  function set(option: Record<keyof Options, any> | keyof Options, value: any) {
+  function set(
+    option: keyof Options | { [k in keyof Options]?: Options[k] },
+    value?: any
+  ) {
     if (option !== null && typeof option === "object")
       Object.assign(self.config, option);
     else self.config[option] = value;
