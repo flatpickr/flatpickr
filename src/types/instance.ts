@@ -89,7 +89,10 @@ export type Instance = Elements &
     jumpToDate: (date?: DateOption) => void;
     open: (e?: Event, positionElement?: HTMLElement) => void;
     redraw: () => void;
-    set: (option: keyof Options, value: any) => void;
+    set: (
+      option: keyof Options | { [k in keyof Options]?: Options[k] },
+      value?: any
+    ) => void;
     setDate: (
       date: DateOption | DateOption[],
       triggerChange?: boolean,
