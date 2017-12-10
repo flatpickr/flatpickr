@@ -2082,6 +2082,7 @@ function FlatpickrInstance(
 
       if (single || range) self.close();
     }
+    triggerChange();
   }
 
   function set(option: Record<keyof Options, any> | keyof Options, value: any) {
