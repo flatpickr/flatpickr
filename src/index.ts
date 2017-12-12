@@ -1249,6 +1249,13 @@ function FlatpickrInstance(
     self.latestSelectedDateObj = undefined;
     self.showTimeInput = false;
 
+    if (self.config.enableTime) {
+      (self.hourElement as HTMLInputElement).value = self.config.defaultHour.toString();
+      (self.minuteElement as HTMLInputElement).value = self.config.defaultMinute.toString();
+      if (self.secondElement !== undefined)
+        self.secondElement.value = self.config.defaultSeconds.toString();
+    }
+
     self.redraw();
 
     if (triggerChangeEvent)
