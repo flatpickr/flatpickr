@@ -1250,10 +1250,14 @@ function FlatpickrInstance(
     self.showTimeInput = false;
 
     if (self.config.enableTime) {
-      (self.hourElement as HTMLInputElement).value = self.config.defaultHour.toString();
-      (self.minuteElement as HTMLInputElement).value = self.config.defaultMinute.toString();
-      if (self.secondElement !== undefined)
-        self.secondElement.value = self.config.defaultSeconds.toString();
+      if (self.config.minDate !== undefined)
+        setHoursFromDate(self.config.minDate);
+      else
+        setHours(
+          self.config.defaultHour,
+          self.config.defaultMinute,
+          self.config.defaultSeconds
+        );
     }
 
     self.redraw();

@@ -1062,6 +1062,7 @@ describe("flatpickr", () => {
       createInstance({
         enableTime: true,
         noCalendar: true,
+        dateFormat: "H:i",
         minDate: "02:30",
         defaultDate: "3:30",
       });
@@ -1092,10 +1093,10 @@ describe("flatpickr", () => {
       expect(hours.value).toBe("03");
 
       fp.setDate("05:30");
-      expect(hours.value).toBe("03");
+      expect(hours.value).toBe("02");
 
       fp.setDate("00:30");
-      expect(hours.value).toBe("03");
+      expect(hours.value).toBe("02");
     });
 
     it("should delay time input validation on keydown", () => {
