@@ -128,17 +128,18 @@ function FlatpickrInstance(
   ) {
     if (self.config.noCalendar && self.selectedDates.length === 0) {
       // picking time only
-      const minDate = self.config.minDate;
       self.setDate(
-        new Date().setHours(
-          !minDate ? self.config.defaultHour : minDate.getHours(),
-          !minDate ? self.config.defaultMinute : minDate.getMinutes(),
-          !minDate || !self.config.enableSeconds
-            ? self.config.defaultSeconds
-            : minDate.getSeconds()
-        ),
+        self.config.minDate !== undefined
+          ? new Date(self.config.minDate.getTime())
+          : new Date().setHours(
+              self.config.defaultHour,
+              self.config.defaultMinute,
+              self.config.defaultSeconds,
+              0
+            ),
         false
       );
+
       setHoursFromInputs();
       updateValue();
     }
@@ -1450,7 +1451,6 @@ function FlatpickrInstance(
         ) > 0)
     )
       return false;
-
     if (!self.config.enable.length && !self.config.disable.length) return true;
 
     if (dateToCheck === undefined) return false;
