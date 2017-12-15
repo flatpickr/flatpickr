@@ -1,5 +1,9 @@
 import { Instance } from "../types/instance";
-import { compareDates, createDateFormatter } from "../utils/dates";
+import {
+  compareDates,
+  compareTimes,
+  createDateFormatter,
+} from "../utils/dates";
 
 interface MinMaxTime {
   minTime?: string;
@@ -79,13 +83,38 @@ function minMaxTimePlugin(config: Config) {
               ),
               false
             );
-        } else
-          this.set(
-            state.defaults || {
-              minTime: undefined,
-              maxTime: undefined,
-            }
-          );
+        } else {
+          const newMinMax = state.defaults || {
+            minTime: undefined,
+            maxTime: undefined,
+          };
+
+          this.set(newMinMax);
+
+          if (!latest) return;
+
+          const [minTime, maxTime] = [fp.config.minTime, fp.config.maxTime];
+
+          if (minTime && compareTimes(latest, minTime) < 0) {
+            fp.setDate(
+              new Date(latest.getTime()).setHours(
+                minTime.getHours(),
+                minTime.getMinutes(),
+                minTime.getSeconds()
+              ),
+              false
+            );
+          } else if (maxTime && compareTimes(latest, maxTime) > 0) {
+            fp.setDate(
+              new Date(latest.getTime()).setHours(
+                maxTime.getHours(),
+                maxTime.getMinutes(),
+                maxTime.getSeconds()
+              )
+            );
+          }
+          //
+        }
       },
     };
   };

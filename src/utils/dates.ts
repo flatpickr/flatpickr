@@ -119,6 +119,18 @@ export function compareDates(date1: Date, date2: Date, timeless = true) {
   return date1.getTime() - date2.getTime();
 }
 
+/**
+ * Compute the difference in times, measured in ms
+ */
+export function compareTimes(date1: Date, date2: Date) {
+  return (
+    3600 * (date1.getHours() - date2.getHours()) +
+    60 * (date1.getMinutes() - date2.getMinutes()) +
+    date1.getSeconds() -
+    date2.getSeconds()
+  );
+}
+
 export const monthToStr = (
   monthNumber: number,
   shorthand: boolean,
