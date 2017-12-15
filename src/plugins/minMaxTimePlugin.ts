@@ -93,7 +93,7 @@ function minMaxTimePlugin(config: Config) {
 
           if (!latest) return;
 
-          const [minTime, maxTime] = [fp.config.minTime, fp.config.maxTime];
+          const { minTime, maxTime } = fp.config;
 
           if (minTime && compareTimes(latest, minTime) < 0) {
             fp.setDate(
