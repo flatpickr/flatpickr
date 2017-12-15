@@ -1058,6 +1058,21 @@ describe("flatpickr", () => {
       expect(fp.input.value.length).toBeGreaterThan(0);
     });
 
+    it("time picker: minDate + bounds", () => {
+      createInstance({
+        noCalendar: true,
+        enableTime: true,
+        dateFormat: "H:i",
+        minDate: "02:30",
+      });
+
+      incrementTime("hourElement", -1);
+      expect(fp.input.value).toEqual("02:30");
+
+      incrementTime("hourElement", -1);
+      expect(fp.input.value).toEqual("02:30");
+    });
+
     it("time picker: minDate/maxDate + preloading", () => {
       createInstance({
         enableTime: true,
