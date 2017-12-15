@@ -10,18 +10,22 @@ interface Config {
   table?: Record<string, MinMaxTime>;
   getTimeLimits?: (date: Date) => MinMaxTime;
   tableDateFormat?: string;
-  defaults?: MinMaxTime;
 }
 
 interface State {
   formatDate: (date: Date, f: string) => string;
   tableDateFormat: string;
+  defaults: MinMaxTime;
 }
 
 function minMaxTimePlugin(config: Config) {
   const state: State = {
     formatDate: createDateFormatter({}),
     tableDateFormat: config.tableDateFormat || "Y-m-d",
+    defaults: {
+      minTime: undefined,
+      maxTime: undefined,
+    },
   };
 
   function findDateTimeLimit(date: Date): MinMaxTime | undefined {
@@ -36,6 +40,12 @@ function minMaxTimePlugin(config: Config) {
     return {
       onReady(this: Instance) {
         state.formatDate = this.formatDate;
+        state.defaults = {
+          minTime:
+            this.config.minTime && state.formatDate(this.config.minTime, "H:i"),
+          maxTime:
+            this.config.maxTime && state.formatDate(this.config.maxTime, "H:i"),
+        };
       },
 
       onChange(this: Instance) {
@@ -71,7 +81,7 @@ function minMaxTimePlugin(config: Config) {
             );
         } else
           this.set(
-            config.defaults || {
+            state.defaults || {
               minTime: undefined,
               maxTime: undefined,
             }
