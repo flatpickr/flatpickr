@@ -2091,6 +2091,7 @@ function FlatpickrInstance(
         self.selectedDates.length === 2 &&
         !self.config.enableTime;
 
+      self._input.focus();
       if (single || range) self.close();
     }
     triggerChange();
