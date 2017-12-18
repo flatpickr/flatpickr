@@ -12,6 +12,16 @@ declare global {
 
 function rangePlugin(config: Config = {}) {
   return function(fp: Instance) {
+    if (!fp.config.disableMobile) {
+      fp.config.errorHandler(
+        new Error(
+          "WARNING! rangePlugin will not work on mobile devices unless " +
+            "flatpickr's disableMobile option is enabled. For more details, see " +
+            "https://chmln.github.io/flatpickr/mobile-support/."
+        )
+      );
+    }
+
     let dateFormat = "",
       secondInput: HTMLInputElement,
       _firstInputFocused: boolean,
@@ -23,7 +33,7 @@ function rangePlugin(config: Config = {}) {
         secondInput =
           config.input instanceof Element
             ? config.input
-            : window.document.querySelector(config.input) as HTMLInputElement;
+            : (window.document.querySelector(config.input) as HTMLInputElement);
       } else {
         secondInput = fp._input.cloneNode() as HTMLInputElement;
         secondInput.removeAttribute("id");
@@ -132,10 +142,9 @@ function rangePlugin(config: Config = {}) {
           _prevDates = [...newDates];
         }
 
-        [
-          fp._input.value = "",
-          secondInput.value = "",
-        ] = fp.selectedDates.map(d => fp.formatDate(d, dateFormat));
+        [fp._input.value = "", secondInput.value = ""] = fp.selectedDates.map(
+          d => fp.formatDate(d, dateFormat)
+        );
       },
     };
 

@@ -19,12 +19,47 @@ const createInstance = (config?: Options): Instance => {
 };
 
 describe("rangePlugin", () => {
+  describe("with the disableMobile option disabled (the flatpickr default)", () => {
+    it("records an error", () => {
+      const errorHandler = jest.fn();
+      const secondInput = document.createElement("input");
+
+      createInstance({
+        plugins: [rangePlugin({ input: secondInput })],
+        defaultDate: ["2017-10-20", "2017-10-25"],
+        dateFormat: "Y-m-d",
+        disableMobile: false,
+        errorHandler,
+      }) as RangeInstance;
+
+      expect(errorHandler).toHaveBeenCalled();
+    });
+  });
+
+  describe("with the disableMobile option enabled", () => {
+    it("doesn't record an error", () => {
+      const errorHandler = jest.fn();
+      const secondInput = document.createElement("input");
+
+      createInstance({
+        plugins: [rangePlugin({ input: secondInput })],
+        defaultDate: ["2017-10-20", "2017-10-25"],
+        dateFormat: "Y-m-d",
+        disableMobile: true,
+        errorHandler,
+      }) as RangeInstance;
+
+      expect(errorHandler).not.toHaveBeenCalled();
+    });
+  });
+
   it("should correctly preload defaultDate", () => {
     const secondInput = document.createElement("input");
     const fp = createInstance({
       plugins: [rangePlugin({ input: secondInput })],
       defaultDate: ["2017-10-20", "2017-10-25"],
       dateFormat: "Y-m-d",
+      disableMobile: true,
     }) as RangeInstance;
 
     expect(fp.selectedDates.length).toEqual(2);
