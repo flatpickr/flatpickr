@@ -488,7 +488,7 @@ describe("flatpickr", () => {
 
       fp.open();
       fp.altInput &&
-        simulate("keydown", fp.altInput, { key: "ArrowLeft", bubbles: true });
+        simulate("keydown", fp.altInput, { keyCode: 37, bubbles: true }); // "ArrowLeft"
       expect(fired).toEqual(true);
 
       fp.destroy();
@@ -499,8 +499,8 @@ describe("flatpickr", () => {
 
       fired = false;
 
-      simulate("keydown", input, { key: "ArrowLeft", bubbles: true });
-      simulate("keydown", document.body, { key: "ArrowLeft", bubbles: true });
+      simulate("keydown", input, { keyCode: 37, bubbles: true }); // "ArrowLeft"
+      simulate("keydown", document.body, { keyCode: 37, bubbles: true }); // "ArrowLeft"
       expect(fired).toEqual(false);
     });
 
@@ -674,7 +674,7 @@ describe("flatpickr", () => {
         "keydown",
         fp.days.childNodes[15],
         {
-          key: "Enter",
+          keyCode: 13, // "Enter"
         },
         KeyboardEvent
       );
@@ -684,7 +684,7 @@ describe("flatpickr", () => {
         "keydown",
         fp.calendarContainer,
         {
-          key: "Escape",
+          keyCode: 27, // "Escape"
         },
         KeyboardEvent
       );
@@ -704,52 +704,55 @@ describe("flatpickr", () => {
       simulate(
         "keydown",
         window.document.body,
-        { key: "ArrowLeft", bubbles: true },
+        { keyCode: 37, bubbles: true }, // "ArrowLeft"
         KeyboardEvent
       );
       let dayElem = document.activeElement as DayElement;
       expect(fp.currentMonth).toBe(0);
       expect(dayElem.dateObj.getDate()).toEqual(1);
 
-      simulate("keydown", document.activeElement, { key: "ArrowLeft" });
+      simulate("keydown", document.activeElement, { keyCode: 37 }); // "ArrowLeft"
       expect(fp.currentMonth).toBe(11);
       expect(fp.currentYear).toBe(2016);
       dayElem = document.activeElement as DayElement;
       expect(dayElem.dateObj.getDate()).toEqual(7);
 
-      simulate("keydown", document.activeElement, { key: "ArrowRight" });
+      simulate("keydown", document.activeElement, { keyCode: 39 }); // "ArrowRight"
       dayElem = document.activeElement as DayElement;
       expect(dayElem.dateObj.getDate()).toEqual(1);
       expect(fp.currentMonth).toBe(0);
       expect(fp.currentYear).toBe(2017);
 
-      simulate("keydown", document.activeElement, { key: "ArrowUp" });
-      simulate("keydown", document.activeElement, { key: "ArrowUp" });
+      simulate("keydown", document.activeElement, { keyCode: 38 }); // "ArrowUp"
+      simulate("keydown", document.activeElement, { keyCode: 38 }); // "ArrowUp"
       expect(fp.currentMonth).toBe(11);
       expect(fp.currentYear).toBe(2016);
       dayElem = document.activeElement as DayElement;
       expect(dayElem.dateObj.getDate()).toEqual(25);
 
-      simulate("keydown", document.activeElement, { key: "ArrowDown" });
-      simulate("keydown", document.activeElement, { key: "ArrowDown" });
+      simulate("keydown", document.activeElement, { keyCode: 40 }); // "ArrowDown"
+      simulate("keydown", document.activeElement, { keyCode: 40 }); // "ArrowDown"
       expect(fp.currentMonth).toBe(0);
       expect(fp.currentYear).toBe(2017);
       dayElem = document.activeElement as DayElement;
       expect(dayElem.dateObj.getDate()).toEqual(1);
 
       simulate("keydown", document.activeElement, {
-        key: "ArrowRight",
+        // "ArrowRight"
+        keyCode: 39,
         ctrlKey: true,
       });
       expect(fp.currentMonth).toBe(1);
       expect(fp.currentYear).toBe(2017);
 
       simulate("keydown", document.activeElement, {
-        key: "ArrowLeft",
+        // "ArrowLeft"
+        keyCode: 37,
         ctrlKey: true,
       });
       simulate("keydown", document.activeElement, {
-        key: "ArrowLeft",
+        // "ArrowLeft"
+        keyCode: 37,
         ctrlKey: true,
       });
       expect(fp.currentMonth).toBe(11);
@@ -779,10 +782,10 @@ describe("flatpickr", () => {
       fp.jumpToDate("2017-1-1");
       fp.open();
 
-      simulate("keydown", fp.days.childNodes[0], { key: "Enter" });
+      simulate("keydown", fp.days.childNodes[0], { keyCode: 13 }); // "Enter"
       expect(fp.selectedDates.length).toBe(1);
 
-      simulate("keydown", fp.days.childNodes[0], { key: "Enter" });
+      simulate("keydown", fp.days.childNodes[0], { keyCode: 13 }); // "Enter"
       expect(fp.selectedDates.length).toBe(0);
     });
 
