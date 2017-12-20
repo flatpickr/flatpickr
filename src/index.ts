@@ -1495,13 +1495,24 @@ function FlatpickrInstance(
   }
 
   function onKeyDown(e: KeyboardEvent) {
+    // e.key                      e.keyCode
+    // "Backspace"                        8
+    // "Tab"                              9
+    // "Enter"                           13
+    // "Escape"     (IE "Esc")           27
+    // "ArrowLeft"  (IE "Left")          37
+    // "ArrowUp"    (IE "Up")            38
+    // "ArrowRight" (IE "Right")         39
+    // "ArrowDown"  (IE "Down")          40
+    // "Delete"     (IE "Del")           46
+
     const isInput = e.target === self._input;
     const calendarElem = isCalendarElem(e.target as HTMLElement);
     const allowInput = self.config.allowInput;
     const allowKeydown = self.isOpen && (!allowInput || !isInput);
     const allowInlineKeydown = self.config.inline && isInput && !allowInput;
 
-    if (e.key === "Enter" && isInput) {
+    if (e.keyCode === 13 && isInput) {
       if (allowInput) {
         self.setDate(
           self._input.value,
@@ -1517,30 +1528,30 @@ function FlatpickrInstance(
         !!self.timeContainer &&
         self.timeContainer.contains(e.target as HTMLElement);
 
-      switch (e.key) {
-        case "Enter":
+      switch (e.keyCode) {
+        case 13:
           if (isTimeObj) updateValue();
           else selectDate(e);
 
           break;
 
-        case "Escape": // escape
+        case 27: // escape
           e.preventDefault();
           self.close();
           break;
 
-        case "Backspace":
-        case "Delete":
+        case 8:
+        case 46:
           if (isInput && !self.config.allowInput) self.clear();
           break;
 
-        case "ArrowLeft":
-        case "ArrowRight":
+        case 37:
+        case 39:
           if (!isTimeObj) {
             e.preventDefault();
 
             if (self.daysContainer) {
-              const delta = e.key === "ArrowRight" ? 1 : -1;
+              const delta = e.keyCode === 39 ? 1 : -1;
 
               if (!e.ctrlKey) focusOnDay((e.target as DayElement).$i, delta);
               else changeMonth(delta, true, undefined, true);
@@ -1549,10 +1560,10 @@ function FlatpickrInstance(
 
           break;
 
-        case "ArrowUp":
-        case "ArrowDown":
+        case 38:
+        case 40:
           e.preventDefault();
-          const delta = e.key === "ArrowDown" ? 1 : -1;
+          const delta = e.keyCode === 40 ? 1 : -1;
 
           if (self.daysContainer && (e.target as DayElement).$i !== undefined) {
             if (e.ctrlKey) {
@@ -1568,7 +1579,7 @@ function FlatpickrInstance(
 
           break;
 
-        case "Tab":
+        case 9:
           if (e.target === self.hourElement) {
             e.preventDefault();
             // can't have hour elem without minute element
@@ -1586,7 +1597,11 @@ function FlatpickrInstance(
           }
 
           break;
+        default:
+          break;
+      }
 
+      switch (e.key) {
         case self.l10n.amPM[0].charAt(0):
           if (self.amPM !== undefined && e.target === self.amPM) {
             self.amPM.textContent = self.l10n.amPM[0];
