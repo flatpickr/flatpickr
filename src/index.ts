@@ -294,15 +294,16 @@ function FlatpickrInstance(
   function bind<E extends Element | Window>(
     element: E | E[],
     event: string | string[],
-    handler: ((e?: any) => void)
+    handler: ((e?: any) => void),
+    options?: object
   ): void {
     if (event instanceof Array)
-      return event.forEach(ev => bind(element, ev, handler));
+      return event.forEach(ev => bind(element, ev, handler, options));
 
     if (element instanceof Array)
-      return element.forEach(el => bind(el, event, handler));
+      return element.forEach(el => bind(el, event, handler, options));
 
-    element.addEventListener(event, handler as EventListener);
+    element.addEventListener(event, handler as EventListener, options);
     self._handlers.push({ element: element as Element, event, handler });
   }
 
@@ -374,12 +375,11 @@ function FlatpickrInstance(
     bind(self._input, "blur", documentClick);
 
     if (self.config.clickOpens === true) {
-      bind(self._input, "focus", self.open);
+      bind(self._input, "focus", self.open, { capture: true });
       bind(self._input, "mousedown", onClick(self.open));
     }
 
     if (self.daysContainer !== undefined) {
-      self.monthNav.addEventListener("wheel", e => e.preventDefault());
       bind(self.monthNav, "wheel", debounce(onMonthNavScroll, 10));
       bind(self.monthNav, "mousedown", onClick(onMonthNavClick));
 
@@ -413,7 +413,8 @@ function FlatpickrInstance(
       bind(
         self.timeContainer,
         ["wheel", "input", "increment"],
-        self._debouncedChange
+        self._debouncedChange,
+        { passive: true }
       );
       // bind(self.timeContainer, , () => {
       //   triggerEvent("onChange");
@@ -1737,10 +1738,11 @@ function FlatpickrInstance(
     self.isOpen = true;
     positionCalendar(positionElement);
 
-    self.calendarContainer.classList.add("open");
-    self._input.classList.add("active");
-
-    !wasOpen && triggerEvent("onOpen");
+    if (!wasOpen) {
+      self.calendarContainer.classList.add("open");
+      self._input.classList.add("active");
+      triggerEvent("onOpen");
+    }
   }
 
   function minMaxDateSetter(type: "min" | "max") {
@@ -2112,8 +2114,12 @@ function FlatpickrInstance(
         self.selectedDates.length === 2 &&
         !self.config.enableTime;
 
-      self._input.focus();
-      if (single || range) self.close();
+      if (single || range) {
+        self._input.focus();
+
+        if (window.navigator.userAgent.indexOf("MSIE") === -1) self.close();
+        else setTimeout(self.close, 0); // hack - bugs in IE focus handling keeps the calendar open
+      }
     }
     triggerChange();
   }
