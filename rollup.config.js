@@ -21,7 +21,9 @@ export default {
     }),
     ...process.env.ROLLUP_WATCH ? [serve({
       open: true,
-      contentBase: ''
+      contentBase: '',
+      host: '0.0.0.0',
+      port: 8000,
     }),
     livereload()] : []
   ],
