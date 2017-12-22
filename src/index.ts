@@ -1379,10 +1379,11 @@ function FlatpickrInstance(
             !isCalendarElem(e.relatedTarget as HTMLElement)
           : !isInput && !isCalendarElement;
 
-      if (
-        lostFocus &&
-        self.config.ignoredFocusElements.indexOf(e.target as HTMLElement) === -1
-      ) {
+      const isIgnored = !self.config.ignoredFocusElements.some(elem =>
+        elem.contains(e.target as Node)
+      );
+
+      if (lostFocus && isIgnored) {
         self.close();
 
         if (self.config.mode === "range" && self.selectedDates.length === 1) {
