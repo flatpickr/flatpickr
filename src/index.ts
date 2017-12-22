@@ -41,6 +41,8 @@ import { tokenRegex } from "utils/formatting";
 
 import "utils/polyfills";
 
+const DEBOUNCED_CHANGE_MS = 300;
+
 function FlatpickrInstance(
   element: HTMLElement,
   instanceConfig?: Options
@@ -147,18 +149,14 @@ function FlatpickrInstance(
     timeWrapper(e);
     if (self.selectedDates.length === 0) return;
 
-    if (
-      !self.minDateHasTime ||
-      e.type !== "input" ||
-      (e.target as HTMLInputElement).value.length >= 2
-    ) {
+    if (e.type !== "input") {
       setHoursFromInputs();
       updateValue();
     } else {
       setTimeout(function() {
         setHoursFromInputs();
         updateValue();
-      }, 1000);
+      }, DEBOUNCED_CHANGE_MS);
     }
   }
 
@@ -351,7 +349,7 @@ function FlatpickrInstance(
     }
 
     const debouncedResize = debounce(onResize, 50);
-    self._debouncedChange = debounce(triggerChange, 300);
+    self._debouncedChange = debounce(triggerChange, DEBOUNCED_CHANGE_MS);
 
     if (
       self.config.mode === "range" &&
@@ -412,8 +410,15 @@ function FlatpickrInstance(
       bind(self.timeContainer, ["wheel", "input", "increment"], updateTime);
       bind(self.timeContainer, "mousedown", onClick(timeIncrement));
 
-      bind(self.timeContainer, ["wheel", "increment"], self._debouncedChange);
-      bind(self.timeContainer, "input", triggerChange);
+      bind(
+        self.timeContainer,
+        ["wheel", "input", "increment"],
+        self._debouncedChange
+      );
+      // bind(self.timeContainer, , () => {
+      //   triggerEvent("onChange");
+      //   console.log("input")
+      // });
 
       bind([self.hourElement, self.minuteElement], ["focus", "click"], selText);
 
