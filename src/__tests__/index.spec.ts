@@ -919,7 +919,7 @@ describe("flatpickr", () => {
 
       fp.hourElement.value = "9";
       simulate("input", fp.hourElement);
-
+      jest.runAllTimers();
       expect(fp.hourElement.value).toEqual("09");
     });
 
@@ -959,7 +959,7 @@ describe("flatpickr", () => {
 
       minuteElem.value = "00";
       simulate("input", minuteElem);
-
+      jest.runAllTimers();
       expect(minuteElem.value).toEqual("35");
     });
 
