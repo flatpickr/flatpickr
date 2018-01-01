@@ -4,9 +4,9 @@ title = "Plugins"
 weight = "9"
 +++
 
-Plugins are essentially a set of [hooks](/events-hooks), that receive an optional config object and a [flatpickr instance](/instance-methods-properties-elements/).
+Plugins are essentially a set of [hooks](/events/#hooks), that receive an optional config object and a [flatpickr instance](/instance-methods-properties-elements/).
 
-Functionality requested by users that doesn't make it to core usually ends up in a plugin. The `flatpickr` repo comes with a few [plugins](https://github.com/chmln/flatpickr/tree/master/dist/plugins).
+Functionality requested by users that doesn't make it to core usually ends up in a plugin. The `flatpickr` repo comes with a few [plugins](https://github.com/chmln/flatpickr/tree/master/src/plugins).
 
 ## `confirmDate`
 
