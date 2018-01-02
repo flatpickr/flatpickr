@@ -4,3 +4,4 @@ index.html
 coverage
 dist
 dist.tar
+.DS_Store
