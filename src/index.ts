@@ -113,7 +113,19 @@ function FlatpickrInstance(
         self.daysContainer.offsetWidth + self.weekWrapper.offsetWidth + "px";
     }
 
-    if (!self.isMobile) positionCalendar();
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+    /* TODO: investigate this further
+
+      Currently, there is weird positioning behavior in safari causing pages
+      to scroll up. https://github.com/chmln/flatpickr/issues/563
+
+      However, most browsers are not Safari and positioning is expensive when used
+      in scale. https://github.com/chmln/flatpickr/issues/1096
+    */
+    if (!self.isMobile && isSafari) {
+      positionCalendar();
+    }
 
     triggerEvent("onReady");
   }
@@ -1736,12 +1748,12 @@ function FlatpickrInstance(
     const wasOpen = self.isOpen;
 
     self.isOpen = true;
-    positionCalendar(positionElement);
 
     if (!wasOpen) {
       self.calendarContainer.classList.add("open");
       self._input.classList.add("active");
       triggerEvent("onOpen");
+      positionCalendar(positionElement);
     }
   }
 
@@ -2284,7 +2296,7 @@ function FlatpickrInstance(
         self._showTimeInput = bool;
         if (self.calendarContainer)
           toggleClass(self.calendarContainer, "showTimeInput", bool);
-        positionCalendar();
+        self.isOpen && positionCalendar();
       },
     });
   }
