@@ -2128,8 +2128,10 @@ function FlatpickrInstance(
     option: keyof Options | { [k in keyof Options]?: Options[k] },
     value?: any
   ) {
-    if (option !== null && typeof option === "object")
+    if (option !== null && typeof option === "object"){
       Object.assign(self.config, option);
+      parseConfig();
+    }
     else self.config[option] = value;
 
     self.redraw();
