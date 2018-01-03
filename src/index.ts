@@ -113,7 +113,7 @@ function FlatpickrInstance(
         self.daysContainer.offsetWidth + self.weekWrapper.offsetWidth + "px";
     }
 
-    if (!self.isMobile) positionCalendar();
+    if (!self.isMobile && self.isOpen) positionCalendar();
 
     triggerEvent("onReady");
   }
