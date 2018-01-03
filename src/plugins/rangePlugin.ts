@@ -23,11 +23,17 @@ function rangePlugin(config: Config = {}) {
         secondInput =
           config.input instanceof Element
             ? config.input
-            : window.document.querySelector(config.input) as HTMLInputElement;
+            : (window.document.querySelector(config.input) as HTMLInputElement);
       } else {
         secondInput = fp._input.cloneNode() as HTMLInputElement;
         secondInput.removeAttribute("id");
         secondInput._flatpickr = undefined;
+      }
+
+      if (secondInput.value) {
+        const parsedDate = fp.parseDate(secondInput.value);
+
+        if (parsedDate) fp.selectedDates.push(parsedDate);
       }
 
       secondInput.setAttribute("data-fp-omit", "");
@@ -40,11 +46,6 @@ function rangePlugin(config: Config = {}) {
         }
         fp.open(e, secondInput);
         [_firstInputFocused, _secondInputFocused] = [false, true];
-      });
-
-      fp._bind(fp._input, "focus", () => {
-        if (fp.isOpen) fp.calendarContainer.classList.remove("open");
-        setTimeout(fp.open, 0);
       });
 
       fp._bind(secondInput, "keydown", (e: KeyboardEvent) => {
@@ -93,7 +94,7 @@ function rangePlugin(config: Config = {}) {
             );
         });
 
-        fp.setDate(fp.selectedDates);
+        fp.setDate(fp.selectedDates, false);
         plugin.onValueUpdate(fp.selectedDates);
       },
 
@@ -105,6 +106,12 @@ function rangePlugin(config: Config = {}) {
             secondInput.value = "";
             _prevDates = [];
           }, 10);
+        }
+
+        if (_secondInputFocused) {
+          setTimeout(() => {
+            secondInput.focus();
+          }, 0);
         }
       },
 
@@ -132,10 +139,9 @@ function rangePlugin(config: Config = {}) {
           _prevDates = [...newDates];
         }
 
-        [
-          fp._input.value = "",
-          secondInput.value = "",
-        ] = fp.selectedDates.map(d => fp.formatDate(d, dateFormat));
+        [fp._input.value = "", secondInput.value = ""] = fp.selectedDates.map(
+          d => fp.formatDate(d, dateFormat)
+        );
       },
     };
 
