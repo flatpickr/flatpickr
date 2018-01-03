@@ -27,7 +27,8 @@ export type HookKey =
   | "onParseConfig"
   | "onReady"
   | "onValueUpdate"
-  | "onYearChange";
+  | "onYearChange"
+  | "onPreCalendarPosition";
 
 export type Plugin = (fp: Instance) => Options;
 
@@ -189,6 +190,8 @@ Use it along with "enableTime" to create a time picker. */
   /* Fires after the year has changed */
   onYearChange?: Hook | Hook[];
 
+  onPreCalendarPosition?: Hook | Hook[];
+
   /* A custom datestring parser */
   parseDate?: (date: string, format: string) => Date;
 
@@ -276,6 +279,7 @@ export interface ParsedOptions {
   onReady: Hook[];
   onValueUpdate: Hook[];
   onYearChange: Hook[];
+  onPreCalendarPosition: Hook[];
   parseDate?: Options["parseDate"];
   plugins: Plugin[];
   position: "auto" | "below" | "above";
@@ -333,6 +337,7 @@ export const defaults: ParsedOptions = {
   onReady: [],
   onValueUpdate: [],
   onYearChange: [],
+  onPreCalendarPosition: [],
   plugins: [],
   position: "auto",
   positionElement: undefined,

@@ -1802,7 +1802,7 @@ function FlatpickrInstance(
       "disableMobile",
     ];
 
-    let hooks: HookKey[] = [
+    const hooks: HookKey[] = [
       "onChange",
       "onClose",
       "onDayCreate",
@@ -1814,6 +1814,7 @@ function FlatpickrInstance(
       "onReady",
       "onValueUpdate",
       "onYearChange",
+      "onPreCalendarPosition",
     ];
 
     self.config = {
@@ -1956,8 +1957,11 @@ function FlatpickrInstance(
     self.formatDate = createDateFormatter(self);
   }
 
-  function positionCalendar(positionElement = self._positionElement) {
+  function positionCalendar(customPositionElement?: HTMLElement) {
     if (self.calendarContainer === undefined) return;
+
+    triggerEvent("onPreCalendarPosition");
+    const positionElement = customPositionElement || self._positionElement;
 
     const calendarHeight = self.calendarContainer.offsetHeight,
       calendarWidth = self.calendarContainer.offsetWidth,
@@ -2124,8 +2128,8 @@ function FlatpickrInstance(
     triggerChange();
   }
 
-  function set(
-    option: keyof Options | { [k in keyof Options]?: Options[k] },
+  function set<K extends keyof Options>(
+    option: K | { [k in K]?: Options[k] },
     value?: any
   ) {
     if (option !== null && typeof option === "object")
