@@ -38,14 +38,14 @@ function rangePlugin(config: Config = {}) {
 
       secondInput.setAttribute("data-fp-omit", "");
 
-      fp._bind(secondInput, ["focus", "click"], (e: Event) => {
+      fp._bind(secondInput, ["focus", "click"], () => {
         if (fp.selectedDates[1]) {
           fp.latestSelectedDateObj = fp.selectedDates[1];
           fp._setHoursFromDate(fp.selectedDates[1]);
           fp.jumpToDate(fp.selectedDates[1]);
         }
-        fp.open(e, secondInput);
         [_firstInputFocused, _secondInputFocused] = [false, true];
+        fp.open(undefined, secondInput);
       });
 
       fp._bind(secondInput, "keydown", (e: KeyboardEvent) => {
@@ -96,6 +96,15 @@ function rangePlugin(config: Config = {}) {
 
         fp.setDate(fp.selectedDates, false);
         plugin.onValueUpdate(fp.selectedDates);
+      },
+
+      onPreCalendarPosition() {
+        if (_secondInputFocused) {
+          fp._positionElement = secondInput;
+          setTimeout(() => {
+            fp._positionElement = fp._input;
+          }, 0);
+        }
       },
 
       onChange() {
