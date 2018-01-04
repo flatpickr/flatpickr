@@ -22,7 +22,7 @@ interface State {
   defaults: MinMaxTime;
 }
 
-function minMaxTimePlugin(config: Config) {
+function minMaxTimePlugin(config: Config = {}) {
   const state: State = {
     formatDate: createDateFormatter({}),
     tableDateFormat: config.tableDateFormat || "Y-m-d",
