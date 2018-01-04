@@ -212,16 +212,6 @@ function FlatpickrInstance(
         compareDates(self.latestSelectedDateObj, self.config.minDate, true) ===
           0);
 
-    if (limitMinHours) {
-      const minTime =
-        self.config.minTime !== undefined
-          ? self.config.minTime
-          : (self.config.minDate as Date);
-      hours = Math.max(hours, minTime.getHours());
-      if (hours === minTime.getHours())
-        minutes = Math.max(minutes, minTime.getMinutes());
-    }
-
     const limitMaxHours =
       self.config.maxTime !== undefined ||
       (self.config.maxDate &&
@@ -238,6 +228,16 @@ function FlatpickrInstance(
       hours = Math.min(hours, maxTime.getHours());
       if (hours === maxTime.getHours())
         minutes = Math.min(minutes, maxTime.getMinutes());
+    }
+
+    if (limitMinHours) {
+      const minTime =
+        self.config.minTime !== undefined
+          ? self.config.minTime
+          : (self.config.minDate as Date);
+      hours = Math.max(hours, minTime.getHours());
+      if (hours === minTime.getHours())
+        minutes = Math.max(minutes, minTime.getMinutes());
     }
 
     setHours(hours, minutes, seconds);
@@ -2143,13 +2143,22 @@ function FlatpickrInstance(
     triggerChange();
   }
 
+  const CALLBACKS: { [k in keyof Options]: Array<Function> } = {
+    locale: [setupLocale],
+  };
+
   function set<K extends keyof Options>(
     option: K | { [k in K]?: Options[k] },
     value?: any
   ) {
     if (option !== null && typeof option === "object")
       Object.assign(self.config, option);
-    else self.config[option] = value;
+    else {
+      self.config[option] = value;
+
+      if (CALLBACKS[option as keyof Options] !== undefined)
+        CALLBACKS[option].forEach(x => x());
+    }
 
     self.redraw();
     jumpToDate();
