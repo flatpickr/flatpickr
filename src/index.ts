@@ -763,9 +763,7 @@ function FlatpickrInstance(
     ) {
       self.weekNumbers.insertAdjacentHTML(
         "beforeend",
-        "<span class='disabled flatpickr-day'>" +
-          self.config.getWeek(date) +
-          "</span>"
+        "<span class='flatpickr-day'>" + self.config.getWeek(date) + "</span>"
       );
     }
 
@@ -1393,7 +1391,8 @@ function FlatpickrInstance(
       );
 
       if (lostFocus && isIgnored) {
-        self.close();
+        focusAndClose();
+        self._input.focus();
 
         if (self.config.mode === "range" && self.selectedDates.length === 1) {
           self.clear(false);
@@ -1645,6 +1644,7 @@ function FlatpickrInstance(
     if (
       self.selectedDates.length !== 1 ||
       !elem.classList.contains("flatpickr-day") ||
+      elem.classList.contains("disabled") ||
       self.minRangeDate === undefined ||
       self.maxRangeDate === undefined
     )
@@ -2023,6 +2023,13 @@ function FlatpickrInstance(
     buildDays();
   }
 
+  function focusAndClose() {
+    self._input.focus();
+
+    if (window.navigator.userAgent.indexOf("MSIE") === -1) self.close();
+    else setTimeout(self.close, 0); // hack - bugs in IE focus handling keeps the calendar open
+  }
+
   function selectDate(e: MouseEvent | KeyboardEvent) {
     e.preventDefault();
     e.stopPropagation();
@@ -2131,10 +2138,7 @@ function FlatpickrInstance(
         !self.config.enableTime;
 
       if (single || range) {
-        self._input.focus();
-
-        if (window.navigator.userAgent.indexOf("MSIE") === -1) self.close();
-        else setTimeout(self.close, 0); // hack - bugs in IE focus handling keeps the calendar open
+        focusAndClose();
       }
     }
     triggerChange();

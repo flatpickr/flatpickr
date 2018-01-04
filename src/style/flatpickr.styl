@@ -542,22 +542,22 @@ span.flatpickr-weekday
         border-radius 0
         box-shadow: (-2.5*$dayMargin) 0 0 $dayHoverBackground, (2.5*$dayMargin) 0 0 $dayHoverBackground
 
-    &.disabled, &.disabled:hover
-        pointer-events none
-
     &.disabled, &.disabled:hover,
     &.prevMonthDay, &.nextMonthDay,
     &.notAllowed, &.notAllowed.prevMonthDay, &.notAllowed.nextMonthDay
-        if $disabled_day_color is defined
-            color $disabled_day_color
-        else
-            color alpha($dayForeground, 0.3)
+        color alpha($dayForeground, 0.3)
         background transparent
+
         if $disabled_border_color is defined
             border-color $disabled_border_color
+
         else
             border-color transparent
         cursor default
+
+    &.disabled, &.disabled:hover
+        cursor not-allowed
+        color alpha($dayForeground, 0.1)
 
     &.week.selected
         border-radius 0
@@ -584,9 +584,14 @@ span.flatpickr-weekday
         line-height $weekdaysHeight
 
     span.flatpickr-day
-        display block
-        width 100%
-        max-width none
+        &, &:hover
+            display block
+            width 100%
+            max-width none
+            color alpha($dayForeground, 0.3)
+            background transparent
+            cursor default
+            border none
 
 
 .flatpickr-innerContainer
