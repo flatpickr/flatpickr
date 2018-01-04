@@ -36,6 +36,7 @@ const rollupConfig = {
       (rollup_typescript as any)({
         abortOnError: false,
         cacheRoot: `/tmp/.rpt2_cache`,
+        clean: true,
       }),
     ],
   },
