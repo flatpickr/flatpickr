@@ -7,10 +7,11 @@ const pkg = require("./package.json");
 
 export default {
   input: './src/index.ts',
-  name: "flatpickr",
   output: {
     file: 'dist/flatpickr.js',
+    name: "flatpickr",
     format: 'umd',
+    exports: "named",
     banner: `/* flatpickr v${pkg.version}, @license MIT */`
   },
 
