@@ -1975,7 +1975,11 @@ function FlatpickrInstance(
     triggerEvent("onPreCalendarPosition");
     const positionElement = customPositionElement || self._positionElement;
 
-    const calendarHeight = self.calendarContainer.offsetHeight,
+    const calendarHeight = Array.prototype.reduce.call(
+        self.calendarContainer.children,
+        (acc: number, child: HTMLElement) => acc + child.offsetHeight,
+        0
+      ),
       calendarWidth = self.calendarContainer.offsetWidth,
       configPos = self.config.position,
       inputBounds = positionElement.getBoundingClientRect(),
