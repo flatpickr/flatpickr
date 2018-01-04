@@ -53,6 +53,8 @@ export const Polish: CustomLocale = {
       "Grudzień",
     ],
   },
+  
+  firstDayOfWeek: 1,
 
   ordinal: () => {
     return ".";
