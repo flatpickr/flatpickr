@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import { promisify } from "util";
-import { exec as execCommand, ChildProcess } from "child_process";
+import { exec as execCommand } from "child_process";
 
 import * as glob from "glob";
 
