@@ -387,12 +387,12 @@ function FlatpickrInstance(
     bind(self._input, "blur", documentClick);
 
     if (self.config.clickOpens === true) {
-      bind(self._input, "focus", self.open, { capture: true });
+      bind(self._input, "focus", self.open);
       bind(self._input, "mousedown", onClick(self.open));
     }
 
     if (self.daysContainer !== undefined) {
-      bind(self.monthNav, "wheel", debounce(onMonthNavScroll, 10));
+      bind(self.monthNav, "wheel", onMonthNavScroll);
       bind(self.monthNav, "mousedown", onClick(onMonthNavClick));
 
       bind(self.monthNav, ["keyup", "increment"], onYearInput);
@@ -428,10 +428,6 @@ function FlatpickrInstance(
         self._debouncedChange,
         { passive: true }
       );
-      // bind(self.timeContainer, , () => {
-      //   triggerEvent("onChange");
-      //   console.log("input")
-      // });
 
       bind([self.hourElement, self.minuteElement], ["focus", "click"], selText);
 
