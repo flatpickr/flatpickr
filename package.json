@@ -9,10 +9,9 @@
     "start": "npm run build:build -- --dev",
     "rollup:start": "rollup -w -c",
     "rollup:build": "rollup -c",
-    "test": "run-s test:typecheck test:unit test:ssr",
+    "test": "run-s test:typecheck test:unit",
     "test:typecheck": "tsc -p ./ --noEmit",
     "test:unit": "jest --config .jest.json",
-    "test:ssr": "jest --config .jest.ssr.json",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "precommit": "lint-staged"
   },
@@ -43,7 +42,7 @@
     "stylus": "latest",
     "ts-jest": "22.0.0",
     "ts-node": "^4.1.0",
-    "typescript": "^2.6.1",
+    "typescript": "^2.6.2",
     "uglify-js": "^3.3.4"
   },
   "main": "dist/flatpickr.js",
