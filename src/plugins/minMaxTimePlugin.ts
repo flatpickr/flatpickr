@@ -58,12 +58,15 @@ function minMaxTimePlugin(config: Config = {}) {
 
         if (latest && matchingTimeLimit !== undefined) {
           this.set(matchingTimeLimit);
+
+          (fp.config.minTime as Date).setFullYear(latest.getFullYear());
+          (fp.config.maxTime as Date).setFullYear(latest.getFullYear());
           (fp.config.minTime as Date).setMonth(latest.getMonth());
           (fp.config.maxTime as Date).setMonth(latest.getMonth());
           (fp.config.minTime as Date).setDate(latest.getDate());
           (fp.config.maxTime as Date).setDate(latest.getDate());
 
-          if (compareDates(latest, fp.config.maxTime as Date, false) > 0)
+          if (compareDates(latest, fp.config.maxTime as Date, false) > 0) {
             fp.setDate(
               new Date(latest.getTime()).setHours(
                 (fp.config.maxTime as Date).getHours(),
@@ -73,7 +76,7 @@ function minMaxTimePlugin(config: Config = {}) {
               ),
               false
             );
-          else if (compareDates(latest, fp.config.minTime as Date, false) < 0)
+          } else if (compareDates(latest, fp.config.minTime as Date, false) < 0)
             fp.setDate(
               new Date(latest.getTime()).setHours(
                 (fp.config.minTime as Date).getHours(),
