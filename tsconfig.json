@@ -14,7 +14,8 @@
     "lib": [
       "ES2015",
       "dom",
-      "es2017.object"
+      "es2017.object",
+      "esnext.asynciterable"
     ],
     "baseUrl": "src"
   },

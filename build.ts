@@ -205,15 +205,17 @@ function start() {
   const devMode = process.argv.indexOf("--dev") > -1;
   const proc = startRollup(devMode);
 
-  proc.stdout.on("data", data => {
-    process.stdout.write(`rollup: ${data}`);
-  });
-
   function exit() {
     !proc.killed && proc.kill();
   }
 
-  buildScripts();
+  proc.stdout.on("data", data => {
+    process.stdout.write(`rollup: ${data}`);
+  });
+
+  proc.stdout.on("readable", () => {
+    buildScripts();
+  });
 
   if (devMode) {
     setupWatchers();
