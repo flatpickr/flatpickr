@@ -18,8 +18,10 @@
       <pubDate>Fri, 03 Mar 2017 00:00:00 +0000</pubDate>
       
       <guid>https://chmln.github.io/flatpickr/getting-started/</guid>
-      <description>Installation Installing a flatpickr module flatpickr is available on npm and bower. Use either one to easily stay up to date with new features and (inevitably) bugfixes.
-# using npm install npm i flatpickr --save # bower bower install flatpickr-calendar --save # or, if you like yarn better yarn add flatpickr Non-module environments If, for any reason, you are constained to a non-module environment (e.g. no bundlers such as webpack) - don&amp;rsquo;t fret.</description>
+      <description>Installation Installing a flatpickr module flatpickr is delivered primarily via npm.
+Bower users: please use https://www.npmjs.com/package/bower-npm-resolver
+# using npm install npm i flatpickr --save Non-module environments If, for any reason, you are constained to a non-module environment (e.g. no bundlers such as webpack) - don&amp;rsquo;t fret. I suggest simply pulling the latest version of flatpickr from jsdelivr.
+&amp;lt;link rel=&amp;#34;stylesheet&amp;#34; href=&amp;#34;https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css&amp;#34;&amp;gt; &amp;lt;script src=&amp;#34;https://cdn.jsdelivr.net/npm/flatpickr&amp;#34;&amp;gt;&amp;lt;/script&amp;gt; Usage If you&amp;rsquo;re using a bundler, e.g. webpack, you&amp;rsquo;ll need to import flatpickr.</description>
     </item>
     
     <item>
@@ -29,9 +31,9 @@
       
       <guid>https://chmln.github.io/flatpickr/examples/</guid>
       <description>Unless otherwise specified, the markup for examples below consists of just an input element, and flatpickr invocation with a given config.
-Basic flatpickr without any config. Some features right off the bat:
- The year is scrollable and can be typed in The month name is scrollable  DateTime { enableTime: true } Human-friendly Dates altInput hides your original input and creates a new one.
-Upon date selection, the original input will contain a Y-m-d.</description>
+Basic flatpickr without any config.
+DateTime { enableTime: true, dateFormat: &amp;#34;Y-m-d H:i&amp;#34;, } Human-friendly Dates altInput hides your original input and creates a new one.
+Upon date selection, the original input will contain a Y-m-d... string, while the altInput will display the date in a more legible, customizable format.</description>
     </item>
     
     <item>
@@ -96,7 +98,7 @@ const flatpickr = require(&amp;#34;flatpickr&amp;#34;); const Russian = require(
       <pubDate>Sat, 25 Mar 2017 20:23:43 -0500</pubDate>
       
       <guid>https://chmln.github.io/flatpickr/plugins/</guid>
-      <description>Plugins are in essentially a set of hooks, that receive a config object (optionally) and a flatpickr instance
+      <description>Plugins are essentially a set of hooks, that receive an optional config object and a flatpickr instance.
 Functionality requested by users that doesn&amp;rsquo;t make it to core usually ends up in a plugin. The flatpickr repo comes with a few plugins.
 confirmDate Provides a visual cue for users after selecting either:
  date + time multiple dates  { &amp;#34;enableTime&amp;#34;: true, &amp;#34;plugins&amp;#34;: [new confirmDatePlugin({})] } A spiffy SVG icon is included, along with sane defaults, but you can customize them.</description>

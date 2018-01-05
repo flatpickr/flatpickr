@@ -5,15 +5,18 @@ var examples = document.querySelectorAll(".flatpickr");
 
 var configs = {
     datetime: {
-        enableTime: true
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
     },
 
     altinput: {
-        altInput: true
+        altInput: true,
+        altFormat: "F j, Y",
+        dateFormat: "Y-m-d"
     },
 
-    "minDate2017": {
-        minDate: "2017-04"
+    "minDate": {
+        minDate: "2020-01"
     },
 
     "minDateToday": {
@@ -31,18 +34,24 @@ var configs = {
     },
 
     disableSpecific: {
-        disable: ["2017-03-30", "2017-05-21", "2017-06-08", new Date(2017, 8, 9) ]
+        onReady () {
+            this.jumpToDate("2025-01")
+        },
+        disable: ["2025-01-30", "2025-02-21", "2025-03-08", new Date(2025, 4, 9) ]
     },
 
     disableRange: {
+        onReady () {
+            this.jumpToDate("2025-04")
+        },
         disable: [
             {
-                from: "2017-04-01",
-                to: "2017-06-01"
+                from: "2025-04-01",
+                to: "2025-05-01"
             },
             {
-                from: "2017-09-01",
-                to: "2017-12-01"
+                from: "2025-09-01",
+                to: "2025-12-01"
             }
         ]
     },
@@ -62,18 +71,24 @@ var configs = {
     },
 
     enableSpecific: {
-        enable: ["2017-03-30", "2017-05-21", "2017-06-08", new Date(2017, 8, 9) ]
+        onReady: function () {
+            this.jumpToDate("2025-03")
+        },
+        enable: ["2025-03-30", "2025-05-21", "2025-06-08", new Date(2025, 8, 9) ]
     },
 
     enableRange: {
+        onReady: function () {
+            this.jumpToDate("2025-04")
+        },
         enable: [
             {
-                from: "2017-04-01",
-                to: "2017-06-01"
+                from: "2025-04-01",
+                to: "2025-05-01"
             },
             {
-                from: "2017-09-01",
-                to: "2017-12-01"
+                from: "2025-09-01",
+                to: "2025-12-01"
             }
         ]
     },
@@ -90,7 +105,14 @@ var configs = {
     },
 
     multiple: {
-        mode: "multiple"
+        mode: "multiple",
+        dateFormat: "Y-m-d",
+    },
+
+    multipleCustomConjunction: {
+        mode: "multiple",
+        dateFormat: "Y-m-d",
+        conjunction: " :: "
     },
 
     multiplePreload: {
@@ -106,6 +128,7 @@ var configs = {
     rangeDisable:{
         mode: "range",
         minDate: "today",
+        dateFormat: "Y-m-d",
         disable: [
             function(date) {
                 // disable every multiple of 8
@@ -146,11 +169,23 @@ var configs = {
         defaultDate: "13:45"
     },
 
+    minTime: {
+        enableTime: true,
+        minTime: "09:00"
+    },
+
+    minMaxTime: {
+        enableTime: true,
+        minTime: "16:00",
+        maxTime: "22:00"
+    },
+
     inline: {
         inline: true
     },
     weekNumbers: {
-        weekNumbers: true
+        weekNumbers: true,
+
     },
 
     strap: {
@@ -188,6 +223,21 @@ var configs = {
     },
     rangePlugin: {
         "plugins": [new rangePlugin({ input: "#secondRangeInput"})]
+    },
+
+    minMaxTimePlugin: {
+        enableTime: true,
+        minDate: "2025",
+        plugins: [
+            new minMaxTimePlugin({
+                table: {
+                    "2025-01-10": {
+                        minTime: "16:00",
+                        maxTime: "22:00"
+                    }
+                }
+            })
+        ]
     }
 }
 
