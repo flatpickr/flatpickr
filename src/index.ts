@@ -384,7 +384,7 @@ function FlatpickrInstance(
       bind(window.document.body, "touchstart", documentClick);
 
     bind(window.document.body, "mousedown", onClick(documentClick));
-    bind(self._input, "blur", documentClick);
+    bind(window.document.body, "focus", documentClick, { capture: true });
 
     if (self.config.clickOpens === true) {
       bind(self._input, "focus", self.open);
@@ -938,7 +938,8 @@ function FlatpickrInstance(
     );
     self.currentMonthElement.title = self.l10n.scrollTitle;
 
-    const yearInput = createNumberInput("cur-year");
+    const yearInput = createNumberInput("cur-year", { tabindex: "-1" });
+
     self.currentYearElement = yearInput.childNodes[0] as HTMLInputElement;
     self.currentYearElement.title = self.l10n.scrollTitle;
 

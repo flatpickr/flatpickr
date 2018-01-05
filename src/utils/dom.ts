@@ -38,7 +38,10 @@ export function findParent(
   return undefined; // nothing found
 }
 
-export function createNumberInput(inputClassName: string) {
+export function createNumberInput(
+  inputClassName: string,
+  opts?: Record<string, any>
+) {
   const wrapper = createElement<HTMLDivElement>("div", "numInputWrapper"),
     numInput = createElement<HTMLInputElement>(
       "input",
@@ -49,6 +52,9 @@ export function createNumberInput(inputClassName: string) {
 
   numInput.type = "text";
   numInput.pattern = "\\d*";
+
+  if (opts !== undefined)
+    for (const key in opts) numInput.setAttribute(key, opts[key]);
 
   wrapper.appendChild(numInput);
   wrapper.appendChild(arrowUp);
