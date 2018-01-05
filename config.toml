@@ -37,6 +37,7 @@ pygmentsStyle = "manni"
         "https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/plugins/confirmDate/confirmDate.js",
         "https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/plugins/weekSelect/weekSelect.js",
         "https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/plugins/rangePlugin.js",
+        "https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/plugins/minMaxTimePlugin.js",
         "flatpickr.js",
         "themer.js"
     ]

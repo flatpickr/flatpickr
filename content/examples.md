@@ -9,10 +9,7 @@ Unless otherwise specified, the markup for examples below consists of just an in
 
 ## Basic
 
-`flatpickr` without any config. Some features right off the bat:
-
-- The year is scrollable and can be typed in
-- The month name is scrollable
+`flatpickr` without any config.
 
 <input class=flatpickr type="text" placeholder="Select Date..">
 
@@ -20,7 +17,8 @@ Unless otherwise specified, the markup for examples below consists of just an in
 
 ```js
 {
-    enableTime: true
+    enableTime: true,
+    dateFormat: "Y-m-d H:i",
 }
 ```
 
@@ -36,9 +34,13 @@ Enabling this option is highly recommended.
 
 ```js
 {
-    altInput: true
+    altInput: true,
+    altFormat: "F j, Y",
+    dateFormat: "Y-m-d",
 }
 ```
+
+After selecting a date, inspect this input to see how it works.
 
 <input class=flatpickr type="text" placeholder="Select Date.." data-id="altinput">
 
@@ -85,11 +87,11 @@ See [supplying dates](#supplying-dates-for-flatpickr) for valid date examples.
 
 ```js
 {
-    minDate: "2017-04"
+    minDate: "2020-01"
 }
 ```
 
-<input class=flatpickr type="text" placeholder="Select Date.." data-id="minDate2017">
+<input class=flatpickr type="text" placeholder="Select Date.." data-id="minDate">
 
 ```js
 {
@@ -134,35 +136,38 @@ All of those are possible with the `disable` option.
 
 ### Disabling specific dates
 
+```js
+{
+    disable: ["2025-01-30", "2025-02-21", "2025-03-08", new Date(2025, 4, 9) ],
+    dateFormat: "Y-m-d",
+}
+```
 
 <input class=flatpickr type="text" placeholder="Select Date.." data-id="disableSpecific">
 
-```js
-{
-    disable: ["2017-03-30", "2017-05-21", "2017-06-08", new Date(2017, 8, 9) ]
-}
-```
+
 
 ---
 
 ### Disabling range(s) of dates:
 
-<input class=flatpickr type="text" placeholder="Select Date.." data-id="disableRange">
-
 ```js
 {
+    dateFormat: "Y-m-d",
     disable: [
         {
-            from: "2017-04-01",
-            to: "2017-06-01"
+            from: "2025-04-01",
+            to: "2025-05-01"
         },
         {
-            from: "2017-09-01",
-            to: "2017-12-01"
+            from: "2025-09-01",
+            to: "2025-12-01"
         }
     ]
 }
 ```
+
+<input class=flatpickr type="text" placeholder="Select Date.." data-id="disableRange">
 
 ---
 
@@ -174,9 +179,8 @@ If the function returns `true`, the date will be disabled.
 This flexibility allows us to use any arbitrary logic to disable dates.<br>
 The example below disables Saturdays and Sundays.
 
-<input class=flatpickr type="text" placeholder="Select Date.." data-id="disableFunction">
 
-```javascript
+```js
 {
     "disable": [
         function(date) {
@@ -191,6 +195,8 @@ The example below disables Saturdays and Sundays.
 }
 ```
 
+<input class=flatpickr type="text" placeholder="Select Date.." data-id="disableFunction">
+
 
 ## Disabling all dates except select few
 
@@ -198,40 +204,42 @@ This is the `enable` option, which takes in an array of date strings, date range
 
 ### Enabling specific dates
 
-<input class=flatpickr type="text" placeholder="Select Date.." data-id="enableSpecific">
-
 ```js
 {
-    enable: ["2017-03-30", "2017-05-21", "2017-06-08", new Date(2017, 8, 9) ]
+    enable: ["2025-03-30", "2025-05-21", "2025-06-08", new Date(2025, 8, 9) ]
 }
 ```
+
+<input class=flatpickr type="text" placeholder="Select Date.." data-id="enableSpecific">
+
+
 
 ---
 
 ### Enabling range(s) of dates:
 
-<input class=flatpickr type="text" placeholder="Select Date.." data-id="enableRange">
-
 ```js
 {
     enable: [
         {
-            from: "2017-04-01",
-            to: "2017-06-01"
+            from: "2025-04-01",
+            to: "2025-05-01"
         },
         {
-            from: "2017-09-01",
-            to: "2017-12-01"
+            from: "2025-09-01",
+            to: "2025-12-01"
         }
     ]
 }
 ```
 
+<input class=flatpickr type="text" placeholder="Select Date.." data-id="enableRange">
+
+
+
 ---
 
 ### Enabling dates by a function:
-
-<input class=flatpickr type="text" placeholder="Select Date.." data-id="enableFunction">
 
 ```js
 {
@@ -246,13 +254,18 @@ This is the `enable` option, which takes in an array of date strings, date range
 }
 ```
 
+<input class=flatpickr type="text" placeholder="Select Date.." data-id="enableFunction">
+
+
+
 ## Selecting multiple dates
 
 It is possible to select multiple dates.
 
 ```js
 {
-    mode: "multiple"
+    mode: "multiple",
+    dateFormat: "Y-m-d"
 }
 ```
 
@@ -269,6 +282,20 @@ It is possible to select multiple dates.
 ```
 
 <input class=flatpickr type="text" placeholder="Select Date.." data-id="multiplePreload">
+
+### Customizing the Conjunction
+
+```js
+{
+    mode: "multiple",
+    dateFormat: "Y-m-d",
+    conjunction: " :: "
+}
+```
+
+<input class=flatpickr type="text" placeholder="Select Date.." data-id="multipleCustomConjunction">
+
+
 
 ## Range Calendar
 
@@ -288,6 +315,7 @@ Note that disabled dates (by either `minDate`, `maxDate`, `enable` or `disable`)
 {
     mode: "range",
     minDate: "today",
+    dateFormat: "Y-m-d",
     disable: [
         function(date) {
             // disable every multiple of 8
@@ -362,6 +390,28 @@ Note that disabled dates (by either `minDate`, `maxDate`, `enable` or `disable`)
 ```
 
 <input class=flatpickr type="text" placeholder="Select Date.." data-id="timePickerPreloading">
+
+## DateTimePicker with Limited Time Range
+
+```js
+{
+    enableTime: true,
+    minTime: "09:00"
+}
+```
+
+<input class=flatpickr type="text" placeholder="Select Date.." data-id="minTime">
+
+```js
+{
+    enableTime: true,
+    minTime: "16:00",
+    maxTime: "22:00"
+}
+```
+
+<input class=flatpickr type="text" placeholder="Select Date.." data-id="minMaxTime">
+
 
 ## Inline Calendar
 

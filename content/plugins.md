@@ -80,3 +80,26 @@ flatpickr({
 <label><div><b>Date 2</b></div>
 <input type="text" placeholder="Select Date.." id="secondRangeInput"></label></div>
 </div>
+
+## `MinMaxTimePlugin (beta)`
+
+Custom minTime and maxTime per date.
+
+```js
+{
+    enableTime: true,
+    minDate: "2025",
+    plugins: [
+        new minMaxTimePlugin({
+            table: {
+                "2025-01-10": {
+                    minTime: "16:00",
+                    maxTime: "22:00"
+                }
+            }
+        })
+    ]
+};
+
+```
+<input class=flatpickr type="text" placeholder="Select Date.." data-id="minMaxTimePlugin">

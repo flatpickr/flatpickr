@@ -9,31 +9,22 @@ description = "flatpickr installation and usage"
 
 ### Installing a flatpickr module
 
-flatpickr is available on npm and bower. Use either one to easily stay up to date with new features and (inevitably) bugfixes.
+flatpickr is delivered primarily via npm.
+
+Bower users: please use https://www.npmjs.com/package/bower-npm-resolver
 
 ```sh
 # using npm install
 npm i flatpickr --save
-
-# bower
-bower install flatpickr-calendar --save
-
-# or, if you like yarn better
-yarn add flatpickr
 ```
 
 ### Non-module environments
 
-If, for any reason, you are constained to a non-module environment (e.g. no bundlers such as webpack) - don't fret. I suggest simply pulling the latest version of `flatpickr` from `jsdelivr` or `unpkg`.
+If, for any reason, you are constained to a non-module environment (e.g. no bundlers such as webpack) - don't fret. I suggest simply pulling the latest version of `flatpickr` from `jsdelivr`.
 
 ```html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
-<!-- or -->
-
-<link rel="stylesheet" href="https://unpkg.com/flatpickr/dist/flatpickr.min.css">
-<script src="https://unpkg.com/flatpickr"></script>
 ```
 
 
@@ -41,16 +32,27 @@ If, for any reason, you are constained to a non-module environment (e.g. no bund
 
 If you're using a bundler, e.g. `webpack`, you'll need to import flatpickr.
 
-```js
+```ts
+// commonjs
 const flatpickr = require("flatpickr");
+
+// es modules are recommended, if available, especially for typescript
+import flatpickr from "flatpickr";
 ```
 
 All of the following are valid ways to create flatpickr instance.
 
-```javascript
+```js
+// If using flatpickr in a framework, its recommended to pass the element directly
+flatpickr(element, {});
+
+// Otherwise, selectors are also supported
 flatpickr("#myID", {});
-flatpickr(".myClass", {}); // creates multiple instances
-flatpickr(element, {}); // https://developer.mozilla.org/en-US/docs/Web/API/Element
+
+// creates multiple instances
+flatpickr(".anotherSelector");
+
+
 ```
 
 Configuration is optional and passed in an object `{}`.
