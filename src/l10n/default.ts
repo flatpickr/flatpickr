@@ -1,4 +1,4 @@
-import { Locale } from "types/locale";
+import { Locale } from "../types/locale";
 
 export const english: Locale = {
   weekdays: {

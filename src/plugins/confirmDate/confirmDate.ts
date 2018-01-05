@@ -1,4 +1,4 @@
-import { Instance } from "types/instance";
+import { Instance } from "../../types/instance";
 
 export interface Config {
   confirmIcon?: string;
@@ -34,9 +34,9 @@ function confirmDatePlugin(pluginConfig: Config) {
 
         confirmContainer = fp._createElement<HTMLDivElement>(
           "div",
-          `flatpickr-confirm ${config.showAlways
-            ? "visible"
-            : ""} ${config.theme}Theme`,
+          `flatpickr-confirm ${config.showAlways ? "visible" : ""} ${
+            config.theme
+          }Theme`,
           config.confirmText
         );
 

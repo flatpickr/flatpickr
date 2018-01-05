@@ -1,4 +1,4 @@
-export interface MonthsWeekDays {
+export type Locale = {
   weekdays: {
     shorthand: [string, string, string, string, string, string, string];
     longhand: [string, string, string, string, string, string, string];
@@ -33,9 +33,6 @@ export interface MonthsWeekDays {
       string
     ];
   };
-}
-
-export type Locale = MonthsWeekDays & {
   daysInMonth: [
     number,
     number,
@@ -59,7 +56,7 @@ export type Locale = MonthsWeekDays & {
   amPM: [string, string];
 };
 
-export type CustomLocale = MonthsWeekDays & {
+export type CustomLocale = {
   ordinal?: Locale["ordinal"];
   daysInMonth?: Locale["daysInMonth"];
   firstDayOfWeek?: Locale["firstDayOfWeek"];
@@ -68,6 +65,40 @@ export type CustomLocale = MonthsWeekDays & {
   toggleTitle?: Locale["toggleTitle"];
   scrollTitle?: Locale["scrollTitle"];
   amPM?: Locale["amPM"];
+  weekdays: {
+    shorthand: [string, string, string, string, string, string, string];
+    longhand: [string, string, string, string, string, string, string];
+  };
+  months: {
+    shorthand: [
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string
+    ];
+    longhand: [
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string
+    ];
+  };
 };
 
 export type key =

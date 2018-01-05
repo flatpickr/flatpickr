@@ -1,5 +1,5 @@
 /*! flatpickr v4.1.4, @license MIT */
-import { Instance, FlatpickrFn, DayElement } from "types/instance";
+import { Instance, FlatpickrFn, DayElement } from "./types/instance";
 import {
   Options,
   ParsedOptions,
@@ -9,10 +9,10 @@ import {
   defaults as defaultOptions,
   Hook,
   HookKey,
-} from "types/options";
+} from "./types/options";
 
-import { Locale, CustomLocale, key as LocaleKey } from "types/locale";
-import English from "l10n/default";
+import { Locale, CustomLocale, key as LocaleKey } from "./types/locale";
+import English from "./l10n/default";
 
 import {
   arrayify,
@@ -21,25 +21,25 @@ import {
   mouseDelta,
   pad,
   IncrementEvent,
-} from "utils";
+} from "./utils";
 import {
   clearNode,
   createElement,
   createNumberInput,
   findParent,
   toggleClass,
-} from "utils/dom";
+} from "./utils/dom";
 import {
   compareDates,
   duration,
   monthToStr,
   createDateParser,
   createDateFormatter,
-} from "utils/dates";
+} from "./utils/dates";
 
-import { tokenRegex } from "utils/formatting";
+import { tokenRegex } from "./utils/formatting";
 
-import "utils/polyfills";
+import "./utils/polyfills";
 
 const DEBOUNCED_CHANGE_MS = 300;
 

@@ -1,6 +1,6 @@
-import { Instance, DayElement } from "types/instance";
+import { Instance, DayElement } from "../../types/instance";
 
-type InstancePlusWeeks = Instance & {
+export type InstancePlusWeeks = Instance & {
   weekStartDay: Date;
   weekEndDay: Date;
 };

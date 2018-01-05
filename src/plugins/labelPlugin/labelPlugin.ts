@@ -1,4 +1,4 @@
-import { Instance } from "types/instance";
+import { Instance } from "../../types/instance";
 
 function labelPlugin() {
   return function(fp: Instance) {

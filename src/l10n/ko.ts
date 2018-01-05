@@ -1,18 +1,26 @@
 /* Republic of Korea locals for flatpickr */
-import { CustomLocale } from "types/locale";
-import { FlatpickrFn } from "types/instance";
+import { CustomLocale } from "../types/locale";
+import { FlatpickrFn } from "../types/instance";
 
 const fp =
   typeof window !== "undefined" && window.flatpickr !== undefined
     ? window.flatpickr
-    : {
+    : ({
         l10ns: {},
-      } as FlatpickrFn;
+      } as FlatpickrFn);
 
 export const Korean: CustomLocale = {
   weekdays: {
     shorthand: ["일", "월", "화", "수", "목", "금", "토"],
-    longhand: ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"],
+    longhand: [
+      "일요일",
+      "월요일",
+      "화요일",
+      "수요일",
+      "목요일",
+      "금요일",
+      "토요일",
+    ],
   },
 
   months: {

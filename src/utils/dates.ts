@@ -6,13 +6,18 @@ import {
   revFormat,
   formats,
 } from "./formatting";
-import { defaults } from "../types/options";
+import { defaults, ParsedOptions } from "../types/options";
 import { english } from "../l10n/default";
 
-export const createDateFormatter = ({ config = defaults, l10n = english }) => (
-  dateObj: Date,
-  frmt: string
-): string => {
+export interface FormatterArgs {
+  config?: ParsedOptions;
+  l10n?: Locale;
+}
+
+export const createDateFormatter = ({
+  config = defaults,
+  l10n = english,
+}: FormatterArgs) => (dateObj: Date, frmt: string): string => {
   if (config.formatDate !== undefined) return config.formatDate(dateObj, frmt);
 
   return frmt

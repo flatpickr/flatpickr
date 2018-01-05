@@ -3,6 +3,7 @@
     "strict": true,
     "strictFunctionTypes": true,
     "noImplicitAny": true,
+    "declaration": true,
     "target": "es5",
     "module": "commonjs",
     "moduleResolution": "node",
@@ -16,5 +17,8 @@
       "es2017.object"
     ],
     "baseUrl": "src"
-  }
+  },
+  "include": [
+    "./src"
+  ]
 }

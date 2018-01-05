@@ -5,18 +5,18 @@ import {
   createDateFormatter,
 } from "../utils/dates";
 
-interface MinMaxTime {
+export interface MinMaxTime {
   minTime?: string;
   maxTime?: string;
 }
 
-interface Config {
+export interface Config {
   table?: Record<string, MinMaxTime>;
   getTimeLimits?: (date: Date) => MinMaxTime;
   tableDateFormat?: string;
 }
 
-interface State {
+export interface State {
   formatDate: (date: Date, f: string) => string;
   tableDateFormat: string;
   defaults: MinMaxTime;

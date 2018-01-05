@@ -1,6 +1,6 @@
-import { Instance } from "types/instance";
+import { Instance } from "../types/instance";
 
-interface Config {
+export interface Config {
   input?: string | HTMLInputElement;
 }
 

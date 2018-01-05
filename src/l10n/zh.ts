@@ -1,18 +1,26 @@
 /* Mandarin locals for flatpickr */
-import { CustomLocale } from "types/locale";
-import { FlatpickrFn } from "types/instance";
+import { CustomLocale } from "../types/locale";
+import { FlatpickrFn } from "../types/instance";
 
 const fp =
   typeof window !== "undefined" && window.flatpickr !== undefined
     ? window.flatpickr
-    : {
+    : ({
         l10ns: {},
-      } as FlatpickrFn;
+      } as FlatpickrFn);
 
 export const Mandarin: CustomLocale = {
   weekdays: {
     shorthand: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],
-    longhand: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
+    longhand: [
+      "星期日",
+      "星期一",
+      "星期二",
+      "星期三",
+      "星期四",
+      "星期五",
+      "星期六",
+    ],
   },
 
   months: {
