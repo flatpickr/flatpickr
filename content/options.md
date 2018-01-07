@@ -234,7 +234,7 @@ An always up-to-date list of options may be found at <a href="https://github.com
             <td>static</td>
             <td>boolean</td>
             <td>false</td>
-            <td>Position the calendar inside the wrapper and next to the input element. (Leave<code>false</code>unless you know what you're doing.</td>
+            <td>Position the calendar inside the wrapper and next to the input element. (Leave <code>false</code> unless you know what you're doing.</td>
         </tr>
         <tr>
             <td>time_24hr</td>
