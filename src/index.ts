@@ -2371,6 +2371,7 @@ function FlatpickrInstance(
     self.mobileInput.tabIndex = 1;
     self.mobileInput.type = inputType;
     self.mobileInput.disabled = self.input.disabled;
+    self.mobileInput.required = self.input.required;
     self.mobileInput.placeholder = self.input.placeholder;
 
     self.mobileFormatStr =
