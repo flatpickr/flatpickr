@@ -2433,11 +2433,23 @@ function FlatpickrInstance(
       // many front-end frameworks bind to the input event
       self.input.dispatchEvent(createEvent("input"));
     }
+
+    self.input.dispatchEvent(createCustomEvent(event, {
+      selectedDates: self.selectedDates,
+      dateStr: self.input.value,
+      instance: self
+    }))
   }
 
   function createEvent(name: string): Event {
     const e = document.createEvent("Event");
     e.initEvent(name, true, true);
+    return e;
+  }
+
+  function createCustomEvent(name: string, data: Object): Event {
+    const e = document.createEvent("CustomEvent");
+    e.initCustomEvent(name, true, true, data);
     return e;
   }
 
