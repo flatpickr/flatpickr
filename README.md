@@ -1,5 +1,6 @@
 ## flatpickr - javascript datetime picker
 [![Build Status](https://travis-ci.org/chmln/flatpickr.svg?branch=master)](https://travis-ci.org/chmln/flatpickr)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fchmln%2Fflatpickr.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fchmln%2Fflatpickr?ref=badge_shield)
 
 [![Coverage](https://coveralls.io/repos/github/chmln/flatpickr/badge.svg?branch=master)](https://coveralls.io/github/chmln/flatpickr)
 [![npm version](https://badge.fury.io/js/flatpickr.svg)](https://www.npmjs.com/package/flatpickr)
@@ -46,3 +47,7 @@ flatpickr will never change its license, pester users for donations, or engage i
 Nevertheless, if you enjoyed working with this library or if its made your life easier, you can buy me a cup of coffee :)
 
 <a href='https://ko-fi.com/A3381DJ9' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi4.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fchmln%2Fflatpickr.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fchmln%2Fflatpickr?ref=badge_large)
