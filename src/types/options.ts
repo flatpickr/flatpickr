@@ -224,6 +224,12 @@ Use it along with "enableTime" to create a time picker. */
 
   /* See https://chmln.github.io/flatpickr/examples/#flatpickr-external-elements */
   wrap?: boolean;
+
+  /* Enable or disable month scroll, by default is enabled */
+  enableMonthScroll?: boolean;
+
+  /* Enable or disable year scroll, by default is enabled */
+  enableYearScroll?: boolean;
 }
 
 export interface ParsedOptions {
@@ -290,6 +296,8 @@ export interface ParsedOptions {
   time_24hr: boolean;
   weekNumbers: boolean;
   wrap: boolean;
+  enableMonthScroll: boolean;
+  enableYearScroll: boolean;
 }
 
 export const defaults: ParsedOptions = {
@@ -348,4 +356,6 @@ export const defaults: ParsedOptions = {
   time_24hr: false,
   weekNumbers: false,
   wrap: false,
+  enableMonthScroll: true,
+  enableYearScroll: true,
 };
