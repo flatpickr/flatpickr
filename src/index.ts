@@ -1808,6 +1808,8 @@ function FlatpickrInstance(
       "static",
       "enableSeconds",
       "disableMobile",
+      "enableMonthScroll",
+      "enableYearScroll",
     ];
 
     const hooks: HookKey[] = [
@@ -2523,10 +2525,15 @@ function FlatpickrInstance(
     if (e.target === self.currentMonthElement || isYear) {
       const delta = mouseDelta(e);
 
-      if (isYear) {
+      if (isYear && self.config.enableYearScroll) {
         changeYear(self.currentYear + delta);
         (e.target as HTMLInputElement).value = self.currentYear.toString();
-      } else self.changeMonth(delta, true, false);
+        return;
+      }
+
+      if (self.config.enableMonthScroll) {
+        self.changeMonth(delta, true, false);
+      }
     }
   }
 
