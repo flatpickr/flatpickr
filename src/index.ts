@@ -47,8 +47,13 @@ function FlatpickrInstance(
   element: HTMLElement,
   instanceConfig?: Options
 ): Instance {
-  const self = {} as Instance;
-  self.parseDate = createDateParser(self);
+  const self = {
+    config: {
+      ...flatpickr.defaultConfig,
+    } as ParsedOptions,
+    l10n: English,
+  } as Instance;
+  self.parseDate = createDateParser({ config: self.config, l10n: self.l10n });
 
   self._animationLoop = [];
   self._handlers = [];
@@ -1794,7 +1799,7 @@ function FlatpickrInstance(
   }
 
   function parseConfig() {
-    let boolOpts: Array<keyof Options> = [
+    const boolOpts: Array<keyof Options> = [
       "wrap",
       "weekNumbers",
       "allowInput",
@@ -1824,10 +1829,6 @@ function FlatpickrInstance(
       "onYearChange",
       "onPreCalendarPosition",
     ];
-
-    self.config = {
-      ...flatpickr.defaultConfig,
-    } as ParsedOptions;
 
     const userConfig = {
       ...instanceConfig,
@@ -1951,11 +1952,11 @@ function FlatpickrInstance(
 
     self.l10n = {
       ...(flatpickr.l10ns.default as Locale),
-      ...typeof self.config.locale === "object"
+      ...(typeof self.config.locale === "object"
         ? self.config.locale
         : self.config.locale !== "default"
           ? flatpickr.l10ns[self.config.locale as LocaleKey]
-          : undefined,
+          : undefined),
     };
 
     tokenRegex.K = `(${self.l10n.amPM[0]}|${
