@@ -1,5 +1,5 @@
 {
-  "bail": true,
+  "bail": false,
   "transform": {
     "^.+\\.tsx?$": "ts-jest"
   },
