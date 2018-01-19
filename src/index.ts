@@ -811,41 +811,29 @@ function FlatpickrInstance(
     self.config.animate === true ? self._animationLoop.push(fn) : fn();
   }
 
-  function buildDays(delta?: number) {
-    if (self.daysContainer === undefined) {
-      return;
-    }
-
+  function buildMonthDays(year: number, month: number): HTMLDivElement {
+    console.trace();
     const firstOfMonth =
-        (new Date(self.currentYear, self.currentMonth, 1).getDay() -
-          self.l10n.firstDayOfWeek +
-          7) %
-        7,
+        (new Date(year, month, 1).getDay() - self.l10n.firstDayOfWeek + 7) % 7,
       isRangeMode = self.config.mode === "range";
 
-    const prevMonthDays = self.utils.getDaysInMonth(
-      (self.currentMonth - 1 + 12) % 12
-    );
+    const prevMonthDays = self.utils.getDaysInMonth((month - 1 + 12) % 12);
 
-    const daysInMonth = self.utils.getDaysInMonth(),
+    const daysInMonth = self.utils.getDaysInMonth(month),
       days = window.document.createDocumentFragment();
 
     let dayNumber = prevMonthDays + 1 - firstOfMonth,
       dayIndex = 0;
 
-    if (self.weekNumbers && self.weekNumbers.firstChild)
-      self.weekNumbers.textContent = "";
+    // if (self.weekNumbers && self.weekNumbers.firstChild)
+    //   self.weekNumbers.textContent = "";
 
     if (isRangeMode) {
       // const dateLimits = self.config.enable.length || self.config.disable.length || self.config.mixDate || self.config.maxDate;
-      self.minRangeDate = new Date(
-        self.currentYear,
-        self.currentMonth - 1,
-        dayNumber
-      );
+      self.minRangeDate = new Date(year, month - 1, dayNumber);
       self.maxRangeDate = new Date(
-        self.currentYear,
-        self.currentMonth + 1,
+        year,
+        month + 1,
         (42 - firstOfMonth) % daysInMonth
       );
     }
@@ -855,7 +843,7 @@ function FlatpickrInstance(
       days.appendChild(
         createDay(
           "prevMonthDay",
-          new Date(self.currentYear, self.currentMonth - 1, dayNumber),
+          new Date(year, month - 1, dayNumber),
           dayNumber,
           dayIndex
         )
@@ -865,12 +853,7 @@ function FlatpickrInstance(
     // Start at 1 since there is no 0th day
     for (dayNumber = 1; dayNumber <= daysInMonth; dayNumber++, dayIndex++) {
       days.appendChild(
-        createDay(
-          "",
-          new Date(self.currentYear, self.currentMonth, dayNumber),
-          dayNumber,
-          dayIndex
-        )
+        createDay("", new Date(year, month, dayNumber), dayNumber, dayIndex)
       );
     }
 
@@ -883,11 +866,7 @@ function FlatpickrInstance(
       days.appendChild(
         createDay(
           "nextMonthDay",
-          new Date(
-            self.currentYear,
-            self.currentMonth + 1,
-            dayNum % daysInMonth
-          ),
+          new Date(year, month + 1, dayNum % daysInMonth),
           dayNum,
           dayIndex
         )
@@ -903,12 +882,25 @@ function FlatpickrInstance(
       self._hideNextMonthArrow =
         self._hideNextMonthArrow ||
         (!!self.maxRangeDate &&
-          self.maxRangeDate <
-            new Date(self.currentYear, self.currentMonth + 1, 1));
+          self.maxRangeDate < new Date(year, month + 1, 1));
     } else updateNavigationCurrentMonth();
 
     const dayContainer = createElement<HTMLDivElement>("div", "dayContainer");
     dayContainer.appendChild(days);
+
+    return dayContainer;
+  }
+
+  function buildDays(delta?: number) {
+    if (self.daysContainer === undefined) {
+      return;
+    }
+
+    const dayContainers: HTMLDivElement[] = Array.apply(null, {
+      length: self.config.showMonths,
+    }).map((_: null, i: number) =>
+      buildMonthDays(self.currentYear, self.currentMonth + i)
+    );
 
     if (!self.config.animate || delta === undefined)
       clearNode(self.daysContainer);
@@ -917,12 +909,13 @@ function FlatpickrInstance(
         self.daysContainer.removeChild(self.daysContainer.firstChild as Node);
     }
 
-    if (delta && delta >= 0) self.daysContainer.appendChild(dayContainer);
-    else
-      self.daysContainer.insertBefore(
-        dayContainer,
-        self.daysContainer.firstChild
-      );
+    for (let i = dayContainers.length; i--; )
+      if (delta && delta >= 0) self.daysContainer.appendChild(dayContainers[i]);
+      else
+        self.daysContainer.insertBefore(
+          dayContainers[i],
+          self.daysContainer.firstChild
+        );
 
     self.days = self.daysContainer.childNodes[0] as HTMLDivElement;
   }
