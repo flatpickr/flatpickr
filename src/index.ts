@@ -1062,11 +1062,18 @@ function FlatpickrInstance(
       ];
     }
 
-    self.weekdayContainer.innerHTML = `
-    <span class=flatpickr-weekday>
-      ${weekdays.join("</span><span class=flatpickr-weekday>")}
-    </span>
-    `;
+    for (let i = self.config.showMonths; i--; ) {
+      const container = createElement<HTMLDivElement>(
+        "div",
+        "flatpickr-weekdaycontainer"
+      );
+      container.innerHTML = `
+      <span class=flatpickr-weekday>
+        ${weekdays.join("</span><span class=flatpickr-weekday>")}
+      </span>
+      `;
+      self.weekdayContainer.appendChild(container);
+    }
 
     return self.weekdayContainer;
   }
