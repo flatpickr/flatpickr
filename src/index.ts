@@ -402,19 +402,6 @@ function FlatpickrInstance(
 
       bind(self.monthNav, ["keyup", "increment"], onYearInput);
       bind(self.daysContainer, "mousedown", onClick(selectDate));
-
-      if (self.config.animate) {
-        bind(
-          self.daysContainer,
-          ["webkitAnimationEnd", "animationend"],
-          animateDays
-        );
-        bind(
-          self.monthNav,
-          ["webkitAnimationEnd", "animationend"],
-          animateMonths
-        );
-      }
     }
 
     if (
@@ -453,77 +440,6 @@ function FlatpickrInstance(
           })
         );
       }
-    }
-  }
-
-  function processPostDayAnimation() {
-    self._animationLoop.forEach(f => f());
-    self._animationLoop = [];
-  }
-
-  /**
-   * Removes the day container that slided out of view
-   * @param {Event} e the animation event
-   */
-  function animateDays(e: AnimationEvent) {
-    if (self.daysContainer && self.daysContainer.childNodes.length > 1) {
-      switch (e.animationName) {
-        case "fpSlideLeft":
-          self.daysContainer.lastChild &&
-            (self.daysContainer.lastChild as Element).classList.remove(
-              "slideLeftNew"
-            );
-          self.daysContainer.removeChild(self.daysContainer
-            .firstChild as Element);
-          self.days = self.daysContainer.firstChild as HTMLDivElement;
-          processPostDayAnimation();
-
-          break;
-
-        case "fpSlideRight":
-          self.daysContainer.firstChild &&
-            (self.daysContainer.firstChild as Element).classList.remove(
-              "slideRightNew"
-            );
-          self.daysContainer.removeChild(self.daysContainer
-            .lastChild as Element);
-          self.days = self.daysContainer.firstChild as HTMLDivElement;
-          processPostDayAnimation();
-
-          break;
-
-        default:
-          break;
-      }
-    }
-  }
-
-  /**
-   * Removes the month element that animated out of view
-   * @param {Event} e the animation event
-   */
-  function animateMonths(e: AnimationEvent) {
-    switch (e.animationName) {
-      case "fpSlideLeftNew":
-      case "fpSlideRightNew":
-        self.navigationCurrentMonth.classList.remove("slideLeftNew");
-        self.navigationCurrentMonth.classList.remove("slideRightNew");
-        const nav = self.navigationCurrentMonth;
-
-        while (
-          nav.nextSibling &&
-          /curr/.test((nav.nextSibling as Element).className)
-        )
-          self.monthNav.removeChild(nav.nextSibling);
-
-        while (
-          nav.previousSibling &&
-          /curr/.test((nav.previousSibling as Element).className)
-        )
-          self.monthNav.removeChild(nav.previousSibling);
-
-        self.oldCurMonth = undefined;
-        break;
     }
   }
 
@@ -794,21 +710,15 @@ function FlatpickrInstance(
 
     if (targetNode === undefined && offset !== 0) {
       if (offset > 0) {
-        self.changeMonth(1, true, undefined, true);
+        self.changeMonth(1, true, true);
         newIndex = newIndex % 42;
       } else if (offset < 0) {
-        self.changeMonth(-1, true, undefined, true);
+        self.changeMonth(-1, true, true);
         newIndex += 42;
       }
-
-      return afterDayAnim(focus);
     }
 
     focus();
-  }
-
-  function afterDayAnim<F extends Function>(fn: F) {
-    self.config.animate === true ? self._animationLoop.push(fn) : fn();
   }
 
   function buildMonthDays(year: number, month: number): HTMLDivElement {
@@ -1153,12 +1063,7 @@ function FlatpickrInstance(
     };
   }
 
-  function changeMonth(
-    value: number,
-    is_offset = true,
-    animate = self.config.animate,
-    from_keyboard = false
-  ) {
+  function changeMonth(value: number, is_offset = true, from_keyboard = false) {
     const delta = is_offset ? value : value - self.currentMonth;
 
     if (
@@ -1176,67 +1081,10 @@ function FlatpickrInstance(
       triggerEvent("onYearChange");
     }
 
-    buildDays(animate ? delta : undefined);
+    buildDays();
 
-    if (!animate) {
-      triggerEvent("onMonthChange");
-      return updateNavigationCurrentMonth();
-    }
-
-    // remove possible remnants from clicking too fast
-    const nav = self.navigationCurrentMonth;
-    if (delta < 0) {
-      while (
-        nav.nextSibling &&
-        /curr/.test((nav.nextSibling as HTMLElement).className)
-      )
-        self.monthNav.removeChild(nav.nextSibling);
-    } else if (delta > 0) {
-      while (
-        nav.previousSibling &&
-        /curr/.test((nav.previousSibling as HTMLElement).className)
-      )
-        self.monthNav.removeChild(nav.previousSibling);
-    }
-
-    self.oldCurMonth = self.navigationCurrentMonth;
-
-    self.navigationCurrentMonth = self.monthNav.insertBefore(
-      self.oldCurMonth.cloneNode(true),
-      delta > 0 ? self.oldCurMonth.nextSibling : self.oldCurMonth
-    ) as HTMLDivElement;
-
-    const daysContainer = self.daysContainer as HTMLDivElement;
-    if (daysContainer.firstChild && daysContainer.lastChild) {
-      if (delta > 0) {
-        (daysContainer.firstChild as Element).classList.add("slideLeft");
-        (daysContainer.lastChild as Element).classList.add("slideLeftNew");
-
-        self.oldCurMonth.classList.add("slideLeft");
-        self.navigationCurrentMonth.classList.add("slideLeftNew");
-      } else if (delta < 0) {
-        (daysContainer.firstChild as Element).classList.add("slideRightNew");
-        (daysContainer.lastChild as Element).classList.add("slideRight");
-
-        self.oldCurMonth.classList.add("slideRight");
-        self.navigationCurrentMonth.classList.add("slideRightNew");
-      }
-    }
-
-    self.currentMonthElement = self.navigationCurrentMonth
-      .firstChild as HTMLInputElement;
-    self.currentYearElement = (self.navigationCurrentMonth.lastChild as Node)
-      .childNodes[0] as HTMLInputElement;
-
+    triggerEvent("onMonthChange");
     updateNavigationCurrentMonth();
-    if (self.oldCurMonth.firstChild)
-      self.oldCurMonth.firstChild.textContent = monthToStr(
-        self.currentMonth - delta,
-        self.config.shorthandCurrentMonth,
-        self.l10n
-      );
-
-    afterDayAnim(() => triggerEvent("onMonthChange"));
 
     if (
       from_keyboard &&
@@ -1244,9 +1092,7 @@ function FlatpickrInstance(
       (document.activeElement as DayElement).$i
     ) {
       const index = (document.activeElement as DayElement).$i;
-      afterDayAnim(() => {
-        focusOnDay(index, 0);
-      });
+      focusOnDay(index, 0);
     }
   }
 
@@ -2113,10 +1959,7 @@ function FlatpickrInstance(
 
     // maintain focus
     if (!shouldChangeMonth) focusOnDay(target.$i, 0);
-    else
-      afterDayAnim(
-        () => self.selectedDateElem && self.selectedDateElem.focus()
-      );
+    else self.selectedDateElem && self.selectedDateElem.focus();
 
     if (self.hourElement !== undefined)
       setTimeout(
@@ -2520,7 +2363,7 @@ function FlatpickrInstance(
       if (isYear) {
         changeYear(self.currentYear + delta);
         (e.target as HTMLInputElement).value = self.currentYear.toString();
-      } else self.changeMonth(delta, true, false);
+      } else self.changeMonth(delta, true);
     }
   }
 
