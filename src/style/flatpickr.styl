@@ -189,66 +189,70 @@
     position relative
     display inline-block
 
-.flatpickr-month
-    if $noCalendarBorder is defined
-        border-radius 5px 5px 0 0
-    background $monthBackground
-    color $monthForeground
-    fill $monthForeground
-    height $monthNavHeight
-    line-height 1
-    text-align center
-    position relative
-    user-select none
-    overflow hidden
+.flatpickr-months
+    display flex
 
-.flatpickr-prev-month, .flatpickr-next-month
-    text-decoration none
-    cursor pointer
-    position absolute
-    top 0px
-    line-height 16px
-    height $monthNavHeight
-    padding 10px calc(3.57% - 1.5px)
-    z-index 3
-
-    i
+    .flatpickr-month
+        if $noCalendarBorder is defined
+            border-radius 5px 5px 0 0
+        background $monthBackground
+        color $monthForeground
+        fill $monthForeground
+        height $monthNavHeight
+        line-height 1
+        text-align center
         position relative
+        user-select none
+        overflow hidden
+        flex 1
 
-    &.flatpickr-prev-month
-        /*!
-        /*rtl:begin:ignore*//*
-        */
-        left 0
-        /*!
-        /*rtl:end:ignore*//*
-        */
+    .flatpickr-prev-month, .flatpickr-next-month
+        text-decoration none
+        cursor pointer
+        position absolute
+        top 0px
+        line-height 16px
+        height $monthNavHeight
+        padding 10px
+        z-index 3
+
+        i
+            position relative
+
+        &.flatpickr-prev-month
+            /*!
+            /*rtl:begin:ignore*//*
+            */
+            left 0
+            /*!
+            /*rtl:end:ignore*//*
+            */
 
 
-    &.flatpickr-next-month
-        /*!
-        /*rtl:begin:ignore*//*
-        */
-        right 0
-        /*!
-        /*rtl:end:ignore*//*
-        */
+        &.flatpickr-next-month
+            /*!
+            /*rtl:begin:ignore*//*
+            */
+            right 0
+            /*!
+            /*rtl:end:ignore*//*
+            */
 
-    &:hover
-        color $todayColor
+        &:hover
+            color $todayColor
+            svg
+                if $arrow_hover_color is defined
+                    fill $arrow_hover_color
+
+                else
+                    fill $todayColor
+
         svg
-            if $arrow_hover_color is defined
-                fill $arrow_hover_color
+            width 14px
 
-            else
-                fill $todayColor
-
-    svg
-        width 14px
-
-        path
-            transition fill 0.1s
-            fill inherit
+            path
+                transition fill 0.1s
+                fill inherit
 
 
 .numInputWrapper
@@ -408,6 +412,8 @@
 
     .flatpickr-weekdaycontainer
         flex 1
+
+
 
 span.flatpickr-weekday
     cursor default
