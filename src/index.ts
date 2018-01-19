@@ -772,31 +772,21 @@ function FlatpickrInstance(
     return dayContainer;
   }
 
-  function buildDays(delta?: number) {
+  function buildDays() {
     if (self.daysContainer === undefined) {
       return;
     }
 
-    const dayContainers: HTMLDivElement[] = Array.apply(null, {
-      length: self.config.showMonths,
-    }).map((_: null, i: number) =>
-      buildMonthDays(self.currentYear, self.currentMonth + i)
-    );
+    clearNode(self.daysContainer);
 
-    if (!self.config.animate || delta === undefined)
-      clearNode(self.daysContainer);
-    else {
-      while (self.daysContainer.childNodes.length > 1)
-        self.daysContainer.removeChild(self.daysContainer.firstChild as Node);
+    for (let i = 0; i < self.config.showMonths; i++) {
+      const d = new Date(self.currentYear, self.currentMonth, 1);
+      d.setMonth(self.currentMonth + i);
+
+      self.daysContainer.appendChild(
+        buildMonthDays(d.getFullYear(), d.getMonth())
+      );
     }
-
-    for (let i = dayContainers.length; i--; )
-      if (delta && delta >= 0) self.daysContainer.appendChild(dayContainers[i]);
-      else
-        self.daysContainer.insertBefore(
-          dayContainers[i],
-          self.daysContainer.firstChild
-        );
 
     self.days = self.daysContainer.childNodes[0] as HTMLDivElement;
   }
@@ -2292,13 +2282,13 @@ function FlatpickrInstance(
     if (self.config.noCalendar || self.isMobile || !self.monthNav) return;
 
     self.yearElements.forEach((yearElement, i) => {
+      const d = new Date(self.currentYear, self.currentMonth, 1);
+      d.setMonth(self.currentMonth + i);
+
       self.monthElements[i].textContent =
-        monthToStr(
-          self.currentMonth + i,
-          self.config.shorthandCurrentMonth,
-          self.l10n
-        ) + " ";
-      yearElement.value = self.currentYear.toString();
+        monthToStr(d.getMonth(), self.config.shorthandCurrentMonth, self.l10n) +
+        " ";
+      yearElement.value = d.getFullYear().toString();
     });
 
     self._hidePrevMonthArrow =
