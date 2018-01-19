@@ -1052,6 +1052,21 @@ function FlatpickrInstance(
         "flatpickr-weekdays"
       );
 
+    for (let i = self.config.showMonths; i--; ) {
+      const container = createElement<HTMLDivElement>(
+        "div",
+        "flatpickr-weekdaycontainer"
+      );
+
+      self.weekdayContainer.appendChild(container);
+    }
+
+    updateWeekdays();
+
+    return self.weekdayContainer;
+  }
+
+  function updateWeekdays() {
     const firstDayOfWeek = self.l10n.firstDayOfWeek;
     let weekdays = [...self.l10n.weekdays.shorthand];
 
@@ -1063,19 +1078,12 @@ function FlatpickrInstance(
     }
 
     for (let i = self.config.showMonths; i--; ) {
-      const container = createElement<HTMLDivElement>(
-        "div",
-        "flatpickr-weekdaycontainer"
-      );
-      container.innerHTML = `
+      self.weekdayContainer.children[i].innerHTML = `
       <span class=flatpickr-weekday>
         ${weekdays.join("</span><span class=flatpickr-weekday>")}
       </span>
       `;
-      self.weekdayContainer.appendChild(container);
     }
-
-    return self.weekdayContainer;
   }
 
   /* istanbul ignore next */
@@ -1283,14 +1291,8 @@ function FlatpickrInstance(
   function changeYear(newYear: number) {
     if (
       !newYear ||
-      (self.currentYearElement.getAttribute("data-min") &&
-        newYear <
-          parseInt(self.currentYearElement.getAttribute(
-            "data-min"
-          ) as string)) ||
-      (self.currentYearElement.getAttribute("data-max") &&
-        newYear >
-          parseInt(self.currentYearElement.getAttribute("data-max") as string))
+      (self.config.minDate && newYear < self.config.minDate.getFullYear()) ||
+      (self.config.minDate && newYear > self.config.minDate.getFullYear())
     )
       return;
 
@@ -1892,7 +1894,7 @@ function FlatpickrInstance(
   function redraw() {
     if (self.config.noCalendar || self.isMobile) return;
 
-    buildWeekdays();
+    updateWeekdays();
     updateNavigationCurrentMonth();
     buildDays();
   }
