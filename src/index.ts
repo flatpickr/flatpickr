@@ -113,6 +113,15 @@ function FlatpickrInstance(
     self.showTimeInput =
       self.selectedDates.length > 0 || self.config.noCalendar;
 
+    if (self.daysContainer !== undefined) {
+      const daysWidth =
+        (self.calendarContainer.clientWidth + 1) * self.config.showMonths +
+        "px";
+
+      self.daysContainer.style.width = daysWidth;
+      self.calendarContainer.style.width = daysWidth;
+    }
+
     if (self.weekWrapper !== undefined && self.daysContainer !== undefined) {
       self.calendarContainer.style.width =
         self.daysContainer.offsetWidth + self.weekWrapper.offsetWidth + "px";
@@ -722,7 +731,6 @@ function FlatpickrInstance(
   }
 
   function buildMonthDays(year: number, month: number): HTMLDivElement {
-    console.trace();
     const firstOfMonth =
         (new Date(year, month, 1).getDay() - self.l10n.firstDayOfWeek + 7) % 7,
       isRangeMode = self.config.mode === "range";
@@ -735,6 +743,7 @@ function FlatpickrInstance(
     let dayNumber = prevMonthDays + 1 - firstOfMonth,
       dayIndex = 0;
 
+    // TODO: week numbers
     // if (self.weekNumbers && self.weekNumbers.firstChild)
     //   self.weekNumbers.textContent = "";
 
@@ -830,9 +839,56 @@ function FlatpickrInstance(
     self.days = self.daysContainer.childNodes[0] as HTMLDivElement;
   }
 
-  function buildMonthNav() {
+  function buildMonth() {
+    const container = createElement("div", "flatpickr-month");
     const monthNavFragment = window.document.createDocumentFragment();
-    self.monthNav = createElement<HTMLDivElement>("div", "flatpickr-month");
+
+    const monthElement = createElement<HTMLSpanElement>("span", "cur-month");
+    monthElement.title = self.l10n.scrollTitle;
+
+    const yearInput = createNumberInput("cur-year", { tabindex: "-1" });
+
+    const yearElement = yearInput.childNodes[0] as HTMLInputElement;
+    yearElement.title = self.l10n.scrollTitle;
+
+    if (self.config.minDate)
+      yearElement.setAttribute(
+        "data-min",
+        self.config.minDate.getFullYear().toString()
+      );
+
+    if (self.config.maxDate) {
+      yearElement.setAttribute(
+        "data-max",
+        self.config.maxDate.getFullYear().toString()
+      );
+
+      yearElement.disabled =
+        !!self.config.minDate &&
+        self.config.minDate.getFullYear() === self.config.maxDate.getFullYear();
+    }
+
+    const currentMonth = createElement<HTMLDivElement>(
+      "div",
+      "flatpickr-current-month"
+    );
+    currentMonth.appendChild(monthElement);
+    currentMonth.appendChild(yearInput);
+
+    monthNavFragment.appendChild(currentMonth);
+    container.appendChild(monthNavFragment);
+
+    return {
+      container,
+      yearElement,
+      monthElement,
+    };
+  }
+
+  function buildMonthNav() {
+    self.monthNav = createElement<HTMLDivElement>("div", "flatpickr-months");
+    self.yearElements = [];
+    self.monthElements = [];
 
     self.prevMonthNav = createElement<HTMLSpanElement>(
       "span",
@@ -840,48 +896,19 @@ function FlatpickrInstance(
     );
     self.prevMonthNav.innerHTML = self.config.prevArrow;
 
-    self.currentMonthElement = createElement<HTMLSpanElement>(
-      "span",
-      "cur-month"
-    );
-    self.currentMonthElement.title = self.l10n.scrollTitle;
-
-    const yearInput = createNumberInput("cur-year", { tabindex: "-1" });
-
-    self.currentYearElement = yearInput.childNodes[0] as HTMLInputElement;
-    self.currentYearElement.title = self.l10n.scrollTitle;
-
-    if (self.config.minDate)
-      self.currentYearElement.setAttribute(
-        "data-min",
-        self.config.minDate.getFullYear().toString()
-      );
-
-    if (self.config.maxDate) {
-      self.currentYearElement.setAttribute(
-        "data-max",
-        self.config.maxDate.getFullYear().toString()
-      );
-
-      self.currentYearElement.disabled =
-        !!self.config.minDate &&
-        self.config.minDate.getFullYear() === self.config.maxDate.getFullYear();
-    }
-
     self.nextMonthNav = createElement("span", "flatpickr-next-month");
     self.nextMonthNav.innerHTML = self.config.nextArrow;
 
-    self.navigationCurrentMonth = createElement<HTMLDivElement>(
-      "div",
-      "flatpickr-current-month"
-    );
-    self.navigationCurrentMonth.appendChild(self.currentMonthElement);
-    self.navigationCurrentMonth.appendChild(yearInput);
+    self.monthNav.appendChild(self.prevMonthNav);
 
-    monthNavFragment.appendChild(self.prevMonthNav);
-    monthNavFragment.appendChild(self.navigationCurrentMonth);
-    monthNavFragment.appendChild(self.nextMonthNav);
-    self.monthNav.appendChild(monthNavFragment);
+    for (let m = self.config.showMonths; m--; ) {
+      const month = buildMonth();
+      self.yearElements.push(month.yearElement);
+      self.monthElements.push(month.monthElement);
+      self.monthNav.appendChild(month.container);
+    }
+
+    self.monthNav.appendChild(self.nextMonthNav);
 
     Object.defineProperty(self, "_hidePrevMonthArrow", {
       get: () => self.__hidePrevMonthArrow,
@@ -1412,7 +1439,7 @@ function FlatpickrInstance(
               const delta = e.keyCode === 39 ? 1 : -1;
 
               if (!e.ctrlKey) focusOnDay((e.target as DayElement).$i, delta);
-              else changeMonth(delta, true, undefined, true);
+              else changeMonth(delta, true, true);
             }
           } else if (self.hourElement) self.hourElement.focus();
 
@@ -2298,13 +2325,15 @@ function FlatpickrInstance(
   function updateNavigationCurrentMonth() {
     if (self.config.noCalendar || self.isMobile || !self.monthNav) return;
 
-    self.currentMonthElement.textContent =
-      monthToStr(
-        self.currentMonth,
-        self.config.shorthandCurrentMonth,
-        self.l10n
-      ) + " ";
-    self.currentYearElement.value = self.currentYear.toString();
+    self.yearElements.forEach((yearElement, i) => {
+      self.monthElements[i].textContent =
+        monthToStr(
+          self.currentMonth + i,
+          self.config.shorthandCurrentMonth,
+          self.l10n
+        ) + " ";
+      yearElement.value = self.currentYear.toString();
+    });
 
     self._hidePrevMonthArrow =
       self.config.minDate !== undefined &&

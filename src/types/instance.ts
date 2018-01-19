@@ -25,11 +25,17 @@ export interface Elements {
   weekWrapper?: HTMLDivElement;
   weekNumbers?: HTMLDivElement;
 
-  oldCurMonth?: HTMLSpanElement;
-  navigationCurrentMonth: HTMLSpanElement;
+  // month nav
   monthNav: HTMLDivElement;
+
+  yearElements: HTMLInputElement[];
+  monthElements: HTMLSpanElement[];
+
+  // month nav getters
   currentYearElement: HTMLInputElement;
   currentMonthElement: HTMLSpanElement;
+
+  // month nav arrows
   _hidePrevMonthArrow: boolean;
   _hideNextMonthArrow: boolean;
   prevMonthNav: HTMLElement;
