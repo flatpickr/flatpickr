@@ -83,6 +83,11 @@ Each character in the table below can be used in `dateFormat` and `altFormat` op
 <td>A full numeric representation of a year, 4 digits</td>
 <td>1999 or 2003</td>
 </tr>
+<tr>
+<td>Z</td>
+<td>ISO Date format</td>
+<td>2017-03-04T01:23:43.000Z</td>
+</tr>
 </tbody>
 </table>
 
@@ -129,3 +134,13 @@ Each character in the table below can be used in `dateFormat` and `altFormat` op
 </tr>
 </tbody>
 </table>
+
+## Escaping Formatting Tokens
+
+You may escape formatting tokens using `\\`.
+
+```js
+{
+    dateFormat: "Y-m-d\\Z", // Displays: 2017-01-22Z
+}
+```
