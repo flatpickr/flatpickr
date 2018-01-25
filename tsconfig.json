@@ -20,7 +20,6 @@
     "baseUrl": "src"
   },
   "include": [
-    "./src",
-    "./dist"
+    "./src"
   ]
 }
