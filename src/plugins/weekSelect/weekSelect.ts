@@ -71,8 +71,8 @@ function weekSelectPlugin() {
       onParseConfig: function() {
         fp.config.mode = "single";
         fp.config.enableTime = false;
-        fp.config.dateFormat = "\\W\\e\\e\\k #W, Y";
-        fp.config.altFormat = "\\W\\e\\e\\k #W, Y";
+        fp.config.dateFormat = (fp.config.dateFormat ? fp.config.dateFormat : "\\W\\e\\e\\k #W, Y");
+        fp.config.altFormat = (fp.config.altFormat ? fp.config.altFormat : "\\W\\e\\e\\k #W, Y");
       },
       onReady: [onReady, highlightWeek],
       onDestroy,
