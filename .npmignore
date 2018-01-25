@@ -7,4 +7,3 @@
 !src/style/**/*
 dist/index.d.ts
 !index.d.ts
-!tsconfig.json

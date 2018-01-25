@@ -12,7 +12,7 @@
     "removeComments": true,
     "types": ["jquery", "jest"],
     "lib": [
-      "ES2015",
+      "es2015",
       "dom",
       "es2017.object",
       "esnext.asynciterable"
