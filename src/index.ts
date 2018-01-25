@@ -31,7 +31,6 @@ import {
 } from "./utils/dom";
 import {
   compareDates,
-  duration,
   monthToStr,
   createDateParser,
   createDateFormatter,
@@ -644,12 +643,15 @@ function FlatpickrInstance(
       if (isDateSelected(date)) {
         dayElement.classList.add("selected");
         self.selectedDateElem = dayElement;
+
         if (self.config.mode === "range") {
           toggleClass(
             dayElement,
             "startRange",
             self.selectedDates[0] &&
-              compareDates(date, self.selectedDates[0]) === 0
+              compareDates(date, self.selectedDates[0]) === 0 &&
+              date.getTime() <=
+                new Date(self.currentYear, self.currentMonth + 1, 1).getTime()
           );
 
           toggleClass(
@@ -658,6 +660,9 @@ function FlatpickrInstance(
             self.selectedDates[1] &&
               compareDates(date, self.selectedDates[1]) === 0
           );
+
+          if (isDateSelected(date) && className === "nextMonthDay")
+            dayElement.classList.add("inRange");
         }
       }
     } else {
