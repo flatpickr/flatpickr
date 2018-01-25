@@ -20,6 +20,11 @@ function confirmDatePlugin(pluginConfig: Config) {
   let confirmContainer: HTMLDivElement;
 
   return function(fp: Instance) {
+    if (fp.calendarContainer === undefined) {
+      // disable on mobile
+      return {};
+    }
+
     const hooks = {
       onKeyDown(_: Date[], __: string, ___: Instance, e: KeyboardEvent) {
         if (fp.config.enableTime && e.key === "Tab" && e.target === fp.amPM) {
@@ -30,8 +35,6 @@ function confirmDatePlugin(pluginConfig: Config) {
       },
 
       onReady() {
-        if (fp.calendarContainer === undefined) return;
-
         confirmContainer = fp._createElement<HTMLDivElement>(
           "div",
           `flatpickr-confirm ${config.showAlways ? "visible" : ""} ${
@@ -46,7 +49,7 @@ function confirmDatePlugin(pluginConfig: Config) {
         confirmContainer.addEventListener("click", fp.close);
         fp.calendarContainer.appendChild(confirmContainer);
       },
-      ...!config.showAlways
+      ...(!config.showAlways
         ? {
             onChange: function(_: Date, dateStr: string) {
               const showCondition =
@@ -56,7 +59,7 @@ function confirmDatePlugin(pluginConfig: Config) {
               confirmContainer.classList.remove("visible");
             },
           }
-        : {},
+        : {}),
     };
 
     return hooks;
