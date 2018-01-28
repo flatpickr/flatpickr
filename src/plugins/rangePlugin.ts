@@ -12,6 +12,16 @@ declare global {
 
 function rangePlugin(config: Config = {}) {
   return function(fp: Instance) {
+    if (!fp.config.disableMobile) {
+      fp.config.errorHandler(
+        new Error(
+          "WARNING! rangePlugin will not work on mobile devices unless " +
+            "flatpickr's disableMobile option is enabled. For more details, see " +
+            "https://chmln.github.io/flatpickr/mobile-support/."
+        )
+      );
+    }
+
     let dateFormat = "",
       secondInput: HTMLInputElement,
       _firstInputFocused: boolean,
