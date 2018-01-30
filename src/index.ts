@@ -369,14 +369,10 @@ function FlatpickrInstance(
     const debouncedResize = debounce(onResize, 50);
     self._debouncedChange = debounce(triggerChange, DEBOUNCED_CHANGE_MS);
 
-    if (
-      self.config.mode === "range" &&
-      self.daysContainer &&
-      !/iPhone|iPad|iPod/i.test(navigator.userAgent)
-    )
-      bind(self.daysContainer, "mouseover", (e: MouseEvent) =>
-        onMouseOver(e.target as DayElement)
-      );
+    if (self.daysContainer && !/iPhone|iPad|iPod/i.test(navigator.userAgent))
+      bind(self.daysContainer, "mouseover", (e: MouseEvent) => {
+        if (self.config.mode === "range") onMouseOver(e.target as DayElement);
+      });
 
     bind(window.document.body, "keydown", onKeyDown);
 
