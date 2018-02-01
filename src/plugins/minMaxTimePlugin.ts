@@ -5,6 +5,8 @@ import {
   createDateFormatter,
 } from "../utils/dates";
 
+import { Plugin } from "../types/options";
+
 export interface MinMaxTime {
   minTime?: string;
   maxTime?: string;
@@ -22,7 +24,7 @@ export interface State {
   defaults: MinMaxTime;
 }
 
-function minMaxTimePlugin(config: Config = {}) {
+function minMaxTimePlugin(config: Config = {}): Plugin {
   const state: State = {
     formatDate: createDateFormatter({}),
     tableDateFormat: config.tableDateFormat || "Y-m-d",
@@ -40,7 +42,7 @@ function minMaxTimePlugin(config: Config = {}) {
     return config.getTimeLimits && config.getTimeLimits(date);
   }
 
-  return function(fp: Instance) {
+  return function(fp) {
     return {
       onReady(this: Instance) {
         state.formatDate = this.formatDate;

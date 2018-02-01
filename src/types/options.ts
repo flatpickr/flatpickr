@@ -30,7 +30,7 @@ export type HookKey =
   | "onYearChange"
   | "onPreCalendarPosition";
 
-export type Plugin = (fp: Instance) => Options;
+export type Plugin<E = {}> = (fp: Instance & E) => Options;
 
 export interface Options {
   /*

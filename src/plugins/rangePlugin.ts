@@ -1,4 +1,4 @@
-import { Instance } from "../types/instance";
+import { Plugin } from "../types/options";
 
 export interface Config {
   input?: string | HTMLInputElement;
@@ -10,8 +10,8 @@ declare global {
   }
 }
 
-function rangePlugin(config: Config = {}) {
-  return function(fp: Instance) {
+function rangePlugin(config: Config = {}): Plugin {
+  return function(fp) {
     let dateFormat = "",
       secondInput: HTMLInputElement,
       _firstInputFocused: boolean,

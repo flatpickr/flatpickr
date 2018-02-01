@@ -1,4 +1,5 @@
 import { Instance } from "../../types/instance";
+import { Plugin } from "../../types/options";
 
 export interface Config {
   confirmIcon?: string;
@@ -15,7 +16,7 @@ const defaultConfig: Config = {
   theme: "light",
 };
 
-function confirmDatePlugin(pluginConfig: Config) {
+function confirmDatePlugin(pluginConfig: Config): Plugin {
   const config = { ...defaultConfig, ...pluginConfig };
   let confirmContainer: HTMLDivElement;
 
