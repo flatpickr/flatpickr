@@ -14,14 +14,7 @@ import {
 import { Locale, CustomLocale, key as LocaleKey } from "./types/locale";
 import English from "./l10n/default";
 
-import {
-  arrayify,
-  debounce,
-  int,
-  mouseDelta,
-  pad,
-  IncrementEvent,
-} from "./utils";
+import { arrayify, debounce, int, pad, IncrementEvent } from "./utils";
 import {
   clearNode,
   createElement,
@@ -142,9 +135,7 @@ function FlatpickrInstance(
   /**
    * The handler for all events targeting the time inputs
    */
-  function updateTime(
-    e: MouseEvent | WheelEvent | IncrementEvent | KeyboardEvent
-  ) {
+  function updateTime(e: MouseEvent | IncrementEvent | KeyboardEvent) {
     if (self.config.noCalendar && self.selectedDates.length === 0) {
       // picking time only
       self.setDate(
@@ -397,7 +388,6 @@ function FlatpickrInstance(
     }
 
     if (self.daysContainer !== undefined) {
-      bind(self.monthNav, "wheel", onMonthNavScroll);
       bind(self.monthNav, "mousedown", onClick(onMonthNavClick));
 
       bind(self.monthNav, ["keyup", "increment"], onYearInput);
@@ -424,15 +414,12 @@ function FlatpickrInstance(
     ) {
       const selText = (e: FocusEvent) =>
         (e.target as HTMLInputElement).select();
-      bind(self.timeContainer, ["wheel", "input", "increment"], updateTime);
+      bind(self.timeContainer, ["input", "increment"], updateTime);
       bind(self.timeContainer, "mousedown", onClick(timeIncrement));
 
-      bind(
-        self.timeContainer,
-        ["wheel", "input", "increment"],
-        self._debouncedChange,
-        { passive: true }
-      );
+      bind(self.timeContainer, ["input", "increment"], self._debouncedChange, {
+        passive: true,
+      });
 
       bind([self.hourElement, self.minuteElement], ["focus", "click"], selText);
 
@@ -941,12 +928,10 @@ function FlatpickrInstance(
       "span",
       "cur-month"
     );
-    self.currentMonthElement.title = self.l10n.scrollTitle;
 
     const yearInput = createNumberInput("cur-year", { tabindex: "-1" });
 
     self.currentYearElement = yearInput.childNodes[0] as HTMLInputElement;
-    self.currentYearElement.title = self.l10n.scrollTitle;
 
     if (self.config.minDate)
       self.currentYearElement.setAttribute(
@@ -1054,8 +1039,6 @@ function FlatpickrInstance(
 
     self.minuteElement.setAttribute("data-min", "0");
     self.minuteElement.setAttribute("data-max", "59");
-
-    self.hourElement.title = self.minuteElement.title = self.l10n.scrollTitle;
 
     self.timeContainer.appendChild(hourInput);
     self.timeContainer.appendChild(separator);
@@ -2515,22 +2498,6 @@ function FlatpickrInstance(
     if (triggerChange !== false) triggerEvent("onValueUpdate");
   }
 
-  function onMonthNavScroll(e: MouseWheelEvent) {
-    e.preventDefault();
-    const isYear =
-      self.currentYearElement.parentNode &&
-      self.currentYearElement.parentNode.contains(e.target as Node);
-
-    if (e.target === self.currentMonthElement || isYear) {
-      const delta = mouseDelta(e);
-
-      if (isYear) {
-        changeYear(self.currentYear + delta);
-        (e.target as HTMLInputElement).value = self.currentYear.toString();
-      } else self.changeMonth(delta, true, false);
-    }
-  }
-
   function onMonthNavClick(e: MouseEvent) {
     const isPrevMonth = self.prevMonthNav.contains(e.target as Node);
     const isNextMonth = self.nextMonthNav.contains(e.target as Node);
@@ -2545,9 +2512,7 @@ function FlatpickrInstance(
       self.changeYear(self.currentYear - 1);
   }
 
-  function timeWrapper(
-    e: MouseEvent | WheelEvent | KeyboardEvent | IncrementEvent
-  ): void {
+  function timeWrapper(e: MouseEvent | KeyboardEvent | IncrementEvent): void {
     e.preventDefault();
 
     const isKeyDown = e.type === "keydown",
@@ -2564,15 +2529,7 @@ function FlatpickrInstance(
       curValue = parseInt(input.value, 10),
       delta =
         (e as IncrementEvent).delta ||
-        (isKeyDown
-          ? e.which === 38 ? 1 : -1
-          : Math.max(
-              -1,
-              Math.min(
-                1,
-                (e as WheelEvent).wheelDelta || -(e as WheelEvent).deltaY
-              )
-            ) || 0);
+        (isKeyDown ? (e.which === 38 ? 1 : -1) : 0);
 
     let newValue = curValue + step * delta;
 
