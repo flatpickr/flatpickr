@@ -17,15 +17,21 @@ export interface FormatterArgs {
 export const createDateFormatter = ({
   config = defaults,
   l10n = english,
-}: FormatterArgs) => (dateObj: Date, frmt: string): string => {
+}: FormatterArgs) => (
+  dateObj: Date,
+  frmt: string,
+  overrideLocale?: Locale
+): string => {
   if (config.formatDate !== undefined) return config.formatDate(dateObj, frmt);
+
+  const locale = overrideLocale || l10n;
 
   return frmt
     .split("")
     .map(
       (c, i, arr) =>
         formats[c as token] && arr[i - 1] !== "\\"
-          ? formats[c as token](dateObj, l10n, config)
+          ? formats[c as token](dateObj, locale, config)
           : c !== "\\" ? c : ""
     )
     .join("");
