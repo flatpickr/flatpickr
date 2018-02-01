@@ -48,7 +48,6 @@ function FlatpickrInstance(
   } as Instance;
   self.parseDate = createDateParser({ config: self.config, l10n: self.l10n });
 
-  self._animationLoop = [];
   self._handlers = [];
   self._bind = bind;
   self._setHoursFromDate = setHoursFromDate;
@@ -693,10 +692,10 @@ function FlatpickrInstance(
 
     if (targetNode === undefined && offset !== 0) {
       if (offset > 0) {
-        self.changeMonth(1, true, undefined, true);
+        self.changeMonth(1, true, true);
         newIndex = newIndex % 42;
       } else if (offset < 0) {
-        self.changeMonth(-1, true, undefined, true);
+        self.changeMonth(-1, true, true);
         newIndex += 42;
       }
     }
