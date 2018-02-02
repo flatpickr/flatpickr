@@ -1844,7 +1844,11 @@ function FlatpickrInstance(
   function focusAndClose() {
     self._input.focus();
 
-    if (window.navigator.userAgent.indexOf("MSIE") === -1) self.close();
+    const isIE11 =
+      !!window.MSInputMethodContext && !!window.document.documentMode;
+
+    if (window.navigator.userAgent.indexOf("MSIE") === -1 && !isIE11)
+      self.close();
     else setTimeout(self.close, 0); // hack - bugs in IE focus handling keeps the calendar open
   }
 
