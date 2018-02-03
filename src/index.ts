@@ -1844,8 +1844,15 @@ function FlatpickrInstance(
   function focusAndClose() {
     self._input.focus();
 
-    if (window.navigator.userAgent.indexOf("MSIE") === -1) self.close();
-    else setTimeout(self.close, 0); // hack - bugs in IE focus handling keeps the calendar open
+    if (
+      window.navigator.userAgent.indexOf("MSIE") !== -1 ||
+      navigator.msMaxTouchPoints !== undefined
+    ) {
+      // hack - bugs in the way IE handles focus keeps the calendar open
+      setTimeout(self.close, 0);
+    } else {
+      self.close();
+    }
   }
 
   function selectDate(e: MouseEvent | KeyboardEvent) {
