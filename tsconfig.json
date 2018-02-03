@@ -20,6 +20,8 @@
     "baseUrl": "src"
   },
   "include": [
-    "./src"
+    "./src",
+    "build.ts",
+    "custom.d.ts"
   ]
 }

@@ -152,20 +152,24 @@ async function transpileStyle(src: string, compress = false) {
 }
 
 async function buildStyle() {
-  const [src, src_ie] = await Promise.all([
-    readFileAsync(paths.style),
-    readFileAsync("./src/style/ie.styl"),
-  ]);
+  try {
+    const [src, src_ie] = await Promise.all([
+      readFileAsync(paths.style),
+      readFileAsync("./src/style/ie.styl"),
+    ]);
 
-  const [style, min, ie] = await Promise.all([
-    transpileStyle(src),
-    transpileStyle(src, true),
-    transpileStyle(src_ie),
-  ]);
+    const [style, min, ie] = await Promise.all([
+      transpileStyle(src),
+      transpileStyle(src, true),
+      transpileStyle(src_ie),
+    ]);
 
-  writeFileAsync("./dist/flatpickr.css", style).catch(logErr);
-  writeFileAsync("./dist/flatpickr.min.css", min).catch(logErr);
-  writeFileAsync("./dist/ie.css", ie).catch(logErr);
+    writeFileAsync("./dist/flatpickr.css", style);
+    writeFileAsync("./dist/flatpickr.min.css", min);
+    writeFileAsync("./dist/ie.css", ie);
+  } catch (e) {
+    logErr(e);
+  }
 }
 
 const themeRegex = /themes\/(.+).styl/;
@@ -196,6 +200,7 @@ function watch<F extends () => void>(path: string, cb: F) {
       awaitWriteFinish: {
         stabilityThreshold: 100,
       },
+      usePolling: true,
     })
     .on("change", cb)
     .on("error", logErr);
@@ -209,9 +214,12 @@ function start() {
     !proc.killed && proc.kill();
   }
 
-  proc.stdout.on("data", data => {
+  function log(data: string) {
     process.stdout.write(`rollup: ${data}`);
-  });
+  }
+
+  proc.stdout.on("data", log);
+  proc.stderr.on("data", log);
 
   proc.stdout.on("readable", () => {
     buildScripts();
