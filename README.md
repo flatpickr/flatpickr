@@ -1,5 +1,5 @@
 ## flatpickr - javascript datetime picker
-[![Build Status](https://travis-ci.org/chmln/flatpickr.svg?branch=master)](https://travis-ci.org/chmln/flatpickr)
+[![Build Status](https://circleci.com/gh/chmln/flatpickr/tree/master.svg?style=svg)](https://circleci.com/gh/chmln/flatpickr/tree/master)
 
 [![Coverage](https://coveralls.io/repos/github/chmln/flatpickr/badge.svg?branch=master)](https://coveralls.io/github/chmln/flatpickr)
 [![npm version](https://badge.fury.io/js/flatpickr.svg)](https://www.npmjs.com/package/flatpickr)
