@@ -27,6 +27,11 @@ declare global {
 
   interface Window {
     flatpickr: FlatpickrFn;
+    MSInputMethodContext?: any;
+  }
+
+  interface Document {
+    documentMode?: any;
   }
 
   interface Date {
