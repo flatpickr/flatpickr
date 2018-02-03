@@ -1,4 +1,4 @@
-import { key, CustomLocale } from "types/locale";
+import { key, CustomLocale } from "../types/locale";
 
 import { Arabic as ar } from "./ar";
 import { Bulgarian as bg } from "./bg";

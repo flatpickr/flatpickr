@@ -78,7 +78,6 @@ export type Instance = Elements &
     changeMonth: (
       value: number,
       is_offset?: boolean,
-      animate?: boolean,
       from_keyboard?: boolean
     ) => void;
     changeYear: (year: number) => void;
@@ -109,7 +108,7 @@ export type Instance = Elements &
     formatDate: (dateObj: Date, frmt: string) => string;
 
     // Internals
-    _animationLoop: Function[];
+
     _handlers: {
       event: string;
       element: Element;

@@ -36,6 +36,7 @@ const rollupConfig = {
       (rollup_typescript as any)({
         abortOnError: false,
         cacheRoot: `/tmp/.rpt2_cache`,
+        clean: true,
       }),
     ],
   },
@@ -53,21 +54,7 @@ function logErr(e: Error | string) {
 const writeFileAsync = promisify(fs.writeFile);
 
 function startRollup(dev = false) {
-  return new Promise((resolve, reject) => {
-    execCommand(
-      `npm run rollup:${dev ? "start" : "build"}`,
-      (error, stdout, stderr) => {
-        if (error) {
-          console.error(`exec error: ${error}`);
-          return reject();
-        }
-
-        console.log(stdout);
-        console.log(stderr);
-        resolve();
-      }
-    );
-  });
+  return execCommand(`npm run rollup:${dev ? "start" : "build"}`);
 }
 
 function resolveGlob(g: string) {
@@ -103,8 +90,8 @@ function uglify(src: string) {
 async function buildScripts() {
   try {
     const transpiled = await readFileAsync("./dist/flatpickr.js");
-
-    writeFileAsync("./dist/flatpickr.min.js", uglify(transpiled)).catch(logErr);
+    writeFileAsync("./dist/flatpickr.min.js", uglify(transpiled));
+    console.log("done.");
   } catch (e) {
     logErr(e);
   }
@@ -216,7 +203,19 @@ function watch<F extends () => void>(path: string, cb: F) {
 
 function start() {
   const devMode = process.argv.indexOf("--dev") > -1;
-  startRollup(devMode).then(buildScripts);
+  const proc = startRollup(devMode);
+
+  function exit() {
+    !proc.killed && proc.kill();
+  }
+
+  proc.stdout.on("data", data => {
+    process.stdout.write(`rollup: ${data}`);
+  });
+
+  proc.stdout.on("readable", () => {
+    buildScripts();
+  });
 
   if (devMode) {
     setupWatchers();
@@ -226,6 +225,16 @@ function start() {
     buildExtras("l10n")();
     buildExtras("plugins")();
   }
+
+  //do something when app is closing
+  //process.on('exit', proc.kill);
+
+  //catches ctrl+c event
+  process.on("SIGINT", exit.bind(null, "SIGKILL"));
+
+  // catches "kill pid" (for example: nodemon restart)
+  process.on("SIGUSR1", exit.bind(null, "SIGKILL"));
+  process.on("SIGUSR2", exit.bind(null, "SIGKILL"));
 }
 
 start();

@@ -1,17 +1,17 @@
 /* Macedonian locals for flatpickr */
-import { CustomLocale } from "types/locale";
-import { FlatpickrFn } from "types/instance";
+import { CustomLocale } from "../types/locale";
+import { FlatpickrFn } from "../types/instance";
 
 const fp =
   typeof window !== "undefined" && window.flatpickr !== undefined
     ? window.flatpickr
-    : {
+    : ({
         l10ns: {},
-      } as FlatpickrFn;
+      } as FlatpickrFn);
 
 export const Macedonian: CustomLocale = {
   weekdays: {
-    shorthand: ["Не", "По", "Вт", "Ср", "Че", "Пе", "Са", "Не"],
+    shorthand: ["Не", "По", "Вт", "Ср", "Че", "Пе", "Са"],
     longhand: [
       "Недела",
       "Понеделник",
@@ -20,7 +20,6 @@ export const Macedonian: CustomLocale = {
       "Четврток",
       "Петок",
       "Сабота",
-      "Недела",
     ],
   },
 

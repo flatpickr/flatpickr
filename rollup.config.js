@@ -7,17 +7,19 @@ const pkg = require("./package.json");
 
 export default {
   input: './src/index.ts',
-  name: "flatpickr",
   output: {
     file: 'dist/flatpickr.js',
+    name: "flatpickr",
     format: 'umd',
+    exports: "named",
     banner: `/* flatpickr v${pkg.version}, @license MIT */`
   },
 
   plugins: [
     typescript({
       abortOnError: false,
-      cacheRoot: `/tmp/.rpt2_cache`
+      cacheRoot: `/tmp/.rpt2_cache`,
+      clean: true
     }),
     ...process.env.ROLLUP_WATCH ? [serve({
       open: true,

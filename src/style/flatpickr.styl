@@ -274,7 +274,7 @@
         line-height 50%
         opacity 0
         cursor pointer
-        border 1px solid alpha($dayForeground, 0.05)
+        border 1px solid alpha($dayForeground, 0.15)
         box-sizing border-box
 
         &:hover
@@ -287,7 +287,7 @@
             display block
             content ""
             position absolute
-            top 33%
+            //top 33%
 
         &.arrowUp
             top 0
@@ -297,6 +297,7 @@
                 border-left 4px solid transparent
                 border-right 4px solid transparent
                 border-bottom 4px solid alpha($dayForeground, 0.6)
+                top 26%
 
         &.arrowDown
             top 50%
@@ -305,6 +306,7 @@
                 border-left 4px solid transparent
                 border-right 4px solid transparent
                 border-top 4px solid alpha($dayForeground, 0.6)
+                top 40%
 
         svg
             width inherit
@@ -385,7 +387,7 @@
         font-family inherit
         font-weight 300
         line-height inherit
-        height 28px
+        height auto
         border 0
         border-radius 0
         vertical-align initial
@@ -544,22 +546,22 @@ span.flatpickr-weekday
         border-radius 0
         box-shadow: (-2.5*$dayMargin) 0 0 $dayHoverBackground, (2.5*$dayMargin) 0 0 $dayHoverBackground
 
-    &.disabled, &.disabled:hover
-        pointer-events none
-
     &.disabled, &.disabled:hover,
     &.prevMonthDay, &.nextMonthDay,
     &.notAllowed, &.notAllowed.prevMonthDay, &.notAllowed.nextMonthDay
-        if $disabled_day_color is defined
-            color $disabled_day_color
-        else
-            color alpha($dayForeground, 0.3)
+        color alpha($dayForeground, 0.3)
         background transparent
+
         if $disabled_border_color is defined
             border-color $disabled_border_color
+
         else
             border-color transparent
         cursor default
+
+    &.disabled, &.disabled:hover
+        cursor not-allowed
+        color alpha($dayForeground, 0.1)
 
     &.week.selected
         border-radius 0
@@ -586,9 +588,14 @@ span.flatpickr-weekday
         line-height $weekdaysHeight
 
     span.flatpickr-day
-        display block
-        width 100%
-        max-width none
+        &, &:hover
+            display block
+            width 100%
+            max-width none
+            color alpha($dayForeground, 0.3)
+            background transparent
+            cursor default
+            border none
 
 
 .flatpickr-innerContainer

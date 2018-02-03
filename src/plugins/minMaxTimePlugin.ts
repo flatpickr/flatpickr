@@ -5,24 +5,26 @@ import {
   createDateFormatter,
 } from "../utils/dates";
 
-interface MinMaxTime {
+import { Plugin } from "../types/options";
+
+export interface MinMaxTime {
   minTime?: string;
   maxTime?: string;
 }
 
-interface Config {
+export interface Config {
   table?: Record<string, MinMaxTime>;
   getTimeLimits?: (date: Date) => MinMaxTime;
   tableDateFormat?: string;
 }
 
-interface State {
+export interface State {
   formatDate: (date: Date, f: string) => string;
   tableDateFormat: string;
   defaults: MinMaxTime;
 }
 
-function minMaxTimePlugin(config: Config) {
+function minMaxTimePlugin(config: Config = {}): Plugin {
   const state: State = {
     formatDate: createDateFormatter({}),
     tableDateFormat: config.tableDateFormat || "Y-m-d",
@@ -40,7 +42,7 @@ function minMaxTimePlugin(config: Config) {
     return config.getTimeLimits && config.getTimeLimits(date);
   }
 
-  return function(fp: Instance) {
+  return function(fp) {
     return {
       onReady(this: Instance) {
         state.formatDate = this.formatDate;
@@ -58,12 +60,15 @@ function minMaxTimePlugin(config: Config) {
 
         if (latest && matchingTimeLimit !== undefined) {
           this.set(matchingTimeLimit);
+
+          (fp.config.minTime as Date).setFullYear(latest.getFullYear());
+          (fp.config.maxTime as Date).setFullYear(latest.getFullYear());
           (fp.config.minTime as Date).setMonth(latest.getMonth());
           (fp.config.maxTime as Date).setMonth(latest.getMonth());
           (fp.config.minTime as Date).setDate(latest.getDate());
           (fp.config.maxTime as Date).setDate(latest.getDate());
 
-          if (compareDates(latest, fp.config.maxTime as Date, false) > 0)
+          if (compareDates(latest, fp.config.maxTime as Date, false) > 0) {
             fp.setDate(
               new Date(latest.getTime()).setHours(
                 (fp.config.maxTime as Date).getHours(),
@@ -73,7 +78,7 @@ function minMaxTimePlugin(config: Config) {
               ),
               false
             );
-          else if (compareDates(latest, fp.config.minTime as Date, false) < 0)
+          } else if (compareDates(latest, fp.config.minTime as Date, false) < 0)
             fp.setDate(
               new Date(latest.getTime()).setHours(
                 (fp.config.minTime as Date).getHours(),

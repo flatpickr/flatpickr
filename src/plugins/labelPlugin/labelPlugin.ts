@@ -1,7 +1,7 @@
-import { Instance } from "types/instance";
+import { Plugin } from "../../types/options";
 
-function labelPlugin() {
-  return function(fp: Instance) {
+function labelPlugin(): Plugin {
+  return function(fp) {
     return {
       onReady() {
         const id = fp.input.id;

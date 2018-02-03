@@ -23,9 +23,4 @@ export function debounce<F extends Function>(
 export const arrayify = <T>(obj: T | T[]): T[] =>
   obj instanceof Array ? obj : [obj];
 
-export function mouseDelta(e: MouseWheelEvent): number {
-  const delta = e.wheelDelta || -e.deltaY;
-  return delta >= 0 ? 1 : -1;
-}
-
 export type IncrementEvent = MouseEvent & { delta: number; type: "increment" };

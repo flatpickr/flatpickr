@@ -1,5 +1,5 @@
 ## flatpickr - javascript datetime picker
-[![Build Status](https://travis-ci.org/chmln/flatpickr.svg?branch=master)](https://travis-ci.org/chmln/flatpickr)
+[![Build Status](https://circleci.com/gh/chmln/flatpickr/tree/master.svg?style=svg)](https://circleci.com/gh/chmln/flatpickr/tree/master)
 
 [![Coverage](https://coveralls.io/repos/github/chmln/flatpickr/badge.svg?branch=master)](https://coveralls.io/github/chmln/flatpickr)
 [![npm version](https://badge.fury.io/js/flatpickr.svg)](https://www.npmjs.com/package/flatpickr)
@@ -35,7 +35,8 @@ Demos and documentation: https://chmln.github.io/flatpickr
 See also:
 * [React Component](https://github.com/coderhaoxin/react-flatpickr)
 * [ember-flatpickr addon](https://www.npmjs.com/package/ember-flatpickr)
-* [angular-flatpickr addon](https://www.npmjs.com/package/angular-flatpickr)
+* [angularJS-flatpickr addon](https://www.npmjs.com/package/angular-flatpickr)
+* [angular2+-flatpickr addon](https://github.com/mezoistvan/ng2-flatpickr)
 * [vue-flatpickr component](https://github.com/ankurk91/vue-flatpickr-component)
 
 ## Supporting flatpickr

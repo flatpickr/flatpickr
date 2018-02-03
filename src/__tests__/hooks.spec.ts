@@ -1,6 +1,6 @@
 import flatpickr from "index";
-import { Options } from "types/options";
-import { Instance } from "types/instance";
+import { Options } from "../types/options";
+import { Instance } from "../types/instance";
 
 flatpickr.defaultConfig.animate = false;
 

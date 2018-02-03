@@ -1,6 +1,6 @@
-import { Instance } from "types/instance";
+import { Plugin } from "../types/options";
 
-interface Config {
+export interface Config {
   input?: string | HTMLInputElement;
 }
 
@@ -10,8 +10,8 @@ declare global {
   }
 }
 
-function rangePlugin(config: Config = {}) {
-  return function(fp: Instance) {
+function rangePlugin(config: Config = {}): Plugin {
+  return function(fp) {
     let dateFormat = "",
       secondInput: HTMLInputElement,
       _firstInputFocused: boolean,
@@ -23,28 +23,29 @@ function rangePlugin(config: Config = {}) {
         secondInput =
           config.input instanceof Element
             ? config.input
-            : window.document.querySelector(config.input) as HTMLInputElement;
+            : (window.document.querySelector(config.input) as HTMLInputElement);
       } else {
         secondInput = fp._input.cloneNode() as HTMLInputElement;
         secondInput.removeAttribute("id");
         secondInput._flatpickr = undefined;
       }
 
+      if (secondInput.value) {
+        const parsedDate = fp.parseDate(secondInput.value);
+
+        if (parsedDate) fp.selectedDates.push(parsedDate);
+      }
+
       secondInput.setAttribute("data-fp-omit", "");
 
-      fp._bind(secondInput, ["focus", "click"], (e: Event) => {
+      fp._bind(secondInput, ["focus", "click"], () => {
         if (fp.selectedDates[1]) {
           fp.latestSelectedDateObj = fp.selectedDates[1];
           fp._setHoursFromDate(fp.selectedDates[1]);
           fp.jumpToDate(fp.selectedDates[1]);
         }
-        fp.open(e, secondInput);
         [_firstInputFocused, _secondInputFocused] = [false, true];
-      });
-
-      fp._bind(fp._input, "focus", () => {
-        if (fp.isOpen) fp.calendarContainer.classList.remove("open");
-        setTimeout(fp.open, 0);
+        fp.open(undefined, secondInput);
       });
 
       fp._bind(secondInput, "keydown", (e: KeyboardEvent) => {
@@ -93,8 +94,17 @@ function rangePlugin(config: Config = {}) {
             );
         });
 
-        fp.setDate(fp.selectedDates);
+        fp.setDate(fp.selectedDates, false);
         plugin.onValueUpdate(fp.selectedDates);
+      },
+
+      onPreCalendarPosition() {
+        if (_secondInputFocused) {
+          fp._positionElement = secondInput;
+          setTimeout(() => {
+            fp._positionElement = fp._input;
+          }, 0);
+        }
       },
 
       onChange() {
@@ -105,6 +115,12 @@ function rangePlugin(config: Config = {}) {
             secondInput.value = "";
             _prevDates = [];
           }, 10);
+        }
+
+        if (_secondInputFocused) {
+          setTimeout(() => {
+            secondInput.focus();
+          }, 0);
         }
       },
 
@@ -132,10 +148,9 @@ function rangePlugin(config: Config = {}) {
           _prevDates = [...newDates];
         }
 
-        [
-          fp._input.value = "",
-          secondInput.value = "",
-        ] = fp.selectedDates.map(d => fp.formatDate(d, dateFormat));
+        [fp._input.value = "", secondInput.value = ""] = fp.selectedDates.map(
+          d => fp.formatDate(d, dateFormat)
+        );
       },
     };
 

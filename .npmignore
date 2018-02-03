@@ -3,7 +3,7 @@
 !README.md
 !dist
 !dist/**/*
-!src
-!src/**/*
+!src/style
+!src/style/**/*
+dist/index.d.ts
 !index.d.ts
-!tsconfig.json

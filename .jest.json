@@ -1,9 +1,9 @@
 {
-  "bail": true,
+  "bail": false,
   "transform": {
-    "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    "^.+\\.tsx?$": "ts-jest"
   },
-  "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+  "testRegex": "(src/(__tests__|__ssr_tests__)/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
   "moduleFileExtensions": [
     "ts",
     "tsx",
@@ -11,5 +11,6 @@
     "jsx",
     "json"
   ],
-  "moduleDirectories": ["src", "node_modules"]
+  "moduleDirectories": ["src", "node_modules"],
+  "mapCoverage": true
 }
