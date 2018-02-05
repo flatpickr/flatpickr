@@ -2337,17 +2337,20 @@ function FlatpickrInstance(
   }
 
   function onMonthNavClick(e: MouseEvent) {
+    e.preventDefault();
+
     const isPrevMonth = self.prevMonthNav.contains(e.target as Node);
     const isNextMonth = self.nextMonthNav.contains(e.target as Node);
 
-    if (isPrevMonth || isNextMonth) changeMonth(isPrevMonth ? -1 : 1);
-    else if (e.target === self.currentYearElement) {
-      e.preventDefault();
+    if (isPrevMonth || isNextMonth) {
+      changeMonth(isPrevMonth ? -1 : 1);
+    } else if (e.target === self.currentYearElement) {
       self.currentYearElement.select();
-    } else if ((e.target as Element).className === "arrowUp")
+    } else if ((e.target as Element).className === "arrowUp") {
       self.changeYear(self.currentYear + 1);
-    else if ((e.target as Element).className === "arrowDown")
+    } else if ((e.target as Element).className === "arrowDown") {
       self.changeYear(self.currentYear - 1);
+    }
   }
 
   function timeWrapper(e: MouseEvent | KeyboardEvent | IncrementEvent): void {
