@@ -97,6 +97,21 @@ async function buildScripts() {
   }
 }
 
+function copyFile(source: string, target: string): Promise<any> {
+  var rd = fs.createReadStream(source);
+  var wr = fs.createWriteStream(target);
+  return new Promise(function(resolve, reject) {
+    rd.on("error", reject);
+    wr.on("error", reject);
+    wr.on("finish", resolve);
+    rd.pipe(wr);
+  }).catch(function(error) {
+    rd.destroy();
+    wr.end();
+    throw error;
+  });
+}
+
 function buildExtras(folder: "plugins" | "l10n") {
   return async function(changed_path?: string) {
     const [src_paths, css_paths] = await Promise.all([
@@ -121,11 +136,7 @@ function buildExtras(folder: "plugins" | "l10n") {
           name: customModuleNames[fileName] || fileName,
         } as any);
       }),
-      ...css_paths.map(async p => {
-        fs
-          .createReadStream(p)
-          .pipe(fs.createWriteStream(p.replace("src", "dist")));
-      }),
+      ...css_paths.map(p => copyFile(p, p.replace("src", "dist"))),
     ]);
 
     console.log("done.");
