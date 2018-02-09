@@ -2026,7 +2026,8 @@ function FlatpickrInstance(
       d => d instanceof Date && isEnabled(d, false)
     ) as Date[];
 
-    self.selectedDates.sort((a, b) => a.getTime() - b.getTime());
+    if (self.config.mode === "range")
+      self.selectedDates.sort((a, b) => a.getTime() - b.getTime());
   }
 
   function setDate(
