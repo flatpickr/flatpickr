@@ -105,8 +105,13 @@ function FlatpickrInstance(
       self.selectedDates.length > 0 || self.config.noCalendar;
 
     if (self.weekWrapper !== undefined && self.daysContainer !== undefined) {
+      self.calendarContainer.style.visibility = "hidden";
+      self.calendarContainer.style.display = "block";
       self.calendarContainer.style.width =
         self.daysContainer.offsetWidth + self.weekWrapper.offsetWidth + "px";
+
+      self.calendarContainer.style.visibility = "visible";
+      self.calendarContainer.style.display = null;
     }
 
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
