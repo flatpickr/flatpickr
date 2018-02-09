@@ -3,7 +3,6 @@
 
 [![Coverage](https://coveralls.io/repos/github/chmln/flatpickr/badge.svg?branch=master)](https://coveralls.io/github/chmln/flatpickr)
 [![npm version](https://badge.fury.io/js/flatpickr.svg)](https://www.npmjs.com/package/flatpickr)
-![Bower version](https://badge.fury.io/bo/flatpickr-calendar.svg)
 [![CDNJS](https://img.shields.io/cdnjs/v/flatpickr.svg)](https://cdnjs.com/libraries/flatpickr)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=plastic)](https://raw.githubusercontent.com/chmln/flatpickr/master/LICENSE.md)
 
