@@ -302,7 +302,7 @@ function FlatpickrInstance(
    * @param {String} event the event name
    * @param {Function} handler the event handler
    */
-  function bind<E extends Element | Window>(
+  function bind<E extends Element | Window | Document>(
     element: E | E[],
     event: string | string[],
     handler: ((e?: any) => void),
@@ -376,10 +376,10 @@ function FlatpickrInstance(
       bind(window, "resize", debouncedResize);
 
     if (window.ontouchstart !== undefined)
-      bind(window.document.body, "touchstart", documentClick);
+      bind(window.document, "touchstart", documentClick);
 
-    bind(window.document.body, "mousedown", onClick(documentClick));
-    bind(window.document.body, "focus", documentClick, { capture: true });
+    bind(window.document, "mousedown", onClick(documentClick));
+    bind(window.document, "focus", documentClick, { capture: true });
 
     if (self.config.clickOpens === true) {
       bind(self._input, "focus", self.open);
