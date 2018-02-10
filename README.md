@@ -43,7 +43,7 @@ IE9 and up, Edge, iOS Safari 6+, Chrome 8+, Firefox 6+
 
 ## Install & Use
 
-Demos and documentation: https://chmln.github.io/flatpickr
+Demos and documentation: https://flatpickr.github.io/
 
 See also:
 * [React Component](https://github.com/coderhaoxin/react-flatpickr)
