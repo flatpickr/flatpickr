@@ -227,6 +227,9 @@ function FlatpickrInstance(
       hours = Math.min(hours, maxTime.getHours());
       if (hours === maxTime.getHours())
         minutes = Math.min(minutes, maxTime.getMinutes());
+
+      if (minutes === maxTime.getMinutes())
+        seconds = Math.min(seconds, maxTime.getSeconds());
     }
 
     if (limitMinHours) {
@@ -237,6 +240,9 @@ function FlatpickrInstance(
       hours = Math.max(hours, minTime.getHours());
       if (hours === minTime.getHours())
         minutes = Math.max(minutes, minTime.getMinutes());
+
+      if (minutes === minTime.getMinutes())
+        seconds = Math.max(seconds, minTime.getSeconds());
     }
 
     setHours(hours, minutes, seconds);
@@ -545,12 +551,12 @@ function FlatpickrInstance(
       "rangeMode",
       self.config.mode === "range"
     );
-    toggleClass(self.calendarContainer, "animate", self.config.animate);
 
     self.calendarContainer.appendChild(fragment);
 
     const customAppend =
-      self.config.appendTo !== undefined && self.config.appendTo.nodeType;
+      self.config.appendTo !== undefined &&
+      self.config.appendTo.nodeType !== undefined;
 
     if (self.config.inline || self.config.static) {
       self.calendarContainer.classList.add(
@@ -1730,6 +1736,11 @@ function FlatpickrInstance(
           bindToInstance
         );
       }
+    }
+
+    if (self.config.mode === "time") {
+      self.config.noCalendar = true;
+      self.config.enableTime = true;
     }
 
     for (let i = 0; i < self.config.plugins.length; i++) {
