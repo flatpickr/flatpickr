@@ -3,7 +3,6 @@
 
 [![Coverage](https://coveralls.io/repos/github/chmln/flatpickr/badge.svg?branch=master)](https://coveralls.io/github/chmln/flatpickr)
 [![npm version](https://badge.fury.io/js/flatpickr.svg)](https://www.npmjs.com/package/flatpickr)
-![Bower version](https://badge.fury.io/bo/flatpickr-calendar.svg)
 [![CDNJS](https://img.shields.io/cdnjs/v/flatpickr.svg)](https://cdnjs.com/libraries/flatpickr)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=plastic)](https://raw.githubusercontent.com/chmln/flatpickr/master/LICENSE.md)
 
@@ -16,21 +15,35 @@
 ![dark](https://cloud.githubusercontent.com/assets/11352152/14549372/3cbc8514-028d-11e6-8daf-ec1ba01c9d7e.PNG)
 
 
-## Preamble
-Almost every large SPA or project involves date and time input. There are limited options, however, if you also prefer to keep your projects lean and consequently stay away from heavy frameworks such as [jQuery](https://jsperf.com/jquery-vs-javascript-performance-comparison/22), or even Bootstrap.
+## Motivation
+Almost every large SPA or project involves date and time input. Browser's native implementations of those are inconsistent and limited in functionality. Most other libraries require you to pull in heavy dependencies like jQuery, Bootstrap, and moment.js. I wanted something that was good-looking out of the box, dependency-free, powerful, and extensible.
 
-Appalled at the fact that I have to load 300kb of jquery and jquery UI or hook up bootstrap just to use a calendar, I created this \[date\]\[time\]picker that's powerful, easy to use, and looks good out of the box.
+Feature overview:
 
-Written in vanilla javascript, works with anything, anywhere.
+- Dependency-free (no bloated bundles)
+- Simple, polished UX
+- Date + time input
+- Range selections
+- Ability to select multiple dates
+- Can be used as just a time picker
+- Display dates in a human-friendly format
+- Easily disable specific dates, date ranges, or any date using arbitrary logic
+- Week numbers
+- 50 locales
+- 8 colorful themes (incl. dark and material)
+- Numerous plugins
+- Libraries available for React, Angular, Vue, Ember, and more
 
-![wew](https://cloud.githubusercontent.com/assets/11352152/14397836/d02d2f7c-fdad-11e5-9658-bedfb997ff52.png)
+![](https://user-images.githubusercontent.com/11352152/36033089-f37dc1d0-0d7d-11e8-8ec4-c7a56d1ff92e.png)
+
+flatpickr provides more functionality at a fraction of the size of other libraries.
 
 ## Compatibility
-IE9+, iOS Safari 6+, MS Edge, Chrome 8+, Firefox 6+
+IE9 and up, Edge, iOS Safari 6+, Chrome 8+, Firefox 6+
 
 ## Install & Use
 
-Demos and documentation: https://chmln.github.io/flatpickr
+Demos and documentation: https://flatpickr.github.io/
 
 See also:
 * [React Component](https://github.com/coderhaoxin/react-flatpickr)
