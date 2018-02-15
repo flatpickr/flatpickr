@@ -2363,9 +2363,9 @@ function FlatpickrInstance(
       changeMonth(isPrevMonth ? -1 : 1);
     } else if (e.target === self.currentYearElement) {
       self.currentYearElement.select();
-    } else if ((e.target as Element).className === "arrowUp") {
+    } else if ((e.target as Element).classList.contains("arrowUp")) {
       self.changeYear(self.currentYear + 1);
-    } else if ((e.target as Element).className === "arrowDown") {
+    } else if ((e.target as Element).classList.contains("arrowDown")) {
       self.changeYear(self.currentYear - 1);
     }
   }
