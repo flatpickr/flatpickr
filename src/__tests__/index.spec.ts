@@ -426,51 +426,6 @@ describe("flatpickr", () => {
       expect(fp.currentMonth).toEqual(3);
     });
 
-    it("monthScroll", () => {
-      createInstance();
-      fp.changeMonth(1, false);
-
-      fp.open();
-      simulate("wheel", fp.currentMonthElement, {
-        wheelDelta: 1,
-      });
-
-      jest.runAllTimers();
-      expect(fp.currentMonth).toEqual(2);
-    });
-
-    it("monthScroll: 0 < abs(delta) < 1", () => {
-      createInstance();
-      fp.changeMonth(1, false);
-
-      fp.open();
-      simulate("wheel", fp.currentMonthElement, {
-        deltaY: -0.3,
-      });
-
-      jest.runAllTimers();
-      expect(fp.currentMonth).toEqual(2);
-    });
-
-    it("yearScroll", () => {
-      createInstance();
-      const now = new Date();
-      fp.setDate(now);
-
-      fp.open();
-      simulate(
-        "wheel",
-        fp.currentYearElement,
-        {
-          wheelDelta: 1,
-        },
-        MouseEvent
-      );
-
-      jest.runAllTimers();
-      expect(fp.currentYear).toEqual(now.getFullYear() + 1);
-    });
-
     it("destroy()", () => {
       let fired = false;
       const input = fp.input;
@@ -973,14 +928,9 @@ describe("flatpickr", () => {
       simulate("mousedown", fp.amPM, { which: 1 }, MouseEvent);
       expect(fp.amPM.textContent).toEqual("PM");
 
-      simulate(
-        "wheel",
-        fp.hourElement,
-        {
-          wheelDelta: 1,
-        },
-        MouseEvent
-      );
+      simulate("increment", fp.hourElement, {
+        delta: 1,
+      });
 
       expect(fp.hourElement.value).toEqual("12");
 
@@ -1116,14 +1066,9 @@ describe("flatpickr", () => {
         minDate: "23:59",
       });
 
-      simulate(
-        "wheel",
-        fp.minuteElement as Node,
-        {
-          wheelDelta: 1,
-        },
-        MouseEvent
-      );
+      simulate("increment", fp.minuteElement as Node, {
+        delta: 1,
+      });
 
       expect(fp.input.value.length).toBeGreaterThan(0);
     });

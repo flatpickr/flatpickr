@@ -58,6 +58,8 @@ export const Italian: CustomLocale = {
 
   ordinal: () => "°",
 
+  rangeSeparator: " al ",
+
   weekAbbreviation: "Se",
 
   scrollTitle: "Scrolla per aumentare",

@@ -114,7 +114,7 @@ export type Instance = Elements &
     formatDate: (dateObj: Date, frmt: string) => string;
 
     // Internals
-    _animationLoop: Function[];
+
     _handlers: {
       event: string;
       element: Element;

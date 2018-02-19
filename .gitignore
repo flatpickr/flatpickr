@@ -1,6 +1,5 @@
 *.log
-/node_modules/
+node_modules
 index.html
 coverage
 dist
-dist.tar

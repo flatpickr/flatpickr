@@ -1,4 +1,5 @@
 import { Instance } from "../../types/instance";
+import { Plugin } from "../../types/options";
 
 export interface Config {
   confirmIcon?: string;
@@ -15,12 +16,13 @@ const defaultConfig: Config = {
   theme: "light",
 };
 
-function confirmDatePlugin(pluginConfig: Config) {
+function confirmDatePlugin(pluginConfig: Config): Plugin {
   const config = { ...defaultConfig, ...pluginConfig };
   let confirmContainer: HTMLDivElement;
 
   return function(fp: Instance) {
-    const hooks = {
+    if (fp.config.noCalendar || fp.isMobile) return {};
+    return {
       onKeyDown(_: Date[], __: string, ___: Instance, e: KeyboardEvent) {
         if (fp.config.enableTime && e.key === "Tab" && e.target === fp.amPM) {
           e.preventDefault();
@@ -30,8 +32,6 @@ function confirmDatePlugin(pluginConfig: Config) {
       },
 
       onReady() {
-        if (fp.calendarContainer === undefined) return;
-
         confirmContainer = fp._createElement<HTMLDivElement>(
           "div",
           `flatpickr-confirm ${config.showAlways ? "visible" : ""} ${
@@ -46,9 +46,9 @@ function confirmDatePlugin(pluginConfig: Config) {
         confirmContainer.addEventListener("click", fp.close);
         fp.calendarContainer.appendChild(confirmContainer);
       },
-      ...!config.showAlways
+      ...(!config.showAlways
         ? {
-            onChange: function(_: Date, dateStr: string) {
+            onChange: function(_: Date[], dateStr: string) {
               const showCondition =
                 fp.config.enableTime || fp.config.mode === "multiple";
               if (dateStr && !fp.config.inline && showCondition)
@@ -56,10 +56,8 @@ function confirmDatePlugin(pluginConfig: Config) {
               confirmContainer.classList.remove("visible");
             },
           }
-        : {},
+        : {}),
     };
-
-    return hooks;
   };
 }
 
