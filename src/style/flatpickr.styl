@@ -107,9 +107,17 @@
         &.open
             z-index 999
             display block
-    // &.multiMonth
-    //     .prevMonthDay, .nextMonthDay
-    //         visibility hidden
+    &.multiMonth
+        .prevMonthDay, .nextMonthDay
+            visibility hidden
+
+        .flatpickr-days .dayContainer:nth-child(n+1)
+            & .flatpickr-day.inRange:nth-child(7n+7)
+                box-shadow: none !important;
+
+        .flatpickr-days .dayContainer:nth-child(n+2)
+            & .flatpickr-day.inRange:nth-child(7n+1)
+                box-shadow: -2px 0 0 #e6e6e6, 5px 0 0 #e6e6e6
 
     &.hasWeeks
         width auto
