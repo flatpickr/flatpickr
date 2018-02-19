@@ -349,7 +349,7 @@ export const defaults: ParsedOptions = {
   prevArrow:
     "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M5.207 8.471l7.146 7.147-0.707 0.707-7.853-7.854 7.854-7.853 0.707 0.707-7.147 7.146z' /></svg>",
   shorthandCurrentMonth: false,
-  showMonths: 2,
+  showMonths: 1,
   static: false,
   time_24hr: false,
   weekNumbers: false,
