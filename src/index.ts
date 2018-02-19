@@ -24,12 +24,11 @@ import {
 import {
   compareDates,
   duration,
-  monthToStr,
   createDateParser,
   createDateFormatter,
 } from "./utils/dates";
 
-import { tokenRegex } from "./utils/formatting";
+import { tokenRegex, monthToStr } from "./utils/formatting";
 
 import "./utils/polyfills";
 
@@ -1452,6 +1451,7 @@ function FlatpickrInstance(
 
       switch (e.key) {
         case self.l10n.amPM[0].charAt(0):
+        case self.l10n.amPM[0].charAt(0).toLowerCase():
           if (self.amPM !== undefined && e.target === self.amPM) {
             self.amPM.textContent = self.l10n.amPM[0];
             setHoursFromInputs();
@@ -1460,6 +1460,7 @@ function FlatpickrInstance(
           break;
 
         case self.l10n.amPM[1].charAt(0):
+        case self.l10n.amPM[1].charAt(0).toLowerCase():
           if (self.amPM !== undefined && e.target === self.amPM) {
             self.amPM.textContent = self.l10n.amPM[1];
             setHoursFromInputs();
