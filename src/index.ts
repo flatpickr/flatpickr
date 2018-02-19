@@ -1908,7 +1908,7 @@ function FlatpickrInstance(
       if (selectedIndex) self.selectedDates.splice(parseInt(selectedIndex), 1);
       else self.selectedDates.push(selectedDate);
     } else if (self.config.mode === "range") {
-      if (self.selectedDates.length === 2) self.clear();
+      if (self.selectedDates.length === 2) self.clear(false);
 
       self.selectedDates.push(selectedDate);
 
@@ -1951,7 +1951,8 @@ function FlatpickrInstance(
     }
 
     // maintain focus
-    if (!shouldChangeMonth) focusOnDay(target.$i, 0);
+    if (!shouldChangeMonth && self.config.mode !== "range")
+      focusOnDay(target.$i, 0);
     else self.selectedDateElem && self.selectedDateElem.focus();
 
     if (self.hourElement !== undefined)
