@@ -25,6 +25,7 @@ import {
   compareDates,
   createDateParser,
   createDateFormatter,
+  duration,
 } from "./utils/dates";
 
 import { tokenRegex, monthToStr } from "./utils/formatting";
@@ -642,20 +643,17 @@ function FlatpickrInstance(
             dayElement,
             "startRange",
             self.selectedDates[0] &&
-              compareDates(date, self.selectedDates[0]) === 0 &&
-              date.getTime() <=
-                new Date(self.currentYear, self.currentMonth + 1, 1).getTime()
+              compareDates(date, self.selectedDates[0], true) === 0
           );
 
           toggleClass(
             dayElement,
             "endRange",
             self.selectedDates[1] &&
-              compareDates(date, self.selectedDates[1]) === 0
+              compareDates(date, self.selectedDates[1], true) === 0
           );
 
-          if (isDateSelected(date) && className === "nextMonthDay")
-            dayElement.classList.add("inRange");
+          if (className === "nextMonthDay") dayElement.classList.add("inRange");
         }
       }
     } else {
@@ -749,7 +747,8 @@ function FlatpickrInstance(
     // append days from the next month
     for (
       let dayNum = daysInMonth + 1;
-      dayNum <= 42 - firstOfMonth;
+      dayNum <= 42 - firstOfMonth &&
+      (self.config.showMonths === 1 || dayIndex % 7 !== 0);
       dayNum++, dayIndex++
     ) {
       days.appendChild(
@@ -1497,18 +1496,18 @@ function FlatpickrInstance(
       ),
       containsDisabled = false;
 
-    // for (let t = rangeStartDate; t < rangeEndDate; t += duration.DAY) {
-    //   if (!isEnabled(new Date(t))) {
-    //     containsDisabled = true;
-    //     break;
-    //   }
-    // }
+    for (let t = rangeStartDate; t < rangeEndDate; t += duration.DAY) {
+      if (!isEnabled(new Date(t))) {
+        containsDisabled = true;
+        break;
+      }
+    }
 
     for (let m = 0; m < self.config.showMonths; m++) {
       const month = (<HTMLDivElement>self.daysContainer).children[m];
       const prevMonth = (<HTMLDivElement>self.daysContainer).children[m - 1];
 
-      for (let i = 0; i < 42; i++) {
+      for (let i = 0, l = month.children.length; i < l; i++) {
         const date = (month.children[i] as DayElement).dateObj;
 
         const timestamp = date.getTime();
@@ -1535,7 +1534,6 @@ function FlatpickrInstance(
           hoverDate < self.selectedDates[0] ? "startRange" : "endRange"
         );
 
-        //console.log([minRangeDate, timestamp, maxRangeDate].map(x => new Date(x)))
         if (
           month.contains(elem) ||
           !(
