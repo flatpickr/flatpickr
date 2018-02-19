@@ -1388,7 +1388,10 @@ function FlatpickrInstance(
 
         case 8:
         case 46:
-          if (isInput && !self.config.allowInput) self.clear();
+          if (isInput && !self.config.allowInput) {
+            e.preventDefault();
+            self.clear();
+          }
           break;
 
         case 37:
