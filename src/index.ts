@@ -305,7 +305,7 @@ function FlatpickrInstance(
       parseInt((event.target as HTMLInputElement).value) + (event.delta || 0);
 
     if (year.toString().length === 4 || event.key === "Enter") {
-      self.currentYearElement.blur();
+      (event.target as HTMLInputElement).blur();
       if (!/[^\d]/.test(year.toString())) changeYear(year);
     }
   }
@@ -401,7 +401,7 @@ function FlatpickrInstance(
     }
 
     if (self.daysContainer !== undefined) {
-      bind(self.monthNav, "mousedown", onClick(onMonthNavClick));
+      bind(self.monthNav, "click", onMonthNavClick);
 
       bind(self.monthNav, ["keyup", "increment"], onYearInput);
       bind(self.daysContainer, "mousedown", onClick(selectDate));
@@ -875,6 +875,8 @@ function FlatpickrInstance(
         self.__hideNextMonthArrow = bool;
       },
     });
+
+    self.currentYearElement = self.yearElements[0];
 
     updateNavigationCurrentMonth();
 
@@ -1479,7 +1481,7 @@ function FlatpickrInstance(
     )
       return;
 
-    let hoverDate = elem.dateObj,
+    const hoverDate = elem.dateObj,
       initialDate = self.parseDate(
         self.selectedDates[0],
         undefined,
@@ -1492,27 +1494,43 @@ function FlatpickrInstance(
       rangeEndDate = Math.max(
         hoverDate.getTime(),
         self.selectedDates[0].getTime()
-      ),
-      containsDisabled = false;
+      );
 
-    for (let t = rangeStartDate; t < rangeEndDate; t += duration.DAY) {
+    const  months: HTMLCollection = (self.daysContainer as HTMLDivElement).children,
+      firstDay = (months[0].children[0] as DayElement).dateObj.getTime(),
+      lastDay = (months[months.length - 1].lastChild as DayElement).dateObj.getTime();
+
+    let containsDisabled = false;
+
+    let minRange = 0, maxRange = 0;
+    //console.log(((<HTMLDivElement>self.daysContainer).children[0].children[0] as DayElement).dateObj.getTime())
+
+    for (let t = firstDay; t < lastDay; t += duration.DAY) {
       if (!isEnabled(new Date(t))) {
-        containsDisabled = true;
-        break;
+        containsDisabled = containsDisabled || (t > rangeStartDate && t < rangeEndDate);
+
+        if (t < initialDate.getTime() && (!minRange || t < minRange))
+          minRange = t;
+        else if (t > initialDate.getTime() && (!maxRange || t < maxRange))
+          maxRange = t;
       }
     }
+
+
 
     for (let m = 0; m < self.config.showMonths; m++) {
       const month = (<HTMLDivElement>self.daysContainer).children[m];
       const prevMonth = (<HTMLDivElement>self.daysContainer).children[m - 1];
 
+
       for (let i = 0, l = month.children.length; i < l; i++) {
-        const date = (month.children[i] as DayElement).dateObj;
+        const dayElem = month.children[i] as DayElement,
+          date = dayElem.dateObj;
 
         const timestamp = date.getTime();
 
-        const outOfRange = false,
-          dayElem = month.children[i] as DayElement;
+
+        const outOfRange = (minRange > 0 && timestamp < minRange) || (maxRange > 0 && timestamp > maxRange);
 
         if (outOfRange) {
           dayElem.classList.add("notAllowed");
@@ -1525,9 +1543,6 @@ function FlatpickrInstance(
         ["startRange", "inRange", "endRange", "notAllowed"].forEach(c => {
           dayElem.classList.remove(c);
         });
-
-        const minRangeDate = rangeStartDate,
-          maxRangeDate = rangeEndDate;
 
         elem.classList.add(
           hoverDate < self.selectedDates[0] ? "startRange" : "endRange"
@@ -1549,7 +1564,7 @@ function FlatpickrInstance(
           )
             dayElem.classList.add("endRange");
 
-          if (timestamp >= minRangeDate && timestamp <= maxRangeDate)
+          if (timestamp >= minRange && (maxRange === 0 || timestamp <= maxRange))
             dayElem.classList.add("inRange");
         }
       }
@@ -2355,8 +2370,8 @@ function FlatpickrInstance(
 
     if (isPrevMonth || isNextMonth) {
       changeMonth(isPrevMonth ? -1 : 1);
-    } else if (e.target === self.currentYearElement) {
-      self.currentYearElement.select();
+    } else if (self.yearElements.indexOf(e.target as HTMLInputElement) > -1) {
+      (e.target as HTMLInputElement).select();
     } else if ((e.target as Element).classList.contains("arrowUp")) {
       self.changeYear(self.currentYear + 1);
     } else if ((e.target as Element).classList.contains("arrowDown")) {
