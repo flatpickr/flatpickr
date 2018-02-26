@@ -26,6 +26,7 @@ import {
   createDateParser,
   createDateFormatter,
   duration,
+  isBetween,
 } from "./utils/dates";
 
 import { tokenRegex, monthToStr } from "./utils/formatting";
@@ -1481,47 +1482,40 @@ function FlatpickrInstance(
     )
       return;
 
-    const hoverDate = elem.dateObj,
-      initialDate = self.parseDate(
+    const hoverDate = elem.dateObj.getTime(),
+      initialDate = (self.parseDate(
         self.selectedDates[0],
         undefined,
         true
-      ) as Date,
-      rangeStartDate = Math.min(
-        hoverDate.getTime(),
-        self.selectedDates[0].getTime()
-      ),
-      rangeEndDate = Math.max(
-        hoverDate.getTime(),
-        self.selectedDates[0].getTime()
-      );
+      ) as Date).getTime(),
+      rangeStartDate = Math.min(hoverDate, self.selectedDates[0].getTime()),
+      rangeEndDate = Math.max(hoverDate, self.selectedDates[0].getTime());
 
-    const  months: HTMLCollection = (self.daysContainer as HTMLDivElement).children,
+    const months: HTMLCollection = (self.daysContainer as HTMLDivElement)
+        .children,
       firstDay = (months[0].children[0] as DayElement).dateObj.getTime(),
-      lastDay = (months[months.length - 1].lastChild as DayElement).dateObj.getTime();
+      lastDay = (months[months.length - 1]
+        .lastChild as DayElement).dateObj.getTime();
 
     let containsDisabled = false;
 
-    let minRange = 0, maxRange = 0;
+    let minRange = 0,
+      maxRange = 0;
     //console.log(((<HTMLDivElement>self.daysContainer).children[0].children[0] as DayElement).dateObj.getTime())
 
     for (let t = firstDay; t < lastDay; t += duration.DAY) {
       if (!isEnabled(new Date(t))) {
-        containsDisabled = containsDisabled || (t > rangeStartDate && t < rangeEndDate);
+        containsDisabled =
+          containsDisabled || (t > rangeStartDate && t < rangeEndDate);
 
-        if (t < initialDate.getTime() && (!minRange || t < minRange))
-          minRange = t;
-        else if (t > initialDate.getTime() && (!maxRange || t < maxRange))
-          maxRange = t;
+        if (t < initialDate && (!minRange || t < minRange)) minRange = t;
+        else if (t > initialDate && (!maxRange || t < maxRange)) maxRange = t;
       }
     }
-
-
 
     for (let m = 0; m < self.config.showMonths; m++) {
       const month = (<HTMLDivElement>self.daysContainer).children[m];
       const prevMonth = (<HTMLDivElement>self.daysContainer).children[m - 1];
-
 
       for (let i = 0, l = month.children.length; i < l; i++) {
         const dayElem = month.children[i] as DayElement,
@@ -1529,8 +1523,9 @@ function FlatpickrInstance(
 
         const timestamp = date.getTime();
 
-
-        const outOfRange = (minRange > 0 && timestamp < minRange) || (maxRange > 0 && timestamp > maxRange);
+        const outOfRange =
+          (minRange > 0 && timestamp < minRange) ||
+          (maxRange > 0 && timestamp > maxRange);
 
         if (outOfRange) {
           dayElem.classList.add("notAllowed");
@@ -1545,7 +1540,9 @@ function FlatpickrInstance(
         });
 
         elem.classList.add(
-          hoverDate < self.selectedDates[0] ? "startRange" : "endRange"
+          hoverDate < self.selectedDates[0].getTime()
+            ? "startRange"
+            : "endRange"
         );
 
         if (
@@ -1556,15 +1553,16 @@ function FlatpickrInstance(
             (<DayElement>prevMonth.lastChild).dateObj.getTime() >= timestamp
           )
         ) {
-          if (initialDate < hoverDate && timestamp === initialDate.getTime())
+          if (initialDate < hoverDate && timestamp === initialDate)
             dayElem.classList.add("startRange");
-          else if (
-            initialDate > hoverDate &&
-            timestamp === initialDate.getTime()
-          )
+          else if (initialDate > hoverDate && timestamp === initialDate)
             dayElem.classList.add("endRange");
 
-          if (timestamp >= minRange && (maxRange === 0 || timestamp <= maxRange))
+          if (
+            timestamp >= minRange &&
+            (maxRange === 0 || timestamp <= maxRange) &&
+            isBetween(timestamp, initialDate, hoverDate)
+          )
             dayElem.classList.add("inRange");
         }
       }

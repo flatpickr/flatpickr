@@ -164,6 +164,10 @@ export const getWeek = (givenDate: Date) => {
   );
 };
 
+export const isBetween = (ts: number, ts1: number, ts2: number) => {
+  return ts > Math.min(ts1, ts2) && ts < Math.max(ts1, ts2);
+};
+
 export const duration = {
   DAY: 86400000,
 };
