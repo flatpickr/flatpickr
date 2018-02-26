@@ -52,7 +52,7 @@ function incrementTime(
   if (e !== undefined && e.parentNode)
     for (let i = times; i--; )
       simulate(
-        "mousedown",
+       type === "currentYearElement" ? "click" : "mousedown",
         e.parentNode.childNodes[childNodeNum],
         { which: 1 },
         MouseEvent
@@ -889,14 +889,14 @@ describe("flatpickr", () => {
 
     it("year input", () => {
       createInstance();
-      fp.currentYearElement.value = "2000";
-      simulate("keyup", fp.currentYearElement);
+      fp.yearElements[0].value = "2000";
+      simulate("keyup", fp.yearElements[0]);
 
       expect(fp.currentYear).toEqual(2000);
       incrementTime("currentYearElement", 1);
 
       expect(fp.currentYear).toEqual(2001);
-      expect(fp.currentYearElement.value).toEqual("2001");
+      expect(fp.yearElements[0].value).toEqual("2001");
       expect(
         (fp.days.childNodes[10] as DayElement).dateObj.getFullYear()
       ).toEqual(2001);
@@ -1260,14 +1260,14 @@ describe("flatpickr", () => {
       expect(isArrowVisible("prevMonthNav")).toBe(false);
       expect(isArrowVisible("nextMonthNav")).toBe(true);
 
-      simulate("mousedown", fp.days.childNodes[10], { which: 1 }, MouseEvent); // select some date
+      simulate("click", fp.days.childNodes[10], { which: 1 }, MouseEvent); // select some date
       jest.runOnlyPendingTimers();
-      simulate("mousedown", fp.nextMonthNav, { which: 1 }, MouseEvent);
+      simulate("click", fp.nextMonthNav, { which: 1 }, MouseEvent);
 
       expect(isArrowVisible("prevMonthNav")).toBe(true);
       expect(isArrowVisible("nextMonthNav")).toBe(true);
 
-      simulate("mousedown", fp.nextMonthNav, { which: 1 }, MouseEvent);
+      simulate("click", fp.nextMonthNav, { which: 1 }, MouseEvent);
       expect(isArrowVisible("prevMonthNav")).toBe(true);
       expect(isArrowVisible("nextMonthNav")).toBe(false);
     });
