@@ -220,6 +220,7 @@
 
     svg
       width 14px
+      height 14px
 
       path
         transition fill 0.1s
@@ -247,7 +248,7 @@
     line-height 50%
     opacity 0
     cursor pointer
-    border 1px solid alpha($dayForeground, 0.05)
+    border 1px solid alpha($dayForeground, 0.15)
     box-sizing border-box
 
     &:hover
@@ -260,7 +261,6 @@
       display block
       content ""
       position absolute
-      top 33%
 
     &.arrowUp
       top 0
@@ -270,6 +270,7 @@
         border-left 4px solid transparent
         border-right 4px solid transparent
         border-bottom 4px solid alpha($dayForeground, 0.6)
+        top 26%
 
     &.arrowDown
       top 50%
@@ -278,6 +279,7 @@
         border-left 4px solid transparent
         border-right 4px solid transparent
         border-top 4px solid alpha($dayForeground, 0.6)
+        top 40%
 
     svg
       width inherit
@@ -342,7 +344,7 @@
     font-family inherit
     font-weight 300
     line-height inherit
-    height initial
+    height auto
     border 0
     border-radius 0
     vertical-align initial
