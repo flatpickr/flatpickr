@@ -1,5 +1,5 @@
-import flatpickr from "index";
-import { Russian } from "l10n/ru";
+import flatpickr from "../index";
+import { Russian } from "../l10n/ru";
 import { Instance, DayElement } from "../types/instance";
 import { Options, DateRangeLimit } from "../types/options";
 
@@ -52,7 +52,7 @@ function incrementTime(
   if (e !== undefined && e.parentNode)
     for (let i = times; i--; )
       simulate(
-       type === "currentYearElement" ? "click" : "mousedown",
+        type === "currentYearElement" ? "click" : "mousedown",
         e.parentNode.childNodes[childNodeNum],
         { which: 1 },
         MouseEvent
@@ -1220,10 +1220,11 @@ describe("flatpickr", () => {
 
       simulate("mouseover", fp.days.childNodes[32]);
       expect(day(21).classList.contains("startRange")).toEqual(true);
-      expect(day(32).classList.contains("endRange")).toEqual(true);
 
-      for (let i = 22; i < 32; i++)
-        expect(day(i).classList.contains("inRange")).toEqual(true);
+      for (let i = 0; i < 42; i++)
+        expect(day(i).classList.contains("inRange")).toEqual(i > 21 && i < 32);
+
+      expect(day(32).classList.contains("endRange")).toEqual(true);
 
       fp.clear();
       fp.set("disable", ["2016-1-12", "2016-1-20"]);
