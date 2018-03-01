@@ -1,4 +1,4 @@
-import flatpickr from "index";
+import flatpickr from "../index";
 
 describe("flatpickr SSR", () => {
   it("can be imported", () => {

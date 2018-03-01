@@ -6,7 +6,7 @@
     "build": "run-s build:pre build:build build:post",
     "build:pre": "mkdir -p dist/themes",
     "build:build": "ts-node build.ts",
-    "build:post": "rm -f dist/index.d.ts",
+    "build:post": "cp src/index.d.ts dist/index.d.ts",
     "start": "npm run build:build -- --dev",
     "rollup:start": "rollup -w -c",
     "rollup:build": "rollup -c",

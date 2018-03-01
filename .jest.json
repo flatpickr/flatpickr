@@ -11,6 +11,5 @@
     "jsx",
     "json"
   ],
-  "moduleDirectories": ["src", "node_modules"],
-  "mapCoverage": true
+  "moduleDirectories": ["src", "node_modules"]
 }
