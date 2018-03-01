@@ -105,19 +105,20 @@ function FlatpickrInstance(
       self.selectedDates.length > 0 || self.config.noCalendar;
 
     if (self.daysContainer !== undefined) {
+      self.calendarContainer.style.visibility = "hidden";
+      self.calendarContainer.style.display = "block";
+
       const daysWidth =
         (self.calendarContainer.clientWidth + 1) * self.config.showMonths +
         "px";
 
       self.daysContainer.style.width = daysWidth;
       self.calendarContainer.style.width = daysWidth;
-    }
 
-    if (self.weekWrapper !== undefined && self.daysContainer !== undefined) {
-      self.calendarContainer.style.visibility = "hidden";
-      self.calendarContainer.style.display = "block";
-      self.calendarContainer.style.width =
-        self.daysContainer.offsetWidth + self.weekWrapper.offsetWidth + "px";
+      if (self.weekWrapper !== undefined) {
+        self.calendarContainer.style.width =
+          daysWidth + self.weekWrapper.offsetWidth + "px";
+      }
 
       self.calendarContainer.style.visibility = "visible";
       self.calendarContainer.style.display = null;
