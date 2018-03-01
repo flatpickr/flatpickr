@@ -546,6 +546,12 @@ function FlatpickrInstance(
 
     toggleClass(
       self.calendarContainer,
+      "animate",
+      self.config.animate === true
+    );
+
+    toggleClass(
+      self.calendarContainer,
       "multiMonth",
       self.config.showMonths > 1
     );
