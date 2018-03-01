@@ -64,6 +64,7 @@ export const english: Locale = {
   scrollTitle: "Scroll to increment",
   toggleTitle: "Click to toggle",
   amPM: ["AM", "PM"],
+  yearAriaLabel: "Year",
 };
 
 export default english;

@@ -789,6 +789,7 @@ function FlatpickrInstance(
 
     const yearElement = yearInput.childNodes[0] as HTMLInputElement;
     yearElement.title = self.l10n.scrollTitle;
+    yearElement.setAttribute("aria-label", self.l10n.yearAriaLabel);
 
     if (self.config.minDate)
       yearElement.setAttribute(
