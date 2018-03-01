@@ -1052,6 +1052,7 @@ describe("flatpickr", () => {
       });
 
       expect(fp.selectedDates.length).toEqual(0);
+      fp.open();
       incrementTime("minuteElement", 1);
 
       expect(fp.selectedDates.length).toEqual(1);
@@ -1065,6 +1066,8 @@ describe("flatpickr", () => {
         dateFormat: "H:i",
         minDate: "23:59",
       });
+
+      fp.open();
 
       simulate("increment", fp.minuteElement as Node, {
         delta: 1,
@@ -1080,6 +1083,8 @@ describe("flatpickr", () => {
         dateFormat: "H:i",
         minDate: "02:30",
       });
+
+      fp.open();
 
       incrementTime("hourElement", -1);
       expect(fp.input.value).toEqual("02:30");

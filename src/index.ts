@@ -148,26 +148,9 @@ function FlatpickrInstance(
    * The handler for all events targeting the time inputs
    */
   function updateTime(e: MouseEvent | IncrementEvent | KeyboardEvent) {
-    if (self.config.noCalendar && self.selectedDates.length === 0) {
-      // picking time only
-      self.setDate(
-        self.config.minDate !== undefined
-          ? new Date(self.config.minDate.getTime())
-          : new Date().setHours(
-              self.config.defaultHour,
-              self.config.defaultMinute,
-              self.config.defaultSeconds,
-              0
-            ),
-        false
-      );
-
-      setHoursFromInputs();
-      updateValue();
-    }
+    if (self.selectedDates.length === 0) return;
 
     timeWrapper(e);
-    if (self.selectedDates.length === 0) return;
 
     if (e.type !== "input") {
       setHoursFromInputs();
@@ -1575,7 +1558,7 @@ function FlatpickrInstance(
   }
 
   function open(e?: Event, positionElement: HTMLElement = self._input) {
-    if (self.isMobile) {
+    if (self.isMobile === true) {
       if (e) {
         e.preventDefault();
         e.target && (e.target as HTMLInputElement).blur();
@@ -1600,6 +1583,26 @@ function FlatpickrInstance(
       self._input.classList.add("active");
       triggerEvent("onOpen");
       positionCalendar(positionElement);
+    }
+
+    if (self.config.enableTime === true && self.config.noCalendar === true) {
+      if (self.selectedDates.length === 0) {
+        self.setDate(
+          self.config.minDate !== undefined
+            ? new Date(self.config.minDate.getTime())
+            : new Date().setHours(
+                self.config.defaultHour,
+                self.config.defaultMinute,
+                self.config.defaultSeconds,
+                0
+              ),
+          false
+        );
+        setHoursFromInputs();
+        updateValue();
+      }
+
+      setTimeout(() => (<HTMLInputElement>self.hourElement).select(), 50);
     }
   }
 
