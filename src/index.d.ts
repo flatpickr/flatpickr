@@ -1,5 +1,5 @@
-import { FlatpickrFn } from "./dist/types/instance";
-import { Instance as _Instance } from "./dist/types/instance";
+import { FlatpickrFn } from "./types/instance";
+import { Instance as _Instance } from "./types/instance";
 import {
   Options as _Options,
   Hook as _Hook,
@@ -9,12 +9,12 @@ import {
   DateOption as _DateOption,
   DateRangeLimit as _DateRangeLimit,
   Plugin as _Plugin,
-} from "./dist/types/options";
+} from "./types/options";
 
 import {
   Locale as _Locale,
   CustomLocale as _CustomLocale,
-} from "./dist/types/locale";
+} from "./types/locale";
 
 declare var flatpickr: FlatpickrFn;
 

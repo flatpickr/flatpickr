@@ -57,4 +57,4 @@ export const Hindi: CustomLocale = {
 
 fp.l10ns.hi = Hindi;
 
-export default fp.l10ns;
+export default fp.l10ns as FlatpickrFn["l10ns"];

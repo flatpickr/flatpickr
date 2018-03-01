@@ -63,4 +63,4 @@ export const Spanish: CustomLocale = {
 
 fp.l10ns.es = Spanish;
 
-export default fp.l10ns;
+export default fp.l10ns as FlatpickrFn["l10ns"];

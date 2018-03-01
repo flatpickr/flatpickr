@@ -66,4 +66,4 @@ export const Thai: CustomLocale = {
 
 fp.l10ns.th = Thai;
 
-export default fp.l10ns;
+export default fp.l10ns as FlatpickrFn["l10ns"];

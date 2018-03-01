@@ -59,4 +59,4 @@ export const Ukrainian: CustomLocale = {
 
 fp.l10ns.uk = Ukrainian;
 
-export default fp.l10ns;
+export default fp.l10ns as FlatpickrFn["l10ns"];

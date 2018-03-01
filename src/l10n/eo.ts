@@ -67,4 +67,4 @@ export const Esperanto: CustomLocale = {
 };
 
 fp.l10ns.eo = Esperanto;
-export default fp.l10ns;
+export default fp.l10ns as FlatpickrFn["l10ns"];

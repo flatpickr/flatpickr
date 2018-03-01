@@ -63,4 +63,4 @@ export const Russian: CustomLocale = {
 
 fp.l10ns.ru = Russian;
 
-export default fp.l10ns;
+export default fp.l10ns as FlatpickrFn["l10ns"];

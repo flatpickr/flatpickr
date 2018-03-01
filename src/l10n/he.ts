@@ -49,4 +49,4 @@ export const Hebrew: CustomLocale = {
 
 fp.l10ns.he = Hebrew;
 
-export default fp.l10ns;
+export default fp.l10ns as FlatpickrFn["l10ns"];

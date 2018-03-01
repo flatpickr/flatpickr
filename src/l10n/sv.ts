@@ -64,4 +64,4 @@ export const Swedish: CustomLocale = {
 
 fp.l10ns.sv = Swedish;
 
-export default fp.l10ns;
+export default fp.l10ns as FlatpickrFn["l10ns"];

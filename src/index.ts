@@ -1988,7 +1988,7 @@ function FlatpickrInstance(
     triggerChange();
   }
 
-  const CALLBACKS: { [k in keyof Options]: Array<Function> } = {
+  const CALLBACKS: { [k in keyof Options]: Function[] } = {
     locale: [setupLocale],
   };
 
@@ -2001,8 +2001,8 @@ function FlatpickrInstance(
     else {
       self.config[option] = value;
 
-      if (CALLBACKS[option as keyof Options] !== undefined)
-        CALLBACKS[option].forEach(x => x());
+      if (CALLBACKS[option] !== undefined)
+        (CALLBACKS[option] as Function[]).forEach(x => x());
     }
 
     self.redraw();

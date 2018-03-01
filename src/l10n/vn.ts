@@ -59,4 +59,4 @@ export const Vietnamese: CustomLocale = {
 
 fp.l10ns.vn = Vietnamese;
 
-export default fp.l10ns;
+export default fp.l10ns as FlatpickrFn["l10ns"];

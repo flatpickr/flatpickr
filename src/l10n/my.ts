@@ -63,4 +63,4 @@ export const Burmese: CustomLocale = {
 
 fp.l10ns.my = Burmese;
 
-export default fp.l10ns;
+export default fp.l10ns as FlatpickrFn["l10ns"];

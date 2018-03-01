@@ -68,4 +68,4 @@ export const Estonian: CustomLocale = {
 
 fp.l10ns.et = Estonian;
 
-export default fp.l10ns;
+export default fp.l10ns as FlatpickrFn["l10ns"];

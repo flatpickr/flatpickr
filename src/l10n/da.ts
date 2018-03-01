@@ -65,4 +65,4 @@ export const Danish: CustomLocale = {
 
 fp.l10ns.da = Danish;
 
-export default fp.l10ns;
+export default fp.l10ns as FlatpickrFn["l10ns"];

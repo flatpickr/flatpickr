@@ -93,4 +93,4 @@ export const Welsh: CustomLocale = {
 
 fp.l10ns.cy = Welsh;
 
-export default fp.l10ns;
+export default fp.l10ns as FlatpickrFn["l10ns"];

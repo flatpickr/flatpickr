@@ -50,4 +50,4 @@ export const Mongolian: CustomLocale = {
 };
 
 fp.l10ns.mn = Mongolian;
-export default fp.l10ns;
+export default fp.l10ns as FlatpickrFn["l10ns"];

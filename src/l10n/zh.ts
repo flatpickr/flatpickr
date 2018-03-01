@@ -62,4 +62,4 @@ export const Mandarin: CustomLocale = {
 
 fp.l10ns.zh = Mandarin;
 
-export default fp.l10ns;
+export default fp.l10ns as FlatpickrFn["l10ns"];

@@ -61,4 +61,4 @@ export const Macedonian: CustomLocale = {
 
 fp.l10ns.mk = Macedonian;
 
-export default fp.l10ns;
+export default fp.l10ns as FlatpickrFn["l10ns"];

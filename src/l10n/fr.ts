@@ -69,4 +69,4 @@ export const French: CustomLocale = {
 
 fp.l10ns.fr = French;
 
-export default fp.l10ns;
+export default fp.l10ns as FlatpickrFn["l10ns"];
