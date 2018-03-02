@@ -1,40 +1,31 @@
 Hello,
 
 Thank you for your interest in contributing to `flatpickr`!
+Contributions are welcome from beginners and seasoned developers alike.
 
-## What to contribute
+### Bug Fixes
 
-You're welcome to contribute to the source code, unit tests, or the documentation of the library.
+If you've found a bug, create a new issue first, then submit a pull request. 
 
-### Contributing to documentation
+If at any point you are having trouble navigating/understanding the code base, please don't hesitate to ask for help :)
 
-You may submit PRs to the [documentation](https://github.com/chmln/flatpickr/tree/docs) without any notice.
+### Feature Requests
 
-The docs are written in markdown, so please commit just the changes you've made to the `.md` files.
+If you'd like to see a certain feature in flatpickr, file an issue first with request for consideration.
 
-Optional: to run the docs locally, install [`hugo`](https://gohugo.io/) and run `hugo server`
+While a lot of feature requests often don't make it to the core, they can be implemented as [plugins](https://github.com/chmln/flatpickr/tree/master/src/plugins).
 
-### Contributing to source code
-
-If you've found a bug and would like to fix it, submit a PR and include a fiddle with reproduces the bug.
-
-If you'd like to contribute a feature, consider writing and contributing a [plugin](https://github.com/chmln/flatpickr/tree/master/src/plugins). 
-
-How to submit a pull request:
+### How to submit a pull requests
 
 1. Fork the repository.
 2. Setup the necessary dependencies by running `yarn`. 
 3. Then, `yarn start` to launch the dev environment. 
-4. `index.html` is where you can experiment with various options. 
-5. Ensure there are no linting errors in the terminal
-6. Ensure that all the tests pass by running `yarn test`
-7. **Commit only the changes to `src` and `test` (if applicable)**, then `git push`
-8. https://github.com/chmln/flatpickr/compare
-
-
+4. `src/index.ts` is the entry point, `index.html` is where you can experiment with options. 
+5. Make desired changes and push.
+6. Go to https://github.com/flatpickr/flatpickr/compare?expand=1
 
 ## License
 
 By submitting a contribution to this project, you agree to allow the project
-owners to license your work as part of this project under this project's
+owners to license your work as part of this project under this project's MIT
 [license](LICENSE.md).
