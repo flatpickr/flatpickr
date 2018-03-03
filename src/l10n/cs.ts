@@ -22,7 +22,6 @@ export const Czech: CustomLocale = {
       "Sobota",
     ],
   },
-
   months: {
     shorthand: [
       "Led",
@@ -53,14 +52,16 @@ export const Czech: CustomLocale = {
       "Prosinec",
     ],
   },
-
-  rangeSeparator: " do ",
-
   firstDayOfWeek: 1,
-
   ordinal: function() {
     return ".";
   },
+  rangeSeparator: " do ",
+  weekAbbreviation: "Týd.",
+  scrollTitle: "Rolujte pro změnu",
+  toggleTitle: "Přepnout dopoledne/odpoledne",
+  amPM: ["dop.", "odp."],
+  yearAriaLabel: "Rok",
 };
 
 fp.l10ns.cs = Czech;
