@@ -34,6 +34,11 @@ const PLUGINS = {
 
 const config: WebpackConfig = {
   mode: MODE,
+  entry: {},
+  output: {
+    path: path.resolve("dist/l10n"),
+    filename: "[name].js",
+  },
   module: {
     rules: [
       {

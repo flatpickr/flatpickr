@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "strictFunctionTypes": true,
+    "noImplicitAny": true,
+    "target": "es2015",
+    "module": "es2015",
+    "moduleResolution": "node",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "removeComments": true,
+    "lib": [
+      "es2015",
+      "dom",
+      "es2017.object",
+      "esnext.asynciterable"
+    ],
+    "baseUrl": "src"
+  },
+  "include": [
+    "./src"
+  ],
+  "exclude": [
+    "./src/__tests__",
+    "./src/__ssr_tests__"
+  ]
+}

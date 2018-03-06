@@ -18,6 +18,8 @@ import tsconfig from "./tsconfig.json";
 import * as path from "path";
 import * as mkdirp from "mkdirp";
 
+import webpack from "webpack";
+
 const pkg = require("./package.json");
 const version = `/* flatpickr v${pkg.version},, @license MIT */`;
 
@@ -32,21 +34,8 @@ const customModuleNames: Record<string, string> = {
   confirmDate: "confirmDatePlugin",
 };
 
-function transform(moduleName: string, ts_src: string) {
-  const transpiled = typescript.transpileModule(ts_src, {
-    compilerOptions: {
-      outF,
-    },
-  });
-
-  /* flatpickr v${pkg.version}, @license MIT */
-  return `(function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(factory((global.${moduleName} = {})));
-}(this, (function (exports) { 'use strict';
-${transpiled}
-})));`;
+function transform() {
+  webpack.Compiler;
 }
 
 function logErr(e: Error | string) {
