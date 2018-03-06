@@ -9,5 +9,9 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "removeComments": true,
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "build.ts"
+  ]
 }
