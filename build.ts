@@ -12,6 +12,8 @@ import * as stylus_autoprefixer from "autoprefixer-stylus";
 
 import * as rollup from "rollup";
 import * as rollup_typescript from "rollup-plugin-typescript2";
+import typescript from "typescript";
+import tsconfig from "./tsconfig.json";
 
 import * as path from "path";
 import * as mkdirp from "mkdirp";
@@ -30,42 +32,32 @@ const customModuleNames: Record<string, string> = {
   confirmDate: "confirmDatePlugin",
 };
 
-const rollupConfig = {
-  inputOptions: {
-    input: "",
-    plugins: [
-      (rollup_typescript as any)({
-        abortOnError: false,
-        cacheRoot: `/tmp/.rpt2_cache`,
-        clean: true,
-      }),
-    ],
-  } as rollup.InputOptions,
-  outputOptions: {
-    file: "",
-    format: "umd",
-    banner: `/* flatpickr v${pkg.version}, @license MIT */`,
-  } as rollup.OutputOptions,
-};
+function transform(moduleName: string, ts_src: string) {
+  const transpiled = typescript.transpileModule(ts_src, {
+    compilerOptions: {
+      outF,
+    },
+  });
+
+  /* flatpickr v${pkg.version}, @license MIT */
+  return `(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+	typeof define === 'function' && define.amd ? define(['exports'], factory) :
+	(factory((global.${moduleName} = {})));
+}(this, (function (exports) { 'use strict';
+${transpiled}
+})));`;
+}
 
 function logErr(e: Error | string) {
   console.error(e);
 }
 
 const writeFileAsync = promisify(fs.writeFile);
+const resolveGlob = promisify(glob);
 
 function startRollup(dev = false) {
   return execCommand(`npm run rollup:${dev ? "start" : "build"}`);
-}
-
-function resolveGlob(g: string) {
-  return new Promise<string[]>((resolve, reject) => {
-    glob(
-      g,
-      (err: Error | null, files: string[]) =>
-        err ? reject(err) : resolve(files)
-    );
-  });
 }
 
 async function readFileAsync(path: string) {
@@ -125,18 +117,16 @@ function buildExtras(folder: "plugins" | "l10n") {
 
     await Promise.all([
       ...src_paths.map(async sourcePath => {
-        const bundle = await rollup.rollup({
-          ...rollupConfig.inputOptions,
-          input: sourcePath,
-        });
-
-        const fileName = path.basename(sourcePath, path.extname(sourcePath));
-
-        return bundle.write({
-          ...rollupConfig.outputOptions,
-          file: sourcePath.replace("src", "dist").replace(".ts", ".js"),
-          name: fileName,
-        });
+        // const bundle = await rollup.rollup({
+        //   ...rollupConfig.inputOptions,
+        //   input: sourcePath,
+        // });
+        // const fileName = path.basename(sourcePath, path.extname(sourcePath));
+        // return bundle.write({
+        //   ...rollupConfig.outputOptions,
+        //   file: sourcePath.replace("src", "dist").replace(".ts", ".js"),
+        //   name: fileName,
+        // });
       }),
       ...css_paths.map(p => copyFile(p, p.replace("src", "dist"))),
     ]);

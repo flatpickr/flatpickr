@@ -3,6 +3,7 @@
   "version": "4.3.2",
   "description": "A lightweight, powerful javascript datetime picker",
   "scripts": {
+    "newbuild": "NODE_ENV=production webpack",
     "build": "run-s build:pre build:build build:post",
     "build:pre": "mkdir -p dist/themes",
     "build:build": "ts-node build.ts",
@@ -28,7 +29,9 @@
     "@types/stylus": "^0.48.29",
     "@types/uglify-js": "^2.6.30",
     "autoprefixer-stylus": "latest",
+    "babel-loader": "^7.1.4",
     "chokidar": "2.0.2",
+    "clean-webpack-plugin": "^0.1.18",
     "coveralls": "^3.0.0",
     "glob": "latest",
     "husky": "^0.14.3",
@@ -46,9 +49,12 @@
     "source-map": "^0.7.2",
     "stylus": "latest",
     "ts-jest": "22.4.0",
-    "ts-node": "^5.0.0",
+    "ts-loader": "^4.0.1",
+    "ts-node": "^5.0.1",
     "typescript": "^2.7.2",
-    "uglify-js": "^3.3.12"
+    "uglify-js": "^3.3.12",
+    "webpack": "^4.1.0",
+    "webpack-cli": "^2.0.10"
   },
   "main": "dist/flatpickr.js",
   "style": "dist/flatpickr.css",
