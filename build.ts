@@ -14,6 +14,7 @@ import * as rollup from "rollup";
 import * as rollup_typescript from "rollup-plugin-typescript2";
 
 import * as path from "path";
+import * as mkdirp from "mkdirp";
 
 const pkg = require("./package.json");
 const version = `/* flatpickr v${pkg.version},, @license MIT */`;
@@ -39,12 +40,12 @@ const rollupConfig = {
         clean: true,
       }),
     ],
-  },
+  } as rollup.InputOptions,
   outputOptions: {
     file: "",
     format: "umd",
     banner: `/* flatpickr v${pkg.version}, @license MIT */`,
-  },
+  } as rollup.OutputOptions,
 };
 
 function logErr(e: Error | string) {
@@ -100,6 +101,7 @@ async function buildScripts() {
 function copyFile(source: string, target: string): Promise<any> {
   var rd = fs.createReadStream(source);
   var wr = fs.createWriteStream(target);
+
   return new Promise(function(resolve, reject) {
     rd.on("error", reject);
     wr.on("error", reject);
@@ -126,15 +128,15 @@ function buildExtras(folder: "plugins" | "l10n") {
         const bundle = await rollup.rollup({
           ...rollupConfig.inputOptions,
           input: sourcePath,
-        } as any);
+        });
 
         const fileName = path.basename(sourcePath, path.extname(sourcePath));
 
         return bundle.write({
           ...rollupConfig.outputOptions,
           file: sourcePath.replace("src", "dist").replace(".ts", ".js"),
-          name: customModuleNames[fileName] || fileName,
-        } as any);
+          name: fileName,
+        });
       }),
       ...css_paths.map(p => copyFile(p, p.replace("src", "dist"))),
     ]);
