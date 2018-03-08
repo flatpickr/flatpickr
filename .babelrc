@@ -22,6 +22,7 @@
                 "loose": true,
                 "useBuiltIns": true
             }
-        ]
+        ],
+        "@babel/plugin-proposal-optional-catch-binding"
     ]
 }
