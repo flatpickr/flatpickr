@@ -1,5 +1,8 @@
 import l10n from "./webpack.config.l10n";
-import main from "./webpack.config.main";
-import style from "./webpack.config.style";
+import { main, unminified } from "./webpack.config.main";
+import {
+  minified as minifiedCSS,
+  unminified as unminifiedCSS,
+} from "./webpack.config.style";
 
-export default [main, l10n, style];
+export default [main, unminified, l10n, minifiedCSS, unminifiedCSS];

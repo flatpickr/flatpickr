@@ -2,7 +2,6 @@ import * as path from "path";
 import * as webpack from "webpack";
 
 import * as CleanBuildFolder from "clean-webpack-plugin";
-import * as ExtractTextPlugin from "extract-text-webpack-plugin";
 
 type WebpackConfig = webpack.Configuration & {
   mode: "development" | "production";
@@ -56,25 +55,6 @@ const config: WebpackConfig = {
         // regular css files
         test: /\.css$/,
         use: ["css-loader"],
-      },
-      {
-        test: /\.styl$/,
-        use: ExtractTextPlugin.extract({
-          use: [
-            {
-              loader: "css-loader",
-              options: {
-                minimize: true,
-                sourceMap: true,
-              },
-            },
-            {
-              loader: "stylus-loader",
-            },
-          ],
-          // use style-loader in development
-          fallback: "style-loader",
-        }),
       },
     ],
   },
