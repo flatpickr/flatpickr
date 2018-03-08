@@ -1,5 +1,5 @@
-import { Instance } from "../../types/instance";
-import { Plugin } from "../../types/options";
+import { Instance } from "types/instance";
+import { Plugin } from "types/options";
 
 export interface Config {
   confirmIcon?: string;

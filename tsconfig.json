@@ -15,6 +15,7 @@
       "es2017.object",
       "esnext.asynciterable"
     ],
+    "baseUrl": "src"
   },
   "exclude": [
     "node_modules",

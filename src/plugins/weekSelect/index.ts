@@ -1,5 +1,5 @@
-import { DayElement } from "../../types/instance";
-import { Plugin } from "../../types/options";
+import { DayElement } from "types/instance";
+import { Plugin } from "types/options";
 
 export type PlusWeeks = {
   weekStartDay: Date;

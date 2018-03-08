@@ -1,4 +1,4 @@
-import { Plugin } from "../types/options";
+import { Plugin } from "types/options";
 
 export interface Config {
   input?: string | HTMLInputElement;

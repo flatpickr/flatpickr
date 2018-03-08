@@ -1,6 +1,6 @@
 import * as path from "path";
 import baseConfig from "./webpack.config.base";
-import { Configuration, Plugin } from "webpack";
+import { Configuration } from "webpack";
 
 export const main: Configuration = {
   ...baseConfig,
@@ -11,6 +11,7 @@ export const main: Configuration = {
     library: "flatpickr",
     libraryTarget: "umd",
     libraryExport: "default",
+    globalObject: "this",
   },
 };
 

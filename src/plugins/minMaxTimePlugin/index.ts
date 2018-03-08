@@ -1,11 +1,7 @@
-import { Instance } from "../types/instance";
-import {
-  compareDates,
-  compareTimes,
-  createDateFormatter,
-} from "../utils/dates";
+import { Instance } from "types/instance";
+import { compareDates, compareTimes, createDateFormatter } from "utils/dates";
 
-import { Plugin } from "../types/options";
+import { Plugin } from "types/options";
 
 export interface MinMaxTime {
   minTime?: string;
