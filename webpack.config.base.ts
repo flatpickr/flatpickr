@@ -2,6 +2,7 @@ import * as path from "path";
 import * as webpack from "webpack";
 
 import * as CleanBuildFolder from "clean-webpack-plugin";
+import * as ExtractTextPlugin from "extract-text-webpack-plugin";
 
 type WebpackConfig = webpack.Configuration & {
   mode: "development" | "production";
@@ -42,22 +43,6 @@ const config: WebpackConfig = {
   module: {
     rules: [
       {
-        test: /\.css$/,
-        use: ["style-loader", "css-loader"],
-      },
-      {
-        test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot|otf)$/,
-        use: [
-          {
-            loader: "url-loader",
-            options: {
-              name: "[name].[hash].[ext]",
-              limit: 10000,
-            },
-          },
-        ],
-      },
-      {
         test: /\.tsx?$/,
         use: [
           //{ loader: "babel-loader" },
@@ -68,19 +53,28 @@ const config: WebpackConfig = {
         ],
       },
       {
+        // regular css files
+        test: /\.css$/,
+        use: ["css-loader"],
+      },
+      {
         test: /\.styl$/,
-        use: [
-          { loader: "style-loader" },
-          {
-            loader: "css-loader",
-            options: {
-              modules: true,
-              importLoaders: 2,
-              localIdentName: "[path][name]__[local]--[hash:base64:5]",
+        use: ExtractTextPlugin.extract({
+          use: [
+            {
+              loader: "css-loader",
+              options: {
+                minimize: true,
+                sourceMap: true,
+              },
             },
-          },
-          { loader: "stylus-loader" },
-        ],
+            {
+              loader: "stylus-loader",
+            },
+          ],
+          // use style-loader in development
+          fallback: "style-loader",
+        }),
       },
     ],
   },
@@ -89,7 +83,7 @@ const config: WebpackConfig = {
     extensions: [".ts", ".tsx", ".js", ".jsx", ".styl"],
     modules: [SOURCE_DIR, "node_modules"],
     alias: {
-      style: path.posix.resolve("style"),
+      src: path.posix.resolve("src"),
     },
   },
   devServer: {
