@@ -6,12 +6,18 @@ import { Configuration } from "webpack";
 const config: Configuration = {
   ...baseConfig,
   entry: {} as Record<string, string>,
+  output: {
+    path: path.resolve("dist/l10n"),
+    library: "locale",
+    libraryTarget: "umd",
+    globalObject: "this",
+  },
 };
 
 glob
   .sync("./src/l10n/*.ts")
   .forEach(
-    f => ((<Record<string, string>>config.entry)[path.basename(f, "ts")] = f)
+    f => ((<Record<string, string>>config.entry)[path.basename(f, ".ts")] = f)
   );
 
 export default config;

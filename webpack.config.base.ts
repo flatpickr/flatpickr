@@ -36,7 +36,7 @@ const config: WebpackConfig = {
   mode: MODE,
   entry: {},
   output: {
-    path: path.resolve("dist/l10n"),
+    path: path.resolve("dist"),
     filename: "[name].js",
   },
   module: {
