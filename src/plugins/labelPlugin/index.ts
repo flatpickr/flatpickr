@@ -1,4 +1,4 @@
-import { Plugin } from "types/options";
+import { Plugin } from "../../types/options";
 
 function labelPlugin(): Plugin {
   return function(fp) {

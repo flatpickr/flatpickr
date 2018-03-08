@@ -9,6 +9,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "removeComments": true,
+    "declaration": true,
     "lib": [
       "es2015",
       "dom",

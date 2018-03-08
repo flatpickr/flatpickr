@@ -1,0 +1,14 @@
+{
+    "extends": "./src/tsconfig.json",
+    "compilerOptions": {
+        "emitDeclarationOnly": true,
+        "declaration": true,
+        "outDir": "./types"
+    },
+    "include": [
+        "./src/l10n",
+        "./src/plugins",
+        "./src/types/globals.ts",
+        "./src/typings.d.ts"
+    ]
+}
