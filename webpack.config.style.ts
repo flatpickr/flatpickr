@@ -1,28 +1,8 @@
 import * as path from "path";
-import baseConfig from "./webpack.config.base";
+import baseConfig, { stylusLoader } from "./webpack.config.base";
 import { Configuration, Module, Plugin } from "webpack";
 
 import * as ExtractTextPlugin from "extract-text-webpack-plugin";
-
-export const stylusLoader = (minimize: boolean) => ({
-  test: /\.styl$/,
-  use: ExtractTextPlugin.extract({
-    use: [
-      {
-        loader: "css-loader",
-        options: {
-          minimize,
-          sourceMap: false,
-        },
-      },
-      {
-        loader: "stylus-loader",
-      },
-    ],
-    // use style-loader in development
-    fallback: "style-loader",
-  }),
-});
 
 export const minified: Configuration = {
   ...baseConfig,

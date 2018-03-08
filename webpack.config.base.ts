@@ -2,13 +2,7 @@ import * as path from "path";
 import * as webpack from "webpack";
 
 import * as CleanBuildFolder from "clean-webpack-plugin";
-
-type WebpackConfig = webpack.Configuration & {
-  mode: "development" | "production";
-  optimization?: {
-    minimize?: boolean;
-  };
-};
+import * as ExtractTextPlugin from "extract-text-webpack-plugin";
 
 const [SOURCE_DIR, BUILD_DIR] = ["src", "dist"];
 
@@ -32,7 +26,7 @@ const PLUGINS = {
   ],
 };
 
-const config: WebpackConfig = {
+const config: webpack.Configuration = {
   mode: MODE,
   entry: {},
   output: {
@@ -44,7 +38,7 @@ const config: WebpackConfig = {
       {
         test: /\.tsx?$/,
         use: [
-          //{ loader: "babel-loader" },
+          { loader: "babel-loader" },
           {
             loader: "ts-loader",
             options: { transpileOnly: true, happyPackMode: true },
@@ -52,7 +46,6 @@ const config: WebpackConfig = {
         ],
       },
       {
-        // regular css files
         test: /\.css$/,
         use: ["css-loader"],
       },
@@ -73,5 +66,25 @@ const config: WebpackConfig = {
   },
   devtool: PRODUCTION ? false : "source-map",
 };
+
+export const stylusLoader = (minimize: boolean) => ({
+  test: /\.styl$/,
+  use: ExtractTextPlugin.extract({
+    use: [
+      {
+        loader: "css-loader",
+        options: {
+          minimize,
+          sourceMap: false,
+        },
+      },
+      {
+        loader: "stylus-loader",
+      },
+    ],
+    // use style-loader in development
+    fallback: "style-loader",
+  }),
+});
 
 export default config;

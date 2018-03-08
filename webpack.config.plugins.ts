@@ -1,9 +1,8 @@
 import * as glob from "glob";
 import * as path from "path";
-import baseConfig from "./webpack.config.base";
+import baseConfig, { stylusLoader } from "./webpack.config.base";
 import { Configuration, Plugin, Module } from "webpack";
 
-import { stylusLoader } from "./webpack.config.style";
 import * as ExtractTextPlugin from "extract-text-webpack-plugin";
 
 export const scripts = glob
