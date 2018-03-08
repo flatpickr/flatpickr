@@ -20,7 +20,7 @@ const PLUGINS = {
       "process.env.NODE_ENV": `'${JSON.stringify(MODE)}'`,
     }),
   ],
-  development: [new webpack.HotModuleReplacementPlugin(), new LiveReload()],
+  development: [new LiveReload()],
   production: [
     new webpack.HashedModuleIdsPlugin(),
     new CleanBuildFolder(BUILD_DIR),
@@ -65,7 +65,7 @@ const config: webpack.Configuration = {
     hot: true,
     open: true,
   },
-  devtool: PRODUCTION ? false : "source-map",
+  devtool: false,
   watch: process.env.watch === "true",
 };
 
