@@ -3,11 +3,10 @@
   "version": "4.3.2",
   "description": "A lightweight, powerful javascript datetime picker",
   "scripts": {
-    "build": "NODE_ENV=production webpack",
-    "build:post": "cp src/index.d.ts dist/index.d.ts",
-    "start": "npm run build:build -- --dev",
-    "rollup:start": "rollup -w -c",
-    "rollup:build": "rollup -c",
+    "build": "NODE_ENV=production webpack && ./emitDeclarations.sh",
+    "start": "run-p start:*",
+    "start:webpack": "watch=true webpack",
+    "start:serve": "hs ./ -s -o",
     "test": "run-s test:typecheck test:unit",
     "test:typecheck": "tsc -p ./ --noEmit",
     "test:unit": "jest --config .jest.json",
@@ -34,6 +33,7 @@
     "css-loader": "^0.28.10",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "glob": "latest",
+    "http-server": "^0.11.1",
     "husky": "^0.14.3",
     "jest": "22.4.2",
     "lint-staged": "^7.0.0",
@@ -48,11 +48,11 @@
     "typescript": "^2.7.2",
     "webpack": "^4.1.0",
     "webpack-cli": "^2.0.10",
-    "webpack-merge-and-include-globally": "^1.0.1"
+    "webpack-livereload-plugin": "^1.0.0"
   },
   "main": "dist/flatpickr.js",
   "style": "dist/flatpickr.css",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/typings.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/chmln/flatpickr.git"
@@ -71,11 +71,6 @@
     "time",
     "picker",
     "lightweight"
-  ],
-  "browserslist": [
-    "ie >= 9",
-    "last 2 versions",
-    "safari >= 7"
   ],
   "lint-staged": {
     "**/*.{ts,tsx}": [

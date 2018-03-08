@@ -3,6 +3,7 @@ import * as webpack from "webpack";
 
 import * as CleanBuildFolder from "clean-webpack-plugin";
 import * as ExtractTextPlugin from "extract-text-webpack-plugin";
+import * as LiveReload from "webpack-livereload-plugin";
 
 const [SOURCE_DIR, BUILD_DIR] = ["src", "dist"];
 
@@ -19,7 +20,7 @@ const PLUGINS = {
       "process.env.NODE_ENV": `'${JSON.stringify(MODE)}'`,
     }),
   ],
-  development: [new webpack.HotModuleReplacementPlugin()],
+  development: [new webpack.HotModuleReplacementPlugin(), new LiveReload()],
   production: [
     new webpack.HashedModuleIdsPlugin(),
     new CleanBuildFolder(BUILD_DIR),
@@ -65,6 +66,7 @@ const config: webpack.Configuration = {
     open: true,
   },
   devtool: PRODUCTION ? false : "source-map",
+  watch: process.env.watch === "true",
 };
 
 export const stylusLoader = (minimize: boolean) => ({

@@ -2,7 +2,7 @@ declare module "closure-webpack-plugin" {
   const t: any;
   export = t;
 }
-declare module "webpack-merge-and-include-globally" {
+declare module "webpack-livereload-plugin" {
   const t: any;
   export = t;
 }
