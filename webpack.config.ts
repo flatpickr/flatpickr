@@ -5,6 +5,17 @@ import {
   unminified as unminifiedCSS,
 } from "./webpack.config.style";
 
-import plugins from "./webpack.config.plugins";
+import {
+  scripts as plugins,
+  styles as pluginStyles,
+} from "./webpack.config.plugins";
 
-export default [main, unminified, l10n, minifiedCSS, unminifiedCSS, ...plugins];
+export default [
+  main,
+  unminified,
+  l10n,
+  minifiedCSS,
+  unminifiedCSS,
+  ...plugins,
+  ...pluginStyles,
+];

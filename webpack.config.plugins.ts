@@ -1,20 +1,12 @@
 import * as glob from "glob";
 import * as path from "path";
 import baseConfig from "./webpack.config.base";
-import { Configuration } from "webpack";
+import { Configuration, Plugin, Module } from "webpack";
 
-// const config: Configuration = {
-//   ...baseConfig,
-//   entry: {} as Record<string, string>,
-//   output: {
-//     path: path.resolve("dist/l10n"),
-//     library: "locale",
-//     libraryTarget: "umd",
-//     globalObject: "this",
-//   },
-// };
+import { stylusLoader } from "./webpack.config.style";
+import * as ExtractTextPlugin from "extract-text-webpack-plugin";
 
-const configs = glob
+export const scripts = glob
   .sync("./src/plugins/*")
   .map((pluginSrcPath): Configuration => ({
     ...baseConfig,
@@ -26,11 +18,25 @@ const configs = glob
       globalObject: "this",
       filename: `index.js`,
     },
-    optimization: {
-      minimize: false,
-    },
   }));
 
-export default configs;
-
-//export default config;
+export const styles = glob
+  .sync("./src/plugins/**/*.styl")
+  .map((stylePath): Configuration => ({
+    ...baseConfig,
+    module: {
+      rules: [...(<Module>baseConfig.module).rules, stylusLoader(true)],
+    },
+    entry: stylePath,
+    output: {
+      path: path.resolve(path.dirname(stylePath.replace("/src", "/dist"))),
+      filename: `${path.basename(path.dirname(stylePath))}.css`,
+    },
+    plugins: [
+      ...(<Plugin[]>baseConfig.plugins),
+      new ExtractTextPlugin({
+        filename: `${path.basename(path.dirname(stylePath))}.css`,
+        allChunks: true,
+      }),
+    ],
+  }));

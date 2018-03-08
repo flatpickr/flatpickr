@@ -4,7 +4,7 @@ import { Configuration, Module, Plugin } from "webpack";
 
 import * as ExtractTextPlugin from "extract-text-webpack-plugin";
 
-const stylusLoader = (minimize: boolean) => ({
+export const stylusLoader = (minimize: boolean) => ({
   test: /\.styl$/,
   use: ExtractTextPlugin.extract({
     use: [
