@@ -1,4 +1,4 @@
-declare module "autoprefixer-stylus" {
+declare module "closure-webpack-plugin" {
   const t: any;
   export = t;
 }

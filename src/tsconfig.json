@@ -17,11 +17,8 @@
     ],
     "baseUrl": "src"
   },
-  "include": [
-    "./src"
-  ],
   "exclude": [
-    "./src/__tests__",
-    "./src/__ssr_tests__"
+    "./__tests__",
+    "./__ssr_tests__"
   ]
 }

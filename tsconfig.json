@@ -9,6 +9,12 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "removeComments": true,
+    "lib": [
+      "es2015",
+      "dom",
+      "es2017.object",
+      "esnext.asynciterable"
+    ],
   },
   "exclude": [
     "node_modules",
