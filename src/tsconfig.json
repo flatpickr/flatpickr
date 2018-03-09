@@ -1,14 +1,12 @@
 {
   "compilerOptions": {
     "strict": true,
-    "strictFunctionTypes": true,
     "noImplicitAny": true,
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "removeComments": true,
     "declaration": true,
     "lib": [
       "es2015",
