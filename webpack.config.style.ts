@@ -23,7 +23,7 @@ export const minified: Configuration = {
   ],
 };
 
-export const unminified = {
+export const unminified: Configuration = {
   ...minified,
   output: {
     path: path.resolve("dist"),

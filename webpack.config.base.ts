@@ -4,7 +4,6 @@ import * as webpack from "webpack";
 import * as CleanBuildFolder from "clean-webpack-plugin";
 import * as ExtractTextPlugin from "extract-text-webpack-plugin";
 import * as LiveReload from "webpack-livereload-plugin";
-import * as TSChecker from "fork-ts-checker-webpack-plugin";
 
 const [SOURCE_DIR, BUILD_DIR] = ["src", "dist"];
 
