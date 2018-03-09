@@ -1,4 +1,4 @@
-declare module "closure-webpack-plugin" {
+declare module "fork-ts-checker-webpack-plugin" {
   const t: any;
   export = t;
 }

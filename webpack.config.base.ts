@@ -4,6 +4,7 @@ import * as webpack from "webpack";
 import * as CleanBuildFolder from "clean-webpack-plugin";
 import * as ExtractTextPlugin from "extract-text-webpack-plugin";
 import * as LiveReload from "webpack-livereload-plugin";
+import * as TSChecker from "fork-ts-checker-webpack-plugin";
 
 const [SOURCE_DIR, BUILD_DIR] = ["src", "dist"];
 
@@ -17,7 +18,7 @@ const PLUGINS = {
       stylus: { preferPathResolver: "webpack" },
     }),
     new webpack.DefinePlugin({
-      "process.env.NODE_ENV": `'${JSON.stringify(MODE)}'`,
+      "process.env.NODE_ENV": MODE,
     }),
   ],
   development: [new LiveReload()],

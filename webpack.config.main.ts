@@ -15,7 +15,7 @@ export const main: Configuration = {
   },
 };
 
-export const unminified = {
+export const unminified: Configuration = {
   ...main,
   output: {
     ...main.output,
