@@ -6,16 +6,17 @@ import { Configuration, Plugin, Module } from "webpack";
 import * as ExtractTextPlugin from "extract-text-webpack-plugin";
 
 export const scripts = glob
-  .sync("./src/plugins/*")
+  .sync("./src/plugins/**/*.ts")
+  .concat(glob.sync("./src/plugins/*.ts"))
   .map((pluginSrcPath): Configuration => ({
     ...baseConfig,
     entry: pluginSrcPath,
     output: {
-      path: path.resolve(pluginSrcPath.replace("/src", "/dist")),
+      path: path.resolve(path.dirname(pluginSrcPath.replace("/src", "/dist"))),
       library: "plugin",
       libraryTarget: "umd",
       globalObject: "this",
-      filename: `index.js`,
+      filename: `${path.basename(pluginSrcPath, ".ts")}.js`,
     },
   }));
 

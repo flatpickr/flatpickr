@@ -80,12 +80,9 @@ export const stylusLoader = (minimize: boolean) => ({
           sourceMap: false,
         },
       },
-      {
-        loader: "stylus-loader",
-      },
+      "postcss-loader",
+      "stylus-loader",
     ],
-    // use style-loader in development
-    fallback: "style-loader",
   }),
 });
 

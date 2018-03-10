@@ -1,8 +1,10 @@
+import { Configuration } from "webpack";
 import l10n from "./webpack.config.l10n";
 import { main, unminified } from "./webpack.config.main";
 import {
   minified as minifiedCSS,
   unminified as unminifiedCSS,
+  themes,
 } from "./webpack.config.style";
 
 import {
@@ -18,4 +20,5 @@ export default [
   unminifiedCSS,
   ...plugins,
   ...pluginStyles,
-];
+  ...themes,
+] as Configuration[];
