@@ -10,8 +10,6 @@ const fp =
       } as FlatpickrFn);
 
 export const Russian: CustomLocale = {
-  firstDayOfWeek: 1, // Monday
-
   weekdays: {
     shorthand: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
     longhand: [
@@ -24,7 +22,6 @@ export const Russian: CustomLocale = {
       "Суббота",
     ],
   },
-
   months: {
     shorthand: [
       "Янв",
@@ -55,10 +52,16 @@ export const Russian: CustomLocale = {
       "Декабрь",
     ],
   },
-
+  firstDayOfWeek: 1,
+  ordinal: function() {
+    return "";
+  },
   rangeSeparator: " — ",
+  weekAbbreviation: "Нед.",
   scrollTitle: "Прокрутите для увеличения",
   toggleTitle: "Нажмите для переключения",
+  amPM: ["ДП", "ПП"],
+  yearAriaLabel: "Год",
 };
 
 fp.l10ns.ru = Russian;
