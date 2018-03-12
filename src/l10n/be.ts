@@ -53,6 +53,9 @@ export const Belarusian: CustomLocale = {
     ],
   },
   firstDayOfWeek: 1,
+  ordinal: function() {
+    return "";
+  },
   rangeSeparator: " — ",
   weekAbbreviation: "Тыд.",
   scrollTitle: "Пракруціце для павелічэння",

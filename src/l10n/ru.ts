@@ -53,6 +53,9 @@ export const Russian: CustomLocale = {
     ],
   },
   firstDayOfWeek: 1,
+  ordinal: function() {
+    return "";
+  },
   rangeSeparator: " — ",
   weekAbbreviation: "Нед.",
   scrollTitle: "Прокрутите для увеличения",
