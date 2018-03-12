@@ -853,8 +853,10 @@ function FlatpickrInstance(
     Object.defineProperty(self, "_hidePrevMonthArrow", {
       get: () => self.__hidePrevMonthArrow,
       set(bool: boolean) {
-        if (self.__hidePrevMonthArrow !== bool)
+        if (self.__hidePrevMonthArrow !== bool) {
+          toggleClass(self.prevMonthNav, "disabled", bool);
           self.prevMonthNav.style.display = bool ? "none" : "block";
+        }
         self.__hidePrevMonthArrow = bool;
       },
     });
@@ -862,8 +864,10 @@ function FlatpickrInstance(
     Object.defineProperty(self, "_hideNextMonthArrow", {
       get: () => self.__hideNextMonthArrow,
       set(bool: boolean) {
-        if (self.__hideNextMonthArrow !== bool)
+        if (self.__hideNextMonthArrow !== bool) {
+          toggleClass(self.nextMonthNav, "disabled", bool);
           self.nextMonthNav.style.display = bool ? "none" : "block";
+        }
         self.__hideNextMonthArrow = bool;
       },
     });
