@@ -1277,6 +1277,32 @@ describe("flatpickr", () => {
       expect(isArrowVisible("prevMonthNav")).toBe(true);
       expect(isArrowVisible("nextMonthNav")).toBe(false);
     });
+
+    it("adds disabled class to disabled prev/next month arrows", () => {
+      const isArrowDisabled = (which: "prevMonthNav" | "nextMonthNav") =>
+        fp[which].classList.contains("disabled");
+      createInstance({
+        minDate: "2099-1-1",
+        maxDate: "2099-3-4",
+        inline: true,
+      });
+
+      expect(fp.currentMonth).toBe(0);
+      expect(isArrowDisabled("prevMonthNav")).toBe(true);
+      expect(isArrowDisabled("nextMonthNav")).toBe(false);
+
+      simulate("click", fp.nextMonthNav, { which: 1 }, MouseEvent);
+
+      expect(fp.currentMonth).toBe(1);
+      expect(isArrowDisabled("prevMonthNav")).toBe(false);
+      expect(isArrowDisabled("nextMonthNav")).toBe(false);
+
+      simulate("click", fp.nextMonthNav, { which: 1 }, MouseEvent);
+
+      expect(fp.currentMonth).toBe(2);
+      expect(isArrowDisabled("prevMonthNav")).toBe(false);
+      expect(isArrowDisabled("nextMonthNav")).toBe(true);
+    });
   });
 
   describe("Localization", () => {
