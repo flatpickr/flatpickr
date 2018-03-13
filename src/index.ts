@@ -1185,7 +1185,7 @@ function FlatpickrInstance(
     ] as Array<keyof Instance>).forEach(k => {
       try {
         delete self[k as keyof Instance];
-      } catch (_) {}
+      } catch {}
     });
   }
 
