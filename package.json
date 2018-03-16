@@ -3,9 +3,9 @@
   "version": "4.3.2",
   "description": "A lightweight, powerful javascript datetime picker",
   "scripts": {
-    "build": "NODE_ENV=production webpack && ./emitDeclarations.sh",
+    "build": "NODE_ENV=production webpack --config build/webpack.config.ts && ./emitDeclarations.sh",
     "start": "run-p start:*",
-    "start:webpack": "watch=true webpack",
+    "start:webpack": "watch=true webpack --config build/webpack.config.ts",
     "start:serve": "hs ./ -s -o",
     "test": "run-s test:typecheck test:unit",
     "test:typecheck": "tsc -p ./ --noEmit",
@@ -34,7 +34,7 @@
     "css-loader": "^0.28.10",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "fork-ts-checker-webpack-plugin": "^0.4.1",
-    "glob": "latest",
+    "glob": "^7.1.2",
     "http-server": "^0.11.1",
     "husky": "^0.14.3",
     "jest": "22.4.2",
@@ -65,7 +65,7 @@
   "bugs": {
     "url": "https://github.com/chmln/flatpickr/issues"
   },
-  "homepage": "https://chmln.github.io/flatpickr",
+  "homepage": "https://flatpickr.js.org",
   "keywords": [
     "javascript",
     "datetimepicker",
