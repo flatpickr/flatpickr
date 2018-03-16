@@ -2457,7 +2457,7 @@ function _flatpickr(
   config?: Options
 ): Instance | Instance[] {
   const nodes: HTMLElement[] = Array.prototype.slice.call(nodeList); // static list
-  let instances = [];
+  let instances: Instance[] = [];
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i];
     try {
@@ -2488,7 +2488,7 @@ if (typeof HTMLElement !== "undefined") {
   };
 
   HTMLElement.prototype.flatpickr = function(config?: Options) {
-    return _flatpickr([this], config);
+    return _flatpickr([this], config) as Instance;
   };
 }
 
