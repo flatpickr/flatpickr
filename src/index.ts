@@ -386,7 +386,7 @@ function FlatpickrInstance(
     }
 
     if (self.daysContainer !== undefined) {
-      bind(self.monthNav, "click", onMonthNavClick);
+      bind(self.monthNav, "mousedown", onClick(onMonthNavClick));
 
       bind(self.monthNav, ["keyup", "increment"], onYearInput);
       bind(self.daysContainer, "mousedown", onClick(selectDate));
@@ -751,7 +751,7 @@ function FlatpickrInstance(
       );
     }
 
-    updateNavigationCurrentMonth();
+    //updateNavigationCurrentMonth();
 
     const dayContainer = createElement<HTMLDivElement>("div", "dayContainer");
     dayContainer.appendChild(days);
@@ -766,14 +766,16 @@ function FlatpickrInstance(
 
     clearNode(self.daysContainer);
 
+    const frag = document.createDocumentFragment();
+
     for (let i = 0; i < self.config.showMonths; i++) {
       const d = new Date(self.currentYear, self.currentMonth, 1);
       d.setMonth(self.currentMonth + i);
 
-      self.daysContainer.appendChild(
-        buildMonthDays(d.getFullYear(), d.getMonth())
-      );
+      frag.appendChild(buildMonthDays(d.getFullYear(), d.getMonth()));
     }
+
+    self.daysContainer.appendChild(frag);
 
     self.days = self.daysContainer.firstChild as HTMLDivElement;
   }
@@ -855,9 +857,8 @@ function FlatpickrInstance(
       set(bool: boolean) {
         if (self.__hidePrevMonthArrow !== bool) {
           toggleClass(self.prevMonthNav, "disabled", bool);
-          self.prevMonthNav.style.display = bool ? "none" : "block";
+          self.__hidePrevMonthArrow = bool;
         }
-        self.__hidePrevMonthArrow = bool;
       },
     });
 
@@ -866,9 +867,8 @@ function FlatpickrInstance(
       set(bool: boolean) {
         if (self.__hideNextMonthArrow !== bool) {
           toggleClass(self.nextMonthNav, "disabled", bool);
-          self.nextMonthNav.style.display = bool ? "none" : "block";
+          self.__hideNextMonthArrow = bool;
         }
-        self.__hideNextMonthArrow = bool;
       },
     });
 
@@ -1496,14 +1496,13 @@ function FlatpickrInstance(
 
     let minRange = 0,
       maxRange = 0;
-    //console.log(((<HTMLDivElement>self.daysContainer).children[0].children[0] as DayElement).dateObj.getTime())
 
     for (let t = firstDay; t < lastDay; t += duration.DAY) {
-      if (!isEnabled(new Date(t))) {
+      if (!isEnabled(new Date(t), true)) {
         containsDisabled =
           containsDisabled || (t > rangeStartDate && t < rangeEndDate);
 
-        if (t < initialDate && (!minRange || t < minRange)) minRange = t;
+        if (t < initialDate && (!minRange || t > minRange)) minRange = t;
         else if (t > initialDate && (!maxRange || t < maxRange)) maxRange = t;
       }
     }
