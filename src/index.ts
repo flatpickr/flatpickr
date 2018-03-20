@@ -671,32 +671,25 @@ function FlatpickrInstance(
     return dayElement;
   }
 
-  function focusOnDay(currentIndex: number, offset: number) {
-    let newIndex = currentIndex + offset || 0,
-      targetNode = (currentIndex !== undefined
-        ? self.days.childNodes[newIndex]
-        : self.selectedDateElem ||
-          self.todayDateElem ||
-          self.days.childNodes[0]) as DayElement;
+  function focusOnDay(currentInd: number | undefined, offset: number) {
+    const currentIndex =
+      currentInd !== undefined
+        ? currentInd
+        : (document.activeElement as DayElement).$i;
 
-    const focus = () => {
-      targetNode = targetNode || self.days.childNodes[newIndex];
+    let newIndex = (currentIndex || 0) + offset || 0,
+      targetNode: DayElement = Array.prototype.find.call(
+        self.days.children,
+        (c: DayElement, i: number) =>
+          i >= newIndex &&
+          c.className.indexOf("MonthDay") === -1 &&
+          isEnabled(c.dateObj)
+      ) as DayElement;
+
+    if (targetNode !== undefined) {
       targetNode.focus();
-
       if (self.config.mode === "range") onMouseOver(targetNode);
-    };
-
-    if (targetNode === undefined && offset !== 0) {
-      if (offset > 0) {
-        self.changeMonth(1, true, true);
-        newIndex = newIndex % 42;
-      } else if (offset < 0) {
-        self.changeMonth(-1, true, true);
-        newIndex += 42;
-      }
     }
-
-    focus();
   }
 
   function buildMonthDays(year: number, month: number) {
@@ -1072,13 +1065,8 @@ function FlatpickrInstance(
     triggerEvent("onMonthChange");
     updateNavigationCurrentMonth();
 
-    if (
-      from_keyboard &&
-      document.activeElement &&
-      (document.activeElement as DayElement).$i
-    ) {
-      const index = (document.activeElement as DayElement).$i;
-      focusOnDay(index, 0);
+    if (from_keyboard) {
+      focusOnDay(undefined, 0);
     }
   }
 
@@ -1375,7 +1363,7 @@ function FlatpickrInstance(
 
         case 27: // escape
           e.preventDefault();
-          self.close();
+          focusAndClose();
           break;
 
         case 8:
@@ -1392,9 +1380,9 @@ function FlatpickrInstance(
             e.preventDefault();
 
             if (self.daysContainer) {
-              const delta = e.keyCode === 39 ? 1 : -1;
+              const delta = isInput ? 0 : e.keyCode === 39 ? 1 : -1;
 
-              if (!e.ctrlKey) focusOnDay((e.target as DayElement).$i, delta);
+              if (!e.ctrlKey) focusOnDay(undefined, delta);
               else changeMonth(delta, true, true);
             }
           } else if (self.hourElement) self.hourElement.focus();
