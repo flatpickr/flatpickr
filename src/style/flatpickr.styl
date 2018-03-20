@@ -12,11 +12,10 @@
 
 .flatpickr-calendar
   background transparent
-  overflow hidden
-  max-height 0
   opacity 0
-  visibility hidden
+  display none
   text-align center
+  visibility hidden
   padding 0
   animation none
   direction ltr
@@ -43,9 +42,8 @@
 
   &.open, &.inline
     opacity 1
-    visibility visible
-    overflow visible
     max-height 640px
+    visibility visible
 
   &.open
     display inline-block
@@ -66,6 +64,7 @@
     &.open
       z-index 999
       display block
+
   &.multiMonth
     .prevMonthDay, .nextMonthDay
       visibility hidden
@@ -186,6 +185,9 @@
     height $monthNavHeight
     padding 10px
     z-index 3
+
+    &.disabled
+      display none
 
     i
       position relative
