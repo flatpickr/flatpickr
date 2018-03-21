@@ -1046,8 +1046,8 @@ function FlatpickrInstance(
     const delta = is_offset ? value : value - self.currentMonth;
 
     if (
-      (delta < 0 && self._hidePrevMonthArrow) ||
-      (delta > 0 && self._hideNextMonthArrow)
+      (delta < 0 && self._hidePrevMonthArrow === true) ||
+      (delta > 0 && self._hideNextMonthArrow === true)
     )
       return;
 
@@ -1065,7 +1065,7 @@ function FlatpickrInstance(
     triggerEvent("onMonthChange");
     updateNavigationCurrentMonth();
 
-    if (from_keyboard) {
+    if (from_keyboard === true) {
       focusOnDay(undefined, 0);
     }
   }
@@ -1073,15 +1073,15 @@ function FlatpickrInstance(
   function clear(triggerChangeEvent = true) {
     self.input.value = "";
 
-    if (self.altInput) self.altInput.value = "";
+    if (self.altInput !== undefined) self.altInput.value = "";
 
-    if (self.mobileInput) self.mobileInput.value = "";
+    if (self.mobileInput !== undefined) self.mobileInput.value = "";
 
     self.selectedDates = [];
     self.latestSelectedDateObj = undefined;
     self.showTimeInput = false;
 
-    if (self.config.enableTime) {
+    if (self.config.enableTime === true) {
       if (self.config.minDate !== undefined)
         setHoursFromDate(self.config.minDate);
       else
@@ -1277,7 +1277,8 @@ function FlatpickrInstance(
         ) > 0)
     )
       return false;
-    if (!self.config.enable.length && !self.config.disable.length) return true;
+    if (self.config.enable.length === 0 && self.config.disable.length === 0)
+      return true;
 
     if (dateToCheck === undefined) return false;
 
@@ -2116,20 +2117,21 @@ function FlatpickrInstance(
 
     if (preloadedDate) setSelectedDate(preloadedDate, self.config.dateFormat);
 
-    const initialDate = self.selectedDates.length
-      ? self.selectedDates[0]
-      : self.config.minDate &&
-        self.config.minDate.getTime() > self.now.getTime()
-        ? self.config.minDate
-        : self.config.maxDate &&
-          self.config.maxDate.getTime() < self.now.getTime()
-          ? self.config.maxDate
-          : self.now;
+    const initialDate =
+      self.selectedDates.length > 0
+        ? self.selectedDates[0]
+        : self.config.minDate &&
+          self.config.minDate.getTime() > self.now.getTime()
+          ? self.config.minDate
+          : self.config.maxDate &&
+            self.config.maxDate.getTime() < self.now.getTime()
+            ? self.config.maxDate
+            : self.now;
 
     self.currentYear = initialDate.getFullYear();
     self.currentMonth = initialDate.getMonth();
 
-    if (self.selectedDates.length)
+    if (self.selectedDates.length > 0)
       self.latestSelectedDateObj = self.selectedDates[0];
 
     if (self.config.minTime !== undefined)
@@ -2227,7 +2229,7 @@ function FlatpickrInstance(
         ? "Y-m-d\\TH:i:S"
         : inputType === "date" ? "Y-m-d" : "H:i:S";
 
-    if (self.selectedDates.length) {
+    if (self.selectedDates.length > 0) {
       self.mobileInput.defaultValue = self.mobileInput.value = self.formatDate(
         self.selectedDates[0],
         self.mobileFormatStr
@@ -2337,7 +2339,7 @@ function FlatpickrInstance(
    * @return {void}
    */
   function updateValue(triggerChange = true) {
-    if (!self.selectedDates.length) return self.clear(triggerChange);
+    if (self.selectedDates.length === 0) return self.clear(triggerChange);
 
     if (self.mobileInput !== undefined && self.mobileFormatStr) {
       self.mobileInput.value =
