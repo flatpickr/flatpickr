@@ -52,7 +52,7 @@ function incrementTime(
   if (e !== undefined && e.parentNode)
     for (let i = times; i--; )
       simulate(
-        type === "currentYearElement" ? "click" : "mousedown",
+        "mousedown",
         e.parentNode.childNodes[childNodeNum],
         { which: 1 },
         MouseEvent
@@ -656,43 +656,7 @@ describe("flatpickr", () => {
       fp.open();
       fp.input.focus();
 
-      simulate(
-        "keydown",
-        window.document.body,
-        { keyCode: 37, bubbles: true }, // "ArrowLeft"
-        KeyboardEvent
-      );
-      let dayElem = document.activeElement as DayElement;
-      expect(fp.currentMonth).toBe(0);
-      expect(dayElem.dateObj.getDate()).toEqual(1);
-
-      simulate("keydown", document.activeElement, { keyCode: 37 }); // "ArrowLeft"
-      expect(fp.currentMonth).toBe(11);
-      expect(fp.currentYear).toBe(2016);
-      dayElem = document.activeElement as DayElement;
-      expect(dayElem.dateObj.getDate()).toEqual(7);
-
-      simulate("keydown", document.activeElement, { keyCode: 39 }); // "ArrowRight"
-      dayElem = document.activeElement as DayElement;
-      expect(dayElem.dateObj.getDate()).toEqual(1);
-      expect(fp.currentMonth).toBe(0);
-      expect(fp.currentYear).toBe(2017);
-
-      simulate("keydown", document.activeElement, { keyCode: 38 }); // "ArrowUp"
-      simulate("keydown", document.activeElement, { keyCode: 38 }); // "ArrowUp"
-      expect(fp.currentMonth).toBe(11);
-      expect(fp.currentYear).toBe(2016);
-      dayElem = document.activeElement as DayElement;
-      expect(dayElem.dateObj.getDate()).toEqual(25);
-
-      simulate("keydown", document.activeElement, { keyCode: 40 }); // "ArrowDown"
-      simulate("keydown", document.activeElement, { keyCode: 40 }); // "ArrowDown"
-      expect(fp.currentMonth).toBe(0);
-      expect(fp.currentYear).toBe(2017);
-      dayElem = document.activeElement as DayElement;
-      expect(dayElem.dateObj.getDate()).toEqual(1);
-
-      simulate("keydown", document.activeElement, {
+      simulate("keydown", document.body, {
         // "ArrowRight"
         keyCode: 39,
         ctrlKey: true,
@@ -700,12 +664,12 @@ describe("flatpickr", () => {
       expect(fp.currentMonth).toBe(1);
       expect(fp.currentYear).toBe(2017);
 
-      simulate("keydown", document.activeElement, {
+      simulate("keydown", document.body, {
         // "ArrowLeft"
         keyCode: 37,
         ctrlKey: true,
       });
-      simulate("keydown", document.activeElement, {
+      simulate("keydown", document.body, {
         // "ArrowLeft"
         keyCode: 37,
         ctrlKey: true,
@@ -889,14 +853,14 @@ describe("flatpickr", () => {
 
     it("year input", () => {
       createInstance();
-      fp.yearElements[0].value = "2000";
-      simulate("keyup", fp.yearElements[0]);
+      fp.currentYearElement.value = "2000";
+      simulate("keyup", fp.currentYearElement, KeyboardEvent);
 
       expect(fp.currentYear).toEqual(2000);
       incrementTime("currentYearElement", 1);
 
       expect(fp.currentYear).toEqual(2001);
-      expect(fp.yearElements[0].value).toEqual("2001");
+      expect(fp.currentYearElement.value).toEqual("2001");
       expect(
         (fp.days.childNodes[10] as DayElement).dateObj.getFullYear()
       ).toEqual(2001);
@@ -1253,31 +1217,6 @@ describe("flatpickr", () => {
       expect(fp.input.value).toEqual("2016-01-13 to 2016-01-17");
     });
 
-    it("show and hide prev/next month arrows", () => {
-      const isArrowVisible = (which: "prevMonthNav" | "nextMonthNav") =>
-        fp[which].style.display !== "none";
-      createInstance({
-        minDate: "2099-1-1",
-        maxDate: "2099-3-4",
-        mode: "range",
-      });
-
-      expect(fp.currentMonth).toBe(0);
-      expect(isArrowVisible("prevMonthNav")).toBe(false);
-      expect(isArrowVisible("nextMonthNav")).toBe(true);
-
-      simulate("click", fp.days.childNodes[10], { which: 1 }, MouseEvent); // select some date
-      jest.runOnlyPendingTimers();
-      simulate("click", fp.nextMonthNav, { which: 1 }, MouseEvent);
-
-      expect(isArrowVisible("prevMonthNav")).toBe(true);
-      expect(isArrowVisible("nextMonthNav")).toBe(true);
-
-      simulate("click", fp.nextMonthNav, { which: 1 }, MouseEvent);
-      expect(isArrowVisible("prevMonthNav")).toBe(true);
-      expect(isArrowVisible("nextMonthNav")).toBe(false);
-    });
-
     it("adds disabled class to disabled prev/next month arrows", () => {
       const isArrowDisabled = (which: "prevMonthNav" | "nextMonthNav") =>
         fp[which].classList.contains("disabled");
@@ -1291,13 +1230,13 @@ describe("flatpickr", () => {
       expect(isArrowDisabled("prevMonthNav")).toBe(true);
       expect(isArrowDisabled("nextMonthNav")).toBe(false);
 
-      simulate("click", fp.nextMonthNav, { which: 1 }, MouseEvent);
+      simulate("mousedown", fp.nextMonthNav, { which: 1 }, MouseEvent);
 
       expect(fp.currentMonth).toBe(1);
       expect(isArrowDisabled("prevMonthNav")).toBe(false);
       expect(isArrowDisabled("nextMonthNav")).toBe(false);
 
-      simulate("click", fp.nextMonthNav, { which: 1 }, MouseEvent);
+      simulate("mousedown", fp.nextMonthNav, { which: 1 }, MouseEvent);
 
       expect(fp.currentMonth).toBe(2);
       expect(isArrowDisabled("prevMonthNav")).toBe(false);
