@@ -1,6 +1,6 @@
 {
   "name": "flatpickr",
-  "version": "4.3.2",
+  "version": "4.4.0",
   "description": "A lightweight, powerful javascript datetime picker",
   "scripts": {
     "build": "NODE_ENV=production webpack --config build/webpack.config.ts && ./emitDeclarations.sh",
