@@ -1688,14 +1688,14 @@ function FlatpickrInstance(
     self.config.formatDate = userConfig.formatDate;
 
     Object.defineProperty(self.config, "enable", {
-      get: () => self.config._enable || [],
+      get: () => self.config._enable,
       set: dates => {
         self.config._enable = parseDateRules(dates);
       },
     });
 
     Object.defineProperty(self.config, "disable", {
-      get: () => self.config._disable || [],
+      get: () => self.config._disable,
       set: dates => {
         self.config._disable = parseDateRules(dates);
       },
@@ -2371,6 +2371,7 @@ function FlatpickrInstance(
     if (isPrevMonth || isNextMonth) {
       changeMonth(isPrevMonth ? -1 : 1);
     } else if (self.yearElements.indexOf(e.target as HTMLInputElement) > -1) {
+      e.preventDefault();
       (e.target as HTMLInputElement).select();
     } else if ((e.target as Element).classList.contains("arrowUp")) {
       self.changeYear(self.currentYear + 1);
