@@ -2110,7 +2110,7 @@ function FlatpickrInstance(
 
   function setupDates() {
     self.selectedDates = [];
-    self.now = self.parseDate(self.config.now);
+    self.now = self.parseDate(self.config.now) || new Date();
 
     const preloadedDate = self.config.defaultDate || self.input.value;
 
