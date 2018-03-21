@@ -5,6 +5,8 @@ import * as CleanBuildFolder from "clean-webpack-plugin";
 import * as ExtractTextPlugin from "extract-text-webpack-plugin";
 import * as LiveReload from "webpack-livereload-plugin";
 
+const VERSION = require("../package.json").version;
+
 const [SOURCE_DIR, BUILD_DIR] = ["src", "dist"];
 
 const PRODUCTION = process.env.NODE_ENV === "production";
@@ -24,6 +26,10 @@ const PLUGINS = {
   production: [
     new webpack.HashedModuleIdsPlugin(),
     new CleanBuildFolder(BUILD_DIR),
+    new webpack.BannerPlugin({
+      banner: `flatpickr v${VERSION}`,
+      test: /\.js$/,
+    }),
   ],
 };
 
