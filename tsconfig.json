@@ -9,7 +9,6 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "removeComments": true,
-    "declaration": true,
     "lib": [
       "es2015",
       "dom",
@@ -17,9 +16,5 @@
       "esnext.asynciterable"
     ],
     "baseUrl": "src"
-  },
-  "exclude": [
-    "node_modules",
-    "build.ts"
-  ]
+  }
 }

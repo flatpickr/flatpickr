@@ -1,23 +1,23 @@
 {
   "compilerOptions": {
     "strict": true,
+    "strictFunctionTypes": true,
     "noImplicitAny": true,
-    "target": "esnext",
-    "module": "esnext",
+    "target": "es5",
+    "module": "ESNext",
     "moduleResolution": "node",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "declaration": true,
+    "removeComments": true,
     "lib": [
       "es2015",
       "dom",
       "es2017.object",
       "esnext.asynciterable"
     ],
-    "baseUrl": "src"
+    "baseUrl": "./"
   },
   "exclude": [
     "./__tests__",
-    "./__ssr_tests__"
   ]
 }
