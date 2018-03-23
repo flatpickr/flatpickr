@@ -34,6 +34,6 @@ export default {
     livereload()] : []
   ],
   watch: {
-    include: 'src/**/*.ts',
-  }
+      chokidar: false
+    }
 }
