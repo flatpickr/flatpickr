@@ -2483,8 +2483,7 @@ if (typeof HTMLElement !== "undefined") {
 }
 
 /* istanbul ignore next */
-var flatpickr: FlatpickrFn;
-flatpickr = function(
+var flatpickr = function(
   selector: NodeList | HTMLElement | string,
   config?: Options
 ) {
@@ -2494,8 +2493,6 @@ flatpickr = function(
 
   return _flatpickr([selector], config);
 } as FlatpickrFn;
-
-if (typeof window === "object") window.flatpickr = flatpickr;
 
 /* istanbul ignore next */
 flatpickr.defaultConfig = defaultOptions;
