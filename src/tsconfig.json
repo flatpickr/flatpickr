@@ -1,10 +1,8 @@
 {
   "compilerOptions": {
     "strict": true,
-    "strictFunctionTypes": true,
-    "noImplicitAny": true,
-    "target": "es5",
-    "module": "ESNext",
+    "target": "ES2015",
+    "module": "ES2015",
     "moduleResolution": "node",
     "noUnusedLocals": true,
     "noUnusedParameters": true,

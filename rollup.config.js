@@ -1,5 +1,6 @@
 // rollup.config.js
-import typescript from 'rollup-plugin-typescript2';
+import typescript from 'rollup-plugin-typescript';
+import babel from 'rollup-plugin-babel';
 import serve from 'rollup-plugin-serve';
 import livereload from "rollup-plugin-livereload"
 
@@ -12,18 +13,17 @@ export default {
     file: 'dist/flatpickr.js',
     name: "flatpickr",
     format: 'umd',
-    exports: "named",
+    exports: "default",
     banner: `/* flatpickr v${pkg.version}, @license MIT */`
   },
 
   plugins: [
     typescript({
-      // abortOnError: false,
-      // cacheRoot: `/tmp/.rpt2_cache`,
-      // clean: true,
-      // tsconfig: "src/tsconfig.json"
       tsconfig: path.resolve("src/tsconfig.json"),
       typescript: require('typescript')
+    }),
+    babel({
+      runtimeHelpers: true
     }),
     ...process.env.ROLLUP_WATCH ? [serve({
       open: true,

@@ -1,5 +1,4 @@
-import * as fs from "fs";
-import { promisify } from "util";
+import * as fs from "fs-extra";
 import { exec as execCommand } from "child_process";
 
 import * as glob from "glob";
@@ -12,6 +11,7 @@ import * as stylus_autoprefixer from "autoprefixer-stylus";
 
 import * as rollup from "rollup";
 import * as rollup_typescript from "rollup-plugin-typescript";
+import * as rollup_babel from "rollup-plugin-babel";
 
 import * as path from "path";
 
@@ -45,20 +45,24 @@ const rollupConfig: RollupOptions = {
         tsconfig: path.resolve("src/tsconfig.json"),
         typescript: require("typescript"),
       }),
+      rollup_babel({
+        runtimeHelpers: true,
+      }),
     ],
   },
   output: {
     file: "",
     format: "umd",
+    exports: "auto",
     banner: `/* flatpickr v${pkg.version}, @license MIT */`,
+    sourcemap: false,
   },
 };
 
 function logErr(e: Error | string) {
   console.error(e);
+  console.trace();
 }
-
-const writeFileAsync = promisify(fs.writeFile);
 
 function startRollup(dev = false) {
   return execCommand(`npm run rollup:${dev ? "start" : "build"}`);
@@ -88,35 +92,22 @@ function uglify(src: string) {
       preamble: version,
       comments: false,
     },
-  } as any);
+  });
 
-  (minified as any).error && console.log((minified as any).error);
+  if (minified.error) {
+    logErr(minified.error);
+  }
   return minified.code;
 }
 
 async function buildScripts() {
   try {
-    const transpiled = await readFileAsync("./dist/flatpickr.js");
-    writeFileAsync("./dist/flatpickr.min.js", uglify(transpiled));
+    const transpiled = await fs.readFile("./dist/flatpickr.js");
+    fs.writeFile("./dist/flatpickr.min.js", uglify(transpiled.toString()));
     console.log("done.");
   } catch (e) {
     logErr(e);
   }
-}
-
-function copyFile(source: string, target: string): Promise<any> {
-  var rd = fs.createReadStream(source);
-  var wr = fs.createWriteStream(target);
-  return new Promise(function(resolve, reject) {
-    rd.on("error", reject);
-    wr.on("error", reject);
-    wr.on("finish", resolve);
-    rd.pipe(wr);
-  }).catch(function(error) {
-    rd.destroy();
-    wr.end();
-    throw error;
-  });
 }
 
 function buildExtras(folder: "plugins" | "l10n") {
@@ -139,12 +130,13 @@ function buildExtras(folder: "plugins" | "l10n") {
 
         return bundle.write({
           ...rollupConfig.output,
+          exports: folder === "l10n" ? "named" : "default",
           sourcemap: false,
           file: sourcePath.replace("src", "dist").replace(".ts", ".js"),
           name: customModuleNames[fileName] || fileName,
-        } as any);
+        });
       }),
-      ...css_paths.map(p => copyFile(p, p.replace("src", "dist"))),
+      ...css_paths.map(p => fs.copy(p, p.replace("src", "dist"))),
     ]);
 
     console.log("done.");
@@ -183,9 +175,9 @@ async function buildStyle() {
       transpileStyle(src_ie),
     ]);
 
-    writeFileAsync("./dist/flatpickr.css", style);
-    writeFileAsync("./dist/flatpickr.min.css", min);
-    writeFileAsync("./dist/ie.css", ie);
+    fs.writeFile("./dist/flatpickr.css", style);
+    fs.writeFile("./dist/flatpickr.min.css", min);
+    fs.writeFile("./dist/ie.css", ie);
   } catch (e) {
     logErr(e);
   }
@@ -200,7 +192,7 @@ async function buildThemes() {
 
     readFileAsync(themePath)
       .then(transpileStyle)
-      .then(css => writeFileAsync(`./dist/themes/${match[1]}.css`, css));
+      .then(css => fs.writeFile(`./dist/themes/${match[1]}.css`, css));
   });
 }
 
@@ -240,7 +232,7 @@ function start() {
   proc.stdout.on("data", log);
   proc.stderr.on("data", log);
 
-  proc.stdout.on("readable", () => {
+  proc.on("exit", () => {
     buildScripts();
   });
 

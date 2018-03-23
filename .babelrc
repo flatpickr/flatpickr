@@ -1,0 +1,21 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env", {
+        "modules": false,
+        "targets": {
+                "browsers": [
+            "ie >= 9",
+            "last 2 versions",
+            "safari >= 7"
+          ]
+        },
+        "loose": true
+      }
+    ]
+  ],
+  "plugins": [
+    ["@babel/plugin-proposal-object-rest-spread", { "useBuiltIns": true }],
+    "@babel/plugin-proposal-optional-catch-binding"
+  ]
+}
