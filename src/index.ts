@@ -1224,7 +1224,7 @@ function FlatpickrInstance(
     if (
       !newYear ||
       (self.config.minDate && newYear < self.config.minDate.getFullYear()) ||
-      (self.config.minDate && newYear > self.config.minDate.getFullYear())
+      (self.config.maxDate && newYear > self.config.maxDate.getFullYear())
     )
       return;
 
