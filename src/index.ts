@@ -2372,7 +2372,7 @@ function FlatpickrInstance(
 
     if (isPrevMonth || isNextMonth) {
       changeMonth(isPrevMonth ? -1 : 1);
-    } else if (self.yearElements.indexOf(e.target as HTMLInputElement) > -1) {
+    } else if (self.yearElements.indexOf(e.target as HTMLInputElement) >= 0) {
       e.preventDefault();
       (e.target as HTMLInputElement).select();
     } else if ((e.target as Element).classList.contains("arrowUp")) {
