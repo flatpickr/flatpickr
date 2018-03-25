@@ -32,19 +32,24 @@ function weekSelectPlugin(): Plugin<PlusWeeks> {
     }
 
     function highlightWeek() {
-      if (fp.selectedDateElem) {
-        fp.weekStartDay = (fp.days.childNodes[
-          7 * Math.floor(fp.selectedDateElem.$i / 7)
-        ] as DayElement).dateObj;
-        fp.weekEndDay = (fp.days.childNodes[
-          7 * Math.ceil(fp.selectedDateElem.$i / 7 + 0.01) - 1
-        ] as DayElement).dateObj;
+      const selDate = fp.latestSelectedDateObj;
+      if (
+        selDate !== undefined &&
+        selDate.getMonth() === fp.currentMonth &&
+        selDate.getFullYear() === fp.currentYear
+      ) {
+        fp.weekStartDay = (<DayElement>fp.days.childNodes[
+          7 * Math.floor((<DayElement>fp.selectedDateElem).$i / 7)
+        ]).dateObj;
+        fp.weekEndDay = (<DayElement>fp.days.childNodes[
+          7 * Math.ceil((<DayElement>fp.selectedDateElem).$i / 7 + 0.01) - 1
+        ]).dateObj;
       }
       const days = fp.days.childNodes;
       for (let i = days.length; i--; ) {
-        const date = (days[i] as DayElement).dateObj;
+        const date = (<DayElement>days[i]).dateObj;
         if (date >= fp.weekStartDay && date <= fp.weekEndDay)
-          (days[i] as DayElement).classList.add("week", "selected");
+          (<DayElement>days[i]).classList.add("week", "selected");
       }
     }
 
