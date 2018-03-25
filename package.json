@@ -14,8 +14,7 @@
     "test:typecheck": "tsc -p src --noEmit",
     "test:unit": "jest --config .jest.json",
     "coveralls": "jest --config .jest.json --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
-    "precommit": "lint-staged",
-    "prepublishOnly": "npm run build && npm test"
+    "precommit": "lint-staged"
   },
   "dependencies": {},
   "devDependencies": {
