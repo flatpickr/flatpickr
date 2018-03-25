@@ -4,7 +4,7 @@ function delta(e: WheelEvent) {
   return Math.max(-1, Math.min(1, e.wheelDelta || -e.deltaY));
 }
 
-const scroll = e => {
+const scroll = (e: WheelEvent) => {
   e.preventDefault();
   const ev = new CustomEvent("increment", {
     bubbles: true,
