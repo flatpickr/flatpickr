@@ -3,7 +3,7 @@ Hello,
 Thank you for your interest in contributing to `flatpickr`!
 Contributions are welcome from beginners and seasoned developers alike.
 
-### Bug Fixes
+### Bugs
 
 If you've found a bug, create a new issue first, then submit a pull request. 
 
