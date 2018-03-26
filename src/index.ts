@@ -704,10 +704,6 @@ function FlatpickrInstance(
     let dayNumber = prevMonthDays + 1 - firstOfMonth,
       dayIndex = 0;
 
-    // TODO: week numbers
-    // if (self.weekNumbers && self.weekNumbers.firstChild)
-    //   self.weekNumbers.textContent = "";
-
     // prepend days from the ending of previous month
     for (; dayNumber <= prevMonthDays; dayNumber++, dayIndex++) {
       days.appendChild(
@@ -758,6 +754,10 @@ function FlatpickrInstance(
     }
 
     clearNode(self.daysContainer);
+
+    // TODO: week numbers for each month
+    if (self.weekNumbers && self.weekNumbers.firstChild)
+      clearNode(self.weekNumbers);
 
     const frag = document.createDocumentFragment();
 
