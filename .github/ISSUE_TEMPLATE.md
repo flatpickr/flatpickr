@@ -1,10 +1,4 @@
-<!-- 1. Provide a general summary of the issue in the Title above -->
-
-<!-- 2. Enter your issue details below this comment. -->
-
-<!-- FOR BUG REPORTS -->
-### Reproduction Link
-
+<!-- IF REPORTING A BUG, A REPRO LINK IS ABSOLUTELY NECESSARY -->
 <!-- fork this -->
 https://jsfiddle.net/tj2Lo4z7/
 
