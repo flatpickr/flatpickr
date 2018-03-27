@@ -109,11 +109,10 @@ function FlatpickrInstance(
       self.calendarContainer.style.display = "block";
 
       const daysWidth =
-        (self.calendarContainer.clientWidth + 1) * self.config.showMonths +
-        "px";
+        (self.daysContainer.offsetWidth + 1) * self.config.showMonths;
 
-      self.daysContainer.style.width = daysWidth;
-      self.calendarContainer.style.width = daysWidth;
+      self.daysContainer.style.width = daysWidth + "px";
+      self.calendarContainer.style.width = daysWidth + "px";
 
       if (self.weekWrapper !== undefined) {
         self.calendarContainer.style.width =
@@ -657,6 +656,7 @@ function FlatpickrInstance(
 
     if (
       self.weekNumbers &&
+      self.config.showMonths === 1 &&
       className !== "prevMonthDay" &&
       dayNumber % 7 === 1
     ) {
@@ -756,8 +756,7 @@ function FlatpickrInstance(
     clearNode(self.daysContainer);
 
     // TODO: week numbers for each month
-    if (self.weekNumbers && self.weekNumbers.firstChild)
-      clearNode(self.weekNumbers);
+    if (self.weekNumbers) clearNode(self.weekNumbers);
 
     const frag = document.createDocumentFragment();
 
@@ -1912,7 +1911,8 @@ function FlatpickrInstance(
     ));
 
     const shouldChangeMonth =
-      selectedDate.getMonth() !== self.currentMonth &&
+      (selectedDate.getMonth() < self.currentMonth ||
+        selectedDate.getMonth() > self.currentMonth + self.config.showMonths) &&
       self.config.mode !== "range";
 
     self.selectedDateElem = target;
@@ -1967,7 +1967,11 @@ function FlatpickrInstance(
     }
 
     // maintain focus
-    if (!shouldChangeMonth && self.config.mode !== "range")
+    if (
+      !shouldChangeMonth &&
+      self.config.mode !== "range" &&
+      self.config.showMonths === 1
+    )
       focusOnDay(target.$i, 0);
     else self.selectedDateElem && self.selectedDateElem.focus();
 
