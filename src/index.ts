@@ -1912,7 +1912,8 @@ function FlatpickrInstance(
 
     const shouldChangeMonth =
       (selectedDate.getMonth() < self.currentMonth ||
-        selectedDate.getMonth() > self.currentMonth + self.config.showMonths) &&
+        selectedDate.getMonth() >
+          self.currentMonth + self.config.showMonths - 1) &&
       self.config.mode !== "range";
 
     self.selectedDateElem = target;
@@ -1945,6 +1946,7 @@ function FlatpickrInstance(
       triggerEvent("onMonthChange");
     }
 
+    updateNavigationCurrentMonth();
     buildDays();
 
     if (
