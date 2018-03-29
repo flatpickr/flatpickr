@@ -323,7 +323,8 @@ export const defaults: ParsedOptions = {
   enable: [],
   enableSeconds: false,
   enableTime: false,
-  errorHandler: console.warn,
+  errorHandler: (err: Error) =>
+    typeof console !== "undefined" && console.warn(err),
   getWeek,
   hourIncrement: 1,
   ignoredFocusElements: [],
