@@ -66,10 +66,6 @@
       display block
 
   &.multiMonth
-
-    .prevMonthDay, .nextMonthDay
-      visibility hidden
-
     .flatpickr-days .dayContainer:nth-child(n+1)
       & .flatpickr-day.inRange:nth-child(7n+7)
         box-shadow: none !important;
@@ -516,6 +512,9 @@ span.flatpickr-weekday
     border-radius 0
     box-shadow: (-2.5*$dayMargin) 0 0 $selectedDayBackground,
       (2.5*$dayMargin) 0 0 $selectedDayBackground
+
+  &.hidden
+    visibility hidden
 
 .rangeMode .flatpickr-day
   margin-top 1px

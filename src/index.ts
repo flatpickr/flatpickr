@@ -616,7 +616,10 @@ function FlatpickrInstance(
       self.formatDate(date, self.config.ariaDateFormat)
     );
 
-    if (compareDates(date, self.now) === 0) {
+    if (
+      className.indexOf("hidden") === -1 &&
+      compareDates(date, self.now) === 0
+    ) {
       self.todayDateElem = dayElement;
       dayElement.classList.add("today");
     }
@@ -671,25 +674,82 @@ function FlatpickrInstance(
     return dayElement;
   }
 
-  function focusOnDay(currentInd: number | undefined, offset: number) {
-    const currentIndex =
-      currentInd !== undefined
-        ? currentInd
-        : (document.activeElement as DayElement).$i;
+  function focusOnDayElem(targetNode: DayElement) {
+    targetNode.focus();
+    if (self.config.mode === "range") onMouseOver(targetNode);
+  }
 
-    let newIndex = (currentIndex || 0) + offset || 0,
-      targetNode: DayElement = Array.prototype.find.call(
-        self.days.children,
-        (c: DayElement, i: number) =>
-          i >= newIndex &&
-          c.className.indexOf("MonthDay") === -1 &&
-          isEnabled(c.dateObj)
-      ) as DayElement;
+  function getFirstAvailableDay() {
+    for (let m = 0; m < self.config.showMonths; m++) {
+      const month = (<HTMLDivElement>self.daysContainer).children[m];
 
-    if (targetNode !== undefined) {
-      targetNode.focus();
-      if (self.config.mode === "range") onMouseOver(targetNode);
+      for (let i = 0, l = month.children.length; i < l; i++) {
+        const c = month.children[i] as DayElement;
+        if (c.className.indexOf("hidden") === -1 && isEnabled(c.dateObj))
+          return c;
+      }
     }
+    return undefined;
+  }
+
+  function getNextAvailableDay(current: DayElement, delta: number) {
+    const givenMonth =
+      current.className.indexOf("Month") === -1
+        ? current.dateObj.getMonth()
+        : self.currentMonth;
+    const endMonth = delta > 0 ? self.config.showMonths : -1;
+    const loopDelta = delta > 0 ? 1 : -1;
+
+    for (
+      let m = givenMonth - self.currentMonth;
+      m != endMonth;
+      m += loopDelta
+    ) {
+      const month = (<HTMLDivElement>self.daysContainer).children[m];
+      const startIndex =
+        givenMonth - self.currentMonth === m
+          ? current.$i + delta
+          : delta < 0 ? month.children.length - 1 : 0;
+
+      for (
+        let i = startIndex;
+        i != (delta > 0 ? self.days.children.length : -1);
+        i += loopDelta
+      ) {
+        const c = month.children[i] as DayElement;
+        if (
+          c.className.indexOf("hidden") === -1 &&
+          isEnabled(c.dateObj) &&
+          Math.abs(current.$i - i) >= Math.abs(delta)
+        )
+          return focusOnDayElem(c);
+      }
+    }
+
+    self.changeMonth(delta);
+    focusOnDay(delta > 0 ? getFirstAvailableDay() : undefined, 0);
+    return undefined;
+  }
+
+  function focusOnDay(current: DayElement | undefined, offset: number) {
+    const dayFocused = isInView(document.activeElement);
+    const startElem =
+      current !== undefined
+        ? current
+        : dayFocused
+          ? (document.activeElement as DayElement)
+          : self.selectedDateElem !== undefined &&
+            isInView(self.selectedDateElem)
+            ? self.selectedDateElem
+            : self.todayDateElem !== undefined && isInView(self.todayDateElem)
+              ? self.todayDateElem
+              : getFirstAvailableDay();
+
+    if (startElem === undefined) return self._input.focus();
+
+    if (!dayFocused) return focusOnDayElem(startElem);
+
+    getNextAvailableDay(startElem, offset);
   }
 
   function buildMonthDays(year: number, month: number) {
@@ -699,7 +759,10 @@ function FlatpickrInstance(
     const prevMonthDays = self.utils.getDaysInMonth((month - 1 + 12) % 12);
 
     const daysInMonth = self.utils.getDaysInMonth(month),
-      days = window.document.createDocumentFragment();
+      days = window.document.createDocumentFragment(),
+      isMultiMonth = self.config.showMonths > 1,
+      prevMonthDayClass = isMultiMonth ? "prevMonthDay hidden" : "prevMonthDay",
+      nextMonthDayClass = isMultiMonth ? "nextMonthDay hidden" : "nextMonthDay";
 
     let dayNumber = prevMonthDays + 1 - firstOfMonth,
       dayIndex = 0;
@@ -708,7 +771,7 @@ function FlatpickrInstance(
     for (; dayNumber <= prevMonthDays; dayNumber++, dayIndex++) {
       days.appendChild(
         createDay(
-          "prevMonthDay",
+          prevMonthDayClass,
           new Date(year, month - 1, dayNumber),
           dayNumber,
           dayIndex
@@ -732,7 +795,7 @@ function FlatpickrInstance(
     ) {
       days.appendChild(
         createDay(
-          "nextMonthDay",
+          nextMonthDayClass,
           new Date(year, month + 1, dayNum % daysInMonth),
           dayNum,
           dayIndex
@@ -1320,6 +1383,15 @@ function FlatpickrInstance(
     return !bool;
   }
 
+  function isInView(elem: Element) {
+    if (self.daysContainer !== undefined)
+      return (
+        elem.className.indexOf("hidden") === -1 &&
+        self.daysContainer.contains(elem)
+      );
+    return false;
+  }
+
   function onKeyDown(e: KeyboardEvent) {
     // e.key                      e.keyCode
     // "Backspace"                        8
@@ -1331,6 +1403,7 @@ function FlatpickrInstance(
     // "ArrowRight" (IE "Right")         39
     // "ArrowDown"  (IE "Down")          40
     // "Delete"     (IE "Del")           46
+    e.stopPropagation();
 
     const isInput = e.target === self._input;
     const calendarElem = isCalendarElem(e.target as HTMLElement);
@@ -1379,8 +1452,11 @@ function FlatpickrInstance(
           if (!isTimeObj) {
             e.preventDefault();
 
-            if (self.daysContainer) {
-              const delta = isInput ? 0 : e.keyCode === 39 ? 1 : -1;
+            if (
+              self.daysContainer !== undefined &&
+              self.config.allowInput === false
+            ) {
+              const delta = e.keyCode === 39 ? 1 : -1;
 
               if (!e.ctrlKey) focusOnDay(undefined, delta);
               else changeMonth(delta, true, true);
@@ -1397,9 +1473,8 @@ function FlatpickrInstance(
           if (self.daysContainer && (e.target as DayElement).$i !== undefined) {
             if (e.ctrlKey) {
               changeYear(self.currentYear - delta);
-              focusOnDay((e.target as DayElement).$i, 0);
-            } else if (!isTimeObj)
-              focusOnDay((e.target as DayElement).$i, delta * 7);
+              focusOnDay(undefined, 0);
+            } else if (!isTimeObj) focusOnDay(undefined, delta * 7);
           } else if (self.config.enableTime) {
             if (!isTimeObj && self.hourElement) self.hourElement.focus();
             updateTime(e);
@@ -1974,7 +2049,7 @@ function FlatpickrInstance(
       self.config.mode !== "range" &&
       self.config.showMonths === 1
     )
-      focusOnDay(target.$i, 0);
+      focusOnDayElem(target);
     else self.selectedDateElem && self.selectedDateElem.focus();
 
     if (self.hourElement !== undefined)
