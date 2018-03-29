@@ -12,7 +12,7 @@ export interface Elements {
   mobileFormatStr?: string;
 
   selectedDateElem?: DayElement;
-  todayDateElem?: HTMLSpanElement;
+  todayDateElem?: DayElement;
 
   _positionElement: HTMLElement;
   weekdayContainer: HTMLDivElement;
