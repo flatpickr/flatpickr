@@ -622,6 +622,7 @@ function FlatpickrInstance(
     ) {
       self.todayDateElem = dayElement;
       dayElement.classList.add("today");
+      dayElement.setAttribute("aria-current", "date");
     }
 
     if (dateIsEnabled) {
