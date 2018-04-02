@@ -1173,6 +1173,7 @@ function FlatpickrInstance(
     }
 
     triggerEvent("onClose");
+    positionCalendar();
   }
 
   function destroy() {
@@ -1930,7 +1931,7 @@ function FlatpickrInstance(
 
     if (self.config.inline) return;
 
-    const left = window.pageXOffset + inputBounds.left;
+    const left = self.isOpen ? window.pageXOffset + inputBounds.left : 0;
     const right = window.document.body.offsetWidth - inputBounds.right;
     const rightMost = left + calendarWidth > window.document.body.offsetWidth;
 
