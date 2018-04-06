@@ -53,6 +53,10 @@ export const Polish: CustomLocale = {
       "Grudzień",
     ],
   },
+  rangeSeparator: " do ",
+  weekAbbreviation: "tydz.",
+  scrollTitle: "Przwiń aby zwiększyć",
+  toggleTitle: "Kliknij aby przełączyć",
 
   firstDayOfWeek: 1,
 
