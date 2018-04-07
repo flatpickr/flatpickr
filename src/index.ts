@@ -119,8 +119,8 @@ function FlatpickrInstance(
           daysWidth + self.weekWrapper.offsetWidth + "px";
       }
 
-      self.calendarContainer.style.visibility = "visible";
-      self.calendarContainer.style.display = null;
+      self.calendarContainer.style.removeProperty("visibility");
+      self.calendarContainer.style.removeProperty("display");
     }
 
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
