@@ -101,27 +101,10 @@ function FlatpickrInstance(
       updateValue(false);
     }
 
+    setCalendarWidth();
+
     self.showTimeInput =
       self.selectedDates.length > 0 || self.config.noCalendar;
-
-    if (self.daysContainer !== undefined) {
-      self.calendarContainer.style.visibility = "hidden";
-      self.calendarContainer.style.display = "block";
-
-      const daysWidth =
-        (self.daysContainer.offsetWidth + 1) * self.config.showMonths;
-
-      self.daysContainer.style.width = daysWidth + "px";
-      self.calendarContainer.style.width = daysWidth + "px";
-
-      if (self.weekWrapper !== undefined) {
-        self.calendarContainer.style.width =
-          daysWidth + self.weekWrapper.offsetWidth + "px";
-      }
-
-      self.calendarContainer.style.removeProperty("visibility");
-      self.calendarContainer.style.removeProperty("display");
-    }
 
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
@@ -142,6 +125,26 @@ function FlatpickrInstance(
 
   function bindToInstance<F extends Function>(fn: F): F {
     return fn.bind(self);
+  }
+
+  function setCalendarWidth() {
+    if (self.daysContainer !== undefined) {
+      self.calendarContainer.style.visibility = "hidden";
+      self.calendarContainer.style.display = "block";
+
+      const daysWidth = (self.days.offsetWidth + 1) * self.config.showMonths;
+
+      self.daysContainer.style.width = daysWidth + "px";
+      self.calendarContainer.style.width = daysWidth + "px";
+
+      if (self.weekWrapper !== undefined) {
+        self.calendarContainer.style.width =
+          daysWidth + self.weekWrapper.offsetWidth + "px";
+      }
+
+      self.calendarContainer.style.removeProperty("visibility");
+      self.calendarContainer.style.removeProperty("display");
+    }
   }
 
   /**
@@ -889,6 +892,20 @@ function FlatpickrInstance(
     };
   }
 
+  function buildMonths() {
+    clearNode(self.monthNav);
+    self.monthNav.appendChild(self.prevMonthNav);
+
+    for (let m = self.config.showMonths; m--; ) {
+      const month = buildMonth();
+      self.yearElements.push(month.yearElement);
+      self.monthElements.push(month.monthElement);
+      self.monthNav.appendChild(month.container);
+    }
+
+    self.monthNav.appendChild(self.nextMonthNav);
+  }
+
   function buildMonthNav() {
     self.monthNav = createElement<HTMLDivElement>("div", "flatpickr-months");
     self.yearElements = [];
@@ -903,16 +920,7 @@ function FlatpickrInstance(
     self.nextMonthNav = createElement("span", "flatpickr-next-month");
     self.nextMonthNav.innerHTML = self.config.nextArrow;
 
-    self.monthNav.appendChild(self.prevMonthNav);
-
-    for (let m = self.config.showMonths; m--; ) {
-      const month = buildMonth();
-      self.yearElements.push(month.yearElement);
-      self.monthElements.push(month.monthElement);
-      self.monthNav.appendChild(month.container);
-    }
-
-    self.monthNav.appendChild(self.nextMonthNav);
+    buildMonths();
 
     Object.defineProperty(self, "_hidePrevMonthArrow", {
       get: () => self.__hidePrevMonthArrow,
@@ -1057,6 +1065,7 @@ function FlatpickrInstance(
         "div",
         "flatpickr-weekdays"
       );
+    else clearNode(self.weekdayContainer);
 
     for (let i = self.config.showMonths; i--; ) {
       const container = createElement<HTMLDivElement>(
@@ -1952,7 +1961,6 @@ function FlatpickrInstance(
   function redraw() {
     if (self.config.noCalendar || self.isMobile) return;
 
-    updateWeekdays();
     updateNavigationCurrentMonth();
     buildDays();
   }
@@ -2079,7 +2087,8 @@ function FlatpickrInstance(
   }
 
   const CALLBACKS: { [k in keyof Options]: Function[] } = {
-    locale: [setupLocale],
+    locale: [setupLocale, updateWeekdays],
+    showMonths: [buildMonths, setCalendarWidth, buildWeekdays],
   };
 
   function set<K extends keyof Options>(
