@@ -1853,6 +1853,17 @@ function FlatpickrInstance(
       self.config.enableTime = true;
     }
 
+    self.isMobile =
+      !self.config.disableMobile &&
+      !self.config.inline &&
+      self.config.mode === "single" &&
+      !self.config.disable.length &&
+      !self.config.enable.length &&
+      !self.config.weekNumbers &&
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      );
+
     for (let i = 0; i < self.config.plugins.length; i++) {
       const pluginConf = self.config.plugins[i](self) || ({} as Options);
       for (const key in pluginConf) {
@@ -1868,17 +1879,6 @@ function FlatpickrInstance(
           ] as any;
       }
     }
-
-    self.isMobile =
-      !self.config.disableMobile &&
-      !self.config.inline &&
-      self.config.mode === "single" &&
-      !self.config.disable.length &&
-      !self.config.enable.length &&
-      !self.config.weekNumbers &&
-      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-        navigator.userAgent
-      );
 
     triggerEvent("onParseConfig");
   }

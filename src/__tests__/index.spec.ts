@@ -2,6 +2,7 @@ import flatpickr from "../index";
 import { Russian } from "../l10n/ru";
 import { Instance, DayElement } from "../types/instance";
 import { Options, DateRangeLimit } from "../types/options";
+import confirmDatePlugin from '../plugins/confirmDate/confirmDate';
 
 flatpickr.defaultConfig.animate = false;
 flatpickr.defaultConfig.closeOnSelect = true;
@@ -821,6 +822,13 @@ describe("flatpickr", () => {
           expect(mobileInput.disabled).toBe(true);
           expect(mobileInput.required).toBe(true);
         });
+
+        it('with confirmDatePlugin', () => {
+          mockAgent = 'Android';
+          createInstance({
+            plugins: [confirmDatePlugin({})]
+          });
+        })
       });
     });
 
