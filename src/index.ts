@@ -723,7 +723,9 @@ function FlatpickrInstance(
       const startIndex =
         givenMonth - self.currentMonth === m
           ? current.$i + delta
-          : delta < 0 ? month.children.length - 1 : 0;
+          : delta < 0
+            ? month.children.length - 1
+            : 0;
       const numMonthDays = month.children.length;
 
       for (
@@ -1569,18 +1571,12 @@ function FlatpickrInstance(
       rangeStartDate = Math.min(hoverDate, self.selectedDates[0].getTime()),
       rangeEndDate = Math.max(hoverDate, self.selectedDates[0].getTime());
 
-    const months: HTMLCollection = (self.daysContainer as HTMLDivElement)
-        .children,
-      firstDay = (months[0].children[0] as DayElement).dateObj.getTime(),
-      lastDay = (months[months.length - 1]
-        .lastChild as DayElement).dateObj.getTime();
-
     let containsDisabled = false;
 
     let minRange = 0,
       maxRange = 0;
 
-    for (let t = firstDay; t < lastDay; t += duration.DAY) {
+    for (let t = rangeStartDate; t < rangeEndDate; t += duration.DAY) {
       if (!isEnabled(new Date(t), true)) {
         containsDisabled =
           containsDisabled || (t > rangeStartDate && t < rangeEndDate);
@@ -2311,7 +2307,9 @@ function FlatpickrInstance(
 
   function setupMobile() {
     const inputType = self.config.enableTime
-      ? self.config.noCalendar ? "time" : "datetime-local"
+      ? self.config.noCalendar
+        ? "time"
+        : "datetime-local"
       : "date";
 
     self.mobileInput = createElement<HTMLInputElement>(
@@ -2328,7 +2326,9 @@ function FlatpickrInstance(
     self.mobileFormatStr =
       inputType === "datetime-local"
         ? "Y-m-d\\TH:i:S"
-        : inputType === "date" ? "Y-m-d" : "H:i:S";
+        : inputType === "date"
+          ? "Y-m-d"
+          : "H:i:S";
 
     if (self.selectedDates.length > 0) {
       self.mobileInput.defaultValue = self.mobileInput.value = self.formatDate(
