@@ -1692,7 +1692,9 @@ function FlatpickrInstance(
         updateValue();
       }
 
-      setTimeout(() => (<HTMLInputElement>self.hourElement).select(), 50);
+      if (self.config.allowInput === false) {
+        setTimeout(() => (<HTMLInputElement>self.hourElement).select(), 50);
+      }
     }
   }
 
@@ -1792,19 +1794,27 @@ function FlatpickrInstance(
       },
     });
 
-    if (!userConfig.dateFormat && userConfig.enableTime) {
-      formats.dateFormat = userConfig.noCalendar
-        ? "H:i" + (userConfig.enableSeconds ? ":S" : "")
-        : flatpickr.defaultConfig.dateFormat +
-          " H:i" +
-          (userConfig.enableSeconds ? ":S" : "");
+    const timeMode = userConfig.mode === "time";
+
+    if (!userConfig.dateFormat && (userConfig.enableTime || timeMode)) {
+      formats.dateFormat =
+        userConfig.noCalendar || timeMode
+          ? "H:i" + (userConfig.enableSeconds ? ":S" : "")
+          : flatpickr.defaultConfig.dateFormat +
+            " H:i" +
+            (userConfig.enableSeconds ? ":S" : "");
     }
 
-    if (userConfig.altInput && userConfig.enableTime && !userConfig.altFormat) {
-      formats.altFormat = userConfig.noCalendar
-        ? "h:i" + (userConfig.enableSeconds ? ":S K" : " K")
-        : flatpickr.defaultConfig.altFormat +
-          ` h:i${userConfig.enableSeconds ? ":S" : ""} K`;
+    if (
+      userConfig.altInput &&
+      (userConfig.enableTime || timeMode) &&
+      !userConfig.altFormat
+    ) {
+      formats.altFormat =
+        userConfig.noCalendar || timeMode
+          ? "h:i" + (userConfig.enableSeconds ? ":S K" : " K")
+          : flatpickr.defaultConfig.altFormat +
+            ` h:i${userConfig.enableSeconds ? ":S" : ""} K`;
     }
 
     Object.defineProperty(self.config, "minDate", {
@@ -1834,6 +1844,11 @@ function FlatpickrInstance(
       set: minMaxTimeSetter("max"),
     });
 
+    if (userConfig.mode === "time") {
+      self.config.noCalendar = true;
+      self.config.enableTime = true;
+    }
+
     Object.assign(self.config, formats, userConfig);
 
     for (let i = 0; i < boolOpts.length; i++)
@@ -1847,11 +1862,6 @@ function FlatpickrInstance(
           bindToInstance
         );
       }
-    }
-
-    if (self.config.mode === "time") {
-      self.config.noCalendar = true;
-      self.config.enableTime = true;
     }
 
     self.isMobile =
@@ -2121,6 +2131,7 @@ function FlatpickrInstance(
     else if (typeof inputDate === "string") {
       switch (self.config.mode) {
         case "single":
+        case "time":
           dates = [self.parseDate(inputDate, format)];
           break;
 
