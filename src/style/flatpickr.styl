@@ -74,6 +74,8 @@
       & .flatpickr-day.inRange:nth-child(7n+1)
         box-shadow: -2px 0 0 #e6e6e6, 5px 0 0 #e6e6e6
 
+
+
   .hasWeeks, .hasTime
     .dayContainer
       border-bottom 0
@@ -479,9 +481,9 @@ span.flatpickr-weekday
 
     &.endRange
       border-radius 0 50px 50px 0
-      //
 
-    &.startRange + .endRange
+    // Avoid adding extra fill because it overflows in multimonth mode
+    &.startRange + .endRange:not(:nth-child(7n+1))
       box-shadow: (-5*$dayMargin) 0 0 $selectedDayBackground
 
     &.startRange.endRange
