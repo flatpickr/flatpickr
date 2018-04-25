@@ -57,4 +57,4 @@ export const Albanian: CustomLocale = {
 
 fp.l10ns.sq = Albanian;
 
-export default fp.l10ns as FlatpickrFn["l10ns"];
+export default fp.l10ns;

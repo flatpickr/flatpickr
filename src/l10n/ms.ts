@@ -61,4 +61,4 @@ export const Malaysian: CustomLocale = {
   },
 };
 
-export default fp.l10ns as FlatpickrFn["l10ns"];
+export default fp.l10ns;

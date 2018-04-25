@@ -59,4 +59,4 @@ export const Croatian: CustomLocale = {
 
 fp.l10ns.hr = Croatian;
 
-export default fp.l10ns as FlatpickrFn["l10ns"];
+export default fp.l10ns;

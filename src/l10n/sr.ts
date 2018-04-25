@@ -61,4 +61,4 @@ export const Serbian: CustomLocale = {
 
 fp.l10ns.sr = Serbian;
 
-export default fp.l10ns as FlatpickrFn["l10ns"];
+export default fp.l10ns;

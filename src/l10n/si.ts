@@ -57,4 +57,4 @@ export const Sinhala: CustomLocale = {
 
 fp.l10ns.si = Sinhala;
 
-export default fp.l10ns as FlatpickrFn["l10ns"];
+export default fp.l10ns;

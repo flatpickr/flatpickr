@@ -61,4 +61,4 @@ export const Latvian: CustomLocale = {
 
 fp.l10ns.lv = Latvian;
 
-export default fp.l10ns as FlatpickrFn["l10ns"];
+export default fp.l10ns;

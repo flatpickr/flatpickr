@@ -67,4 +67,4 @@ export const Norwegian: CustomLocale = {
 
 fp.l10ns.no = Norwegian;
 
-export default fp.l10ns as FlatpickrFn["l10ns"];
+export default fp.l10ns;

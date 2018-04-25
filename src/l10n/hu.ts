@@ -67,4 +67,4 @@ export const Hungarian: CustomLocale = {
 
 fp.l10ns.hu = Hungarian;
 
-export default fp.l10ns as FlatpickrFn["l10ns"];
+export default fp.l10ns;

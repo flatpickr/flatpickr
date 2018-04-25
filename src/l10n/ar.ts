@@ -44,4 +44,4 @@ export const Arabic: CustomLocale = {
 
 fp.l10ns.ar = Arabic;
 
-export default fp.l10ns as FlatpickrFn["l10ns"];
+export default fp.l10ns;

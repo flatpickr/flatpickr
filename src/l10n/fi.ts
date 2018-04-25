@@ -63,4 +63,4 @@ export const Finnish: CustomLocale = {
 
 fp.l10ns.fi = Finnish;
 
-export default fp.l10ns as FlatpickrFn["l10ns"];
+export default fp.l10ns;

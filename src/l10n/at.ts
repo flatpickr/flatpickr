@@ -63,4 +63,4 @@ export const Austria: CustomLocale = {
 
 fp.l10ns.at = Austria;
 
-export default fp.l10ns as FlatpickrFn["l10ns"];
+export default fp.l10ns;

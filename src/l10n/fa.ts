@@ -61,4 +61,4 @@ export const Persian: CustomLocale = {
 
 fp.l10ns.fa = Persian;
 
-export default fp.l10ns as FlatpickrFn["l10ns"];
+export default fp.l10ns;

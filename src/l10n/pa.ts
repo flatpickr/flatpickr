@@ -57,4 +57,4 @@ export const Punjabi: CustomLocale = {
 
 fp.l10ns.pa = Punjabi;
 
-export default fp.l10ns as FlatpickrFn["l10ns"];
+export default fp.l10ns;

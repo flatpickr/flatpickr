@@ -66,4 +66,4 @@ export const Belarusian: CustomLocale = {
 
 fp.l10ns.be = Belarusian;
 
-export default fp.l10ns as FlatpickrFn["l10ns"];
+export default fp.l10ns;

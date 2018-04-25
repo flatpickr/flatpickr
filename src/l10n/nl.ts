@@ -69,4 +69,4 @@ export const Dutch: CustomLocale = {
 
 fp.l10ns.nl = Dutch;
 
-export default fp.l10ns as FlatpickrFn["l10ns"];
+export default fp.l10ns;

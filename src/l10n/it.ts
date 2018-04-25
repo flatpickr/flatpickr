@@ -69,4 +69,4 @@ export const Italian: CustomLocale = {
 
 fp.l10ns.it = Italian;
 
-export default fp.l10ns as FlatpickrFn["l10ns"];
+export default fp.l10ns;

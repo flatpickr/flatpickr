@@ -57,4 +57,4 @@ export const Japanese: CustomLocale = {
 
 fp.l10ns.ja = Japanese;
 
-export default fp.l10ns as FlatpickrFn["l10ns"];
+export default fp.l10ns;

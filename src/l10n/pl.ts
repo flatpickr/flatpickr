@@ -67,4 +67,4 @@ export const Polish: CustomLocale = {
 
 fp.l10ns.pl = Polish;
 
-export default fp.l10ns as FlatpickrFn["l10ns"];
+export default fp.l10ns;

@@ -55,4 +55,4 @@ export const Indonesian: CustomLocale = {
 
 fp.l10ns.id = Indonesian;
 
-export default fp.l10ns as FlatpickrFn["l10ns"];
+export default fp.l10ns;

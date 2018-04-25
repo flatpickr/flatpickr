@@ -63,4 +63,4 @@ export const Romanian: CustomLocale = {
 
 fp.l10ns.ro = Romanian;
 
-export default fp.l10ns as FlatpickrFn["l10ns"];
+export default fp.l10ns;
