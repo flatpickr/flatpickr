@@ -14,3 +14,21 @@ if (typeof Object.assign !== "function") {
     return target;
   };
 }
+
+if (typeof window.requestAnimationFrame !== "function") {
+  const vendors = ["ms", "moz", "webkit", "o"];
+  for (
+    let x = 0, length = vendors.length;
+    x < length && !window.requestAnimationFrame;
+    ++x
+  ) {
+    window.requestAnimationFrame = (<any>window)[
+      vendors[x] + "RequestAnimationFrame"
+    ];
+  }
+  if (typeof window.requestAnimationFrame !== "function") {
+    window.requestAnimationFrame = function(cb) {
+      return setTimeout(cb, 16);
+    };
+  }
+}

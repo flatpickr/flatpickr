@@ -132,18 +132,23 @@ function FlatpickrInstance(
       self.calendarContainer.style.visibility = "hidden";
       self.calendarContainer.style.display = "block";
 
-      const daysWidth = (self.days.offsetWidth + 1) * self.config.showMonths;
+      window.requestAnimationFrame(function() {
+        if (self.daysContainer !== undefined) {
+          const daysWidth =
+            (self.days.offsetWidth + 1) * self.config.showMonths;
 
-      self.daysContainer.style.width = daysWidth + "px";
-      self.calendarContainer.style.width = daysWidth + "px";
+          self.daysContainer.style.width = daysWidth + "px";
+          self.calendarContainer.style.width = daysWidth + "px";
 
-      if (self.weekWrapper !== undefined) {
-        self.calendarContainer.style.width =
-          daysWidth + self.weekWrapper.offsetWidth + "px";
-      }
+          if (self.weekWrapper !== undefined) {
+            self.calendarContainer.style.width =
+              daysWidth + self.weekWrapper.offsetWidth + "px";
+          }
 
-      self.calendarContainer.style.removeProperty("visibility");
-      self.calendarContainer.style.removeProperty("display");
+          self.calendarContainer.style.removeProperty("visibility");
+          self.calendarContainer.style.removeProperty("display");
+        }
+      });
     }
   }
 
