@@ -4500,9 +4500,9 @@ typescript@^1.8.9:
   version "1.8.10"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-1.8.10.tgz#b475d6e0dff0bf50f296e5ca6ef9fbb5c7320f1e"
 
-typescript@^2.9.0-dev.20180424:
-  version "2.9.0-dev.20180424"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.9.0-dev.20180424.tgz#07fab78bd174a3904a1c3e9391e3bd0b02d41746"
+typescript@^2.8.3:
+  version "2.8.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.8.3.tgz#5d817f9b6f31bb871835f4edf0089f21abe6c170"
 
 uglify-js@^2.6:
   version "2.8.29"
