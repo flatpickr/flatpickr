@@ -1422,7 +1422,6 @@ function FlatpickrInstance(
     // "ArrowRight" (IE "Right")         39
     // "ArrowDown"  (IE "Down")          40
     // "Delete"     (IE "Del")           46
-    e.stopPropagation();
 
     const isInput = e.target === self._input;
     const calendarElem = isCalendarElem(e.target as HTMLElement);
