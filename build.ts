@@ -136,7 +136,7 @@ function buildExtras(folder: "plugins" | "l10n") {
           name: customModuleNames[fileName] || fileName,
         });
       }),
-      ...css_paths.map(p => fs.copy(p, p.replace("src", "dist"))),
+      ...(css_paths.map(p => fs.copy(p, p.replace("src", "dist"))) as any),
     ]);
 
     console.log("done.");
