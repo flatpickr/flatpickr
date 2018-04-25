@@ -2468,13 +2468,14 @@ function FlatpickrInstance(
   }
 
   function onMonthNavClick(e: MouseEvent) {
+    e.preventDefault();
+
     const isPrevMonth = self.prevMonthNav.contains(e.target as Node);
     const isNextMonth = self.nextMonthNav.contains(e.target as Node);
 
     if (isPrevMonth || isNextMonth) {
       changeMonth(isPrevMonth ? -1 : 1);
     } else if (self.yearElements.indexOf(e.target as HTMLInputElement) >= 0) {
-      e.preventDefault();
       (e.target as HTMLInputElement).select();
     } else if ((e.target as Element).classList.contains("arrowUp")) {
       self.changeYear(self.currentYear + 1);
