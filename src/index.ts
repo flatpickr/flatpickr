@@ -1472,7 +1472,7 @@ function FlatpickrInstance(
 
             if (
               self.daysContainer !== undefined &&
-              self.config.allowInput === false
+              (allowInput === false || isInView(document.activeElement))
             ) {
               const delta = e.keyCode === 39 ? 1 : -1;
 
@@ -2645,5 +2645,7 @@ Date.prototype.fp_incr = function(days: number | string) {
     this.getDate() + (typeof days === "string" ? parseInt(days, 10) : days)
   );
 };
+
+window.flatpickr = flatpickr;
 
 export default flatpickr;
