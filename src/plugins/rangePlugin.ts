@@ -48,16 +48,18 @@ function rangePlugin(config: Config = {}): Plugin {
         fp.open(undefined, secondInput);
       });
 
-      fp._bind(secondInput, "keydown", (e: KeyboardEvent) => {
-        if ((e as KeyboardEvent).key === "Enter") {
-          fp.setDate(
-            [fp.selectedDates[0], secondInput.value],
-            true,
-            dateFormat
-          );
-          secondInput.click();
-        }
-      });
+      if (fp.config.allowInput)
+        fp._bind(secondInput, "keydown", (e: KeyboardEvent) => {
+          if ((e as KeyboardEvent).key === "Enter") {
+            fp.setDate(
+              [fp.selectedDates[0], secondInput.value],
+              true,
+              dateFormat
+            );
+            secondInput.click();
+          }
+        });
+
       if (!config.input)
         fp._input.parentNode &&
           fp._input.parentNode.insertBefore(secondInput, fp._input.nextSibling);
@@ -66,7 +68,7 @@ function rangePlugin(config: Config = {}): Plugin {
     const plugin = {
       onParseConfig() {
         fp.config.mode = "range";
-        fp.config.allowInput = true;
+
         dateFormat = fp.config.altInput
           ? fp.config.altFormat
           : fp.config.dateFormat;
@@ -85,14 +87,15 @@ function rangePlugin(config: Config = {}): Plugin {
           fp.jumpToDate(fp.selectedDates[0]);
         });
 
-        fp._bind(fp._input, "keydown", (e: KeyboardEvent) => {
-          if ((e as KeyboardEvent).key === "Enter")
-            fp.setDate(
-              [fp._input.value, fp.selectedDates[1]],
-              true,
-              dateFormat
-            );
-        });
+        if (fp.config.allowInput)
+          fp._bind(fp._input, "keydown", (e: KeyboardEvent) => {
+            if ((e as KeyboardEvent).key === "Enter")
+              fp.setDate(
+                [fp._input.value, fp.selectedDates[1]],
+                true,
+                dateFormat
+              );
+          });
 
         fp.setDate(fp.selectedDates, false);
         plugin.onValueUpdate(fp.selectedDates);
