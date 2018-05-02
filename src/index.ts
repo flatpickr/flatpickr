@@ -128,11 +128,12 @@ function FlatpickrInstance(
   }
 
   function setCalendarWidth() {
-    if (self.daysContainer !== undefined) {
-      self.calendarContainer.style.visibility = "hidden";
-      self.calendarContainer.style.display = "block";
-
+    if (self.config.weekNumbers === false && self.config.showMonths === 1)
+      return;
+    else if (self.daysContainer !== undefined) {
       window.requestAnimationFrame(function() {
+        self.calendarContainer.style.visibility = "hidden";
+        self.calendarContainer.style.display = "block";
         if (self.daysContainer !== undefined) {
           const daysWidth =
             (self.days.offsetWidth + 1) * self.config.showMonths;
