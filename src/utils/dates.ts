@@ -32,7 +32,9 @@ export const createDateFormatter = ({
       (c, i, arr) =>
         formats[c as token] && arr[i - 1] !== "\\"
           ? formats[c as token](dateObj, locale, config)
-          : c !== "\\" ? c : ""
+          : c !== "\\"
+            ? c
+            : ""
     )
     .join("");
 };
