@@ -119,6 +119,7 @@ export type Instance = Elements &
       event: string;
       element: Element;
       handler: (e?: Event) => void;
+      options?: { capture?: boolean };
     }[];
 
     _bind: <E extends Element>(
