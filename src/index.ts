@@ -1665,7 +1665,7 @@ function FlatpickrInstance(
       }
 
       setTimeout(() => {
-        self.mobileInput !== undefined && self.mobileInput.click();
+        self.mobileInput !== undefined && self.mobileInput.focus();
       }, 0);
 
       triggerEvent("onOpen");
@@ -1941,12 +1941,14 @@ function FlatpickrInstance(
         0
       ),
       calendarWidth = self.calendarContainer.offsetWidth,
-      configPos = self.config.position,
+      configPos = self.config.position.split(" "),
+      configPosVertical = configPos[0],
+      configPosHorizontal = configPos.length > 1 ? configPos[1] : null,
       inputBounds = positionElement.getBoundingClientRect(),
       distanceFromBottom = window.innerHeight - inputBounds.bottom,
       showOnTop =
-        configPos === "above" ||
-        (configPos !== "below" &&
+        configPosVertical === "above" ||
+        (configPosVertical !== "below" &&
           distanceFromBottom < calendarHeight &&
           inputBounds.top > calendarHeight);
 
@@ -1960,7 +1962,12 @@ function FlatpickrInstance(
 
     if (self.config.inline) return;
 
-    const left = window.pageXOffset + inputBounds.left;
+    const left =
+      window.pageXOffset +
+      inputBounds.left -
+      (configPosHorizontal != null && configPosHorizontal === "center"
+        ? (calendarWidth - inputBounds.width) / 2
+        : 0);
     const right = window.document.body.offsetWidth - inputBounds.right;
     const rightMost = left + calendarWidth > window.document.body.offsetWidth;
 
@@ -2386,9 +2393,9 @@ function FlatpickrInstance(
     });
   }
 
-  function toggle() {
+  function toggle(e?: Event) {
     if (self.isOpen) return self.close();
-    self.open();
+    self.open(e);
   }
 
   function triggerEvent(event: HookKey, data?: any) {
