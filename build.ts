@@ -29,6 +29,8 @@ const customModuleNames: Record<string, string> = {
   confirmDate: "confirmDatePlugin",
 };
 
+const watchers: chokidar.FSWatcher[] = [];
+
 interface RollupOptions {
   input: rollup.InputOptions;
   output: rollup.OutputOptions;
@@ -143,6 +145,21 @@ function buildExtras(folder: "plugins" | "l10n") {
   };
 }
 
+// function debounce(func: Function, wait: number, immediate?:boolean) {
+//   var timeout: number | NodeJS.Timer | null;
+//   return function(this: Function) {
+//     var context = this, args = arguments;
+//     var later = function() {
+//       timeout = null;
+//       if (!immediate) func.apply(context, args);
+//     };
+//     var callNow = immediate && !timeout;
+//     clearTimeout(timeout as number);
+//     timeout = setTimeout(later, wait);
+//     if (callNow) func.apply(context, args);
+//   };
+// };
+
 async function transpileStyle(src: string, compress = false) {
   return new Promise<string>((resolve, reject) => {
     stylus(src, {
@@ -203,26 +220,34 @@ function setupWatchers() {
     buildThemes();
   });
   watch("./src/style/themes", buildThemes);
+  watch("./src", (path: string) => {
+    execCommand(`npm run fmt -- ${path}`, {
+      cwd: __dirname,
+    });
+  });
 }
 
-function watch<F extends () => void>(path: string, cb: F) {
-  chokidar
-    .watch(path, {
-      awaitWriteFinish: {
-        stabilityThreshold: 100,
-      },
-      usePolling: true,
-    })
-    .on("change", cb)
-    .on("error", logErr);
+function watch(path: string, cb: (path: string) => void) {
+  watchers.push(
+    chokidar
+      .watch(path, {
+        // awaitWriteFinish: {
+        //   stabilityThreshold: 500,
+        // },
+        //usePolling: true,
+      })
+      .on("change", cb)
+      .on("error", logErr)
+  );
 }
 
 function start() {
   const devMode = process.argv.indexOf("--dev") > -1;
   const proc = startRollup(devMode);
 
-  function exit() {
-    !proc.killed && proc.kill();
+  function exit(signal: string) {
+    !proc.killed && proc.kill(signal);
+    watchers.forEach(w => w.close());
   }
 
   function log(data: string) {
