@@ -1655,7 +1655,7 @@ function FlatpickrInstance(
       }
 
       setTimeout(() => {
-        self.mobileInput !== undefined && self.mobileInput.click();
+        self.mobileInput !== undefined && self.mobileInput.focus();
       }, 0);
 
       triggerEvent("onOpen");
@@ -2383,9 +2383,9 @@ function FlatpickrInstance(
     });
   }
 
-  function toggle() {
+  function toggle(e?: Event) {
     if (self.isOpen) return self.close();
-    self.open();
+    self.open(e);
   }
 
   function triggerEvent(event: HookKey, data?: any) {
