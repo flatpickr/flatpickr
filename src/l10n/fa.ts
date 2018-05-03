@@ -53,7 +53,7 @@ export const Persian: CustomLocale = {
       "دسامبر",
     ],
   },
-
+  firstDayOfWeek: 6,
   ordinal: () => {
     return "";
   },
