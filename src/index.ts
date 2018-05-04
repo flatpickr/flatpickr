@@ -1526,7 +1526,10 @@ function FlatpickrInstance(
           ) {
             e.preventDefault();
             if (self.secondElement !== undefined) self.secondElement.focus();
-            else if (self.amPM !== undefined) self.amPM.focus();
+            else if (self.amPM !== undefined) {
+              e.preventDefault();
+              self.amPM.focus();
+            }
           } else if (e.target === self.secondElement && self.amPM) {
             e.preventDefault();
             self.amPM.focus();
@@ -1657,7 +1660,7 @@ function FlatpickrInstance(
       positionCalendar();
   }
 
-  function open(e?: Event, positionElement: HTMLElement = self._input) {
+  function open(e?: FocusEvent, positionElement: HTMLElement = self._input) {
     if (self.isMobile === true) {
       if (e) {
         e.preventDefault();
@@ -1702,7 +1705,13 @@ function FlatpickrInstance(
         updateValue();
       }
 
-      if (self.config.allowInput === false) {
+      if (
+        self.config.allowInput === false &&
+        (e === undefined ||
+          !(<HTMLDivElement>self.timeContainer).contains(
+            e.relatedTarget as Node
+          ))
+      ) {
         setTimeout(() => (<HTMLInputElement>self.hourElement).select(), 50);
       }
     }
