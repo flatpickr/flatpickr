@@ -298,9 +298,11 @@ function FlatpickrInstance(
     const year =
       parseInt((event.target as HTMLInputElement).value) + (event.delta || 0);
 
-    if (year.toString().length === 4 || event.key === "Enter") {
-      (event.target as HTMLInputElement).blur();
-      if (!/[^\d]/.test(year.toString())) changeYear(year);
+    if (
+      year / 1000 > 1 ||
+      (event.key === "Enter" && !/[^\d]/.test(year.toString()))
+    ) {
+      changeYear(year);
     }
   }
 
