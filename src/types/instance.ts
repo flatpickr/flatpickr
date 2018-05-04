@@ -92,7 +92,7 @@ export type Instance = Elements &
     destroy: () => void;
     isEnabled: (date: DateOption, timeless?: boolean) => boolean;
     jumpToDate: (date?: DateOption) => void;
-    open: (e?: Event, positionElement?: HTMLElement) => void;
+    open: (e?: FocusEvent | MouseEvent, positionElement?: HTMLElement) => void;
     redraw: () => void;
     set: (
       option: keyof Options | { [k in keyof Options]?: Options[k] },

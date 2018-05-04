@@ -1516,6 +1516,8 @@ function FlatpickrInstance(
           break;
 
         case 9:
+          if (!isTimeObj) break;
+
           if (e.target === self.hourElement) {
             e.preventDefault();
             // can't have hour elem without minute element
@@ -1528,6 +1530,7 @@ function FlatpickrInstance(
             if (self.secondElement !== undefined) self.secondElement.focus();
             else if (self.amPM !== undefined) {
               e.preventDefault();
+
               self.amPM.focus();
             }
           } else if (e.target === self.secondElement && self.amPM) {
@@ -1539,32 +1542,29 @@ function FlatpickrInstance(
         default:
           break;
       }
+    }
 
+    if (self.amPM !== undefined && e.target === self.amPM) {
       switch (e.key) {
         case self.l10n.amPM[0].charAt(0):
         case self.l10n.amPM[0].charAt(0).toLowerCase():
-          if (self.amPM !== undefined && e.target === self.amPM) {
-            self.amPM.textContent = self.l10n.amPM[0];
-            setHoursFromInputs();
-            updateValue();
-          }
+          self.amPM.textContent = self.l10n.amPM[0];
+          setHoursFromInputs();
+          updateValue();
+
           break;
 
         case self.l10n.amPM[1].charAt(0):
         case self.l10n.amPM[1].charAt(0).toLowerCase():
-          if (self.amPM !== undefined && e.target === self.amPM) {
-            self.amPM.textContent = self.l10n.amPM[1];
-            setHoursFromInputs();
-            updateValue();
-          }
-          break;
+          self.amPM.textContent = self.l10n.amPM[1];
+          setHoursFromInputs();
+          updateValue();
 
-        default:
           break;
       }
-
-      triggerEvent("onKeyDown", e);
     }
+
+    triggerEvent("onKeyDown", e);
   }
 
   function onMouseOver(elem: DayElement) {
@@ -1660,7 +1660,10 @@ function FlatpickrInstance(
       positionCalendar();
   }
 
-  function open(e?: FocusEvent, positionElement: HTMLElement = self._input) {
+  function open(
+    e?: FocusEvent | MouseEvent,
+    positionElement: HTMLElement = self._input
+  ) {
     if (self.isMobile === true) {
       if (e) {
         e.preventDefault();
@@ -2402,7 +2405,7 @@ function FlatpickrInstance(
     });
   }
 
-  function toggle(e?: Event) {
+  function toggle(e?: FocusEvent | MouseEvent) {
     if (self.isOpen) return self.close();
     self.open(e);
   }
