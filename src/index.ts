@@ -2678,6 +2678,8 @@ Date.prototype.fp_incr = function(days: number | string) {
   );
 };
 
-window.flatpickr = flatpickr;
+if (typeof window !== "undefined") {
+  window.flatpickr = flatpickr;
+}
 
 export default flatpickr;
