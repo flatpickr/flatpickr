@@ -2216,6 +2216,7 @@ function FlatpickrInstance(
 
   function parseDateRules(arr: DateLimit[]): DateLimit<Date>[] {
     return arr
+      .slice()
       .map(rule => {
         if (
           typeof rule === "string" ||
@@ -2406,7 +2407,7 @@ function FlatpickrInstance(
   }
 
   function toggle(e?: FocusEvent | MouseEvent) {
-    if (self.isOpen) return self.close();
+    if (self.isOpen === true) return self.close();
     self.open(e);
   }
 
