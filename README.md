@@ -51,6 +51,7 @@ See also:
 * [angularJS-flatpickr addon](https://www.npmjs.com/package/angular-flatpickr)
 * [angular2+-flatpickr addon](https://github.com/mezoistvan/ng2-flatpickr)
 * [vue-flatpickr component](https://github.com/ankurk91/vue-flatpickr-component)
+* [Stimulus.js Controller](https://github.com/adrienpoly/stimulus-flatpickr)
 
 ## Supporting flatpickr
 
