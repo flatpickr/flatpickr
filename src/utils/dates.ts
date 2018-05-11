@@ -108,7 +108,7 @@ export const createDateParser = ({ config = defaults, l10n = english }) => (
   }
 
   /* istanbul ignore next */
-  if (!(parsedDate instanceof Date)) {
+  if (!(parsedDate instanceof Date && !isNaN(parsedDate.getTime()))) {
     config.errorHandler(new Error(`Invalid date provided: ${date_orig}`));
     return undefined;
   }
