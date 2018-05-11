@@ -2252,7 +2252,8 @@ function FlatpickrInstance(
     self.selectedDates = [];
     self.now = self.parseDate(self.config.now) || new Date();
 
-    const preloadedDate = self.config.defaultDate || self.input.value;
+    const preloadedDate =
+      self.config.defaultDate || self.input.getAttribute("value");
 
     if (preloadedDate) setSelectedDate(preloadedDate, self.config.dateFormat);
 
@@ -2332,7 +2333,7 @@ function FlatpickrInstance(
       self.altInput.required = self.input.required;
       self.altInput.tabIndex = self.input.tabIndex;
       self.altInput.type = "text";
-      self.input.type = "hidden";
+      self.input.setAttribute("type", "hidden");
 
       if (!self.config.static && self.input.parentNode)
         self.input.parentNode.insertBefore(
