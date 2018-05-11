@@ -149,7 +149,7 @@ function rangePlugin(config: Config = {}): Plugin {
         if (!secondInput) return;
 
         _prevDates =
-          !_prevDates || selDates.length != _prevDates.length
+          !_prevDates || selDates.length >= _prevDates.length
             ? [...selDates]
             : _prevDates;
 
