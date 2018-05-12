@@ -2255,7 +2255,10 @@ function FlatpickrInstance(
     // Workaround IE11 setting placeholder as the input's value
     const preloadedDate =
       self.config.defaultDate ||
-      (self.input.value !== self.input.placeholder ? self.input.value : null);
+      (self.input.placeholder.length > 0 &&
+      self.input.value === self.input.placeholder
+        ? null
+        : self.input.value);
 
     if (preloadedDate) setSelectedDate(preloadedDate, self.config.dateFormat);
 
