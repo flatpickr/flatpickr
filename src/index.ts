@@ -1171,7 +1171,10 @@ function FlatpickrInstance(
     self.showTimeInput = false;
 
     if (self.config.enableTime === true) {
-      if (self.config.minDate !== undefined)
+      if (
+        self.config.minDate !== undefined &&
+        compareDates(self.now, self.config.minDate, true) === 0
+      )
         setHoursFromDate(self.config.minDate);
       else
         setHours(
