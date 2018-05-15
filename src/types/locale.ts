@@ -131,6 +131,7 @@ export type key =
   | "it"
   | "ja"
   | "ko"
+  | "kz"
   | "lt"
   | "lv"
   | "mk"

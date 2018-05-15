@@ -1,4 +1,4 @@
-/* Russian locals for flatpickr */
+/* Kazakh locals for flatpickr */
 import { CustomLocale } from "../types/locale";
 import { FlatpickrFn } from "../types/instance";
 
@@ -64,6 +64,6 @@ export const Kazakh: CustomLocale = {
   yearAriaLabel: "Жыл",
 };
 
-fp.l10ns.ru = Kazakh;
+fp.l10ns.kz = Kazakh;
 
 export default fp.l10ns;
