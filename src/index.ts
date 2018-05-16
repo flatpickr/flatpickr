@@ -159,20 +159,16 @@ function FlatpickrInstance(
   /**
    * The handler for all events targeting the time inputs
    */
-  function updateTime(e: MouseEvent | IncrementEvent | KeyboardEvent) {
+  function updateTime(
+    e?: MouseEvent | IncrementEvent | KeyboardEvent | FocusEvent
+  ) {
     if (self.selectedDates.length === 0) return;
 
-    timeWrapper(e);
+    if (e !== undefined && e.type !== "blur") timeWrapper(e);
 
-    if (e.type !== "input") {
-      setHoursFromInputs();
-      updateValue();
-    } else {
-      setTimeout(function() {
-        setHoursFromInputs();
-        updateValue();
-      }, DEBOUNCED_CHANGE_MS);
-    }
+    setHoursFromInputs();
+    updateValue();
+    self._debouncedChange();
   }
 
   function ampm2military(hour: number, amPM: string) {
@@ -204,8 +200,9 @@ function FlatpickrInstance(
           ? (parseInt(self.secondElement.value, 10) || 0) % 60
           : 0;
 
-    if (self.amPM !== undefined)
+    if (self.amPM !== undefined) {
       hours = ampm2military(hours, self.amPM.textContent as string);
+    }
 
     const limitMinHours =
       self.config.minTime !== undefined ||
@@ -443,12 +440,9 @@ function FlatpickrInstance(
     ) {
       const selText = (e: FocusEvent) =>
         (e.target as HTMLInputElement).select();
-      bind(self.timeContainer, ["input", "increment"], updateTime);
+      bind(self.timeContainer, ["increment"], updateTime);
+      bind(self.timeContainer, "blur", updateTime, { capture: true });
       bind(self.timeContainer, "mousedown", onClick(timeIncrement));
-
-      bind(self.timeContainer, ["input", "increment"], self._debouncedChange, {
-        passive: true,
-      });
 
       bind([self.hourElement, self.minuteElement], ["focus", "click"], selText);
 
@@ -1484,7 +1478,7 @@ function FlatpickrInstance(
 
       switch (e.keyCode) {
         case 13:
-          if (isTimeObj) updateValue();
+          if (isTimeObj) updateTime();
           else selectDate(e);
 
           break;
@@ -2541,7 +2535,9 @@ function FlatpickrInstance(
     }
   }
 
-  function timeWrapper(e: MouseEvent | KeyboardEvent | IncrementEvent): void {
+  function timeWrapper(
+    e: MouseEvent | KeyboardEvent | FocusEvent | IncrementEvent
+  ): void {
     e.preventDefault();
 
     const isKeyDown = e.type === "keydown",
@@ -2558,7 +2554,7 @@ function FlatpickrInstance(
       curValue = parseInt(input.value, 10),
       delta =
         (e as IncrementEvent).delta ||
-        (isKeyDown ? (e.which === 38 ? 1 : -1) : 0);
+        (isKeyDown ? ((<KeyboardEvent>e).which === 38 ? 1 : -1) : 0);
 
     let newValue = curValue + step * delta;
 
