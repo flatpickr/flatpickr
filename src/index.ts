@@ -259,6 +259,33 @@ function FlatpickrInstance(
     if (date) setHours(date.getHours(), date.getMinutes(), date.getSeconds());
   }
 
+  function setDefaultHours() {
+    let hours = self.config.defaultHour;
+    let minutes = self.config.defaultMinute;
+    let seconds = self.config.defaultSeconds;
+
+    if (self.config.minDate !== undefined) {
+      const min_hr = self.config.minDate.getHours();
+      const min_minutes = self.config.minDate.getMinutes();
+      hours = Math.max(hours, min_hr);
+      if (hours === min_hr) minutes = Math.max(min_minutes, minutes);
+      if (hours === min_hr && minutes === min_minutes)
+        seconds = self.config.minDate.getSeconds();
+    }
+
+    if (self.config.maxDate !== undefined) {
+      const max_hr = self.config.maxDate.getHours();
+      const max_minutes = self.config.maxDate.getMinutes();
+      hours = Math.min(hours, max_hr);
+
+      if (hours === max_hr) minutes = Math.min(max_minutes, minutes);
+      if (hours === max_hr && minutes === max_minutes)
+        seconds = self.config.maxDate.getSeconds();
+    }
+
+    setHours(hours, minutes, seconds);
+  }
+
   /**
    * Sets the hours, minutes, and optionally seconds
    * of the latest selected date object and the
@@ -1171,17 +1198,7 @@ function FlatpickrInstance(
     self.showTimeInput = false;
 
     if (self.config.enableTime === true) {
-      if (
-        self.config.minDate !== undefined &&
-        compareDates(self.now, self.config.minDate, true) === 0
-      )
-        setHoursFromDate(self.config.minDate);
-      else
-        setHours(
-          self.config.defaultHour,
-          self.config.defaultMinute,
-          self.config.defaultSeconds
-        );
+      setDefaultHours();
     }
 
     self.redraw();
@@ -1700,15 +1717,10 @@ function FlatpickrInstance(
         self.setDate(
           self.config.minDate !== undefined
             ? new Date(self.config.minDate.getTime())
-            : new Date().setHours(
-                self.config.defaultHour,
-                self.config.defaultMinute,
-                self.config.defaultSeconds,
-                0
-              ),
+            : new Date(),
           false
         );
-        setHoursFromInputs();
+        setDefaultHours();
         updateValue();
       }
 
@@ -2082,14 +2094,7 @@ function FlatpickrInstance(
     updateNavigationCurrentMonth();
     buildDays();
 
-    if (
-      self.config.minDate &&
-      self.minDateHasTime &&
-      self.config.enableTime &&
-      compareDates(selectedDate, self.config.minDate) === 0
-    )
-      setHoursFromDate(self.config.minDate);
-
+    setDefaultHours();
     updateValue();
 
     if (self.config.enableTime)

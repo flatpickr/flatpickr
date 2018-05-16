@@ -839,10 +839,6 @@ describe("flatpickr", () => {
         expect(date.getFullYear()).toEqual(2016);
         expect(date.getMonth()).toEqual(9);
         expect(date.getDate()).toEqual(10);
-
-        expect((fp.hourElement as HTMLInputElement).value).toEqual("03");
-        expect((fp.minuteElement as HTMLInputElement).value).toEqual("30");
-        expect((fp.amPM as HTMLSpanElement).textContent).toEqual("AM");
       }
 
       createInstance({
@@ -1138,12 +1134,13 @@ describe("flatpickr", () => {
       expect(hours.value).toBe("03");
 
       fp.setDate("05:30");
-      // date exceeds maxDate - value is reset
-      expect(hours.value).toBe("09");
+      // date exceeds maxDate - value is reset to maxDate's
+      expect(hours.value).toBe("04");
 
       fp.setDate("00:30");
-      // date lower than minDate - value is reset
-      expect(hours.value).toBe("09");
+      // date lower than minDate - value is reset to defaultHour
+      // since defaultHour > maxDate, value is reset to maxDate
+      expect(hours.value).toBe("04");
     });
 
     it("should delay time input validation on keydown", () => {
