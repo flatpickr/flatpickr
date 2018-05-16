@@ -50,6 +50,8 @@ function FlatpickrInstance(
   self._handlers = [];
   self._bind = bind;
   self._setHoursFromDate = setHoursFromDate;
+  self._positionCalendar = positionCalendar;
+
   self.changeMonth = changeMonth;
   self.changeYear = changeYear;
   self.clear = clear;

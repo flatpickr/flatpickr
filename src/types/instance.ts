@@ -136,6 +136,7 @@ export type Instance = Elements &
     _debouncedChange: () => void;
     __hideNextMonthArrow: boolean;
     __hidePrevMonthArrow: boolean;
+    _positionCalendar: (customPositionElement?: HTMLElement) => void;
 
     utils: {
       getDaysInMonth: (month?: number, year?: number) => number;
