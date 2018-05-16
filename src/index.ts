@@ -1458,7 +1458,6 @@ function FlatpickrInstance(
     // "Delete"     (IE "Del")           46
 
     const isInput = e.target === self._input;
-    const calendarElem = isCalendarElem(e.target as HTMLElement);
     const allowInput = self.config.allowInput;
     const allowKeydown = self.isOpen && (!allowInput || !isInput);
     const allowInlineKeydown = self.config.inline && isInput && !allowInput;
@@ -1474,7 +1473,11 @@ function FlatpickrInstance(
         );
         return (e.target as HTMLElement).blur();
       } else self.open();
-    } else if (calendarElem || allowKeydown || allowInlineKeydown) {
+    } else if (
+      isCalendarElem(e.target as HTMLElement) ||
+      allowKeydown ||
+      allowInlineKeydown
+    ) {
       const isTimeObj =
         !!self.timeContainer &&
         self.timeContainer.contains(e.target as HTMLElement);
@@ -1540,25 +1543,21 @@ function FlatpickrInstance(
 
         case 9:
           if (!isTimeObj) break;
+          const elems = [
+            self.hourElement,
+            self.minuteElement,
+            self.secondElement,
+            self.amPM,
+          ].filter(x => x) as HTMLInputElement[];
 
-          if (e.target === self.hourElement) {
-            e.preventDefault();
-            // can't have hour elem without minute element
-            (self.minuteElement as HTMLInputElement).select();
-          } else if (
-            e.target === self.minuteElement &&
-            (self.secondElement || self.amPM)
-          ) {
-            e.preventDefault();
-            if (self.secondElement !== undefined) self.secondElement.focus();
-            else if (self.amPM !== undefined) {
+          const i = elems.indexOf(e.target as HTMLInputElement);
+
+          if (i !== -1) {
+            const target = elems[i + (e.shiftKey ? -1 : 1)];
+            if (target !== undefined) {
               e.preventDefault();
-
-              self.amPM.focus();
+              target.focus();
             }
-          } else if (e.target === self.secondElement && self.amPM) {
-            e.preventDefault();
-            self.amPM.focus();
           }
 
           break;
