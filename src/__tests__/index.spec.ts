@@ -1048,12 +1048,49 @@ describe("flatpickr", () => {
       expect(fp.input.value.length).toBeGreaterThan(0);
     });
 
+    it("time picker: default hours/mins", () => {
+      createInstance({
+        noCalendar: true,
+        enableTime: true,
+        dateFormat: "H:i",
+        minDate: "02:30",
+        defaultHour: 2,
+        defaultMinute: 45,
+      });
+
+      fp.open();
+      expect(fp.input.value).toEqual("02:45");
+
+      createInstance({
+        enableTime: true,
+        minDate: new Date().setHours(2, 30),
+        defaultHour: 12,
+        defaultMinute: 45,
+      });
+
+      simulate("mousedown", fp.todayDateElem, { which: 1 });
+      expect(fp.latestSelectedDateObj.getHours()).toEqual(12);
+      expect(fp.latestSelectedDateObj.getMinutes()).toEqual(45);
+
+      createInstance({
+        enableTime: true,
+        minDate: new Date().setHours(6, 30),
+        defaultHour: 3,
+        defaultMinute: 0,
+      });
+
+      simulate("mousedown", fp.todayDateElem, { which: 1 });
+      expect(fp.latestSelectedDateObj.getHours()).toEqual(6);
+      expect(fp.latestSelectedDateObj.getMinutes()).toEqual(30);
+    });
+
     it("time picker: minDate + bounds", () => {
       createInstance({
         noCalendar: true,
         enableTime: true,
         dateFormat: "H:i",
         minDate: "02:30",
+        defaultDate: "3:30",
       });
 
       fp.open();
@@ -1072,6 +1109,7 @@ describe("flatpickr", () => {
         dateFormat: "H:i",
         minDate: "02:30",
         defaultDate: "3:30",
+        defaultHour: 9,
       });
 
       const [hours, minutes, amPM] = [
@@ -1100,10 +1138,12 @@ describe("flatpickr", () => {
       expect(hours.value).toBe("03");
 
       fp.setDate("05:30");
-      expect(hours.value).toBe("02");
+      // date exceeds maxDate - value is reset
+      expect(hours.value).toBe("09");
 
       fp.setDate("00:30");
-      expect(hours.value).toBe("02");
+      // date lower than minDate - value is reset
+      expect(hours.value).toBe("09");
     });
 
     it("should delay time input validation on keydown", () => {
