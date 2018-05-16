@@ -2202,7 +2202,8 @@ function FlatpickrInstance(
     triggerChange = false,
     format = self.config.dateFormat
   ) {
-    if (date !== 0 && !date) return self.clear(triggerChange);
+    if ((date !== 0 && !date) || !(date as DateOption[]).length)
+      return self.clear(triggerChange);
 
     setSelectedDate(date, format);
 
