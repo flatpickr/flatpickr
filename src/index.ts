@@ -2259,8 +2259,7 @@ function FlatpickrInstance(
     // Workaround IE11 setting placeholder as the input's value
     const preloadedDate =
       self.config.defaultDate ||
-      (self.input.placeholder
-        && self.input.value === self.input.placeholder
+      (self.input.placeholder && self.input.value === self.input.placeholder
         ? null
         : self.input.value);
 
@@ -2674,13 +2673,6 @@ flatpickr.setDefaults = (config: Options) => {
 flatpickr.parseDate = createDateParser({});
 flatpickr.formatDate = createDateFormatter({});
 flatpickr.compareDates = compareDates;
-
-/* istanbul ignore next */
-if (typeof jQuery !== "undefined") {
-  (jQuery.fn as any).flatpickr = function(config: Options) {
-    return _flatpickr(this, config);
-  };
-}
 
 Date.prototype.fp_incr = function(days: number | string) {
   return new Date(
