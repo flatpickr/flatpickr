@@ -1241,8 +1241,15 @@ function FlatpickrInstance(
       if (self.mobileInput.parentNode)
         self.mobileInput.parentNode.removeChild(self.mobileInput);
       self.mobileInput = undefined;
-    } else if (self.calendarContainer && self.calendarContainer.parentNode)
+    } else if (self.config.static) {
+      const wrapper = self.calendarContainer.parentNode!;
+      wrapper.removeChild(wrapper.lastChild!);
+      while (wrapper.firstChild)
+        wrapper.parentNode.insertBefore(wrapper.firstChild, wrapper);
+      wrapper.parentNode.removeChild(wrapper);
+    } else if (self.calendarContainer && self.calendarContainer.parentNode) {
       self.calendarContainer.parentNode.removeChild(self.calendarContainer);
+    }
 
     if (self.altInput) {
       self.input.type = "text";
