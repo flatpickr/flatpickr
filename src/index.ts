@@ -898,12 +898,10 @@ function FlatpickrInstance(
     const monthNavFragment = window.document.createDocumentFragment();
 
     const monthElement = createElement<HTMLSpanElement>("span", "cur-month");
-    monthElement.title = self.l10n.scrollTitle;
 
     const yearInput = createNumberInput("cur-year", { tabindex: "-1" });
 
     const yearElement = yearInput.childNodes[0] as HTMLInputElement;
-    yearElement.title = self.l10n.scrollTitle;
     yearElement.setAttribute("aria-label", self.l10n.yearAriaLabel);
 
     if (self.config.minDate)
