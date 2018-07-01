@@ -1695,7 +1695,7 @@ function FlatpickrInstance(
 
   function open(
     e?: FocusEvent | MouseEvent,
-    positionElement: HTMLElement = self._input
+    positionElement: HTMLElement = self._positionElement
   ) {
     if (self.isMobile === true) {
       if (e) {
