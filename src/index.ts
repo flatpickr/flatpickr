@@ -164,11 +164,18 @@ function FlatpickrInstance(
   ) {
     if (self.selectedDates.length === 0) return;
 
-    if (e !== undefined && e.type !== "blur") timeWrapper(e);
+    if (e !== undefined && e.type !== "blur") {
+      timeWrapper(e);
+    }
+
+    const prevValue = self._input.value;
 
     setHoursFromInputs();
     updateValue();
-    self._debouncedChange();
+
+    if (self._input.value !== prevValue) {
+      self._debouncedChange();
+    }
   }
 
   function ampm2military(hour: number, amPM: string) {
