@@ -51,7 +51,7 @@
     "rtlcss": "^2.4.0",
     "source-map": "^0.7.3",
     "stylus": "latest",
-    "ts-jest": "23.0.0",
+    "ts-jest": "22",
     "ts-node": "^7.0.0",
     "typescript": "^2.9.2",
     "uglify-js": "^3.4.2"

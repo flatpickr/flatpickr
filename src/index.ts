@@ -1241,14 +1241,15 @@ function FlatpickrInstance(
       if (self.mobileInput.parentNode)
         self.mobileInput.parentNode.removeChild(self.mobileInput);
       self.mobileInput = undefined;
-    } else if (self.config.static) {
-      const wrapper = self.calendarContainer.parentNode!;
-      wrapper.removeChild(wrapper.lastChild!);
-      while (wrapper.firstChild)
-        wrapper.parentNode.insertBefore(wrapper.firstChild, wrapper);
-      wrapper.parentNode.removeChild(wrapper);
     } else if (self.calendarContainer && self.calendarContainer.parentNode) {
-      self.calendarContainer.parentNode.removeChild(self.calendarContainer);
+      if (self.config.static && self.calendarContainer.parentNode) {
+        const wrapper = self.calendarContainer.parentNode;
+        wrapper.lastChild && wrapper.removeChild(wrapper.lastChild);
+        while (wrapper.firstChild)
+          wrapper.parentNode!.insertBefore(wrapper.firstChild, wrapper);
+        wrapper.parentNode!.removeChild(wrapper);
+      } else
+        self.calendarContainer.parentNode.removeChild(self.calendarContainer);
     }
 
     if (self.altInput) {
@@ -1700,7 +1701,7 @@ function FlatpickrInstance(
 
   function open(
     e?: FocusEvent | MouseEvent,
-    positionElement: HTMLElement = self._positionElement
+    positionElement = self._positionElement
   ) {
     if (self.isMobile === true) {
       if (e) {
