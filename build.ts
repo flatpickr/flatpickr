@@ -125,6 +125,7 @@ function buildExtras(folder: "plugins" | "l10n") {
       ...src_paths.map(async sourcePath => {
         const bundle = await rollup.rollup({
           ...rollupConfig.input,
+          cache: undefined,
           input: sourcePath,
         });
 

@@ -1064,9 +1064,9 @@ describe("flatpickr", () => {
         defaultMinute: 45,
       });
 
-      simulate("mousedown", fp.todayDateElem, { which: 1 });
-      expect(fp.latestSelectedDateObj.getHours()).toEqual(12);
-      expect(fp.latestSelectedDateObj.getMinutes()).toEqual(45);
+      simulate("mousedown", <DayElement>fp.todayDateElem, { which: 1 });
+      expect((<Date>fp.latestSelectedDateObj).getHours()).toEqual(12);
+      expect((<Date>fp.latestSelectedDateObj).getMinutes()).toEqual(45);
 
       createInstance({
         enableTime: true,
@@ -1075,9 +1075,9 @@ describe("flatpickr", () => {
         defaultMinute: 0,
       });
 
-      simulate("mousedown", fp.todayDateElem, { which: 1 });
-      expect(fp.latestSelectedDateObj.getHours()).toEqual(6);
-      expect(fp.latestSelectedDateObj.getMinutes()).toEqual(30);
+      simulate("mousedown", <DayElement>fp.todayDateElem, { which: 1 });
+      expect((<Date>fp.latestSelectedDateObj).getHours()).toEqual(6);
+      expect((<Date>fp.latestSelectedDateObj).getMinutes()).toEqual(30);
     });
 
     it("time picker: minDate + bounds", () => {
