@@ -172,7 +172,7 @@ function FlatpickrInstance(
   }
 
   function ampm2military(hour: number, amPM: string) {
-    return hour % 12 + 12 * int(amPM === self.l10n.amPM[1]);
+    return (hour % 12) + 12 * int(amPM === self.l10n.amPM[1]);
   }
 
   function military2ampm(hour: number) {
@@ -303,7 +303,7 @@ function FlatpickrInstance(
 
     self.hourElement.value = pad(
       !self.config.time_24hr
-        ? (12 + hours) % 12 + 12 * int(hours % 12 === 0)
+        ? ((12 + hours) % 12) + 12 * int(hours % 12 === 0)
         : hours
     );
 
@@ -2089,7 +2089,6 @@ function FlatpickrInstance(
     updateNavigationCurrentMonth();
     buildDays();
 
-    setDefaultHours();
     updateValue();
 
     if (self.config.enableTime)
