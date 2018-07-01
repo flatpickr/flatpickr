@@ -881,6 +881,9 @@ function FlatpickrInstance(
     self.daysContainer.appendChild(frag);
 
     self.days = self.daysContainer.firstChild as HTMLDivElement;
+    if (self.config.mode === "range" && self.selectedDates.length === 1) {
+      onMouseOver();
+    }
   }
 
   function buildMonth() {
@@ -1583,29 +1586,34 @@ function FlatpickrInstance(
     triggerEvent("onKeyDown", e);
   }
 
-  function onMouseOver(elem: DayElement) {
+  function onMouseOver(elem?: DayElement) {
     if (
       self.selectedDates.length !== 1 ||
-      !elem.classList.contains("flatpickr-day") ||
-      elem.classList.contains("disabled")
+      (elem &&
+        (!elem.classList.contains("flatpickr-day") ||
+          elem.classList.contains("disabled")))
     )
       return;
 
-    const hoverDate = elem.dateObj.getTime(),
+    const hoverDate = elem
+        ? elem.dateObj.getTime()
+        : (<DayElement>self.days.firstElementChild).dateObj.getTime(),
       initialDate = (self.parseDate(
         self.selectedDates[0],
         undefined,
         true
       ) as Date).getTime(),
       rangeStartDate = Math.min(hoverDate, self.selectedDates[0].getTime()),
-      rangeEndDate = Math.max(hoverDate, self.selectedDates[0].getTime());
+      rangeEndDate = Math.max(hoverDate, self.selectedDates[0].getTime()),
+      lastDate = (self.daysContainer!.lastChild!
+        .lastChild as DayElement).dateObj.getTime();
 
     let containsDisabled = false;
 
     let minRange = 0,
       maxRange = 0;
 
-    for (let t = rangeStartDate; t < rangeEndDate; t += duration.DAY) {
+    for (let t = rangeStartDate; t < lastDate; t += duration.DAY) {
       if (!isEnabled(new Date(t), true)) {
         containsDisabled =
           containsDisabled || (t > rangeStartDate && t < rangeEndDate);
@@ -1641,31 +1649,33 @@ function FlatpickrInstance(
           dayElem.classList.remove(c);
         });
 
-        elem.classList.add(
-          hoverDate < self.selectedDates[0].getTime()
-            ? "startRange"
-            : "endRange"
-        );
-
-        if (
-          month.contains(elem) ||
-          !(
-            m > 0 &&
-            prevMonth &&
-            (<DayElement>prevMonth.lastChild).dateObj.getTime() >= timestamp
-          )
-        ) {
-          if (initialDate < hoverDate && timestamp === initialDate)
-            dayElem.classList.add("startRange");
-          else if (initialDate > hoverDate && timestamp === initialDate)
-            dayElem.classList.add("endRange");
+        if (elem !== undefined) {
+          elem.classList.add(
+            hoverDate < self.selectedDates[0].getTime()
+              ? "startRange"
+              : "endRange"
+          );
 
           if (
-            timestamp >= minRange &&
-            (maxRange === 0 || timestamp <= maxRange) &&
-            isBetween(timestamp, initialDate, hoverDate)
-          )
-            dayElem.classList.add("inRange");
+            month.contains(elem) ||
+            !(
+              m > 0 &&
+              prevMonth &&
+              (<DayElement>prevMonth.lastChild).dateObj.getTime() >= timestamp
+            )
+          ) {
+            if (initialDate < hoverDate && timestamp === initialDate)
+              dayElem.classList.add("startRange");
+            else if (initialDate > hoverDate && timestamp === initialDate)
+              dayElem.classList.add("endRange");
+
+            if (
+              timestamp >= minRange &&
+              (maxRange === 0 || timestamp <= maxRange) &&
+              isBetween(timestamp, initialDate, hoverDate)
+            )
+              dayElem.classList.add("inRange");
+          }
         }
       }
     }
@@ -2093,12 +2103,6 @@ function FlatpickrInstance(
 
     if (self.config.enableTime)
       setTimeout(() => (self.showTimeInput = true), 50);
-
-    if (self.config.mode === "range") {
-      if (self.selectedDates.length === 1) {
-        onMouseOver(target);
-      } else updateNavigationCurrentMonth();
-    }
 
     // maintain focus
     if (
