@@ -1960,6 +1960,7 @@ function FlatpickrInstance(
     }|${self.l10n.amPM[0].toLowerCase()}|${self.l10n.amPM[1].toLowerCase()})`;
 
     self.formatDate = createDateFormatter(self);
+    self.parseDate = createDateParser({ config: self.config, l10n: self.l10n });
   }
 
   function positionCalendar(customPositionElement?: HTMLElement) {
