@@ -35,4 +35,4 @@ declare namespace flatpickr {
   }
 }
 
-export default flatpickr;
+export = flatpickr;
