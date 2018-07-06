@@ -1709,9 +1709,10 @@ function FlatpickrInstance(
         e.target && (e.target as HTMLInputElement).blur();
       }
 
-      setTimeout(() => {
-        self.mobileInput !== undefined && self.mobileInput.focus();
-      }, 0);
+      if (self.mobileInput !== undefined) {
+        self.mobileInput.focus();
+        self.mobileInput.click();
+      }
 
       triggerEvent("onOpen");
       return;
