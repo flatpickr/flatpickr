@@ -2443,6 +2443,9 @@ function FlatpickrInstance(
   }
 
   function triggerEvent(event: HookKey, data?: any) {
+    // If the instance has been destroyed already, all hooks have been removed
+    if (self.config === undefined) return;
+
     const hooks = self.config[event];
 
     if (hooks !== undefined && hooks.length > 0) {
