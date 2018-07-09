@@ -787,7 +787,7 @@ function FlatpickrInstance(
   }
 
   function focusOnDay(current: DayElement | undefined, offset: number) {
-    const dayFocused = isInView(document.activeElement);
+    const dayFocused = isInView(document.activeElement || document.body);
     const startElem =
       current !== undefined
         ? current
