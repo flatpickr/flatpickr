@@ -1552,7 +1552,10 @@ function FlatpickrInstance(
           break;
 
         case 9:
-          if (!isTimeObj) break;
+          if (!isTimeObj) {
+            self.element.focus();
+            break;
+          }
           const elems = [
             self.hourElement,
             self.minuteElement,
@@ -1567,6 +1570,8 @@ function FlatpickrInstance(
             if (target !== undefined) {
               e.preventDefault();
               target.focus();
+            } else {
+              self.element.focus();
             }
           }
 
