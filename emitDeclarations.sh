@@ -8,3 +8,4 @@ else
 fi
 cp src/typings.d.ts dist/typings.d.ts
 rm -rf types
+find dist/types/l10n/ -type f -iname '*.d.ts' -exec sed -i '' -e 's#"types/locale"#"../types/locale"#g' "{}" +;
