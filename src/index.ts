@@ -1245,9 +1245,12 @@ function FlatpickrInstance(
       if (self.config.static && self.calendarContainer.parentNode) {
         const wrapper = self.calendarContainer.parentNode;
         wrapper.lastChild && wrapper.removeChild(wrapper.lastChild);
-        while (wrapper.firstChild)
-          wrapper.parentNode!.insertBefore(wrapper.firstChild, wrapper);
-        wrapper.parentNode!.removeChild(wrapper);
+
+        if (wrapper.parentNode) {
+          while (wrapper.firstChild)
+            wrapper.parentNode!.insertBefore(wrapper.firstChild, wrapper);
+          wrapper.parentNode!.removeChild(wrapper);
+        }
       } else
         self.calendarContainer.parentNode.removeChild(self.calendarContainer);
     }
