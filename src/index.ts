@@ -1541,7 +1541,7 @@ function FlatpickrInstance(
           e.preventDefault();
           const delta = e.keyCode === 40 ? 1 : -1;
 
-          if (self.daysContainer) {
+          if (self.daysContainer && (e.target as DayElement).$i !== undefined) {
             if (e.ctrlKey) {
               changeYear(self.currentYear - delta);
               focusOnDay(getFirstAvailableDay(1), 0);
