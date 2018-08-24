@@ -901,9 +901,7 @@ function FlatpickrInstance(
 
     const yearInput = createNumberInput("cur-year", { tabindex: "-1" });
 
-    const yearElement = yearInput.getElementsByTagName(
-      "input"
-    )[0] as HTMLInputElement;
+    const yearElement = yearInput.childNodes[0] as HTMLInputElement;
     yearElement.setAttribute("aria-label", self.l10n.yearAriaLabel);
 
     if (self.config.minDate)
@@ -1007,14 +1005,10 @@ function FlatpickrInstance(
     const separator = createElement("span", "flatpickr-time-separator", ":");
 
     const hourInput = createNumberInput("flatpickr-hour");
-    self.hourElement = hourInput.getElementsByTagName(
-      "input"
-    )[0] as HTMLInputElement;
+    self.hourElement = hourInput.childNodes[0] as HTMLInputElement;
 
     const minuteInput = createNumberInput("flatpickr-minute");
-    self.minuteElement = minuteInput.getElementsByTagName(
-      "input"
-    )[0] as HTMLInputElement;
+    self.minuteElement = minuteInput.childNodes[0] as HTMLInputElement;
 
     self.hourElement.tabIndex = self.minuteElement.tabIndex = -1;
 
@@ -1063,9 +1057,7 @@ function FlatpickrInstance(
       self.timeContainer.classList.add("hasSeconds");
 
       const secondInput = createNumberInput("flatpickr-second");
-      self.secondElement = secondInput.getElementsByTagName(
-        "input"
-      )[0] as HTMLInputElement;
+      self.secondElement = secondInput.childNodes[0] as HTMLInputElement;
 
       self.secondElement.value = pad(
         self.latestSelectedDateObj
@@ -2181,6 +2173,7 @@ function FlatpickrInstance(
 
     self.redraw();
     jumpToDate();
+    updateValue(false);
   }
 
   function setSelectedDate(
