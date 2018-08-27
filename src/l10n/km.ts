@@ -63,5 +63,5 @@ export const Khmer: CustomLocale = {
   yearAriaLabel: "ឆ្នាំ",
 };
 
-fp.l10ns.th = Khmer;
+fp.l10ns.km = Khmer;
 export default fp.l10ns;
