@@ -1253,9 +1253,12 @@ function FlatpickrInstance(
       if (self.config.static && self.calendarContainer.parentNode) {
         const wrapper = self.calendarContainer.parentNode;
         wrapper.lastChild && wrapper.removeChild(wrapper.lastChild);
-        while (wrapper.firstChild)
-          wrapper.parentNode!.insertBefore(wrapper.firstChild, wrapper);
-        wrapper.parentNode!.removeChild(wrapper);
+
+        if (wrapper.parentNode) {
+          while (wrapper.firstChild)
+            wrapper.parentNode!.insertBefore(wrapper.firstChild, wrapper);
+          wrapper.parentNode!.removeChild(wrapper);
+        }
       } else
         self.calendarContainer.parentNode.removeChild(self.calendarContainer);
     }
@@ -1546,7 +1549,7 @@ function FlatpickrInstance(
           e.preventDefault();
           const delta = e.keyCode === 40 ? 1 : -1;
 
-          if (self.daysContainer) {
+          if (self.daysContainer && (e.target as DayElement).$i !== undefined) {
             if (e.ctrlKey) {
               changeYear(self.currentYear - delta);
               focusOnDay(getFirstAvailableDay(1), 0);
