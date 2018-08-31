@@ -2173,6 +2173,7 @@ function FlatpickrInstance(
 
     self.redraw();
     jumpToDate();
+    updateValue(false);
   }
 
   function setSelectedDate(
