@@ -73,8 +73,8 @@ function minMaxTimePlugin(config: Config = {}): Plugin {
               new Date(latest.getTime()).setHours(
                 (fp.config.maxTime as Date).getHours(),
                 (fp.config.maxTime as Date).getMinutes(),
-                0,
-                0
+                (fp.config.maxTime as Date).getSeconds(),
+                (fp.config.maxTime as Date).getMilliseconds()
               ),
               false
             );
@@ -83,8 +83,8 @@ function minMaxTimePlugin(config: Config = {}): Plugin {
               new Date(latest.getTime()).setHours(
                 (fp.config.minTime as Date).getHours(),
                 (fp.config.minTime as Date).getMinutes(),
-                0,
-                0
+                (fp.config.minTime as Date).getSeconds(),
+                (fp.config.minTime as Date).getMilliseconds()
               ),
               false
             );
@@ -105,7 +105,8 @@ function minMaxTimePlugin(config: Config = {}): Plugin {
               new Date(latest.getTime()).setHours(
                 minTime.getHours(),
                 minTime.getMinutes(),
-                minTime.getSeconds()
+                minTime.getSeconds(),
+                minTime.getMilliseconds()
               ),
               false
             );
@@ -114,7 +115,8 @@ function minMaxTimePlugin(config: Config = {}): Plugin {
               new Date(latest.getTime()).setHours(
                 maxTime.getHours(),
                 maxTime.getMinutes(),
-                maxTime.getSeconds()
+                maxTime.getSeconds(),
+                maxTime.getMilliseconds()
               )
             );
           }
