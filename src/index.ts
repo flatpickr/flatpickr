@@ -8,6 +8,7 @@ import {
   defaults as defaultOptions,
   Hook,
   HookKey,
+  HOOKS,
 } from "./types/options";
 
 import { Locale, CustomLocale, key as LocaleKey } from "./types/locale";
@@ -1828,21 +1829,6 @@ function FlatpickrInstance(
       "disableMobile",
     ];
 
-    const hooks: HookKey[] = [
-      "onChange",
-      "onClose",
-      "onDayCreate",
-      "onDestroy",
-      "onKeyDown",
-      "onMonthChange",
-      "onOpen",
-      "onParseConfig",
-      "onReady",
-      "onValueUpdate",
-      "onYearChange",
-      "onPreCalendarPosition",
-    ];
-
     const userConfig = {
       ...instanceConfig,
       ...JSON.parse(JSON.stringify(element.dataset || {})),
@@ -1929,13 +1915,9 @@ function FlatpickrInstance(
         self.config[boolOpts[i]] === true ||
         self.config[boolOpts[i]] === "true";
 
-    for (let i = hooks.length; i--; ) {
-      if (self.config[hooks[i]] !== undefined) {
-        self.config[hooks[i]] = arrayify(self.config[hooks[i]] || []).map(
-          bindToInstance
-        );
-      }
-    }
+    HOOKS.filter(hook => self.config[hook] !== undefined).forEach(hook => {
+      self.config[hook] = arrayify(self.config[hook] || []).map(bindToInstance);
+    });
 
     self.isMobile =
       !self.config.disableMobile &&
@@ -1951,7 +1933,7 @@ function FlatpickrInstance(
     for (let i = 0; i < self.config.plugins.length; i++) {
       const pluginConf = self.config.plugins[i](self) || ({} as Options);
       for (const key in pluginConf) {
-        if (~hooks.indexOf(key as HookKey)) {
+        if (HOOKS.indexOf(key as HookKey) > -1) {
           self.config[key as keyof Options] = arrayify(pluginConf[
             key as HookKey
           ] as Hook)
@@ -2180,6 +2162,8 @@ function FlatpickrInstance(
 
       if (CALLBACKS[option] !== undefined)
         (CALLBACKS[option] as Function[]).forEach(x => x());
+      else if (HOOKS.indexOf(option as HookKey) > -1)
+        self.config[option] = arrayify(value);
     }
 
     self.redraw();

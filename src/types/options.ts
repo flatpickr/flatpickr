@@ -30,6 +30,21 @@ export type HookKey =
   | "onYearChange"
   | "onPreCalendarPosition";
 
+export const HOOKS: HookKey[] = [
+  "onChange",
+  "onClose",
+  "onDayCreate",
+  "onDestroy",
+  "onKeyDown",
+  "onMonthChange",
+  "onOpen",
+  "onParseConfig",
+  "onReady",
+  "onValueUpdate",
+  "onYearChange",
+  "onPreCalendarPosition",
+];
+
 export type Plugin<E = {}> = (fp: Instance & E) => Options;
 
 export interface BaseOptions {
