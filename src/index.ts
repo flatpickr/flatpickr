@@ -2527,9 +2527,24 @@ function FlatpickrInstance(
         : self.currentYear > self.config.maxDate.getFullYear());
   }
 
+  function getDateStr(format: string) {
+    return self.selectedDates
+      .map(dObj => self.formatDate(dObj, format))
+      .filter(
+        (d, i, arr) =>
+          self.config.mode !== "range" ||
+          self.config.enableTime ||
+          arr.indexOf(d) === i
+      )
+      .join(
+        self.config.mode !== "range"
+          ? self.config.conjunction
+          : self.l10n.rangeSeparator
+      );
+  }
+
   /**
    * Updates the values of inputs associated with the calendar
-   * @return {void}
    */
   function updateValue(triggerChange = true) {
     if (self.selectedDates.length === 0) return self.clear(triggerChange);
@@ -2541,19 +2556,10 @@ function FlatpickrInstance(
           : "";
     }
 
-    const joinChar =
-      self.config.mode !== "range"
-        ? self.config.conjunction
-        : self.l10n.rangeSeparator;
-
-    self.input.value = self.selectedDates
-      .map(dObj => self.formatDate(dObj, self.config.dateFormat))
-      .join(joinChar);
+    self.input.value = getDateStr(self.config.dateFormat);
 
     if (self.altInput !== undefined) {
-      self.altInput.value = self.selectedDates
-        .map(dObj => self.formatDate(dObj, self.config.altFormat))
-        .join(joinChar);
+      self.altInput.value = getDateStr(self.config.altFormat);
     }
 
     if (triggerChange !== false) triggerEvent("onValueUpdate");
