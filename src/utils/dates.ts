@@ -22,9 +22,11 @@ export const createDateFormatter = ({
   frmt: string,
   overrideLocale?: Locale
 ): string => {
-  if (config.formatDate !== undefined) return config.formatDate(dateObj, frmt);
-
   const locale = overrideLocale || l10n;
+
+  if (config.formatDate !== undefined) {
+    return config.formatDate(dateObj, frmt, locale);
+  }
 
   return frmt
     .split("")

@@ -1,6 +1,6 @@
 import { Instance } from "./instance";
 import { getWeek } from "../utils/dates";
-import { CustomLocale, key as LocaleKey } from "./locale";
+import { CustomLocale, key as LocaleKey, Locale } from "./locale";
 
 export type DateOption = Date | string | number;
 export type DateRangeLimit<D = DateOption> = { from: D; to: D };
@@ -112,7 +112,7 @@ By default, Flatpickr utilizes native datetime widgets unless certain options (e
   errorHandler: (e: Error) => void;
 
   /* Allows using a custom date formatting function instead of the built-in. Generally unnecessary.  */
-  formatDate: (date: Date, format: string) => string;
+  formatDate: (date: Date, format: string, locale: Locale) => string;
 
   /* If "weekNumbers" are enabled, this is the function that outputs the week number for a given dates, optionally along with other text  */
   getWeek: (date: Date) => string | number;
