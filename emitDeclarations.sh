@@ -8,4 +8,6 @@ else
 fi
 cp src/typings.d.ts dist/typings.d.ts
 rm -rf types
-find dist/types/l10n/ -type f -iname '*.d.ts' -exec sed -i '' -e 's#"types/locale"#"../types/locale"#g' "{}" +;
+
+# https://github.com/Microsoft/TypeScript/issues/26439
+fd '.d.ts' dist/l10n --exec sed -i -e 's/"types/"..\/types/g' {}
