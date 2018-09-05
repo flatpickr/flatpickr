@@ -429,9 +429,12 @@ function FlatpickrInstance(
     else bind(window.document, "mousedown", onClick(documentClick));
     bind(window.document, "focus", documentClick, { capture: true });
 
-    if (self.config.clickOpens === true) {
+    if (self.config.clickBehaviour === "open") {
       bind(self._input, "focus", self.open);
       bind(self._input, "mousedown", onClick(self.open));
+    } else if (self.config.clickBehaviour === "toggle") {
+      bind(self._input, "focus", self.toggle);
+      bind(self._input, "mousedown", onClick(self.toggle));
     }
 
     if (self.daysContainer !== undefined) {

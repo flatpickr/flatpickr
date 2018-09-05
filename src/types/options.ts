@@ -45,6 +45,8 @@ export const HOOKS: HookKey[] = [
   "onPreCalendarPosition",
 ];
 
+export type ClickBehaviour = "open" | "toggle" | "nothing";
+
 export type Plugin<E = {}> = (fp: Instance & E) => Options;
 
 export interface BaseOptions {
@@ -73,10 +75,13 @@ export interface BaseOptions {
   ariaDateFormat: string;
 
   /*
-    Whether clicking on the input should open the picker.
-    Set it to false if you only want to open the calendar programmatically
+    What should clicking on the input do.
+    Options are:
+    "open" (default) -- open the picker;
+    "toggle" -- toggle the picker;
+    "nothing" -- do nothing.
   */
-  clickOpens: boolean;
+  clickBehaviour: ClickBehaviour;
 
   /* Whether calendar should close after date selection */
   closeOnSelect: boolean;
@@ -261,7 +266,7 @@ export interface ParsedOptions {
   animate: boolean;
   appendTo?: HTMLElement;
   ariaDateFormat: string;
-  clickOpens: boolean;
+  clickBehaviour: ClickBehaviour;
   closeOnSelect: boolean;
   conjunction: string;
   dateFormat: string;
@@ -326,7 +331,7 @@ export const defaults: ParsedOptions = {
     typeof window === "object" &&
     window.navigator.userAgent.indexOf("MSIE") === -1,
   ariaDateFormat: "F j, Y",
-  clickOpens: true,
+  clickBehaviour: "open",
   closeOnSelect: true,
   conjunction: ", ",
   dateFormat: "Y-m-d",
