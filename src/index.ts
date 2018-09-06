@@ -1823,7 +1823,6 @@ function FlatpickrInstance(
       "wrap",
       "weekNumbers",
       "allowInput",
-      "clickOpens",
       "time_24hr",
       "enableTime",
       "noCalendar",
