@@ -2284,9 +2284,9 @@ function FlatpickrInstance(
       ((self.input.nodeName === "INPUT" ||
         self.input.nodeName === "TEXTAREA") &&
       self.input.placeholder &&
-      self.input.value === self.input.placeholder
+      self.input.defaultValue === self.input.placeholder
         ? null
-        : self.input.value);
+        : self.input.defaultValue);
 
     if (preloadedDate) setSelectedDate(preloadedDate, self.config.dateFormat);
 
