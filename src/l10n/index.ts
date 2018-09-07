@@ -16,6 +16,7 @@ import { Spanish as es } from "./es";
 import { Estonian as et } from "./et";
 import { Persian as fa } from "./fa";
 import { Finnish as fi } from "./fi";
+import { Faroese as fo } from "./fo";
 import { French as fr } from "./fr";
 import { Greek as gr } from "./gr";
 import { Hebrew as he } from "./he";
@@ -71,6 +72,7 @@ const l10n: Record<key, CustomLocale> = {
   et,
   fa,
   fi,
+  fo,
   fr,
   gr,
   he,

@@ -121,6 +121,7 @@ export type key =
   | "et"
   | "fa"
   | "fi"
+  | "fo"
   | "fr"
   | "gr"
   | "he"
