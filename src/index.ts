@@ -1749,6 +1749,8 @@ function FlatpickrInstance(
       self._input.classList.add("active");
       triggerEvent("onOpen");
       positionCalendar(positionElement);
+      self.calendarContainer.focus();
+      focusOnDay(undefined, 0);
     }
 
     if (self.config.enableTime === true && self.config.noCalendar === true) {
