@@ -13,7 +13,7 @@ export const Latvian: CustomLocale = {
   firstDayOfWeek: 1,
 
   weekdays: {
-    shorthand: ["Sv", "P", "Ot", "Tr", "Ce", "Pk", "Se"],
+    shorthand: ["Sv", "Pr", "Ot", "Tr", "Ce", "Pk", "Se"],
     longhand: [
       "Svētdiena",
       "Pirmdiena",
@@ -30,8 +30,8 @@ export const Latvian: CustomLocale = {
       "Jan",
       "Feb",
       "Mar",
-      "Mai",
       "Apr",
+      "Mai",
       "Jūn",
       "Jūl",
       "Aug",
