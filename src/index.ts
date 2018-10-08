@@ -1584,27 +1584,35 @@ function FlatpickrInstance(
           break;
 
         case 9:
-          if (!isTimeObj) {
-            self.element.focus();
+          const childElementCount = self.calendarContainer.childElementCount;
+          let expectedChildElementCount = 0;
+          if (self.config.enableTime) expectedChildElementCount += 1;
+          if (!self.config.noCalendar) expectedChildElementCount += 2;
+
+          if (isTimeObj) {
+            const elems = [
+              self.hourElement,
+              self.minuteElement,
+              self.secondElement,
+              self.amPM,
+            ].filter(x => x) as HTMLInputElement[];
+
+            const i = elems.indexOf(e.target as HTMLInputElement);
+
+            if (i !== -1) {
+              const target = elems[i + (e.shiftKey ? -1 : 1)];
+              if (target !== undefined) {
+                e.preventDefault();
+                target.focus();
+              } else if (childElementCount <= expectedChildElementCount) {
+                self.element.focus();
+              }
+            }
             break;
           }
-          const elems = [
-            self.hourElement,
-            self.minuteElement,
-            self.secondElement,
-            self.amPM,
-          ].filter(x => x) as HTMLInputElement[];
 
-          const i = elems.indexOf(e.target as HTMLInputElement);
-
-          if (i !== -1) {
-            const target = elems[i + (e.shiftKey ? -1 : 1)];
-            if (target !== undefined) {
-              e.preventDefault();
-              target.focus();
-            } else {
-              self.element.focus();
-            }
+          if (childElementCount <= expectedChildElementCount) {
+            self.element.focus();
           }
 
           break;
