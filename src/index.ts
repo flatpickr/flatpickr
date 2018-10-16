@@ -1340,7 +1340,9 @@ function FlatpickrInstance(
           ? isInput &&
             e.relatedTarget &&
             !isCalendarElem(e.relatedTarget as HTMLElement)
-          : !isInput && !isCalendarElement;
+          : !isInput &&
+            !isCalendarElement &&
+            !isCalendarElem(e.relatedTarget as HTMLElement);
 
       const isIgnored = !self.config.ignoredFocusElements.some(elem =>
         elem.contains(e.target as Node)
@@ -2124,13 +2126,15 @@ function FlatpickrInstance(
       self.config.showMonths === 1
     )
       focusOnDayElem(target);
-    else self.selectedDateElem && self.selectedDateElem.focus();
+    else if (
+      self.selectedDateElem !== undefined &&
+      self.hourElement === undefined
+    ) {
+      self.selectedDateElem && self.selectedDateElem.focus();
+    }
 
     if (self.hourElement !== undefined)
-      setTimeout(
-        () => self.hourElement !== undefined && self.hourElement.select(),
-        451
-      );
+      self.hourElement !== undefined && self.hourElement.focus();
 
     if (self.config.closeOnSelect) {
       const single = self.config.mode === "single" && !self.config.enableTime;
