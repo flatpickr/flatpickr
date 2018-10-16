@@ -1533,7 +1533,8 @@ function FlatpickrInstance(
 
             if (
               self.daysContainer !== undefined &&
-              (allowInput === false || isInView(document.activeElement))
+              (allowInput === false ||
+                (document.activeElement && isInView(document.activeElement)))
             ) {
               const delta = e.keyCode === 39 ? 1 : -1;
 

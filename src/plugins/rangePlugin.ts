@@ -14,6 +14,7 @@ function rangePlugin(config: Config = {}): Plugin {
   return function(fp) {
     let dateFormat = "",
       secondInput: HTMLInputElement,
+      // @ts-ignore
       _firstInputFocused: boolean,
       _secondInputFocused: boolean,
       _prevDates: Date[];
@@ -45,7 +46,8 @@ function rangePlugin(config: Config = {}): Plugin {
           fp.jumpToDate(fp.selectedDates[1]);
         }
 
-        [_firstInputFocused, _secondInputFocused] = [false, true];
+        _firstInputFocused = false;
+        _secondInputFocused = true;
         fp.isOpen = false;
         fp.open(undefined, secondInput);
       });
