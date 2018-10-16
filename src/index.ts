@@ -1539,6 +1539,7 @@ function FlatpickrInstance(
 
               if (!e.ctrlKey) focusOnDay(undefined, delta);
               else {
+                e.stopPropagation();
                 changeMonth(delta);
                 focusOnDay(getFirstAvailableDay(1), 0);
               }
@@ -1551,9 +1552,12 @@ function FlatpickrInstance(
         case 40:
           e.preventDefault();
           const delta = e.keyCode === 40 ? 1 : -1;
-
-          if (self.daysContainer && (e.target as DayElement).$i !== undefined) {
+          if (
+            (self.daysContainer && (e.target as DayElement).$i !== undefined) ||
+            e.target === self.input
+          ) {
             if (e.ctrlKey) {
+              e.stopPropagation();
               changeYear(self.currentYear - delta);
               focusOnDay(getFirstAvailableDay(1), 0);
             } else if (!isTimeObj) focusOnDay(undefined, delta * 7);
@@ -1614,7 +1618,6 @@ function FlatpickrInstance(
           break;
       }
     }
-
     triggerEvent("onKeyDown", e);
   }
 
