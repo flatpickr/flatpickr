@@ -945,6 +945,11 @@ function FlatpickrInstance(
     clearNode(self.monthNav);
     self.monthNav.appendChild(self.prevMonthNav);
 
+    if (self.config.showMonths) {
+      self.yearElements = [];
+      self.monthElements = [];
+    }
+
     for (let m = self.config.showMonths; m--; ) {
       const month = buildMonth();
       self.yearElements.push(month.yearElement);
