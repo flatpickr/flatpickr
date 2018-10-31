@@ -1,5 +1,5 @@
 ## flatpickr - javascript datetime picker
-[![Build Status](https://circleci.com/gh/flatpickr/flatpickr/tree/master.svg?style=svg)](https://circleci.com/gh/flatpickr/flatpickr/tree/master)
+[![Build Status](https://circleci.com/gh/flatpickr/flatpickr/tree/master.svg?style=shield)](https://circleci.com/gh/flatpickr/flatpickr/tree/master)
 
 [![Coverage](https://coveralls.io/repos/github/chmln/flatpickr/badge.svg?branch=master)](https://coveralls.io/github/chmln/flatpickr)
 [![npm version](https://badge.fury.io/js/flatpickr.svg)](https://www.npmjs.com/package/flatpickr)
@@ -52,6 +52,7 @@ See also:
 * [angular2+-flatpickr addon](https://github.com/mezoistvan/ng2-flatpickr)
 * [vue-flatpickr component](https://github.com/ankurk91/vue-flatpickr-component)
 * [Stimulus.js Controller](https://github.com/adrienpoly/stimulus-flatpickr)
+* [Svelte Component](https://github.com/jacobmischka/svelte-flatpickr)
 
 ## Supporting flatpickr
 
