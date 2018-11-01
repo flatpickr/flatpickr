@@ -2042,19 +2042,22 @@ function FlatpickrInstance(
       self.calendarContainer.style.right = "auto";
     } else if (!centerMost) {
       self.calendarContainer.style.left = "auto";
-			self.calendarContainer.style.right = `${right}px`;
+      self.calendarContainer.style.right = `${right}px`;
     } else {
-      const doc = document.styleSheets[0];
+      const doc = <CSSStyleSheet>document.styleSheets[0];
       const bodyWidth = window.document.body.offsetWidth;
-      const centerLeft = Math.max(0, ((bodyWidth / 2) - (calendarWidth / 2)));
+      const centerLeft = Math.max(0, bodyWidth / 2 - calendarWidth / 2);
       const centerBefore = ".flatpickr-calendar.centerMost:before";
       const centerAfter = ".flatpickr-calendar.centerMost:after";
       const centerIndex = doc.cssRules.length;
       const centerStyle = `{left:${inputBounds.left}px;right:auto;}`;
       toggleClass(self.calendarContainer, "rightMost", false);
       toggleClass(self.calendarContainer, "centerMost", true);
-      doc.insertRule(`${centerBefore},${centerAfter}${centerStyle}`, centerIndex);
-      self.calendarContainer.style.left =  `${centerLeft}px`;
+      doc.insertRule(
+        `${centerBefore},${centerAfter}${centerStyle}`,
+        centerIndex
+      );
+      self.calendarContainer.style.left = `${centerLeft}px`;
       self.calendarContainer.style.right = "auto";
     }
   }
