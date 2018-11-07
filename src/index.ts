@@ -2045,7 +2045,7 @@ function FlatpickrInstance(
       self.calendarContainer.style.left = "auto";
       self.calendarContainer.style.right = `${right}px`;
     } else {
-      const doc = document.styleSheets[0];
+      const doc = document.styleSheets[0] as CSSStyleSheet;
       const bodyWidth = window.document.body.offsetWidth;
       const centerLeft = Math.max(0, bodyWidth / 2 - calendarWidth / 2);
       const centerBefore = ".flatpickr-calendar.centerMost:before";
