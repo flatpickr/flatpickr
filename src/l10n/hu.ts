@@ -63,6 +63,7 @@ export const Hungarian: CustomLocale = {
   weekAbbreviation: "Hét",
   scrollTitle: "Görgessen",
   toggleTitle: "Kattintson a váltáshoz",
+  rangeSeparator: " - ",
 };
 
 fp.l10ns.hu = Hungarian;

@@ -2,6 +2,7 @@ import { key, CustomLocale } from "../types/locale";
 
 import { Arabic as ar } from "./ar";
 import { Austria as at } from "./at";
+import { Azerbaijan as az } from "./az";
 import { Belarusian as be } from "./be";
 import { Bulgarian as bg } from "./bg";
 import { Bangla as bn } from "./bn";
@@ -24,6 +25,7 @@ import { Hindi as hi } from "./hi";
 import { Croatian as hr } from "./hr";
 import { Hungarian as hu } from "./hu";
 import { Indonesian as id } from "./id";
+import { Icelandic as is } from "./is";
 import { Italian as it } from "./it";
 import { Japanese as ja } from "./ja";
 import { Korean as ko } from "./ko";
@@ -57,6 +59,7 @@ import { Mandarin as zh } from "./zh";
 const l10n: Record<key, CustomLocale> = {
   ar,
   at,
+  az,
   be,
   bg,
   bn,
@@ -80,6 +83,7 @@ const l10n: Record<key, CustomLocale> = {
   hr,
   hu,
   id,
+  is,
   it,
   ja,
   ko,

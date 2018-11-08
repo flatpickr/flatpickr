@@ -945,6 +945,11 @@ function FlatpickrInstance(
     clearNode(self.monthNav);
     self.monthNav.appendChild(self.prevMonthNav);
 
+    if (self.config.showMonths) {
+      self.yearElements = [];
+      self.monthElements = [];
+    }
+
     for (let m = self.config.showMonths; m--; ) {
       const month = buildMonth();
       self.yearElements.push(month.yearElement);
@@ -1340,7 +1345,9 @@ function FlatpickrInstance(
           ? isInput &&
             e.relatedTarget &&
             !isCalendarElem(e.relatedTarget as HTMLElement)
-          : !isInput && !isCalendarElement;
+          : !isInput &&
+            !isCalendarElement &&
+            !isCalendarElem(e.relatedTarget as HTMLElement);
 
       const isIgnored = !self.config.ignoredFocusElements.some(elem =>
         elem.contains(e.target as Node)
@@ -1531,7 +1538,8 @@ function FlatpickrInstance(
 
             if (
               self.daysContainer !== undefined &&
-              (allowInput === false || isInView(document.activeElement))
+              (allowInput === false ||
+                (document.activeElement && isInView(document.activeElement)))
             ) {
               const delta = e.keyCode === 39 ? 1 : -1;
 
@@ -1749,6 +1757,8 @@ function FlatpickrInstance(
       self._input.classList.add("active");
       triggerEvent("onOpen");
       positionCalendar(positionElement);
+      self.calendarContainer.focus();
+      focusOnDay(undefined, 0);
     }
 
     if (self.config.enableTime === true && self.config.noCalendar === true) {
@@ -2019,6 +2029,7 @@ function FlatpickrInstance(
         : 0);
     const right = window.document.body.offsetWidth - inputBounds.right;
     const rightMost = left + calendarWidth > window.document.body.offsetWidth;
+    const centerMost = right + calendarWidth > window.document.body.offsetWidth;
 
     toggleClass(self.calendarContainer, "rightMost", rightMost);
 
@@ -2029,9 +2040,22 @@ function FlatpickrInstance(
     if (!rightMost) {
       self.calendarContainer.style.left = `${left}px`;
       self.calendarContainer.style.right = "auto";
-    } else {
+    } else if (!centerMost) {
       self.calendarContainer.style.left = "auto";
-      self.calendarContainer.style.right = `${right}px`;
+			self.calendarContainer.style.right = `${right}px`;
+    } else {
+      const doc = document.styleSheets[0];
+      const bodyWidth = window.document.body.offsetWidth;
+      const centerLeft = Math.max(0, ((bodyWidth / 2) - (calendarWidth / 2)));
+      const centerBefore = ".flatpickr-calendar.centerMost:before";
+      const centerAfter = ".flatpickr-calendar.centerMost:after";
+      const centerIndex = doc.cssRules.length;
+      const centerStyle = `{left:${inputBounds.left}px;right:auto;}`;
+      toggleClass(self.calendarContainer, "rightMost", false);
+      toggleClass(self.calendarContainer, "centerMost", true);
+      doc.insertRule(`${centerBefore},${centerAfter}${centerStyle}`, centerIndex);
+      self.calendarContainer.style.left =  `${centerLeft}px`;
+      self.calendarContainer.style.right = "auto";
     }
   }
 
@@ -2092,6 +2116,7 @@ function FlatpickrInstance(
       else self.selectedDates.push(selectedDate);
     } else if (self.config.mode === "range") {
       if (self.selectedDates.length === 2) self.clear(false);
+      self.latestSelectedDateObj = selectedDate;
 
       self.selectedDates.push(selectedDate);
 
@@ -2127,13 +2152,15 @@ function FlatpickrInstance(
       self.config.showMonths === 1
     )
       focusOnDayElem(target);
-    else self.selectedDateElem && self.selectedDateElem.focus();
+    else if (
+      self.selectedDateElem !== undefined &&
+      self.hourElement === undefined
+    ) {
+      self.selectedDateElem && self.selectedDateElem.focus();
+    }
 
     if (self.hourElement !== undefined)
-      setTimeout(
-        () => self.hourElement !== undefined && self.hourElement.select(),
-        451
-      );
+      self.hourElement !== undefined && self.hourElement.focus();
 
     if (self.config.closeOnSelect) {
       const single = self.config.mode === "single" && !self.config.enableTime;
