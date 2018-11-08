@@ -159,4 +159,5 @@ export type key =
   | "tr"
   | "uk"
   | "vn"
-  | "zh";
+  | "zh"
+  | "zh_tw";
