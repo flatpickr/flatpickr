@@ -21,6 +21,7 @@ import {
   createNumberInput,
   findParent,
   toggleClass,
+  getEventTarget,
 } from "./utils/dom";
 import {
   compareDates,
@@ -2655,16 +2656,6 @@ function FlatpickrInstance(
 
       input.value = pad(newValue);
     }
-  }
-
-  function getEventTarget(event: Event): EventTarget | null {
-    if (typeof event.composedPath === "function") {
-      const path = event.composedPath();
-
-      return path[0];
-    }
-
-    return event.target;
   }
 
   init();
