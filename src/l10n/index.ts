@@ -55,6 +55,7 @@ import { Turkish as tr } from "./tr";
 import { Ukrainian as uk } from "./uk";
 import { Vietnamese as vn } from "./vn";
 import { Mandarin as zh } from "./zh";
+import { MandarinTraditional as zh_tw } from "./zh-tw";
 
 const l10n: Record<key, CustomLocale> = {
   ar,
@@ -113,6 +114,7 @@ const l10n: Record<key, CustomLocale> = {
   uk,
   vn,
   zh,
+  zh_tw,
 };
 
 export default l10n;

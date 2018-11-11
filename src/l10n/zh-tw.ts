@@ -1,13 +1,13 @@
 /* Mandarin locals for flatpickr */
 import { CustomLocale } from "../types/locale";
 import { FlatpickrFn } from "../types/instance";
- const fp =
+const fp =
   typeof window !== "undefined" && window.flatpickr !== undefined
     ? window.flatpickr
     : ({
         l10ns: {},
       } as FlatpickrFn);
- export const Mandarin: CustomLocale = {
+export const MandarinTraditional: CustomLocale = {
   weekdays: {
     shorthand: ["週日", "週一", "週二", "週三", "週四", "週五", "週六"],
     longhand: [
@@ -20,7 +20,7 @@ import { FlatpickrFn } from "../types/instance";
       "星期六",
     ],
   },
-   months: {
+  months: {
     shorthand: [
       "一月",
       "二月",
@@ -50,10 +50,10 @@ import { FlatpickrFn } from "../types/instance";
       "十二月",
     ],
   },
-   rangeSeparator: " 至 ",
+  rangeSeparator: " 至 ",
   weekAbbreviation: "週",
   scrollTitle: "滾動切換",
   toggleTitle: "點擊切換 12/24 小時時制",
 };
- fp.l10ns.zh_tw = Mandarin;
- export default fp.l10ns;
+fp.l10ns.zh_tw = MandarinTraditional;
+export default fp.l10ns;
