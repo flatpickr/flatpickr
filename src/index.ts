@@ -21,6 +21,7 @@ import {
   createNumberInput,
   findParent,
   toggleClass,
+  getEventTarget,
 } from "./utils/dom";
 import {
   compareDates,
@@ -1328,11 +1329,12 @@ function FlatpickrInstance(
 
   function documentClick(e: MouseEvent) {
     if (self.isOpen && !self.config.inline) {
-      const isCalendarElement = isCalendarElem(e.target as HTMLElement);
+      const eventTarget = getEventTarget(e);
+      const isCalendarElement = isCalendarElem(eventTarget as HTMLElement);
       const isInput =
-        e.target === self.input ||
-        e.target === self.altInput ||
-        self.element.contains(e.target as HTMLElement) ||
+        eventTarget === self.input ||
+        eventTarget === self.altInput ||
+        self.element.contains(eventTarget as HTMLElement) ||
         // web components
         // e.path is not present in all browsers. circumventing typechecks
         ((e as any).path &&
@@ -1350,7 +1352,7 @@ function FlatpickrInstance(
             !isCalendarElem(e.relatedTarget as HTMLElement);
 
       const isIgnored = !self.config.ignoredFocusElements.some(elem =>
-        elem.contains(e.target as Node)
+        elem.contains(eventTarget as Node)
       );
 
       if (lostFocus && isIgnored) {
@@ -2042,19 +2044,22 @@ function FlatpickrInstance(
       self.calendarContainer.style.right = "auto";
     } else if (!centerMost) {
       self.calendarContainer.style.left = "auto";
-			self.calendarContainer.style.right = `${right}px`;
+      self.calendarContainer.style.right = `${right}px`;
     } else {
-      const doc = document.styleSheets[0];
+      const doc = document.styleSheets[0] as CSSStyleSheet;
       const bodyWidth = window.document.body.offsetWidth;
-      const centerLeft = Math.max(0, ((bodyWidth / 2) - (calendarWidth / 2)));
+      const centerLeft = Math.max(0, bodyWidth / 2 - calendarWidth / 2);
       const centerBefore = ".flatpickr-calendar.centerMost:before";
       const centerAfter = ".flatpickr-calendar.centerMost:after";
       const centerIndex = doc.cssRules.length;
       const centerStyle = `{left:${inputBounds.left}px;right:auto;}`;
       toggleClass(self.calendarContainer, "rightMost", false);
       toggleClass(self.calendarContainer, "centerMost", true);
-      doc.insertRule(`${centerBefore},${centerAfter}${centerStyle}`, centerIndex);
-      self.calendarContainer.style.left =  `${centerLeft}px`;
+      doc.insertRule(
+        `${centerBefore},${centerAfter}${centerStyle}`,
+        centerIndex
+      );
+      self.calendarContainer.style.left = `${centerLeft}px`;
       self.calendarContainer.style.right = "auto";
     }
   }

@@ -62,3 +62,13 @@ export function createNumberInput(
 
   return wrapper;
 }
+
+export function getEventTarget(event: Event): EventTarget | null {
+  if (typeof event.composedPath === "function") {
+    const path = event.composedPath();
+
+    return path[0];
+  }
+
+  return event.target;
+}
