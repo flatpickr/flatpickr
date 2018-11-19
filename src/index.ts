@@ -137,8 +137,10 @@ function FlatpickrInstance(
     if (config.weekNumbers === false && config.showMonths === 1) return;
     else if (config.noCalendar !== true) {
       window.requestAnimationFrame(function() {
-        self.calendarContainer.style.visibility = "hidden";
-        self.calendarContainer.style.display = "block";
+        if (self.calendarContainer !== undefined) {
+          self.calendarContainer.style.visibility = "hidden";
+          self.calendarContainer.style.display = "block";
+        }
         if (self.daysContainer !== undefined) {
           const daysWidth = (self.days.offsetWidth + 1) * config.showMonths;
 
