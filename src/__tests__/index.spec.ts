@@ -79,6 +79,10 @@ describe("flatpickr", () => {
   beforeEach(beforeEachTest);
 
   describe("init", () => {
+    it("should gracefully handle no elements", () => {
+      expect(flatpickr([])).toEqual([]);
+    });
+
     it("should parse defaultDate", () => {
       createInstance({
         defaultDate: "2016-12-27T16:16:22.585Z",
