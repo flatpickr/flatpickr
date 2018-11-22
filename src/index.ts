@@ -2672,10 +2672,19 @@ function FlatpickrInstance(
 
 /* istanbul ignore next */
 function _flatpickr(
-  nodeList: NodeList | HTMLElement[],
+  nodeList: ArrayLike<Node>,
   config?: Options
 ): Instance | Instance[] {
-  const nodes: HTMLElement[] = Array.prototype.slice.call(nodeList); // static list
+  // spare ourselves some cycles & errors
+  if (nodeList == null || !nodeList.length) {
+    return [];
+  }
+
+  // static list
+  const nodes = Array.from(nodeList).filter(
+    x => x instanceof HTMLElement
+  ) as HTMLElement[];
+
   let instances: Instance[] = [];
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i];
@@ -2713,14 +2722,16 @@ if (typeof HTMLElement !== "undefined") {
 
 /* istanbul ignore next */
 var flatpickr = function(
-  selector: NodeList | HTMLElement | string,
+  selector: ArrayLike<Node> | Node | string,
   config?: Options
 ) {
-  if (selector instanceof NodeList) return _flatpickr(selector, config);
-  else if (typeof selector === "string")
+  if (typeof selector === "string") {
     return _flatpickr(window.document.querySelectorAll(selector), config);
-
-  return _flatpickr([selector], config);
+  } else if (selector instanceof Node) {
+    return _flatpickr([selector], config);
+  } else {
+    return _flatpickr(selector, config);
+  }
 } as FlatpickrFn;
 
 /* istanbul ignore next */
