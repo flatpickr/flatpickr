@@ -21,6 +21,7 @@ import {
   createNumberInput,
   findParent,
   toggleClass,
+  getEventTarget,
 } from "./utils/dom";
 import {
   compareDates,
@@ -136,8 +137,10 @@ function FlatpickrInstance(
     if (config.weekNumbers === false && config.showMonths === 1) return;
     else if (config.noCalendar !== true) {
       window.requestAnimationFrame(function() {
-        self.calendarContainer.style.visibility = "hidden";
-        self.calendarContainer.style.display = "block";
+        if (self.calendarContainer !== undefined) {
+          self.calendarContainer.style.visibility = "hidden";
+          self.calendarContainer.style.display = "block";
+        }
         if (self.daysContainer !== undefined) {
           const daysWidth = (self.days.offsetWidth + 1) * config.showMonths;
 
@@ -486,8 +489,8 @@ function FlatpickrInstance(
           (self.config.minDate && self.config.minDate > self.now
             ? (self.config.minDate as Date)
             : self.config.maxDate && self.config.maxDate < self.now
-              ? self.config.maxDate
-              : self.now);
+            ? self.config.maxDate
+            : self.now);
 
     try {
       if (jumpTo !== undefined) {
@@ -763,8 +766,8 @@ function FlatpickrInstance(
         givenMonth - self.currentMonth === m
           ? current.$i + delta
           : delta < 0
-            ? month.children.length - 1
-            : 0;
+          ? month.children.length - 1
+          : 0;
       const numMonthDays = month.children.length;
 
       for (
@@ -793,13 +796,12 @@ function FlatpickrInstance(
       current !== undefined
         ? current
         : dayFocused
-          ? (document.activeElement as DayElement)
-          : self.selectedDateElem !== undefined &&
-            isInView(self.selectedDateElem)
-            ? self.selectedDateElem
-            : self.todayDateElem !== undefined && isInView(self.todayDateElem)
-              ? self.todayDateElem
-              : getFirstAvailableDay(offset > 0 ? 1 : -1);
+        ? (document.activeElement as DayElement)
+        : self.selectedDateElem !== undefined && isInView(self.selectedDateElem)
+        ? self.selectedDateElem
+        : self.todayDateElem !== undefined && isInView(self.todayDateElem)
+        ? self.todayDateElem
+        : getFirstAvailableDay(offset > 0 ? 1 : -1);
 
     if (startElem === undefined) return self._input.focus();
 
@@ -1028,8 +1030,8 @@ function FlatpickrInstance(
       self.latestSelectedDateObj
         ? self.latestSelectedDateObj.getHours()
         : self.config.time_24hr
-          ? self.config.defaultHour
-          : military2ampm(self.config.defaultHour)
+        ? self.config.defaultHour
+        : military2ampm(self.config.defaultHour)
     );
 
     self.minuteElement.value = pad(
@@ -1328,11 +1330,12 @@ function FlatpickrInstance(
 
   function documentClick(e: MouseEvent) {
     if (self.isOpen && !self.config.inline) {
-      const isCalendarElement = isCalendarElem(e.target as HTMLElement);
+      const eventTarget = getEventTarget(e);
+      const isCalendarElement = isCalendarElem(eventTarget as HTMLElement);
       const isInput =
-        e.target === self.input ||
-        e.target === self.altInput ||
-        self.element.contains(e.target as HTMLElement) ||
+        eventTarget === self.input ||
+        eventTarget === self.altInput ||
+        self.element.contains(eventTarget as HTMLElement) ||
         // web components
         // e.path is not present in all browsers. circumventing typechecks
         ((e as any).path &&
@@ -1350,7 +1353,7 @@ function FlatpickrInstance(
             !isCalendarElem(e.relatedTarget as HTMLElement);
 
       const isIgnored = !self.config.ignoredFocusElements.some(elem =>
-        elem.contains(e.target as Node)
+        elem.contains(eventTarget as Node)
       );
 
       if (lostFocus && isIgnored) {
@@ -1758,7 +1761,9 @@ function FlatpickrInstance(
       triggerEvent("onOpen");
       positionCalendar(positionElement);
       self.calendarContainer.focus();
-      focusOnDay(undefined, 0);
+      if (self.config.noCalendar === false) {
+        focusOnDay(undefined, 0);
+      }
     }
 
     if (self.config.enableTime === true && self.config.noCalendar === true) {
@@ -1976,8 +1981,8 @@ function FlatpickrInstance(
       ...(typeof self.config.locale === "object"
         ? self.config.locale
         : self.config.locale !== "default"
-          ? flatpickr.l10ns[self.config.locale as LocaleKey]
-          : undefined),
+        ? flatpickr.l10ns[self.config.locale as LocaleKey]
+        : undefined),
     };
 
     tokenRegex.K = `(${self.l10n.amPM[0]}|${
@@ -2042,19 +2047,22 @@ function FlatpickrInstance(
       self.calendarContainer.style.right = "auto";
     } else if (!centerMost) {
       self.calendarContainer.style.left = "auto";
-			self.calendarContainer.style.right = `${right}px`;
+      self.calendarContainer.style.right = `${right}px`;
     } else {
-      const doc = document.styleSheets[0];
+      const doc = document.styleSheets[0] as CSSStyleSheet;
       const bodyWidth = window.document.body.offsetWidth;
-      const centerLeft = Math.max(0, ((bodyWidth / 2) - (calendarWidth / 2)));
+      const centerLeft = Math.max(0, bodyWidth / 2 - calendarWidth / 2);
       const centerBefore = ".flatpickr-calendar.centerMost:before";
       const centerAfter = ".flatpickr-calendar.centerMost:after";
       const centerIndex = doc.cssRules.length;
       const centerStyle = `{left:${inputBounds.left}px;right:auto;}`;
       toggleClass(self.calendarContainer, "rightMost", false);
       toggleClass(self.calendarContainer, "centerMost", true);
-      doc.insertRule(`${centerBefore},${centerAfter}${centerStyle}`, centerIndex);
-      self.calendarContainer.style.left =  `${centerLeft}px`;
+      doc.insertRule(
+        `${centerBefore},${centerAfter}${centerStyle}`,
+        centerIndex
+      );
+      self.calendarContainer.style.left = `${centerLeft}px`;
       self.calendarContainer.style.right = "auto";
     }
   }
@@ -2322,11 +2330,11 @@ function FlatpickrInstance(
         ? self.selectedDates[0]
         : self.config.minDate &&
           self.config.minDate.getTime() > self.now.getTime()
-          ? self.config.minDate
-          : self.config.maxDate &&
-            self.config.maxDate.getTime() < self.now.getTime()
-            ? self.config.maxDate
-            : self.now;
+        ? self.config.minDate
+        : self.config.maxDate &&
+          self.config.maxDate.getTime() < self.now.getTime()
+        ? self.config.maxDate
+        : self.now;
 
     self.currentYear = initialDate.getFullYear();
     self.currentMonth = initialDate.getMonth();
@@ -2430,8 +2438,8 @@ function FlatpickrInstance(
       inputType === "datetime-local"
         ? "Y-m-d\\TH:i:S"
         : inputType === "date"
-          ? "Y-m-d"
-          : "H:i:S";
+        ? "Y-m-d"
+        : "H:i:S";
 
     if (self.selectedDates.length > 0) {
       self.mobileInput.defaultValue = self.mobileInput.value = self.formatDate(
