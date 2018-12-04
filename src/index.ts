@@ -2675,8 +2675,8 @@ function _flatpickr(
   nodeList: ArrayLike<Node>,
   config?: Options
 ): Instance | Instance[] {
-  // spare ourselves some cycles & errors
-  if (nodeList == null || !nodeList.length) {
+  // spare ourselves some cycles
+  if (nodeList.length === 0) {
     return [];
   }
 
