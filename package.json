@@ -14,7 +14,7 @@
     "test": "run-s test:typecheck test:unit",
     "test:typecheck": "tsc -p src --noEmit",
     "test:unit": "jest --config .jest.config.js",
-    "coveralls": "jest --config .jest.config.js --coverage | coveralls"
+    "coveralls": "jest --config .jest.config.js --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   },
   "dependencies": {},
   "devDependencies": {
