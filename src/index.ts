@@ -1357,6 +1357,7 @@ function FlatpickrInstance(
       );
 
       if (lostFocus && isIgnored) {
+        updateTime();
         self.close();
 
         if (self.config.mode === "range" && self.selectedDates.length === 1) {
