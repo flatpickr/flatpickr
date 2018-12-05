@@ -1232,8 +1232,12 @@ function FlatpickrInstance(
     self.isOpen = false;
 
     if (!self.isMobile) {
-      self.calendarContainer.classList.remove("open");
-      self._input.classList.remove("active");
+      if (self.calendarContainer !== undefined) {
+        self.calendarContainer.classList.remove("open");
+      }
+      if (self._input !== undefined) {
+        self._input.classList.remove("active");
+      }
     }
 
     triggerEvent("onClose");
