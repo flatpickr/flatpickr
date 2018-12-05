@@ -1156,8 +1156,8 @@ function FlatpickrInstance(
 
     for (let i = self.config.showMonths; i--; ) {
       self.weekdayContainer.children[i].innerHTML = `
-      <span class=flatpickr-weekday>
-        ${weekdays.join("</span><span class=flatpickr-weekday>")}
+      <span class='flatpickr-weekday'>
+        ${weekdays.join("</span><span class='flatpickr-weekday'>")}
       </span>
       `;
     }
@@ -1232,8 +1232,12 @@ function FlatpickrInstance(
     self.isOpen = false;
 
     if (!self.isMobile) {
-      self.calendarContainer.classList.remove("open");
-      self._input.classList.remove("active");
+      if (self.calendarContainer !== undefined) {
+        self.calendarContainer.classList.remove("open");
+      }
+      if (self._input !== undefined) {
+        self._input.classList.remove("active");
+      }
     }
 
     triggerEvent("onClose");
@@ -1357,6 +1361,7 @@ function FlatpickrInstance(
       );
 
       if (lostFocus && isIgnored) {
+        updateTime();
         self.close();
 
         if (self.config.mode === "range" && self.selectedDates.length === 1) {
