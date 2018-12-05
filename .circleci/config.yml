@@ -26,4 +26,3 @@ jobs:
 
 
       - run: yarn test
-      - run: yarn coveralls
