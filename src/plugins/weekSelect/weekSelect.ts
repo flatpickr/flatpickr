@@ -38,12 +38,16 @@ function weekSelectPlugin(): Plugin<PlusWeeks> {
         selDate.getMonth() === fp.currentMonth &&
         selDate.getFullYear() === fp.currentYear
       ) {
-        fp.weekStartDay = (<DayElement>fp.days.childNodes[
-          7 * Math.floor((<DayElement>fp.selectedDateElem).$i / 7)
-        ]).dateObj;
-        fp.weekEndDay = (<DayElement>fp.days.childNodes[
-          7 * Math.ceil((<DayElement>fp.selectedDateElem).$i / 7 + 0.01) - 1
-        ]).dateObj;
+        fp.weekStartDay = (<DayElement>(
+          fp.days.childNodes[
+            7 * Math.floor((<DayElement>fp.selectedDateElem).$i / 7)
+          ]
+        )).dateObj;
+        fp.weekEndDay = (<DayElement>(
+          fp.days.childNodes[
+            7 * Math.ceil((<DayElement>fp.selectedDateElem).$i / 7 + 0.01) - 1
+          ]
+        )).dateObj;
       }
       const days = fp.days.childNodes;
       for (let i = days.length; i--; ) {
@@ -73,6 +77,7 @@ function weekSelectPlugin(): Plugin<PlusWeeks> {
       onValueUpdate: highlightWeek,
       onMonthChange: highlightWeek,
       onYearChange: highlightWeek,
+      onOpen: highlightWeek,
       onClose: clearHover,
       onParseConfig: function() {
         fp.config.mode = "single";
