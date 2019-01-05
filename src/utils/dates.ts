@@ -30,13 +30,12 @@ export const createDateFormatter = ({
 
   return frmt
     .split("")
-    .map(
-      (c, i, arr) =>
-        formats[c as token] && arr[i - 1] !== "\\"
-          ? formats[c as token](dateObj, locale, config)
-          : c !== "\\"
-            ? c
-            : ""
+    .map((c, i, arr) =>
+      formats[c as token] && arr[i - 1] !== "\\"
+        ? formats[c as token](dateObj, locale, config)
+        : c !== "\\"
+        ? c
+        : ""
     )
     .join("");
 };

@@ -118,7 +118,7 @@ By default, Flatpickr utilizes native datetime widgets unless certain options (e
   enable: DateLimit<DateOption>[];
 
   /* Enables seconds selection in the time picker.
- */
+   */
   enableSeconds: boolean;
 
   /* Enables the time picker */

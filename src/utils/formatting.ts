@@ -108,7 +108,8 @@ export const revFormat: RevFormat = {
   s: (dateObj: Date, seconds: string) => {
     dateObj.setSeconds(parseFloat(seconds));
   },
-  u: (_: Date, unixMillSeconds: string) => new Date(parseFloat(unixMillSeconds)),
+  u: (_: Date, unixMillSeconds: string) =>
+    new Date(parseFloat(unixMillSeconds)),
   w: do_nothing,
   y: (dateObj: Date, year: string) => {
     dateObj.setFullYear(2000 + parseFloat(year));
@@ -227,7 +228,7 @@ export const formats: Formats = {
 
   // seconds 0-59
   s: (date: Date) => date.getSeconds(),
-  
+
   // Unix Milliseconds
   u: (date: Date) => date.getTime(),
 
