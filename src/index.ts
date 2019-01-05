@@ -2014,7 +2014,7 @@ function FlatpickrInstance(
 
     const calendarHeight = Array.prototype.reduce.call(
         self.calendarContainer.children,
-        (acc: number, child: HTMLElement) => acc + child.offsetHeight,
+        ((acc: number, child: HTMLElement) => acc + child.offsetHeight) as any,
         0
       ),
       calendarWidth = self.calendarContainer.offsetWidth,

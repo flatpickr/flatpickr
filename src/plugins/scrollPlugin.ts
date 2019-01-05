@@ -1,7 +1,7 @@
 import { Plugin } from "../types/options";
 import { Instance } from "../types/instance";
 function delta(e: WheelEvent) {
-  return Math.max(-1, Math.min(1, e.wheelDelta || -e.deltaY));
+  return Math.max(-1, Math.min(1, (e as any).wheelDelta || -e.deltaY));
 }
 
 const scroll = (e: WheelEvent) => {
