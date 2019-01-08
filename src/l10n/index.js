@@ -1,4 +1,5 @@
 const ar = require("./ar")["ar"]
+const ar = require("./az")["az"]
 const bg = require("./bg")["bg"]
 const bn = require("./bn")["bn"]
 const cat = require("./cat")["cat"]
@@ -47,6 +48,7 @@ const zh = require("./zh")["zh"]
 
 const l10n = {
 	ar,
+	az,
 	bg,
 	bn,
 	cat,
