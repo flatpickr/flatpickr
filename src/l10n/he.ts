@@ -11,7 +11,7 @@ const fp =
 
 export const Hebrew: CustomLocale = {
   weekdays: {
-    shorthand: ["א", "ב", "ג", "ד", "ה", "ו", "ז"],
+    shorthand: ["א", "ב", "ג", "ד", "ה", "ו", "ש"],
     longhand: ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"],
   },
 
@@ -45,6 +45,7 @@ export const Hebrew: CustomLocale = {
       "דצמבר",
     ],
   },
+  rangeSeparator: ' אל '
 };
 
 fp.l10ns.he = Hebrew;
