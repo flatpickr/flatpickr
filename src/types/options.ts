@@ -227,6 +227,9 @@ Use it along with "enableTime" to create a time picker. */
   /* HTML for the left arrow icon, used to switch months. */
   prevArrow: string;
 
+  /* HTML for the time input OK button, used to validate a time. En empty value will disable the button. */
+  timeInputOkButton?: string;
+
   /* Whether to display the current month name in shorthand mode, e.g. "Sep" instead "September" */
   shorthandCurrentMonth: boolean;
 
@@ -307,6 +310,7 @@ export interface ParsedOptions {
   position: BaseOptions["position"];
   positionElement?: HTMLElement;
   prevArrow: string;
+  timeInputOkButton?: string;
   shorthandCurrentMonth: boolean;
   showMonths: number;
   static: boolean;
@@ -368,6 +372,7 @@ export const defaults: ParsedOptions = {
   positionElement: undefined,
   prevArrow:
     "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M5.207 8.471l7.146 7.147-0.707 0.707-7.853-7.854 7.854-7.853 0.707 0.707-7.147 7.146z' /></svg>",
+  timeInputOkButton: undefined,
   shorthandCurrentMonth: false,
   showMonths: 1,
   static: false,

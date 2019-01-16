@@ -45,7 +45,9 @@ export interface Elements {
   hourElement?: HTMLInputElement;
   minuteElement?: HTMLInputElement;
   secondElement?: HTMLInputElement;
+
   amPM?: HTMLSpanElement;
+  okButtonElement?: HTMLSpanElement;
 }
 
 export interface Formatting {

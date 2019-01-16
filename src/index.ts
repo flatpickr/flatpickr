@@ -474,6 +474,18 @@ function FlatpickrInstance(
           })
         );
       }
+
+      if (self.okButtonElement !== undefined) {
+        bind(
+          self.okButtonElement,
+          "click",
+          onClick(e => {
+            updateTime(e);
+            triggerChange();
+            self.close();
+          })
+        );
+      }
     }
   }
 
@@ -1012,6 +1024,14 @@ function FlatpickrInstance(
 
     self.timeContainer = createElement<HTMLDivElement>("div", "flatpickr-time");
     self.timeContainer.tabIndex = -1;
+    if (self.config.timeInputOkButton) {
+      self.okButtonElement = createElement<HTMLSpanElement>(
+        "span",
+        "flatpickr-time-ok-button",
+        ""
+      );
+      self.okButtonElement.innerHTML = self.config.timeInputOkButton;
+    }
     const separator = createElement("span", "flatpickr-time-separator", ":");
 
     const hourInput = createNumberInput("flatpickr-hour");
@@ -1116,6 +1136,10 @@ function FlatpickrInstance(
       self.amPM.title = self.l10n.toggleTitle;
       self.amPM.tabIndex = -1;
       self.timeContainer.appendChild(self.amPM);
+    }
+
+    if (self.okButtonElement) {
+      self.timeContainer.appendChild(self.okButtonElement);
     }
 
     return self.timeContainer;
