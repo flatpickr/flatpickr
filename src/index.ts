@@ -1495,6 +1495,10 @@ function FlatpickrInstance(
     // "Delete"     (IE "Del")           46
 
     const isInput = e.target === self._input;
+    const isTimeInput =
+      e.target === self.hourElement ||
+      e.target === self.minuteElement ||
+      e.target === self.secondElement;
     const allowInput = self.config.allowInput;
     const allowKeydown = self.isOpen && (!allowInput || !isInput);
     const allowInlineKeydown = self.config.inline && isInput && !allowInput;
@@ -1510,6 +1514,11 @@ function FlatpickrInstance(
         );
         return (e.target as HTMLElement).blur();
       } else self.open();
+    } else if (e.keyCode === 13 && isTimeInput) {
+      e.stopPropagation();
+      setHoursFromInputs();
+      updateValue();
+      return self.close();
     } else if (
       isCalendarElem(e.target as HTMLElement) ||
       allowKeydown ||
