@@ -238,6 +238,9 @@ Use it along with "enableTime" to create a time picker. */
   /* Displays time picker in 24 hour mode without AM/PM selection when enabled.*/
   time_24hr: boolean;
 
+  /* Type of the calendar. */
+  typeCalendar: string;
+
   /* Display week numbers left of the calendar. */
   weekNumbers: boolean;
 
@@ -311,6 +314,7 @@ export interface ParsedOptions {
   showMonths: number;
   static: boolean;
   time_24hr: boolean;
+  typeCalendar: string;
   weekNumbers: boolean;
   wrap: boolean;
 }
@@ -372,6 +376,7 @@ export const defaults: ParsedOptions = {
   showMonths: 1,
   static: false,
   time_24hr: false,
+  typeCalendar: "none",
   weekNumbers: false,
   wrap: false,
 };

@@ -35,6 +35,12 @@ import { tokenRegex, monthToStr } from "./utils/formatting";
 
 import "./utils/polyfills";
 
+import {
+  convertToNational,
+  getDaysInNationalMonth,
+  convertToGregorian,
+} from "./utils/nationalcalendar";
+
 const DEBOUNCED_CHANGE_MS = 300;
 
 function FlatpickrInstance(
@@ -68,6 +74,14 @@ function FlatpickrInstance(
   self.set = set;
   self.setDate = setDate;
   self.toggle = toggle;
+
+  function isNationalCalendar() {
+    if (!self.config.typeCalendar || self.config.typeCalendar === "none") {
+      return false;
+    } else {
+      return true;
+    }
+  }
 
   function setupHelperFunctions() {
     self.utils = {
@@ -496,6 +510,11 @@ function FlatpickrInstance(
       if (jumpTo !== undefined) {
         self.currentYear = jumpTo.getFullYear();
         self.currentMonth = jumpTo.getMonth();
+        if (isNationalCalendar()) {
+          const nDate = convertToNational(jumpTo, self.config.typeCalendar);
+          self.currentYear = nDate.nYear;
+          self.currentMonth = nDate.nMonth;
+        }
       }
     } catch (e) {
       /* istanbul ignore next */
@@ -656,7 +675,7 @@ function FlatpickrInstance(
       dayElement = createElement<DayElement>(
         "span",
         "flatpickr-day " + className,
-        date.getDate().toString()
+        !isNationalCalendar() ? date.getDate().toString() : dayNumber
       );
 
     dayElement.dateObj = date;
@@ -811,12 +830,32 @@ function FlatpickrInstance(
   }
 
   function buildMonthDays(year: number, month: number) {
-    const firstOfMonth =
+    var firstOfMonth =
       (new Date(year, month, 1).getDay() - self.l10n.firstDayOfWeek + 7) % 7;
+    var gDate = new Date(0);
+    if (isNationalCalendar()) {
+      gDate = convertToGregorian(year, month, 1, self.config.typeCalendar);
+      firstOfMonth = (gDate.getDay() - self.l10n.firstDayOfWeek + 7) % 7;
+    }
 
-    const prevMonthDays = self.utils.getDaysInMonth((month - 1 + 12) % 12);
+    var prevMonthDays = self.utils.getDaysInMonth((month - 1 + 12) % 12);
+    if (isNationalCalendar()) {
+      var prevMonth = month - 1;
+      var prevYear = year;
+      if (prevMonth < 0) {
+        prevMonth = 11;
+        prevYear--;
+      }
+      prevMonthDays = getDaysInNationalMonth(
+        prevMonth,
+        prevYear,
+        self.config.typeCalendar
+      );
+    }
 
-    const daysInMonth = self.utils.getDaysInMonth(month),
+    const daysInMonth = !isNationalCalendar()
+        ? self.utils.getDaysInMonth(month)
+        : getDaysInNationalMonth(month, year, self.config.typeCalendar),
       days = window.document.createDocumentFragment(),
       isMultiMonth = self.config.showMonths > 1,
       prevMonthDayClass = isMultiMonth ? "prevMonthDay hidden" : "prevMonthDay",
@@ -830,7 +869,11 @@ function FlatpickrInstance(
       days.appendChild(
         createDay(
           prevMonthDayClass,
-          new Date(year, month - 1, dayNumber),
+          !isNationalCalendar()
+            ? new Date(year, month - 1, dayNumber)
+            : new Date(
+                gDate.getTime() - (prevMonthDays - dayNumber + 1) * 86400000
+              ),
           dayNumber,
           dayIndex
         )
@@ -840,7 +883,14 @@ function FlatpickrInstance(
     // Start at 1 since there is no 0th day
     for (dayNumber = 1; dayNumber <= daysInMonth; dayNumber++, dayIndex++) {
       days.appendChild(
-        createDay("", new Date(year, month, dayNumber), dayNumber, dayIndex)
+        createDay(
+          "",
+          !isNationalCalendar()
+            ? new Date(year, month, dayNumber)
+            : new Date(gDate.getTime() + (dayNumber - 1) * 86400000),
+          dayNumber,
+          dayIndex
+        )
       );
     }
 
@@ -854,8 +904,10 @@ function FlatpickrInstance(
       days.appendChild(
         createDay(
           nextMonthDayClass,
-          new Date(year, month + 1, dayNum % daysInMonth),
-          dayNum,
+          !isNationalCalendar()
+            ? new Date(year, month + 1, dayNum % daysInMonth)
+            : new Date(gDate.getTime() + (dayNum - 1) * 86400000),
+          !isNationalCalendar() ? dayNum : dayNum % daysInMonth,
           dayIndex
         )
       );
@@ -880,12 +932,22 @@ function FlatpickrInstance(
     if (self.weekNumbers) clearNode(self.weekNumbers);
 
     const frag = document.createDocumentFragment();
+    var month = self.currentMonth;
+    var year = self.currentYear;
 
     for (let i = 0; i < self.config.showMonths; i++) {
       const d = new Date(self.currentYear, self.currentMonth, 1);
-      d.setMonth(self.currentMonth + i);
-
-      frag.appendChild(buildMonthDays(d.getFullYear(), d.getMonth()));
+      if (!isNationalCalendar()) {
+        d.setMonth(self.currentMonth + i);
+        frag.appendChild(buildMonthDays(d.getFullYear(), d.getMonth()));
+      } else {
+        frag.appendChild(buildMonthDays(year, month));
+        month++;
+        if (month > 11) {
+          month = 0;
+          year++;
+        }
+      }
     }
 
     self.daysContainer.appendChild(frag);
@@ -1373,34 +1435,62 @@ function FlatpickrInstance(
   }
 
   function changeYear(newYear: number) {
-    if (
-      !newYear ||
-      (self.config.minDate && newYear < self.config.minDate.getFullYear()) ||
-      (self.config.maxDate && newYear > self.config.maxDate.getFullYear())
-    )
-      return;
+    if (!isNationalCalendar()) {
+      if (
+        !newYear ||
+        (self.config.minDate && newYear < self.config.minDate.getFullYear()) ||
+        (self.config.maxDate && newYear > self.config.maxDate.getFullYear())
+      )
+        return;
 
-    const newYearNum = newYear,
-      isNewYear = self.currentYear !== newYearNum;
+      const newYearNum = newYear,
+        isNewYear = self.currentYear !== newYearNum;
 
-    self.currentYear = newYearNum || self.currentYear;
+      self.currentYear = newYearNum || self.currentYear;
 
-    if (
-      self.config.maxDate &&
-      self.currentYear === self.config.maxDate.getFullYear()
-    ) {
-      self.currentMonth = Math.min(
-        self.config.maxDate.getMonth(),
-        self.currentMonth
+      if (
+        self.config.maxDate &&
+        self.currentYear === self.config.maxDate.getFullYear()
+      ) {
+        self.currentMonth = Math.min(
+          self.config.maxDate.getMonth(),
+          self.currentMonth
+        );
+      } else if (
+        self.config.minDate &&
+        self.currentYear === self.config.minDate.getFullYear()
+      ) {
+        self.currentMonth = Math.max(
+          self.config.minDate.getMonth(),
+          self.currentMonth
+        );
+      }
+    } else {
+      const nMinDate = convertToNational(
+        self.config.minDate,
+        options.typeCalendar
       );
-    } else if (
-      self.config.minDate &&
-      self.currentYear === self.config.minDate.getFullYear()
-    ) {
-      self.currentMonth = Math.max(
-        self.config.minDate.getMonth(),
-        self.currentMonth
+      const nMaxDate = convertToNational(
+        self.config.maxDate,
+        options.typeCalendar
       );
+      if (
+        !newYear ||
+        (self.config.minDate && newYear < nMinDate.nYear) ||
+        (self.config.maxDate && newYear > nMaxDate.nYear)
+      )
+        return;
+
+      const newYearNum = newYear,
+        isNewYear = self.currentYear !== newYearNum;
+
+      self.currentYear = newYearNum || self.currentYear;
+
+      if (self.config.maxDate && self.currentYear === nMaxDate.nYear) {
+        self.currentMonth = Math.min(nMaxDate.nMonth, self.currentMonth);
+      } else if (self.config.minDate && self.currentYear === nMinDate.nYear) {
+        self.currentMonth = Math.max(nMinDate.nMonth, self.currentMonth);
+      }
     }
 
     if (isNewYear) {
@@ -1869,6 +1959,7 @@ function FlatpickrInstance(
 
     self.config.parseDate = userConfig.parseDate;
     self.config.formatDate = userConfig.formatDate;
+    self.config.typeCalendar = userConfig.typeCalendar;
 
     Object.defineProperty(self.config, "enable", {
       get: () => self.config._enable,
@@ -2117,14 +2208,24 @@ function FlatpickrInstance(
 
     const target = t as DayElement;
 
-    const selectedDate = (self.latestSelectedDateObj = new Date(
+    var selectedDate = (self.latestSelectedDateObj = new Date(
       target.dateObj.getTime()
     ));
 
+    var month = 0;
+    var year = 0;
+    if (!isNationalCalendar()) {
+      month = selectedDate.getMonth();
+      year = selectedDate.getFullYear();
+    } else {
+      const nDate = convertToNational(selectedDate, self.config.typeCalendar);
+      month = nDate.nMonth;
+      year = nDate.nYear;
+    }
+
     const shouldChangeMonth =
-      (selectedDate.getMonth() < self.currentMonth ||
-        selectedDate.getMonth() >
-          self.currentMonth + self.config.showMonths - 1) &&
+      (month < self.currentMonth ||
+        month > self.currentMonth + self.config.showMonths - 1) &&
       self.config.mode !== "range";
 
     self.selectedDateElem = target;
@@ -2149,9 +2250,9 @@ function FlatpickrInstance(
     setHoursFromInputs();
 
     if (shouldChangeMonth) {
-      const isNewYear = self.currentYear !== selectedDate.getFullYear();
-      self.currentYear = selectedDate.getFullYear();
-      self.currentMonth = selectedDate.getMonth();
+      const isNewYear = self.currentYear !== year;
+      self.currentYear = year;
+      self.currentMonth = month;
 
       if (isNewYear) triggerEvent("onYearChange");
 
@@ -2351,6 +2452,11 @@ function FlatpickrInstance(
 
     self.currentYear = initialDate.getFullYear();
     self.currentMonth = initialDate.getMonth();
+    if (isNationalCalendar()) {
+      const nDate = convertToNational(initialDate, self.config.typeCalendar);
+      self.currentYear = nDate.nYear;
+      self.currentMonth = nDate.nMonth;
+    }
 
     if (self.selectedDates.length > 0)
       self.latestSelectedDateObj = self.selectedDates[0];
@@ -2539,27 +2645,62 @@ function FlatpickrInstance(
   function updateNavigationCurrentMonth() {
     if (self.config.noCalendar || self.isMobile || !self.monthNav) return;
 
+    var month = self.currentMonth;
+    var year = self.currentYear;
     self.yearElements.forEach((yearElement, i) => {
       const d = new Date(self.currentYear, self.currentMonth, 1);
       d.setMonth(self.currentMonth + i);
 
       self.monthElements[i].textContent =
-        monthToStr(d.getMonth(), self.config.shorthandCurrentMonth, self.l10n) +
-        " ";
-      yearElement.value = d.getFullYear().toString();
+        monthToStr(
+          !isNationalCalendar() ? d.getMonth() : month,
+          self.config.shorthandCurrentMonth,
+          self.l10n,
+          self.config.typeCalendar
+        ) + " ";
+      yearElement.value = !isNationalCalendar()
+        ? d.getFullYear().toString()
+        : year;
+      month++;
+      if (month > 11) {
+        month = 0;
+        year++;
+      }
     });
 
-    self._hidePrevMonthArrow =
-      self.config.minDate !== undefined &&
-      (self.currentYear === self.config.minDate.getFullYear()
-        ? self.currentMonth <= self.config.minDate.getMonth()
-        : self.currentYear < self.config.minDate.getFullYear());
+    if (!isNationalCalendar()) {
+      self._hidePrevMonthArrow =
+        self.config.minDate !== undefined &&
+        (self.currentYear === self.config.minDate.getFullYear()
+          ? self.currentMonth <= self.config.minDate.getMonth()
+          : self.currentYear < self.config.minDate.getFullYear());
 
-    self._hideNextMonthArrow =
-      self.config.maxDate !== undefined &&
-      (self.currentYear === self.config.maxDate.getFullYear()
-        ? self.currentMonth + 1 > self.config.maxDate.getMonth()
-        : self.currentYear > self.config.maxDate.getFullYear());
+      self._hideNextMonthArrow =
+        self.config.maxDate !== undefined &&
+        (self.currentYear === self.config.maxDate.getFullYear()
+          ? self.currentMonth + 1 > self.config.maxDate.getMonth()
+          : self.currentYear > self.config.maxDate.getFullYear());
+    } else {
+      const nMinDate = convertToNational(
+        self.config.minDate,
+        self.config.typeCalendar
+      );
+      const nMaxDate = convertToNational(
+        self.config.maxDate,
+        self.config.typeCalendar
+      );
+      self._hidePrevMonthArrow =
+        self.config.minDate !== undefined &&
+        (self.currentYear === nMinDate.nYear
+          ? self.currentMonth <= nMinDate.nMonth
+          : self.currentYear < nMinDate.nYear);
+
+      self._hideNextMonthArrow =
+        self.config.maxDate !== undefined &&
+        (self.currentYear === nMaxDate.nYear
+          ? self.currentMonth + 1 > nMaxDate.nMonth
+          : self.currentYear > nMaxDate.nYear);
+    }
   }
 
   function getDateStr(format: string) {

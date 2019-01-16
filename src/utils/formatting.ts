@@ -1,6 +1,7 @@
 import { int, pad } from "../utils";
 import { Locale } from "../types/locale";
 import { ParsedOptions } from "../types/options";
+import { convertToNational } from "../utils/nationalcalendar";
 
 export type token =
   | "D"
@@ -32,8 +33,12 @@ const do_nothing = (): undefined => undefined;
 export const monthToStr = (
   monthNumber: number,
   shorthand: boolean,
-  locale: Locale
-) => locale.months[shorthand ? "shorthand" : "longhand"][monthNumber];
+  locale: Locale,
+  typeCalendar: string
+) =>
+  !typeCalendar || typeCalendar === "none"
+    ? locale.months[shorthand ? "shorthand" : "longhand"][monthNumber]
+    : locale.monthsHijri[shorthand ? "shorthand" : "longhand"][monthNumber];
 
 export type RevFormatFn = (
   date: Date,
@@ -160,11 +165,16 @@ export const formats: Formats = {
 
   // full month name e.g. January
   F: function(date: Date, locale: Locale, options: ParsedOptions) {
-    return monthToStr(
-      (formats.n(date, locale, options) as number) - 1,
-      false,
-      locale
-    );
+    if (!options.typeCalendar || options.typeCalendar === "none") {
+      return monthToStr(
+        (formats.n(date, locale, options) as number) - 1,
+        false,
+        locale
+      );
+    } else {
+      const nDate = convertToNational(date, options.typeCalendar);
+      return monthToStr(nDate.nMonth, false, locale, options.typeCalendar);
+    }
   },
 
   // padded hour 1-12
@@ -176,18 +186,30 @@ export const formats: Formats = {
   H: (date: Date) => pad(date.getHours()),
 
   // day (1-30) with ordinal suffix e.g. 1st, 2nd
-  J: function(date: Date, locale: Locale) {
-    return locale.ordinal !== undefined
-      ? date.getDate() + locale.ordinal(date.getDate())
-      : date.getDate();
+  J: function(date: Date, _: Locale, options: ParsedOptions) {
+    if (!options.typeCalendar || options.typeCalendar === "none") {
+      return locale.ordinal !== undefined
+        ? date.getDate() + locale.ordinal(date.getDate())
+        : date.getDate();
+    } else {
+      const nDate = convertToNational(date, options.typeCalendar);
+      return locale.ordinal !== undefined
+        ? nDate.nDay + locale.ordinal(nDate.nDay)
+        : nDate.nDay;
+    }
   },
 
   // AM/PM
   K: (date: Date, locale: Locale) => locale.amPM[int(date.getHours() > 11)],
 
   // shorthand month e.g. Jan, Sep, Oct, etc
-  M: function(date: Date, locale: Locale) {
-    return monthToStr(date.getMonth(), true, locale);
+  M: function(date: Date, locale: Locale, options: ParsedOptions) {
+    if (!options.typeCalendar || options.typeCalendar === "none") {
+      return monthToStr(date.getMonth(), true, locale);
+    } else {
+      const nDate = convertToNational(date, options.typeCalendar);
+      return monthToStr(nDate.nMonth, true, locale, options.typeCalendar);
+    }
   },
 
   // seconds 00-59
@@ -201,10 +223,24 @@ export const formats: Formats = {
   },
 
   // full year e.g. 2016
-  Y: (date: Date) => date.getFullYear(),
+  Y: function(date: Date, _: Locale, options: ParsedOptions) {
+    if (!options.typeCalendar || options.typeCalendar === "none") {
+      return date.getFullYear();
+    } else {
+      const nDate = convertToNational(date, options.typeCalendar);
+      return nDate.nYear;
+    }
+  },
 
   // day in month, padded (01-30)
-  d: (date: Date) => pad(date.getDate()),
+  d: function(date: Date, _: Locale, options: ParsedOptions) {
+    if (!options.typeCalendar || options.typeCalendar === "none") {
+      return pad(date.getDate());
+    } else {
+      const nDate = convertToNational(date, options.typeCalendar);
+      return pad(nDate.nDay);
+    }
+  },
 
   // hour from 1-12 (am/pm)
   h: (date: Date) => (date.getHours() % 12 ? date.getHours() % 12 : 12),
@@ -213,7 +249,14 @@ export const formats: Formats = {
   i: (date: Date) => pad(date.getMinutes()),
 
   // day in month (1-30)
-  j: (date: Date) => date.getDate(),
+  j: function(date: Date, _: Locale, options: ParsedOptions) {
+    if (!options.typeCalendar || options.typeCalendar === "none") {
+      return date.getDate();
+    } else {
+      const nDate = convertToNational(date, options.typeCalendar);
+      return nDate.nDay;
+    }
+  },
 
   // weekday name, full, e.g. Thursday
   l: function(date: Date, locale: Locale) {
@@ -221,10 +264,24 @@ export const formats: Formats = {
   },
 
   // padded month number (01-12)
-  m: (date: Date) => pad(date.getMonth() + 1),
+  m: function(date: Date, _: Locale, options: ParsedOptions) {
+    if (!options.typeCalendar || options.typeCalendar === "none") {
+      pad(date.getMonth() + 1);
+    } else {
+      const nDate = convertToNational(date, options.typeCalendar);
+      return pad(nDate.nMonth + 1);
+    }
+  },
 
   // the month number (1-12)
-  n: (date: Date) => date.getMonth() + 1,
+  n: function(date: Date, _: Locale, options: ParsedOptions) {
+    if (!options.typeCalendar || options.typeCalendar === "none") {
+      return date.getMonth() + 1;
+    } else {
+      const nDate = convertToNational(date, options.typeCalendar);
+      return nDate.nMonth + 1;
+    }
+  },
 
   // seconds 0-59
   s: (date: Date) => date.getSeconds(),
@@ -236,5 +293,12 @@ export const formats: Formats = {
   w: (date: Date) => date.getDay(),
 
   // last two digits of year e.g. 16 for 2016
-  y: (date: Date) => String(date.getFullYear()).substring(2),
+  y: function(date: Date, _: Locale, options: ParsedOptions) {
+    if (!options.typeCalendar || options.typeCalendar === "none") {
+      return String(date.getFullYear()).substring(2);
+    } else {
+      const nDate = convertToNational(date, options.typeCalendar);
+      return String(nDate.nYear).substring(2);
+    }
+  },
 };
