@@ -21,6 +21,7 @@
     "@babel/core": "7.2.2",
     "@babel/plugin-proposal-object-rest-spread": "^7.2.0",
     "@babel/plugin-proposal-optional-catch-binding": "^7.2.0",
+    "@babel/plugin-transform-object-assign": "^7.2.0",
     "@babel/preset-env": "7.2.3",
     "@types/acorn": "^4.0.4",
     "@types/chokidar": "^1.7.5",
