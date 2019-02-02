@@ -1215,6 +1215,8 @@ function FlatpickrInstance(
 
     self.selectedDates = [];
     self.latestSelectedDateObj = undefined;
+    self.currentYear = self._initialDate.getFullYear();
+    self.currentMonth = self._initialDate.getMonth();
     self.showTimeInput = false;
 
     if (self.config.enableTime === true) {
@@ -2338,7 +2340,7 @@ function FlatpickrInstance(
 
     if (preloadedDate) setSelectedDate(preloadedDate, self.config.dateFormat);
 
-    const initialDate =
+    self._initialDate =
       self.selectedDates.length > 0
         ? self.selectedDates[0]
         : self.config.minDate &&
@@ -2349,8 +2351,8 @@ function FlatpickrInstance(
         ? self.config.maxDate
         : self.now;
 
-    self.currentYear = initialDate.getFullYear();
-    self.currentMonth = initialDate.getMonth();
+    self.currentYear = self._initialDate.getFullYear();
+    self.currentMonth = self._initialDate.getMonth();
 
     if (self.selectedDates.length > 0)
       self.latestSelectedDateObj = self.selectedDates[0];
