@@ -703,6 +703,10 @@ describe("flatpickr", () => {
         });
 
         fp.changeMonth(-1);
+
+        expect(fp.currentMonth).toEqual(11);
+        expect(fp.currentYear).toEqual(2015);
+
         fp.clear();
 
         expect(fp.currentMonth).toEqual(0);
