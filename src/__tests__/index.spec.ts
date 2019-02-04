@@ -695,6 +695,24 @@ describe("flatpickr", () => {
       expect(fp.isEnabled("2016-10-22")).toBe(false);
       expect(fp.isEnabled("2016-10-25")).toBe(false);
     });
+
+    describe("clear()", () => {
+      it("resets currentMonth and currentYear", () => {
+        createInstance({
+          defaultDate: "2016-01-20",
+        });
+
+        fp.changeMonth(-1);
+
+        expect(fp.currentMonth).toEqual(11);
+        expect(fp.currentYear).toEqual(2015);
+
+        fp.clear();
+
+        expect(fp.currentMonth).toEqual(0);
+        expect(fp.currentYear).toEqual(2016);
+      });
+    });
   });
 
   describe("UI", () => {

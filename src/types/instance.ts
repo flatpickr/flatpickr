@@ -63,6 +63,7 @@ export type Instance = Elements &
     latestSelectedDateObj?: Date;
     _selectedDateObj?: Date;
     selectedDates: Date[];
+    _initialDate: Date;
 
     // State
     config: ParsedOptions;
