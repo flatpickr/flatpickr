@@ -15,9 +15,6 @@
     ]
   ],
   "plugins": [
-    ["module-resolver", {
-      "root": ["./src"]
-    }],
     ["@babel/plugin-proposal-object-rest-spread", { "useBuiltIns": true }],
     "@babel/plugin-proposal-optional-catch-binding"
   ]

@@ -28,7 +28,6 @@
     "@types/node": "11.9.4",
     "@types/stylus": "^0.48.31",
     "autoprefixer-stylus": "latest",
-    "babel-plugin-module-resolver": "^3.2.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "chokidar": "2.1.1",
     "coveralls": "^3.0.2",
