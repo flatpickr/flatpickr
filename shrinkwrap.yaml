@@ -11,7 +11,6 @@ devDependencies:
   '@types/jquery': 3.3.29
   '@types/node': 11.9.4
   '@types/stylus': 0.48.31
-  '@types/uglify-js': 3.0.4
   autoprefixer-stylus: 0.14.0
   babel-plugin-module-resolver: 3.2.0
   babel-plugin-transform-object-rest-spread: 6.26.0
@@ -33,7 +32,6 @@ devDependencies:
   ts-node: 8.0.2
   tslib: 1.9.3
   typescript: 3.3.3
-  uglify-js: 3.4.9
 packages:
   /@babel/code-frame/7.0.0:
     dependencies:
@@ -735,12 +733,6 @@ packages:
     dev: true
     resolution:
       integrity: sha512-pskI2ZCEcJoDutB84aHIHnsRM3GrjCSXMu9nHSvNJYGlJmzHUZ49ceGX3wshztuvPVM9CZahrJhwlRnU4+Ebbw==
-  /@types/uglify-js/3.0.4:
-    dependencies:
-      source-map: 0.6.1
-    dev: true
-    resolution:
-      integrity: sha512-SudIN9TRJ+v8g5pTG8RRCqfqTMNqgWCKKd3vtynhGzkIIjxaicNAMuY5TRadJ6tzDu3Dotf3ngaMILtmOdmWEQ==
   /abab/2.0.0:
     dev: true
     resolution:
@@ -4700,6 +4692,7 @@ packages:
     engines:
       node: '>=0.8.0'
     hasBin: true
+    optional: true
     resolution:
       integrity: sha512-8CJsbKOtEbnJsTyv6LE6m6ZKniqMiFWmm9sRbopbkGs3gMPPfd3Fh8iIA4Ykv5MgaTbqHr4BaoGLJLZNhsrW1Q==
   /ultron/1.0.2:
@@ -4981,7 +4974,6 @@ specifiers:
   '@types/jquery': ^3.3.29
   '@types/node': 11.9.4
   '@types/stylus': ^0.48.31
-  '@types/uglify-js': 3.0.4
   autoprefixer-stylus: latest
   babel-plugin-module-resolver: ^3.2.0
   babel-plugin-transform-object-rest-spread: ^6.26.0
@@ -5003,4 +4995,3 @@ specifiers:
   ts-node: 8.0.2
   tslib: ^1.9.3
   typescript: 3.3.3
-  uglify-js: 3.4.9
