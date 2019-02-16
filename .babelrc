@@ -4,7 +4,7 @@
       "@babel/preset-env", {
         "modules": false,
         "targets": {
-                "browsers": [
+            "browsers": [
             "ie >= 9",
             "last 2 versions",
             "safari >= 7"
@@ -15,6 +15,9 @@
     ]
   ],
   "plugins": [
+    ["module-resolver", {
+      "root": ["./src"]
+    }],
     ["@babel/plugin-proposal-object-rest-spread", { "useBuiltIns": true }],
     "@babel/plugin-proposal-optional-catch-binding"
   ]
