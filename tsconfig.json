@@ -15,5 +15,8 @@
       "esnext.asynciterable"
     ],
     "baseUrl": "src",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
   }
 }

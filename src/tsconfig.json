@@ -16,6 +16,6 @@
     "baseUrl": "./"
   },
   "exclude": [
-    "./__tests__",
+    "./__tests__"
   ]
 }

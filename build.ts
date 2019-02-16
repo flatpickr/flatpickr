@@ -1,21 +1,19 @@
 import * as fs from "fs-extra";
 import { exec as execCommand } from "child_process";
 
-import * as glob from "glob";
+import glob from "glob";
 
-import * as uglifyJS from "uglify-js";
-
-import * as chokidar from "chokidar";
-import * as stylus from "stylus";
-import * as stylus_autoprefixer from "autoprefixer-stylus";
+import terser from "terser"
+import chokidar from "chokidar";
+import stylus from "stylus";
+import stylus_autoprefixer from "autoprefixer-stylus";
 
 import * as rollup from "rollup";
-import * as rollup_typescript from "rollup-plugin-typescript";
-import * as rollup_babel from "rollup-plugin-babel";
 
 import * as path from "path";
+import rollupConfig from "./config/rollup"
 
-const pkg = require("./package.json");
+import * as pkg from "./package.json"
 const version = `/* flatpickr v${pkg.version},, @license MIT */`;
 
 const paths = {
@@ -31,43 +29,9 @@ const customModuleNames: Record<string, string> = {
 
 const watchers: chokidar.FSWatcher[] = [];
 
-interface RollupOptions {
-  input: rollup.InputOptions;
-  output: rollup.OutputOptions;
-}
-
-const rollupConfig: RollupOptions = {
-  input: {
-    input: "",
-    plugins: [
-      rollup_typescript({
-        // abortOnError: false,
-        // cacheRoot: `/tmp/.rpt2_cache`,
-        // clean: true,
-        tsconfig: path.resolve("src/tsconfig.json"),
-        typescript: require("typescript"),
-      }),
-      rollup_babel({
-        runtimeHelpers: true,
-      }),
-    ],
-  },
-  output: {
-    file: "",
-    format: "umd",
-    exports: "auto",
-    banner: `/* flatpickr v${pkg.version}, @license MIT */`,
-    sourcemap: false,
-  },
-};
-
 function logErr(e: Error | string) {
   console.error(e);
   console.trace();
-}
-
-function startRollup(dev = false) {
-  return execCommand(`npm run rollup:${dev ? "start" : "build"}`);
 }
 
 function resolveGlob(g: string) {
@@ -89,7 +53,7 @@ async function readFileAsync(path: string) {
 }
 
 function uglify(src: string) {
-  const minified = uglifyJS.minify(src, {
+  const minified = terser.minify(src, {
     output: {
       preamble: version,
       comments: false,
@@ -102,11 +66,16 @@ function uglify(src: string) {
   return minified.code;
 }
 
+async function buildFlatpickrJs() {
+  const bundle = await rollup.rollup(rollupConfig);
+  return bundle.write(rollupConfig.output!);
+}
+
 async function buildScripts() {
   try {
+    await buildFlatpickrJs();
     const transpiled = await fs.readFile("./dist/flatpickr.js");
     fs.writeFile("./dist/flatpickr.min.js", uglify(transpiled.toString()));
-    console.log("done.");
   } catch (e) {
     logErr(e);
   }
@@ -124,7 +93,7 @@ function buildExtras(folder: "plugins" | "l10n") {
     await Promise.all([
       ...src_paths.map(async sourcePath => {
         const bundle = await rollup.rollup({
-          ...rollupConfig.input,
+          ...rollupConfig,
           cache: undefined,
           input: sourcePath,
         });
@@ -132,8 +101,8 @@ function buildExtras(folder: "plugins" | "l10n") {
         const fileName = path.basename(sourcePath, path.extname(sourcePath));
 
         return bundle.write({
-          ...rollupConfig.output,
           exports: folder === "l10n" ? "named" : "default",
+          format: "umd",
           sourcemap: false,
           file: sourcePath.replace("src", "dist").replace(".ts", ".js"),
           name: customModuleNames[fileName] || fileName,
@@ -141,25 +110,8 @@ function buildExtras(folder: "plugins" | "l10n") {
       }),
       ...(css_paths.map(p => fs.copy(p, p.replace("src", "dist"))) as any),
     ]);
-
-    console.log("done.");
   };
 }
-
-// function debounce(func: Function, wait: number, immediate?:boolean) {
-//   var timeout: number | NodeJS.Timer | null;
-//   return function(this: Function) {
-//     var context = this, args = arguments;
-//     var later = function() {
-//       timeout = null;
-//       if (!immediate) func.apply(context, args);
-//     };
-//     var callNow = immediate && !timeout;
-//     clearTimeout(timeout as number);
-//     timeout = setTimeout(later, wait);
-//     if (callNow) func.apply(context, args);
-//   };
-// };
 
 async function transpileStyle(src: string, compress = false) {
   return new Promise<string>((resolve, reject) => {
@@ -204,14 +156,16 @@ async function buildStyle() {
 const themeRegex = /themes\/(.+).styl/;
 async function buildThemes() {
   const themePaths = await resolveGlob("./src/style/themes/*.styl");
-  themePaths.forEach(themePath => {
+  return Promise.all(themePaths.map(async themePath => {
     const match = themeRegex.exec(themePath);
     if (!match) return;
 
-    readFileAsync(themePath)
-      .then(transpileStyle)
-      .then(css => fs.writeFile(`./dist/themes/${match[1]}.css`, css));
-  });
+    const src = await readFileAsync(themePath);
+    return fs.writeFile(
+      `./dist/themes/${match[1]}.css`,
+      transpileStyle(src)
+    );
+  }));
 }
 
 function setupWatchers() {
@@ -244,42 +198,38 @@ function watch(path: string, cb: (path: string) => void) {
 
 function start() {
   const devMode = process.argv.indexOf("--dev") > -1;
-  const proc = startRollup(devMode);
-
-  function exit(signal: string) {
-    !proc.killed && proc.kill(signal);
-    watchers.forEach(w => w.close());
-  }
-
-  function log(data: string) {
-    process.stdout.write(`rollup: ${data}`);
-  }
-
-  proc.stdout.on("data", log);
-  proc.stderr.on("data", log);
-
-  proc.on("exit", () => {
-    buildScripts();
-  });
-
   if (devMode) {
+    const write = (s: string) => process.stdout.write(`rollup: ${s}`)
+    const watcher = rollup.watch([rollupConfig])
+
+    watcher.on("event", logEvent);
+
+    function exit() {
+      watcher.close();
+      watchers.forEach(w => w.close());
+    }
+
+    interface RollupWatchEvent { code: string, input?: string, output?: string, result?: string }
+    function logEvent(e: RollupWatchEvent) {
+      write([e.code, e.input && `${e.input} -> ${e.output!}`, "\n"].filter(x => x).join(" "))
+    }
+
+    //catches ctrl+c event
+    process.on("SIGINT", exit);
+
+    // catches "kill pid" (for example: nodemon restart)
+    process.on("SIGUSR1", exit);
+    process.on("SIGUSR2", exit);
+
     setupWatchers();
-  } else {
-    buildStyle();
-    buildThemes();
-    buildExtras("l10n")();
-    buildExtras("plugins")();
+    return;
   }
 
-  //do something when app is closing
-  //process.on('exit', proc.kill);
-
-  //catches ctrl+c event
-  process.on("SIGINT", exit.bind(null, "SIGKILL"));
-
-  // catches "kill pid" (for example: nodemon restart)
-  process.on("SIGUSR1", exit.bind(null, "SIGKILL"));
-  process.on("SIGUSR2", exit.bind(null, "SIGKILL"));
+  buildScripts();
+  buildStyle();
+  buildThemes();
+  buildExtras("l10n")();
+  buildExtras("plugins")();
 }
 
 start();
