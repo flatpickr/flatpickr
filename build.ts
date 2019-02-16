@@ -34,10 +34,6 @@ function logErr(e: Error | string) {
   console.trace();
 }
 
-function startRollup() {
-  return execCommand(`npm run rollup:start`);
-}
-
 function resolveGlob(g: string) {
   return new Promise<string[]>((resolve, reject) => {
     glob(
@@ -80,7 +76,6 @@ async function buildScripts() {
     await buildFlatpickrJs();
     const transpiled = await fs.readFile("./dist/flatpickr.js");
     fs.writeFile("./dist/flatpickr.min.js", uglify(transpiled.toString()));
-    console.log("done.");
   } catch (e) {
     logErr(e);
   }
@@ -115,8 +110,6 @@ function buildExtras(folder: "plugins" | "l10n") {
       }),
       ...(css_paths.map(p => fs.copy(p, p.replace("src", "dist"))) as any),
     ]);
-
-    console.log("done.");
   };
 }
 
@@ -206,26 +199,27 @@ function watch(path: string, cb: (path: string) => void) {
 function start() {
   const devMode = process.argv.indexOf("--dev") > -1;
   if (devMode) {
-    const proc = startRollup();
+    const write = (s: string) => process.stdout.write(`rollup: ${s}`)
+    const watcher = rollup.watch([rollupConfig])
 
-    function exit(signal: string) {
-      !proc.killed && proc.kill(signal);
+    watcher.on("event", logEvent);
+
+    function exit() {
+      watcher.close();
       watchers.forEach(w => w.close());
     }
 
-    function log(data: string) {
-      process.stdout.write(`rollup: ${data}`);
+    interface RollupWatchEvent { code: string, input?: string, output?: string, result?: string }
+    function logEvent(e: RollupWatchEvent) {
+      write([e.code, e.input && `${e.input} -> ${e.output!}`, "\n"].filter(x => x).join(" "))
     }
 
-    proc.stdout.on("data", log);
-    proc.stderr.on("data", log);
-
     //catches ctrl+c event
-    process.on("SIGINT", exit.bind(null, "SIGKILL"));
+    process.on("SIGINT", exit);
 
     // catches "kill pid" (for example: nodemon restart)
-    process.on("SIGUSR1", exit.bind(null, "SIGKILL"));
-    process.on("SIGUSR2", exit.bind(null, "SIGKILL"));
+    process.on("SIGUSR1", exit);
+    process.on("SIGUSR2", exit);
 
     setupWatchers();
     return;

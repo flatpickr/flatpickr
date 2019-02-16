@@ -9,7 +9,6 @@
     "build:post": "sh ./emitDeclarations.sh",
     "fmt": "prettier --write --trailing-comma es5 --write",
     "start": "npm run build:build -- --dev",
-    "rollup:start": "rollup -w -c",
     "test": "run-s test:typecheck test:unit",
     "test:typecheck": "tsc -p src --noEmit",
     "test:unit": "jest --config config/jest.json",
