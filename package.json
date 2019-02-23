@@ -7,7 +7,7 @@
     "build:pre": "rm -rf dist && mkdir -p dist/themes",
     "build:build": "ts-node --transpile-only build.ts",
     "build:post": "sh ./emitDeclarations.sh",
-    "fmt": "prettier --write --trailing-comma es5 --write",
+    "fmt": "prettier --ignore-path .gitignore --trailing-comma es5 --write '**/*.ts'",
     "start": "npm run build:build -- --dev",
     "test": "run-s test:typecheck test:unit",
     "test:typecheck": "tsc -p src --noEmit",
