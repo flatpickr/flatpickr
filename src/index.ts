@@ -352,7 +352,7 @@ function FlatpickrInstance(
   function bind<E extends Element | Window | Document>(
     element: E | E[],
     event: string | string[],
-    handler: ((e?: any) => void),
+    handler: (e?: any) => void,
     options?: object
   ): void {
     if (event instanceof Array)

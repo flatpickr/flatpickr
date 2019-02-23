@@ -45,7 +45,7 @@ export const Hebrew: CustomLocale = {
       "דצמבר",
     ],
   },
-  rangeSeparator: ' אל '
+  rangeSeparator: " אל ",
 };
 
 fp.l10ns.he = Hebrew;
