@@ -3,7 +3,7 @@ import { exec as execCommand } from "child_process";
 
 import glob from "glob";
 
-import terser from "terser"
+import terser from "terser";
 import chokidar from "chokidar";
 import stylus from "stylus";
 import stylus_autoprefixer from "autoprefixer-stylus";
@@ -11,9 +11,9 @@ import stylus_autoprefixer from "autoprefixer-stylus";
 import * as rollup from "rollup";
 
 import * as path from "path";
-import rollupConfig from "./config/rollup"
+import rollupConfig, { getConfig } from "./config/rollup";
 
-import * as pkg from "./package.json"
+import * as pkg from "./package.json";
 const version = `/* flatpickr v${pkg.version},, @license MIT */`;
 
 const paths = {
@@ -36,10 +36,8 @@ function logErr(e: Error | string) {
 
 function resolveGlob(g: string) {
   return new Promise<string[]>((resolve, reject) => {
-    glob(
-      g,
-      (err: Error | null, files: string[]) =>
-        err ? reject(err) : resolve(files)
+    glob(g, (err: Error | null, files: string[]) =>
+      err ? reject(err) : resolve(files)
     );
   });
 }
@@ -90,26 +88,30 @@ function buildExtras(folder: "plugins" | "l10n") {
       resolveGlob(`./src/${folder}/**/*.css`),
     ]);
 
-    await Promise.all([
-      ...src_paths.map(async sourcePath => {
-        const bundle = await rollup.rollup({
-          ...rollupConfig,
-          cache: undefined,
-          input: sourcePath,
-        });
+    try {
+      await Promise.all([
+        ...src_paths.map(async sourcePath => {
+          const bundle = await rollup.rollup({
+            ...rollupConfig,
+            cache: undefined,
+            input: sourcePath,
+          });
 
-        const fileName = path.basename(sourcePath, path.extname(sourcePath));
+          const fileName = path.basename(sourcePath, path.extname(sourcePath));
 
-        return bundle.write({
-          exports: folder === "l10n" ? "named" : "default",
-          format: "umd",
-          sourcemap: false,
-          file: sourcePath.replace("src", "dist").replace(".ts", ".js"),
-          name: customModuleNames[fileName] || fileName,
-        });
-      }),
-      ...(css_paths.map(p => fs.copy(p, p.replace("src", "dist"))) as any),
-    ]);
+          return bundle.write({
+            exports: folder === "l10n" ? "named" : "default",
+            format: "umd",
+            sourcemap: false,
+            file: sourcePath.replace("src", "dist").replace(".ts", ".js"),
+            name: customModuleNames[fileName] || fileName,
+          });
+        }),
+        ...(css_paths.map(p => fs.copy(p, p.replace("src", "dist"))) as any),
+      ]);
+    } catch (err) {
+      logErr(err);
+    }
   };
 }
 
@@ -125,9 +127,8 @@ async function transpileStyle(src: string, compress = false) {
           browsers: pkg.browserslist,
         })
       )
-      .render(
-        (err: Error | undefined, css: string) =>
-          !err ? resolve(css) : reject(err)
+      .render((err: Error | undefined, css: string) =>
+        !err ? resolve(css) : reject(err)
       );
   });
 }
@@ -156,16 +157,15 @@ async function buildStyle() {
 const themeRegex = /themes\/(.+).styl/;
 async function buildThemes() {
   const themePaths = await resolveGlob("./src/style/themes/*.styl");
-  return Promise.all(themePaths.map(async themePath => {
-    const match = themeRegex.exec(themePath);
-    if (!match) return;
+  return Promise.all(
+    themePaths.map(async themePath => {
+      const match = themeRegex.exec(themePath);
+      if (!match) return;
 
-    const src = await readFileAsync(themePath);
-    return fs.writeFile(
-      `./dist/themes/${match[1]}.css`,
-      transpileStyle(src)
-    );
-  }));
+      const src = await readFileAsync(themePath);
+      return fs.writeFile(`./dist/themes/${match[1]}.css`, transpileStyle(src));
+    })
+  );
 }
 
 function setupWatchers() {
@@ -199,8 +199,8 @@ function watch(path: string, cb: (path: string) => void) {
 function start() {
   const devMode = process.argv.indexOf("--dev") > -1;
   if (devMode) {
-    const write = (s: string) => process.stdout.write(`rollup: ${s}`)
-    const watcher = rollup.watch([rollupConfig])
+    const write = (s: string) => process.stdout.write(`rollup: ${s}`);
+    const watcher = rollup.watch([getConfig({ dev: true })]);
 
     watcher.on("event", logEvent);
 
@@ -209,9 +209,17 @@ function start() {
       watchers.forEach(w => w.close());
     }
 
-    interface RollupWatchEvent { code: string, input?: string, output?: string, result?: string }
+    interface RollupWatchEvent {
+      code: string;
+      input?: string;
+      output?: string;
+    }
     function logEvent(e: RollupWatchEvent) {
-      write([e.code, e.input && `${e.input} -> ${e.output!}`, "\n"].filter(x => x).join(" "))
+      write(
+        [e.code, e.input && `${e.input} -> ${e.output!}`, "\n"]
+          .filter(x => x)
+          .join(" ")
+      );
     }
 
     //catches ctrl+c event
@@ -222,7 +230,6 @@ function start() {
     process.on("SIGUSR2", exit);
 
     setupWatchers();
-    return;
   }
 
   buildScripts();
