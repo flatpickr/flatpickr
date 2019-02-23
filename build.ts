@@ -157,15 +157,16 @@ async function buildStyle() {
 const themeRegex = /themes\/(.+).styl/;
 async function buildThemes() {
   const themePaths = await resolveGlob("./src/style/themes/*.styl");
-  return Promise.all(
+  await Promise.all(
     themePaths.map(async themePath => {
       const match = themeRegex.exec(themePath);
       if (!match) return;
 
       const src = await readFileAsync(themePath);
-      return fs.writeFile(`./dist/themes/${match[1]}.css`, transpileStyle(src));
+      return fs.writeFile(`./dist/themes/${match[1]}.css`, await transpileStyle(src));
     })
   );
+  return;
 }
 
 function setupWatchers() {
