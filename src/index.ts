@@ -2691,9 +2691,9 @@ function _flatpickr(
   }
 
   // static list
-  const nodes = Array.from(nodeList).filter(
-    x => x instanceof HTMLElement
-  ) as HTMLElement[];
+  const nodes = Array.prototype.slice
+    .call(nodeList)
+    .filter(x => x instanceof HTMLElement) as HTMLElement[];
 
   let instances: Instance[] = [];
   for (let i = 0; i < nodes.length; i++) {
