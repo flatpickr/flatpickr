@@ -1607,22 +1607,14 @@ function FlatpickrInstance(
                 e.preventDefault();
                 target.focus();
               } else if (childElementCount <= expectedChildElementCount) {
-                if (self.altInput) {
-                  self.altInput.focus();
-                } else {
-                  self.element.focus();
-                }
+                self._input.focus();
               }
             }
             break;
           }
 
           if (childElementCount <= expectedChildElementCount) {
-            if (self.altInput) {
-              self.altInput.focus();
-            } else {
-              self.element.focus();
-            }
+            self._input.focus();
           }
 
           break;
