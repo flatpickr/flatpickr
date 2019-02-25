@@ -1607,14 +1607,14 @@ function FlatpickrInstance(
                 e.preventDefault();
                 target.focus();
               } else if (childElementCount <= expectedChildElementCount) {
-                self.element.focus();
+                self._input.focus();
               }
             }
             break;
           }
 
           if (childElementCount <= expectedChildElementCount) {
-            self.element.focus();
+            self._input.focus();
           }
 
           break;
