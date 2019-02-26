@@ -166,7 +166,9 @@ function FlatpickrInstance(
   function updateTime(
     e?: MouseEvent | IncrementEvent | KeyboardEvent | FocusEvent
   ) {
-    if (self.selectedDates.length === 0) return;
+    if (self.selectedDates.length === 0) {
+      setDefaultTime();
+    }
 
     if (e !== undefined && e.type !== "blur") {
       timeWrapper(e);
@@ -1745,6 +1747,17 @@ function FlatpickrInstance(
       positionCalendar();
   }
 
+  function setDefaultTime() {
+    self.setDate(
+      self.config.minDate !== undefined
+        ? new Date(self.config.minDate.getTime())
+        : new Date(),
+      false
+    );
+    setDefaultHours();
+    updateValue();
+  }
+
   function open(
     e?: FocusEvent | MouseEvent,
     positionElement = self._positionElement
@@ -1783,14 +1796,7 @@ function FlatpickrInstance(
 
     if (self.config.enableTime === true && self.config.noCalendar === true) {
       if (self.selectedDates.length === 0) {
-        self.setDate(
-          self.config.minDate !== undefined
-            ? new Date(self.config.minDate.getTime())
-            : new Date(),
-          false
-        );
-        setDefaultHours();
-        updateValue();
+        setDefaultTime();
       }
 
       if (
