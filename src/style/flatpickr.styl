@@ -238,6 +238,10 @@
     &::-ms-clear
       display none
 
+    &::-webkit-outer-spin-button, &::-webkit-inner-spin-button
+      margin 0
+      -webkit-appearance none
+
   span
     position absolute
     right 0
@@ -619,6 +623,10 @@ span.flatpickr-weekday
     font-size 14px
     position relative
     box-sizing border-box
+    -webkit-appearance textfield
+    -moz-appearance textfield
+    appearance textfield
+
 
     &.flatpickr-hour
       font-weight bold
@@ -650,7 +658,7 @@ span.flatpickr-weekday
 
   input, .flatpickr-am-pm
     &:hover, &:focus
-      background lighten($dayHoverBackground, 5)
+      background lighten($dayHoverBackground, 3)
 
 .flatpickr-input[readonly]
   cursor pointer

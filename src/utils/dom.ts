@@ -50,8 +50,12 @@ export function createNumberInput(
     arrowUp = createElement<HTMLSpanElement>("span", "arrowUp"),
     arrowDown = createElement<HTMLSpanElement>("span", "arrowDown");
 
-  numInput.type = "text";
-  numInput.pattern = "\\d*";
+  if (navigator.userAgent.indexOf("MSIE 9.0") === -1) {
+    numInput.type = "number";
+  } else {
+    numInput.type = "text";
+    numInput.pattern = "\\d*";
+  }
 
   if (opts !== undefined)
     for (const key in opts) numInput.setAttribute(key, opts[key]);
