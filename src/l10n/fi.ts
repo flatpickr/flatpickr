@@ -54,6 +54,8 @@ export const Finnish: CustomLocale = {
       "Marraskuu",
       "Joulukuu",
     ],
+    
+    weekAbbreviation: "Vko"
   },
 
   ordinal: () => {
