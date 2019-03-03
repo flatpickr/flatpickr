@@ -163,7 +163,10 @@ async function buildThemes() {
       if (!match) return;
 
       const src = await readFileAsync(themePath);
-      return fs.writeFile(`./dist/themes/${match[1]}.css`, await transpileStyle(src));
+      return fs.writeFile(
+        `./dist/themes/${match[1]}.css`,
+        await transpileStyle(src)
+      );
     })
   );
   return;
