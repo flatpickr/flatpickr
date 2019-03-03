@@ -1208,7 +1208,7 @@ function FlatpickrInstance(
     updateNavigationCurrentMonth();
   }
 
-  function clear(triggerChangeEvent = true) {
+  function clear(triggerChangeEvent = true, toInitial = true) {
     self.input.value = "";
 
     if (self.altInput !== undefined) self.altInput.value = "";
@@ -1217,8 +1217,10 @@ function FlatpickrInstance(
 
     self.selectedDates = [];
     self.latestSelectedDateObj = undefined;
-    self.currentYear = self._initialDate.getFullYear();
-    self.currentMonth = self._initialDate.getMonth();
+    if (toInitial === true) {
+      self.currentYear = self._initialDate.getFullYear();
+      self.currentMonth = self._initialDate.getMonth();
+    }
     self.showTimeInput = false;
 
     if (self.config.enableTime === true) {
@@ -2144,9 +2146,10 @@ function FlatpickrInstance(
       if (selectedIndex) self.selectedDates.splice(parseInt(selectedIndex), 1);
       else self.selectedDates.push(selectedDate);
     } else if (self.config.mode === "range") {
-      if (self.selectedDates.length === 2) self.clear(false);
+      if (self.selectedDates.length === 2) {
+        self.clear(false, false);
+      }
       self.latestSelectedDateObj = selectedDate;
-
       self.selectedDates.push(selectedDate);
 
       // unless selecting same date twice, sort ascendingly
