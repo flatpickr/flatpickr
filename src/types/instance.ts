@@ -88,7 +88,7 @@ export type Instance = Elements &
       from_keyboard?: boolean
     ) => void;
     changeYear: (year: number) => void;
-    clear: (emitChangeEvent?: boolean) => void;
+    clear: (emitChangeEvent?: boolean, toInitial?: boolean) => void;
     close: () => void;
     destroy: () => void;
     isEnabled: (date: DateOption, timeless?: boolean) => boolean;
