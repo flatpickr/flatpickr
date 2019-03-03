@@ -757,6 +757,21 @@ describe("flatpickr", () => {
       expect(fp.element.parentNode.childNodes[1]).toEqual(fp.calendarContainer);
     });
 
+    it("range mode - no month jump", () => {
+      createInstance({
+        mode: "range",
+        maxDate: "today",
+        defaultDate: ["2019-02-01", "2019-02-27"],
+      });
+
+      fp.open();
+      simulate("mousedown", fp.prevMonthNav, { which: 1 }, CustomEvent);
+      expect(fp.currentMonth).toEqual(0);
+
+      simulate("mousedown", fp.days.children[2], { which: 1 }, CustomEvent);
+      expect(fp.currentMonth).toEqual(0);
+    });
+
     describe("mobile calendar", () => {
       describe(".isMobile", () => {
         it("returns true", () => {
