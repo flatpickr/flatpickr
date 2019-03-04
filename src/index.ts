@@ -911,15 +911,24 @@ function FlatpickrInstance(
     )[0] as HTMLInputElement;
     yearElement.setAttribute("aria-label", self.l10n.yearAriaLabel);
 
-    if (self.config.minDate)
+    if (self.config.minDate) {
       yearElement.setAttribute(
         "data-min",
         self.config.minDate.getFullYear().toString()
       );
+	  yearElement.setAttribute(
+        "min",
+        self.config.minDate.getFullYear().toString()
+      );
+    }
 
     if (self.config.maxDate) {
       yearElement.setAttribute(
         "data-max",
+        self.config.maxDate.getFullYear().toString()
+      );
+      yearElement.setAttribute(
+        "max",
         self.config.maxDate.getFullYear().toString()
       );
 
@@ -1059,9 +1068,19 @@ function FlatpickrInstance(
       "data-max",
       self.config.time_24hr ? "23" : "12"
     );
+	self.hourElement.setAttribute(
+      "min",
+      self.config.time_24hr ? "0" : "1"
+    );
+    self.hourElement.setAttribute(
+      "max",
+      self.config.time_24hr ? "23" : "12"
+    );
 
     self.minuteElement.setAttribute("data-min", "0");
     self.minuteElement.setAttribute("data-max", "59");
+    self.minuteElement.setAttribute("min", "0");
+    self.minuteElement.setAttribute("max", "59");
 
     self.timeContainer.appendChild(hourInput);
     self.timeContainer.appendChild(separator);
@@ -1087,14 +1106,10 @@ function FlatpickrInstance(
         "data-step",
         self.minuteElement.getAttribute("data-step") as string
       );
-      self.secondElement.setAttribute(
-        "data-min",
-        self.minuteElement.getAttribute("data-min") as string
-      );
-      self.secondElement.setAttribute(
-        "data-max",
-        self.minuteElement.getAttribute("data-max") as string
-      );
+      self.secondElement.setAttribute("data-min", "0");
+      self.secondElement.setAttribute("data-max", "59");
+	  self.secondElement.setAttribute("min", "0");
+      self.secondElement.setAttribute("max", "59");
 
       self.timeContainer.appendChild(
         createElement("span", "flatpickr-time-separator", ":")
