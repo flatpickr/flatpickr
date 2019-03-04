@@ -1527,8 +1527,10 @@ function FlatpickrInstance(
 
       switch (e.keyCode) {
         case 13:
-          if (isTimeObj) updateTime();
-          else selectDate(e);
+          if (isTimeObj) {
+            updateTime();
+            focusAndClose();
+          } else selectDate(e);
 
           break;
 
