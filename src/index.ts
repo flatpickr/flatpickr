@@ -1615,9 +1615,10 @@ function FlatpickrInstance(
               }
             }
             break;
-          }
-
-          if (childElementCount <= expectedChildElementCount) {
+          } else if (
+            (e.target as Node).nodeName !== "INPUT" &&
+            childElementCount <= expectedChildElementCount
+          ) {
             self._input.focus();
           }
 
@@ -1790,10 +1791,6 @@ function FlatpickrInstance(
       self._input.classList.add("active");
       triggerEvent("onOpen");
       positionCalendar(positionElement);
-      self.calendarContainer.focus();
-      if (self.config.noCalendar === false) {
-        focusOnDay(undefined, 0);
-      }
     }
 
     if (self.config.enableTime === true && self.config.noCalendar === true) {
@@ -2693,11 +2690,6 @@ function _flatpickr(
   nodeList: ArrayLike<Node>,
   config?: Options
 ): Instance | Instance[] {
-  // spare ourselves some cycles
-  if (nodeList.length === 0) {
-    return [];
-  }
-
   // static list
   const nodes = Array.prototype.slice
     .call(nodeList)
