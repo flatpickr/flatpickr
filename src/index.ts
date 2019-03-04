@@ -1108,7 +1108,7 @@ function FlatpickrInstance(
       );
       self.secondElement.setAttribute("data-min", "0");
       self.secondElement.setAttribute("data-max", "59");
-	  self.secondElement.setAttribute("min", "0");
+      self.secondElement.setAttribute("min", "0");
       self.secondElement.setAttribute("max", "59");
 
       self.timeContainer.appendChild(
