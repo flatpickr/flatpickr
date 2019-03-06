@@ -75,6 +75,11 @@ function simulate(
   onElement.dispatchEvent(evt);
 }
 
+// mousedown click
+const clickOn = (element: Node) => {
+  simulate("mousedown", element, { which: 1 }, CustomEvent);
+};
+
 describe("flatpickr", () => {
   beforeEach(beforeEachTest);
 
@@ -1321,6 +1326,16 @@ describe("flatpickr", () => {
       expect(fp.currentMonth).toBe(2);
       expect(isArrowDisabled("prevMonthNav")).toBe(false);
       expect(isArrowDisabled("nextMonthNav")).toBe(true);
+    });
+
+    it("idempotent on focus in and out", () => {
+      createInstance({
+        allowInput: true,
+      });
+
+      fp._input.focus();
+      clickOn(document.body);
+      expect(fp._input.value).toEqual("");
     });
   });
 
