@@ -1341,16 +1341,38 @@ describe("flatpickr", () => {
     it("time-picker focuses out onto input", () => {
       createInstance({ mode: "time" });
       fp.open();
+
+      fp.minuteElement.focus();
+      simulate(
+        "keydown",
+        document.activeElement,
+        {
+          keyCode: 9, // Tab
+        },
+        KeyboardEvent
+      );
+      expect(document.activeElement).toStrictEqual(fp.amPM);
+
+      simulate(
+        "keydown",
+        document.activeElement,
+        {
+          keyCode: 9, // Tab
+          shiftKey: true,
+        },
+        KeyboardEvent
+      );
+      expect(document.activeElement).toStrictEqual(fp.minuteElement);
+
       fp.amPM.focus();
       simulate(
         "keydown",
         fp.amPM!,
         {
-          keyCode: 9, // "Escape"
+          keyCode: 9, // Tab
         },
         KeyboardEvent
       );
-
       expect(document.activeElement).toStrictEqual(fp._input);
     });
   });
