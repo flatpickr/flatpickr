@@ -50,6 +50,7 @@ function FlatpickrInstance(
   self.parseDate = createDateParser({ config: self.config, l10n: self.l10n });
 
   self._handlers = [];
+  self.pluginElements = [];
   self._bind = bind;
   self._setHoursFromDate = setHoursFromDate;
   self._positionCalendar = positionCalendar;
@@ -1577,24 +1578,21 @@ function FlatpickrInstance(
 
         case 9:
           if (isTimeObj) {
-            const elems = [
+            const elems = ([
               self.hourElement,
               self.minuteElement,
               self.secondElement,
               self.amPM,
-            ].filter(x => x) as HTMLInputElement[];
+            ] as Node[])
+              .concat(self.pluginElements)
+              .filter(x => x) as HTMLInputElement[];
 
             const i = elems.indexOf(e.target as HTMLInputElement);
 
             if (i !== -1) {
               const target = elems[i + (e.shiftKey ? -1 : 1)];
-              if (target !== undefined) {
-                e.preventDefault();
-                target.focus();
-              } else if (e.shiftKey) {
-                e.preventDefault();
-                self._input.focus();
-              }
+              e.preventDefault();
+              (target || self._input).focus();
             }
           }
           break;
