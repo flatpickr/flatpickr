@@ -1337,6 +1337,44 @@ describe("flatpickr", () => {
       clickOn(document.body);
       expect(fp._input.value).toEqual("");
     });
+
+    it("time-picker focuses out onto input", () => {
+      createInstance({ mode: "time" });
+      fp.open();
+
+      fp.minuteElement.focus();
+      simulate(
+        "keydown",
+        document.activeElement,
+        {
+          keyCode: 9, // Tab
+        },
+        KeyboardEvent
+      );
+      expect(document.activeElement).toStrictEqual(fp.amPM);
+
+      simulate(
+        "keydown",
+        document.activeElement,
+        {
+          keyCode: 9, // Tab
+          shiftKey: true,
+        },
+        KeyboardEvent
+      );
+      expect(document.activeElement).toStrictEqual(fp.minuteElement);
+
+      fp.amPM.focus();
+      simulate(
+        "keydown",
+        fp.amPM!,
+        {
+          keyCode: 9, // Tab
+        },
+        KeyboardEvent
+      );
+      expect(document.activeElement).toStrictEqual(fp._input);
+    });
   });
 
   describe("Localization", () => {

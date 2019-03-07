@@ -46,6 +46,8 @@ export interface Elements {
   minuteElement?: HTMLInputElement;
   secondElement?: HTMLInputElement;
   amPM?: HTMLSpanElement;
+
+  pluginElements: Array<Node>;
 }
 
 export interface Formatting {
