@@ -75,6 +75,11 @@ function simulate(
   onElement.dispatchEvent(evt);
 }
 
+// mousedown click
+const clickOn = (element: Node) => {
+  simulate("mousedown", element, { which: 1 }, CustomEvent);
+};
+
 describe("flatpickr", () => {
   beforeEach(beforeEachTest);
 
@@ -757,6 +762,21 @@ describe("flatpickr", () => {
       expect(fp.element.parentNode.childNodes[1]).toEqual(fp.calendarContainer);
     });
 
+    it("range mode - no month jump", () => {
+      createInstance({
+        mode: "range",
+        maxDate: "today",
+        defaultDate: ["2019-02-01", "2019-02-27"],
+      });
+
+      fp.open();
+      simulate("mousedown", fp.prevMonthNav, { which: 1 }, CustomEvent);
+      expect(fp.currentMonth).toEqual(0);
+
+      simulate("mousedown", fp.days.children[2], { which: 1 }, CustomEvent);
+      expect(fp.currentMonth).toEqual(0);
+    });
+
     describe("mobile calendar", () => {
       describe(".isMobile", () => {
         it("returns true", () => {
@@ -1306,6 +1326,54 @@ describe("flatpickr", () => {
       expect(fp.currentMonth).toBe(2);
       expect(isArrowDisabled("prevMonthNav")).toBe(false);
       expect(isArrowDisabled("nextMonthNav")).toBe(true);
+    });
+
+    it("idempotent on focus in and out", () => {
+      createInstance({
+        allowInput: true,
+      });
+
+      fp._input.focus();
+      clickOn(document.body);
+      expect(fp._input.value).toEqual("");
+    });
+
+    it("time-picker focuses out onto input", () => {
+      createInstance({ mode: "time" });
+      fp.open();
+
+      fp.minuteElement.focus();
+      simulate(
+        "keydown",
+        document.activeElement,
+        {
+          keyCode: 9, // Tab
+        },
+        KeyboardEvent
+      );
+      expect(document.activeElement).toStrictEqual(fp.amPM);
+
+      simulate(
+        "keydown",
+        document.activeElement,
+        {
+          keyCode: 9, // Tab
+          shiftKey: true,
+        },
+        KeyboardEvent
+      );
+      expect(document.activeElement).toStrictEqual(fp.minuteElement);
+
+      fp.amPM.focus();
+      simulate(
+        "keydown",
+        fp.amPM!,
+        {
+          keyCode: 9, // Tab
+        },
+        KeyboardEvent
+      );
+      expect(document.activeElement).toStrictEqual(fp._input);
     });
   });
 
