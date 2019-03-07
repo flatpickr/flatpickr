@@ -3,12 +3,14 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/node
+      - image: mhart/alpine-node
 
     working_directory: ~/repo
 
     steps:
       - checkout
+
+      - run: npm i pnpm -g
 
       # Download and cache dependencies
       - restore_cache:
@@ -17,7 +19,7 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run: yarn install
+      - run: pnpm i --frozen-shrinkwrap
 
       - save_cache:
           paths:
@@ -25,4 +27,4 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
 
-      - run: yarn test
+      - run: pnpm test
