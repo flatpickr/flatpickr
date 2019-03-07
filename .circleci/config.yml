@@ -22,8 +22,7 @@ jobs:
 
       - save_cache:
           paths:
-            - node_modules
+            - ~/.pnpm/store
           key: v1-dependencies-{{ checksum "package.json" }}
-
 
       - run: pnpm test
