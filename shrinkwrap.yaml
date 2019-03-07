@@ -4,7 +4,6 @@ devDependencies:
   '@babel/plugin-proposal-optional-catch-binding': 7.2.0
   '@babel/preset-env': 7.3.1
   '@types/acorn': 4.0.5
-  '@types/chokidar': 1.7.5
   '@types/fs-extra': 5.0.5
   '@types/glob': 7.1.1
   '@types/jest': 24.0.5
@@ -665,13 +664,6 @@ packages:
     dev: true
     resolution:
       integrity: sha512-603sPiZ4GVRHPvn6vNgEAvJewKsy+zwRWYS2MeIMemgoAtcjlw2G3lALxrb9OPA17J28bkB71R33yXlQbUatCA==
-  /@types/chokidar/1.7.5:
-    dependencies:
-      '@types/events': 3.0.0
-      '@types/node': 10.12.18
-    dev: true
-    resolution:
-      integrity: sha512-PDkSRY7KltW3M60hSBlerxI8SFPXsO3AL/aRVsO4Kh9IHRW74Ih75gUuTd/aE4LSSFqypb10UIX3QzOJwBQMGQ==
   /@types/estree/0.0.39:
     dev: true
     resolution:
@@ -4889,7 +4881,6 @@ specifiers:
   '@babel/plugin-proposal-optional-catch-binding': ^7.2.0
   '@babel/preset-env': 7.3.1
   '@types/acorn': ^4.0.5
-  '@types/chokidar': ^1.7.5
   '@types/fs-extra': 5.0.5
   '@types/glob': 7.1.1
   '@types/jest': 24.0.5
