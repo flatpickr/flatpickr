@@ -10,6 +10,8 @@ jobs:
     steps:
       - checkout
 
+      - run: npm config set unsafe-perm true
+
       - run: npm i pnpm -g
 
       # Download and cache dependencies
