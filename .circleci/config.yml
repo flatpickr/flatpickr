@@ -3,12 +3,13 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/node
+      - image: mhart/alpine-node
 
     working_directory: ~/repo
 
     steps:
       - checkout
+      - run: sudo apk add curl
       - run: curl -L https://unpkg.com/@pnpm/self-installer | node
 
       # Download and cache dependencies
