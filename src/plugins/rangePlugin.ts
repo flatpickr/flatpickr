@@ -2,6 +2,7 @@ import { Plugin } from "../types/options";
 
 export interface Config {
   input?: string | HTMLInputElement;
+  position?: "left";
 }
 
 declare global {
@@ -49,7 +50,10 @@ function rangePlugin(config: Config = {}): Plugin {
         _firstInputFocused = false;
         _secondInputFocused = true;
         fp.isOpen = false;
-        fp.open(undefined, secondInput);
+        fp.open(
+          undefined,
+          config.position === "left" ? fp._input : secondInput
+        );
       });
 
       fp._bind(fp._input, ["focus", "click"], (e: FocusEvent) => {
