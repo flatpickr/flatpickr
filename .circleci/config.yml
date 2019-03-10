@@ -9,20 +9,18 @@ jobs:
 
     steps:
       - checkout
+      - run: sudo npm i pnpm -g
 
       # Download and cache dependencies
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "package.json" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
 
-      - run: yarn install
+      - run: pnpm install --frozen-lockfile
 
       - save_cache:
           paths:
-            - node_modules
+            - ~/.pnpm/store
           key: v1-dependencies-{{ checksum "package.json" }}
 
-
-      - run: yarn test
+      - run: pnpm test
