@@ -31,7 +31,6 @@ const watchers: chokidar.FSWatcher[] = [];
 
 function logErr(e: Error | string) {
   console.error(e);
-  console.trace();
 }
 
 function resolveGlob(g: string) {
@@ -42,12 +41,14 @@ function resolveGlob(g: string) {
   });
 }
 
-async function readFileAsync(path: string) {
-  return new Promise<string>((resolve, reject) => {
-    fs.readFile(path, (err, buffer) => {
-      err ? reject(err) : resolve(buffer.toString());
-    });
-  });
+async function readFileAsync(path: string): Promise<string> {
+  try {
+    const buf = await fs.readFile(path);
+    return buf.toString();
+  } catch (e) {
+    logErr(e);
+    return e.toString();
+  }
 }
 
 function uglify(src: string) {
@@ -72,8 +73,8 @@ async function buildFlatpickrJs() {
 async function buildScripts() {
   try {
     await buildFlatpickrJs();
-    const transpiled = await fs.readFile("./dist/flatpickr.js");
-    fs.writeFile("./dist/flatpickr.min.js", uglify(transpiled.toString()));
+    const transpiled = await readFileAsync("./dist/flatpickr.js");
+    fs.writeFile("./dist/flatpickr.min.js", uglify(transpiled));
   } catch (e) {
     logErr(e);
   }
@@ -140,15 +141,11 @@ async function buildStyle() {
       readFileAsync("./src/style/ie.styl"),
     ]);
 
-    const [style, min, ie] = await Promise.all([
-      transpileStyle(src),
-      transpileStyle(src, true),
-      transpileStyle(src_ie),
+    await Promise.all([
+      fs.writeFile("./dist/flatpickr.css", await transpileStyle(src)),
+      fs.writeFile("./dist/flatpickr.min.css", await transpileStyle(src, true)),
+      fs.writeFile("./dist/ie.css", await transpileStyle(src_ie)),
     ]);
-
-    fs.writeFile("./dist/flatpickr.css", style);
-    fs.writeFile("./dist/flatpickr.min.css", min);
-    fs.writeFile("./dist/ie.css", ie);
   } catch (e) {
     logErr(e);
   }
@@ -156,19 +153,23 @@ async function buildStyle() {
 
 const themeRegex = /themes\/(.+).styl/;
 async function buildThemes() {
-  const themePaths = await resolveGlob("./src/style/themes/*.styl");
-  await Promise.all(
-    themePaths.map(async themePath => {
-      const match = themeRegex.exec(themePath);
-      if (!match) return;
+  try {
+    const themePaths = await resolveGlob("./src/style/themes/*.styl");
+    await Promise.all(
+      themePaths.map(async themePath => {
+        const match = themeRegex.exec(themePath);
+        if (!match) return;
 
-      const src = await readFileAsync(themePath);
-      return fs.writeFile(
-        `./dist/themes/${match[1]}.css`,
-        await transpileStyle(src)
-      );
-    })
-  );
+        const src = await readFileAsync(themePath);
+        return fs.writeFile(
+          `./dist/themes/${match[1]}.css`,
+          await transpileStyle(src)
+        );
+      })
+    );
+  } catch (err) {
+    logErr(err);
+  }
   return;
 }
 
@@ -200,7 +201,7 @@ function watch(path: string, cb: (path: string) => void) {
   );
 }
 
-function start() {
+async function start() {
   const devMode = process.argv.indexOf("--dev") > -1;
   if (devMode) {
     const write = (s: string) => process.stdout.write(`rollup: ${s}`);
@@ -235,6 +236,10 @@ function start() {
 
     setupWatchers();
   }
+
+  try {
+    await fs.mkdirp("./dist/themes");
+  } catch {}
 
   buildScripts();
   buildStyle();
