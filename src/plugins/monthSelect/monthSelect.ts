@@ -1,88 +1,146 @@
 import { Plugin } from "../../types/options";
-import { DayElement } from "../../types/instance";
+import { Instance } from "../../types/instance";
+import { monthToStr } from "../../utils/formatting";
 
-export interface ExtraFields {
-  monthStartDay: number;
-  monthEndDay: number;
+export interface Config {
+  shorthand: boolean;
+  dateFormat: string;
+  altFormat: string;
 }
 
-function monthSelectPlugin(): Plugin<ExtraFields> {
-  return function(fp) {
-    var days: NodeListOf<DayElement>;
+export type MonthElement = HTMLSpanElement & { dateObj: Date; $i: number };
 
-    function onDayHover(event: MouseEvent) {
+const defaultConfig: Config = {
+  shorthand: false,
+  dateFormat: "F Y",
+  altFormat: "F Y",
+};
+
+function monthSelectPlugin(pluginConfig: Config): Plugin {
+  const config = { ...defaultConfig, ...pluginConfig };
+
+  return function(fp: Instance) {
+    fp.config.dateFormat = config.dateFormat;
+    fp.config.altFormat = config.altFormat;
+
+    function clearUnnecessaryDOMElements(): void {
+      if (!fp.rContainer || !fp.daysContainer || !fp.weekdayContainer) return;
+
+      fp.rContainer.removeChild(fp.daysContainer);
+      fp.rContainer.removeChild(fp.weekdayContainer);
+
+      fp.monthElements.forEach(element => {
+        if (!element.parentNode) return;
+
+        element.parentNode.removeChild(element);
+      });
+
+      console.log("monthSelect.ts:7", fp);
+    }
+
+    /*function clearUnnecessaryListeners(): void {
       if (
-        !event.target ||
-        !(event.target as Element).classList.contains("flatpickr-day")
+        !fp.prevMonthNav ||
+        !fp.prevMonthNav.parentNode ||
+        !fp.nextMonthNav ||
+        !fp.nextMonthNav.parentNode
       )
         return;
 
-      const dayIndex = Array.prototype.indexOf.call(days, event.target);
-      fp.monthStartDay = new Date(
-        days[dayIndex].dateObj.getFullYear(),
-        days[dayIndex].dateObj.getMonth(),
-        1,
-        0,
-        0,
-        0,
-        0
-      ).getTime();
-      fp.monthEndDay = new Date(
-        days[dayIndex].dateObj.getFullYear(),
-        days[dayIndex].dateObj.getMonth() + 1,
-        0,
-        0,
-        0,
-        0,
-        0
-      ).getTime();
-      //console.log(days[dayIndex].dateObj.toString());
-      for (var i = days.length; i--; ) {
-        var date = days[i].dateObj.getTime();
-        if (date > fp.monthEndDay || date < fp.monthStartDay)
-          days[i].classList.remove("inRange");
-        else days[i].classList.add("inRange");
-        if (date != fp.monthEndDay) days[i].classList.remove("endRange");
-        else days[i].classList.add("endRange");
-        if (date != fp.monthStartDay) days[i].classList.remove("startRange");
-        else days[i].classList.add("startRange");
+      fp.prevMonthNav.parentNode.replaceChild(
+        fp.prevMonthNav.cloneNode(true),
+        fp.prevMonthNav
+      );
+      fp.nextMonthNav.parentNode.replaceChild(
+        fp.nextMonthNav.cloneNode(true),
+        fp.nextMonthNav
+      );
+    }*/
+
+    function addListeners() {
+      fp.prevMonthNav.addEventListener("click", () => {
+        fp.currentYear -= 1;
+      });
+
+      fp.nextMonthNav.addEventListener("mousedown", () => {
+        fp.currentYear += 1;
+      });
+    }
+
+    function addMonths() {
+      if (!fp.rContainer) return;
+
+      let monthsContainer = fp._createElement<HTMLDivElement>(
+        "div",
+        "flatpickr-monthSelect-months"
+      );
+
+      monthsContainer.tabIndex = -1;
+
+      for (let i = 0; i < 12; i++) {
+        const month = fp._createElement<MonthElement>(
+          "span",
+          "flatpickr-monthSelect-month"
+        );
+        month.dateObj = new Date(fp.currentYear, i);
+        month.$i = i;
+        month.textContent = monthToStr(i, config.shorthand === true, fp.l10n);
+        month.tabIndex = -1;
+        month.addEventListener("click", selectMonth);
+        monthsContainer.appendChild(month);
+      }
+
+      fp.rContainer.appendChild(monthsContainer);
+    }
+
+    function setCurrentlySelected() {
+      if (!fp.rContainer) return;
+
+      const currentlySelected = fp.rContainer.querySelectorAll(
+        ".flatpickr-monthSelect-month.selected"
+      );
+
+      currentlySelected.forEach(month => {
+        month.classList.remove("selected");
+      });
+
+      const month = fp.rContainer.querySelector(
+        `.flatpickr-monthSelect-month:nth-child(${fp.currentMonth + 1})`
+      );
+
+      if (month) {
+        month.classList.add("selected");
       }
     }
 
-    function highlightMonth() {
-      for (var i = days.length; i--; ) {
-        var date = days[i].dateObj.getTime();
-        if (date >= fp.monthStartDay && date <= fp.monthEndDay)
-          days[i].classList.add("month", "selected");
-        if (date != fp.monthEndDay) days[i].classList.remove("endRange");
-        else days[i].classList.add("endRange");
-        if (date != fp.monthStartDay) days[i].classList.remove("startRange");
-        else days[i].classList.add("startRange");
-      }
-    }
+    function selectMonth(e: any) {
+      e.preventDefault();
+      e.stopPropagation();
 
-    function clearHover() {
-      for (var i = days.length; i--; ) {
-        days[i].classList.remove("inRange");
-      }
+      e.target.classList.add("selected");
+
+      const selectedDate = new Date(e.target.dateObj);
+      selectedDate.setFullYear(fp.currentYear);
+      fp.currentMonth = selectedDate.getMonth();
+
+      fp.setDate(selectedDate, true);
+
+      setCurrentlySelected();
     }
 
     return {
-      onChange: highlightMonth,
-      onMonthChange: highlightMonth,
-      onClose: clearHover,
       onParseConfig: function onParseConfig() {
         fp.config.mode = "single";
         fp.config.enableTime = false;
+        /*fp.config.noCalendar = true;*/
       },
+      onValueUpdate: setCurrentlySelected,
       onReady: [
-        function() {
-          days = fp.days.childNodes as NodeListOf<DayElement>;
-        },
-        function() {
-          return fp.days.addEventListener("mouseover", onDayHover);
-        },
-        highlightMonth,
+        clearUnnecessaryDOMElements,
+        //clearUnnecessaryListeners,
+        addListeners,
+        addMonths,
+        setCurrentlySelected,
       ],
     };
   };
