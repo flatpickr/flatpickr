@@ -60,10 +60,12 @@ function monthSelectPlugin(pluginConfig: Config): Plugin {
     function addListeners() {
       fp.prevMonthNav.addEventListener("click", () => {
         fp.currentYear -= 1;
+        selectYear();
       });
 
       fp.nextMonthNav.addEventListener("mousedown", () => {
         fp.currentYear += 1;
+        selectYear();
       });
     }
 
@@ -111,6 +113,15 @@ function monthSelectPlugin(pluginConfig: Config): Plugin {
       if (month) {
         month.classList.add("selected");
       }
+    }
+
+    function selectYear() {
+      let selectedDate = fp.selectedDates[0];
+      console.log("monthSelect.ts:120", selectedDate);
+      selectedDate.setFullYear(fp.currentYear);
+      //selectedDate.setMonth(fp.currentMonth);
+
+      fp.setDate(selectedDate, true);
     }
 
     function selectMonth(e: any) {
