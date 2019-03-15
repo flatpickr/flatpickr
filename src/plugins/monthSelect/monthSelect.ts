@@ -34,28 +34,7 @@ function monthSelectPlugin(pluginConfig: Config): Plugin {
 
         element.parentNode.removeChild(element);
       });
-
-      console.log("monthSelect.ts:7", fp);
     }
-
-    /*function clearUnnecessaryListeners(): void {
-      if (
-        !fp.prevMonthNav ||
-        !fp.prevMonthNav.parentNode ||
-        !fp.nextMonthNav ||
-        !fp.nextMonthNav.parentNode
-      )
-        return;
-
-      fp.prevMonthNav.parentNode.replaceChild(
-        fp.prevMonthNav.cloneNode(true),
-        fp.prevMonthNav
-      );
-      fp.nextMonthNav.parentNode.replaceChild(
-        fp.nextMonthNav.cloneNode(true),
-        fp.nextMonthNav
-      );
-    }*/
 
     function addListeners() {
       fp.prevMonthNav.addEventListener("click", () => {
@@ -117,9 +96,7 @@ function monthSelectPlugin(pluginConfig: Config): Plugin {
 
     function selectYear() {
       let selectedDate = fp.selectedDates[0];
-      console.log("monthSelect.ts:120", selectedDate);
       selectedDate.setFullYear(fp.currentYear);
-      //selectedDate.setMonth(fp.currentMonth);
 
       fp.setDate(selectedDate, true);
     }
@@ -143,12 +120,10 @@ function monthSelectPlugin(pluginConfig: Config): Plugin {
       onParseConfig: function onParseConfig() {
         fp.config.mode = "single";
         fp.config.enableTime = false;
-        /*fp.config.noCalendar = true;*/
       },
       onValueUpdate: setCurrentlySelected,
       onReady: [
         clearUnnecessaryDOMElements,
-        //clearUnnecessaryListeners,
         addListeners,
         addMonths,
         setCurrentlySelected,
