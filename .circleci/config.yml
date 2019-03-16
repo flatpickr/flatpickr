@@ -9,7 +9,7 @@ jobs:
 
     steps:
       - checkout
-      - run: sudo npm i pnpm@2 -g
+      - run: sudo npm i pnpm -g
 
       # Download and cache dependencies
       - restore_cache:
