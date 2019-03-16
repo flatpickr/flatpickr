@@ -19,6 +19,7 @@ const defaultConfig: Config = {
 function confirmDatePlugin(pluginConfig: Config): Plugin {
   const config = { ...defaultConfig, ...pluginConfig };
   let confirmContainer: HTMLDivElement;
+  const confirmButtonCSSClass = "flatpickr-confirm";
 
   return function(fp: Instance) {
     if (fp.config.noCalendar || fp.isMobile) return {};
@@ -34,7 +35,7 @@ function confirmDatePlugin(pluginConfig: Config): Plugin {
       onReady() {
         confirmContainer = fp._createElement<HTMLDivElement>(
           "div",
-          `flatpickr-confirm ${config.showAlways ? "visible" : ""} ${
+          `${confirmButtonCSSClass} ${config.showAlways ? "visible" : ""} ${
             config.theme
           }Theme`,
           config.confirmText
@@ -51,9 +52,22 @@ function confirmDatePlugin(pluginConfig: Config): Plugin {
             onChange: function(_: Date[], dateStr: string) {
               const showCondition =
                 fp.config.enableTime || fp.config.mode === "multiple";
-              if (dateStr && !fp.config.inline && showCondition)
-                return confirmContainer.classList.add("visible");
-              confirmContainer.classList.remove("visible");
+
+              const localConfirmContainer = fp.calendarContainer.querySelector(
+                `.${confirmButtonCSSClass}`
+              );
+
+              if (!localConfirmContainer) return;
+
+              if (
+                dateStr &&
+                !fp.config.inline &&
+                showCondition &&
+                localConfirmContainer
+              )
+                return localConfirmContainer.classList.add("visible");
+
+              localConfirmContainer.classList.remove("visible");
             },
           }
         : {}),
