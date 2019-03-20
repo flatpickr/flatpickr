@@ -34,7 +34,7 @@ span.flatpickr-day
 		border 1px solid $dayHoverBackground
 		max-width none
 		border-right-color transparent
-		
+
 		&:nth-child(n+8)
 			border-top-color transparent
 
@@ -43,7 +43,7 @@ span.flatpickr-day
 
 		&:nth-child(n+36)
 			border-bottom 0
-		
+
 		&:nth-child(-n+7)
 			margin-top 0
 
@@ -76,3 +76,12 @@ span.flatpickr-day
 
 .hasWeeks .flatpickr-days
 	border-right 0
+
+@css {
+	@media screen and (min-width:0\0) and (min-resolution: +72dpi) {
+		span.flatpickr-day {
+			display: block;
+			flex: 1 0 auto;
+		}
+	}
+}
