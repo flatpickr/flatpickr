@@ -1088,7 +1088,6 @@ function FlatpickrInstance(
       self.timeContainer.appendChild(secondInput);
     }
 
-    console.log("index.ts:1091", self.config.time_24hr);
     if (!self.config.time_24hr) {
       // add self.amPM if appropriate
       self.amPM = createElement(
