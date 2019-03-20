@@ -56,6 +56,7 @@ export const Slovak: CustomLocale = {
 
   firstDayOfWeek: 1,
   rangeSeparator: " do ",
+  time_24hr: true,
   ordinal: function() {
     return ".";
   },

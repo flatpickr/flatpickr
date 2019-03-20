@@ -57,6 +57,7 @@ export const Serbian: CustomLocale = {
   firstDayOfWeek: 1,
   weekAbbreviation: "Ned.",
   rangeSeparator: " do ",
+  time_24hr: true,
 };
 
 fp.l10ns.sr = Serbian;

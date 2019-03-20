@@ -55,6 +55,7 @@ export const Ukrainian: CustomLocale = {
       "Грудень",
     ],
   },
+  time_24hr: true,
 };
 
 fp.l10ns.uk = Ukrainian;

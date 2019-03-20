@@ -62,6 +62,7 @@ export const Icelandic: CustomLocale = {
   rangeSeparator: " til ",
   weekAbbreviation: "vika",
   yearAriaLabel: "Ár",
+  time_24hr: true,
 };
 
 fp.l10ns.is = Icelandic;

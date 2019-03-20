@@ -1088,6 +1088,7 @@ function FlatpickrInstance(
       self.timeContainer.appendChild(secondInput);
     }
 
+    console.log("index.ts:1091", self.config.time_24hr);
     if (!self.config.time_24hr) {
       // add self.amPM if appropriate
       self.amPM = createElement(
@@ -1982,6 +1983,13 @@ function FlatpickrInstance(
     tokenRegex.K = `(${self.l10n.amPM[0]}|${
       self.l10n.amPM[1]
     }|${self.l10n.amPM[0].toLowerCase()}|${self.l10n.amPM[1].toLowerCase()})`;
+
+    self.config.time_24hr = Object.prototype.hasOwnProperty.call(
+      self.l10n,
+      "time_24hr"
+    )
+      ? self.l10n.time_24hr
+      : self.config.time_24hr;
 
     self.formatDate = createDateFormatter(self);
     self.parseDate = createDateParser({ config: self.config, l10n: self.l10n });

@@ -64,6 +64,7 @@ export const Hungarian: CustomLocale = {
   scrollTitle: "Görgessen",
   toggleTitle: "Kattintson a váltáshoz",
   rangeSeparator: " - ",
+  time_24hr: true,
 };
 
 fp.l10ns.hu = Hungarian;
