@@ -55,6 +55,7 @@ export const Croatian: CustomLocale = {
       "Prosinac",
     ],
   },
+  time_24hr: true,
 };
 
 fp.l10ns.hr = Croatian;

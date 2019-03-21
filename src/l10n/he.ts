@@ -46,6 +46,7 @@ export const Hebrew: CustomLocale = {
     ],
   },
   rangeSeparator: " אל ",
+  time_24hr: true,
 };
 
 fp.l10ns.he = Hebrew;

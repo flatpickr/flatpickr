@@ -51,6 +51,7 @@ export const Indonesian: CustomLocale = {
   ordinal: () => {
     return "";
   },
+  time_24hr: true,
 };
 
 fp.l10ns.id = Indonesian;

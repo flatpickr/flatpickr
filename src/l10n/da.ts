@@ -61,6 +61,7 @@ export const Danish: CustomLocale = {
   firstDayOfWeek: 1,
   rangeSeparator: " til ",
   weekAbbreviation: "uge",
+  time_24hr: true,
 };
 
 fp.l10ns.da = Danish;
