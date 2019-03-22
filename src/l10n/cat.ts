@@ -72,6 +72,7 @@ export const Catalan: CustomLocale = {
   },
 
   firstDayOfWeek: 1,
+  time_24hr: true,
 };
 
 fp.l10ns.cat = Catalan;

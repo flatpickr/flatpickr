@@ -64,6 +64,7 @@ export const Esperanto: CustomLocale = {
   ordinal: () => {
     return "-a";
   },
+  time_24hr: true,
 };
 
 fp.l10ns.eo = Esperanto;

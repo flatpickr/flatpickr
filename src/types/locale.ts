@@ -55,6 +55,7 @@ export type Locale = {
   toggleTitle: string;
   amPM: [string, string];
   yearAriaLabel: string;
+  time_24hr: boolean;
 };
 
 export type CustomLocale = {
@@ -67,6 +68,7 @@ export type CustomLocale = {
   scrollTitle?: Locale["scrollTitle"];
   yearAriaLabel?: string;
   amPM?: Locale["amPM"];
+  time_24hr?: Locale["time_24hr"];
   weekdays: {
     shorthand: [string, string, string, string, string, string, string];
     longhand: [string, string, string, string, string, string, string];

@@ -53,18 +53,13 @@ export const Italian: CustomLocale = {
       "Dicembre",
     ],
   },
-
   firstDayOfWeek: 1,
-
   ordinal: () => "°",
-
   rangeSeparator: " al ",
-
   weekAbbreviation: "Se",
-
   scrollTitle: "Scrolla per aumentare",
-
   toggleTitle: "Clicca per cambiare",
+  time_24hr: true,
 };
 
 fp.l10ns.it = Italian;

@@ -57,6 +57,7 @@ export const Macedonian: CustomLocale = {
   firstDayOfWeek: 1,
   weekAbbreviation: "Нед.",
   rangeSeparator: " до ",
+  time_24hr: true,
 };
 
 fp.l10ns.mk = Macedonian;

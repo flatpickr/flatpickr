@@ -53,6 +53,7 @@ export const Bulgarian: CustomLocale = {
       "Декември",
     ],
   },
+  time_24hr: true,
 };
 
 fp.l10ns.bg = Bulgarian;
