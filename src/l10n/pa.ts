@@ -53,6 +53,7 @@ export const Punjabi: CustomLocale = {
       "ਦਸੰਬਰ",
     ],
   },
+  time_24hr: true,
 };
 
 fp.l10ns.pa = Punjabi;

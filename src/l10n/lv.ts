@@ -57,6 +57,7 @@ export const Latvian: CustomLocale = {
   },
 
   rangeSeparator: " līdz ",
+  time_24hr: true,
 };
 
 fp.l10ns.lv = Latvian;

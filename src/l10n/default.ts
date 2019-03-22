@@ -65,6 +65,7 @@ export const english: Locale = {
   toggleTitle: "Click to toggle",
   amPM: ["AM", "PM"],
   yearAriaLabel: "Year",
+  time_24hr: false,
 };
 
 export default english;

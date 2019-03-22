@@ -59,6 +59,7 @@ export const Burmese: CustomLocale = {
   ordinal: () => {
     return "";
   },
+  time_24hr: true,
 };
 
 fp.l10ns.my = Burmese;

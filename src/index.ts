@@ -43,6 +43,7 @@ function FlatpickrInstance(
 ): Instance {
   const self = {
     config: {
+      ...defaultOptions,
       ...flatpickr.defaultConfig,
     } as ParsedOptions,
     l10n: English,
@@ -1879,12 +1880,12 @@ function FlatpickrInstance(
     const timeMode = userConfig.mode === "time";
 
     if (!userConfig.dateFormat && (userConfig.enableTime || timeMode)) {
+      const defaultDateFormat =
+        flatpickr.defaultConfig.dateFormat || defaultOptions.dateFormat;
       formats.dateFormat =
         userConfig.noCalendar || timeMode
           ? "H:i" + (userConfig.enableSeconds ? ":S" : "")
-          : flatpickr.defaultConfig.dateFormat +
-            " H:i" +
-            (userConfig.enableSeconds ? ":S" : "");
+          : defaultDateFormat + " H:i" + (userConfig.enableSeconds ? ":S" : "");
     }
 
     if (
@@ -1892,11 +1893,12 @@ function FlatpickrInstance(
       (userConfig.enableTime || timeMode) &&
       !userConfig.altFormat
     ) {
+      const defaultAltFormat =
+        flatpickr.defaultConfig.altFormat || defaultOptions.altFormat;
       formats.altFormat =
         userConfig.noCalendar || timeMode
           ? "h:i" + (userConfig.enableSeconds ? ":S K" : " K")
-          : flatpickr.defaultConfig.altFormat +
-            ` h:i${userConfig.enableSeconds ? ":S" : ""} K`;
+          : defaultAltFormat + ` h:i${userConfig.enableSeconds ? ":S" : ""} K`;
     }
 
     Object.defineProperty(self.config, "minDate", {
@@ -1993,6 +1995,18 @@ function FlatpickrInstance(
     tokenRegex.K = `(${self.l10n.amPM[0]}|${
       self.l10n.amPM[1]
     }|${self.l10n.amPM[0].toLowerCase()}|${self.l10n.amPM[1].toLowerCase()})`;
+
+    const userConfig = {
+      ...instanceConfig,
+      ...JSON.parse(JSON.stringify(element.dataset || {})),
+    } as Options;
+
+    if (
+      userConfig.time_24hr === undefined &&
+      flatpickr.defaultConfig.time_24hr === undefined
+    ) {
+      self.config.time_24hr = self.l10n.time_24hr;
+    }
 
     self.formatDate = createDateFormatter(self);
     self.parseDate = createDateParser({ config: self.config, l10n: self.l10n });
@@ -2732,7 +2746,7 @@ var flatpickr = function(
 } as FlatpickrFn;
 
 /* istanbul ignore next */
-flatpickr.defaultConfig = defaultOptions;
+flatpickr.defaultConfig = {};
 
 flatpickr.l10ns = {
   en: { ...English },

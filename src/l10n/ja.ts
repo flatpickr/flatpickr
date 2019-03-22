@@ -53,6 +53,7 @@ export const Japanese: CustomLocale = {
       "12月",
     ],
   },
+  time_24hr: true,
 };
 
 fp.l10ns.ja = Japanese;

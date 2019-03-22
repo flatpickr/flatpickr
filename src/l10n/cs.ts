@@ -62,6 +62,7 @@ export const Czech: CustomLocale = {
   toggleTitle: "Přepnout dopoledne/odpoledne",
   amPM: ["dop.", "odp."],
   yearAriaLabel: "Rok",
+  time_24hr: true,
 };
 
 fp.l10ns.cs = Czech;

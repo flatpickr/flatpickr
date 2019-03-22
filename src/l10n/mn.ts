@@ -47,6 +47,7 @@ export const Mongolian: CustomLocale = {
     ],
   },
   rangeSeparator: "-с ",
+  time_24hr: true,
 };
 
 fp.l10ns.mn = Mongolian;
