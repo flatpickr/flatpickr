@@ -425,8 +425,6 @@ function FlatpickrInstance(
 
     bind(window.document.body, "keydown", onKeyDown);
 
-    if (!self.config.static) bind(self._input, "keydown", onKeyDown);
-
     if (!self.config.inline && !self.config.static)
       bind(window, "resize", debouncedResize);
 
@@ -1500,7 +1498,9 @@ function FlatpickrInstance(
             : self.config.dateFormat
         );
         return (e.target as HTMLElement).blur();
-      } else self.open();
+      } else {
+        self.open();
+      }
     } else if (
       isCalendarElem(e.target as HTMLElement) ||
       allowKeydown ||
@@ -1594,7 +1594,15 @@ function FlatpickrInstance(
               e.preventDefault();
               (target || self._input).focus();
             }
+          } else if (
+            !self.config.noCalendar &&
+            self.daysContainer!.contains(e.target as Node) &&
+            e.shiftKey
+          ) {
+            e.preventDefault();
+            self._input.focus();
           }
+
           break;
 
         default:
@@ -1621,7 +1629,10 @@ function FlatpickrInstance(
           break;
       }
     }
-    triggerEvent("onKeyDown", e);
+
+    if (isInput || isCalendarElem(e.target as HTMLElement)) {
+      triggerEvent("onKeyDown", e);
+    }
   }
 
   function onMouseOver(elem?: DayElement) {
