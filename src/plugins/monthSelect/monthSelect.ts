@@ -1,5 +1,5 @@
 import { Plugin } from "../../types/options";
-import { Instance } from "../../types/instance";
+import { DayElement as MonthElement, Instance } from "../../types/instance";
 import { monthToStr } from "../../utils/formatting";
 
 export interface Config {
@@ -19,9 +19,10 @@ const defaultConfig: Config = {
 function monthSelectPlugin(pluginConfig: Config): Plugin {
   const config = { ...defaultConfig, ...pluginConfig };
 
-  return function(fp: Instance) {
+  return (fp: Instance) => {
     fp.config.dateFormat = config.dateFormat;
     fp.config.altFormat = config.altFormat;
+    const self = { monthsContainer: null as null | HTMLDivElement };
 
     function clearUnnecessaryDOMElements(): void {
       if (!fp.rContainer || !fp.daysContainer || !fp.weekdayContainer) return;
@@ -37,12 +38,12 @@ function monthSelectPlugin(pluginConfig: Config): Plugin {
     }
 
     function addListeners() {
-      fp.prevMonthNav.addEventListener("click", () => {
+      fp._bind(fp.prevMonthNav, "click", () => {
         fp.currentYear -= 1;
         selectYear();
       });
 
-      fp.nextMonthNav.addEventListener("mousedown", () => {
+      fp._bind(fp.nextMonthNav, "mousedown", () => {
         fp.currentYear += 1;
         selectYear();
       });
@@ -51,12 +52,12 @@ function monthSelectPlugin(pluginConfig: Config): Plugin {
     function addMonths() {
       if (!fp.rContainer) return;
 
-      let monthsContainer = fp._createElement<HTMLDivElement>(
+      self.monthsContainer = fp._createElement<HTMLDivElement>(
         "div",
         "flatpickr-monthSelect-months"
       );
 
-      monthsContainer.tabIndex = -1;
+      self.monthsContainer.tabIndex = -1;
 
       for (let i = 0; i < 12; i++) {
         const month = fp._createElement<MonthElement>(
@@ -68,10 +69,10 @@ function monthSelectPlugin(pluginConfig: Config): Plugin {
         month.textContent = monthToStr(i, config.shorthand === true, fp.l10n);
         month.tabIndex = -1;
         month.addEventListener("click", selectMonth);
-        monthsContainer.appendChild(month);
+        self.monthsContainer.appendChild(month);
       }
 
-      fp.rContainer.appendChild(monthsContainer);
+      fp.rContainer.appendChild(self.monthsContainer);
     }
 
     function setCurrentlySelected() {
@@ -101,13 +102,15 @@ function monthSelectPlugin(pluginConfig: Config): Plugin {
       fp.setDate(selectedDate, true);
     }
 
-    function selectMonth(e: any) {
+    function selectMonth(e: MouseEvent) {
       e.preventDefault();
       e.stopPropagation();
 
-      e.target.classList.add("selected");
+      setMonth((e.target as MonthElement).dateObj);
+    }
 
-      const selectedDate = new Date(e.target.dateObj);
+    function setMonth(date: Date) {
+      const selectedDate = new Date(date);
       selectedDate.setFullYear(fp.currentYear);
       fp.currentMonth = selectedDate.getMonth();
 
@@ -116,12 +119,54 @@ function monthSelectPlugin(pluginConfig: Config): Plugin {
       setCurrentlySelected();
     }
 
+    const shifts: Record<number, number> = {
+      37: -1,
+      39: 1,
+      40: 3,
+      38: -3,
+    };
+
+    function onKeyDown(_: any, __: any, ___: any, e: KeyboardEvent) {
+      const shouldMove = shifts[e.keyCode] !== undefined;
+      if (!shouldMove && e.keyCode !== 13) {
+        return;
+      }
+
+      const currentlySelected = fp.rContainer!.querySelector(
+        ".flatpickr-monthSelect-month.selected"
+      ) as HTMLElement;
+
+      let index = Array.prototype.indexOf.call(
+        self.monthsContainer!.children,
+        document.activeElement
+      );
+
+      if (index === -1) {
+        const target =
+          currentlySelected || self.monthsContainer!.firstElementChild;
+        target.focus();
+        index = (target as MonthElement).$i;
+      }
+
+      if (shouldMove) {
+        (self.monthsContainer!.children[
+          (12 + index + shifts[e.keyCode]) % 12
+        ] as HTMLElement).focus();
+      } else if (
+        e.keyCode === 13 &&
+        self.monthsContainer!.contains(document.activeElement)
+      ) {
+        setMonth((document.activeElement as MonthElement).dateObj);
+      }
+    }
+
     return {
-      onParseConfig: function onParseConfig() {
+      onParseConfig() {
         fp.config.mode = "single";
         fp.config.enableTime = false;
       },
       onValueUpdate: setCurrentlySelected,
+      onKeyDown,
       onReady: [
         clearUnnecessaryDOMElements,
         addListeners,
