@@ -16,7 +16,7 @@ const defaultConfig: Config = {
   altFormat: "F Y",
 };
 
-function monthSelectPlugin(pluginConfig: Config): Plugin {
+function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
   const config = { ...defaultConfig, ...pluginConfig };
 
   return (fp: Instance) => {

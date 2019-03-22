@@ -1,5 +1,5 @@
 import flatpickr from "index";
-import monthSelectPlugin from "../plugins/monthSelect/monthSelect";
+import monthSelectPlugin from "../plugins/monthSelect";
 import { German } from "../l10n/de";
 import { Instance } from "../types/instance";
 import { Options } from "../types/options";
@@ -19,7 +19,7 @@ describe("monthSelect", () => {
   it("should correctly preload defaultDate", () => {
     const fp = createInstance({
       defaultDate: new Date("2019-04-20"),
-      plugins: [new monthSelectPlugin({})],
+      plugins: [monthSelectPlugin({})],
     }) as Instance;
 
     expect(fp.input.value).toEqual("April 2019");
@@ -29,7 +29,7 @@ describe("monthSelect", () => {
     const fp = createInstance({
       defaultDate: new Date("2019-03-20"),
       locale: German,
-      plugins: [new monthSelectPlugin({})],
+      plugins: [monthSelectPlugin({})],
     }) as Instance;
 
     expect(fp.input.value).toEqual("März 2019");
@@ -39,7 +39,7 @@ describe("monthSelect", () => {
     const fp = createInstance({
       defaultDate: new Date("2019-03-20"),
       locale: German,
-      plugins: [new monthSelectPlugin({ dateFormat: "m.y" })],
+      plugins: [monthSelectPlugin({ dateFormat: "m.y" })],
     }) as Instance;
 
     expect(fp.input.value).toEqual("03.19");
@@ -49,10 +49,10 @@ describe("monthSelect", () => {
     const fp = createInstance({
       defaultDate: new Date("2019-03-20"),
       altInput: true,
-      plugins: [new monthSelectPlugin({ dateFormat: "m.y", altFormat: "m y" })],
+      plugins: [monthSelectPlugin({ dateFormat: "m.y", altFormat: "m y" })],
     }) as Instance;
 
     expect(fp.input.value).toEqual("03.19");
-    expect(fp.altInput.value).toEqual("03 19");
+    expect(fp.altInput!.value).toEqual("03 19");
   });
 });
