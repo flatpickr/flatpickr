@@ -55,6 +55,7 @@ export function createNumberInput(
   } else {
     numInput.type = "text";
     numInput.pattern = "\\d*";
+    numInput.maxLength = 4;
   }
 
   if (opts !== undefined)
