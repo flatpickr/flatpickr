@@ -2333,7 +2333,7 @@ function FlatpickrInstance(
         ? null
         : self.input.value);
 
-    if (preloadedDate) setSelectedDate(preloadedDate, self.config.dateFormat);
+    if (preloadedDate) setSelectedDate(preloadedDate, self.config.altInput ? self.config.altFormat : self.config.dateFormat);
 
     self._initialDate =
       self.selectedDates.length > 0
