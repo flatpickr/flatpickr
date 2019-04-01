@@ -6,6 +6,7 @@ export interface Config {
   shorthand: boolean;
   dateFormat: string;
   altFormat: string;
+  theme: string;
 }
 
 export type MonthElement = HTMLSpanElement & { dateObj: Date; $i: number };
@@ -14,6 +15,7 @@ const defaultConfig: Config = {
   shorthand: false,
   dateFormat: "F Y",
   altFormat: "F Y",
+  theme: "light",
 };
 
 function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
@@ -59,6 +61,10 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
 
       self.monthsContainer.tabIndex = -1;
 
+      self.monthsContainer.classList.add(
+        `flatpickr-monthSelect-theme-${config.theme}`
+      );
+
       for (let i = 0; i < 12; i++) {
         const month = fp._createElement<MonthElement>(
           "span",
@@ -102,7 +108,7 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
       fp.setDate(selectedDate, true);
     }
 
-    function selectMonth(e: MouseEvent) {
+    function selectMonth(e: Event) {
       e.preventDefault();
       e.stopPropagation();
 
@@ -160,6 +166,14 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
       }
     }
 
+    function destroyPluginInstance() {
+      self
+        .monthsContainer!.querySelectorAll(".flatpickr-monthSelect-month")
+        .forEach(element => {
+          element.removeEventListener("click", selectMonth);
+        });
+    }
+
     return {
       onParseConfig() {
         fp.config.mode = "single";
@@ -173,6 +187,7 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         addMonths,
         setCurrentlySelected,
       ],
+      onDestroy: destroyPluginInstance,
     };
   };
 }
