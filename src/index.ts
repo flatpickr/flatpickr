@@ -1279,7 +1279,6 @@ function FlatpickrInstance(
       self.input.type = (self.input as any)._type;
       self.input.classList.remove("flatpickr-input");
       self.input.removeAttribute("readonly");
-      self.input.value = "";
     }
 
     ([
