@@ -123,7 +123,7 @@ describe("flatpickr", () => {
       expect(fp.days.querySelector(".selected")).toEqual(null);
 
       let enabledDays = fp.days.querySelectorAll(
-        ".flatpickr-day:not(.disabled)"
+        ".flatpickr-day:not(.flatpickr-disabled)"
       );
 
       expect(enabledDays.length).toEqual(2);
@@ -1286,7 +1286,7 @@ describe("flatpickr", () => {
 
       simulate("mouseover", day(32));
       expect(day(32).classList.contains("endRange")).toEqual(false);
-      expect(day(24).classList.contains("disabled")).toEqual(true);
+      expect(day(24).classList.contains("flatpickr-disabled")).toEqual(true);
       expect(day(25).classList.contains("notAllowed")).toEqual(true);
 
       for (let i = 25; i < 32; i++)
@@ -1294,7 +1294,7 @@ describe("flatpickr", () => {
 
       for (let i = 17; i < 22; i++) {
         expect(day(i).classList.contains("notAllowed")).toEqual(false);
-        expect(day(i).classList.contains("disabled")).toEqual(false);
+        expect(day(i).classList.contains("flatpickr-disabled")).toEqual(false);
       }
 
       simulate("mousedown", fp.days.childNodes[17], { which: 1 }, MouseEvent);
@@ -1304,7 +1304,7 @@ describe("flatpickr", () => {
 
     it("adds disabled class to disabled prev/next month arrows", () => {
       const isArrowDisabled = (which: "prevMonthNav" | "nextMonthNav") =>
-        fp[which].classList.contains("disabled");
+        fp[which].classList.contains("flatpickr-disabled");
       createInstance({
         minDate: "2099-1-1",
         maxDate: "2099-3-4",

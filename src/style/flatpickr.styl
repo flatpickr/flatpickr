@@ -183,7 +183,7 @@
     color $monthForeground
     fill $monthForeground
 
-    &.disabled
+    &.flatpickr-disabled
       display none
 
     i
@@ -502,7 +502,7 @@ span.flatpickr-weekday
     border-radius 0
     box-shadow: (-2.5*$dayMargin) 0 0 $dayHoverBackground, (2.5*$dayMargin) 0 0 $dayHoverBackground
 
-  &.disabled, &.disabled:hover,
+  &.flatpickr-disabled, &.flatpickr-disabled:hover,
   &.prevMonthDay, &.nextMonthDay,
   &.notAllowed, &.notAllowed.prevMonthDay, &.notAllowed.nextMonthDay
     color alpha($dayForeground, 0.3)
@@ -515,7 +515,7 @@ span.flatpickr-weekday
       border-color transparent
     cursor default
 
-  &.disabled, &.disabled:hover
+  &.flatpickr-disabled, &.flatpickr-disabled:hover
     cursor not-allowed
     color alpha($dayForeground, 0.1)
 
