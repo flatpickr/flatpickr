@@ -704,7 +704,7 @@ function FlatpickrInstance(
         }
       }
     } else {
-      dayElement.classList.add("disabled");
+      dayElement.classList.add("flatpickr-disabled");
     }
 
     if (self.config.mode === "range") {
@@ -987,7 +987,7 @@ function FlatpickrInstance(
       get: () => self.__hidePrevMonthArrow,
       set(bool: boolean) {
         if (self.__hidePrevMonthArrow !== bool) {
-          toggleClass(self.prevMonthNav, "disabled", bool);
+          toggleClass(self.prevMonthNav, "flatpickr-disabled", bool);
           self.__hidePrevMonthArrow = bool;
         }
       },
@@ -997,7 +997,7 @@ function FlatpickrInstance(
       get: () => self.__hideNextMonthArrow,
       set(bool: boolean) {
         if (self.__hideNextMonthArrow !== bool) {
-          toggleClass(self.nextMonthNav, "disabled", bool);
+          toggleClass(self.nextMonthNav, "flatpickr-disabled", bool);
           self.__hideNextMonthArrow = bool;
         }
       },
@@ -1630,7 +1630,7 @@ function FlatpickrInstance(
       self.selectedDates.length !== 1 ||
       (elem &&
         (!elem.classList.contains("flatpickr-day") ||
-          elem.classList.contains("disabled")))
+          elem.classList.contains("flatpickr-disabled")))
     )
       return;
 
@@ -2105,7 +2105,7 @@ function FlatpickrInstance(
     const isSelectable = (day: Element) =>
       day.classList &&
       day.classList.contains("flatpickr-day") &&
-      !day.classList.contains("disabled") &&
+      !day.classList.contains("flatpickr-disabled") &&
       !day.classList.contains("notAllowed");
 
     const t = findParent(e.target as Element, isSelectable);
