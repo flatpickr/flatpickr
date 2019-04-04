@@ -186,6 +186,9 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         addListeners,
         addMonths,
         setCurrentlySelected,
+        () => {
+          fp.loadedPlugins.push("monthSelect");
+        },
       ],
       onDestroy: destroyPluginInstance,
     };

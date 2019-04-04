@@ -52,6 +52,7 @@ function FlatpickrInstance(
 
   self._handlers = [];
   self.pluginElements = [];
+  self.loadedPlugins = [];
   self._bind = bind;
   self._setHoursFromDate = setHoursFromDate;
   self._positionCalendar = positionCalendar;

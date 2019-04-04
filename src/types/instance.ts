@@ -69,6 +69,7 @@ export type Instance = Elements &
 
     // State
     config: ParsedOptions;
+    loadedPlugins: string[];
     l10n: Locale;
 
     currentYear: number;
