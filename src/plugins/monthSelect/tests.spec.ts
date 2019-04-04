@@ -1,8 +1,8 @@
-import flatpickr from "index";
-import monthSelectPlugin from "../plugins/monthSelect/monthSelectPlugin";
-import { German } from "../l10n/de";
-import { Instance } from "../types/instance";
-import { Options } from "../types/options";
+import flatpickr from "../../index";
+import monthSelectPlugin from "./index";
+import { German } from "l10n/de";
+import { Instance } from "types/instance";
+import { Options } from "types/options";
 
 flatpickr.defaultConfig.animate = false;
 
