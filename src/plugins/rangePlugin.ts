@@ -117,6 +117,7 @@ function rangePlugin(config: Config = {}): Plugin {
 
         fp.setDate(fp.selectedDates, false);
         plugin.onValueUpdate(fp.selectedDates);
+        fp.loadedPlugins.push("range");
       },
 
       onPreCalendarPosition() {

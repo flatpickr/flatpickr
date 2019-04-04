@@ -37,6 +37,8 @@ function scrollPlugin(): Plugin {
         fp.monthElements.forEach(monthElem =>
           monthElem.addEventListener("wheel", monthScroller)
         );
+
+        fp.loadedPlugins.push("scroll");
       },
       onDestroy() {
         if (fp.timeContainer) {

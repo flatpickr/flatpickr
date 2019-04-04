@@ -89,7 +89,13 @@ function weekSelectPlugin(): Plugin<PlusWeeks> {
           ? fp.config.altFormat
           : "\\W\\e\\e\\k #W, Y";
       },
-      onReady: [onReady, highlightWeek],
+      onReady: [
+        onReady,
+        highlightWeek,
+        () => {
+          fp.loadedPlugins.push("weekSelect");
+        },
+      ],
       onDestroy,
     };
   };

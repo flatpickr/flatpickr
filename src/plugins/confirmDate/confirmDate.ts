@@ -46,6 +46,8 @@ function confirmDatePlugin(pluginConfig: Config): Plugin {
 
         confirmContainer.addEventListener("click", fp.close);
         fp.calendarContainer.appendChild(confirmContainer);
+
+        fp.loadedPlugins.push("confirmDate");
       },
       ...(!config.showAlways
         ? {
