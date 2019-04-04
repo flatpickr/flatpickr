@@ -92,7 +92,6 @@ function buildExtras(folder: "plugins" | "l10n") {
             resolveGlob(`./src/${folder}/**/*.css`),
           ]
     );
-    console.log(src_paths, css_paths);
 
     try {
       await Promise.all([
@@ -104,13 +103,17 @@ function buildExtras(folder: "plugins" | "l10n") {
           });
 
           const fileName = path.basename(sourcePath, path.extname(sourcePath));
+          const folderName = path.basename(path.dirname(sourcePath))
 
           return bundle.write({
             exports: folder === "l10n" ? "named" : "default",
             format: "umd",
             sourcemap: false,
             file: sourcePath.replace("src", "dist").replace(".ts", ".js"),
-            name: customModuleNames[fileName] || fileName,
+            name: sourcePath.includes("plugins") && fileName === "index"
+              ? `${folderName}Plugin`
+              : customModuleNames[fileName] || fileName
+            ,
           });
         }),
         ...(css_paths.map(p => fs.copy(p, p.replace("src", "dist"))) as any),
