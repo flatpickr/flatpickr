@@ -52,10 +52,6 @@ function confirmDatePlugin(pluginConfig: Config): Plugin {
       ...(!config.showAlways
         ? {
             onChange: function(_: Date[], dateStr: string) {
-              fp.config.plugins.forEach(test => {
-                console.log("confirmDate.ts:53", test);
-              });
-
               const showCondition =
                 fp.config.enableTime || fp.config.mode === "multiple";
 
