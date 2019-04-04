@@ -53,7 +53,9 @@ function confirmDatePlugin(pluginConfig: Config): Plugin {
         ? {
             onChange: function(_: Date[], dateStr: string) {
               const showCondition =
-                fp.config.enableTime || fp.config.mode === "multiple";
+                fp.config.enableTime ||
+                fp.config.mode === "multiple" ||
+                fp.loadedPlugins.indexOf("monthSelect") !== -1;
 
               const localConfirmContainer = fp.calendarContainer.querySelector(
                 `.${confirmButtonCSSClass}`
