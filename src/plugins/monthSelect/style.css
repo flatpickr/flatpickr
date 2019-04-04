@@ -24,6 +24,20 @@
   width: 33%;
 }
 
+.flatpickr-monthSelect-theme-dark {
+  background: #3f4458;
+}
+
+.flatpickr-monthSelect-theme-dark .flatpickr-current-month input.cur-year {
+  color: #fff;
+}
+
+.flatpickr-monthSelect-theme-dark .flatpickr-months .flatpickr-prev-month,
+.flatpickr-monthSelect-theme-dark .flatpickr-months .flatpickr-next-month {
+  color: #fff;
+  fill: #fff;
+}
+
 .flatpickr-monthSelect-theme-dark .flatpickr-monthSelect-month {
   color: rgba(255, 255, 255, 0.95);
 }

@@ -61,7 +61,7 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
 
       self.monthsContainer.tabIndex = -1;
 
-      self.monthsContainer.classList.add(
+      fp.calendarContainer.classList.add(
         `flatpickr-monthSelect-theme-${config.theme}`
       );
 
