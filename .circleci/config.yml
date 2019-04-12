@@ -8,19 +8,17 @@ jobs:
     working_directory: ~/repo
 
     steps:
-      - checkout
-      - run: sudo npm i pnpm -g
-
-      # Download and cache dependencies
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "package.json" }}
+            - pkg-cache-{{ checksum "package-lock.json" }}
 
-      - run: pnpm install --frozen-lockfile
+      - checkout
+
+      - run: npm ci
 
       - save_cache:
           paths:
-            - ~/.pnpm/store
-          key: v1-dependencies-{{ checksum "package.json" }}
+            - ./node_modules
+          key: pkg-cache-{{ checksum "package-lock.json" }}
 
-      - run: pnpm test
+      - run: npm test
