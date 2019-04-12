@@ -212,6 +212,11 @@ function watch(path: string, cb: (path: string) => void) {
 async function start() {
   const devMode = process.argv.indexOf("--dev") > -1;
   if (devMode) {
+    const indexExists = await fs.pathExists( './index.html');
+    if ( !indexExists ) {
+      await fs.copyFile('./template.html','./index.html');
+      console.log('missing index.html - copying template.html; -> index.html');
+    }
     const write = (s: string) => process.stdout.write(`rollup: ${s}`);
     const watcher = rollup.watch([getConfig({ dev: true })]);
 
