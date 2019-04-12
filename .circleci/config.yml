@@ -9,8 +9,8 @@ jobs:
 
     steps:
       - restore_cache:
-        keys:
-          - pkg-cache-{{ checksum "package-lock.json" }}
+          keys:
+            - pkg-cache-{{ checksum "package-lock.json" }}
 
       - checkout
 
