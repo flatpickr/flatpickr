@@ -17,9 +17,8 @@ jobs:
       - run: npm ci
 
       - save_cache:
-        paths:
-          - ./node_modules
-        key: pkg-cache-{{ checksum "package-lock.json" }}
-
+          paths:
+            - ./node_modules
+          key: pkg-cache-{{ checksum "package-lock.json" }}
 
       - run: npm test
