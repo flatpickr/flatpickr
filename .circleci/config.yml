@@ -8,10 +8,11 @@ jobs:
     working_directory: ~/repo
 
     steps:
-      - checkout
-
       - restore_cache:
-        key: pkg-cache-{{ checksum "package-lock.json" }}
+        keys:
+          - pkg-cache-{{ checksum "package-lock.json" }}
+
+      - checkout
 
       - run: npm ci
 
