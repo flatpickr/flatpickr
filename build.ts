@@ -214,8 +214,7 @@ async function start() {
   if (devMode) {
     const indexExists = await fs.pathExists( './index.html');
     if ( !indexExists ) {
-      await fs.copyFile('./template.html','./index.html');
-      console.log('missing index.html - copying template.html; -> index.html');
+      await fs.copyFile('./index.template.html','./index.html');
     }
     const write = (s: string) => process.stdout.write(`rollup: ${s}`);
     const watcher = rollup.watch([getConfig({ dev: true })]);
