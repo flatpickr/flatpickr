@@ -1,0 +1,13 @@
+{
+    "version": "0.1.0",
+    "configurations": [
+        {
+            "preLaunchTask": "npm run serve",
+            "name": "Launch Quick Start",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://127.0.0.1:8000/index.html",
+            "webRoot": "${workspaceFolder}/"
+        }
+    ]
+}

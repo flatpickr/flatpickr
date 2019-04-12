@@ -1,0 +1,25 @@
+{
+    "version": "2.0.0",
+    "tasks": [{
+        "label": "npm run serve",
+        "command": "npm",
+        "args": ["run", "serve"],
+        "type": "shell",
+        "isBackground": true,
+        "problemMatcher": {
+            "owner": "custom",
+            "pattern": {
+                "regexp": "^error.*$"
+            },
+            "background": {
+                "activeOnStart": true,
+                "beginsPattern": {
+                    "regexp": "^npm run.*$"
+                },
+                "endsPattern":  {
+                    "regexp": "^rollup: END.*$"
+                }
+            }
+        }
+    }]
+}
