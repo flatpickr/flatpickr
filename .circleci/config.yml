@@ -10,7 +10,7 @@ jobs:
     steps:
       - checkout
 
-     - restore_cache:
+      - restore_cache:
         keys:
           # when lock file changes, use increasingly general patterns to restore cache
           - node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
