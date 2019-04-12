@@ -9,18 +9,20 @@ jobs:
 
     steps:
       - checkout
-      - run: sudo npm i pnpm -g
 
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "package.json" }}
+     - restore_cache:
+        keys:
+          # when lock file changes, use increasingly general patterns to restore cache
+          - node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+          - node-v1-{{ .Branch }}-
+          - node-v1-
 
-      - run: pnpm install --frozen-lockfile
+      - run: npm ci
 
       - save_cache:
-          paths:
-            - ~/.pnpm/store
-          key: v1-dependencies-{{ checksum "package.json" }}
+        paths:
+          - ./node_modules
+        key: node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
 
-      - run: pnpm test
+
+      - run: npm test
