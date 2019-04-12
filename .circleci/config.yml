@@ -11,18 +11,14 @@ jobs:
       - checkout
 
       - restore_cache:
-        keys:
-          # when lock file changes, use increasingly general patterns to restore cache
-          - node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
-          - node-v1-{{ .Branch }}-
-          - node-v1-
+        key: pkg-cache-{{ checksum "package-lock.json" }}
 
       - run: npm ci
 
       - save_cache:
         paths:
           - ./node_modules
-        key: node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+        key: pkg-cache-{{ checksum "package-lock.json" }}
 
 
       - run: npm test
