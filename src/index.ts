@@ -2210,6 +2210,8 @@ function FlatpickrInstance(
   const CALLBACKS: { [k in keyof Options]: Function[] } = {
     locale: [setupLocale, updateWeekdays],
     showMonths: [buildMonths, setCalendarWidth, buildWeekdays],
+    minDate: [setInitialDateTime],
+    maxDate: [setInitialDateTime],
   };
 
   function set<K extends keyof Options>(
@@ -2347,6 +2349,20 @@ function FlatpickrInstance(
 
     if (preloadedDate) setSelectedDate(preloadedDate, self.config.dateFormat);
 
+    setInitialDateTime();
+
+    Object.defineProperty(self, "showTimeInput", {
+      get: () => self._showTimeInput,
+      set(bool: boolean) {
+        self._showTimeInput = bool;
+        if (self.calendarContainer)
+          toggleClass(self.calendarContainer, "showTimeInput", bool);
+        self.isOpen && positionCalendar();
+      },
+    });
+  }
+
+  function setInitialDateTime() {
     self._initialDate =
       self.selectedDates.length > 0
         ? self.selectedDates[0]
@@ -2381,16 +2397,6 @@ function FlatpickrInstance(
       (self.config.maxDate.getHours() > 0 ||
         self.config.maxDate.getMinutes() > 0 ||
         self.config.maxDate.getSeconds() > 0);
-
-    Object.defineProperty(self, "showTimeInput", {
-      get: () => self._showTimeInput,
-      set(bool: boolean) {
-        self._showTimeInput = bool;
-        if (self.calendarContainer)
-          toggleClass(self.calendarContainer, "showTimeInput", bool);
-        self.isOpen && positionCalendar();
-      },
-    });
   }
 
   function setupInputs() {
