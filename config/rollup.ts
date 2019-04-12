@@ -15,6 +15,7 @@ export const getConfig = (opts?: { dev: boolean }): RollupOptions => ({
     format: "umd",
     exports: "default",
     banner: `/* flatpickr v${pkg.version}, @license MIT */`,
+    sourcemap: (opts != undefined ? opts.dev : false),
   },
   experimentalOptimizeChunks: true,
   onwarn(warning) {
@@ -38,7 +39,7 @@ export const getConfig = (opts?: { dev: boolean }): RollupOptions => ({
           serve({
             open: true,
             contentBase: "",
-            host: "0.0.0.0",
+            host: "127.0.0.1",
             port: 8000,
           }),
           livereload(),
