@@ -1,23 +1,9 @@
 import { Locale } from "../types/locale";
-import {
-  tokenRegex,
-  RevFormatFn,
-  token,
-  revFormat,
-  formats,
-} from "./formatting";
-import { defaults, ParsedOptions } from "../types/options";
+import { ParseTokenFn } from "./formatting";
+import { defaults } from "../types/options";
 import { english } from "../l10n/default";
 
-export interface FormatterArgs {
-  config?: ParsedOptions;
-  l10n?: Locale;
-}
-
-export const createDateFormatter = ({
-  config = defaults,
-  l10n = english,
-}: FormatterArgs) => (
+export const createDateFormatter = ({ config = defaults, l10n = english }) => (
   dateObj: Date,
   frmt: string,
   overrideLocale?: Locale
@@ -31,8 +17,8 @@ export const createDateFormatter = ({
   return frmt
     .split("")
     .map((c, i, arr) =>
-      formats[c as token] && arr[i - 1] !== "\\"
-        ? formats[c as token](dateObj, locale, config)
+      config.formatFns[c] && arr[i - 1] !== "\\"
+        ? config.formatFns[c](dateObj, locale, config)
         : c !== "\\"
         ? c
         : ""
@@ -83,19 +69,19 @@ export const createDateParser = ({ config = defaults, l10n = english }) => (
           : (new Date(new Date().setHours(0, 0, 0, 0)) as Date);
 
       let matched,
-        ops: { fn: RevFormatFn; val: string }[] = [];
+        ops: { fn: ParseTokenFn; val: string }[] = [];
 
       for (let i = 0, matchIndex = 0, regexStr = ""; i < format.length; i++) {
-        const token = format[i] as token;
-        const isBackSlash = (token as string) === "\\";
+        const token = format[i];
+        const isBackSlash = token === "\\";
         const escaped = format[i - 1] === "\\" || isBackSlash;
 
-        if (tokenRegex[token] && !escaped) {
-          regexStr += tokenRegex[token];
+        if (config.parseTokenRegexs[token] && !escaped) {
+          regexStr += config.parseTokenRegexs[token];
           const match = new RegExp(regexStr).exec(date);
           if (match && (matched = true)) {
             ops[token !== "Y" ? "push" : "unshift"]({
-              fn: revFormat[token],
+              fn: config.parseTokenFns[token],
               val: match[++matchIndex],
             });
           }

@@ -2,31 +2,6 @@ import { int, pad } from "../utils";
 import { Locale } from "../types/locale";
 import { ParsedOptions } from "../types/options";
 
-export type token =
-  | "D"
-  | "F"
-  | "G"
-  | "H"
-  | "J"
-  | "K"
-  | "M"
-  | "S"
-  | "U"
-  | "W"
-  | "Y"
-  | "Z"
-  | "d"
-  | "h"
-  | "i"
-  | "j"
-  | "l"
-  | "m"
-  | "n"
-  | "s"
-  | "u"
-  | "w"
-  | "y";
-
 const do_nothing = (): undefined => undefined;
 
 export const monthToStr = (
@@ -35,13 +10,13 @@ export const monthToStr = (
   locale: Locale
 ) => locale.months[shorthand ? "shorthand" : "longhand"][monthNumber];
 
-export type RevFormatFn = (
+export type ParseTokenFn = (
   date: Date,
   data: string,
   locale: Locale
 ) => Date | void | undefined;
-export type RevFormat = Record<string, RevFormatFn>;
-export const revFormat: RevFormat = {
+export type ParseTokenFns = Record<string, ParseTokenFn>;
+export const defaultParseTokenFns: ParseTokenFns = {
   D: do_nothing,
   F: function(dateObj: Date, monthName: string, locale: Locale) {
     dateObj.setMonth(locale.months.longhand.indexOf(monthName));
@@ -116,8 +91,8 @@ export const revFormat: RevFormat = {
   },
 };
 
-export type TokenRegex = { [k in token]: string };
-export const tokenRegex: TokenRegex = {
+export type ParseTokenRegexs = Record<string, string>;
+export const defaultParseTokenRegexs: ParseTokenRegexs = {
   D: "(\\w+)",
   F: "(\\w+)",
   G: "(\\d\\d|\\d)",
@@ -143,25 +118,25 @@ export const tokenRegex: TokenRegex = {
   y: "(\\d{2})",
 };
 
-export type Formats = Record<
-  token,
+export type FormatFns = Record<
+  string,
   (date: Date, locale: Locale, options: ParsedOptions) => string | number
 >;
-export const formats: Formats = {
+export const defaultFormatFns: FormatFns = {
   // get the date in UTC
   Z: (date: Date) => date.toISOString(),
 
   // weekday name, short, e.g. Thu
   D: function(date: Date, locale: Locale, options: ParsedOptions) {
     return locale.weekdays.shorthand[
-      formats.w(date, locale, options) as number
+      defaultFormatFns.w(date, locale, options) as number
     ];
   },
 
   // full month name e.g. January
   F: function(date: Date, locale: Locale, options: ParsedOptions) {
     return monthToStr(
-      (formats.n(date, locale, options) as number) - 1,
+      (defaultFormatFns.n(date, locale, options) as number) - 1,
       false,
       locale
     );
@@ -169,7 +144,7 @@ export const formats: Formats = {
 
   // padded hour 1-12
   G: function(date: Date, locale: Locale, options: ParsedOptions) {
-    return pad(formats.h(date, locale, options));
+    return pad(defaultFormatFns.h(date, locale, options));
   },
 
   // hours with leading zero e.g. 03

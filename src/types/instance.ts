@@ -1,8 +1,6 @@
 import { DateOption, Options, ParsedOptions } from "./options";
 import { Locale, CustomLocale, key as LocaleKey } from "./locale";
 
-import { RevFormat, Formats, TokenRegex } from "../utils/formatting";
-
 export interface Elements {
   element: HTMLElement;
   input: HTMLInputElement;
@@ -50,110 +48,110 @@ export interface Elements {
   pluginElements: Array<Node>;
 }
 
-export interface Formatting {
-  revFormat: RevFormat;
-  formats: Formats;
-  tokenRegex: TokenRegex;
-}
+export type Instance = Elements & {
+  // Dates
+  minRangeDate?: Date;
+  maxRangeDate?: Date;
+  now: Date;
+  latestSelectedDateObj?: Date;
+  _selectedDateObj?: Date;
+  selectedDates: Date[];
+  _initialDate: Date;
 
-export type Instance = Elements &
-  Formatting & {
-    // Dates
-    minRangeDate?: Date;
-    maxRangeDate?: Date;
-    now: Date;
-    latestSelectedDateObj?: Date;
-    _selectedDateObj?: Date;
-    selectedDates: Date[];
-    _initialDate: Date;
+  // State
+  config: ParsedOptions;
+  loadedPlugins: string[];
+  l10n: Locale;
 
-    // State
-    config: ParsedOptions;
-    loadedPlugins: string[];
-    l10n: Locale;
+  currentYear: number;
+  currentMonth: number;
 
-    currentYear: number;
-    currentMonth: number;
+  isOpen: boolean;
+  isMobile: boolean;
 
-    isOpen: boolean;
-    isMobile: boolean;
+  minDateHasTime: boolean;
+  maxDateHasTime: boolean;
 
-    minDateHasTime: boolean;
-    maxDateHasTime: boolean;
+  showTimeInput: boolean;
+  _showTimeInput: boolean;
 
-    showTimeInput: boolean;
-    _showTimeInput: boolean;
+  // Methods
+  changeMonth: (
+    value: number,
+    is_offset?: boolean,
+    from_keyboard?: boolean
+  ) => void;
+  changeYear: (year: number) => void;
+  clear: (emitChangeEvent?: boolean, toInitial?: boolean) => void;
+  close: () => void;
+  destroy: () => void;
+  isEnabled: (date: DateOption, timeless?: boolean) => boolean;
+  jumpToDate: (date?: DateOption) => void;
+  open: (e?: FocusEvent | MouseEvent, positionElement?: HTMLElement) => void;
+  redraw: () => void;
+  set: (
+    option: keyof Options | { [k in keyof Options]?: Options[k] },
+    value?: any
+  ) => void;
+  setDate: (
+    date: DateOption | DateOption[],
+    triggerChange?: boolean,
+    format?: string
+  ) => void;
+  toggle: () => void;
 
-    // Methods
-    changeMonth: (
-      value: number,
-      is_offset?: boolean,
-      from_keyboard?: boolean
-    ) => void;
-    changeYear: (year: number) => void;
-    clear: (emitChangeEvent?: boolean, toInitial?: boolean) => void;
-    close: () => void;
-    destroy: () => void;
-    isEnabled: (date: DateOption, timeless?: boolean) => boolean;
-    jumpToDate: (date?: DateOption) => void;
-    open: (e?: FocusEvent | MouseEvent, positionElement?: HTMLElement) => void;
-    redraw: () => void;
-    set: (
-      option: keyof Options | { [k in keyof Options]?: Options[k] },
-      value?: any
-    ) => void;
-    setDate: (
-      date: DateOption | DateOption[],
-      triggerChange?: boolean,
-      format?: string
-    ) => void;
-    toggle: () => void;
+  pad: (num: string | number) => string;
+  parseDate: (
+    date: Date | string | number,
+    givenFormat?: string,
+    timeless?: boolean
+  ) => Date | undefined;
+  formatDate: (dateObj: Date, frmt: string) => string;
 
-    pad: (num: string | number) => string;
-    parseDate: (
-      date: Date | string | number,
-      givenFormat?: string,
-      timeless?: boolean
-    ) => Date | undefined;
-    formatDate: (dateObj: Date, frmt: string) => string;
+  // Internals
 
-    // Internals
+  _handlers: {
+    event: string;
+    element: Element;
+    handler: (e?: Event) => void;
+    options?: { capture?: boolean };
+  }[];
 
-    _handlers: {
-      event: string;
-      element: Element;
-      handler: (e?: Event) => void;
-      options?: { capture?: boolean };
-    }[];
+  _bind: <E extends Element>(
+    element: E | E[],
+    event: string | string[],
+    handler: (e?: any) => void
+  ) => void;
+  _createElement: <E extends HTMLElement>(
+    tag: keyof HTMLElementTagNameMap,
+    className: string,
+    content?: string
+  ) => E;
+  _setHoursFromDate: (date: Date) => void;
+  _debouncedChange: () => void;
+  __hideNextMonthArrow: boolean;
+  __hidePrevMonthArrow: boolean;
+  _positionCalendar: (customPositionElement?: HTMLElement) => void;
 
-    _bind: <E extends Element>(
-      element: E | E[],
-      event: string | string[],
-      handler: (e?: any) => void
-    ) => void;
-    _createElement: <E extends HTMLElement>(
-      tag: keyof HTMLElementTagNameMap,
-      className: string,
-      content?: string
-    ) => E;
-    _setHoursFromDate: (date: Date) => void;
-    _debouncedChange: () => void;
-    __hideNextMonthArrow: boolean;
-    __hidePrevMonthArrow: boolean;
-    _positionCalendar: (customPositionElement?: HTMLElement) => void;
-
-    utils: {
-      getDaysInMonth: (month?: number, year?: number) => number;
-    };
+  utils: {
+    getDaysInMonth: (month?: number, year?: number) => number;
   };
+};
 
 export interface FlatpickrFn {
   (selector: Node, config?: Options): Instance;
   (selector: ArrayLike<Node>, config?: Options): Instance[];
   (selector: string, config?: Options): Instance | Instance[];
   defaultConfig: Partial<ParsedOptions>;
+
+  /** Get current global config i.e. the union of application defaults & global default config.
+   * Used by static parseDate, formatDate as well as new FlatPickr instances */
+  getGlobalConfig: () => ParsedOptions;
   l10ns: { [k in LocaleKey]?: CustomLocale } & { default: Locale };
   localize: (l10n: CustomLocale) => void;
+
+  /** Set global default config. Combined with application defaults to be
+   * used by static parseDate, formatDate as well as new FlatPickr instances */
   setDefaults: (config: Options) => void;
   parseDate: (
     date: DateOption,

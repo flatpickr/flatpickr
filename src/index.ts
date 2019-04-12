@@ -31,7 +31,7 @@ import {
   isBetween,
 } from "./utils/dates";
 
-import { tokenRegex, monthToStr } from "./utils/formatting";
+import { defaultParseTokenRegexs, monthToStr } from "./utils/formatting";
 
 import "./utils/polyfills";
 
@@ -42,10 +42,7 @@ function FlatpickrInstance(
   instanceConfig?: Options
 ): Instance {
   const self = {
-    config: {
-      ...defaultOptions,
-      ...flatpickr.defaultConfig,
-    } as ParsedOptions,
+    config: flatpickr.getGlobalConfig(),
     l10n: English,
   } as Instance;
   self.parseDate = createDateParser({ config: self.config, l10n: self.l10n });
@@ -1993,7 +1990,10 @@ function FlatpickrInstance(
         : undefined),
     };
 
-    tokenRegex.K = `(${self.l10n.amPM[0]}|${
+    //TODO static config should also run this for static parseDate()
+    // Symptoms: 1. until this is run (by creating an instance) static parseDate wont parse any K tokens
+    //           2. once run static parseDate will resolve token K with the last locale's amPM
+    defaultParseTokenRegexs.K = `(${self.l10n.amPM[0]}|${
       self.l10n.amPM[1]
     }|${self.l10n.amPM[0].toLowerCase()}|${self.l10n.amPM[1].toLowerCase()})`;
 
@@ -2749,22 +2749,45 @@ var flatpickr = function(
 /* istanbul ignore next */
 flatpickr.defaultConfig = {};
 
+flatpickr.getGlobalConfig = () => {
+  return {
+    ...defaultOptions,
+    ...flatpickr.defaultConfig,
+  };
+}
+
 flatpickr.l10ns = {
   en: { ...English },
   default: { ...English },
 };
+
+const rebuildFormatParse = () => {
+  const globalConfig = flatpickr.getGlobalConfig();
+
+  flatpickr.parseDate = createDateParser({
+    config: globalConfig,
+    l10n: flatpickr.l10ns.default,
+  });
+  flatpickr.formatDate = createDateFormatter({
+    config: globalConfig,
+    l10n: flatpickr.l10ns.default,
+  });
+}
 
 flatpickr.localize = (l10n: CustomLocale) => {
   flatpickr.l10ns.default = {
     ...flatpickr.l10ns.default,
     ...l10n,
   };
+  rebuildFormatParse();
 };
+
 flatpickr.setDefaults = (config: Options) => {
   flatpickr.defaultConfig = {
     ...flatpickr.defaultConfig,
     ...(config as ParsedOptions),
   };
+  rebuildFormatParse();
 };
 
 flatpickr.parseDate = createDateParser({});

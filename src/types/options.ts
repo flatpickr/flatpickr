@@ -1,3 +1,7 @@
+import {
+  FormatFns, ParseTokenFns, ParseTokenRegexs,
+  defaultFormatFns, defaultParseTokenFns, defaultParseTokenRegexs
+} from "./../utils/formatting";
 import { Instance } from "./instance";
 import { CustomLocale, key as LocaleKey, Locale } from "./locale";
 
@@ -128,6 +132,9 @@ By default, Flatpickr utilizes native datetime widgets unless certain options (e
   /* Allows using a custom date formatting function instead of the built-in. Generally unnecessary.  */
   formatDate: (date: Date, format: string, locale: Locale) => string;
 
+  /* Functions used to format a string from a date. Preset to support documented tokens */
+  formatFns: FormatFns;
+
   /* If "weekNumbers" are enabled, this is the function that outputs the week number for a given dates, optionally along with other text  */
   getWeek: (date: Date) => string | number;
 
@@ -211,6 +218,12 @@ Use it along with "enableTime" to create a time picker. */
   /* A custom datestring parser */
   parseDate: (date: string, format: string) => Date;
 
+  /* Functions used to parse a string tokens to a date. Preset to support documented tokens */
+  parseTokenFns: ParseTokenFns;
+
+  /* Regexs used to identify tokens of an input string. Preset to support documented tokens */
+  parseTokenRegexs: ParseTokenRegexs;
+
   /* Plugins. See https://chmln.github.io/flatpickr/plugins/ */
   plugins: Plugin[];
 
@@ -275,6 +288,7 @@ export interface ParsedOptions {
   enableTime: boolean;
   errorHandler: (err: Error) => void;
   formatDate?: Options["formatDate"];
+  formatFns: FormatFns;
   getWeek: (date: Date) => string | number;
   hourIncrement: number;
   ignoredFocusElements: HTMLElement[];
@@ -302,6 +316,8 @@ export interface ParsedOptions {
   onYearChange: Hook[];
   onPreCalendarPosition: Hook[];
   parseDate?: BaseOptions["parseDate"];
+  parseTokenFns: ParseTokenFns;
+  parseTokenRegexs: ParseTokenRegexs;
   plugins: Plugin[];
   position: BaseOptions["position"];
   positionElement?: HTMLElement;
@@ -339,6 +355,7 @@ export const defaults: ParsedOptions = {
   enableTime: false,
   errorHandler: (err: Error) =>
     typeof console !== "undefined" && console.warn(err),
+  formatFns: defaultFormatFns,
   getWeek: (givenDate: Date) => {
     const date = new Date(givenDate.getTime());
     date.setHours(0, 0, 0, 0);
@@ -382,6 +399,8 @@ export const defaults: ParsedOptions = {
   onValueUpdate: [],
   onYearChange: [],
   onPreCalendarPosition: [],
+  parseTokenFns: defaultParseTokenFns,
+  parseTokenRegexs: defaultParseTokenRegexs,
   plugins: [],
   position: "auto",
   positionElement: undefined,
