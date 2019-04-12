@@ -211,9 +211,10 @@ function watch(path: string, cb: (path: string) => void) {
 
 async function start() {
   const devMode = process.argv.indexOf("--dev") > -1;
+  const launchBrowser = process.argv.indexOf("--launchBrowser") > -1 ? true : false;
   if (devMode) {
     const write = (s: string) => process.stdout.write(`rollup: ${s}`);
-    const watcher = rollup.watch([getConfig({ dev: true })]);
+    const watcher = rollup.watch([getConfig({ dev: true, launchBrowser: launchBrowser })]);
 
     watcher.on("event", logEvent);
 

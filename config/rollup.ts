@@ -7,7 +7,7 @@ import { resolve } from "path";
 import * as pkg from "../package.json";
 import { RollupOptions } from "rollup";
 
-export const getConfig = (opts?: { dev: boolean }): RollupOptions => ({
+export const getConfig = (opts?: { dev: boolean, launchBrowser: boolean }): RollupOptions => ({
   input: "./src/index.ts",
   output: {
     file: "dist/flatpickr.js",
@@ -37,7 +37,7 @@ export const getConfig = (opts?: { dev: boolean }): RollupOptions => ({
     ...(opts && opts.dev
       ? [
           serve({
-            open: true,
+            open: opts && opts.launchBrowser,
             contentBase: "",
             host: "127.0.0.1",
             port: 8000,
