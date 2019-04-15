@@ -213,6 +213,10 @@ async function start() {
   const devMode = process.argv.indexOf("--dev") > -1;
   const launchBrowser = process.argv.indexOf("--launchBrowser") > -1 ? true : false;
   if (devMode) {
+    const indexExists = await fs.pathExists( './index.html');
+    if ( !indexExists ) {
+      await fs.copyFile('./index.template.html','./index.html');
+    }
     const write = (s: string) => process.stdout.write(`rollup: ${s}`);
     const watcher = rollup.watch([getConfig({ dev: true, launchBrowser: launchBrowser })]);
 
