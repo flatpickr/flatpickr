@@ -520,6 +520,18 @@ describe("flatpickr", () => {
       expect(fp.selectedDates[0]).not.toBeDefined();
     });
 
+    it("setDate (date, , , doSkipUpdateInputElement)", () => {
+      createInstance({
+        //allowInput: true,
+      });
+
+      fp.setDate("2016-10-21");
+      expect(fp.input.value).toEqual("2016-10-21");
+
+      fp.setDate("2019-04-13", undefined, undefined, true);
+      expect(fp.input.value).toEqual("2016-10-21");
+    });
+
     it("has valid latestSelectedDateObj", () => {
       createInstance({
         defaultDate: "2016-10-01 3:30",

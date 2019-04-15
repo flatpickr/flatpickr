@@ -2279,7 +2279,8 @@ function FlatpickrInstance(
   function setDate(
     date: DateOption | DateOption[],
     triggerChange = false,
-    format = self.config.dateFormat
+    format = self.config.dateFormat,
+    doSkipUpdateInputElement = false
   ) {
     if ((date !== 0 && !date) || (date instanceof Array && date.length === 0))
       return self.clear(triggerChange);
@@ -2293,7 +2294,7 @@ function FlatpickrInstance(
     jumpToDate();
 
     setHoursFromDate();
-    updateValue(triggerChange);
+    if (!doSkipUpdateInputElement) updateValue(triggerChange);
 
     if (triggerChange) triggerEvent("onChange");
   }

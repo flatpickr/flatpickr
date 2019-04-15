@@ -105,7 +105,8 @@ export type Instance = Elements &
     setDate: (
       date: DateOption | DateOption[],
       triggerChange?: boolean,
-      format?: string
+      format?: string,
+      doSkipUpdateInputElement?: boolean
     ) => void;
     toggle: () => void;
 
