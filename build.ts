@@ -65,14 +65,17 @@ function uglify(src: string) {
   return minified.code;
 }
 
-async function buildFlatpickrJs() {
+async function buildFlatpickrJs(devMode: boolean) {
+  if (rollupConfig.output != undefined) {
+    rollupConfig.output.sourcemap = devMode;
+  }
   const bundle = await rollup.rollup(rollupConfig);
   return bundle.write(rollupConfig.output!);
 }
 
-async function buildScripts() {
+async function buildScripts(devMode: boolean) {
   try {
-    await buildFlatpickrJs();
+    await buildFlatpickrJs(devMode);
     const transpiled = await readFileAsync("./dist/flatpickr.js");
     fs.writeFile("./dist/flatpickr.min.js", uglify(transpiled));
   } catch (e) {
@@ -80,7 +83,7 @@ async function buildScripts() {
   }
 }
 
-function buildExtras(folder: "plugins" | "l10n") {
+function buildExtras(folder: "plugins" | "l10n", devMode: boolean) {
   return async function(changed_path?: string) {
     const [src_paths, css_paths] = await Promise.all(
       changed_path !== undefined
@@ -108,7 +111,7 @@ function buildExtras(folder: "plugins" | "l10n") {
           return bundle.write({
             exports: folder === "l10n" ? "named" : "default",
             format: "umd",
-            sourcemap: false,
+            sourcemap: devMode,
             file: sourcePath.replace("src", "dist").replace(".ts", ".js"),
             name:
               sourcePath.includes("plugins") && fileName === "index"
@@ -181,8 +184,8 @@ async function buildThemes() {
   return;
 }
 
-function setupWatchers() {
-  watch("./src/plugins", buildExtras("plugins"));
+function setupWatchers(devMode: boolean) {
+  watch("./src/plugins", buildExtras("plugins", devMode));
   watch("./src/style/*.styl", () => {
     buildStyle();
     buildThemes();
@@ -246,18 +249,18 @@ async function start() {
     process.on("SIGUSR1", exit);
     process.on("SIGUSR2", exit);
 
-    setupWatchers();
+    setupWatchers(devMode);
   }
 
   try {
     await fs.mkdirp("./dist/themes");
   } catch {}
 
-  buildScripts();
+  buildScripts(devMode);
   buildStyle();
   buildThemes();
-  buildExtras("l10n")();
-  buildExtras("plugins")();
+  buildExtras("l10n", devMode)();
+  buildExtras("plugins", devMode)();
 }
 
 start();
