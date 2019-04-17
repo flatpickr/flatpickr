@@ -16,7 +16,7 @@ import rollupConfig, { getConfig } from "./config/rollup";
 import * as pkg from "./package.json";
 const version = `/* flatpickr v${pkg.version},, @license MIT */`;
 
-let DEV_MODE = false;
+let DEV_MODE = process.argv.indexOf("--dev") > -1;
 
 const paths = {
   themes: "./src/style/themes/*.styl",
@@ -212,8 +212,6 @@ function watch(path: string, cb: (path: string) => void) {
 }
 
 async function start() {
-  DEV_MODE = process.argv.indexOf("--dev") > -1;
-
   if (DEV_MODE) {
     rollupConfig.output!.sourcemap = true;
     const indexExists = await fs.pathExists( './index.html');
