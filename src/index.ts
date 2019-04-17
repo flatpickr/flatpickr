@@ -2210,15 +2210,21 @@ function FlatpickrInstance(
   const CALLBACKS: { [k in keyof Options]: Function[] } = {
     locale: [setupLocale, updateWeekdays],
     showMonths: [buildMonths, setCalendarWidth, buildWeekdays],
+    minDate: [jumpToDate],
+    maxDate: [jumpToDate],
   };
 
   function set<K extends keyof Options>(
     option: K | { [k in K]?: Options[k] },
     value?: any
   ) {
-    if (option !== null && typeof option === "object")
+    if (option !== null && typeof option === "object") {
       Object.assign(self.config, option);
-    else {
+      for (const key in option) {
+        if (CALLBACKS[key] !== undefined)
+          (CALLBACKS[key] as Function[]).forEach(x => x());
+      }
+    } else {
       self.config[option] = value;
 
       if (CALLBACKS[option] !== undefined)
@@ -2293,6 +2299,9 @@ function FlatpickrInstance(
     jumpToDate();
 
     setHoursFromDate();
+    if (self.selectedDates.length === 0) {
+      self.clear(false);
+    }
     updateValue(triggerChange);
 
     if (triggerChange) triggerEvent("onChange");
@@ -2591,8 +2600,6 @@ function FlatpickrInstance(
    * Updates the values of inputs associated with the calendar
    */
   function updateValue(triggerChange = true) {
-    if (self.selectedDates.length === 0) return self.clear(triggerChange);
-
     if (self.mobileInput !== undefined && self.mobileFormatStr) {
       self.mobileInput.value =
         self.latestSelectedDateObj !== undefined
