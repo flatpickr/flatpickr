@@ -95,7 +95,7 @@ export type Instance = Elements &
     close: () => void;
     destroy: () => void;
     isEnabled: (date: DateOption, timeless?: boolean) => boolean;
-    jumpToDate: (date?: DateOption) => void;
+    jumpToDate: (date?: DateOption, triggerChange?: boolean) => void;
     open: (e?: FocusEvent | MouseEvent, positionElement?: HTMLElement) => void;
     redraw: () => void;
     set: (

@@ -730,6 +730,30 @@ describe("flatpickr", () => {
         expect(fp.currentYear).toEqual(2016);
       });
     });
+
+    it("triggers monthChange on jump", done => {
+      const fp = createInstance({
+        defaultDate: new Date(2019, 3, 17),
+        onMonthChange: () => {
+          expect(fp.currentMonth).toEqual(4);
+          done();
+        },
+      });
+
+      fp.jumpToDate(new Date(2019, 4, 17), true);
+    });
+
+    it("triggers yearChange on jump", done => {
+      const fp = createInstance({
+        defaultDate: new Date(2019, 3, 17),
+        onYearChange: () => {
+          expect(fp.currentYear).toEqual(2020);
+          done();
+        },
+      });
+
+      fp.jumpToDate(new Date(2020, 4, 17), true);
+    });
   });
 
   describe("UI", () => {
