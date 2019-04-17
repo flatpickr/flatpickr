@@ -483,8 +483,9 @@ function FlatpickrInstance(
   /**
    * Set the calendar view to a particular date.
    * @param {Date} jumpDate the date to set the view to
+   * @param {boolean} triggerChange if change events should be triggered
    */
-  function jumpToDate(jumpDate?: DateOption) {
+  function jumpToDate(jumpDate?: DateOption, triggerChange?: boolean) {
     const jumpTo =
       jumpDate !== undefined
         ? self.parseDate(jumpDate)
@@ -495,6 +496,9 @@ function FlatpickrInstance(
             ? self.config.maxDate
             : self.now);
 
+    const oldYear = self.currentYear;
+    const oldMonth = self.currentMonth;
+
     try {
       if (jumpTo !== undefined) {
         self.currentYear = jumpTo.getFullYear();
@@ -504,6 +508,14 @@ function FlatpickrInstance(
       /* istanbul ignore next */
       e.message = "Invalid date supplied: " + jumpTo;
       self.config.errorHandler(e);
+    }
+
+    if (triggerChange && self.currentYear !== oldYear) {
+      triggerEvent("onYearChange");
+    }
+
+    if (triggerChange && (self.currentYear !== oldYear || self.currentMonth !== oldMonth)) {
+      triggerEvent("onMonthChange");
     }
 
     self.redraw();
