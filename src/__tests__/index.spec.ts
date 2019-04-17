@@ -491,6 +491,19 @@ describe("flatpickr", () => {
       expect(fp.config.mode).toEqual("range");
     });
 
+    it("set() minDate/maxDate updates current view", () => {
+      createInstance();
+      const now = new Date();
+      const nextMonth = new Date();
+      nextMonth.setMonth(now.getMonth() + 1);
+      console.log(now, nextMonth);
+
+      expect(fp.currentMonth).toEqual(now.getMonth());
+
+      fp.set("minDate", nextMonth)
+      expect(fp.currentMonth).toEqual(nextMonth.getMonth());
+    });
+
     it("setDate (date)", () => {
       createInstance({
         enableTime: true,
