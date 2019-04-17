@@ -496,7 +496,6 @@ describe("flatpickr", () => {
       const now = new Date();
       const nextMonth = new Date();
       nextMonth.setMonth(now.getMonth() + 1);
-      console.log(now, nextMonth);
 
       expect(fp.currentMonth).toEqual(now.getMonth());
 
