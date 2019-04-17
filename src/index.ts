@@ -2224,8 +2224,7 @@ function FlatpickrInstance(
         if (CALLBACKS[key] !== undefined)
           (CALLBACKS[key] as Function[]).forEach(x => x());
       }
-    }
-    else {
+    } else {
       self.config[option] = value;
 
       if (CALLBACKS[option] !== undefined)
@@ -2300,6 +2299,9 @@ function FlatpickrInstance(
     jumpToDate();
 
     setHoursFromDate();
+    if (self.selectedDates.length === 0) {
+      self.clear(false);
+    }
     updateValue(triggerChange);
 
     if (triggerChange) triggerEvent("onChange");
@@ -2598,8 +2600,6 @@ function FlatpickrInstance(
    * Updates the values of inputs associated with the calendar
    */
   function updateValue(triggerChange = true) {
-    if (self.selectedDates.length === 0) return self.clear(triggerChange);
-
     if (self.mobileInput !== undefined && self.mobileFormatStr) {
       self.mobileInput.value =
         self.latestSelectedDateObj !== undefined

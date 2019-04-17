@@ -500,7 +500,7 @@ describe("flatpickr", () => {
 
       expect(fp.currentMonth).toEqual(now.getMonth());
 
-      fp.set("minDate", nextMonth)
+      fp.set("minDate", nextMonth);
       expect(fp.currentMonth).toEqual(nextMonth.getMonth());
     });
 
