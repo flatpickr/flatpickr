@@ -102,10 +102,16 @@ export type Instance = Elements &
       option: keyof Options | { [k in keyof Options]?: Options[k] },
       value?: any
     ) => void;
+
+    /**
+     * @param triggerChange trigger flatPickr onChange event
+     * @param format defaults to config.dateFormat. You may want to use config.altFormat
+     */
     setDate: (
       date: DateOption | DateOption[],
       triggerChange?: boolean,
-      format?: string
+      format?: string,
+      doSkipUpdateInputElement?: boolean
     ) => void;
     toggle: () => void;
 
