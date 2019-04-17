@@ -16,6 +16,8 @@ import rollupConfig, { getConfig } from "./config/rollup";
 import * as pkg from "./package.json";
 const version = `/* flatpickr v${pkg.version},, @license MIT */`;
 
+let DEV_MODE = false;
+
 const paths = {
   themes: "./src/style/themes/*.styl",
   style: "./src/style/flatpickr.styl",
@@ -65,17 +67,14 @@ function uglify(src: string) {
   return minified.code;
 }
 
-async function buildFlatpickrJs(devMode: boolean) {
-  if (rollupConfig.output != undefined) {
-    rollupConfig.output.sourcemap = devMode;
-  }
+async function buildFlatpickrJs() {
   const bundle = await rollup.rollup(rollupConfig);
   return bundle.write(rollupConfig.output!);
 }
 
-async function buildScripts(devMode: boolean) {
+async function buildScripts() {
   try {
-    await buildFlatpickrJs(devMode);
+    await buildFlatpickrJs();
     const transpiled = await readFileAsync("./dist/flatpickr.js");
     fs.writeFile("./dist/flatpickr.min.js", uglify(transpiled));
   } catch (e) {
@@ -83,7 +82,7 @@ async function buildScripts(devMode: boolean) {
   }
 }
 
-function buildExtras(folder: "plugins" | "l10n", devMode: boolean) {
+function buildExtras(folder: "plugins" | "l10n") {
   return async function(changed_path?: string) {
     const [src_paths, css_paths] = await Promise.all(
       changed_path !== undefined
@@ -111,7 +110,7 @@ function buildExtras(folder: "plugins" | "l10n", devMode: boolean) {
           return bundle.write({
             exports: folder === "l10n" ? "named" : "default",
             format: "umd",
-            sourcemap: devMode,
+            sourcemap: DEV_MODE,
             file: sourcePath.replace("src", "dist").replace(".ts", ".js"),
             name:
               sourcePath.includes("plugins") && fileName === "index"
@@ -184,8 +183,8 @@ async function buildThemes() {
   return;
 }
 
-function setupWatchers(devMode: boolean) {
-  watch("./src/plugins", buildExtras("plugins", devMode));
+function setupWatchers() {
+  watch("./src/plugins", buildExtras("plugins"));
   watch("./src/style/*.styl", () => {
     buildStyle();
     buildThemes();
@@ -213,8 +212,10 @@ function watch(path: string, cb: (path: string) => void) {
 }
 
 async function start() {
-  const devMode = process.argv.indexOf("--dev") > -1;
-  if (devMode) {
+  DEV_MODE = process.argv.indexOf("--dev") > -1;
+
+  if (DEV_MODE) {
+    rollupConfig.output!.sourcemap = true;
     const indexExists = await fs.pathExists( './index.html');
     if ( !indexExists ) {
       await fs.copyFile('./index.template.html','./index.html');
@@ -234,6 +235,7 @@ async function start() {
       input?: string;
       output?: string;
     }
+
     function logEvent(e: RollupWatchEvent) {
       write(
         [e.code, e.input && `${e.input} -> ${e.output!}`, "\n"]
@@ -249,20 +251,18 @@ async function start() {
     process.on("SIGUSR1", exit);
     process.on("SIGUSR2", exit);
 
-    setupWatchers(devMode);
+    setupWatchers();
   }
 
   try {
     await fs.mkdirp("./dist/themes");
   } catch {}
 
-  buildScripts(devMode);
+  buildScripts();
   buildStyle();
   buildThemes();
-  buildExtras("l10n", devMode)();
-  buildExtras("plugins", devMode)();
+  buildExtras("l10n")();
+  buildExtras("plugins")();
 }
 
 start();
-
-process.on("unhandledRejection", logErr);
