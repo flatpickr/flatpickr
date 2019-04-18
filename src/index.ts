@@ -1527,6 +1527,7 @@ function FlatpickrInstance(
       switch (e.keyCode) {
         case 13:
           if (isTimeObj) {
+            e.preventDefault();
             updateTime();
             focusAndClose();
           } else selectDate(e);
