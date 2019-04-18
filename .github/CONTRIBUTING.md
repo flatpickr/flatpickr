@@ -18,8 +18,8 @@ While a lot of feature requests often don't make it to the core, they can be imp
 ### How to submit a pull requests
 
 1. Fork the repository.
-2. Setup the necessary dependencies by running `yarn`. 
-3. Then, `yarn start` to launch the dev environment. 
+2. Setup the necessary dependencies by running `npm install`. 
+3. Then, `npm start` to launch the dev environment. 
 4. `src/index.ts` is the entry point, `index.html` is where you can experiment with options. 
 5. Make desired changes and push.
 6. Go to https://github.com/flatpickr/flatpickr/compare?expand=1
