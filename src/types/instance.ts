@@ -28,6 +28,8 @@ export interface Elements {
   // month nav
   monthNav: HTMLDivElement;
 
+  monthsDropdownContainer: HTMLSelectElement;
+
   yearElements: HTMLInputElement[];
   monthElements: HTMLSpanElement[];
 
