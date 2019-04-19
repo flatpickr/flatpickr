@@ -491,6 +491,18 @@ describe("flatpickr", () => {
       expect(fp.config.mode).toEqual("range");
     });
 
+    it("set() minDate/maxDate updates current view", () => {
+      createInstance();
+      const now = new Date();
+      const nextMonth = new Date();
+      nextMonth.setMonth(now.getMonth() + 1);
+
+      expect(fp.currentMonth).toEqual(now.getMonth());
+
+      fp.set("minDate", nextMonth);
+      expect(fp.currentMonth).toEqual(nextMonth.getMonth());
+    });
+
     it("setDate (date)", () => {
       createInstance({
         enableTime: true,
@@ -717,6 +729,30 @@ describe("flatpickr", () => {
         expect(fp.currentMonth).toEqual(0);
         expect(fp.currentYear).toEqual(2016);
       });
+    });
+
+    it("triggers monthChange on jump", done => {
+      const fp = createInstance({
+        defaultDate: new Date(2019, 3, 17),
+        onMonthChange: () => {
+          expect(fp.currentMonth).toEqual(4);
+          done();
+        },
+      });
+
+      fp.jumpToDate(new Date(2019, 4, 17), true);
+    });
+
+    it("triggers yearChange on jump", done => {
+      const fp = createInstance({
+        defaultDate: new Date(2019, 3, 17),
+        onYearChange: () => {
+          expect(fp.currentYear).toEqual(2020);
+          done();
+        },
+      });
+
+      fp.jumpToDate(new Date(2020, 4, 17), true);
     });
   });
 

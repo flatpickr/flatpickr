@@ -483,8 +483,9 @@ function FlatpickrInstance(
   /**
    * Set the calendar view to a particular date.
    * @param {Date} jumpDate the date to set the view to
+   * @param {boolean} triggerChange if change events should be triggered
    */
-  function jumpToDate(jumpDate?: DateOption) {
+  function jumpToDate(jumpDate?: DateOption, triggerChange?: boolean) {
     const jumpTo =
       jumpDate !== undefined
         ? self.parseDate(jumpDate)
@@ -495,6 +496,9 @@ function FlatpickrInstance(
             ? self.config.maxDate
             : self.now);
 
+    const oldYear = self.currentYear;
+    const oldMonth = self.currentMonth;
+
     try {
       if (jumpTo !== undefined) {
         self.currentYear = jumpTo.getFullYear();
@@ -504,6 +508,14 @@ function FlatpickrInstance(
       /* istanbul ignore next */
       e.message = "Invalid date supplied: " + jumpTo;
       self.config.errorHandler(e);
+    }
+
+    if (triggerChange && self.currentYear !== oldYear) {
+      triggerEvent("onYearChange");
+    }
+
+    if (triggerChange && (self.currentYear !== oldYear || self.currentMonth !== oldMonth)) {
+      triggerEvent("onMonthChange");
     }
 
     self.redraw();
@@ -1515,6 +1527,7 @@ function FlatpickrInstance(
       switch (e.keyCode) {
         case 13:
           if (isTimeObj) {
+            e.preventDefault();
             updateTime();
             focusAndClose();
           } else selectDate(e);
@@ -1702,7 +1715,7 @@ function FlatpickrInstance(
 
         if (elem !== undefined) {
           elem.classList.add(
-            hoverDate < self.selectedDates[0].getTime()
+            hoverDate <= self.selectedDates[0].getTime()
               ? "startRange"
               : "endRange"
           );
@@ -2210,15 +2223,21 @@ function FlatpickrInstance(
   const CALLBACKS: { [k in keyof Options]: Function[] } = {
     locale: [setupLocale, updateWeekdays],
     showMonths: [buildMonths, setCalendarWidth, buildWeekdays],
+    minDate: [jumpToDate],
+    maxDate: [jumpToDate],
   };
 
   function set<K extends keyof Options>(
     option: K | { [k in K]?: Options[k] },
     value?: any
   ) {
-    if (option !== null && typeof option === "object")
+    if (option !== null && typeof option === "object") {
       Object.assign(self.config, option);
-    else {
+      for (const key in option) {
+        if (CALLBACKS[key] !== undefined)
+          (CALLBACKS[key] as Function[]).forEach(x => x());
+      }
+    } else {
       self.config[option] = value;
 
       if (CALLBACKS[option] !== undefined)
@@ -2293,6 +2312,9 @@ function FlatpickrInstance(
     jumpToDate();
 
     setHoursFromDate();
+    if (self.selectedDates.length === 0) {
+      self.clear(false);
+    }
     updateValue(triggerChange);
 
     if (triggerChange) triggerEvent("onChange");
@@ -2591,8 +2613,6 @@ function FlatpickrInstance(
    * Updates the values of inputs associated with the calendar
    */
   function updateValue(triggerChange = true) {
-    if (self.selectedDates.length === 0) return self.clear(triggerChange);
-
     if (self.mobileInput !== undefined && self.mobileFormatStr) {
       self.mobileInput.value =
         self.latestSelectedDateObj !== undefined
