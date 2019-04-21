@@ -1755,7 +1755,7 @@ function FlatpickrInstance(
       self.config.minDate !== undefined
         ? new Date(self.config.minDate.getTime())
         : new Date(),
-      false
+      true
     );
     setDefaultHours();
     updateValue();
