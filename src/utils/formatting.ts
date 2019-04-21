@@ -69,9 +69,9 @@ export const revFormat: RevFormat = {
   },
   U: (_: Date, unixSeconds: string) => new Date(parseFloat(unixSeconds) * 1000),
 
-  W: function(dateObj: Date, weekNum: string) {
+  W: function(dateObj: Date, weekNum: string, locale: Locale) {
     const weekNumber = parseInt(weekNum);
-    return new Date(
+    const date = new Date(
       dateObj.getFullYear(),
       0,
       2 + (weekNumber - 1) * 7,
@@ -80,6 +80,9 @@ export const revFormat: RevFormat = {
       0,
       0
     );
+    date.setDate(date.getDate() - date.getDay() + locale.firstDayOfWeek);
+
+    return date;
   },
   Y: (dateObj: Date, year: string) => {
     dateObj.setFullYear(parseFloat(year));
