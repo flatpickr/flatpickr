@@ -514,7 +514,10 @@ function FlatpickrInstance(
       triggerEvent("onYearChange");
     }
 
-    if (triggerChange && (self.currentYear !== oldYear || self.currentMonth !== oldMonth)) {
+    if (
+      triggerChange &&
+      (self.currentYear !== oldYear || self.currentMonth !== oldMonth)
+    ) {
       triggerEvent("onMonthChange");
     }
 
