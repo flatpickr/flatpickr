@@ -3,7 +3,6 @@ import { Russian } from "../l10n/ru";
 import { Instance, DayElement } from "../types/instance";
 import { Options, DateRangeLimit } from "../types/options";
 import confirmDatePlugin from "../plugins/confirmDate/confirmDate";
-import monthDropdownPlugin from "../plugins/monthDropdown";
 
 flatpickr.defaultConfig.animate = false;
 flatpickr.defaultConfig.closeOnSelect = true;

@@ -1,9 +1,4 @@
-import {
-  Instance,
-  FlatpickrFn,
-  DayElement,
-  DayElement as MonthElement,
-} from "./types/instance";
+import { Instance, FlatpickrFn, DayElement } from "./types/instance";
 import {
   Options,
   ParsedOptions,
@@ -39,7 +34,6 @@ import {
 import { tokenRegex, monthToStr } from "./utils/formatting";
 
 import "./utils/polyfills";
-import { MonthElement } from "./plugins/monthSelect";
 
 const DEBOUNCED_CHANGE_MS = 300;
 
@@ -1021,7 +1015,6 @@ function FlatpickrInstance(
       "div",
       "flatpickr-current-month"
     );
-
     currentMonth.appendChild(monthElement);
     currentMonth.appendChild(yearInput);
 
@@ -2656,14 +2649,16 @@ function FlatpickrInstance(
       const d = new Date(self.currentYear, self.currentMonth, 1);
       d.setMonth(self.currentMonth + i);
 
-      self.config.showMonths > 1
-        ? (self.monthElements[i].textContent =
-            monthToStr(
-              d.getMonth(),
-              self.config.shorthandCurrentMonth,
-              self.l10n
-            ) + " ")
-        : (self.monthsDropdownContainer.value = d.getMonth().toString());
+      if (self.config.showMonths > 1) {
+        self.monthElements[i].textContent =
+          monthToStr(
+            d.getMonth(),
+            self.config.shorthandCurrentMonth,
+            self.l10n
+          ) + " ";
+      } else {
+        self.monthsDropdownContainer.value = d.getMonth().toString();
+      }
 
       yearElement.value = d.getFullYear().toString();
     });
