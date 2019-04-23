@@ -1726,7 +1726,7 @@ function FlatpickrInstance(
           if (
             month.contains(elem) ||
             !(
-              m > 0 &&
+              m > self.config.showMonths - 1 &&
               prevMonth &&
               (<DayElement>prevMonth.lastChild).dateObj.getTime() >= timestamp
             )
