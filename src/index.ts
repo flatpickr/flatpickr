@@ -1692,7 +1692,6 @@ function FlatpickrInstance(
 
     for (let m = 0; m < self.config.showMonths; m++) {
       const month = (<HTMLDivElement>self.daysContainer).children[m];
-      const prevMonth = (<HTMLDivElement>self.daysContainer).children[m - 1];
 
       for (let i = 0, l = month.children.length; i < l; i++) {
         const dayElem = month.children[i] as DayElement,
@@ -1724,12 +1723,12 @@ function FlatpickrInstance(
           );
 
           if (
-            month.contains(elem) ||
-            !(
-              m > 0 &&
-              prevMonth &&
-              (<DayElement>prevMonth.lastChild).dateObj.getTime() >= timestamp
-            )
+            self.config.showMonths === 1 ||
+            (self.config.showMonths > 1 &&
+              !(
+                dayElem.classList.contains("prevMonthDay") ||
+                dayElem.classList.contains("nextMonthDay")
+              ))
           ) {
             if (initialDate < hoverDate && timestamp === initialDate)
               dayElem.classList.add("startRange");
