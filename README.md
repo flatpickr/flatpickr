@@ -46,13 +46,14 @@ IE9 and up, Edge, iOS Safari 6+, Chrome 8+, Firefox 6+
 Demos and documentation: https://flatpickr.js.org
 
 See also:
-* [React Component](https://github.com/coderhaoxin/react-flatpickr)
-* [ember-flatpickr addon](https://www.npmjs.com/package/ember-flatpickr)
-* [angularJS-flatpickr addon](https://www.npmjs.com/package/angular-flatpickr)
 * [angular2+-flatpickr addon](https://github.com/mezoistvan/ng2-flatpickr)
-* [vue-flatpickr component](https://github.com/ankurk91/vue-flatpickr-component)
+* [angularJS-flatpickr addon](https://www.npmjs.com/package/angular-flatpickr)
+* [ember-flatpickr addon](https://www.npmjs.com/package/ember-flatpickr)
+* [Preact Component](https://github.com/molnarmark/preact-flatpickr)
+* [React Component](https://github.com/coderhaoxin/react-flatpickr)
 * [Stimulus.js Controller](https://github.com/adrienpoly/stimulus-flatpickr)
 * [Svelte Component](https://github.com/jacobmischka/svelte-flatpickr)
+* [vue-flatpickr component](https://github.com/ankurk91/vue-flatpickr-component)
 
 ## Supporting flatpickr
 
