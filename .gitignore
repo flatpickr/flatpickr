@@ -6,3 +6,4 @@ dist
 
 yarn.lock
 pnpm-lock.yaml
+.vscode/*
