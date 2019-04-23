@@ -1606,6 +1606,7 @@ function FlatpickrInstance(
       switch (e.keyCode) {
         case 13:
           if (isTimeObj) {
+            e.preventDefault();
             updateTime();
             focusAndClose();
           } else selectDate(e);
@@ -1833,7 +1834,7 @@ function FlatpickrInstance(
       self.config.minDate !== undefined
         ? new Date(self.config.minDate.getTime())
         : new Date(),
-      false
+      true
     );
     setDefaultHours();
     updateValue();

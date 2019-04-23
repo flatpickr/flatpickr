@@ -15,7 +15,7 @@ export const getConfig = (opts?: { dev: boolean }): RollupOptions => ({
     format: "umd",
     exports: "default",
     banner: `/* flatpickr v${pkg.version}, @license MIT */`,
-    ...(opts && opts.dev) ? {sourcemap: true} : {}
+    ...(opts && opts.dev ? { sourcemap: true } : {}),
   },
   experimentalOptimizeChunks: true,
   onwarn(warning) {

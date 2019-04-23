@@ -97,27 +97,32 @@ function buildExtras(folder: "plugins" | "l10n") {
 
     try {
       await Promise.all([
-        ...src_paths.filter(p => !p.includes(".spec.ts")).map(async sourcePath => {
-          const bundle = await rollup.rollup({
-            ...rollupConfig,
-            cache: undefined,
-            input: sourcePath,
-          });
+        ...src_paths
+          .filter(p => !p.includes(".spec.ts"))
+          .map(async sourcePath => {
+            const bundle = await rollup.rollup({
+              ...rollupConfig,
+              cache: undefined,
+              input: sourcePath,
+            });
 
-          const fileName = path.basename(sourcePath, path.extname(sourcePath));
-          const folderName = path.basename(path.dirname(sourcePath));
+            const fileName = path.basename(
+              sourcePath,
+              path.extname(sourcePath)
+            );
+            const folderName = path.basename(path.dirname(sourcePath));
 
-          return bundle.write({
-            exports: folder === "l10n" ? "named" : "default",
-            format: "umd",
-            sourcemap: DEV_MODE,
-            file: sourcePath.replace("src", "dist").replace(".ts", ".js"),
-            name:
-              sourcePath.includes("plugins") && fileName === "index"
-                ? `${folderName}Plugin`
-                : customModuleNames[fileName] || fileName,
-          });
-        }),
+            return bundle.write({
+              exports: folder === "l10n" ? "named" : "default",
+              format: "umd",
+              sourcemap: DEV_MODE,
+              file: sourcePath.replace("src", "dist").replace(".ts", ".js"),
+              name:
+                sourcePath.includes("plugins") && fileName === "index"
+                  ? `${folderName}Plugin`
+                  : customModuleNames[fileName] || fileName,
+            });
+          }),
         ...(css_paths.map(p => fs.copy(p, p.replace("src", "dist"))) as any),
       ]);
     } catch (err) {
@@ -214,9 +219,9 @@ function watch(path: string, cb: (path: string) => void) {
 async function start() {
   if (DEV_MODE) {
     rollupConfig.output!.sourcemap = true;
-    const indexExists = await fs.pathExists( './index.html');
-    if ( !indexExists ) {
-      await fs.copyFile('./index.template.html','./index.html');
+    const indexExists = await fs.pathExists("./index.html");
+    if (!indexExists) {
+      await fs.copyFile("./index.template.html", "./index.html");
     }
     const write = (s: string) => process.stdout.write(`rollup: ${s}`);
     const watcher = rollup.watch([getConfig({ dev: true })]);
