@@ -320,7 +320,7 @@ export const defaults: ParsedOptions = {
   allowInput: false,
   altFormat: "F j, Y",
   altInput: false,
-  altInputClass: "form-control input",
+  altInputClass: "date flatpickr-input form-control input",
   animate:
     typeof window === "object" &&
     window.navigator.userAgent.indexOf("MSIE") === -1,
