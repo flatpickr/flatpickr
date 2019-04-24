@@ -1722,26 +1722,17 @@ function FlatpickrInstance(
               : "endRange"
           );
 
-          if (
-            self.config.showMonths === 1 ||
-            (self.config.showMonths > 1 &&
-              !(
-                dayElem.classList.contains("prevMonthDay") ||
-                dayElem.classList.contains("nextMonthDay")
-              ))
-          ) {
-            if (initialDate < hoverDate && timestamp === initialDate)
-              dayElem.classList.add("startRange");
-            else if (initialDate > hoverDate && timestamp === initialDate)
-              dayElem.classList.add("endRange");
+          if (initialDate < hoverDate && timestamp === initialDate)
+            dayElem.classList.add("startRange");
+          else if (initialDate > hoverDate && timestamp === initialDate)
+            dayElem.classList.add("endRange");
 
-            if (
-              timestamp >= minRange &&
-              (maxRange === 0 || timestamp <= maxRange) &&
-              isBetween(timestamp, initialDate, hoverDate)
-            )
-              dayElem.classList.add("inRange");
-          }
+          if (
+            timestamp >= minRange &&
+            (maxRange === 0 || timestamp <= maxRange) &&
+            isBetween(timestamp, initialDate, hoverDate)
+          )
+            dayElem.classList.add("inRange");
         }
       }
     }
