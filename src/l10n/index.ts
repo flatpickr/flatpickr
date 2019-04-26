@@ -4,6 +4,7 @@ import { Arabic as ar } from "./ar";
 import { Austria as at } from "./at";
 import { Azerbaijan as az } from "./az";
 import { Belarusian as be } from "./be";
+import { Bosnian as bs } from "./bs";
 import { Bulgarian as bg } from "./bg";
 import { Bangla as bn } from "./bn";
 import { Catalan as cat } from "./cat";
@@ -64,6 +65,7 @@ const l10n: Record<key, CustomLocale> = {
   be,
   bg,
   bn,
+  bs,
   cat,
   cs,
   cy,
