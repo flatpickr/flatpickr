@@ -1411,6 +1411,62 @@ describe("flatpickr", () => {
       );
       expect(document.activeElement).toStrictEqual(fp._input);
     });
+
+    it("dropdown should correctly load months with minDate", () => {
+      const fp = createInstance({
+        defaultDate: new Date(2019, 5, 11),
+        minDate: new Date(2019, 4, 11),
+      }) as Instance;
+
+      const monthsDropdown = fp.calendarContainer.querySelector(
+        ".flatpickr-monthDropdown-months"
+      );
+      const months = monthsDropdown!.querySelectorAll(
+        ".flatpickr-monthDropdown-month"
+      );
+
+      expect(months.length).toEqual(8);
+
+      expect(months[0]!.innerHTML).toEqual("May");
+      expect(months[7]!.innerHTML).toEqual("December");
+    });
+
+    it("dropdown should correctly load months with maxDate", () => {
+      const fp = createInstance({
+        defaultDate: new Date(2019, 4, 11),
+        maxDate: new Date(2019, 8, 11),
+      }) as Instance;
+
+      const monthsDropdown = fp.calendarContainer.querySelector(
+        ".flatpickr-monthDropdown-months"
+      );
+      const months = monthsDropdown!.querySelectorAll(
+        ".flatpickr-monthDropdown-month"
+      );
+
+      expect(months.length).toEqual(9);
+
+      expect(months[0]!.innerHTML).toEqual("January");
+      expect(months[months.length - 1]!.innerHTML).toEqual("September");
+    });
+
+    it("dropdown should change month", () => {
+      const fp = createInstance({
+        defaultDate: new Date(2019, 1, 1),
+      }) as Instance;
+
+      const monthsDropdown = fp.calendarContainer.querySelector(
+        ".flatpickr-monthDropdown-months"
+      ) as HTMLSelectElement;
+
+      monthsDropdown.value = "3";
+
+      var evt = document.createEvent("HTMLEvents");
+      evt.initEvent("change", false, true);
+      monthsDropdown.dispatchEvent(evt);
+
+      expect(fp.currentMonth).toEqual(3);
+    });
   });
 
   describe("Localization", () => {

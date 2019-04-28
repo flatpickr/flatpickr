@@ -112,6 +112,7 @@ export type key =
   | "be"
   | "bg"
   | "bn"
+  | "bs"
   | "cat"
   | "cs"
   | "cy"
