@@ -1761,7 +1761,6 @@ function FlatpickrInstance(
 
     for (let m = 0; m < self.config.showMonths; m++) {
       const month = (<HTMLDivElement>self.daysContainer).children[m];
-      const prevMonth = (<HTMLDivElement>self.daysContainer).children[m - 1];
 
       for (let i = 0, l = month.children.length; i < l; i++) {
         const dayElem = month.children[i] as DayElement,
@@ -1792,26 +1791,17 @@ function FlatpickrInstance(
               : "endRange"
           );
 
-          if (
-            month.contains(elem) ||
-            !(
-              m > 0 &&
-              prevMonth &&
-              (<DayElement>prevMonth.lastChild).dateObj.getTime() >= timestamp
-            )
-          ) {
-            if (initialDate < hoverDate && timestamp === initialDate)
-              dayElem.classList.add("startRange");
-            else if (initialDate > hoverDate && timestamp === initialDate)
-              dayElem.classList.add("endRange");
+          if (initialDate < hoverDate && timestamp === initialDate)
+            dayElem.classList.add("startRange");
+          else if (initialDate > hoverDate && timestamp === initialDate)
+            dayElem.classList.add("endRange");
 
-            if (
-              timestamp >= minRange &&
-              (maxRange === 0 || timestamp <= maxRange) &&
-              isBetween(timestamp, initialDate, hoverDate)
-            )
-              dayElem.classList.add("inRange");
-          }
+          if (
+            timestamp >= minRange &&
+            (maxRange === 0 || timestamp <= maxRange) &&
+            isBetween(timestamp, initialDate, hoverDate)
+          )
+            dayElem.classList.add("inRange");
         }
       }
     }
