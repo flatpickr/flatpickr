@@ -1378,32 +1378,32 @@ describe("flatpickr", () => {
       createInstance({ mode: "time" });
       fp.open();
 
-      fp.minuteElement.focus();
+      expect(fp.hourElement && fp.minuteElement && fp.amPM).toBeDefined();
+
       simulate(
         "keydown",
-        document.activeElement,
+        fp.minuteElement as HTMLElement,
         {
           keyCode: 9, // Tab
         },
         KeyboardEvent
       );
-      expect(document.activeElement).toStrictEqual(fp.amPM);
+      expect(document.activeElement).toStrictEqual(fp.amPM as HTMLElement);
 
       simulate(
         "keydown",
-        document.activeElement,
+        fp.amPM as HTMLElement,
         {
           keyCode: 9, // Tab
           shiftKey: true,
         },
         KeyboardEvent
       );
-      expect(document.activeElement).toStrictEqual(fp.minuteElement);
+      expect(document.activeElement).toStrictEqual(fp.minuteElement as HTMLElement);
 
-      fp.amPM.focus();
       simulate(
         "keydown",
-        fp.amPM!,
+        fp.amPM as HTMLElement,
         {
           keyCode: 9, // Tab
         },
