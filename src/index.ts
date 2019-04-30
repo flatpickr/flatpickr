@@ -1918,6 +1918,11 @@ function FlatpickrInstance(
           : defaultAltFormat + ` h:i${userConfig.enableSeconds ? ":S" : ""} K`;
     }
 
+    if (!userConfig.altInputClass) {
+      self.config.altInputClass =
+        self.input.className + " " + self.config.altInputClass;
+    }
+
     Object.defineProperty(self.config, "minDate", {
       get: () => self.config._minDate,
       set: minMaxDateSetter("min"),
