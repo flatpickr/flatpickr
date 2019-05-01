@@ -15,7 +15,6 @@ module.exports =  {
       '@typescript-eslint/no-explicit-any': 'none',
       '@typescript-eslint/prefer-interface': 'none',
       '@typescript-eslint/array-type': 'none',
-      '@typescript-eslint/no-angle-bracket-type-assertion': 'none',
       '@typescript-eslint/no-unused-vars': 'none',
       '@typescript-eslint/no-non-null-assertion': 'none',
       '@typescript-eslint/no-object-literal-type-assertion': 'none',
