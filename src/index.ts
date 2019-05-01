@@ -754,7 +754,7 @@ function FlatpickrInstance(
     const endMonth = delta > 0 ? self.config.showMonths : -1;
 
     for (let m = startMonth; m != endMonth; m += delta) {
-      const month = (<HTMLDivElement>self.daysContainer).children[m];
+      const month = (self.daysContainer as HTMLDivElement).children[m];
       const startIndex = delta > 0 ? 0 : month.children.length - 1;
       const endIndex = delta > 0 ? month.children.length : -1;
 
@@ -780,7 +780,7 @@ function FlatpickrInstance(
       m != endMonth;
       m += loopDelta
     ) {
-      const month = (<HTMLDivElement>self.daysContainer).children[m];
+      const month = (self.daysContainer as HTMLDivElement).children[m];
       const startIndex =
         givenMonth - self.currentMonth === m
           ? current.$i + delta
@@ -1733,7 +1733,7 @@ function FlatpickrInstance(
 
     const hoverDate = elem
         ? elem.dateObj.getTime()
-        : (<DayElement>self.days.firstElementChild).dateObj.getTime(),
+        : (self.days.firstElementChild as DayElement).dateObj.getTime(),
       initialDate = (self.parseDate(
         self.selectedDates[0],
         undefined,
@@ -1760,7 +1760,7 @@ function FlatpickrInstance(
     }
 
     for (let m = 0; m < self.config.showMonths; m++) {
-      const month = (<HTMLDivElement>self.daysContainer).children[m];
+      const month = (self.daysContainer as HTMLElement).children[m];
 
       for (let i = 0, l = month.children.length; i < l; i++) {
         const dayElem = month.children[i] as DayElement,
@@ -1795,7 +1795,6 @@ function FlatpickrInstance(
             dayElem.classList.add("startRange");
           else if (initialDate > hoverDate && timestamp === initialDate)
             dayElem.classList.add("endRange");
-
           if (
             timestamp >= minRange &&
             (maxRange === 0 || timestamp <= maxRange) &&
@@ -1863,11 +1862,11 @@ function FlatpickrInstance(
       if (
         self.config.allowInput === false &&
         (e === undefined ||
-          !(<HTMLDivElement>self.timeContainer).contains(
+          !(self.timeContainer as HTMLDivElement).contains(
             e.relatedTarget as Node
           ))
       ) {
-        setTimeout(() => (<HTMLInputElement>self.hourElement).select(), 50);
+        setTimeout(() => (self.hourElement as HTMLInputElement).select(), 50);
       }
     }
   }
@@ -2741,7 +2740,7 @@ function FlatpickrInstance(
       curValue = parseInt(input.value, 10),
       delta =
         (e as IncrementEvent).delta ||
-        (isKeyDown ? ((<KeyboardEvent>e).which === 38 ? 1 : -1) : 0);
+        (isKeyDown ? ((e as KeyboardEvent).which === 38 ? 1 : -1) : 0);
 
     let newValue = curValue + step * delta;
 
