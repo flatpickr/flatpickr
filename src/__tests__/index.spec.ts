@@ -1384,6 +1384,9 @@ describe("flatpickr", () => {
 
       if (!fp.hourElement || !fp.minuteElement || !fp.amPM) return;
 
+      fp.minuteElement.focus();
+      expect(document.activeElement).toStrictEqual(fp.minuteElement);
+
       simulate(
         "keydown",
         fp.minuteElement,
