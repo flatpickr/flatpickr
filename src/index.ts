@@ -1977,6 +1977,11 @@ function FlatpickrInstance(
           : defaultAltFormat + ` h:i${userConfig.enableSeconds ? ":S" : ""} K`;
     }
 
+    if (!userConfig.altInputClass) {
+      self.config.altInputClass =
+        self.input.className + " " + self.config.altInputClass;
+    }
+
     Object.defineProperty(self.config, "minDate", {
       get: () => self.config._minDate,
       set: minMaxDateSetter("min"),
@@ -2502,7 +2507,7 @@ function FlatpickrInstance(
       // replicate self.element
       self.altInput = createElement<HTMLInputElement>(
         self.input.nodeName as "input",
-        self.input.className + " " + self.config.altInputClass
+        self.config.altInputClass
       );
       self._input = self.altInput;
       self.altInput.placeholder = self.input.placeholder;
