@@ -49,7 +49,7 @@ export interface Elements {
   secondElement?: HTMLInputElement;
   amPM?: HTMLSpanElement;
 
-  pluginElements: Array<Node>;
+  pluginElements: Node[];
 }
 
 export interface Formatting {
