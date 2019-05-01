@@ -6,7 +6,7 @@ module.exports =  {
       'plugin:prettier/recommended',  // Prettier rules for eslint
     ],
     parserOptions:  {
-      ecmaVersion:  5,  // Allows for the parsing of modern ECMAScript features
+      ecmaVersion:  2018,  // Allows for the parsing of modern ECMAScript features
       sourceType:  'module',  // Allows for the use of imports
     },
     rules: { // TODO: The following rules are turned off but need to be addressed.
