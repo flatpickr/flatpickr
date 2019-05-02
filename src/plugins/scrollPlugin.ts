@@ -9,8 +9,8 @@ const scroll = (e: WheelEvent) => {
   const ev = new CustomEvent("increment", {
     bubbles: true,
   });
-  (<any>ev).delta = delta(e);
-  (<HTMLInputElement>e.target).dispatchEvent(ev);
+  (ev as any).delta = delta(e);
+  (e.target as HTMLInputElement).dispatchEvent(ev);
 };
 
 function scrollMonth(fp: Instance) {

@@ -6,7 +6,7 @@ module.exports =  {
       'plugin:prettier/recommended',  // Prettier rules for eslint
     ],
     parserOptions:  {
-      ecmaVersion:  5,  // Allows for the parsing of modern ECMAScript features
+      ecmaVersion:  2018,  // Allows for the parsing of modern ECMAScript features
       sourceType:  'module',  // Allows for the use of imports
     },
     rules: { // TODO: The following rules are turned off but need to be addressed.
@@ -14,7 +14,6 @@ module.exports =  {
       '@typescript-eslint/explicit-function-return-type': 'none,',
       '@typescript-eslint/no-explicit-any': 'none',
       '@typescript-eslint/prefer-interface': 'none',
-      '@typescript-eslint/no-angle-bracket-type-assertion': 'none',
       '@typescript-eslint/no-unused-vars': 'none',
       '@typescript-eslint/no-non-null-assertion': 'none',
       '@typescript-eslint/no-object-literal-type-assertion': 'none',
