@@ -89,8 +89,8 @@ export type Instance = Elements &
     // Methods
     changeMonth: (
       value: number,
-      is_offset?: boolean,
-      from_keyboard?: boolean
+      isOffset?: boolean,
+      fromKeyboard?: boolean
     ) => void;
     changeYear: (year: number) => void;
     clear: (emitChangeEvent?: boolean, toInitial?: boolean) => void;
