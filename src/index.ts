@@ -1393,7 +1393,7 @@ function FlatpickrInstance(
       "navigationCurrentMonth",
       "selectedDateElem",
       "config",
-    ] as Array<keyof Instance>).forEach(k => {
+    ] as (keyof Instance)[]).forEach(k => {
       try {
         delete self[k as keyof Instance];
       } catch (_) {}
@@ -1912,7 +1912,7 @@ function FlatpickrInstance(
   }
 
   function parseConfig() {
-    const boolOpts: Array<keyof Options> = [
+    const boolOpts: (keyof Options)[] = [
       "wrap",
       "weekNumbers",
       "allowInput",
@@ -2323,7 +2323,7 @@ function FlatpickrInstance(
     inputDate: DateOption | DateOption[],
     format?: string
   ) {
-    let dates: Array<Date | undefined> = [];
+    let dates: (Date | undefined)[] = [];
     if (inputDate instanceof Array)
       dates = inputDate.map(d => self.parseDate(d, format));
     else if (inputDate instanceof Date || typeof inputDate === "number")
