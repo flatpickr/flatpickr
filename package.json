@@ -12,7 +12,7 @@
     "lint": "eslint --ignore-path .gitignore \"**/*.ts\"",
     "start": "npm run build:build -- --dev",
     "test": "run-s test:typecheck test:unit",
-    "test:typecheck": "tsc -p src --noEmit",
+    "test:typecheck": "tsc --noEmit",
     "test:unit": "jest --config config/jest.json",
     "coveralls": "npm run test:unit -- --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   },
