@@ -280,21 +280,21 @@ function FlatpickrInstance(
     let seconds = self.config.defaultSeconds;
 
     if (self.config.minDate !== undefined) {
-      const min_hr = self.config.minDate.getHours();
-      const min_minutes = self.config.minDate.getMinutes();
-      hours = Math.max(hours, min_hr);
-      if (hours === min_hr) minutes = Math.max(min_minutes, minutes);
-      if (hours === min_hr && minutes === min_minutes)
+      const minHr = self.config.minDate.getHours();
+      const minMinutes = self.config.minDate.getMinutes();
+      hours = Math.max(hours, minHr);
+      if (hours === minHr) minutes = Math.max(minMinutes, minutes);
+      if (hours === minHr && minutes === minMinutes)
         seconds = self.config.minDate.getSeconds();
     }
 
     if (self.config.maxDate !== undefined) {
-      const max_hr = self.config.maxDate.getHours();
-      const max_minutes = self.config.maxDate.getMinutes();
-      hours = Math.min(hours, max_hr);
+      const maxHr = self.config.maxDate.getHours();
+      const maxMinutes = self.config.maxDate.getMinutes();
+      hours = Math.min(hours, maxHr);
 
-      if (hours === max_hr) minutes = Math.min(max_minutes, minutes);
-      if (hours === max_hr && minutes === max_minutes)
+      if (hours === maxHr) minutes = Math.min(maxMinutes, minutes);
+      if (hours === maxHr && minutes === maxMinutes)
         seconds = self.config.maxDate.getSeconds();
     }
 
@@ -1251,8 +1251,8 @@ function FlatpickrInstance(
     };
   }
 
-  function changeMonth(value: number, is_offset = true) {
-    const delta = is_offset ? value : value - self.currentMonth;
+  function changeMonth(value: number, isOffset = true) {
+    const delta = isOffset ? value : value - self.currentMonth;
 
     if (
       (delta < 0 && self._hidePrevMonthArrow === true) ||
@@ -2873,6 +2873,7 @@ if (typeof jQuery !== "undefined") {
   };
 }
 
+// eslint-disable-next-line @typescript-eslint/camelcase
 Date.prototype.fp_incr = function(days: number | string) {
   return new Date(
     this.getFullYear(),

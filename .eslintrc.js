@@ -17,6 +17,6 @@ module.exports =  {
       '@typescript-eslint/no-unused-vars': 'none',
       '@typescript-eslint/no-non-null-assertion': 'none',
       '@typescript-eslint/no-object-literal-type-assertion': 'none',
-      '@typescript-eslint/camelcase': 'none',
+      '@typescript-eslint/camelcase': ['error', { allow: ['time_24hr', 'zh_tw'] }],
     },
   };

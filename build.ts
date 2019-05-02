@@ -6,7 +6,7 @@ import glob from "glob";
 import terser from "terser";
 import chokidar from "chokidar";
 import stylus from "stylus";
-import stylus_autoprefixer from "autoprefixer-stylus";
+import stylusAutoprefixer from "autoprefixer-stylus";
 
 import * as rollup from "rollup";
 
@@ -83,12 +83,12 @@ async function buildScripts() {
 }
 
 function buildExtras(folder: "plugins" | "l10n") {
-  return async function(changed_path?: string) {
-    const [src_paths, css_paths] = await Promise.all(
-      changed_path !== undefined
-        ? changed_path.endsWith(".ts")
-          ? [[changed_path], []]
-          : [[], [changed_path]]
+  return async function(changedPath?: string) {
+    const [srcPaths, cssPaths] = await Promise.all(
+      changedPath !== undefined
+        ? changedPath.endsWith(".ts")
+          ? [[changedPath], []]
+          : [[], [changedPath]]
         : [
             resolveGlob(`./src/${folder}/**/*.ts`),
             resolveGlob(`./src/${folder}/**/*.css`),
@@ -97,7 +97,7 @@ function buildExtras(folder: "plugins" | "l10n") {
 
     try {
       await Promise.all([
-        ...src_paths
+        ...srcPaths
           .filter(p => !p.includes(".spec.ts"))
           .map(async sourcePath => {
             const bundle = await rollup.rollup({
@@ -123,7 +123,7 @@ function buildExtras(folder: "plugins" | "l10n") {
                   : customModuleNames[fileName] || fileName,
             });
           }),
-        ...(css_paths.map(p => fs.copy(p, p.replace("src", "dist"))) as any),
+        ...(cssPaths.map(p => fs.copy(p, p.replace("src", "dist"))) as any),
       ]);
     } catch (err) {
       logErr(err);
@@ -139,7 +139,7 @@ async function transpileStyle(src: string, compress = false) {
       .include(`${__dirname}/src/style`)
       .include(`${__dirname}/src/style/themes`)
       .use(
-        stylus_autoprefixer({
+        stylusAutoprefixer({
           browsers: pkg.browserslist,
         })
       )
@@ -151,7 +151,7 @@ async function transpileStyle(src: string, compress = false) {
 
 async function buildStyle() {
   try {
-    const [src, src_ie] = await Promise.all([
+    const [src, srcIE] = await Promise.all([
       readFileAsync(paths.style),
       readFileAsync("./src/style/ie.styl"),
     ]);
@@ -159,7 +159,7 @@ async function buildStyle() {
     await Promise.all([
       fs.writeFile("./dist/flatpickr.css", await transpileStyle(src)),
       fs.writeFile("./dist/flatpickr.min.css", await transpileStyle(src, true)),
-      fs.writeFile("./dist/ie.css", await transpileStyle(src_ie)),
+      fs.writeFile("./dist/ie.css", await transpileStyle(srcIE)),
     ]);
   } catch (e) {
     logErr(e);
