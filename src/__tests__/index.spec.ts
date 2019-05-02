@@ -1378,10 +1378,18 @@ describe("flatpickr", () => {
       createInstance({ mode: "time" });
       fp.open();
 
+      expect(fp.hourElement).toBeDefined();
+      expect(fp.minuteElement).toBeDefined();
+      expect(fp.amPM).toBeDefined();
+
+      if (!fp.hourElement || !fp.minuteElement || !fp.amPM) return;
+
       fp.minuteElement.focus();
+      expect(document.activeElement).toStrictEqual(fp.minuteElement);
+
       simulate(
         "keydown",
-        document.activeElement,
+        fp.minuteElement,
         {
           keyCode: 9, // Tab
         },
@@ -1391,7 +1399,7 @@ describe("flatpickr", () => {
 
       simulate(
         "keydown",
-        document.activeElement,
+        fp.amPM,
         {
           keyCode: 9, // Tab
           shiftKey: true,
@@ -1400,10 +1408,9 @@ describe("flatpickr", () => {
       );
       expect(document.activeElement).toStrictEqual(fp.minuteElement);
 
-      fp.amPM.focus();
       simulate(
         "keydown",
-        fp.amPM!,
+        fp.amPM,
         {
           keyCode: 9, // Tab
         },
