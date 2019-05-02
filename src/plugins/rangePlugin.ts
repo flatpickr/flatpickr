@@ -16,6 +16,7 @@ function rangePlugin(config: Config = {}): Plugin {
     let dateFormat = "",
       secondInput: HTMLInputElement,
       // @ts-ignore
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       _firstInputFocused: boolean,
       _secondInputFocused: boolean,
       _prevDates: Date[];
