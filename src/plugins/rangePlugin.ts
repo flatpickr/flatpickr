@@ -15,9 +15,6 @@ function rangePlugin(config: Config = {}): Plugin {
   return function(fp) {
     let dateFormat = "",
       secondInput: HTMLInputElement,
-      // @ts-ignore
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      _firstInputFocused: boolean,
       _secondInputFocused: boolean,
       _prevDates: Date[];
 
@@ -48,7 +45,6 @@ function rangePlugin(config: Config = {}): Plugin {
           fp.jumpToDate(fp.selectedDates[1]);
         }
 
-        _firstInputFocused = false;
         _secondInputFocused = true;
         fp.isOpen = false;
         fp.open(
@@ -102,7 +98,7 @@ function rangePlugin(config: Config = {}): Plugin {
         fp._bind(fp._input, "focus", () => {
           fp.latestSelectedDateObj = fp.selectedDates[0];
           fp._setHoursFromDate(fp.selectedDates[0]);
-          [_firstInputFocused, _secondInputFocused] = [true, false];
+          _secondInputFocused = false;
           fp.jumpToDate(fp.selectedDates[0]);
         });
 
