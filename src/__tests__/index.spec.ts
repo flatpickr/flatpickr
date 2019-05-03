@@ -1428,14 +1428,19 @@ describe("flatpickr", () => {
       const monthsDropdown = fp.calendarContainer.querySelector(
         ".flatpickr-monthDropdown-months"
       );
-      const months = monthsDropdown!.querySelectorAll(
+
+      expect(monthsDropdown).toBeTruthy();
+      if (!monthsDropdown) return;
+
+      const months = monthsDropdown.querySelectorAll(
         ".flatpickr-monthDropdown-month"
       );
 
       expect(months.length).toEqual(8);
+      if (months.length != 8) return;
 
-      expect(months[0]!.innerHTML).toEqual("May");
-      expect(months[7]!.innerHTML).toEqual("December");
+      expect(months[0].innerHTML).toEqual("May");
+      expect(months[7].innerHTML).toEqual("December");
     });
 
     it("dropdown should correctly load months with maxDate", () => {
@@ -1447,14 +1452,19 @@ describe("flatpickr", () => {
       const monthsDropdown = fp.calendarContainer.querySelector(
         ".flatpickr-monthDropdown-months"
       );
-      const months = monthsDropdown!.querySelectorAll(
+
+      expect(monthsDropdown).toBeTruthy();
+      if (!monthsDropdown) return;
+
+      const months = monthsDropdown.querySelectorAll(
         ".flatpickr-monthDropdown-month"
       );
 
       expect(months.length).toEqual(9);
+      if (months.length != 9) return;
 
-      expect(months[0]!.innerHTML).toEqual("January");
-      expect(months[months.length - 1]!.innerHTML).toEqual("September");
+      expect(months[0].innerHTML).toEqual("January");
+      expect(months[months.length - 1].innerHTML).toEqual("September");
     });
 
     it("dropdown should change month", () => {

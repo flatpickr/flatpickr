@@ -1342,8 +1342,8 @@ function FlatpickrInstance(
 
         if (wrapper.parentNode) {
           while (wrapper.firstChild)
-            wrapper.parentNode!.insertBefore(wrapper.firstChild, wrapper);
-          wrapper.parentNode!.removeChild(wrapper);
+            wrapper.parentNode.insertBefore(wrapper.firstChild, wrapper);
+          wrapper.parentNode.removeChild(wrapper);
         }
       } else
         self.calendarContainer.parentNode.removeChild(self.calendarContainer);
@@ -1683,7 +1683,8 @@ function FlatpickrInstance(
             }
           } else if (
             !self.config.noCalendar &&
-            self.daysContainer!.contains(e.target as Node) &&
+            self.daysContainer &&
+            self.daysContainer.contains(e.target as Node) &&
             e.shiftKey
           ) {
             e.preventDefault();
@@ -1740,16 +1741,14 @@ function FlatpickrInstance(
         true
       ) as Date).getTime(),
       rangeStartDate = Math.min(hoverDate, self.selectedDates[0].getTime()),
-      rangeEndDate = Math.max(hoverDate, self.selectedDates[0].getTime()),
-      lastDate = (self.daysContainer!.lastChild!
-        .lastChild as DayElement).dateObj.getTime();
+      rangeEndDate = Math.max(hoverDate, self.selectedDates[0].getTime());
 
     let containsDisabled = false;
 
     let minRange = 0,
       maxRange = 0;
 
-    for (let t = rangeStartDate; t < lastDate; t += duration.DAY) {
+    for (let t = rangeStartDate; t < rangeEndDate; t += duration.DAY) {
       if (!isEnabled(new Date(t), true)) {
         containsDisabled =
           containsDisabled || (t > rangeStartDate && t < rangeEndDate);
@@ -2734,9 +2733,9 @@ function FlatpickrInstance(
         self.l10n.amPM[int(self.amPM.textContent === self.l10n.amPM[0])];
     }
 
-    const min = parseFloat(input.getAttribute("min")!),
-      max = parseFloat(input.getAttribute("max")!),
-      step = parseFloat(input.getAttribute("step")!),
+    const min = parseFloat(input.getAttribute("min") as string),
+      max = parseFloat(input.getAttribute("max") as string),
+      step = parseFloat(input.getAttribute("step") as string),
       curValue = parseInt(input.value, 10),
       delta =
         (e as IncrementEvent).delta ||

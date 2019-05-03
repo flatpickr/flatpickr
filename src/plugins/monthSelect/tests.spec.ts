@@ -53,6 +53,10 @@ describe("monthSelect", () => {
     }) as Instance;
 
     expect(fp.input.value).toEqual("03.19");
-    expect(fp.altInput!.value).toEqual("03 19");
+
+    expect(fp.altInput).toBeDefined();
+    if (!fp.altInput) return;
+
+    expect(fp.altInput.value).toEqual("03 19");
   });
 });
