@@ -14,7 +14,6 @@ module.exports =  {
       '@typescript-eslint/explicit-function-return-type': 'none,',
       '@typescript-eslint/no-explicit-any': 'none',
       '@typescript-eslint/prefer-interface': 'none',
-      '@typescript-eslint/no-non-null-assertion': 'none',
       '@typescript-eslint/no-object-literal-type-assertion': 'none',
       '@typescript-eslint/camelcase': ['error', { allow: ['time_24hr', 'zh_tw'] }],
     },
