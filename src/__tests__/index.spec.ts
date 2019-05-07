@@ -1142,9 +1142,9 @@ describe("flatpickr", () => {
         defaultMinute: 45,
       });
 
-      simulate("mousedown", <DayElement>fp.todayDateElem, { which: 1 });
-      expect((<Date>fp.latestSelectedDateObj).getHours()).toEqual(12);
-      expect((<Date>fp.latestSelectedDateObj).getMinutes()).toEqual(45);
+      simulate("mousedown", fp.todayDateElem as DayElement, { which: 1 });
+      expect((fp.latestSelectedDateObj as Date).getHours()).toEqual(12);
+      expect((fp.latestSelectedDateObj as Date).getMinutes()).toEqual(45);
 
       createInstance({
         enableTime: true,
@@ -1153,9 +1153,9 @@ describe("flatpickr", () => {
         defaultMinute: 0,
       });
 
-      simulate("mousedown", <DayElement>fp.todayDateElem, { which: 1 });
-      expect((<Date>fp.latestSelectedDateObj).getHours()).toEqual(6);
-      expect((<Date>fp.latestSelectedDateObj).getMinutes()).toEqual(30);
+      simulate("mousedown", fp.todayDateElem as DayElement, { which: 1 });
+      expect((fp.latestSelectedDateObj as Date).getHours()).toEqual(6);
+      expect((fp.latestSelectedDateObj as Date).getMinutes()).toEqual(30);
     });
 
     it("time picker: minDate + bounds", () => {
@@ -1378,10 +1378,18 @@ describe("flatpickr", () => {
       createInstance({ mode: "time" });
       fp.open();
 
+      expect(fp.hourElement).toBeDefined();
+      expect(fp.minuteElement).toBeDefined();
+      expect(fp.amPM).toBeDefined();
+
+      if (!fp.hourElement || !fp.minuteElement || !fp.amPM) return;
+
       fp.minuteElement.focus();
+      expect(document.activeElement).toStrictEqual(fp.minuteElement);
+
       simulate(
         "keydown",
-        document.activeElement,
+        fp.minuteElement,
         {
           keyCode: 9, // Tab
         },
@@ -1391,7 +1399,7 @@ describe("flatpickr", () => {
 
       simulate(
         "keydown",
-        document.activeElement,
+        fp.amPM,
         {
           keyCode: 9, // Tab
           shiftKey: true,
@@ -1400,10 +1408,9 @@ describe("flatpickr", () => {
       );
       expect(document.activeElement).toStrictEqual(fp.minuteElement);
 
-      fp.amPM.focus();
       simulate(
         "keydown",
-        fp.amPM!,
+        fp.amPM,
         {
           keyCode: 9, // Tab
         },
@@ -1421,14 +1428,19 @@ describe("flatpickr", () => {
       const monthsDropdown = fp.calendarContainer.querySelector(
         ".flatpickr-monthDropdown-months"
       );
-      const months = monthsDropdown!.querySelectorAll(
+
+      expect(monthsDropdown).toBeTruthy();
+      if (!monthsDropdown) return;
+
+      const months = monthsDropdown.querySelectorAll(
         ".flatpickr-monthDropdown-month"
       );
 
       expect(months.length).toEqual(8);
+      if (months.length != 8) return;
 
-      expect(months[0]!.innerHTML).toEqual("May");
-      expect(months[7]!.innerHTML).toEqual("December");
+      expect(months[0].innerHTML).toEqual("May");
+      expect(months[7].innerHTML).toEqual("December");
     });
 
     it("dropdown should correctly load months with maxDate", () => {
@@ -1440,14 +1452,19 @@ describe("flatpickr", () => {
       const monthsDropdown = fp.calendarContainer.querySelector(
         ".flatpickr-monthDropdown-months"
       );
-      const months = monthsDropdown!.querySelectorAll(
+
+      expect(monthsDropdown).toBeTruthy();
+      if (!monthsDropdown) return;
+
+      const months = monthsDropdown.querySelectorAll(
         ".flatpickr-monthDropdown-month"
       );
 
       expect(months.length).toEqual(9);
+      if (months.length != 9) return;
 
-      expect(months[0]!.innerHTML).toEqual("January");
-      expect(months[months.length - 1]!.innerHTML).toEqual("September");
+      expect(months[0].innerHTML).toEqual("January");
+      expect(months[months.length - 1].innerHTML).toEqual("September");
     });
 
     it("dropdown should change month", () => {

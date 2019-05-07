@@ -138,40 +138,44 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         return;
       }
 
-      const currentlySelected = fp.rContainer!.querySelector(
+      if (!fp.rContainer || !self.monthsContainer) return;
+
+      const currentlySelected = fp.rContainer.querySelector(
         ".flatpickr-monthSelect-month.selected"
       ) as HTMLElement;
 
       let index = Array.prototype.indexOf.call(
-        self.monthsContainer!.children,
+        self.monthsContainer.children,
         document.activeElement
       );
 
       if (index === -1) {
         const target =
-          currentlySelected || self.monthsContainer!.firstElementChild;
+          currentlySelected || self.monthsContainer.firstElementChild;
         target.focus();
         index = (target as MonthElement).$i;
       }
 
       if (shouldMove) {
-        (self.monthsContainer!.children[
+        (self.monthsContainer.children[
           (12 + index + shifts[e.keyCode]) % 12
         ] as HTMLElement).focus();
       } else if (
         e.keyCode === 13 &&
-        self.monthsContainer!.contains(document.activeElement)
+        self.monthsContainer.contains(document.activeElement)
       ) {
         setMonth((document.activeElement as MonthElement).dateObj);
       }
     }
 
     function destroyPluginInstance() {
-      self
-        .monthsContainer!.querySelectorAll(".flatpickr-monthSelect-month")
-        .forEach(element => {
-          element.removeEventListener("click", selectMonth);
-        });
+      if (self.monthsContainer !== null) {
+        self.monthsContainer
+          .querySelectorAll(".flatpickr-monthSelect-month")
+          .forEach(element => {
+            element.removeEventListener("click", selectMonth);
+          });
+      }
     }
 
     return {
