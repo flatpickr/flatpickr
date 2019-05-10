@@ -240,4 +240,13 @@ export const formats: Formats = {
 
   // last two digits of year e.g. 16 for 2016
   y: (date: Date) => String(date.getFullYear()).substring(2),
+  
+  // regular quarter (Q1 = Jan-Mar) 
+  Q: (date: Date) => 1 + Math.floor(date.getMonth() / 3),
+  
+  // US fiscal quarter (Q1 = Oct-Dec)
+  A: (date: Date) => (2 + Math.floor(date.getMonth() / 3)) % 4,
+  
+  // UK fiscal quarter (Q1 = Apr-Jun)
+  B: (date: Date) => (4 + Math.floor(date.getMonth() / 3)) % 4,
 };
