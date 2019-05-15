@@ -1621,7 +1621,7 @@ function FlatpickrInstance(
 
         case 37:
         case 39:
-          if (!isTimeObj) {
+          if (!isTimeObj && !isInput) {
             e.preventDefault();
 
             if (
