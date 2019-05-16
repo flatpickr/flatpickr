@@ -31,7 +31,9 @@ function rangePlugin(config: Config = {}): Plugin {
         }
 
         if (fp.config.wrap) {
-          secondInput = (secondInput.querySelector("[data-input]") as HTMLInputElement);
+          secondInput = secondInput.querySelector(
+            "[data-input]"
+          ) as HTMLInputElement;
         }
       } else {
         secondInput = fp._input.cloneNode() as HTMLInputElement;
