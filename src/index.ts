@@ -2301,6 +2301,7 @@ function FlatpickrInstance(
     option: K | { [k in K]?: Options[k] },
     value?: any
   ) {
+    if (self.isMobile) return;
     if (option !== null && typeof option === "object") {
       Object.assign(self.config, option);
       for (const key in option) {
