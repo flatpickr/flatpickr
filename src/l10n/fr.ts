@@ -54,6 +54,20 @@ export const French: CustomLocale = {
       "novembre",
       "décembre",
     ],
+    longhandGenitive: [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+    ],
   },
 
   ordinal: nth => {

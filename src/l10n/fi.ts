@@ -54,6 +54,20 @@ export const Finnish: CustomLocale = {
       "Marraskuu",
       "Joulukuu",
     ],
+    longhandGenitive: [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+    ],
   },
 
   ordinal: () => {

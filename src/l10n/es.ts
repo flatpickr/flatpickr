@@ -52,6 +52,20 @@ export const Spanish: CustomLocale = {
       "Noviembre",
       "Diciembre",
     ],
+    longhandGenitive: [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+    ],
   },
 
   ordinal: () => {

@@ -52,6 +52,20 @@ export const Danish: CustomLocale = {
       "november",
       "december",
     ],
+    longhandGenitive: [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+    ],
   },
 
   ordinal: () => {

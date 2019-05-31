@@ -52,6 +52,20 @@ export const Bangla: CustomLocale = {
       "নভেম্বর",
       "ডিসেম্বর",
     ],
+    longhandGenitive: [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+    ],
   },
 };
 

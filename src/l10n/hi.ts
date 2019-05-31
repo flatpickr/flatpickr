@@ -52,6 +52,20 @@ export const Hindi: CustomLocale = {
       "नवम्बर",
       "दिसम्बर",
     ],
+    longhandGenitive: [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+    ],
   },
 };
 

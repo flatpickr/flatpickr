@@ -54,6 +54,20 @@ export const Hungarian: CustomLocale = {
       "November",
       "December",
     ],
+    longhandGenitive: [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+    ],
   },
 
   ordinal: function() {
