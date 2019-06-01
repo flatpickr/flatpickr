@@ -2381,7 +2381,7 @@ function FlatpickrInstance(
     setSelectedDate(date, format);
 
     self.showTimeInput = self.selectedDates.length > 0;
-    self.latestSelectedDateObj = self.selectedDates[0];
+    self.latestSelectedDateObj = self.selectedDates[self.selectedDates.length - 1];
 
     self.redraw();
     jumpToDate();
