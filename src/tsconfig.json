@@ -15,7 +15,4 @@
     ],
     "baseUrl": "./"
   },
-  "exclude": [
-    "./__tests__"
-  ]
 }
