@@ -1,3 +1,15 @@
+Symol "R" in altFormat option will be replased genitive of month.
+
+For build lib need:
+
+- clone repository
+- in folder of clone
+- npm install
+- npm i webpack webpack-cli --save-dev
+- npm run build
+
+after this steps node create folder dist where we get all lib files
+
 ## flatpickr - javascript datetime picker
 [![Build Status](https://circleci.com/gh/flatpickr/flatpickr/tree/master.svg?style=shield)](https://circleci.com/gh/flatpickr/flatpickr/tree/master)
 
