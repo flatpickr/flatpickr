@@ -14,5 +14,5 @@
       "esnext.asynciterable"
     ],
     "baseUrl": "./"
-  },
+  }
 }
