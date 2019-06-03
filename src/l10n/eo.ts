@@ -59,6 +59,20 @@ export const Esperanto: CustomLocale = {
       "novembro",
       "decembro",
     ],
+    longhandGenitive: [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+    ],
   },
 
   ordinal: () => {

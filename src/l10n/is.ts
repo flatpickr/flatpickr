@@ -52,6 +52,20 @@ export const Icelandic: CustomLocale = {
       "Nóvember",
       "Desember",
     ],
+    longhandGenitive: [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+    ],
   },
 
   ordinal: () => {

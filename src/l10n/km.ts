@@ -51,6 +51,20 @@ export const Khmer: CustomLocale = {
       "វិច្ឆិកា",
       "ធ្នូ",
     ],
+    longhandGenitive: [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+    ],
   },
   ordinal: () => {
     return "";

@@ -32,6 +32,20 @@ export type Locale = {
       string,
       string
     ];
+    longhandGenitive: [
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string
+    ];
   };
   daysInMonth: [
     number,
@@ -89,6 +103,20 @@ export type CustomLocale = {
       string
     ];
     longhand: [
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string
+    ];
+    longhandGenitive: [
       string,
       string,
       string,

@@ -52,6 +52,20 @@ export const Korean: CustomLocale = {
       "11월",
       "12월",
     ],
+    longhandGenitive: [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+    ],
   },
 
   ordinal: () => {

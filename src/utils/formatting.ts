@@ -5,6 +5,7 @@ import { ParsedOptions } from "../types/options";
 export type token =
   | "D"
   | "F"
+  | "R"
   | "G"
   | "H"
   | "J"
@@ -35,6 +36,11 @@ export const monthToStr = (
   locale: Locale
 ) => locale.months[shorthand ? "shorthand" : "longhand"][monthNumber];
 
+export const genitiveMonthToStr = (
+  monthNumber: number,
+  locale: Locale
+) => locale.months.longhandGenitive [monthNumber];
+
 export type RevFormatFn = (
   date: Date,
   data: string,
@@ -45,6 +51,9 @@ export const revFormat: RevFormat = {
   D: doNothing,
   F: function(dateObj: Date, monthName: string, locale: Locale) {
     dateObj.setMonth(locale.months.longhand.indexOf(monthName));
+  },
+  R: function(dateObj: Date, monthName: string, locale: Locale) {
+    dateObj.setMonth(locale.months.longhandGenitive.indexOf(monthName));
   },
   G: (dateObj: Date, hour: string) => {
     dateObj.setHours(parseFloat(hour));
@@ -133,6 +142,7 @@ export const tokenRegex: TokenRegex = {
   W: "(\\d\\d|\\d)",
   Y: "(\\d{4})",
   Z: "(.+)",
+  R: "(\\w+)",
   d: "(\\d\\d|\\d)",
   h: "(\\d\\d|\\d)",
   i: "(\\d\\d|\\d)",
@@ -166,6 +176,14 @@ export const formats: Formats = {
     return monthToStr(
       (formats.n(date, locale, options) as number) - 1,
       false,
+      locale
+    );
+  },
+
+  //full month name for locales with genitive case e.g Января
+  R: function(date: Date, locale: Locale, options: ParsedOptions) {
+    return genitiveMonthToStr(
+      (formats.n(date, locale, options) as number) - 1,
       locale
     );
   },

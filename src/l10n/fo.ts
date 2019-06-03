@@ -52,6 +52,20 @@ export const Faroese: CustomLocale = {
       "Novembur",
       "Desembur",
     ],
+    longhandGenitive: [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+    ],
   },
 
   ordinal: () => {
