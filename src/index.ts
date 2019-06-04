@@ -2815,7 +2815,11 @@ function _flatpickr(
 }
 
 /* istanbul ignore next */
-if (typeof HTMLElement !== "undefined") {
+if (
+  typeof HTMLElement !== "undefined" &&
+  typeof HTMLCollection !== "undefined" &&
+  typeof NodeList !== "undefined"
+) {
   // browser env
   HTMLCollection.prototype.flatpickr = NodeList.prototype.flatpickr = function(
     config?: Options
