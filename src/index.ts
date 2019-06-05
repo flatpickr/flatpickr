@@ -2872,7 +2872,7 @@ flatpickr.formatDate = createDateFormatter({});
 flatpickr.compareDates = compareDates;
 
 /* istanbul ignore next */
-if (typeof jQuery !== "undefined") {
+if (typeof jQuery !== "undefined" && typeof jQuery.fn !== "undefined") {
   (jQuery.fn as any).flatpickr = function(config: Options) {
     return _flatpickr(this, config);
   };
