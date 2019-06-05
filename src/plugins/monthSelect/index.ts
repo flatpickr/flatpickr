@@ -32,11 +32,12 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
       fp.rContainer.removeChild(fp.daysContainer);
       fp.rContainer.removeChild(fp.weekdayContainer);
 
-      fp.monthElements.forEach(element => {
-        if (!element.parentNode) return;
+      for (let index = 0; index < fp.monthElements.length; index++) {
+        const element = fp.monthElements[index];
+        if (!element.parentNode) continue;
 
         element.parentNode.removeChild(element);
-      });
+      }
     }
 
     function addListeners() {
@@ -72,7 +73,7 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         );
         month.dateObj = new Date(fp.currentYear, i);
         month.$i = i;
-        month.textContent = monthToStr(i, config.shorthand === true, fp.l10n);
+        month.textContent = monthToStr(i, config.shorthand, fp.l10n);
         month.tabIndex = -1;
         month.addEventListener("click", selectMonth);
         self.monthsContainer.appendChild(month);
@@ -88,9 +89,9 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         ".flatpickr-monthSelect-month.selected"
       );
 
-      currentlySelected.forEach(month => {
-        month.classList.remove("selected");
-      });
+      for (let index = 0; index < currentlySelected.length; index++) {
+        currentlySelected[index].classList.remove("selected");
+      }
 
       const month = fp.rContainer.querySelector(
         `.flatpickr-monthSelect-month:nth-child(${fp.currentMonth + 1})`
@@ -170,11 +171,13 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
 
     function destroyPluginInstance() {
       if (self.monthsContainer !== null) {
-        self.monthsContainer
-          .querySelectorAll(".flatpickr-monthSelect-month")
-          .forEach(element => {
-            element.removeEventListener("click", selectMonth);
-          });
+        const months = self.monthsContainer.querySelectorAll(
+          ".flatpickr-monthSelect-month"
+        );
+
+        for (let index = 0; index < months.length; index++) {
+          months[index].removeEventListener("click", selectMonth);
+        }
       }
     }
 
