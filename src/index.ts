@@ -1099,12 +1099,17 @@ function FlatpickrInstance(
     self.timeContainer.tabIndex = -1;
     const separator = createElement("span", "flatpickr-time-separator", ":");
 
-    const hourInput = createNumberInput("flatpickr-hour");
+    const hourInput = createNumberInput("flatpickr-hour", {
+      "aria-label": self.l10n.hourAriaLabel,
+    });
     self.hourElement = hourInput.getElementsByTagName(
       "input"
     )[0] as HTMLInputElement;
 
-    const minuteInput = createNumberInput("flatpickr-minute");
+    const minuteInput = createNumberInput("flatpickr-minute", {
+      "aria-label": self.l10n.minuteAriaLabel,
+    });
+
     self.minuteElement = minuteInput.getElementsByTagName(
       "input"
     )[0] as HTMLInputElement;
@@ -2376,7 +2381,8 @@ function FlatpickrInstance(
     setSelectedDate(date, format);
 
     self.showTimeInput = self.selectedDates.length > 0;
-    self.latestSelectedDateObj = self.selectedDates[self.selectedDates.length - 1];
+    self.latestSelectedDateObj =
+      self.selectedDates[self.selectedDates.length - 1];
 
     self.redraw();
     jumpToDate();
