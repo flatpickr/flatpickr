@@ -52,7 +52,7 @@ export const Indonesian: CustomLocale = {
     return "";
   },
   time_24hr: true,
-  rangeSeparator: ' - '
+  rangeSeparator: " - ",
 };
 
 fp.l10ns.id = Indonesian;

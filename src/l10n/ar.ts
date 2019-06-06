@@ -41,7 +41,7 @@ export const Arabic: CustomLocale = {
     ],
   },
 
-  rangeSeparator: ' - ',
+  rangeSeparator: " - ",
 };
 
 fp.l10ns.ar = Arabic;
