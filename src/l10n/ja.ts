@@ -54,7 +54,7 @@ export const Japanese: CustomLocale = {
     ],
   },
   time_24hr: true,
-  rangeSeparator: ' から ',
+  rangeSeparator: " から ",
 };
 
 fp.l10ns.ja = Japanese;

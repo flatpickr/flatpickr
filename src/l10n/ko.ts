@@ -58,7 +58,7 @@ export const Korean: CustomLocale = {
     return "일";
   },
 
-  rangeSeparator: ' ~ ',
+  rangeSeparator: " ~ ",
 };
 
 fp.l10ns.ko = Korean;
