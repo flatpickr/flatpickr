@@ -29,6 +29,7 @@ import { Indonesian as id } from "./id";
 import { Icelandic as is } from "./is";
 import { Italian as it } from "./it";
 import { Japanese as ja } from "./ja";
+import { Georgian as ka } from "./ka";
 import { Korean as ko } from "./ko";
 import { Khmer as km } from "./km";
 import { Kazakh as kz } from "./kz";
@@ -89,6 +90,7 @@ const l10n: Record<key, CustomLocale> = {
   is,
   it,
   ja,
+  ka,
   ko,
   km,
   kz,

@@ -140,6 +140,7 @@ export type key =
   | "is"
   | "it"
   | "ja"
+  | "ka"
   | "ko"
   | "km"
   | "kz"
