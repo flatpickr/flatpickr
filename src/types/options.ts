@@ -164,6 +164,9 @@ By default, Flatpickr utilizes native datetime widgets unless certain options (e
   /* Date selection mode, defaults to "single" */
   mode: "single" | "multiple" | "range" | "time";
 
+  /* How the month selector in the calendar should be shown */
+  monthSelectorType: "dropdown" | "static";
+
   /* HTML for the right arrow icon, used to switch months. */
   nextArrow: string;
 
@@ -242,9 +245,6 @@ Use it along with "enableTime" to create a time picker. */
 
   /* See https://chmln.github.io/flatpickr/examples/#flatpickr-external-elements */
   wrap: boolean;
-
-  /* How the month selector in the calendar should be shown */
-  monthSelectorType: "dropdown" | "static";
 }
 
 export type Options = Partial<BaseOptions>;
@@ -289,6 +289,7 @@ export interface ParsedOptions {
   minTime?: Date;
   minuteIncrement: number;
   mode: BaseOptions["mode"];
+  monthSelectorType: string;
   nextArrow: string;
   noCalendar: boolean;
   now: Date;
@@ -315,7 +316,6 @@ export interface ParsedOptions {
   time_24hr: boolean;
   weekNumbers: boolean;
   wrap: boolean;
-  monthSelectorType: string;
 }
 
 export const defaults: ParsedOptions = {
@@ -370,6 +370,7 @@ export const defaults: ParsedOptions = {
   locale: "default",
   minuteIncrement: 5,
   mode: "single",
+  monthSelectorType: "dropdown",
   nextArrow:
     "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M13.207 8.472l-7.854 7.854-0.707-0.707 7.146-7.146-7.146-7.148 0.707-0.707 7.854 7.854z' /></svg>",
   noCalendar: false,
@@ -397,5 +398,4 @@ export const defaults: ParsedOptions = {
   time_24hr: false,
   weekNumbers: false,
   wrap: false,
-  monthSelectorType: "dropdown",
 };
