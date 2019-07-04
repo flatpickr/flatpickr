@@ -951,7 +951,11 @@ function FlatpickrInstance(
       );
 
       month.value = new Date(self.currentYear, i).getMonth().toString();
-      month.textContent = monthToStr(i, false, self.l10n);
+      month.textContent = monthToStr(
+        i,
+        self.config.shorthandCurrentMonth,
+        self.l10n
+      );
       month.tabIndex = -1;
 
       if (self.currentMonth === i) {
