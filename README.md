@@ -29,7 +29,7 @@ Feature overview:
 - Display dates in a human-friendly format
 - Easily disable specific dates, date ranges, or any date using arbitrary logic
 - Week numbers
-- 50 locales
+- 51 locales
 - 8 colorful themes (incl. dark and material)
 - Numerous plugins
 - Libraries available for React, Angular, Vue, Ember, and more
