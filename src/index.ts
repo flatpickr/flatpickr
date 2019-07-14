@@ -916,7 +916,11 @@ function FlatpickrInstance(
   }
 
   function buildMonthSwitch() {
-    if (self.config.showMonths > 1) return;
+    if (
+      self.config.showMonths > 1 ||
+      self.config.monthSelectorType !== "dropdown"
+    )
+      return;
 
     const shouldBuildMonth = function(month: number): boolean {
       if (
@@ -968,7 +972,10 @@ function FlatpickrInstance(
 
     let monthElement;
 
-    if (self.config.showMonths > 1) {
+    if (
+      self.config.showMonths > 1 ||
+      self.config.monthSelectorType === "static"
+    ) {
       monthElement = createElement<HTMLSpanElement>("span", "cur-month");
     } else {
       self.monthsDropdownContainer = createElement<HTMLSelectElement>(
@@ -2654,7 +2661,10 @@ function FlatpickrInstance(
       const d = new Date(self.currentYear, self.currentMonth, 1);
       d.setMonth(self.currentMonth + i);
 
-      if (self.config.showMonths > 1) {
+      if (
+        self.config.showMonths > 1 ||
+        self.config.monthSelectorType === "static"
+      ) {
         self.monthElements[i].textContent =
           monthToStr(
             d.getMonth(),
