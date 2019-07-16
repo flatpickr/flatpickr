@@ -60,7 +60,9 @@ export const Khmer: CustomLocale = {
   weekAbbreviation: "សប្តាហ៍",
   scrollTitle: "រំកិលដើម្បីបង្កើន",
   toggleTitle: "ចុចដើម្បីផ្លាស់ប្ដូរ",
-  yearAriaLabel: "ឆ្នាំ",
+  ariaLabels: {
+    year: "ឆ្នាំ",
+  },
   time_24hr: true,
 };
 

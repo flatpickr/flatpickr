@@ -61,7 +61,9 @@ export const Georgian: CustomLocale = {
   scrollTitle: "დასქროლეთ გასადიდებლად",
   toggleTitle: "დააკლიკეთ გადართვისთვის",
   amPM: ["AM", "PM"],
-  yearAriaLabel: "წელი",
+  ariaLabels: {
+    year: "წელი",
+  },
   time_24hr: true,
 };
 

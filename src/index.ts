@@ -1002,7 +1002,7 @@ function FlatpickrInstance(
     const yearElement = yearInput.getElementsByTagName(
       "input"
     )[0] as HTMLInputElement;
-    yearElement.setAttribute("aria-label", self.l10n.yearAriaLabel);
+    yearElement.setAttribute("aria-label", self.l10n.ariaLabels.year);
 
     if (self.config.minDate) {
       yearElement.setAttribute(
@@ -1068,9 +1068,17 @@ function FlatpickrInstance(
       "flatpickr-prev-month"
     );
     self.prevMonthNav.innerHTML = self.config.prevArrow;
+    self.prevMonthNav.setAttribute(
+      "aria-label",
+      self.l10n.ariaLabels.previousMonthNav
+    );
 
     self.nextMonthNav = createElement("span", "flatpickr-next-month");
     self.nextMonthNav.innerHTML = self.config.nextArrow;
+    self.nextMonthNav.setAttribute(
+      "aria-label",
+      self.l10n.ariaLabels.nextMonthNav
+    );
 
     buildMonths();
 
@@ -1111,14 +1119,14 @@ function FlatpickrInstance(
     const separator = createElement("span", "flatpickr-time-separator", ":");
 
     const hourInput = createNumberInput("flatpickr-hour", {
-      "aria-label": self.l10n.hourAriaLabel,
+      "aria-label": self.l10n.ariaLabels.hour,
     });
     self.hourElement = hourInput.getElementsByTagName(
       "input"
     )[0] as HTMLInputElement;
 
     const minuteInput = createNumberInput("flatpickr-minute", {
-      "aria-label": self.l10n.minuteAriaLabel,
+      "aria-label": self.l10n.ariaLabels.minute,
     });
 
     self.minuteElement = minuteInput.getElementsByTagName(

@@ -61,7 +61,9 @@ export const Czech: CustomLocale = {
   scrollTitle: "Rolujte pro změnu",
   toggleTitle: "Přepnout dopoledne/odpoledne",
   amPM: ["dop.", "odp."],
-  yearAriaLabel: "Rok",
+  ariaLabels: {
+    year: "Rok",
+  },
   time_24hr: true,
 };
 

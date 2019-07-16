@@ -61,7 +61,9 @@ export const Belarusian: CustomLocale = {
   scrollTitle: "Пракруціце для павелічэння",
   toggleTitle: "Націсніце для пераключэння",
   amPM: ["ДП", "ПП"],
-  yearAriaLabel: "Год",
+  ariaLabels: {
+    year: "Год",
+  },
   time_24hr: true,
 };
 
