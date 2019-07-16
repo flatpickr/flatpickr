@@ -76,8 +76,8 @@ export type CustomLocale = {
     year?: Locale["ariaLabels"]["year"];
     hour?: Locale["ariaLabels"]["hour"];
     minute?: Locale["ariaLabels"]["minute"];
-    nextMonth?: Locale["ariaLabels"]["nextMonthNav"];
-    previousMonth?: Locale["ariaLabels"]["previousMonthNav"];
+    nextMonthNav?: Locale["ariaLabels"]["nextMonthNav"];
+    previousMonthNav?: Locale["ariaLabels"]["previousMonthNav"];
   };
   amPM?: Locale["amPM"];
   time_24hr?: Locale["time_24hr"];
