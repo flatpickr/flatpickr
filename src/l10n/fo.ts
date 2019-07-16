@@ -63,7 +63,9 @@ export const Faroese: CustomLocale = {
   weekAbbreviation: "vika",
   scrollTitle: "Rulla fyri at broyta",
   toggleTitle: "Trýst fyri at skifta",
-  yearAriaLabel: "Ár",
+  ariaLabels: {
+    year: "Ár",
+  },
   time_24hr: true,
 };
 

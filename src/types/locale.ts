@@ -54,9 +54,13 @@ export type Locale = {
   scrollTitle: string;
   toggleTitle: string;
   amPM: [string, string];
-  yearAriaLabel: string;
-  hourAriaLabel: string;
-  minuteAriaLabel: string;
+  ariaLabels: {
+    year: string;
+    hour: string;
+    minute: string;
+    nextMonthNav: string;
+    previousMonthNav: string;
+  };
   time_24hr: boolean;
 };
 
@@ -68,9 +72,13 @@ export type CustomLocale = {
   weekAbbreviation?: Locale["weekAbbreviation"];
   toggleTitle?: Locale["toggleTitle"];
   scrollTitle?: Locale["scrollTitle"];
-  yearAriaLabel?: string;
-  hourAriaLabel?: string;
-  minuteAriaLabel?: string;
+  ariaLabels?: {
+    year?: Locale["ariaLabels"]["year"];
+    hour?: Locale["ariaLabels"]["hour"];
+    minute?: Locale["ariaLabels"]["minute"];
+    nextMonthNav?: Locale["ariaLabels"]["nextMonthNav"];
+    previousMonthNav?: Locale["ariaLabels"]["previousMonthNav"];
+  };
   amPM?: Locale["amPM"];
   time_24hr?: Locale["time_24hr"];
   weekdays: {

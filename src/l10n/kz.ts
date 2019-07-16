@@ -61,7 +61,9 @@ export const Kazakh: CustomLocale = {
   scrollTitle: "Үлкейту үшін айналдырыңыз",
   toggleTitle: "Ауыстыру үшін басыңыз",
   amPM: ["ТД", "ТК"],
-  yearAriaLabel: "Жыл",
+  ariaLabels: {
+    year: "Жыл",
+  },
 };
 
 fp.l10ns.kz = Kazakh;

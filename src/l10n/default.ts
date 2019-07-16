@@ -64,9 +64,13 @@ export const english: Locale = {
   scrollTitle: "Scroll to increment",
   toggleTitle: "Click to toggle",
   amPM: ["AM", "PM"],
-  yearAriaLabel: "Year",
-  hourAriaLabel: "Hour",
-  minuteAriaLabel: "Minute",
+  ariaLabels: {
+    year: "Year",
+    hour: "Hour",
+    minute: "Minute",
+    nextMonthNav: "Show next month",
+    previousMonthNav: "Show previous month",
+  },
   time_24hr: false,
 };
 

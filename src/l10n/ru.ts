@@ -61,7 +61,9 @@ export const Russian: CustomLocale = {
   scrollTitle: "Прокрутите для увеличения",
   toggleTitle: "Нажмите для переключения",
   amPM: ["ДП", "ПП"],
-  yearAriaLabel: "Год",
+  ariaLabels: {
+    year: "Год",
+  },
   time_24hr: true,
 };
 

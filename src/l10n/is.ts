@@ -61,7 +61,9 @@ export const Icelandic: CustomLocale = {
   firstDayOfWeek: 1,
   rangeSeparator: " til ",
   weekAbbreviation: "vika",
-  yearAriaLabel: "Ár",
+  ariaLabels: {
+    year: "Ár",
+  },
   time_24hr: true,
 };
 
