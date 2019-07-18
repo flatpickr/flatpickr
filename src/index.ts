@@ -1452,6 +1452,14 @@ function FlatpickrInstance(
       );
 
       if (lostFocus && isIgnored) {
+        if (
+          self.timeContainer !== undefined &&
+          self.minuteElement !== undefined &&
+          self.hourElement !== undefined
+        ) {
+          updateTime();
+        }
+
         self.close();
 
         if (self.config.mode === "range" && self.selectedDates.length === 1) {
