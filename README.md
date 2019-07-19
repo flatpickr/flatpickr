@@ -1,4 +1,8 @@
-Symol "R" in altFormat option will be replased genitive of month.
+## flatpickr-genitive
+new features:
+
+- Symol "R" in altFormat option will be replased genitive of month.
+- add plugin dayRangeSelect witch can select range of days by selecting one day
 
 For build lib need:
 
@@ -10,6 +14,18 @@ For build lib need:
 
 after this steps node create folder dist where we get all lib files
 
+### dayRangeSelect
+config example:
+```
+plugins: [
+             new dayRangeSelect(
+                 {
+                     daysAround:2, //how mutch days around will be selected
+                     rangeCheckboxState: true //active or not selecting days around at the start
+                 }
+             )
+         ],
+```
 ## flatpickr - javascript datetime picker
 [![Build Status](https://circleci.com/gh/flatpickr/flatpickr/tree/master.svg?style=shield)](https://circleci.com/gh/flatpickr/flatpickr/tree/master)
 
