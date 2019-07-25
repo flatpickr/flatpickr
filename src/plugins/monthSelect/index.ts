@@ -9,6 +9,10 @@ export interface Config {
   theme: string;
 }
 
+export interface ElementDate extends Element {
+  dateObj: Date;
+}
+
 export type MonthElement = HTMLSpanElement & { dateObj: Date; $i: number };
 
 const defaultConfig: Config = {
@@ -77,6 +81,9 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         month.tabIndex = -1;
         month.addEventListener("click", selectMonth);
         self.monthsContainer.appendChild(month);
+        if ((fp.config.minDate && month.dateObj < fp.config.minDate) || (fp.config.maxDate && month.dateObj > fp.config.maxDate)) {
+          month.classList.add("disabled");
+        }
       }
 
       fp.rContainer.appendChild(self.monthsContainer);
@@ -104,16 +111,40 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
 
     function selectYear() {
       let selectedDate = fp.selectedDates[0];
-      selectedDate.setFullYear(fp.currentYear);
-
-      fp.setDate(selectedDate, true);
+      if (selectedDate) {
+        selectedDate = new Date(selectedDate);
+        selectedDate.setFullYear(fp.currentYear);
+        if (fp.config.minDate && selectedDate < fp.config.minDate) {
+          selectedDate = fp.config.minDate;
+        }
+        if (fp.config.maxDate && selectedDate > fp.config.maxDate) {
+          selectedDate = fp.config.maxDate;
+        }
+        fp.currentYear = selectedDate.getFullYear();
+        fp.currentYearElement.value = String(fp.currentYear);
+        setCurrentlySelected();
+      }
+      if (fp.rContainer) {
+        const months: NodeListOf<ElementDate> = fp.rContainer.querySelectorAll(".flatpickr-monthSelect-month");
+        months.forEach(month => {
+          month.dateObj.setFullYear(fp.currentYear);
+          if ((fp.config.minDate && month.dateObj < fp.config.minDate) || (fp.config.maxDate && month.dateObj > fp.config.maxDate)) {
+            month.classList.add("disabled");
+          } else {
+            month.classList.remove("disabled");
+          }
+        });
+      }
+      
     }
 
     function selectMonth(e: Event) {
       e.preventDefault();
       e.stopPropagation();
-
-      setMonth((e.target as MonthElement).dateObj);
+      if (e.target instanceof Element && !e.target.classList.contains("disabled")) {
+        setMonth((e.target as MonthElement).dateObj);
+        fp.close();
+      }
     }
 
     function setMonth(date: Date) {
