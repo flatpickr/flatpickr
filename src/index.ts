@@ -2137,8 +2137,10 @@ function FlatpickrInstance(
       inputBounds.top +
       (!showOnTop ? positionElement.offsetHeight + 2 : -calendarHeight - 2);
 
-    toggleClass(self.calendarContainer, "arrowTop", !showOnTop);
-    toggleClass(self.calendarContainer, "arrowBottom", showOnTop);
+    if (!self.config.inline && !self.config.static) {
+      toggleClass(self.calendarContainer, "arrowTop", !showOnTop);
+      toggleClass(self.calendarContainer, "arrowBottom", showOnTop);
+    }
 
     if (self.config.inline) return;
 
