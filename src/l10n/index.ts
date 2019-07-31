@@ -39,8 +39,8 @@ import { Macedonian as mk } from "./mk";
 import { Mongolian as mn } from "./mn";
 import { Malaysian as ms } from "./ms";
 import { Burmese as my } from "./my";
+import { Norwegian as nb } from "./nb";
 import { Dutch as nl } from "./nl";
-import { Norwegian as no } from "./no";
 import { Punjabi as pa } from "./pa";
 import { Polish as pl } from "./pl";
 import { Portuguese as pt } from "./pt";
@@ -100,8 +100,8 @@ const l10n: Record<key, CustomLocale> = {
   mn,
   ms,
   my,
+  nb,
   nl,
-  no,
   pa,
   pl,
   pt,
