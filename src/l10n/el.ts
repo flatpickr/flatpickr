@@ -68,6 +68,6 @@ export const Greek: CustomLocale = {
   amPM: ["ΠΜ", "ΜΜ"],
 };
 
-fp.l10ns.gr = Greek;
+fp.l10ns.el = Greek;
 
 export default fp.l10ns;
