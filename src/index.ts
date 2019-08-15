@@ -2019,7 +2019,7 @@ function FlatpickrInstance(
     const minMaxTimeSetter = (type: string) => (val: any) => {
       self.config[type === "min" ? "_minTime" : "_maxTime"] = self.parseDate(
         val,
-        "H:i"
+        "H:i:S"
       );
     };
 
