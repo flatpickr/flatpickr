@@ -1,3 +1,5 @@
+import { cssClassPrefix } from "../utils";
+
 export function toggleClass(
   elem: HTMLElement,
   className: string,
@@ -42,13 +44,22 @@ export function createNumberInput(
   inputClassName: string,
   opts?: Record<string, any>
 ) {
-  const wrapper = createElement<HTMLDivElement>("div", "numInputWrapper"),
+  const wrapper = createElement<HTMLDivElement>(
+      "div",
+      `${cssClassPrefix}numInputWrapper`
+    ),
     numInput = createElement<HTMLInputElement>(
       "input",
-      "numInput " + inputClassName
+      `${cssClassPrefix}numInput ${inputClassName}`
     ),
-    arrowUp = createElement<HTMLSpanElement>("span", "arrowUp"),
-    arrowDown = createElement<HTMLSpanElement>("span", "arrowDown");
+    arrowUp = createElement<HTMLSpanElement>(
+      "span",
+      `${cssClassPrefix}arrowUp`
+    ),
+    arrowDown = createElement<HTMLSpanElement>(
+      "span",
+      `${cssClassPrefix}arrowDown`
+    );
 
   if (navigator.userAgent.indexOf("MSIE 9.0") === -1) {
     numInput.type = "number";

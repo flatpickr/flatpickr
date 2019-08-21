@@ -1,3 +1,4 @@
+export const cssClassPrefix = "flatpickr-";
 export const pad = (number: string | number) => `0${number}`.slice(-2);
 export const int = (bool: boolean) => (bool === true ? 1 : 0);
 

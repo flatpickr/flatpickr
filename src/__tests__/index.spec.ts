@@ -97,7 +97,7 @@ describe("flatpickr", () => {
       const date = new Date("2016-12-27T16:16:22.585Z");
       expect(fp.currentYear).toEqual(date.getFullYear());
       expect(fp.currentMonth).toEqual(date.getMonth());
-      const selected = fp.days.querySelector(".selected");
+      const selected = fp.days.querySelector(".flatpickr-selected");
       expect(selected).toBeTruthy();
 
       if (selected) expect(selected.textContent).toEqual(date.getDate() + "");
@@ -109,7 +109,7 @@ describe("flatpickr", () => {
         defaultDate: "2016-12-27T16:16:22.585Z",
       });
 
-      expect(fp.days.querySelector(".selected")).toEqual(null);
+      expect(fp.days.querySelector(".flatpickr-selected")).toEqual(null);
 
       createInstance({
         defaultDate: "2016-12-27T16:16:22.585Z",
@@ -120,7 +120,7 @@ describe("flatpickr", () => {
       fp.set("minDate", "2016-12-24");
 
       expect(fp.currentMonth).toEqual(11);
-      expect(fp.days.querySelector(".selected")).toEqual(null);
+      expect(fp.days.querySelector(".flatpickr-selected")).toEqual(null);
 
       let enabledDays = fp.days.querySelectorAll(
         ".flatpickr-day:not(.flatpickr-disabled)"
@@ -137,7 +137,7 @@ describe("flatpickr", () => {
       });
 
       expect(fp.selectedDates.length).toBe(0);
-      expect(fp.days.querySelector(".selected")).toEqual(null);
+      expect(fp.days.querySelector(".flatpickr-selected")).toEqual(null);
     });
 
     it("doesn't throw with undefined properties", () => {
@@ -617,7 +617,9 @@ describe("flatpickr", () => {
       fp._input.blur();
 
       expect(fp.isOpen).toBe(false);
-      expect(fp.calendarContainer.classList.contains("open")).toBe(false);
+      expect(fp.calendarContainer.classList.contains("flatpickr-open")).toBe(
+        false
+      );
 
       expect(fp.selectedDates.length).toBe(0);
       simulate("focus", fp._input);
@@ -787,7 +789,9 @@ describe("flatpickr", () => {
         static: true,
       });
 
-      expect(fp.calendarContainer.classList.contains("static")).toBe(true);
+      expect(fp.calendarContainer.classList.contains("flatpickr-static")).toBe(
+        true
+      );
       if (!fp.element.parentNode) return;
       expect(
         (fp.element.parentNode as Element).classList.contains(
@@ -1309,27 +1313,31 @@ describe("flatpickr", () => {
       expect(fp.selectedDates.length).toEqual(1);
 
       simulate("mouseover", fp.days.childNodes[32]);
-      expect(day(21).classList.contains("startRange")).toEqual(true);
+      expect(day(21).classList.contains("flatpickr-startRange")).toEqual(true);
 
       for (let i = 0; i < 42; i++)
-        expect(day(i).classList.contains("inRange")).toEqual(i > 21 && i < 32);
+        expect(day(i).classList.contains("flatpickr-inRange")).toEqual(
+          i > 21 && i < 32
+        );
 
-      expect(day(32).classList.contains("endRange")).toEqual(true);
+      expect(day(32).classList.contains("flatpickr-endRange")).toEqual(true);
 
       fp.clear();
       fp.set("disable", ["2016-1-12", "2016-1-20"]);
       fp.setDate("2016-1-17");
 
       simulate("mouseover", day(32));
-      expect(day(32).classList.contains("endRange")).toEqual(false);
+      expect(day(32).classList.contains("flatpickr-endRange")).toEqual(false);
       expect(day(24).classList.contains("flatpickr-disabled")).toEqual(true);
-      expect(day(25).classList.contains("notAllowed")).toEqual(true);
+      expect(day(25).classList.contains("flatpickr-notAllowed")).toEqual(true);
 
       for (let i = 25; i < 32; i++)
-        expect(day(i).classList.contains("inRange")).toEqual(false);
+        expect(day(i).classList.contains("flatpickr-inRange")).toEqual(false);
 
       for (let i = 17; i < 22; i++) {
-        expect(day(i).classList.contains("notAllowed")).toEqual(false);
+        expect(day(i).classList.contains("flatpickr-notAllowed")).toEqual(
+          false
+        );
         expect(day(i).classList.contains("flatpickr-disabled")).toEqual(false);
       }
 

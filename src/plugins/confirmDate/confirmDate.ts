@@ -1,5 +1,6 @@
 import { Instance } from "../../types/instance";
 import { Plugin } from "../../types/options";
+import { cssClassPrefix } from "../../utils";
 
 export interface Config {
   confirmIcon?: string;
@@ -19,7 +20,7 @@ const defaultConfig: Config = {
 function confirmDatePlugin(pluginConfig: Config): Plugin {
   const config = { ...defaultConfig, ...pluginConfig };
   let confirmContainer: HTMLDivElement;
-  const confirmButtonCSSClass = "flatpickr-confirm";
+  const confirmButtonCSSClass = `${cssClassPrefix}confirm`;
 
   return function(fp: Instance) {
     if (fp.config.noCalendar || fp.isMobile) return {};
@@ -35,9 +36,9 @@ function confirmDatePlugin(pluginConfig: Config): Plugin {
       onReady() {
         confirmContainer = fp._createElement<HTMLDivElement>(
           "div",
-          `${confirmButtonCSSClass} ${config.showAlways ? "visible" : ""} ${
-            config.theme
-          }Theme`,
+          `${confirmButtonCSSClass} ${
+            config.showAlways ? `${cssClassPrefix}visible` : ""
+          } ${cssClassPrefix}${config.theme}Theme`,
           config.confirmText
         );
 
@@ -69,9 +70,13 @@ function confirmDatePlugin(pluginConfig: Config): Plugin {
                 showCondition &&
                 localConfirmContainer
               )
-                return localConfirmContainer.classList.add("visible");
+                return localConfirmContainer.classList.add(
+                  `${cssClassPrefix}visible`
+                );
 
-              localConfirmContainer.classList.remove("visible");
+              localConfirmContainer.classList.remove(
+                `${cssClassPrefix}visible`
+              );
             },
           }
         : {}),
