@@ -59,6 +59,7 @@ export const Norwegian: CustomLocale = {
   weekAbbreviation: "Uke",
   scrollTitle: "Scroll for å endre",
   toggleTitle: "Klikk for å veksle",
+  time_24hr: true,
 
   ordinal: () => {
     return ".";

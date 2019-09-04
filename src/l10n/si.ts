@@ -53,6 +53,7 @@ export const Sinhala: CustomLocale = {
       "දෙසැම්බර්",
     ],
   },
+  time_24hr: true,
 };
 
 fp.l10ns.si = Sinhala;

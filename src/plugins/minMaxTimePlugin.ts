@@ -52,6 +52,7 @@ function minMaxTimePlugin(config: Config = {}): Plugin {
           maxTime:
             this.config.maxTime && state.formatDate(this.config.maxTime, "H:i"),
         };
+        fp.loadedPlugins.push("minMaxTime");
       },
 
       onChange(this: Instance) {

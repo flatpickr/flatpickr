@@ -1,10 +1,7 @@
 {
   "preset": "ts-jest",
   "rootDir": "../",
-  "moduleNameMapper": {
-    "^plugins/(.*)$": "<rootDir>/src/plugins/$1",
-    "^index$": "<rootDir>/src/index.ts"
-  },
+  "moduleDirectories": ["node_modules", "src"],
   "globals": {
     "ts-jest": {
       "isolatedModules": true

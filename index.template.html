@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>flatpickr quick start</title>
+
+  <link rel="stylesheet" href="dist/flatpickr.css">
+  <link rel="stylesheet" href="dist/ie.css">
+  <link rel="stylesheet" href="dist/plugins/confirmDate/confirmDate.css">
+  <link rel="stylesheet" href="dist/plugins/monthSelect/style.css">
+  
+  <style type="text/css">
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "Roboto", "Oxygen", "Ubuntu", "Helvetica Neue", Arial, sans-serif;
+    }
+
+    label > div {
+      margin-bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div style="padding:15vw">
+    <div>
+      <label>
+        <div>Date 1</div>
+        <input placeholder="Select Date..." class=date />
+      </label>
+
+      <!--
+      <label>
+        <div>Date 2</div>
+        <input placeholder="Select Date..." class=date id=input2 />
+      </label>
+      -->
+    </div>
+  </div>
+  
+  <!-- classList polyfill for IE9 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.2.20171210/classList.min.js"></script>
+  <script src="./dist/flatpickr.js"></script>
+  <script src="./dist/plugins/rangePlugin.js"></script>
+  <script src="./dist/plugins/confirmDate/confirmDate.js"></script>
+  <script src="./dist/plugins/minMaxTimePlugin.js"></script>
+  <script src="./dist/plugins/monthSelect/index.js"></script>
+  <script src="./dist/plugins/scrollPlugin.js"></script>
+  <script src="./dist/plugins/weekSelect/weekSelect.js"></script>
+
+  <script>
+    var fp = flatpickr(".date", {
+
+    })
+  </script>
+</body>
+</html>

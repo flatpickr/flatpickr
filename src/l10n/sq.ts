@@ -53,6 +53,7 @@ export const Albanian: CustomLocale = {
       "Dhjetor",
     ],
   },
+  time_24hr: true,
 };
 
 fp.l10ns.sq = Albanian;

@@ -38,22 +38,18 @@ function weekSelectPlugin(): Plugin<PlusWeeks> {
         selDate.getMonth() === fp.currentMonth &&
         selDate.getFullYear() === fp.currentYear
       ) {
-        fp.weekStartDay = (<DayElement>(
-          fp.days.childNodes[
-            7 * Math.floor((<DayElement>fp.selectedDateElem).$i / 7)
-          ]
-        )).dateObj;
-        fp.weekEndDay = (<DayElement>(
-          fp.days.childNodes[
-            7 * Math.ceil((<DayElement>fp.selectedDateElem).$i / 7 + 0.01) - 1
-          ]
-        )).dateObj;
+        fp.weekStartDay = (fp.days.childNodes[
+          7 * Math.floor((fp.selectedDateElem as DayElement).$i / 7)
+        ] as DayElement).dateObj;
+        fp.weekEndDay = (fp.days.childNodes[
+          7 * Math.ceil((fp.selectedDateElem as DayElement).$i / 7 + 0.01) - 1
+        ] as DayElement).dateObj;
       }
       const days = fp.days.childNodes;
       for (let i = days.length; i--; ) {
-        const date = (<DayElement>days[i]).dateObj;
+        const date = (days[i] as DayElement).dateObj;
         if (date >= fp.weekStartDay && date <= fp.weekEndDay)
-          (<DayElement>days[i]).classList.add("week", "selected");
+          (days[i] as DayElement).classList.add("week", "selected");
       }
     }
 
@@ -89,7 +85,13 @@ function weekSelectPlugin(): Plugin<PlusWeeks> {
           ? fp.config.altFormat
           : "\\W\\e\\e\\k #W, Y";
       },
-      onReady: [onReady, highlightWeek],
+      onReady: [
+        onReady,
+        highlightWeek,
+        () => {
+          fp.loadedPlugins.push("weekSelect");
+        },
+      ],
       onDestroy,
     };
   };

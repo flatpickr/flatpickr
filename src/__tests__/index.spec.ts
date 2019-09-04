@@ -123,7 +123,7 @@ describe("flatpickr", () => {
       expect(fp.days.querySelector(".selected")).toEqual(null);
 
       let enabledDays = fp.days.querySelectorAll(
-        ".flatpickr-day:not(.disabled)"
+        ".flatpickr-day:not(.flatpickr-disabled)"
       );
 
       expect(enabledDays.length).toEqual(2);
@@ -491,6 +491,18 @@ describe("flatpickr", () => {
       expect(fp.config.mode).toEqual("range");
     });
 
+    it("set() minDate/maxDate updates current view", () => {
+      createInstance();
+      const now = new Date();
+      const nextMonth = new Date();
+      nextMonth.setMonth(now.getMonth() + 1);
+
+      expect(fp.currentMonth).toEqual(now.getMonth());
+
+      fp.set("minDate", nextMonth);
+      expect(fp.currentMonth).toEqual(nextMonth.getMonth());
+    });
+
     it("setDate (date)", () => {
       createInstance({
         enableTime: true,
@@ -716,6 +728,30 @@ describe("flatpickr", () => {
         expect(fp.currentMonth).toEqual(0);
         expect(fp.currentYear).toEqual(2016);
       });
+    });
+
+    it("triggers monthChange on jump", done => {
+      const fp = createInstance({
+        defaultDate: new Date(2019, 3, 17),
+        onMonthChange: () => {
+          expect(fp.currentMonth).toEqual(4);
+          done();
+        },
+      });
+
+      fp.jumpToDate(new Date(2019, 4, 17), true);
+    });
+
+    it("triggers yearChange on jump", done => {
+      const fp = createInstance({
+        defaultDate: new Date(2019, 3, 17),
+        onYearChange: () => {
+          expect(fp.currentYear).toEqual(2020);
+          done();
+        },
+      });
+
+      fp.jumpToDate(new Date(2020, 4, 17), true);
     });
   });
 
@@ -1105,9 +1141,9 @@ describe("flatpickr", () => {
         defaultMinute: 45,
       });
 
-      simulate("mousedown", <DayElement>fp.todayDateElem, { which: 1 });
-      expect((<Date>fp.latestSelectedDateObj).getHours()).toEqual(12);
-      expect((<Date>fp.latestSelectedDateObj).getMinutes()).toEqual(45);
+      simulate("mousedown", fp.todayDateElem as DayElement, { which: 1 });
+      expect((fp.latestSelectedDateObj as Date).getHours()).toEqual(12);
+      expect((fp.latestSelectedDateObj as Date).getMinutes()).toEqual(45);
 
       createInstance({
         enableTime: true,
@@ -1116,9 +1152,9 @@ describe("flatpickr", () => {
         defaultMinute: 0,
       });
 
-      simulate("mousedown", <DayElement>fp.todayDateElem, { which: 1 });
-      expect((<Date>fp.latestSelectedDateObj).getHours()).toEqual(6);
-      expect((<Date>fp.latestSelectedDateObj).getMinutes()).toEqual(30);
+      simulate("mousedown", fp.todayDateElem as DayElement, { which: 1 });
+      expect((fp.latestSelectedDateObj as Date).getHours()).toEqual(6);
+      expect((fp.latestSelectedDateObj as Date).getMinutes()).toEqual(30);
     });
 
     it("time picker: minDate + bounds", () => {
@@ -1285,7 +1321,7 @@ describe("flatpickr", () => {
 
       simulate("mouseover", day(32));
       expect(day(32).classList.contains("endRange")).toEqual(false);
-      expect(day(24).classList.contains("disabled")).toEqual(true);
+      expect(day(24).classList.contains("flatpickr-disabled")).toEqual(true);
       expect(day(25).classList.contains("notAllowed")).toEqual(true);
 
       for (let i = 25; i < 32; i++)
@@ -1293,7 +1329,7 @@ describe("flatpickr", () => {
 
       for (let i = 17; i < 22; i++) {
         expect(day(i).classList.contains("notAllowed")).toEqual(false);
-        expect(day(i).classList.contains("disabled")).toEqual(false);
+        expect(day(i).classList.contains("flatpickr-disabled")).toEqual(false);
       }
 
       simulate("mousedown", fp.days.childNodes[17], { which: 1 }, MouseEvent);
@@ -1303,7 +1339,7 @@ describe("flatpickr", () => {
 
     it("adds disabled class to disabled prev/next month arrows", () => {
       const isArrowDisabled = (which: "prevMonthNav" | "nextMonthNav") =>
-        fp[which].classList.contains("disabled");
+        fp[which].classList.contains("flatpickr-disabled");
       createInstance({
         minDate: "2099-1-1",
         maxDate: "2099-3-4",
@@ -1341,10 +1377,18 @@ describe("flatpickr", () => {
       createInstance({ mode: "time" });
       fp.open();
 
+      expect(fp.hourElement).toBeDefined();
+      expect(fp.minuteElement).toBeDefined();
+      expect(fp.amPM).toBeDefined();
+
+      if (!fp.hourElement || !fp.minuteElement || !fp.amPM) return;
+
       fp.minuteElement.focus();
+      expect(document.activeElement).toStrictEqual(fp.minuteElement);
+
       simulate(
         "keydown",
-        document.activeElement,
+        fp.minuteElement,
         {
           keyCode: 9, // Tab
         },
@@ -1354,7 +1398,7 @@ describe("flatpickr", () => {
 
       simulate(
         "keydown",
-        document.activeElement,
+        fp.amPM,
         {
           keyCode: 9, // Tab
           shiftKey: true,
@@ -1363,16 +1407,81 @@ describe("flatpickr", () => {
       );
       expect(document.activeElement).toStrictEqual(fp.minuteElement);
 
-      fp.amPM.focus();
       simulate(
         "keydown",
-        fp.amPM!,
+        fp.amPM,
         {
           keyCode: 9, // Tab
         },
         KeyboardEvent
       );
       expect(document.activeElement).toStrictEqual(fp._input);
+    });
+
+    it("dropdown should correctly load months with minDate", () => {
+      const fp = createInstance({
+        defaultDate: new Date(2019, 5, 11),
+        minDate: new Date(2019, 4, 11),
+      }) as Instance;
+
+      const monthsDropdown = fp.calendarContainer.querySelector(
+        ".flatpickr-monthDropdown-months"
+      );
+
+      expect(monthsDropdown).toBeTruthy();
+      if (!monthsDropdown) return;
+
+      const months = monthsDropdown.querySelectorAll(
+        ".flatpickr-monthDropdown-month"
+      );
+
+      expect(months.length).toEqual(8);
+      if (months.length != 8) return;
+
+      expect(months[0].innerHTML).toEqual("May");
+      expect(months[7].innerHTML).toEqual("December");
+    });
+
+    it("dropdown should correctly load months with maxDate", () => {
+      const fp = createInstance({
+        defaultDate: new Date(2019, 4, 11),
+        maxDate: new Date(2019, 8, 11),
+      }) as Instance;
+
+      const monthsDropdown = fp.calendarContainer.querySelector(
+        ".flatpickr-monthDropdown-months"
+      );
+
+      expect(monthsDropdown).toBeTruthy();
+      if (!monthsDropdown) return;
+
+      const months = monthsDropdown.querySelectorAll(
+        ".flatpickr-monthDropdown-month"
+      );
+
+      expect(months.length).toEqual(9);
+      if (months.length != 9) return;
+
+      expect(months[0].innerHTML).toEqual("January");
+      expect(months[months.length - 1].innerHTML).toEqual("September");
+    });
+
+    it("dropdown should change month", () => {
+      const fp = createInstance({
+        defaultDate: new Date(2019, 1, 1),
+      }) as Instance;
+
+      const monthsDropdown = fp.calendarContainer.querySelector(
+        ".flatpickr-monthDropdown-months"
+      ) as HTMLSelectElement;
+
+      monthsDropdown.value = "3";
+
+      var evt = document.createEvent("HTMLEvents");
+      evt.initEvent("change", false, true);
+      monthsDropdown.dispatchEvent(evt);
+
+      expect(fp.currentMonth).toEqual(3);
     });
   });
 

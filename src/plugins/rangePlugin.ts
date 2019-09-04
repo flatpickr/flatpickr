@@ -15,8 +15,6 @@ function rangePlugin(config: Config = {}): Plugin {
   return function(fp) {
     let dateFormat = "",
       secondInput: HTMLInputElement,
-      // @ts-ignore
-      _firstInputFocused: boolean,
       _secondInputFocused: boolean,
       _prevDates: Date[];
 
@@ -26,6 +24,17 @@ function rangePlugin(config: Config = {}): Plugin {
           config.input instanceof Element
             ? config.input
             : (window.document.querySelector(config.input) as HTMLInputElement);
+
+        if (!secondInput) {
+          fp.config.errorHandler(new Error("Invalid input element specified"));
+          return;
+        }
+
+        if (fp.config.wrap) {
+          secondInput = secondInput.querySelector(
+            "[data-input]"
+          ) as HTMLInputElement;
+        }
       } else {
         secondInput = fp._input.cloneNode() as HTMLInputElement;
         secondInput.removeAttribute("id");
@@ -47,7 +56,6 @@ function rangePlugin(config: Config = {}): Plugin {
           fp.jumpToDate(fp.selectedDates[1]);
         }
 
-        _firstInputFocused = false;
         _secondInputFocused = true;
         fp.isOpen = false;
         fp.open(
@@ -101,7 +109,7 @@ function rangePlugin(config: Config = {}): Plugin {
         fp._bind(fp._input, "focus", () => {
           fp.latestSelectedDateObj = fp.selectedDates[0];
           fp._setHoursFromDate(fp.selectedDates[0]);
-          [_firstInputFocused, _secondInputFocused] = [true, false];
+          _secondInputFocused = false;
           fp.jumpToDate(fp.selectedDates[0]);
         });
 
@@ -117,6 +125,7 @@ function rangePlugin(config: Config = {}): Plugin {
 
         fp.setDate(fp.selectedDates, false);
         plugin.onValueUpdate(fp.selectedDates);
+        fp.loadedPlugins.push("range");
       },
 
       onPreCalendarPosition() {

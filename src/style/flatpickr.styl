@@ -175,15 +175,14 @@
     text-decoration none
     cursor pointer
     position absolute
-    top 0px
-    line-height 16px
+    top 0
     height $monthNavHeight
     padding 10px
     z-index 3
     color $monthForeground
     fill $monthForeground
 
-    &.disabled
+    &.flatpickr-disabled
       display none
 
     i
@@ -364,6 +363,40 @@
       background transparent
       pointer-events none
 
+  .flatpickr-monthDropdown-months
+    appearance: menulist
+    background: $monthBackground
+    border: none
+    border-radius: 0
+    box-sizing: border-box
+    color: inherit
+    cursor: pointer
+    font-size: inherit
+    font-family: inherit
+    font-weight: 300
+    height: auto
+    line-height: inherit
+    margin: -1px 0 0 0
+    outline: none
+    padding: 0 0 0 0.5ch
+    position: relative
+    vertical-align: initial
+    -webkit-box-sizing: border-box
+    -webkit-appearance: menulist
+    -moz-appearance: menulist
+    width: auto
+
+    &:focus, &:active
+      outline: none
+
+    &:hover
+      background: alpha($invertedBg, 0.05)
+
+    .flatpickr-monthDropdown-month
+      background-color: $monthBackground
+      outline: none
+      padding: 0
+
 .flatpickr-weekdays
   background $weekdaysBackground
   text-align center
@@ -502,7 +535,7 @@ span.flatpickr-weekday
     border-radius 0
     box-shadow: (-2.5*$dayMargin) 0 0 $dayHoverBackground, (2.5*$dayMargin) 0 0 $dayHoverBackground
 
-  &.disabled, &.disabled:hover,
+  &.flatpickr-disabled, &.flatpickr-disabled:hover,
   &.prevMonthDay, &.nextMonthDay,
   &.notAllowed, &.notAllowed.prevMonthDay, &.notAllowed.nextMonthDay
     color alpha($dayForeground, 0.3)
@@ -515,7 +548,7 @@ span.flatpickr-weekday
       border-color transparent
     cursor default
 
-  &.disabled, &.disabled:hover
+  &.flatpickr-disabled, &.flatpickr-disabled:hover
     cursor not-allowed
     color alpha($dayForeground, 0.1)
 
@@ -531,7 +564,6 @@ span.flatpickr-weekday
   margin-top 1px
 
 .flatpickr-weekwrapper
-  display inline-block
   float left
 
   .flatpickr-weeks
@@ -643,7 +675,6 @@ span.flatpickr-weekday
 
   .flatpickr-time-separator, .flatpickr-am-pm
     height inherit
-    display inline-block
     float left
     line-height inherit
     color $dayForeground

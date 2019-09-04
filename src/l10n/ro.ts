@@ -11,7 +11,7 @@ const fp =
 
 export const Romanian: CustomLocale = {
   weekdays: {
-    shorthand: ["Dum", "Lun", "Mar", "Mie", "Joi", "Vin", "Sam"],
+    shorthand: ["Dum", "Lun", "Mar", "Mie", "Joi", "Vin", "Sâm"],
     longhand: [
       "Duminică",
       "Luni",
@@ -55,6 +55,7 @@ export const Romanian: CustomLocale = {
   },
 
   firstDayOfWeek: 1,
+  time_24hr: true,
 
   ordinal: () => {
     return "";

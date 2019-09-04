@@ -27,7 +27,7 @@ export type token =
   | "w"
   | "y";
 
-const do_nothing = (): undefined => undefined;
+const doNothing = (): undefined => undefined;
 
 export const monthToStr = (
   monthNumber: number,
@@ -42,7 +42,7 @@ export type RevFormatFn = (
 ) => Date | void | undefined;
 export type RevFormat = Record<string, RevFormatFn>;
 export const revFormat: RevFormat = {
-  D: do_nothing,
+  D: doNothing,
   F: function(dateObj: Date, monthName: string, locale: Locale) {
     dateObj.setMonth(locale.months.longhand.indexOf(monthName));
   },
@@ -69,9 +69,9 @@ export const revFormat: RevFormat = {
   },
   U: (_: Date, unixSeconds: string) => new Date(parseFloat(unixSeconds) * 1000),
 
-  W: function(dateObj: Date, weekNum: string) {
+  W: function(dateObj: Date, weekNum: string, locale: Locale) {
     const weekNumber = parseInt(weekNum);
-    return new Date(
+    const date = new Date(
       dateObj.getFullYear(),
       0,
       2 + (weekNumber - 1) * 7,
@@ -80,6 +80,9 @@ export const revFormat: RevFormat = {
       0,
       0
     );
+    date.setDate(date.getDate() - date.getDay() + locale.firstDayOfWeek);
+
+    return date;
   },
   Y: (dateObj: Date, year: string) => {
     dateObj.setFullYear(parseFloat(year));
@@ -98,7 +101,7 @@ export const revFormat: RevFormat = {
   j: (dateObj: Date, day: string) => {
     dateObj.setDate(parseFloat(day));
   },
-  l: do_nothing,
+  l: doNothing,
   m: (dateObj: Date, month: string) => {
     dateObj.setMonth(parseFloat(month) - 1);
   },
@@ -110,7 +113,7 @@ export const revFormat: RevFormat = {
   },
   u: (_: Date, unixMillSeconds: string) =>
     new Date(parseFloat(unixMillSeconds)),
-  w: do_nothing,
+  w: doNothing,
   y: (dateObj: Date, year: string) => {
     dateObj.setFullYear(2000 + parseFloat(year));
   },

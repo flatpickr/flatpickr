@@ -59,6 +59,7 @@ export const Finnish: CustomLocale = {
   ordinal: () => {
     return ".";
   },
+  time_24hr: true,
 };
 
 fp.l10ns.fi = Finnish;

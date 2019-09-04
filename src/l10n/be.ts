@@ -62,6 +62,7 @@ export const Belarusian: CustomLocale = {
   toggleTitle: "Націсніце для пераключэння",
   amPM: ["ДП", "ПП"],
   yearAriaLabel: "Год",
+  time_24hr: true,
 };
 
 fp.l10ns.be = Belarusian;

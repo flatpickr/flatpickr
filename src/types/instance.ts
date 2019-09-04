@@ -28,6 +28,8 @@ export interface Elements {
   // month nav
   monthNav: HTMLDivElement;
 
+  monthsDropdownContainer: HTMLSelectElement;
+
   yearElements: HTMLInputElement[];
   monthElements: HTMLSpanElement[];
 
@@ -47,7 +49,7 @@ export interface Elements {
   secondElement?: HTMLInputElement;
   amPM?: HTMLSpanElement;
 
-  pluginElements: Array<Node>;
+  pluginElements: Node[];
 }
 
 export interface Formatting {
@@ -69,6 +71,7 @@ export type Instance = Elements &
 
     // State
     config: ParsedOptions;
+    loadedPlugins: string[];
     l10n: Locale;
 
     currentYear: number;
@@ -86,15 +89,15 @@ export type Instance = Elements &
     // Methods
     changeMonth: (
       value: number,
-      is_offset?: boolean,
-      from_keyboard?: boolean
+      isOffset?: boolean,
+      fromKeyboard?: boolean
     ) => void;
     changeYear: (year: number) => void;
     clear: (emitChangeEvent?: boolean, toInitial?: boolean) => void;
     close: () => void;
     destroy: () => void;
     isEnabled: (date: DateOption, timeless?: boolean) => boolean;
-    jumpToDate: (date?: DateOption) => void;
+    jumpToDate: (date?: DateOption, triggerChange?: boolean) => void;
     open: (e?: FocusEvent | MouseEvent, positionElement?: HTMLElement) => void;
     redraw: () => void;
     set: (
@@ -150,7 +153,7 @@ export interface FlatpickrFn {
   (selector: Node, config?: Options): Instance;
   (selector: ArrayLike<Node>, config?: Options): Instance[];
   (selector: string, config?: Options): Instance | Instance[];
-  defaultConfig: ParsedOptions;
+  defaultConfig: Partial<ParsedOptions>;
   l10ns: { [k in LocaleKey]?: CustomLocale } & { default: Locale };
   localize: (l10n: CustomLocale) => void;
   setDefaults: (config: Options) => void;

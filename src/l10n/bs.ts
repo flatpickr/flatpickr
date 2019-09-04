@@ -1,4 +1,4 @@
-/* Indonesian locals for flatpickr */
+/* Bosnian locals for flatpickr */
 import { CustomLocale } from "../types/locale";
 import { FlatpickrFn } from "../types/instance";
 
@@ -9,10 +9,20 @@ const fp =
         l10ns: {},
       } as FlatpickrFn);
 
-export const Indonesian: CustomLocale = {
+export const Bosnian: CustomLocale = {
+  firstDayOfWeek: 1,
+
   weekdays: {
-    shorthand: ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"],
-    longhand: ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"],
+    shorthand: ["Ned", "Pon", "Uto", "Sri", "Čet", "Pet", "Sub"],
+    longhand: [
+      "Nedjelja",
+      "Ponedjeljak",
+      "Utorak",
+      "Srijeda",
+      "Četvrtak",
+      "Petak",
+      "Subota",
+    ],
   },
 
   months: {
@@ -21,40 +31,33 @@ export const Indonesian: CustomLocale = {
       "Feb",
       "Mar",
       "Apr",
-      "Mei",
+      "Maj",
       "Jun",
       "Jul",
-      "Agu",
+      "Avg",
       "Sep",
       "Okt",
       "Nov",
-      "Des",
+      "Dec",
     ],
     longhand: [
-      "Januari",
-      "Februari",
-      "Maret",
+      "Januar",
+      "Februar",
+      "Mart",
       "April",
-      "Mei",
+      "Maj",
       "Juni",
       "Juli",
-      "Agustus",
-      "September",
-      "Oktober",
-      "November",
-      "Desember",
+      "Avgust",
+      "Septembar",
+      "Oktobar",
+      "Novembar",
+      "Decembar",
     ],
   },
-
-  firstDayOfWeek: 1,
-
-  ordinal: () => {
-    return "";
-  },
   time_24hr: true,
-  rangeSeparator: " - ",
 };
 
-fp.l10ns.id = Indonesian;
+fp.l10ns.bs = Bosnian;
 
 export default fp.l10ns;

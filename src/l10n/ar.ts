@@ -40,6 +40,8 @@ export const Arabic: CustomLocale = {
       "ديسمبر",
     ],
   },
+
+  rangeSeparator: " - ",
 };
 
 fp.l10ns.ar = Arabic;
