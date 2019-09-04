@@ -1672,7 +1672,8 @@ function FlatpickrInstance(
           const delta = e.keyCode === 40 ? 1 : -1;
           if (
             (self.daysContainer && (e.target as DayElement).$i !== undefined) ||
-            e.target === self.input
+            e.target === self.input ||
+            e.target === self.altInput
           ) {
             if (e.ctrlKey) {
               e.stopPropagation();
