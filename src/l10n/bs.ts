@@ -48,7 +48,7 @@ export const Bosnian: CustomLocale = {
       "Maj",
       "Juni",
       "Juli",
-      "August",
+      "Avgust",
       "Septembar",
       "Oktobar",
       "Novembar",

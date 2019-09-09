@@ -1452,6 +1452,14 @@ function FlatpickrInstance(
       );
 
       if (lostFocus && isIgnored) {
+        if (
+          self.timeContainer !== undefined &&
+          self.minuteElement !== undefined &&
+          self.hourElement !== undefined
+        ) {
+          updateTime();
+        }
+
         self.close();
 
         if (self.config.mode === "range" && self.selectedDates.length === 1) {
@@ -2011,7 +2019,7 @@ function FlatpickrInstance(
     const minMaxTimeSetter = (type: string) => (val: any) => {
       self.config[type === "min" ? "_minTime" : "_maxTime"] = self.parseDate(
         val,
-        "H:i"
+        "H:i:S"
       );
     };
 
@@ -2150,7 +2158,7 @@ function FlatpickrInstance(
       (configPosHorizontal != null && configPosHorizontal === "center"
         ? (calendarWidth - inputBounds.width) / 2
         : 0);
-    const right = window.document.body.offsetWidth - inputBounds.right;
+    const right = window.document.body.offsetWidth - (window.pageXOffset + inputBounds.right);
     const rightMost = left + calendarWidth > window.document.body.offsetWidth;
     const centerMost = right + calendarWidth > window.document.body.offsetWidth;
 
