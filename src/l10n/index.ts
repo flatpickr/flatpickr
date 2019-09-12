@@ -20,7 +20,7 @@ import { Persian as fa } from "./fa";
 import { Finnish as fi } from "./fi";
 import { Faroese as fo } from "./fo";
 import { French as fr } from "./fr";
-import { Greek as gr } from "./gr";
+import { Greek as el } from "./el";
 import { Hebrew as he } from "./he";
 import { Hindi as hi } from "./hi";
 import { Croatian as hr } from "./hr";
@@ -72,6 +72,7 @@ const l10n: Record<key, CustomLocale> = {
   cy,
   da,
   de,
+  el,
   default: { ...en },
   en,
   eo,
@@ -81,7 +82,6 @@ const l10n: Record<key, CustomLocale> = {
   fi,
   fo,
   fr,
-  gr,
   he,
   hi,
   hr,
