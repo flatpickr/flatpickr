@@ -49,7 +49,8 @@ export const greek: Locale = {
   daysInMonth: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
   firstDayOfWeek: 0,
   ordinal: (nth: number) => {
-        return "η";
+        if (number > 0) 
+          return "η";
   },
   rangeSeparator: " ως ",
   weekAbbreviation: "Εβ",
@@ -60,7 +61,6 @@ export const greek: Locale = {
   hourAriaLabel: "Ώρα",
   minuteAriaLabel: "Λεπτό",
   time_24hr: true,
-  firstDayOfWeek: 1, // Monday
 };
 
 
