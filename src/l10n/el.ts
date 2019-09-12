@@ -48,10 +48,12 @@ export const greek: Locale = {
       
   daysInMonth: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
   firstDayOfWeek: 0,
-  ordinal: (nth: number) => {
-        if (number > 0) 
-          return "η";
+  ordinal: nth => {
+    if (nth > 1) return "";
+
+    return "η"
   },
+
   rangeSeparator: " ως ",
   weekAbbreviation: "Εβ",
   scrollTitle: "Σύρατε για αύξηση",
