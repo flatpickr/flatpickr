@@ -61,4 +61,4 @@ export const greek: Locale = {
 };
 
 
-export default greek;
+export default Greek;
