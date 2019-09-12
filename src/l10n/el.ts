@@ -1,6 +1,6 @@
 import { Locale } from "../types/locale";
 
-export const greek: Locale = {
+export const Greek: Locale = {
   weekdays: {
     shorthand: ["Κυρ","Δευ","Τρι","Τετ","Πεμ","Παρ","Σαβ"],
     longhand: [
