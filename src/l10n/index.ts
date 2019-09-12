@@ -12,7 +12,7 @@ import { Czech as cs } from "./cs";
 import { Welsh as cy } from "./cy";
 import { Danish as da } from "./da";
 import { German as de } from "./de";
-import { Greek as el } from "./el";
+import { greek as el } from "./el";
 import { english as en } from "./default";
 import { Esperanto as eo } from "./eo";
 import { Spanish as es } from "./es";
