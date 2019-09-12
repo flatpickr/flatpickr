@@ -48,7 +48,7 @@ export const greek: Locale = {
       
   daysInMonth: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
   firstDayOfWeek: 1,
-  ordinal: (nth: number) => "η",
+  ordinal: () => "η",
   rangeSeparator: " ως ",
   weekAbbreviation: "Εβ",
   scrollTitle: "Σύρατε για αύξηση",
