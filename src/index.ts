@@ -1229,6 +1229,10 @@ function FlatpickrInstance(
   }
 
   function updateWeekdays() {
+    if (!self.weekdayContainer) {
+      return;
+    }
+
     const firstDayOfWeek = self.l10n.firstDayOfWeek;
     let weekdays = [...self.l10n.weekdays.shorthand];
 
