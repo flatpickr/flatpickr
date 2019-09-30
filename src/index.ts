@@ -2409,7 +2409,7 @@ function FlatpickrInstance(
       self.selectedDates[self.selectedDates.length - 1];
 
     self.redraw();
-    jumpToDate();
+    jumpToDate(undefined, triggerChange);
 
     setHoursFromDate();
     if (self.selectedDates.length === 0) {
