@@ -52,6 +52,12 @@ export interface BaseOptions {
   */
   allowInput: boolean;
 
+  /*
+  If "allowInput" is enabled, pressing the Enter key will set the date text entered in the calendar.
+  If disabled, pressing Enter will only trigger blur.
+   */
+  allowEnter: boolean;
+
   /* Exactly the same as date format, but for the altInput field */
   altFormat: string;
 
@@ -257,6 +263,7 @@ export interface ParsedOptions {
   _minDate?: Date;
   _minTime?: Date;
   allowInput: boolean;
+  allowEnter: boolean;
   altFormat: string;
   altInput: boolean;
   altInputClass: string;
@@ -322,6 +329,7 @@ export const defaults: ParsedOptions = {
   _disable: [],
   _enable: [],
   allowInput: false,
+  allowEnter: true,
   altFormat: "F j, Y",
   altInput: false,
   altInputClass: "form-control input",
