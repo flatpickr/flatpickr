@@ -3,7 +3,7 @@
   "version": "4.6.2",
   "description": "A lightweight, powerful javascript datetime picker",
   "scripts": {
-    "prepare": "npm run build",
+    "preinstall": "npm run build",
     "build": "run-s build:pre build:build build:types build:post",
     "build:pre": "rimraf dist",
     "build:build": "ts-node --transpile-only build.ts",
