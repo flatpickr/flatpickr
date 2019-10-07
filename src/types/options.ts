@@ -235,6 +235,7 @@ Use it along with "enableTime" to create a time picker. */
   /* Creates a wrapper to position the calendar. Use this if the input is inside a scrollable element */
   static: boolean;
 
+  /* Sets the number of months to show */
   showMonths?: number;
 
   /* Displays time picker in 24 hour mode without AM/PM selection when enabled.*/
