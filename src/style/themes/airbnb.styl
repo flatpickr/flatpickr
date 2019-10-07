@@ -24,12 +24,12 @@ $selectedDayForeground = #fff
 .flatpickr-calendar
 	width $daysWidth
 
-.dayContainer
+.flatpickr-dayContainer
 	padding 0
 	border-right 0
 
 span.flatpickr-day
-	&, &.prevMonthDay, &.nextMonthDay
+	&, &.flatpickr-prevMonthDay, &.flatpickr-nextMonthDay
 		border-radius 0 !important
 		border 1px solid $dayHoverBackground
 		max-width none
@@ -47,7 +47,7 @@ span.flatpickr-day
 		&:nth-child(-n+7)
 			margin-top 0
 
-		&.today:not(.selected)
+		&.flatpickr-today:not(.flatpickr-selected)
 			border-color $dayHoverBackground
 			border-right-color transparent
 			border-top-color transparent
@@ -56,14 +56,14 @@ span.flatpickr-day
 			&:hover
 				border 1px solid $todayColor
 
-		&.startRange, &.endRange
+		&.flatpickr-startRange, &.flatpickr-endRange
 			border-color $selectedDayBackground
 
 
-		&.today, &.selected
+		&.flatpickr-today, &.flatpickr-selected
 			z-index 2
 
-.rangeMode .flatpickr-day
+.flatpickr-rangeMode .flatpickr-day
 	margin-top -1px
 
 .flatpickr-weekwrapper .flatpickr-weeks
@@ -74,7 +74,7 @@ span.flatpickr-day
 	margin -1px 0 0 -1px
 
 
-.hasWeeks .flatpickr-days
+.flatpickr-hasWeeks .flatpickr-days
 	border-right 0
 
 @css {

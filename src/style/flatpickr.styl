@@ -1,6 +1,6 @@
 @require "./_vars.styl"
 
-@keyframes fpFadeInDown
+@keyframes flatpickr-fadeInDown
   from
     opacity 0
     transform translate3d(0, -20px, 0)
@@ -40,53 +40,53 @@
       0 3px 13px alpha(black, 0.08)
 
 
-  &.open, &.inline
+  &.flatpickr-open, &.flatpickr-inline
     opacity 1
     max-height 640px
     visibility visible
 
-  &.open
+  &.flatpickr-open
     display inline-block
     z-index 99999
 
-  &.animate.open
-    animation fpFadeInDown 300ms $bezier
+  &.flatpickr-animate.flatpickr-open
+    animation flatpickr-fadeInDown 300ms $bezier
 
-  &.inline
+  &.flatpickr-inline
     display block
     position relative
     top 2px
 
-  &.static
+  &.flatpickr-static
     position absolute
     top calc(100% + 2px)
 
-    &.open
+    &.flatpickr-open
       z-index 999
       display block
 
-  &.multiMonth
-    .flatpickr-days .dayContainer:nth-child(n+1)
-      & .flatpickr-day.inRange:nth-child(7n+7)
+  &.flatpickr-multiMonth
+    .flatpickr-days .flatpickr-dayContainer:nth-child(n+1)
+      & .flatpickr-day.flatpickr-inRange:nth-child(7n+7)
         box-shadow: none !important;
 
-    .flatpickr-days .dayContainer:nth-child(n+2)
-      & .flatpickr-day.inRange:nth-child(7n+1)
+    .flatpickr-days .flatpickr-dayContainer:nth-child(n+2)
+      & .flatpickr-day.flatpickr-inRange:nth-child(7n+1)
         box-shadow: -2px 0 0 #e6e6e6, 5px 0 0 #e6e6e6
 
 
 
-  .hasWeeks, .hasTime
-    .dayContainer
+  .flatpickr-hasWeeks, .flatpickr-hasTime
+    .flatpickr-dayContainer
       border-bottom 0
       border-bottom-right-radius 0
       border-bottom-left-radius 0
 
   if $noCalendarBorder
-    .hasWeeks .dayContainer
+    .flatpickr-hasWeeks .flatpickr-dayContainer
       border-left 0
 
-  &.showTimeInput.hasTime
+  &.flatpickr-showTimeInput.flatpickr-hasTime
     .flatpickr-time
       height $timeHeight
       border-top 1px solid $calendarBorderColor
@@ -98,7 +98,7 @@
       .flatpickr-time
         border 1px solid $calendarBorderColor
 
-  &.noCalendar.hasTime
+  &.flatpickr-noCalendar.flatpickr-hasTime
     .flatpickr-time
       height auto
 
@@ -112,7 +112,7 @@
     width 0
     left 22px
 
-  &.rightMost
+  &.flatpickr-rightMost
     &:before, &:after
       left auto
       right 22px
@@ -125,7 +125,7 @@
     border-width 4px
     margin 0 -4px
 
-  &.arrowTop
+  &.flatpickr-arrowTop
     &:before, &:after
       bottom 100%
     &:before
@@ -136,7 +136,7 @@
       else
         border-bottom-color $calendarBackground
 
-  &.arrowBottom
+  &.flatpickr-arrowBottom
     &:before, &:after
       top 100%
     &:before
@@ -225,7 +225,7 @@
         fill inherit
 
 
-.numInputWrapper
+.flatpickr-numInputWrapper
   position relative
   height auto
 
@@ -264,7 +264,7 @@
       content ""
       position absolute
 
-    &.arrowUp
+    &.flatpickr-arrowUp
       top 0
       border-bottom 0
 
@@ -274,7 +274,7 @@
         border-bottom 4px solid alpha($dayForeground, 0.6)
         top 26%
 
-    &.arrowDown
+    &.flatpickr-arrowDown
       top 50%
 
       &:after
@@ -311,7 +311,7 @@
   text-align center
   transform translate3d(0px, 0px, 0px)
 
-  span.cur-month
+  span.flatpickr-cur-month
     font-family inherit
     font-weight 700
     color inherit
@@ -323,18 +323,18 @@
       background: alpha($invertedBg, 0.05)
 
 
-  .numInputWrapper
+  .flatpickr-numInputWrapper
     width 6ch
     width unquote("7ch\0")
     display inline-block
 
-    span.arrowUp:after
+    span.flatpickr-arrowUp:after
       border-bottom-color $monthForeground
 
-    span.arrowDown:after
+    span.flatpickr-arrowDown:after
       border-top-color $monthForeground
 
-  input.cur-year
+  input.flatpickr-cur-year
     background transparent
     box-sizing border-box
     color inherit
@@ -425,7 +425,7 @@ span.flatpickr-weekday
   font-weight bolder
 
 
-.dayContainer, .flatpickr-weeks
+.flatpickr-dayContainer, .flatpickr-weeks
   padding 1px 0 0 0
 
 .flatpickr-days
@@ -443,7 +443,7 @@ span.flatpickr-weekday
     border-right 1px solid $calendarBorderColor
 
 
-.dayContainer
+.flatpickr-dayContainer
   padding 0
   outline 0
   text-align left
@@ -461,7 +461,7 @@ span.flatpickr-weekday
   transform: translate3d(0px, 0px, 0px);
   opacity 1
 
-  & + .dayContainer
+  & + .flatpickr-dayContainer
     box-shadow: -1px 0 0 $calendarBorderColor;
 
 
@@ -486,15 +486,15 @@ span.flatpickr-weekday
   justify-content center
   text-align center
 
-  &, &.prevMonthDay, &.nextMonthDay
-    &.inRange, &.today.inRange, &:hover, &:focus
+  &, &.flatpickr-prevMonthDay, &.flatpickr-nextMonthDay
+    &.flatpickr-inRange, &.flatpickr-today.flatpickr-inRange, &:hover, &:focus
       cursor pointer
       outline 0
       background $dayHoverBackground
       border-color $dayHoverBackground
 
 
-  &.today
+  &.flatpickr-today
     border-color $todayColor
 
     &:hover, &:focus
@@ -505,8 +505,8 @@ span.flatpickr-weekday
       else
         color white
 
-  &.selected, &.startRange, &.endRange
-    &, &.inRange, &:focus, &:hover, &.prevMonthDay, &.nextMonthDay
+  &.flatpickr-selected, &.flatpickr-startRange, &.flatpickr-endRange
+    &, &.flatpickr-inRange, &:focus, &:hover, &.flatpickr-prevMonthDay, &.flatpickr-nextMonthDay
       background $selectedDayBackground
       box-shadow none
 
@@ -517,27 +517,27 @@ span.flatpickr-weekday
 
       border-color $selectedDayBackground
 
-    &.startRange
+    &.flatpickr-startRange
       border-radius 50px 0 0 50px
       //box-shadow:  (2.5*$dayMargin) 0 0 $selectedDayBackground
 
-    &.endRange
+    &.flatpickr-endRange
       border-radius 0 50px 50px 0
 
     // Avoid adding extra fill because it overflows in multimonth mode
-    &.startRange + .endRange:not(:nth-child(7n+1))
+    &.flatpickr-startRange + .flatpickr-endRange:not(:nth-child(7n+1))
       box-shadow: (-5*$dayMargin) 0 0 $selectedDayBackground
 
-    &.startRange.endRange
+    &.flatpickr-startRange.flatpickr-endRange
       border-radius 50px
 
-  &.inRange
+  &.flatpickr-inRange
     border-radius 0
     box-shadow: (-2.5*$dayMargin) 0 0 $dayHoverBackground, (2.5*$dayMargin) 0 0 $dayHoverBackground
 
   &.flatpickr-disabled, &.flatpickr-disabled:hover,
-  &.prevMonthDay, &.nextMonthDay,
-  &.notAllowed, &.notAllowed.prevMonthDay, &.notAllowed.nextMonthDay
+  &.flatpickr-prevMonthDay, &.flatpickr-nextMonthDay,
+  &.flatpickr-notAllowed, &.flatpickr-notAllowed.flatpickr-prevMonthDay, &.flatpickr-notAllowed.flatpickr-nextMonthDay
     color alpha($dayForeground, 0.3)
     background transparent
 
@@ -552,15 +552,15 @@ span.flatpickr-weekday
     cursor not-allowed
     color alpha($dayForeground, 0.1)
 
-  &.week.selected
+  &.flatpickr-week.flatpickr-selected
     border-radius 0
     box-shadow: (-2.5*$dayMargin) 0 0 $selectedDayBackground,
       (2.5*$dayMargin) 0 0 $selectedDayBackground
 
-  &.hidden
+  &.flatpickr-hidden
     visibility hidden
 
-.rangeMode .flatpickr-day
+.flatpickr-rangeMode .flatpickr-day
   margin-top 1px
 
 .flatpickr-weekwrapper
@@ -626,22 +626,22 @@ span.flatpickr-weekday
     display table
     clear both
 
-  .numInputWrapper
+  .flatpickr-numInputWrapper
     flex 1
     width 40%
     height $timeHeight
     float left
 
-    span.arrowUp:after
+    span.flatpickr-arrowUp:after
       border-bottom-color $dayForeground
 
-    span.arrowDown:after
+    span.flatpickr-arrowDown:after
       border-top-color $dayForeground
 
-  &.hasSeconds .numInputWrapper
+  &.flatpickr-hasSeconds .flatpickr-numInputWrapper
     width 26%
 
-  &.time24hr .numInputWrapper
+  &.flatpickr-time24hr .flatpickr-numInputWrapper
     width 49%
 
   input

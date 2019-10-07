@@ -1,5 +1,6 @@
 import { Plugin } from "../../types/options";
 import { DayElement as MonthElement, Instance } from "../../types/instance";
+import { cssClassPrefix } from "../../utils";
 import { monthToStr } from "../../utils/formatting";
 
 export interface Config {
@@ -61,19 +62,19 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
 
       self.monthsContainer = fp._createElement<HTMLDivElement>(
         "div",
-        "flatpickr-monthSelect-months"
+        `${cssClassPrefix}monthSelect-months`
       );
 
       self.monthsContainer.tabIndex = -1;
 
       fp.calendarContainer.classList.add(
-        `flatpickr-monthSelect-theme-${config.theme}`
+        `${cssClassPrefix}monthSelect-theme-${config.theme}`
       );
 
       for (let i = 0; i < 12; i++) {
         const month = fp._createElement<MonthElement>(
           "span",
-          "flatpickr-monthSelect-month"
+          `${cssClassPrefix}monthSelect-month`
         );
         month.dateObj = new Date(fp.currentYear, i);
         month.$i = i;
@@ -81,8 +82,11 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         month.tabIndex = -1;
         month.addEventListener("click", selectMonth);
         self.monthsContainer.appendChild(month);
-        if ((fp.config.minDate && month.dateObj < fp.config.minDate) || (fp.config.maxDate && month.dateObj > fp.config.maxDate)) {
-          month.classList.add("disabled");
+        if (
+          (fp.config.minDate && month.dateObj < fp.config.minDate) ||
+          (fp.config.maxDate && month.dateObj > fp.config.maxDate)
+        ) {
+          month.classList.add(`${cssClassPrefix}disabled`);
         }
       }
 
@@ -93,19 +97,19 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
       if (!fp.rContainer) return;
 
       const currentlySelected = fp.rContainer.querySelectorAll(
-        ".flatpickr-monthSelect-month.selected"
+        `.${cssClassPrefix}monthSelect-month.${cssClassPrefix}selected`
       );
 
       for (let index = 0; index < currentlySelected.length; index++) {
-        currentlySelected[index].classList.remove("selected");
+        currentlySelected[index].classList.remove(`${cssClassPrefix}selected`);
       }
 
       const month = fp.rContainer.querySelector(
-        `.flatpickr-monthSelect-month:nth-child(${fp.currentMonth + 1})`
+        `.${cssClassPrefix}monthSelect-month:nth-child(${fp.currentMonth + 1})`
       );
 
       if (month) {
-        month.classList.add("selected");
+        month.classList.add(`${cssClassPrefix}selected`);
       }
     }
 
@@ -125,23 +129,30 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         setCurrentlySelected();
       }
       if (fp.rContainer) {
-        const months: NodeListOf<ElementDate> = fp.rContainer.querySelectorAll(".flatpickr-monthSelect-month");
+        const months: NodeListOf<ElementDate> = fp.rContainer.querySelectorAll(
+          `.${cssClassPrefix}monthSelect-month`
+        );
         months.forEach(month => {
           month.dateObj.setFullYear(fp.currentYear);
-          if ((fp.config.minDate && month.dateObj < fp.config.minDate) || (fp.config.maxDate && month.dateObj > fp.config.maxDate)) {
-            month.classList.add("disabled");
+          if (
+            (fp.config.minDate && month.dateObj < fp.config.minDate) ||
+            (fp.config.maxDate && month.dateObj > fp.config.maxDate)
+          ) {
+            month.classList.add(`${cssClassPrefix}disabled`);
           } else {
-            month.classList.remove("disabled");
+            month.classList.remove(`${cssClassPrefix}disabled`);
           }
         });
       }
-      
     }
 
     function selectMonth(e: Event) {
       e.preventDefault();
       e.stopPropagation();
-      if (e.target instanceof Element && !e.target.classList.contains("disabled")) {
+      if (
+        e.target instanceof Element &&
+        !e.target.classList.contains(`${cssClassPrefix}disabled`)
+      ) {
         setMonth((e.target as MonthElement).dateObj);
         fp.close();
       }
@@ -173,7 +184,7 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
       if (!fp.rContainer || !self.monthsContainer) return;
 
       const currentlySelected = fp.rContainer.querySelector(
-        ".flatpickr-monthSelect-month.selected"
+        `.${cssClassPrefix}monthSelect-month.${cssClassPrefix}selected`
       ) as HTMLElement;
 
       let index = Array.prototype.indexOf.call(
@@ -203,7 +214,7 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
     function destroyPluginInstance() {
       if (self.monthsContainer !== null) {
         const months = self.monthsContainer.querySelectorAll(
-          ".flatpickr-monthSelect-month"
+          `.${cssClassPrefix}monthSelect-month`
         );
 
         for (let index = 0; index < months.length; index++) {
