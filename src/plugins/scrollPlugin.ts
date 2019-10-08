@@ -1,5 +1,7 @@
 import { Plugin } from "../types/options";
 import { Instance } from "../types/instance";
+import { getEventTarget } from "../utils/dom";
+
 function delta(e: WheelEvent) {
   return Math.max(-1, Math.min(1, (e as any).wheelDelta || -e.deltaY));
 }
@@ -10,7 +12,7 @@ const scroll = (e: WheelEvent) => {
     bubbles: true,
   });
   (ev as any).delta = delta(e);
-  (e.target as HTMLInputElement).dispatchEvent(ev);
+  (getEventTarget(e) as HTMLInputElement).dispatchEvent(ev);
 };
 
 function scrollMonth(fp: Instance) {
