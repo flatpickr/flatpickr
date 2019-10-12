@@ -1,5 +1,6 @@
 import { Instance } from "../../types/instance";
 import { Plugin } from "../../types/options";
+import { getEventTarget } from "../../utils/dom";
 
 export interface Config {
   confirmIcon?: string;
@@ -25,10 +26,11 @@ function confirmDatePlugin(pluginConfig: Config): Plugin {
     if (fp.config.noCalendar || fp.isMobile) return {};
     return {
       onKeyDown(_: Date[], __: string, ___: Instance, e: KeyboardEvent) {
-        if (fp.config.enableTime && e.key === "Tab" && e.target === fp.amPM) {
+        const eventTarget = getEventTarget(e);
+        if (fp.config.enableTime && e.key === "Tab" && eventTarget === fp.amPM) {
           e.preventDefault();
           confirmContainer.focus();
-        } else if (e.key === "Enter" && e.target === confirmContainer)
+        } else if (e.key === "Enter" && eventTarget === confirmContainer)
           fp.close();
       },
 

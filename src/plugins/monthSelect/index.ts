@@ -1,6 +1,7 @@
 import { Plugin } from "../../types/options";
 import { DayElement as MonthElement, Instance } from "../../types/instance";
 import { monthToStr } from "../../utils/formatting";
+import { getEventTarget } from "../../utils/dom";
 
 export interface Config {
   shorthand: boolean;
@@ -141,8 +142,9 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
     function selectMonth(e: Event) {
       e.preventDefault();
       e.stopPropagation();
-      if (e.target instanceof Element && !e.target.classList.contains("disabled")) {
-        setMonth((e.target as MonthElement).dateObj);
+      const eventTarget = getEventTarget(e);
+      if (eventTarget instanceof Element && !eventTarget.classList.contains("disabled")) {
+        setMonth((eventTarget as MonthElement).dateObj);
         fp.close();
       }
     }

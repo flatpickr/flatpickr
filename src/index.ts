@@ -337,8 +337,9 @@ function FlatpickrInstance(
    * @param {Event} event the keyup or increment event
    */
   function onYearInput(event: KeyboardEvent & IncrementEvent) {
+    const eventTarget = getEventTarget(event) as HTMLInputElement;
     const year =
-      parseInt((event.target as HTMLInputElement).value) + (event.delta || 0);
+      parseInt(eventTarget.value) + (event.delta || 0);
 
     if (
       year / 1000 > 1 ||
@@ -422,7 +423,7 @@ function FlatpickrInstance(
 
     if (self.daysContainer && !/iPhone|iPad|iPod/i.test(navigator.userAgent))
       bind(self.daysContainer, "mouseover", (e: MouseEvent) => {
-        if (self.config.mode === "range") onMouseOver(e.target as DayElement);
+        if (self.config.mode === "range") onMouseOver(getEventTarget(e) as DayElement);
       });
 
     bind(window.document.body, "keydown", onKeyDown);
@@ -453,7 +454,7 @@ function FlatpickrInstance(
       self.hourElement !== undefined
     ) {
       const selText = (e: FocusEvent) =>
-        (e.target as HTMLInputElement).select();
+        (getEventTarget(e) as HTMLInputElement).select();
       bind(self.timeContainer, ["increment"], updateTime);
       bind(self.timeContainer, "blur", updateTime, { capture: true });
       bind(self.timeContainer, "mousedown", onClick(timeIncrement));
@@ -530,10 +531,11 @@ function FlatpickrInstance(
    * @param {Event} e the click event
    */
   function timeIncrement(e: KeyboardEvent | MouseEvent) {
-    if (~(e.target as Element).className.indexOf("arrow"))
+    const eventTarget = getEventTarget(e) as Element;
+    if (~eventTarget.className.indexOf("arrow"))
       incrementNumInput(
         e,
-        (e.target as Element).classList.contains("arrowUp") ? 1 : -1
+        eventTarget.classList.contains("arrowUp") ? 1 : -1
       );
   }
 
@@ -551,7 +553,7 @@ function FlatpickrInstance(
     delta: number,
     inputElem?: HTMLInputElement
   ) {
-    const target = e && (e.target as Element);
+    const target = e && (getEventTarget(e) as Element);
     const input =
       inputElem ||
       (target && target.parentNode && target.parentNode.firstChild);
@@ -984,7 +986,7 @@ function FlatpickrInstance(
       );
 
       bind(self.monthsDropdownContainer, "change", (e: Event) => {
-        const target = e.target as HTMLSelectElement;
+        const target = getEventTarget(e) as HTMLSelectElement;
         const selectedMonth = parseInt(target.value, 10);
 
         self.changeMonth(selectedMonth - self.currentMonth);
@@ -1597,7 +1599,8 @@ function FlatpickrInstance(
     // "ArrowDown"  (IE "Down")          40
     // "Delete"     (IE "Del")           46
 
-    const isInput = e.target === self._input;
+    const eventTarget = getEventTarget(e);
+    const isInput = eventTarget === self._input;
     const allowInput = self.config.allowInput;
     const allowKeydown = self.isOpen && (!allowInput || !isInput);
     const allowInlineKeydown = self.config.inline && isInput && !allowInput;
@@ -1607,22 +1610,22 @@ function FlatpickrInstance(
         self.setDate(
           self._input.value,
           true,
-          e.target === self.altInput
+          eventTarget === self.altInput
             ? self.config.altFormat
             : self.config.dateFormat
         );
-        return (e.target as HTMLElement).blur();
+        return (eventTarget as HTMLElement).blur();
       } else {
         self.open();
       }
     } else if (
-      isCalendarElem(e.target as HTMLElement) ||
+      isCalendarElem(eventTarget as HTMLElement) ||
       allowKeydown ||
       allowInlineKeydown
     ) {
       const isTimeObj =
         !!self.timeContainer &&
-        self.timeContainer.contains(e.target as HTMLElement);
+        self.timeContainer.contains(eventTarget as HTMLElement);
 
       switch (e.keyCode) {
         case 13:
@@ -1675,16 +1678,16 @@ function FlatpickrInstance(
           e.preventDefault();
           const delta = e.keyCode === 40 ? 1 : -1;
           if (
-            (self.daysContainer && (e.target as DayElement).$i !== undefined) ||
-            e.target === self.input ||
-            e.target === self.altInput
+            (self.daysContainer && (eventTarget as DayElement).$i !== undefined) ||
+            eventTarget === self.input ||
+            eventTarget === self.altInput
           ) {
             if (e.ctrlKey) {
               e.stopPropagation();
               changeYear(self.currentYear - delta);
               focusOnDay(getFirstAvailableDay(1), 0);
             } else if (!isTimeObj) focusOnDay(undefined, delta * 7);
-          } else if (e.target === self.currentYearElement) {
+          } else if (eventTarget === self.currentYearElement) {
             changeYear(self.currentYear - delta);
           } else if (self.config.enableTime) {
             if (!isTimeObj && self.hourElement) self.hourElement.focus();
@@ -1705,7 +1708,7 @@ function FlatpickrInstance(
               .concat(self.pluginElements)
               .filter(x => x) as HTMLInputElement[];
 
-            const i = elems.indexOf(e.target as HTMLInputElement);
+            const i = elems.indexOf(eventTarget as HTMLInputElement);
 
             if (i !== -1) {
               const target = elems[i + (e.shiftKey ? -1 : 1)];
@@ -1715,7 +1718,7 @@ function FlatpickrInstance(
           } else if (
             !self.config.noCalendar &&
             self.daysContainer &&
-            self.daysContainer.contains(e.target as Node) &&
+            self.daysContainer.contains(eventTarget as Node) &&
             e.shiftKey
           ) {
             e.preventDefault();
@@ -1729,7 +1732,7 @@ function FlatpickrInstance(
       }
     }
 
-    if (self.amPM !== undefined && e.target === self.amPM) {
+    if (self.amPM !== undefined && eventTarget === self.amPM) {
       switch (e.key) {
         case self.l10n.amPM[0].charAt(0):
         case self.l10n.amPM[0].charAt(0).toLowerCase():
@@ -1749,7 +1752,7 @@ function FlatpickrInstance(
       }
     }
 
-    if (isInput || isCalendarElem(e.target as HTMLElement)) {
+    if (isInput || isCalendarElem(eventTarget as HTMLElement)) {
       triggerEvent("onKeyDown", e);
     }
   }
@@ -1859,7 +1862,8 @@ function FlatpickrInstance(
     if (self.isMobile === true) {
       if (e) {
         e.preventDefault();
-        e.target && (e.target as HTMLInputElement).blur();
+        const eventTarget = getEventTarget(e) as HTMLInputElement;
+        eventTarget && eventTarget.blur();
       }
 
       if (self.mobileInput !== undefined) {
@@ -2229,7 +2233,7 @@ function FlatpickrInstance(
       !day.classList.contains("flatpickr-disabled") &&
       !day.classList.contains("notAllowed");
 
-    const t = findParent(e.target as Element, isSelectable);
+    const t = findParent(getEventTarget(e) as Element, isSelectable);
 
     if (t === undefined) return;
 
@@ -2611,7 +2615,7 @@ function FlatpickrInstance(
 
     bind(self.mobileInput, "change", (e: KeyboardEvent) => {
       self.setDate(
-        (e.target as HTMLInputElement).value,
+        (getEventTarget(e) as HTMLInputElement).value,
         false,
         self.mobileFormatStr
       );
@@ -2741,16 +2745,17 @@ function FlatpickrInstance(
   }
 
   function onMonthNavClick(e: MouseEvent) {
-    const isPrevMonth = self.prevMonthNav.contains(e.target as Node);
-    const isNextMonth = self.nextMonthNav.contains(e.target as Node);
+    const eventTarget = getEventTarget(e);
+    const isPrevMonth = self.prevMonthNav.contains(eventTarget as Node);
+    const isNextMonth = self.nextMonthNav.contains(eventTarget as Node);
 
     if (isPrevMonth || isNextMonth) {
       changeMonth(isPrevMonth ? -1 : 1);
-    } else if (self.yearElements.indexOf(e.target as HTMLInputElement) >= 0) {
-      (e.target as HTMLInputElement).select();
-    } else if ((e.target as Element).classList.contains("arrowUp")) {
+    } else if (self.yearElements.indexOf(eventTarget as HTMLInputElement) >= 0) {
+      (eventTarget as HTMLInputElement).select();
+    } else if ((eventTarget as Element).classList.contains("arrowUp")) {
       self.changeYear(self.currentYear + 1);
-    } else if ((e.target as Element).classList.contains("arrowDown")) {
+    } else if ((eventTarget as Element).classList.contains("arrowDown")) {
       self.changeYear(self.currentYear - 1);
     }
   }
@@ -2761,9 +2766,10 @@ function FlatpickrInstance(
     e.preventDefault();
 
     const isKeyDown = e.type === "keydown",
-      input = e.target as HTMLInputElement;
+      eventTarget = getEventTarget(e),
+      input = eventTarget as HTMLInputElement;
 
-    if (self.amPM !== undefined && e.target === self.amPM) {
+    if (self.amPM !== undefined && eventTarget === self.amPM) {
       self.amPM.textContent =
         self.l10n.amPM[int(self.amPM.textContent === self.l10n.amPM[0])];
     }
