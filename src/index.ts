@@ -1028,8 +1028,13 @@ function FlatpickrInstance(
       "div",
       "flatpickr-current-month"
     );
-    currentMonth.appendChild(monthElement);
-    currentMonth.appendChild(yearInput);
+    if (self.config.yearFirst) {
+      currentMonth.appendChild(yearInput);
+      currentMonth.appendChild(monthElement);
+    } else {
+      currentMonth.appendChild(monthElement);
+      currentMonth.appendChild(yearInput);
+    }
 
     monthNavFragment.appendChild(currentMonth);
     container.appendChild(monthNavFragment);
@@ -1960,6 +1965,7 @@ function FlatpickrInstance(
       "static",
       "enableSeconds",
       "disableMobile",
+      "yearFirst",
     ];
 
     const userConfig = {
