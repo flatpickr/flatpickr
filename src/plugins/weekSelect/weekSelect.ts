@@ -70,12 +70,19 @@ function weekSelectPlugin(): Plugin<PlusWeeks> {
         fp.daysContainer.removeEventListener("mouseover", onDayHover);
     }
 
+    function onChange() {
+      fp.input.value = [fp.weekStartDay, fp.weekEndDay]
+        .map(date => fp.formatDate(date, fp.config.dateFormat))
+        .join(fp.l10n.rangeSeparator);
+    }
+
     return {
       onValueUpdate: highlightWeek,
       onMonthChange: highlightWeek,
       onYearChange: highlightWeek,
       onOpen: highlightWeek,
       onClose: clearHover,
+      onChange: onChange,
       onParseConfig: function() {
         fp.config.mode = "single";
         fp.config.enableTime = false;
