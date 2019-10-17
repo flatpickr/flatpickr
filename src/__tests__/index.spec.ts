@@ -872,7 +872,7 @@ describe("flatpickr", () => {
             expect(mobileInput.getAttribute("step")).toBe("3");
           });
 
-          it("set 'any' value if not setted", () => {
+          it("don't set 'any' value if not setted", () => {
             const el = document.createElement("input");
             el.removeAttribute("step");
 
@@ -881,7 +881,7 @@ describe("flatpickr", () => {
 
             const mobileInput = fp.mobileInput as HTMLInputElement;
 
-            expect(mobileInput.getAttribute("step")).toBe("any");
+            expect(mobileInput.getAttribute("step")).toBe(null);
           });
         });
 
