@@ -860,7 +860,7 @@ describe("flatpickr", () => {
         });
 
         describe("step attribute", () => {
-          it("copy value if setted", () => {
+          it("copy value if present", () => {
             const el = document.createElement("input");
             el.setAttribute("step", "3");
 
@@ -872,7 +872,7 @@ describe("flatpickr", () => {
             expect(mobileInput.getAttribute("step")).toBe("3");
           });
 
-          it("don't set 'any' value if not setted", () => {
+          it("don't set a default value if not present", () => {
             const el = document.createElement("input");
             el.removeAttribute("step");
 
