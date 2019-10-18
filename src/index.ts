@@ -2575,7 +2575,6 @@ function FlatpickrInstance(
       "input",
       self.input.className + " flatpickr-mobile"
     );
-    self.mobileInput.step = self.input.getAttribute("step") || "any";
     self.mobileInput.tabIndex = 1;
     self.mobileInput.type = inputType;
     self.mobileInput.disabled = self.input.disabled;
@@ -2601,6 +2600,9 @@ function FlatpickrInstance(
 
     if (self.config.maxDate)
       self.mobileInput.max = self.formatDate(self.config.maxDate, "Y-m-d");
+
+    if (self.input.getAttribute("step"))
+      self.mobileInput.step = String(self.input.getAttribute("step"));
 
     self.input.type = "hidden";
     if (self.altInput !== undefined) self.altInput.type = "hidden";
