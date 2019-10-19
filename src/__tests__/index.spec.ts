@@ -1374,6 +1374,16 @@ describe("flatpickr", () => {
       expect(fp._input.value).toEqual("");
     });
 
+    it("idempotent on focus in and out with time enabled", () => {
+      createInstance({
+        enableTime: true,
+      });
+
+      fp._input.focus();
+      clickOn(document.body);
+      expect(fp._input.value).toEqual("");
+    });
+
     it("time-picker focuses out onto input", () => {
       createInstance({ mode: "time" });
       fp.open();
