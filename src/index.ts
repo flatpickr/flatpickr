@@ -2182,7 +2182,7 @@ function FlatpickrInstance(
       self.calendarContainer.style.left = "auto";
       self.calendarContainer.style.right = `${right}px`;
     } else {
-      const doc = document.styleSheets[0] as CSSStyleSheet;
+      const doc = getDocumentStyleSheet() as CSSStyleSheet;
       // some testing environments don't have css support
       if (doc === undefined) return;
       const bodyWidth = window.document.body.offsetWidth;
@@ -2200,6 +2200,27 @@ function FlatpickrInstance(
       self.calendarContainer.style.left = `${centerLeft}px`;
       self.calendarContainer.style.right = "auto";
     }
+  }
+
+  function getDocumentStyleSheet() {
+    let editableSheet = null;
+    for (let i = 0; i < document.styleSheets.length; i++) {
+      let sheet = document.styleSheets[i] as CSSStyleSheet;
+      try {
+        sheet.cssRules;
+      } catch (err) {
+        continue;
+      }
+      editableSheet = sheet;
+      break;
+    }
+    return editableSheet != null ? editableSheet : createStyleSheet();
+  }
+
+  function createStyleSheet() {
+    let style = document.createElement("style");
+    document.head.appendChild(style);
+    return style.sheet as CSSStyleSheet;
   }
 
   function redraw() {
