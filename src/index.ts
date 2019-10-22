@@ -2390,9 +2390,9 @@ function FlatpickrInstance(
         new Error(`Invalid date supplied: ${JSON.stringify(inputDate)}`)
       );
 
-    self.selectedDates = dates.filter(
+    self.selectedDates = (self.config.allowInvalidPreload ? dates: dates.filter(
       d => d instanceof Date && isEnabled(d, false)
-    ) as Date[];
+    )) as Date[];
 
     if (self.config.mode === "range")
       self.selectedDates.sort((a, b) => a.getTime() - b.getTime());
