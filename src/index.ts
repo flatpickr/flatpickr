@@ -338,8 +338,7 @@ function FlatpickrInstance(
    */
   function onYearInput(event: KeyboardEvent & IncrementEvent) {
     const eventTarget = getEventTarget(event) as HTMLInputElement;
-    const year =
-      parseInt(eventTarget.value) + (event.delta || 0);
+    const year = parseInt(eventTarget.value) + (event.delta || 0);
 
     if (
       year / 1000 > 1 ||
@@ -423,7 +422,8 @@ function FlatpickrInstance(
 
     if (self.daysContainer && !/iPhone|iPad|iPod/i.test(navigator.userAgent))
       bind(self.daysContainer, "mouseover", (e: MouseEvent) => {
-        if (self.config.mode === "range") onMouseOver(getEventTarget(e) as DayElement);
+        if (self.config.mode === "range")
+          onMouseOver(getEventTarget(e) as DayElement);
       });
 
     bind(window.document.body, "keydown", onKeyDown);
@@ -533,10 +533,7 @@ function FlatpickrInstance(
   function timeIncrement(e: KeyboardEvent | MouseEvent) {
     const eventTarget = getEventTarget(e) as Element;
     if (~eventTarget.className.indexOf("arrow"))
-      incrementNumInput(
-        e,
-        eventTarget.classList.contains("arrowUp") ? 1 : -1
-      );
+      incrementNumInput(e, eventTarget.classList.contains("arrowUp") ? 1 : -1);
   }
 
   /**
@@ -1678,7 +1675,8 @@ function FlatpickrInstance(
           e.preventDefault();
           const delta = e.keyCode === 40 ? 1 : -1;
           if (
-            (self.daysContainer && (eventTarget as DayElement).$i !== undefined) ||
+            (self.daysContainer &&
+              (eventTarget as DayElement).$i !== undefined) ||
             eventTarget === self.input ||
             eventTarget === self.altInput
           ) {
@@ -1963,8 +1961,8 @@ function FlatpickrInstance(
     ];
 
     const userConfig = {
-      ...instanceConfig,
       ...JSON.parse(JSON.stringify(element.dataset || {})),
+      ...instanceConfig,
     } as Options;
 
     const formats = {} as Record<"dateFormat" | "altFormat", string>;
@@ -2165,7 +2163,9 @@ function FlatpickrInstance(
       (configPosHorizontal != null && configPosHorizontal === "center"
         ? (calendarWidth - inputBounds.width) / 2
         : 0);
-    const right = window.document.body.offsetWidth - (window.pageXOffset + inputBounds.right);
+    const right =
+      window.document.body.offsetWidth -
+      (window.pageXOffset + inputBounds.right);
     const rightMost = left + calendarWidth > window.document.body.offsetWidth;
     const centerMost = right + calendarWidth > window.document.body.offsetWidth;
 
@@ -2753,7 +2753,9 @@ function FlatpickrInstance(
 
     if (isPrevMonth || isNextMonth) {
       changeMonth(isPrevMonth ? -1 : 1);
-    } else if (self.yearElements.indexOf(eventTarget as HTMLInputElement) >= 0) {
+    } else if (
+      self.yearElements.indexOf(eventTarget as HTMLInputElement) >= 0
+    ) {
       (eventTarget as HTMLInputElement).select();
     } else if ((eventTarget as Element).classList.contains("arrowUp")) {
       self.changeYear(self.currentYear + 1);
