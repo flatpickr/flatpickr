@@ -2048,7 +2048,8 @@ function FlatpickrInstance(
     Object.assign(self.config, formats, userConfig);
 
     for (let i = 0; i < boolOpts.length; i++)
-      self.config[boolOpts[i]] =
+      // https://github.com/microsoft/TypeScript/issues/31663
+      (self.config as any)[boolOpts[i]] =
         self.config[boolOpts[i]] === true ||
         self.config[boolOpts[i]] === "true";
 
@@ -2071,15 +2072,13 @@ function FlatpickrInstance(
       const pluginConf = self.config.plugins[i](self) || ({} as Options);
       for (const key in pluginConf) {
         if (HOOKS.indexOf(key as HookKey) > -1) {
-          self.config[key as keyof Options] = arrayify(pluginConf[
+          (self.config as any)[key] = arrayify(pluginConf[
             key as HookKey
           ] as Hook)
             .map(bindToInstance)
             .concat(self.config[key as HookKey]);
         } else if (typeof userConfig[key as keyof Options] === "undefined")
-          self.config[key as keyof ParsedOptions] = pluginConf[
-            key as keyof Options
-          ] as any;
+          (self.config as any)[key] = pluginConf[key as keyof Options] as any;
       }
     }
 
@@ -2134,7 +2133,7 @@ function FlatpickrInstance(
         self.calendarContainer.children,
         ((acc: number, child: HTMLElement) => acc + child.offsetHeight) as any,
         0
-      ),
+      ) as number,
       calendarWidth = self.calendarContainer.offsetWidth,
       configPos = self.config.position.split(" "),
       configPosVertical = configPos[0],
@@ -2346,7 +2345,7 @@ function FlatpickrInstance(
       if (CALLBACKS[option] !== undefined)
         (CALLBACKS[option] as Function[]).forEach(x => x());
       else if (HOOKS.indexOf(option as HookKey) > -1)
-        self.config[option] = arrayify(value);
+        (self.config as any)[option] = arrayify(value);
     }
 
     self.redraw();
