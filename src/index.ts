@@ -2130,7 +2130,7 @@ function FlatpickrInstance(
     const positionElement = customPositionElement || self._positionElement;
 
     const computedStyles = getComputedStyle(self.calendarContainer, null);
-    const paddingHeight = parseFloat(computedStyles.paddingTop) + parseFloat(computedStyles.paddingBottom);
+    const paddingHeight = parseFloat(computedStyles.paddingTop || '0') + parseFloat(computedStyles.paddingBottom || '0');
 
     const calendarHeight = Array.prototype.reduce.call(
         self.calendarContainer.children,
