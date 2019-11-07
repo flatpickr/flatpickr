@@ -50,7 +50,7 @@ export function createNumberInput(
     arrowUp = createElement<HTMLSpanElement>("span", "arrowUp"),
     arrowDown = createElement<HTMLSpanElement>("span", "arrowDown");
 
-  if (navigator.userAgent.indexOf("MSIE 9.0") === -1) {
+  if ((navigator.userAgent.indexOf("Firefox") === -1) && (navigator.userAgent.indexOf("MSIE 9.0") === -1)) {
     numInput.type = "number";
   } else {
     numInput.type = "text";
