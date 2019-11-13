@@ -2204,6 +2204,7 @@ function FlatpickrInstance(
   function redraw() {
     if (self.config.noCalendar || self.isMobile) return;
 
+    buildMonthSwitch();
     updateNavigationCurrentMonth();
     buildDays();
   }
@@ -2349,7 +2350,7 @@ function FlatpickrInstance(
     }
 
     self.redraw();
-    updateValue(false);
+    updateValue(true);
   }
 
   function setSelectedDate(
@@ -2412,7 +2413,7 @@ function FlatpickrInstance(
       self.selectedDates[self.selectedDates.length - 1];
 
     self.redraw();
-    jumpToDate();
+    jumpToDate(undefined, triggerChange);
 
     setHoursFromDate();
     if (self.selectedDates.length === 0) {
