@@ -156,10 +156,11 @@ describe("flatpickr", () => {
           defaultDate: 1477111633771,
         });
 
+        const date = new Date("2016-10-22T04:47:13.771Z");
         expect(fp.selectedDates[0]).toBeDefined();
-        expect(fp.selectedDates[0].getFullYear()).toEqual(2016);
-        expect(fp.selectedDates[0].getMonth()).toEqual(9);
-        expect(fp.selectedDates[0].getDate()).toEqual(22);
+        expect(fp.selectedDates[0].getFullYear()).toEqual(date.getFullYear());
+        expect(fp.selectedDates[0].getMonth()).toEqual(date.getMonth());
+        expect(fp.selectedDates[0].getDate()).toEqual(date.getDate());
       });
 
       it("should parse unix time", () => {
@@ -168,11 +169,11 @@ describe("flatpickr", () => {
           dateFormat: "U",
         });
 
-        const parsedDate = fp.selectedDates[0];
-        expect(parsedDate).toBeDefined();
-        expect(parsedDate.getFullYear()).toEqual(2016);
-        expect(parsedDate.getMonth()).toEqual(9);
-        expect(parsedDate.getDate()).toEqual(22);
+        const date = new Date("2016-10-22T04:47:13.771Z");
+        expect(fp.selectedDates[0]).toBeDefined();
+        expect(fp.selectedDates[0].getFullYear()).toEqual(date.getFullYear());
+        expect(fp.selectedDates[0].getMonth()).toEqual(date.getMonth());
+        expect(fp.selectedDates[0].getDate()).toEqual(date.getDate());
       });
 
       it('should parse "2016-10"', () => {
