@@ -3,9 +3,10 @@
   "version": "4.6.4",
   "description": "A lightweight, powerful javascript datetime picker",
   "scripts": {
-    "build": "run-s build:pre build:build build:types build:post",
+    "build": "run-s build:pre build:build build:esm build:types build:post",
     "build:pre": "rimraf dist",
     "build:build": "ts-node --transpile-only build.ts",
+    "build:esm": "tsc --module es2015 --target es6 --outDir dist/esm",
     "build:types": "tsc -p tsconfig.declarations.json",
     "build:post": "cp src/typings.d.ts dist/typings.d.ts",
     "fmt": "prettier --ignore-path .gitignore --trailing-comma es5 --write \"**/*.ts\"",
@@ -56,6 +57,7 @@
     "typescript": "^3.6.4"
   },
   "main": "dist/flatpickr.js",
+  "module": "dist/esm/src/index.js",
   "style": "dist/flatpickr.css",
   "types": "./dist/typings.d.ts",
   "repository": {
