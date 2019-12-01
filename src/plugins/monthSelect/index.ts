@@ -1,5 +1,5 @@
 import { Plugin } from "../../types/options";
-import { DayElement as MonthElement, Instance } from "../../types/instance";
+import { Instance } from "../../types/instance";
 import { monthToStr } from "../../utils/formatting";
 import { getEventTarget } from "../../utils/dom";
 
