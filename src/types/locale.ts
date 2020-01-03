@@ -152,6 +152,7 @@ export type key =
   | "my"
   | "nl"
   | "no"
+  | "oc"
   | "pa"
   | "pl"
   | "pt"
