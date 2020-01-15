@@ -131,6 +131,12 @@ By default, Flatpickr utilizes native datetime widgets unless certain options (e
   /* If "weekNumbers" are enabled, this is the function that outputs the week number for a given dates, optionally along with other text  */
   getWeek: (date: Date) => string | number;
 
+  /* Hides days from next month used to fill the calendar container */
+  hideNextMonthDays: boolean;
+
+  /* Hides days from prev month used to fill the calendar container */
+  hidePrevMonthDays: boolean;
+
   /*   Adjusts the step for the hour input (incl. scrolling) */
   hourIncrement: number;
 
@@ -280,6 +286,8 @@ export interface ParsedOptions {
   errorHandler: (err: Error) => void;
   formatDate?: Options["formatDate"];
   getWeek: (date: Date) => string | number;
+  hideNextMonthDays: boolean;
+  hidePrevMonthDays: boolean;
   hourIncrement: number;
   ignoredFocusElements: HTMLElement[];
   inline: boolean;
@@ -365,6 +373,8 @@ export const defaults: ParsedOptions = {
       )
     );
   },
+  hideNextMonthDays: false,
+  hidePrevMonthDays: false,
   hourIncrement: 1,
   ignoredFocusElements: [],
   inline: false,
