@@ -995,30 +995,40 @@ function FlatpickrInstance(
 
       monthElement = self.monthsDropdownContainer;
     }
+    let yearElement;
+    let yearInput;
 
-    const yearInput = createNumberInput("cur-year", { tabindex: "-1" });
+    if (self.config.yearSelectorType === "input") {
+      yearInput = createNumberInput("cur-year", { tabindex: "-1" });
 
-    const yearElement = yearInput.getElementsByTagName(
-      "input"
-    )[0] as HTMLInputElement;
-    yearElement.setAttribute("aria-label", self.l10n.yearAriaLabel);
+      yearElement = yearInput.getElementsByTagName(
+        "input"
+      )[0] as HTMLInputElement;
+      yearElement.setAttribute("aria-label", self.l10n.yearAriaLabel);
 
-    if (self.config.minDate) {
-      yearElement.setAttribute(
-        "min",
-        self.config.minDate.getFullYear().toString()
-      );
-    }
+      if (self.config.minDate) {
+        yearElement.setAttribute(
+          "min",
+          self.config.minDate.getFullYear().toString()
+        );
+      }
 
-    if (self.config.maxDate) {
-      yearElement.setAttribute(
-        "max",
-        self.config.maxDate.getFullYear().toString()
-      );
+      if (self.config.maxDate) {
+        yearElement.setAttribute(
+          "max",
+          self.config.maxDate.getFullYear().toString()
+        );
 
-      yearElement.disabled =
-        !!self.config.minDate &&
-        self.config.minDate.getFullYear() === self.config.maxDate.getFullYear();
+        yearElement.disabled =
+          !!self.config.minDate &&
+          self.config.minDate.getFullYear() ===
+            self.config.maxDate.getFullYear();
+      }
+    } else {
+      yearElement = createElement<HTMLSpanElement>("span", "cur-year numInput");
+      yearElement.textContent = self.currentYear.toString();
+      yearElement.setAttribute("aria-label", self.l10n.yearAriaLabel);
+      yearInput = yearElement;
     }
 
     const currentMonth = createElement<HTMLDivElement>(
@@ -2715,7 +2725,11 @@ function FlatpickrInstance(
         self.monthsDropdownContainer.value = d.getMonth().toString();
       }
 
-      yearElement.value = d.getFullYear().toString();
+      if (self.config.yearSelectorType === "input") {
+        (<HTMLInputElement>yearElement).value = d.getFullYear().toString();
+      } else {
+        yearElement.textContent = d.getFullYear().toString();
+      }
     });
 
     self._hidePrevMonthArrow =
@@ -2775,7 +2789,8 @@ function FlatpickrInstance(
     if (isPrevMonth || isNextMonth) {
       changeMonth(isPrevMonth ? -1 : 1);
     } else if (
-      self.yearElements.indexOf(eventTarget as HTMLInputElement) >= 0
+      self.yearElements.indexOf(eventTarget as HTMLInputElement) >= 0 &&
+      self.config.yearSelectorType === "input"
     ) {
       (eventTarget as HTMLInputElement).select();
     } else if ((eventTarget as Element).classList.contains("arrowUp")) {
