@@ -982,6 +982,9 @@ function FlatpickrInstance(
         "flatpickr-monthDropdown-months"
       );
 
+      self.monthsDropdownContainer.setAttribute("aria-label", self.l10n.monthAriaLabel);
+
+
       bind(self.monthsDropdownContainer, "change", (e: Event) => {
         const target = getEventTarget(e) as HTMLSelectElement;
         const selectedMonth = parseInt(target.value, 10);
