@@ -1103,7 +1103,7 @@ function FlatpickrInstance(
       },
     });
 
-    self.currentYearElement = self.yearElements[0];
+    self.currentYearElement = <HTMLInputElement>self.yearElements[0];
 
     updateNavigationCurrentMonth();
 
