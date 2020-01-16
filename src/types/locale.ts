@@ -55,6 +55,7 @@ export type Locale = {
   toggleTitle: string;
   amPM: [string, string];
   yearAriaLabel: string;
+  monthAriaLabel: string;
   hourAriaLabel: string;
   minuteAriaLabel: string;
   time_24hr: boolean;
