@@ -2764,7 +2764,10 @@ function FlatpickrInstance(
       self.altInput.value = getDateStr(self.config.altFormat);
     }
 
-    if (triggerChange !== false) triggerEvent("onValueUpdate");
+    if (triggerChange !== false) {
+      triggerEvent("onValueUpdate");
+      triggerEvent("onChange");
+    }
   }
 
   function onMonthNavClick(e: MouseEvent) {
