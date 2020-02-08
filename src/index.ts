@@ -1600,7 +1600,9 @@ function FlatpickrInstance(
     // "Delete"     (IE "Del")           46
 
     const eventTarget = getEventTarget(e);
-    const isInput = eventTarget === self._input;
+    const isInput = self.config.wrap
+      ? element.contains(eventTarget as HTMLElement)
+      : eventTarget === self._input;
     const allowInput = self.config.allowInput;
     const allowKeydown = self.isOpen && (!allowInput || !isInput);
     const allowInlineKeydown = self.config.inline && isInput && !allowInput;

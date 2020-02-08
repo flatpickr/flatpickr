@@ -169,4 +169,6 @@ export type key =
   | "uk"
   | "vn"
   | "zh"
+  | "uz"
+  | "uz_latn"
   | "zh_tw";
