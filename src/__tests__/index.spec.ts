@@ -18,6 +18,7 @@ let mockAgent: string | undefined;
 });
 
 function createInstance(config?: Options, el?: HTMLElement) {
+  destroyInstance();
   fp = flatpickr(
     el || elem || document.createElement("input"),
     config || {}
@@ -25,12 +26,19 @@ function createInstance(config?: Options, el?: HTMLElement) {
   return fp;
 }
 
+function destroyInstance() {
+  if (fp) {
+    fp.input.value = "";
+    fp.destroy && fp.destroy();
+  }
+}
+
 function beforeEachTest() {
   mockAgent = undefined;
   jest.runAllTimers();
   (document.activeElement as HTMLElement).blur();
 
-  fp && fp.destroy && fp.destroy();
+  destroyInstance();
 
   if (elem === undefined) {
     elem = document.createElement("input");
