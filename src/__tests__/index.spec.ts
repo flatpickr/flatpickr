@@ -644,8 +644,7 @@ describe("flatpickr", () => {
       fp.isOpen = true;
       simulate("mousedown", window.document.body, { which: 1 }, CustomEvent);
       expect(fp.isOpen).toBe(false);
-      expect(fp.selectedDates.length).toBe(0);
-      expect(fp._input.value).toBe("");
+      expect(fp.selectedDates.length).toBe(1);
     });
 
     it("onKeyDown", () => {
