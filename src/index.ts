@@ -376,9 +376,7 @@ function FlatpickrInstance(
   }
 
   /**
-   * A mousedown handler which mimics click.
-   * Minimizes latency, since we don't need to wait for mouseup in most cases.
-   * Also, avoids handling right clicks.
+   * A click handler, avoids handling right clicks.
    *
    * @param {Function} handler the event handler
    */
@@ -433,19 +431,19 @@ function FlatpickrInstance(
 
     if (window.ontouchstart !== undefined)
       bind(window.document, "touchstart", documentClick);
-    else bind(window.document, "mousedown", onClick(documentClick));
+    else bind(window.document, "click", onClick(documentClick));
     bind(window.document, "focus", documentClick, { capture: true });
 
     if (self.config.clickOpens === true) {
       bind(self._input, "focus", self.open);
-      bind(self._input, "mousedown", onClick(self.open));
+      bind(self._input, "click", onClick(self.open));
     }
 
     if (self.daysContainer !== undefined) {
-      bind(self.monthNav, "mousedown", onClick(onMonthNavClick));
+      bind(self.monthNav, "click", onClick(onMonthNavClick));
 
       bind(self.monthNav, ["keyup", "increment"], onYearInput);
-      bind(self.daysContainer, "mousedown", onClick(selectDate));
+      bind(self.daysContainer, "click", onClick(selectDate));
     }
 
     if (
@@ -457,7 +455,7 @@ function FlatpickrInstance(
         (getEventTarget(e) as HTMLInputElement).select();
       bind(self.timeContainer, ["increment"], updateTime);
       bind(self.timeContainer, "blur", updateTime, { capture: true });
-      bind(self.timeContainer, "mousedown", onClick(timeIncrement));
+      bind(self.timeContainer, "click", onClick(timeIncrement));
 
       bind([self.hourElement, self.minuteElement], ["focus", "click"], selText);
 
@@ -471,7 +469,7 @@ function FlatpickrInstance(
       if (self.amPM !== undefined) {
         bind(
           self.amPM,
-          "mousedown",
+          "click",
           onClick(e => {
             updateTime(e);
             triggerChange();
