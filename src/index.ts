@@ -1590,7 +1590,7 @@ function FlatpickrInstance(
     return false;
   }
     
-  function onBlur(e) {
+  function onBlur(e: FocusEvent) {
     var isInput = e.target === self._input;
     
     if (isInput) {
