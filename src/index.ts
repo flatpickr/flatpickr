@@ -479,6 +479,9 @@ function FlatpickrInstance(
         );
       }
     }
+    
+    if (self.config.allowInput)
+      bind(self._input, "blur", onBlur);
   }
 
   /**
@@ -1585,6 +1588,16 @@ function FlatpickrInstance(
         self.daysContainer.contains(elem)
       );
     return false;
+  }
+    
+  function onBlur(e) {
+    var isInput = e.target === self._input;
+    
+    if (isInput) {
+      self.setDate(self._input.value, true, e.target === self.altInput
+                   ? self.config.altFormat
+                   : self.config.dateFormat);
+    }
   }
 
   function onKeyDown(e: KeyboardEvent) {
