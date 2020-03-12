@@ -832,7 +832,10 @@ function FlatpickrInstance(
     const firstOfMonth =
       (new Date(year, month, 1).getDay() - self.l10n.firstDayOfWeek + 7) % 7;
 
-    const prevMonthDays = self.utils.getDaysInMonth((month - 1 + 12) % 12, year);
+    const prevMonthDays = self.utils.getDaysInMonth(
+      (month - 1 + 12) % 12,
+      year
+    );
 
     const daysInMonth = self.utils.getDaysInMonth(month, year),
       days = window.document.createDocumentFragment(),
@@ -982,8 +985,10 @@ function FlatpickrInstance(
         "flatpickr-monthDropdown-months"
       );
 
-      self.monthsDropdownContainer.setAttribute("aria-label", self.l10n.monthAriaLabel);
-
+      self.monthsDropdownContainer.setAttribute(
+        "aria-label",
+        self.l10n.monthAriaLabel
+      );
 
       bind(self.monthsDropdownContainer, "change", (e: Event) => {
         const target = getEventTarget(e) as HTMLSelectElement;
@@ -1848,6 +1853,10 @@ function FlatpickrInstance(
   }
 
   function setDefaultTime() {
+    if (!self.config.autoFillDefaultTime) {
+      return;
+    }
+
     self.setDate(
       self.config.minDate !== undefined
         ? new Date(self.config.minDate.getTime())
