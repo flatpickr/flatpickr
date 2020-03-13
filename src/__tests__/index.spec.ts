@@ -28,7 +28,10 @@ function createInstance(config?: Options, el?: HTMLElement) {
 function beforeEachTest() {
   mockAgent = undefined;
   jest.runAllTimers();
-  (document.activeElement as HTMLElement).blur();
+
+  if (document.activeElement) {
+    (document.activeElement as HTMLElement).blur();
+  }
 
   fp && fp.destroy && fp.destroy();
 
@@ -351,29 +354,29 @@ describe("flatpickr", () => {
     describe("default formatter", () => {
       const DEFAULT_FORMAT_1 = "d.m.y H:i:S",
         DEFAULT_FORMAT_2 = "D j F, 'y",
-        DEFAULT_FORMAT_3 = 'Y-m-d';
+        DEFAULT_FORMAT_3 = "Y-m-d";
 
-        it(`should format the date with the pattern "${DEFAULT_FORMAT_1}"`, () => {
-          const RESULT = "20.10.16 09:19:59";
-          createInstance({
-            dateFormat: DEFAULT_FORMAT_1,
-          });
-  
-          fp.setDate("20.10.16 09:19:59");
-          expect(fp.input.value).toEqual(RESULT);
-          fp.setDate("2015.11.21 19:29:49");
-          expect(fp.input.value).not.toEqual(RESULT);
+      it(`should format the date with the pattern "${DEFAULT_FORMAT_1}"`, () => {
+        const RESULT = "20.10.16 09:19:59";
+        createInstance({
+          dateFormat: DEFAULT_FORMAT_1,
         });
 
-        it("should format dates for year 0001", () => {
-          const RESULT = "0001-07-15";
-          createInstance({
-            dateFormat: DEFAULT_FORMAT_3,
-          });
-  
-          fp.setDate("0001-07-15");
-          expect(fp.input.value).toEqual(RESULT);
+        fp.setDate("20.10.16 09:19:59");
+        expect(fp.input.value).toEqual(RESULT);
+        fp.setDate("2015.11.21 19:29:49");
+        expect(fp.input.value).not.toEqual(RESULT);
+      });
+
+      it("should format dates for year 0001", () => {
+        const RESULT = "0001-07-15";
+        createInstance({
+          dateFormat: DEFAULT_FORMAT_3,
         });
+
+        fp.setDate("0001-07-15");
+        expect(fp.input.value).toEqual(RESULT);
+      });
 
       it(`should format the date with the pattern "${DEFAULT_FORMAT_2}"`, () => {
         const RESULT = "Thu 20 October, '16";
