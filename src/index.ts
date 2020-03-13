@@ -1854,6 +1854,10 @@ function FlatpickrInstance(
   }
 
   function setDefaultTime() {
+    if (!self.config.autoFillDefaultTime) {
+      return;
+    }
+
     self.setDate(
       self.config.minDate !== undefined
         ? new Date(self.config.minDate.getTime())
