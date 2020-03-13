@@ -12,11 +12,13 @@ import { english } from "../l10n/default";
 export interface FormatterArgs {
   config?: ParsedOptions;
   l10n?: Locale;
+  isMobile?: boolean;
 }
 
 export const createDateFormatter = ({
   config = defaults,
   l10n = english,
+  isMobile = false,
 }: FormatterArgs) => (
   dateObj: Date,
   frmt: string,
@@ -24,7 +26,7 @@ export const createDateFormatter = ({
 ): string => {
   const locale = overrideLocale || l10n;
 
-  if (config.formatDate !== undefined) {
+  if (config.formatDate !== undefined && !isMobile) {
     return config.formatDate(dateObj, frmt, locale);
   }
 

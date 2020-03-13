@@ -56,7 +56,7 @@ export const Dutch: CustomLocale = {
 
   firstDayOfWeek: 1,
   weekAbbreviation: "wk",
-  rangeSeparator: " tot ",
+  rangeSeparator: " t/m ",
   scrollTitle: "Scroll voor volgende / vorige",
   toggleTitle: "Klik om te wisselen",
   time_24hr: true,

@@ -832,9 +832,9 @@ function FlatpickrInstance(
     const firstOfMonth =
       (new Date(year, month, 1).getDay() - self.l10n.firstDayOfWeek + 7) % 7;
 
-    const prevMonthDays = self.utils.getDaysInMonth((month - 1 + 12) % 12);
+    const prevMonthDays = self.utils.getDaysInMonth((month - 1 + 12) % 12, year);
 
-    const daysInMonth = self.utils.getDaysInMonth(month),
+    const daysInMonth = self.utils.getDaysInMonth(month, year),
       days = window.document.createDocumentFragment(),
       isMultiMonth = self.config.showMonths > 1,
       prevMonthDayClass = isMultiMonth ? "prevMonthDay hidden" : "prevMonthDay",
@@ -981,6 +981,9 @@ function FlatpickrInstance(
         "select",
         "flatpickr-monthDropdown-months"
       );
+
+      self.monthsDropdownContainer.setAttribute("aria-label", self.l10n.monthAriaLabel);
+
 
       bind(self.monthsDropdownContainer, "change", (e: Event) => {
         const target = getEventTarget(e) as HTMLSelectElement;
@@ -1597,7 +1600,9 @@ function FlatpickrInstance(
     // "Delete"     (IE "Del")           46
 
     const eventTarget = getEventTarget(e);
-    const isInput = eventTarget === self._input;
+    const isInput = self.config.wrap
+      ? element.contains(eventTarget as HTMLElement)
+      : eventTarget === self._input;
     const allowInput = self.config.allowInput;
     const allowKeydown = self.isOpen && (!allowInput || !isInput);
     const allowInlineKeydown = self.config.inline && isInput && !allowInput;
@@ -2181,7 +2186,7 @@ function FlatpickrInstance(
       self.calendarContainer.style.left = "auto";
       self.calendarContainer.style.right = `${right}px`;
     } else {
-      const doc = document.styleSheets[0] as CSSStyleSheet;
+      const doc = getDocumentStyleSheet() as CSSStyleSheet;
       // some testing environments don't have css support
       if (doc === undefined) return;
       const bodyWidth = window.document.body.offsetWidth;
@@ -2201,9 +2206,31 @@ function FlatpickrInstance(
     }
   }
 
+  function getDocumentStyleSheet() {
+    let editableSheet = null;
+    for (let i = 0; i < document.styleSheets.length; i++) {
+      let sheet = document.styleSheets[i] as CSSStyleSheet;
+      try {
+        sheet.cssRules;
+      } catch (err) {
+        continue;
+      }
+      editableSheet = sheet;
+      break;
+    }
+    return editableSheet != null ? editableSheet : createStyleSheet();
+  }
+
+  function createStyleSheet() {
+    let style = document.createElement("style");
+    document.head.appendChild(style);
+    return style.sheet as CSSStyleSheet;
+  }
+
   function redraw() {
     if (self.config.noCalendar || self.isMobile) return;
 
+    buildMonthSwitch();
     updateNavigationCurrentMonth();
     buildDays();
   }
@@ -2349,7 +2376,7 @@ function FlatpickrInstance(
     }
 
     self.redraw();
-    updateValue(false);
+    updateValue(true);
   }
 
   function setSelectedDate(
@@ -2412,7 +2439,7 @@ function FlatpickrInstance(
       self.selectedDates[self.selectedDates.length - 1];
 
     self.redraw();
-    jumpToDate();
+    jumpToDate(undefined, triggerChange);
 
     setHoursFromDate();
     if (self.selectedDates.length === 0) {
