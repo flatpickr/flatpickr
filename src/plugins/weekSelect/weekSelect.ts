@@ -1,5 +1,6 @@
 import { DayElement } from "../../types/instance";
 import { Plugin } from "../../types/options";
+import { getEventTarget } from "../../utils/dom";
 
 export type PlusWeeks = {
   weekStartDay: Date;
@@ -9,7 +10,7 @@ export type PlusWeeks = {
 function weekSelectPlugin(): Plugin<PlusWeeks> {
   return function(fp) {
     function onDayHover(event: MouseEvent) {
-      const day = event.target as DayElement;
+      const day = getEventTarget(event) as DayElement;
       if (!day.classList.contains("flatpickr-day")) return;
 
       const days = fp.days.childNodes;

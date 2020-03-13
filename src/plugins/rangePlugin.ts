@@ -24,6 +24,17 @@ function rangePlugin(config: Config = {}): Plugin {
           config.input instanceof Element
             ? config.input
             : (window.document.querySelector(config.input) as HTMLInputElement);
+
+        if (!secondInput) {
+          fp.config.errorHandler(new Error("Invalid input element specified"));
+          return;
+        }
+
+        if (fp.config.wrap) {
+          secondInput = secondInput.querySelector(
+            "[data-input]"
+          ) as HTMLInputElement;
+        }
       } else {
         secondInput = fp._input.cloneNode() as HTMLInputElement;
         secondInput.removeAttribute("id");

@@ -28,7 +28,10 @@ function createInstance(config?: Options, el?: HTMLElement) {
 function beforeEachTest() {
   mockAgent = undefined;
   jest.runAllTimers();
-  (document.activeElement as HTMLElement).blur();
+
+  if (document.activeElement) {
+    (document.activeElement as HTMLElement).blur();
+  }
 
   fp && fp.destroy && fp.destroy();
 
@@ -156,10 +159,11 @@ describe("flatpickr", () => {
           defaultDate: 1477111633771,
         });
 
+        const date = new Date("2016-10-22T04:47:13.771Z");
         expect(fp.selectedDates[0]).toBeDefined();
-        expect(fp.selectedDates[0].getFullYear()).toEqual(2016);
-        expect(fp.selectedDates[0].getMonth()).toEqual(9);
-        expect(fp.selectedDates[0].getDate()).toEqual(22);
+        expect(fp.selectedDates[0].getFullYear()).toEqual(date.getFullYear());
+        expect(fp.selectedDates[0].getMonth()).toEqual(date.getMonth());
+        expect(fp.selectedDates[0].getDate()).toEqual(date.getDate());
       });
 
       it("should parse unix time", () => {
@@ -168,11 +172,11 @@ describe("flatpickr", () => {
           dateFormat: "U",
         });
 
-        const parsedDate = fp.selectedDates[0];
-        expect(parsedDate).toBeDefined();
-        expect(parsedDate.getFullYear()).toEqual(2016);
-        expect(parsedDate.getMonth()).toEqual(9);
-        expect(parsedDate.getDate()).toEqual(22);
+        const date = new Date("2016-10-22T04:47:13.771Z");
+        expect(fp.selectedDates[0]).toBeDefined();
+        expect(fp.selectedDates[0].getFullYear()).toEqual(date.getFullYear());
+        expect(fp.selectedDates[0].getMonth()).toEqual(date.getMonth());
+        expect(fp.selectedDates[0].getDate()).toEqual(date.getDate());
       });
 
       it('should parse "2016-10"', () => {
@@ -349,7 +353,8 @@ describe("flatpickr", () => {
   describe("date formatting", () => {
     describe("default formatter", () => {
       const DEFAULT_FORMAT_1 = "d.m.y H:i:S",
-        DEFAULT_FORMAT_2 = "D j F, 'y";
+        DEFAULT_FORMAT_2 = "D j F, 'y",
+        DEFAULT_FORMAT_3 = "Y-m-d";
 
       it(`should format the date with the pattern "${DEFAULT_FORMAT_1}"`, () => {
         const RESULT = "20.10.16 09:19:59";
@@ -361,6 +366,16 @@ describe("flatpickr", () => {
         expect(fp.input.value).toEqual(RESULT);
         fp.setDate("2015.11.21 19:29:49");
         expect(fp.input.value).not.toEqual(RESULT);
+      });
+
+      it("should format dates for year 0001", () => {
+        const RESULT = "0001-07-15";
+        createInstance({
+          dateFormat: DEFAULT_FORMAT_3,
+        });
+
+        fp.setDate("0001-07-15");
+        expect(fp.input.value).toEqual(RESULT);
       });
 
       it(`should format the date with the pattern "${DEFAULT_FORMAT_2}"`, () => {
@@ -860,7 +875,7 @@ describe("flatpickr", () => {
         });
 
         describe("step attribute", () => {
-          it("copy value if setted", () => {
+          it("copy value if present", () => {
             const el = document.createElement("input");
             el.setAttribute("step", "3");
 
@@ -872,7 +887,7 @@ describe("flatpickr", () => {
             expect(mobileInput.getAttribute("step")).toBe("3");
           });
 
-          it("set 'any' value if not setted", () => {
+          it("don't set a default value if not present", () => {
             const el = document.createElement("input");
             el.removeAttribute("step");
 
@@ -881,7 +896,7 @@ describe("flatpickr", () => {
 
             const mobileInput = fp.mobileInput as HTMLInputElement;
 
-            expect(mobileInput.getAttribute("step")).toBe("any");
+            expect(mobileInput.getAttribute("step")).toBe(null);
           });
         });
 

@@ -203,8 +203,8 @@ export const formats: Formats = {
     return options.getWeek(date);
   },
 
-  // full year e.g. 2016
-  Y: (date: Date) => date.getFullYear(),
+  // full year e.g. 2016, padded (0001-9999)
+  Y: (date: Date) => pad(date.getFullYear(), 4),
 
   // day in month, padded (01-30)
   d: (date: Date) => pad(date.getDate()),
