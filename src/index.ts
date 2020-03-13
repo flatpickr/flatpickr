@@ -832,7 +832,10 @@ function FlatpickrInstance(
     const firstOfMonth =
       (new Date(year, month, 1).getDay() - self.l10n.firstDayOfWeek + 7) % 7;
 
-    const prevMonthDays = self.utils.getDaysInMonth((month - 1 + 12) % 12, year);
+    const prevMonthDays = self.utils.getDaysInMonth(
+      (month - 1 + 12) % 12,
+      year
+    );
 
     const daysInMonth = self.utils.getDaysInMonth(month, year),
       days = window.document.createDocumentFragment(),
@@ -982,8 +985,10 @@ function FlatpickrInstance(
         "flatpickr-monthDropdown-months"
       );
 
-      self.monthsDropdownContainer.setAttribute("aria-label", self.l10n.monthAriaLabel);
-
+      self.monthsDropdownContainer.setAttribute(
+        "aria-label",
+        self.l10n.monthAriaLabel
+      );
 
       bind(self.monthsDropdownContainer, "change", (e: Event) => {
         const target = getEventTarget(e) as HTMLSelectElement;
@@ -1175,9 +1180,10 @@ function FlatpickrInstance(
           : self.config.defaultSeconds
       );
 
-      self.secondElement.setAttribute("step", self.minuteElement.getAttribute(
-        "step"
-      ) as string);
+      self.secondElement.setAttribute(
+        "step",
+        self.minuteElement.getAttribute("step") as string
+      );
       self.secondElement.setAttribute("min", "0");
       self.secondElement.setAttribute("max", "59");
 
@@ -2072,9 +2078,9 @@ function FlatpickrInstance(
       const pluginConf = self.config.plugins[i](self) || ({} as Options);
       for (const key in pluginConf) {
         if (HOOKS.indexOf(key as HookKey) > -1) {
-          (self.config as any)[key] = arrayify(pluginConf[
-            key as HookKey
-          ] as Hook)
+          (self.config as any)[key] = arrayify(
+            pluginConf[key as HookKey] as Hook
+          )
             .map(bindToInstance)
             .concat(self.config[key as HookKey]);
         } else if (typeof userConfig[key as keyof Options] === "undefined")
@@ -2083,15 +2089,17 @@ function FlatpickrInstance(
     }
 
     if (!userConfig.altInputClass) {
-      self.input = self.config.wrap
-        ? (element.querySelector("[data-input]") as HTMLInputElement)
-        : (element as HTMLInputElement);
-
       self.config.altInputClass =
-        self.input.className + " " + self.config.altInputClass;
+        getInputElem().className + " " + self.config.altInputClass;
     }
 
     triggerEvent("onParseConfig");
+  }
+
+  function getInputElem() {
+    return self.config.wrap
+      ? (element.querySelector("[data-input]") as HTMLInputElement)
+      : (element as HTMLInputElement);
   }
 
   function setupLocale() {
@@ -2550,9 +2558,7 @@ function FlatpickrInstance(
   }
 
   function setupInputs() {
-    self.input = self.config.wrap
-      ? (element.querySelector("[data-input]") as HTMLInputElement)
-      : (element as HTMLInputElement);
+    self.input = getInputElem();
 
     /* istanbul ignore next */
     if (!self.input) {
