@@ -1474,7 +1474,7 @@ function FlatpickrInstance(
 
         self.close();
 
-        if (self.config.mode === "range" && self.selectedDates.length === 1) {
+        if (self.config && self.config.mode === "range" && self.selectedDates.length === 1) {
           self.clear(false);
           self.redraw();
         }
