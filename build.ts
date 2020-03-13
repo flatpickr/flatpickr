@@ -139,14 +139,8 @@ async function transpileStyle(src: string, compress = false) {
     } as any)
       .include(`${__dirname}/src/style`)
       .include(`${__dirname}/src/style/themes`)
-      .use(
-        stylusAutoprefixer({
-          browsers: pkg.browserslist,
-        })
-      )
-      .render((err: Error | undefined, css: string) =>
-        !err ? resolve(css) : reject(err)
-      );
+      .use(stylusAutoprefixer())
+      .render((err, css) => (!err ? resolve(css) : reject(err)));
   });
 }
 
@@ -225,29 +219,11 @@ async function start() {
     if (!indexExists) {
       await fs.copyFile("./index.template.html", "./index.html");
     }
-    const write = (s: string) => process.stdout.write(`rollup: ${s}`);
     const watcher = rollup.watch([getConfig({ dev: true })]);
-
-    watcher.on("event", logEvent);
 
     function exit() {
       watcher.close();
       watchers.forEach(w => w.close());
-    }
-
-    interface RollupWatchEvent {
-      code: string;
-      input?: string;
-      output?: string;
-    }
-
-    function logEvent(e: RollupWatchEvent) {
-      write(
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        [e.code, e.input && `${e.input} -> ${e.output!}`, "\n"]
-          .filter(x => x)
-          .join(" ")
-      );
     }
 
     //catches ctrl+c event
