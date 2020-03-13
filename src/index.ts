@@ -2013,11 +2013,6 @@ function FlatpickrInstance(
           : defaultAltFormat + ` h:i${userConfig.enableSeconds ? ":S" : ""} K`;
     }
 
-    if (!userConfig.altInputClass) {
-      self.config.altInputClass =
-        self.input.className + " " + self.config.altInputClass;
-    }
-
     Object.defineProperty(self.config, "minDate", {
       get: () => self.config._minDate,
       set: minMaxDateSetter("min"),
@@ -2085,6 +2080,15 @@ function FlatpickrInstance(
         } else if (typeof userConfig[key as keyof Options] === "undefined")
           (self.config as any)[key] = pluginConf[key as keyof Options] as any;
       }
+    }
+
+    if (!userConfig.altInputClass) {
+      self.input = self.config.wrap
+        ? (element.querySelector("[data-input]") as HTMLInputElement)
+        : (element as HTMLInputElement);
+
+      self.config.altInputClass =
+        self.input.className + " " + self.config.altInputClass;
     }
 
     triggerEvent("onParseConfig");
