@@ -5,6 +5,7 @@
 [![npm version](https://badge.fury.io/js/flatpickr.svg)](https://www.npmjs.com/package/flatpickr)
 [![CDNJS](https://img.shields.io/cdnjs/v/flatpickr.svg)](https://cdnjs.com/libraries/flatpickr)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=plastic)](https://raw.githubusercontent.com/flatpickr/flatpickr/master/LICENSE.md)
+[![Open Source Helpers](https://www.codetriage.com/flatpickr/flatpickr/badges/users.svg)](https://www.codetriage.com/flatpickr/flatpickr)
 
 
 ![blue](https://cloud.githubusercontent.com/assets/11352152/14549371/3cbb65da-028d-11e6-976d-a6f63f32061f.PNG)
@@ -54,6 +55,26 @@ See also:
 * [Stimulus.js Controller](https://github.com/adrienpoly/stimulus-flatpickr)
 * [Svelte Component](https://github.com/jacobmischka/svelte-flatpickr)
 * [vue-flatpickr component](https://github.com/ankurk91/vue-flatpickr-component)
+
+## Contributing
+
+Bug reports, usability issues, feature suggestions and documentation requests are all welcome, please open an issue.
+
+Assistance triaging issues and following up old requests is also welcome. Please consider [subscribing to issues on CodeTriage](https://www.codetriage.com/flatpickr/flatpickr).
+
+If you'd like to fix a bug, add a feature or otherwise contribute to the product, Pull Requests are welcome. Before undertaking significant work, please open an issue to discuss your proposed change and make sure it's in line with the project goals.
+
+### Code Contributions
+
+These steps assume you already have the latest LTS version of [Node.js](https://nodejs.org/en/download/) installed.
+
+0. Fork the repository and Git clone your fork to local
+0. Create a feature branch in Git
+0. Run `npm install` to install required Node modules
+0. Run `npm test` to run the test suite and confirm all tests pass on your machine ![PASS](https://via.placeholder.com/100x40/00FF00/000000?text=PASS)
+0. Make your proposed changes, adding tests where applicable
+0. Run `npm test` to confirm all tests are still passing
+0. Commit and raise a PR, explaining the change
 
 ## Supporting flatpickr
 
