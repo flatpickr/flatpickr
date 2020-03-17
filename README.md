@@ -73,6 +73,7 @@ These steps assume you already have the latest LTS version of [Node.js](https://
 0. Run `npm install` to install required Node modules
 0. Run `npm test` to run the test suite and confirm all tests pass on your machine ![PASS](https://via.placeholder.com/100x40/00FF00/000000?text=PASS)
 0. Make your proposed changes, adding tests where applicable
+0. If you'd like to test out your changes in a browser, run `npm run-script build` to generate a `/dist` folder containing the compiled resources. Then tweak (or clone) `/index.template.html`, to include the required configuration options, and open it in your browser
 0. Run `npm test` to confirm all tests are still passing
 0. Commit and raise a PR, explaining the change
 
