@@ -1,4 +1,4 @@
-export const pad = (number: string | number) => `0${number}`.slice(-2);
+export const pad = (number: string | number, length = 2) => `000${number}`.slice(length * -1);
 export const int = (bool: boolean) => (bool === true ? 1 : 0);
 
 /* istanbul ignore next */

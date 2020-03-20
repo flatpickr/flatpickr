@@ -18,6 +18,7 @@ let mockAgent: string | undefined;
 });
 
 function createInstance(config?: Options, el?: HTMLElement) {
+  destroyInstance();
   fp = flatpickr(
     el || elem || document.createElement("input"),
     config || {}
@@ -25,12 +26,22 @@ function createInstance(config?: Options, el?: HTMLElement) {
   return fp;
 }
 
+function destroyInstance() {
+  if (fp) {
+    fp.input.value = "";
+    fp.destroy && fp.destroy();
+  }
+}
+
 function beforeEachTest() {
   mockAgent = undefined;
   jest.runAllTimers();
-  (document.activeElement as HTMLElement).blur();
 
-  fp && fp.destroy && fp.destroy();
+  if (document.activeElement) {
+    (document.activeElement as HTMLElement).blur();
+  }
+
+  destroyInstance();
 
   if (elem === undefined) {
     elem = document.createElement("input");
@@ -156,10 +167,11 @@ describe("flatpickr", () => {
           defaultDate: 1477111633771,
         });
 
+        const date = new Date("2016-10-22T04:47:13.771Z");
         expect(fp.selectedDates[0]).toBeDefined();
-        expect(fp.selectedDates[0].getFullYear()).toEqual(2016);
-        expect(fp.selectedDates[0].getMonth()).toEqual(9);
-        expect(fp.selectedDates[0].getDate()).toEqual(22);
+        expect(fp.selectedDates[0].getFullYear()).toEqual(date.getFullYear());
+        expect(fp.selectedDates[0].getMonth()).toEqual(date.getMonth());
+        expect(fp.selectedDates[0].getDate()).toEqual(date.getDate());
       });
 
       it("should parse unix time", () => {
@@ -168,11 +180,11 @@ describe("flatpickr", () => {
           dateFormat: "U",
         });
 
-        const parsedDate = fp.selectedDates[0];
-        expect(parsedDate).toBeDefined();
-        expect(parsedDate.getFullYear()).toEqual(2016);
-        expect(parsedDate.getMonth()).toEqual(9);
-        expect(parsedDate.getDate()).toEqual(22);
+        const date = new Date("2016-10-22T04:47:13.771Z");
+        expect(fp.selectedDates[0]).toBeDefined();
+        expect(fp.selectedDates[0].getFullYear()).toEqual(date.getFullYear());
+        expect(fp.selectedDates[0].getMonth()).toEqual(date.getMonth());
+        expect(fp.selectedDates[0].getDate()).toEqual(date.getDate());
       });
 
       it('should parse "2016-10"', () => {
@@ -349,7 +361,8 @@ describe("flatpickr", () => {
   describe("date formatting", () => {
     describe("default formatter", () => {
       const DEFAULT_FORMAT_1 = "d.m.y H:i:S",
-        DEFAULT_FORMAT_2 = "D j F, 'y";
+        DEFAULT_FORMAT_2 = "D j F, 'y",
+        DEFAULT_FORMAT_3 = "Y-m-d";
 
       it(`should format the date with the pattern "${DEFAULT_FORMAT_1}"`, () => {
         const RESULT = "20.10.16 09:19:59";
@@ -361,6 +374,16 @@ describe("flatpickr", () => {
         expect(fp.input.value).toEqual(RESULT);
         fp.setDate("2015.11.21 19:29:49");
         expect(fp.input.value).not.toEqual(RESULT);
+      });
+
+      it("should format dates for year 0001", () => {
+        const RESULT = "0001-07-15";
+        createInstance({
+          dateFormat: DEFAULT_FORMAT_3,
+        });
+
+        fp.setDate("0001-07-15");
+        expect(fp.input.value).toEqual(RESULT);
       });
 
       it(`should format the date with the pattern "${DEFAULT_FORMAT_2}"`, () => {
@@ -811,6 +834,45 @@ describe("flatpickr", () => {
 
       simulate("mousedown", fp.days.children[2], { which: 1 }, CustomEvent);
       expect(fp.currentMonth).toEqual(0);
+    });
+
+    it("sets the date on direct entry when allowInput is true", () => {
+      createInstance({ allowInput: true });
+      expect(fp.selectedDates[0]).toBeUndefined();
+
+      fp.input.focus();
+      fp.input.value = "1999-12-31";
+      fp.input.blur();
+
+      expect(fp.selectedDates[0]).toBeDefined();
+      expect(fp.selectedDates[0].getFullYear()).toEqual(1999);
+      expect(fp.selectedDates[0].getMonth()).toEqual(11); // 11 === December
+      expect(fp.selectedDates[0].getDate()).toEqual(31);
+    });
+
+    it("updates the date on direct entry when allowInput is true", () => {
+      createInstance({
+        allowInput: true,
+        enableTime: true,
+        defaultDate: "2001-01-01 01:01",
+      });
+      expect(fp.selectedDates[0]).toBeDefined();
+      expect(fp.selectedDates[0].getFullYear()).toEqual(2001);
+      expect(fp.selectedDates[0].getMonth()).toEqual(0); // 0 === January
+      expect(fp.selectedDates[0].getDate()).toEqual(1);
+      expect(fp.selectedDates[0].getHours()).toEqual(1);
+      expect(fp.selectedDates[0].getMinutes()).toEqual(1);
+
+      fp.input.focus();
+      fp.input.value = "1969-07-20 20:17";
+      fp.input.blur();
+
+      expect(fp.selectedDates[0]).toBeDefined();
+      expect(fp.selectedDates[0].getFullYear()).toEqual(1969);
+      expect(fp.selectedDates[0].getMonth()).toEqual(6); // 6 === July
+      expect(fp.selectedDates[0].getDate()).toEqual(20);
+      expect(fp.selectedDates[0].getHours()).toEqual(20);
+      expect(fp.selectedDates[0].getMinutes()).toEqual(17);
     });
 
     describe("mobile calendar", () => {
