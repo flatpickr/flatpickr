@@ -18,11 +18,19 @@ let mockAgent: string | undefined;
 });
 
 function createInstance(config?: Options, el?: HTMLElement) {
+  destroyInstance();
   fp = flatpickr(
     el || elem || document.createElement("input"),
     config || {}
   ) as Instance;
   return fp;
+}
+
+function destroyInstance() {
+  if (fp) {
+    fp.input.value = "";
+    fp.destroy && fp.destroy();
+  }
 }
 
 function beforeEachTest() {
@@ -33,7 +41,7 @@ function beforeEachTest() {
     (document.activeElement as HTMLElement).blur();
   }
 
-  fp && fp.destroy && fp.destroy();
+  destroyInstance();
 
   if (elem === undefined) {
     elem = document.createElement("input");
@@ -826,6 +834,45 @@ describe("flatpickr", () => {
 
       simulate("click", fp.days.children[2], { which: 1 }, CustomEvent);
       expect(fp.currentMonth).toEqual(0);
+    });
+
+    it("sets the date on direct entry when allowInput is true", () => {
+      createInstance({ allowInput: true });
+      expect(fp.selectedDates[0]).toBeUndefined();
+
+      fp.input.focus();
+      fp.input.value = "1999-12-31";
+      fp.input.blur();
+
+      expect(fp.selectedDates[0]).toBeDefined();
+      expect(fp.selectedDates[0].getFullYear()).toEqual(1999);
+      expect(fp.selectedDates[0].getMonth()).toEqual(11); // 11 === December
+      expect(fp.selectedDates[0].getDate()).toEqual(31);
+    });
+
+    it("updates the date on direct entry when allowInput is true", () => {
+      createInstance({
+        allowInput: true,
+        enableTime: true,
+        defaultDate: "2001-01-01 01:01",
+      });
+      expect(fp.selectedDates[0]).toBeDefined();
+      expect(fp.selectedDates[0].getFullYear()).toEqual(2001);
+      expect(fp.selectedDates[0].getMonth()).toEqual(0); // 0 === January
+      expect(fp.selectedDates[0].getDate()).toEqual(1);
+      expect(fp.selectedDates[0].getHours()).toEqual(1);
+      expect(fp.selectedDates[0].getMinutes()).toEqual(1);
+
+      fp.input.focus();
+      fp.input.value = "1969-07-20 20:17";
+      fp.input.blur();
+
+      expect(fp.selectedDates[0]).toBeDefined();
+      expect(fp.selectedDates[0].getFullYear()).toEqual(1969);
+      expect(fp.selectedDates[0].getMonth()).toEqual(6); // 6 === July
+      expect(fp.selectedDates[0].getDate()).toEqual(20);
+      expect(fp.selectedDates[0].getHours()).toEqual(20);
+      expect(fp.selectedDates[0].getMinutes()).toEqual(17);
     });
 
     describe("mobile calendar", () => {

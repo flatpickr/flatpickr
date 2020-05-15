@@ -477,6 +477,9 @@ function FlatpickrInstance(
         );
       }
     }
+    
+    if (self.config.allowInput)
+      bind(self._input, "blur", onBlur);
   }
 
   /**
@@ -1386,7 +1389,6 @@ function FlatpickrInstance(
       self.input.type = (self.input as any)._type;
       self.input.classList.remove("flatpickr-input");
       self.input.removeAttribute("readonly");
-      self.input.value = "";
     }
 
     ([
@@ -1472,7 +1474,7 @@ function FlatpickrInstance(
 
         self.close();
 
-        if (self.config.mode === "range" && self.selectedDates.length === 1) {
+        if (self.config && self.config.mode === "range" && self.selectedDates.length === 1) {
           self.clear(false);
           self.redraw();
         }
@@ -1589,6 +1591,16 @@ function FlatpickrInstance(
         self.daysContainer.contains(elem)
       );
     return false;
+  }
+    
+  function onBlur(e: FocusEvent) {
+    var isInput = e.target === self._input;
+    
+    if (isInput) {
+      self.setDate(self._input.value, true, e.target === self.altInput
+                   ? self.config.altFormat
+                   : self.config.dateFormat);
+    }
   }
 
   function onKeyDown(e: KeyboardEvent) {

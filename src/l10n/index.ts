@@ -69,6 +69,7 @@ const l10n: Record<key, CustomLocale> = {
   bg,
   bn,
   bs,
+  ca: cat,
   cat,
   cs,
   cy,
