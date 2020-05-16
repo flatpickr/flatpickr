@@ -51,7 +51,7 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         selectYear();
       });
 
-      fp._bind(fp.nextMonthNav, "mousedown", () => {
+      fp._bind(fp.nextMonthNav, "click", () => {
         fp.currentYear += 1;
         selectYear();
       });
