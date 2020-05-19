@@ -209,7 +209,8 @@ function FlatpickrInstance(
     if (self.hourElement === undefined || self.minuteElement === undefined)
       return;
 
-    let hours = (parseInt(self.hourElement.value.slice(-2), 10) || 0) % 24,
+    let hoursHalfParsed = (parseInt(self.hourElement.value.slice(-2), 10) || 0);
+    let hours =  self._duration ? hoursHalfParsed : hoursHalfParsed % 24,
       minutes = (parseInt(self.minuteElement.value, 10) || 0) % 60,
       seconds =
         self.secondElement !== undefined
@@ -318,9 +319,9 @@ function FlatpickrInstance(
     if (!self.hourElement || !self.minuteElement || self.isMobile) return;
 
     self.hourElement.value = pad(
-      !self.config.time_24hr
-        ? ((12 + hours) % 12) + 12 * int(hours % 12 === 0)
-        : hours
+      self.config.time_24hr || self._duration
+        ? hours
+        : ((12 + hours) % 12) + 12 * int(hours % 12 === 0)
     );
 
     self.minuteElement.value = pad(minutes);

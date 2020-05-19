@@ -51,6 +51,7 @@ function duration(pluginConfig?: Partial<DurationConfig>): Plugin {
     let latestSelectedTime: Time;
     
     return (parent: Instance) => {
+
         parent.config.dateFormat = config.timeFormat;
         parent.config.altFormat = config.altTimeFormat;
         parent.config.defaultHour = config.defaultHour;
@@ -90,13 +91,24 @@ function duration(pluginConfig?: Partial<DurationConfig>): Plugin {
         //         .join("");
         // };
 
+        function setup() {
+          parent._duration = true;
+          if (!parent.hourElement || !parent.minuteElement) {
+            console.warn('No hour/minute elements found; plugin will not work');
+            return;
+          }
+          parent.hourElement.setAttribute("max", config.maxHours.toString());
+          parent.hourElement.setAttribute("min", config.minHours.toString()); 
+          
+        }
+
         function setupHoursForDuration() {
             latestSelectedTime = {
               hours: parent.config.defaultHour,
               minutes: parent.config.defaultMinute,
               seconds: parent.config.defaultSeconds
             } as Time;
-        
+        console.log(latestSelectedTime)
             // parent.setHours(
             //   self.latestSelectedTime.hours, 
             //   self.latestSelectedTime.minutes,
@@ -105,7 +117,7 @@ function duration(pluginConfig?: Partial<DurationConfig>): Plugin {
           }
 
         function valueUpdated() {
-            console.log('value updated ', latestSelectedTime)
+            console.log('value updated ', parent.hourElement?.value)
         }
 
         return {
@@ -117,6 +129,7 @@ function duration(pluginConfig?: Partial<DurationConfig>): Plugin {
             },
             onValueUpdate: valueUpdated,
             onReady: [
+                setup,
                 setupHoursForDuration,
                 () => {
                     parent.loadedPlugins.push("duration");
