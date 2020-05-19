@@ -46,12 +46,21 @@
   <script src="./dist/plugins/confirmDate/confirmDate.js"></script>
   <script src="./dist/plugins/minMaxTimePlugin.js"></script>
   <script src="./dist/plugins/monthSelect/index.js"></script>
+  <script src="./dist/plugins/duration/index.js"></script>
   <script src="./dist/plugins/scrollPlugin.js"></script>
   <script src="./dist/plugins/weekSelect/weekSelect.js"></script>
 
   <script>
     var fp = flatpickr(".date", {
-
+      plugins: [
+      // new monthSelectPlugin({
+      //     shorthand: true, //defaults to false
+      //     dateFormat: "m.y", //defaults to "F Y"
+      //     altFormat: "F Y", //defaults to "F Y"
+      //     theme: "dark" // defaults to "light"
+      //   })
+      new durationPlugin({})
+    ]
     })
   </script>
 </body>
