@@ -1,5 +1,6 @@
 import { Instance, Formatting } from "../../types/instance";
 import { Plugin } from "../../types/options";
+import { pad } from "../../utils";
 
 export type timeToken =
   | "H"
@@ -40,8 +41,8 @@ const defaultDurationConfig: DurationConfig = {
     defaultMinute: 0,
     defaultSeconds: 0,
     enableSeconds: false,
-    timeFormat: "H:i",
-    altTimeFormat: "H:i",
+    timeFormat: "H:I",
+    altTimeFormat: "H:I",
     maxHours: 99,
     minHours: 0,
 };
@@ -51,45 +52,39 @@ function duration(pluginConfig?: Partial<DurationConfig>): Plugin {
     let latestSelectedTime: Time;
     
     return (parent: Instance) => {
-
         parent.config.dateFormat = config.timeFormat;
         parent.config.altFormat = config.altTimeFormat;
         parent.config.defaultHour = config.defaultHour;
         parent.config.defaultMinute = config.defaultMinute;
         parent.config.defaultSeconds = config.defaultSeconds;
 
-        // const timeFormats: TimeFormats = {
-        //     // hours with leading zero e.g. 03
-        //     H: (time: Time) => parent.pad(time.hours),
-          
-        //     // seconds 00-59
-        //     S: (time: Time) => parent.pad(time.seconds),
-            
-        //     // minutes, padded with leading zero e.g. 09
-        //     I: (time: Time) => parent.pad(time.minutes),
-            
-        //     // hours 0-59
-        //     h: (time: Time) => time.hours,
+        let timeFormats: TimeFormats = {
+            // hours with leading zero e.g. 03
+            H: (time: Time) => pad(time.hours),
+            // seconds 00-59
+            S: (time: Time) => pad(time.seconds),
+            // minutes, padded with leading zero e.g. 09
+            I: (time: Time) => pad(time.minutes),
+            // hours 0-59
+            h: (time: Time) => time.hours,
+            // minutes 0-59
+            i: (time: Time) => time.minutes,
+            // seconds 0-59
+            s: (time: Time) => time.seconds,
+          };
 
-        //     // minutes 0-59
-        //     i: (time: Time) => time.minutes,
-          
-        //     // seconds 0-59
-        //     s: (time: Time) => time.seconds,
-        //   };
-
-        // function formatTime (): string {
-        //     return parent.config.dateFormat
-        //         .split("")
-        //         .map((c, i, arr) =>
-        //         timeFormats[c as timeToken] && arr[i - 1] !== "\\"
-        //             ? timeFormats[c as timeToken](latestSelectedTime)
-        //             : c !== "\\"
-        //             ? c
-        //             : ""
-        //         )
-        //         .join("");
-        // };
+        function formatTime (format: string): string {
+            return format
+                .split("")
+                .map((c, i, arr) =>
+                timeFormats[c as timeToken] && arr[i - 1] !== "\\"
+                    ? timeFormats[c as timeToken](latestSelectedTime)
+                    : c !== "\\"
+                    ? c
+                    : ""
+                )
+                .join("");
+        };
 
         function setup() {
           parent._duration = true;
@@ -102,22 +97,24 @@ function duration(pluginConfig?: Partial<DurationConfig>): Plugin {
           
         }
 
-        function setupHoursForDuration() {
-            latestSelectedTime = {
-              hours: parent.config.defaultHour,
-              minutes: parent.config.defaultMinute,
-              seconds: parent.config.defaultSeconds
-            } as Time;
-        console.log(latestSelectedTime)
-            // parent.setHours(
-            //   self.latestSelectedTime.hours, 
-            //   self.latestSelectedTime.minutes,
-            //   self.latestSelectedTime.seconds
-            //   );
-          }
+        function setupInitialTime() {
+          latestSelectedTime = {
+            hours: parent.config.defaultHour,
+            minutes: parent.config.defaultMinute,
+            seconds: parent.config.defaultSeconds
+          } as Time;
+        }
 
         function valueUpdated() {
-            console.log('value updated ', parent.hourElement?.value)
+          latestSelectedTime.hours = parent.hourElement ? parseInt(parent.hourElement.value) : config.defaultHour
+          latestSelectedTime.minutes = parent.minuteElement ? parseInt(parent.minuteElement.value) : config.defaultMinute
+          latestSelectedTime.seconds = parent.secondElement ? parseInt(parent.secondElement.value) : config.defaultSeconds
+
+          parent.input.value = formatTime(parent.config.dateFormat);
+
+          if (parent.altInput !== undefined) {
+            parent.altInput.value = formatTime(parent.config.altFormat);
+          }
         }
 
         return {
@@ -130,7 +127,7 @@ function duration(pluginConfig?: Partial<DurationConfig>): Plugin {
             onValueUpdate: valueUpdated,
             onReady: [
                 setup,
-                setupHoursForDuration,
+                setupInitialTime,
                 () => {
                     parent.loadedPlugins.push("duration");
                 },
