@@ -52,6 +52,11 @@ function duration(pluginConfig?: Partial<DurationConfig>): Plugin {
     let latestSelectedTime: Time;
     
     return (parent: Instance) => {
+        if (!parent.config.time_24hr){
+          console.warn('Duration plugin will not work without time_24hr set to true');
+          return {};
+        }
+
         parent.config.dateFormat = config.timeFormat;
         parent.config.altFormat = config.altTimeFormat;
         parent.config.defaultHour = config.defaultHour;
@@ -101,7 +106,7 @@ function duration(pluginConfig?: Partial<DurationConfig>): Plugin {
           latestSelectedTime = {
             hours: parent.config.defaultHour,
             minutes: parent.config.defaultMinute,
-            seconds: parent.config.defaultSeconds
+            seconds: parent.config.defaultSeconds,
           } as Time;
         }
 
@@ -121,8 +126,7 @@ function duration(pluginConfig?: Partial<DurationConfig>): Plugin {
             onParseConfig() {
               parent.config.mode = "single";
               parent.config.enableTime = true;
-              parent.config.noCalendar = true
-              parent.config.time_24hr = true
+              parent.config.noCalendar = true;
             },
             onValueUpdate: valueUpdated,
             onReady: [
