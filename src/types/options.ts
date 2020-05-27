@@ -52,6 +52,9 @@ export interface BaseOptions {
   */
   allowInput: boolean;
 
+  /* Allows the user to clear input with backspace or delete key. By default is enabled. */
+  allowClearInput: boolean;
+
   /* Exactly the same as date format, but for the altInput field */
   altFormat: string;
 
@@ -262,6 +265,7 @@ export interface ParsedOptions {
   _minDate?: Date;
   _minTime?: Date;
   allowInput: boolean;
+  allowClearInput: boolean;
   altFormat: string;
   altInput: boolean;
   altInputClass: string;
@@ -328,6 +332,7 @@ export const defaults: ParsedOptions = {
   _disable: [],
   _enable: [],
   allowInput: false,
+  allowClearInput: true,
   altFormat: "F j, Y",
   altInput: false,
   altInputClass: "form-control input",
