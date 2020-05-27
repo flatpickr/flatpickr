@@ -12,6 +12,7 @@ import { Czech as cs } from "./cs";
 import { Welsh as cy } from "./cy";
 import { Danish as da } from "./da";
 import { German as de } from "./de";
+import { greek as el } from "./el";
 import { english as en } from "./default";
 import { Esperanto as eo } from "./eo";
 import { Spanish as es } from "./es";
@@ -20,7 +21,6 @@ import { Persian as fa } from "./fa";
 import { Finnish as fi } from "./fi";
 import { Faroese as fo } from "./fo";
 import { French as fr } from "./fr";
-import { Greek as gr } from "./gr";
 import { Hebrew as he } from "./he";
 import { Hindi as hi } from "./hi";
 import { Croatian as hr } from "./hr";
@@ -75,6 +75,7 @@ const l10n: Record<key, CustomLocale> = {
   cy,
   da,
   de,
+  el,
   default: { ...en },
   en,
   eo,
@@ -84,7 +85,6 @@ const l10n: Record<key, CustomLocale> = {
   fi,
   fo,
   fr,
-  gr,
   he,
   hi,
   hr,
