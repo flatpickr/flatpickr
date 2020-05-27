@@ -32,9 +32,11 @@ function scrollPlugin(): Plugin {
           fp.timeContainer.addEventListener("wheel", scroll);
         }
 
-        fp.yearElements.forEach(yearElem =>
-          yearElem.addEventListener("wheel", scroll)
-        );
+        if (fp.config.yearSelectorType === "input") {
+          (<HTMLInputElement[]>fp.yearElements).forEach(yearElem =>
+            yearElem.addEventListener("wheel", scroll)
+          );
+        }
 
         fp.monthElements.forEach(monthElem =>
           monthElem.addEventListener("wheel", monthScroller)
@@ -47,9 +49,11 @@ function scrollPlugin(): Plugin {
           fp.timeContainer.removeEventListener("wheel", scroll);
         }
 
-        fp.yearElements.forEach(yearElem =>
-          yearElem.removeEventListener("wheel", scroll)
-        );
+        if (fp.config.yearSelectorType === "input") {
+          (<HTMLInputElement[]>fp.yearElements).forEach(yearElem =>
+            yearElem.removeEventListener("wheel", scroll)
+          );
+        }
 
         fp.monthElements.forEach(monthElem =>
           monthElem.removeEventListener("wheel", monthScroller)

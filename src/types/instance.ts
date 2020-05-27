@@ -30,7 +30,7 @@ export interface Elements {
 
   monthsDropdownContainer: HTMLSelectElement;
 
-  yearElements: HTMLInputElement[];
+  yearElements: (HTMLInputElement | HTMLSpanElement)[];
   monthElements: HTMLSpanElement[];
 
   // month nav getters

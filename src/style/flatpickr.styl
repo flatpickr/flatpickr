@@ -334,6 +334,16 @@
     span.arrowDown:after
       border-top-color $monthForeground
 
+  span.cur-year
+    margin-left 0.5ch
+    font-size inherit
+    font-family inherit
+    font-weight 300
+    line-height inherit
+
+    &:hover
+      background: alpha($invertedBg, 0.05)
+
   input.cur-year
     background transparent
     box-sizing border-box

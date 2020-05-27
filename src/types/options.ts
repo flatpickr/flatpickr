@@ -250,6 +250,9 @@ Use it along with "enableTime" to create a time picker. */
 
   /* See https://chmln.github.io/flatpickr/examples/#flatpickr-external-elements */
   wrap: boolean;
+
+  /* How the year in the calendar should be shown */
+  yearSelectorType: "input" | "static";
 }
 
 export type Options = Partial<BaseOptions>;
@@ -322,6 +325,7 @@ export interface ParsedOptions {
   time_24hr: boolean;
   weekNumbers: boolean;
   wrap: boolean;
+  yearSelectorType: string;
 }
 
 export const defaults: ParsedOptions = {
@@ -405,4 +409,5 @@ export const defaults: ParsedOptions = {
   time_24hr: false,
   weekNumbers: false,
   wrap: false,
+  yearSelectorType: "input",
 };
