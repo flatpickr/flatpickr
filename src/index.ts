@@ -2123,6 +2123,9 @@ function FlatpickrInstance(
   }
 
   function positionCalendar(customPositionElement?: HTMLElement) {
+    if (typeof self.config.position === "function") {
+      return void self.config.position(self, customPositionElement);
+    }
     if (self.calendarContainer === undefined) return;
 
     triggerEvent("onPreCalendarPosition");
