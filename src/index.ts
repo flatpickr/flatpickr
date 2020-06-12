@@ -167,9 +167,6 @@ function FlatpickrInstance(
   function updateTime(
     e?: MouseEvent | IncrementEvent | KeyboardEvent | FocusEvent
   ) {
-    if (self.selectedDates.length === 0) {
-      setDefaultTime();
-    }
 
     if (e !== undefined && e.type !== "blur") {
       timeWrapper(e);
