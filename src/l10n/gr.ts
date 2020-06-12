@@ -56,7 +56,7 @@ export const Greek: CustomLocale = {
 
   firstDayOfWeek: 1,
 
-  ordinal: function() {
+  ordinal: function () {
     return "";
   },
 

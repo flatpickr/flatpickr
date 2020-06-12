@@ -167,6 +167,15 @@ function FlatpickrInstance(
   function updateTime(
     e?: MouseEvent | IncrementEvent | KeyboardEvent | FocusEvent
   ) {
+    if (self.selectedDates.length === 0) {
+      const defaultDate =
+        self.config.minDate !== undefined
+          ? new Date(self.config.minDate.getTime())
+          : new Date();
+      const { hours, minutes, seconds } = getDefaultHours();
+      defaultDate.setHours(hours, minutes, seconds, 0);
+      self.setDate(defaultDate, false);
+    }
     if (e !== undefined && e.type !== "blur") {
       timeWrapper(e);
     }
@@ -265,10 +274,12 @@ function FlatpickrInstance(
   function setHoursFromDate(dateObj?: Date) {
     const date = dateObj || self.latestSelectedDateObj;
 
-    if (date) setHours(date.getHours(), date.getMinutes(), date.getSeconds());
+    if (date) {
+      setHours(date.getHours(), date.getMinutes(), date.getSeconds());
+    }
   }
 
-  function setDefaultHours() {
+  function getDefaultHours() {
     let hours = self.config.defaultHour;
     let minutes = self.config.defaultMinute;
     let seconds = self.config.defaultSeconds;
@@ -292,7 +303,7 @@ function FlatpickrInstance(
         seconds = self.config.maxDate.getSeconds();
     }
 
-    setHours(hours, minutes, seconds);
+    return { hours, minutes, seconds };
   }
 
   /**
@@ -355,10 +366,10 @@ function FlatpickrInstance(
     options?: object
   ): void {
     if (event instanceof Array)
-      return event.forEach(ev => bind(element, ev, handler, options));
+      return event.forEach((ev) => bind(element, ev, handler, options));
 
     if (element instanceof Array)
-      return element.forEach(el => bind(el, event, handler, options));
+      return element.forEach((el) => bind(el, event, handler, options));
 
     element.addEventListener(event, handler, options);
     self._handlers.push({
@@ -378,7 +389,7 @@ function FlatpickrInstance(
    */
   function bindEvents(): void {
     if (self.config.wrap) {
-      ["open", "close", "toggle", "clear"].forEach(evt => {
+      ["open", "close", "toggle", "clear"].forEach((evt) => {
         Array.prototype.forEach.call(
           self.element.querySelectorAll(`[data-${evt}]`),
           (el: HTMLElement) =>
@@ -448,7 +459,7 @@ function FlatpickrInstance(
         );
 
       if (self.amPM !== undefined) {
-        bind(self.amPM, "click", e => {
+        bind(self.amPM, "click", (e) => {
           updateTime(e);
           triggerChange();
         });
@@ -1298,7 +1309,8 @@ function FlatpickrInstance(
     }
 
     if (self.config.enableTime === true) {
-      setDefaultHours();
+      const { hours, minutes, seconds } = getDefaultHours();
+      setHours(hours, minutes, seconds);
     }
 
     self.redraw();
@@ -1398,7 +1410,7 @@ function FlatpickrInstance(
       "navigationCurrentMonth",
       "selectedDateElem",
       "config",
-    ] as (keyof Instance)[]).forEach(k => {
+    ] as (keyof Instance)[]).forEach((k) => {
       try {
         delete self[k as keyof Instance];
       } catch (_) {}
@@ -1436,7 +1448,7 @@ function FlatpickrInstance(
             !isCalendarElement &&
             !isCalendarElem(e.relatedTarget as HTMLElement);
 
-      const isIgnored = !self.config.ignoredFocusElements.some(elem =>
+      const isIgnored = !self.config.ignoredFocusElements.some((elem) =>
         elem.contains(eventTarget as Node)
       );
 
@@ -1710,7 +1722,7 @@ function FlatpickrInstance(
               self.amPM,
             ] as Node[])
               .concat(self.pluginElements)
-              .filter(x => x) as HTMLInputElement[];
+              .filter((x) => x) as HTMLInputElement[];
 
             const i = elems.indexOf(eventTarget as HTMLInputElement);
 
@@ -1811,13 +1823,13 @@ function FlatpickrInstance(
 
         if (outOfRange) {
           dayElem.classList.add("notAllowed");
-          ["inRange", "startRange", "endRange"].forEach(c => {
+          ["inRange", "startRange", "endRange"].forEach((c) => {
             dayElem.classList.remove(c);
           });
           continue;
         } else if (containsDisabled && !outOfRange) continue;
 
-        ["startRange", "inRange", "endRange", "notAllowed"].forEach(c => {
+        ["startRange", "inRange", "endRange", "notAllowed"].forEach((c) => {
           dayElem.classList.remove(c);
         });
 
@@ -1913,7 +1925,7 @@ function FlatpickrInstance(
       }
 
       if (self.selectedDates) {
-        self.selectedDates = self.selectedDates.filter(d => isEnabled(d));
+        self.selectedDates = self.selectedDates.filter((d) => isEnabled(d));
         if (!self.selectedDates.length && type === "min")
           setHoursFromDate(dateObj);
         updateValue();
@@ -1964,14 +1976,14 @@ function FlatpickrInstance(
 
     Object.defineProperty(self.config, "enable", {
       get: () => self.config._enable,
-      set: dates => {
+      set: (dates) => {
         self.config._enable = parseDateRules(dates);
       },
     });
 
     Object.defineProperty(self.config, "disable", {
       get: () => self.config._disable,
-      set: dates => {
+      set: (dates) => {
         self.config._disable = parseDateRules(dates);
       },
     });
@@ -2040,7 +2052,7 @@ function FlatpickrInstance(
         self.config[boolOpts[i]] === true ||
         self.config[boolOpts[i]] === "true";
 
-    HOOKS.filter(hook => self.config[hook] !== undefined).forEach(hook => {
+    HOOKS.filter((hook) => self.config[hook] !== undefined).forEach((hook) => {
       self.config[hook] = arrayify(self.config[hook] || []).map(bindToInstance);
     });
 
@@ -2354,13 +2366,13 @@ function FlatpickrInstance(
       Object.assign(self.config, option);
       for (const key in option) {
         if (CALLBACKS[key] !== undefined)
-          (CALLBACKS[key] as Function[]).forEach(x => x());
+          (CALLBACKS[key] as Function[]).forEach((x) => x());
       }
     } else {
       self.config[option] = value;
 
       if (CALLBACKS[option] !== undefined)
-        (CALLBACKS[option] as Function[]).forEach(x => x());
+        (CALLBACKS[option] as Function[]).forEach((x) => x());
       else if (HOOKS.indexOf(option as HookKey) > -1)
         (self.config as any)[option] = arrayify(value);
     }
@@ -2375,7 +2387,7 @@ function FlatpickrInstance(
   ) {
     let dates: (Date | undefined)[] = [];
     if (inputDate instanceof Array)
-      dates = inputDate.map(d => self.parseDate(d, format));
+      dates = inputDate.map((d) => self.parseDate(d, format));
     else if (inputDate instanceof Date || typeof inputDate === "number")
       dates = [self.parseDate(inputDate, format)];
     else if (typeof inputDate === "string") {
@@ -2388,13 +2400,13 @@ function FlatpickrInstance(
         case "multiple":
           dates = inputDate
             .split(self.config.conjunction)
-            .map(date => self.parseDate(date, format));
+            .map((date) => self.parseDate(date, format));
           break;
 
         case "range":
           dates = inputDate
             .split(self.l10n.rangeSeparator)
-            .map(date => self.parseDate(date, format));
+            .map((date) => self.parseDate(date, format));
 
           break;
 
@@ -2408,7 +2420,9 @@ function FlatpickrInstance(
 
     self.selectedDates = (self.config.allowInvalidPreload
       ? dates
-      : dates.filter(d => d instanceof Date && isEnabled(d, false))) as Date[];
+      : dates.filter(
+          (d) => d instanceof Date && isEnabled(d, false)
+        )) as Date[];
 
     if (self.config.mode === "range")
       self.selectedDates.sort((a, b) => a.getTime() - b.getTime());
@@ -2442,7 +2456,7 @@ function FlatpickrInstance(
   function parseDateRules(arr: DateLimit[]): DateLimit<Date>[] {
     return arr
       .slice()
-      .map(rule => {
+      .map((rule) => {
         if (
           typeof rule === "string" ||
           typeof rule === "number" ||
@@ -2469,7 +2483,7 @@ function FlatpickrInstance(
 
         return rule;
       })
-      .filter(x => x) as DateLimit<Date>[]; // remove falsy values
+      .filter((x) => x) as DateLimit<Date>[]; // remove falsy values
   }
 
   function setupDates() {
@@ -2715,7 +2729,7 @@ function FlatpickrInstance(
 
   function getDateStr(format: string) {
     return self.selectedDates
-      .map(dObj => self.formatDate(dObj, format))
+      .map((dObj) => self.formatDate(dObj, format))
       .filter(
         (d, i, arr) =>
           self.config.mode !== "range" ||
@@ -2837,7 +2851,7 @@ function _flatpickr(
   // static list
   const nodes = Array.prototype.slice
     .call(nodeList)
-    .filter(x => x instanceof HTMLElement) as HTMLElement[];
+    .filter((x) => x instanceof HTMLElement) as HTMLElement[];
 
   let instances: Instance[] = [];
   for (let i = 0; i < nodes.length; i++) {

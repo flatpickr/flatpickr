@@ -54,7 +54,7 @@ export const Catalan: CustomLocale = {
     ],
   },
 
-  ordinal: nth => {
+  ordinal: (nth) => {
     const s = nth % 100;
     if (s > 3 && s < 21) return "è";
     switch (s % 10) {

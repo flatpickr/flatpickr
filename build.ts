@@ -84,7 +84,7 @@ async function buildScripts() {
 }
 
 function buildExtras(folder: "plugins" | "l10n") {
-  return async function(changedPath?: string) {
+  return async function (changedPath?: string) {
     const [srcPaths, cssPaths] = await Promise.all(
       changedPath !== undefined
         ? changedPath.endsWith(".ts")
@@ -99,8 +99,8 @@ function buildExtras(folder: "plugins" | "l10n") {
     try {
       await Promise.all([
         ...srcPaths
-          .filter(p => !p.includes(".spec.ts"))
-          .map(async sourcePath => {
+          .filter((p) => !p.includes(".spec.ts"))
+          .map(async (sourcePath) => {
             const bundle = await rollup.rollup({
               ...rollupConfig,
               cache: undefined,
@@ -124,7 +124,7 @@ function buildExtras(folder: "plugins" | "l10n") {
                   : customModuleNames[fileName] || fileName,
             });
           }),
-        ...(cssPaths.map(p => fs.copy(p, p.replace("src", "dist"))) as any),
+        ...(cssPaths.map((p) => fs.copy(p, p.replace("src", "dist"))) as any),
       ]);
     } catch (err) {
       logErr(err);
@@ -166,7 +166,7 @@ async function buildThemes() {
   try {
     const themePaths = await resolveGlob("./src/style/themes/*.styl");
     await Promise.all(
-      themePaths.map(async themePath => {
+      themePaths.map(async (themePath) => {
         const match = themeRegex.exec(themePath);
         if (!match) return;
 
@@ -223,7 +223,7 @@ async function start() {
 
     function exit() {
       watcher.close();
-      watchers.forEach(w => w.close());
+      watchers.forEach((w) => w.close());
     }
 
     //catches ctrl+c event
