@@ -167,7 +167,6 @@ function FlatpickrInstance(
   function updateTime(
     e?: MouseEvent | IncrementEvent | KeyboardEvent | FocusEvent
   ) {
-
     if (e !== undefined && e.type !== "blur") {
       timeWrapper(e);
     }
@@ -1898,10 +1897,6 @@ function FlatpickrInstance(
     }
 
     if (self.config.enableTime === true && self.config.noCalendar === true) {
-      if (self.selectedDates.length === 0) {
-        setDefaultTime();
-      }
-
       if (
         self.config.allowInput === false &&
         (e === undefined ||
@@ -2426,9 +2421,9 @@ function FlatpickrInstance(
         new Error(`Invalid date supplied: ${JSON.stringify(inputDate)}`)
       );
 
-    self.selectedDates = (self.config.allowInvalidPreload ? dates: dates.filter(
-      d => d instanceof Date && isEnabled(d, false)
-    )) as Date[];
+    self.selectedDates = (self.config.allowInvalidPreload
+      ? dates
+      : dates.filter(d => d instanceof Date && isEnabled(d, false))) as Date[];
 
     if (self.config.mode === "range")
       self.selectedDates.sort((a, b) => a.getTime() - b.getTime());
