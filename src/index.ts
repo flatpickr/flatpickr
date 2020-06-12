@@ -139,7 +139,7 @@ function FlatpickrInstance(
 
     if (config.weekNumbers === false && config.showMonths === 1) return;
     else if (config.noCalendar !== true) {
-      window.requestAnimationFrame(function() {
+      window.requestAnimationFrame(function () {
         if (self.calendarContainer !== undefined) {
           self.calendarContainer.style.visibility = "hidden";
           self.calendarContainer.style.display = "block";
@@ -375,19 +375,6 @@ function FlatpickrInstance(
     });
   }
 
-  /**
-   * A click handler, avoids handling right clicks.
-   *
-   * @param {Function} handler the event handler
-   */
-  function onClick<E extends MouseEvent>(
-    handler: (e: E) => void
-  ): (e: E) => void {
-    return evt => {
-      evt.which === 1 && handler(evt);
-    };
-  }
-
   function triggerChange() {
     triggerEvent("onChange");
   }
@@ -431,19 +418,19 @@ function FlatpickrInstance(
 
     if (window.ontouchstart !== undefined)
       bind(window.document, "touchstart", documentClick);
-    else bind(window.document, "click", onClick(documentClick));
+    else bind(window.document, "click", documentClick);
     bind(window.document, "focus", documentClick, { capture: true });
 
     if (self.config.clickOpens === true) {
       bind(self._input, "focus", self.open);
-      bind(self._input, "click", onClick(self.open));
+      bind(self._input, "click", self.open);
     }
 
     if (self.daysContainer !== undefined) {
-      bind(self.monthNav, "click", onClick(onMonthNavClick));
+      bind(self.monthNav, "click", onMonthNavClick);
 
       bind(self.monthNav, ["keyup", "increment"], onYearInput);
-      bind(self.daysContainer, "click", onClick(selectDate));
+      bind(self.daysContainer, "click", selectDate);
     }
 
     if (
@@ -455,7 +442,7 @@ function FlatpickrInstance(
         (getEventTarget(e) as HTMLInputElement).select();
       bind(self.timeContainer, ["increment"], updateTime);
       bind(self.timeContainer, "blur", updateTime, { capture: true });
-      bind(self.timeContainer, "click", onClick(timeIncrement));
+      bind(self.timeContainer, "click", timeIncrement);
 
       bind([self.hourElement, self.minuteElement], ["focus", "click"], selText);
 
@@ -467,19 +454,14 @@ function FlatpickrInstance(
         );
 
       if (self.amPM !== undefined) {
-        bind(
-          self.amPM,
-          "click",
-          onClick(e => {
-            updateTime(e);
-            triggerChange();
-          })
-        );
+        bind(self.amPM, "click", e => {
+          updateTime(e);
+          triggerChange();
+        });
       }
     }
-    
-    if (self.config.allowInput)
-      bind(self._input, "blur", onBlur);
+
+    if (self.config.allowInput) bind(self._input, "blur", onBlur);
   }
 
   /**
@@ -925,7 +907,7 @@ function FlatpickrInstance(
     )
       return;
 
-    const shouldBuildMonth = function(month: number): boolean {
+    const shouldBuildMonth = function (month: number): boolean {
       if (
         self.config.minDate !== undefined &&
         self.currentYear === self.config.minDate.getFullYear() &&
@@ -1596,14 +1578,18 @@ function FlatpickrInstance(
       );
     return false;
   }
-    
+
   function onBlur(e: FocusEvent) {
     var isInput = e.target === self._input;
-    
+
     if (isInput) {
-      self.setDate(self._input.value, true, e.target === self.altInput
-                   ? self.config.altFormat
-                   : self.config.dateFormat);
+      self.setDate(
+        self._input.value,
+        true,
+        e.target === self.altInput
+          ? self.config.altFormat
+          : self.config.dateFormat
+      );
     }
   }
 
@@ -2918,19 +2904,19 @@ if (
   typeof NodeList !== "undefined"
 ) {
   // browser env
-  HTMLCollection.prototype.flatpickr = NodeList.prototype.flatpickr = function(
+  HTMLCollection.prototype.flatpickr = NodeList.prototype.flatpickr = function (
     config?: Options
   ) {
     return _flatpickr(this, config);
   };
 
-  HTMLElement.prototype.flatpickr = function(config?: Options) {
+  HTMLElement.prototype.flatpickr = function (config?: Options) {
     return _flatpickr([this], config) as Instance;
   };
 }
 
 /* istanbul ignore next */
-var flatpickr = function(
+var flatpickr = function (
   selector: ArrayLike<Node> | Node | string,
   config?: Options
 ) {
@@ -2970,13 +2956,13 @@ flatpickr.compareDates = compareDates;
 
 /* istanbul ignore next */
 if (typeof jQuery !== "undefined" && typeof jQuery.fn !== "undefined") {
-  (jQuery.fn as any).flatpickr = function(config: Options) {
+  (jQuery.fn as any).flatpickr = function (config: Options) {
     return _flatpickr(this, config);
   };
 }
 
 // eslint-disable-next-line @typescript-eslint/camelcase
-Date.prototype.fp_incr = function(days: number | string) {
+Date.prototype.fp_incr = function (days: number | string) {
   return new Date(
     this.getFullYear(),
     this.getMonth(),
