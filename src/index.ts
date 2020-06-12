@@ -1581,6 +1581,7 @@ function FlatpickrInstance(
     if (self.daysContainer !== undefined)
       return (
         elem.className.indexOf("hidden") === -1 &&
+        elem.className.indexOf("flatpickr-disabled") === -1 &&
         self.daysContainer.contains(elem)
       );
     return false;
