@@ -54,6 +54,7 @@ See also:
 * [Stimulus.js Controller](https://github.com/adrienpoly/stimulus-flatpickr)
 * [Svelte Component](https://github.com/jacobmischka/svelte-flatpickr)
 * [vue-flatpickr component](https://github.com/ankurk91/vue-flatpickr-component)
+* [lit-flatpickr component](https://github.com/Matsuuu/lit-flatpickr)
 
 ## Supporting flatpickr
 

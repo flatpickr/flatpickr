@@ -75,6 +75,6 @@ export const Catalan: CustomLocale = {
   time_24hr: true,
 };
 
-fp.l10ns.cat = Catalan;
+fp.l10ns.cat = fp.l10ns.ca = Catalan;
 
 export default fp.l10ns;

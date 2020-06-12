@@ -18,6 +18,7 @@ let mockAgent: string | undefined;
 });
 
 function createInstance(config?: Options, el?: HTMLElement) {
+  destroyInstance();
   fp = flatpickr(
     el || elem || document.createElement("input"),
     config || {}
@@ -25,12 +26,22 @@ function createInstance(config?: Options, el?: HTMLElement) {
   return fp;
 }
 
+function destroyInstance() {
+  if (fp) {
+    fp.input.value = "";
+    fp.destroy && fp.destroy();
+  }
+}
+
 function beforeEachTest() {
   mockAgent = undefined;
   jest.runAllTimers();
-  (document.activeElement as HTMLElement).blur();
 
-  fp && fp.destroy && fp.destroy();
+  if (document.activeElement) {
+    (document.activeElement as HTMLElement).blur();
+  }
+
+  destroyInstance();
 
   if (elem === undefined) {
     elem = document.createElement("input");
@@ -53,7 +64,7 @@ function incrementTime(
   if (e !== undefined && e.parentNode)
     for (let i = times; i--; )
       simulate(
-        "mousedown",
+        "click",
         e.parentNode.childNodes[childNodeNum],
         { which: 1 },
         MouseEvent
@@ -75,9 +86,9 @@ function simulate(
   onElement.dispatchEvent(evt);
 }
 
-// mousedown click
+// simulate click
 const clickOn = (element: Node) => {
-  simulate("mousedown", element, { which: 1 }, CustomEvent);
+  simulate("click", element, { which: 1 }, CustomEvent);
 };
 
 describe("flatpickr", () => {
@@ -156,10 +167,11 @@ describe("flatpickr", () => {
           defaultDate: 1477111633771,
         });
 
+        const date = new Date("2016-10-22T04:47:13.771Z");
         expect(fp.selectedDates[0]).toBeDefined();
-        expect(fp.selectedDates[0].getFullYear()).toEqual(2016);
-        expect(fp.selectedDates[0].getMonth()).toEqual(9);
-        expect(fp.selectedDates[0].getDate()).toEqual(22);
+        expect(fp.selectedDates[0].getFullYear()).toEqual(date.getFullYear());
+        expect(fp.selectedDates[0].getMonth()).toEqual(date.getMonth());
+        expect(fp.selectedDates[0].getDate()).toEqual(date.getDate());
       });
 
       it("should parse unix time", () => {
@@ -168,11 +180,11 @@ describe("flatpickr", () => {
           dateFormat: "U",
         });
 
-        const parsedDate = fp.selectedDates[0];
-        expect(parsedDate).toBeDefined();
-        expect(parsedDate.getFullYear()).toEqual(2016);
-        expect(parsedDate.getMonth()).toEqual(9);
-        expect(parsedDate.getDate()).toEqual(22);
+        const date = new Date("2016-10-22T04:47:13.771Z");
+        expect(fp.selectedDates[0]).toBeDefined();
+        expect(fp.selectedDates[0].getFullYear()).toEqual(date.getFullYear());
+        expect(fp.selectedDates[0].getMonth()).toEqual(date.getMonth());
+        expect(fp.selectedDates[0].getDate()).toEqual(date.getDate());
       });
 
       it('should parse "2016-10"', () => {
@@ -349,7 +361,8 @@ describe("flatpickr", () => {
   describe("date formatting", () => {
     describe("default formatter", () => {
       const DEFAULT_FORMAT_1 = "d.m.y H:i:S",
-        DEFAULT_FORMAT_2 = "D j F, 'y";
+        DEFAULT_FORMAT_2 = "D j F, 'y",
+        DEFAULT_FORMAT_3 = "Y-m-d";
 
       it(`should format the date with the pattern "${DEFAULT_FORMAT_1}"`, () => {
         const RESULT = "20.10.16 09:19:59";
@@ -361,6 +374,16 @@ describe("flatpickr", () => {
         expect(fp.input.value).toEqual(RESULT);
         fp.setDate("2015.11.21 19:29:49");
         expect(fp.input.value).not.toEqual(RESULT);
+      });
+
+      it("should format dates for year 0001", () => {
+        const RESULT = "0001-07-15";
+        createInstance({
+          dateFormat: DEFAULT_FORMAT_3,
+        });
+
+        fp.setDate("0001-07-15");
+        expect(fp.input.value).toEqual(RESULT);
       });
 
       it(`should format the date with the pattern "${DEFAULT_FORMAT_2}"`, () => {
@@ -613,7 +636,7 @@ describe("flatpickr", () => {
       fp._input.focus();
 
       expect(fp.isOpen).toBe(true);
-      simulate("mousedown", window.document.body, { which: 1 }, CustomEvent);
+      simulate("click", window.document.body, { which: 1 }, CustomEvent);
       fp._input.blur();
 
       expect(fp.isOpen).toBe(false);
@@ -622,7 +645,7 @@ describe("flatpickr", () => {
       expect(fp.selectedDates.length).toBe(0);
       simulate("focus", fp._input);
       simulate(
-        "mousedown",
+        "click",
         fp.days.childNodes[15],
         { which: 1, bubbles: true },
         CustomEvent
@@ -630,7 +653,7 @@ describe("flatpickr", () => {
       expect(fp.selectedDates.length).toBe(1);
 
       fp.isOpen = true;
-      simulate("mousedown", window.document.body, { which: 1 }, CustomEvent);
+      simulate("click", window.document.body, { which: 1 }, CustomEvent);
       expect(fp.isOpen).toBe(false);
       expect(fp.selectedDates.length).toBe(0);
       expect(fp._input.value).toBe("");
@@ -777,7 +800,7 @@ describe("flatpickr", () => {
       fp.jumpToDate("2017-1-1");
       expect(fp.currentMonth).toBe(0);
 
-      simulate("mousedown", fp.days.childNodes[41], { which: 1 }, MouseEvent);
+      simulate("click", fp.days.childNodes[41], { which: 1 }, MouseEvent);
       expect(fp.selectedDates.length).toBe(1);
       expect(fp.currentMonth).toBe(1);
     });
@@ -806,11 +829,50 @@ describe("flatpickr", () => {
       });
 
       fp.open();
-      simulate("mousedown", fp.prevMonthNav, { which: 1 }, CustomEvent);
+      simulate("click", fp.prevMonthNav, { which: 1 }, CustomEvent);
       expect(fp.currentMonth).toEqual(0);
 
-      simulate("mousedown", fp.days.children[2], { which: 1 }, CustomEvent);
+      simulate("click", fp.days.children[2], { which: 1 }, CustomEvent);
       expect(fp.currentMonth).toEqual(0);
+    });
+
+    it("sets the date on direct entry when allowInput is true", () => {
+      createInstance({ allowInput: true });
+      expect(fp.selectedDates[0]).toBeUndefined();
+
+      fp.input.focus();
+      fp.input.value = "1999-12-31";
+      fp.input.blur();
+
+      expect(fp.selectedDates[0]).toBeDefined();
+      expect(fp.selectedDates[0].getFullYear()).toEqual(1999);
+      expect(fp.selectedDates[0].getMonth()).toEqual(11); // 11 === December
+      expect(fp.selectedDates[0].getDate()).toEqual(31);
+    });
+
+    it("updates the date on direct entry when allowInput is true", () => {
+      createInstance({
+        allowInput: true,
+        enableTime: true,
+        defaultDate: "2001-01-01 01:01",
+      });
+      expect(fp.selectedDates[0]).toBeDefined();
+      expect(fp.selectedDates[0].getFullYear()).toEqual(2001);
+      expect(fp.selectedDates[0].getMonth()).toEqual(0); // 0 === January
+      expect(fp.selectedDates[0].getDate()).toEqual(1);
+      expect(fp.selectedDates[0].getHours()).toEqual(1);
+      expect(fp.selectedDates[0].getMinutes()).toEqual(1);
+
+      fp.input.focus();
+      fp.input.value = "1969-07-20 20:17";
+      fp.input.blur();
+
+      expect(fp.selectedDates[0]).toBeDefined();
+      expect(fp.selectedDates[0].getFullYear()).toEqual(1969);
+      expect(fp.selectedDates[0].getMonth()).toEqual(6); // 6 === July
+      expect(fp.selectedDates[0].getDate()).toEqual(20);
+      expect(fp.selectedDates[0].getHours()).toEqual(20);
+      expect(fp.selectedDates[0].getMinutes()).toEqual(17);
     });
 
     describe("mobile calendar", () => {
@@ -928,7 +990,7 @@ describe("flatpickr", () => {
       });
 
       fp.open();
-      simulate("mousedown", fp.days.childNodes[15], { which: 1 }, MouseEvent); // oct 10
+      simulate("click", fp.days.childNodes[15], { which: 1 }, MouseEvent); // oct 10
 
       verifySelected(fp.selectedDates[0]);
     });
@@ -971,7 +1033,7 @@ describe("flatpickr", () => {
       incrementTime("minuteElement", 1);
       expect(fp.minuteElement.value).toEqual("05");
 
-      simulate("mousedown", fp.amPM, { which: 1 }, MouseEvent);
+      simulate("click", fp.amPM, { which: 1 }, MouseEvent);
       expect(fp.amPM.textContent).toEqual("PM");
 
       simulate("increment", fp.hourElement, {
@@ -1142,7 +1204,7 @@ describe("flatpickr", () => {
         defaultMinute: 45,
       });
 
-      simulate("mousedown", fp.todayDateElem as DayElement, { which: 1 });
+      simulate("click", fp.todayDateElem as DayElement, { which: 1 });
       expect((fp.latestSelectedDateObj as Date).getHours()).toEqual(12);
       expect((fp.latestSelectedDateObj as Date).getMinutes()).toEqual(45);
 
@@ -1153,7 +1215,7 @@ describe("flatpickr", () => {
         defaultMinute: 0,
       });
 
-      simulate("mousedown", fp.todayDateElem as DayElement, { which: 1 });
+      simulate("click", fp.todayDateElem as DayElement, { which: 1 });
       expect((fp.latestSelectedDateObj as Date).getHours()).toEqual(6);
       expect((fp.latestSelectedDateObj as Date).getMinutes()).toEqual(30);
     });
@@ -1203,7 +1265,7 @@ describe("flatpickr", () => {
       incrementTime("hourElement", 3);
       expect(hours.value).toBe("04");
 
-      simulate("mousedown", amPM, { which: 1 }, MouseEvent);
+      simulate("click", amPM, { which: 1 }, MouseEvent);
       expect(amPM.textContent).toBe("AM");
 
       fp.clear();
@@ -1333,7 +1395,7 @@ describe("flatpickr", () => {
         expect(day(i).classList.contains("flatpickr-disabled")).toEqual(false);
       }
 
-      simulate("mousedown", fp.days.childNodes[17], { which: 1 }, MouseEvent);
+      simulate("click", fp.days.childNodes[17], { which: 1 }, MouseEvent);
       expect(fp.selectedDates.length).toEqual(2);
       expect(fp.input.value).toEqual("2016-01-13 to 2016-01-17");
     });
@@ -1351,13 +1413,13 @@ describe("flatpickr", () => {
       expect(isArrowDisabled("prevMonthNav")).toBe(true);
       expect(isArrowDisabled("nextMonthNav")).toBe(false);
 
-      simulate("mousedown", fp.nextMonthNav, { which: 1 }, MouseEvent);
+      simulate("click", fp.nextMonthNav, { which: 1 }, MouseEvent);
 
       expect(fp.currentMonth).toBe(1);
       expect(isArrowDisabled("prevMonthNav")).toBe(false);
       expect(isArrowDisabled("nextMonthNav")).toBe(false);
 
-      simulate("mousedown", fp.nextMonthNav, { which: 1 }, MouseEvent);
+      simulate("click", fp.nextMonthNav, { which: 1 }, MouseEvent);
 
       expect(fp.currentMonth).toBe(2);
       expect(isArrowDisabled("prevMonthNav")).toBe(false);
