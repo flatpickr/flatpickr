@@ -364,7 +364,7 @@ function FlatpickrInstance(
     if (element instanceof Array)
       return element.forEach(el => bind(el, event, handler, options));
 
-    element.addEventListener(event, handler as EventListener, options);
+    element.addEventListener(event, handler, options);
     self._handlers.push({
       element: element as Element,
       event,
@@ -473,7 +473,7 @@ function FlatpickrInstance(
         ? self.parseDate(jumpDate)
         : self.latestSelectedDateObj ||
           (self.config.minDate && self.config.minDate > self.now
-            ? (self.config.minDate as Date)
+            ? self.config.minDate
             : self.config.maxDate && self.config.maxDate < self.now
             ? self.config.maxDate
             : self.now);
@@ -802,11 +802,13 @@ function FlatpickrInstance(
         ? self.todayDateElem
         : getFirstAvailableDay(offset > 0 ? 1 : -1);
 
-    if (startElem === undefined) return self._input.focus();
-
-    if (!dayFocused) return focusOnDayElem(startElem);
-
-    getNextAvailableDay(startElem, offset);
+    if (startElem === undefined) {
+      self._input.focus();
+    } else if (!dayFocused) {
+      focusOnDayElem(startElem);
+    } else {
+      getNextAvailableDay(startElem, offset);
+    }
   }
 
   function buildMonthDays(year: number, month: number) {
