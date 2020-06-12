@@ -110,9 +110,6 @@ function FlatpickrInstance(
 
     setCalendarWidth();
 
-    self.showTimeInput =
-      self.selectedDates.length > 0 || self.config.noCalendar;
-
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
     /* TODO: investigate this further
@@ -137,8 +134,9 @@ function FlatpickrInstance(
   function setCalendarWidth() {
     const config = self.config;
 
-    if (config.weekNumbers === false && config.showMonths === 1) return;
-    else if (config.noCalendar !== true) {
+    if (config.weekNumbers === false && config.showMonths === 1) {
+      return;
+    } else if (config.noCalendar !== true) {
       window.requestAnimationFrame(function () {
         if (self.calendarContainer !== undefined) {
           self.calendarContainer.style.visibility = "hidden";
@@ -1300,7 +1298,6 @@ function FlatpickrInstance(
       self.currentYear = self._initialDate.getFullYear();
       self.currentMonth = self._initialDate.getMonth();
     }
-    self.showTimeInput = false;
 
     if (self.config.enableTime === true) {
       setDefaultHours();
@@ -2331,9 +2328,6 @@ function FlatpickrInstance(
 
     updateValue();
 
-    if (self.config.enableTime)
-      setTimeout(() => (self.showTimeInput = true), 50);
-
     // maintain focus
     if (
       !shouldChangeMonth &&
@@ -2450,7 +2444,6 @@ function FlatpickrInstance(
 
     setSelectedDate(date, format);
 
-    self.showTimeInput = self.selectedDates.length > 0;
     self.latestSelectedDateObj =
       self.selectedDates[self.selectedDates.length - 1];
 
@@ -2549,16 +2542,6 @@ function FlatpickrInstance(
       (self.config.maxDate.getHours() > 0 ||
         self.config.maxDate.getMinutes() > 0 ||
         self.config.maxDate.getSeconds() > 0);
-
-    Object.defineProperty(self, "showTimeInput", {
-      get: () => self._showTimeInput,
-      set(bool: boolean) {
-        self._showTimeInput = bool;
-        if (self.calendarContainer)
-          toggleClass(self.calendarContainer, "showTimeInput", bool);
-        self.isOpen && positionCalendar();
-      },
-    });
   }
 
   function setupInputs() {

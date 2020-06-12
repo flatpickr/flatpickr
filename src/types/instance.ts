@@ -83,9 +83,6 @@ export type Instance = Elements &
     minDateHasTime: boolean;
     maxDateHasTime: boolean;
 
-    showTimeInput: boolean;
-    _showTimeInput: boolean;
-
     // Methods
     changeMonth: (
       value: number,
