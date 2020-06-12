@@ -1848,21 +1848,6 @@ function FlatpickrInstance(
       positionCalendar();
   }
 
-  function setDefaultTime() {
-    if (!self.config.autoFillDefaultTime) {
-      return;
-    }
-
-    self.setDate(
-      self.config.minDate !== undefined
-        ? new Date(self.config.minDate.getTime())
-        : new Date(),
-      true
-    );
-    setDefaultHours();
-    updateValue();
-  }
-
   function open(
     e?: FocusEvent | MouseEvent,
     positionElement = self._positionElement
