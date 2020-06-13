@@ -1195,7 +1195,10 @@ describe("flatpickr", () => {
       });
 
       fp.open();
-      expect(fp.input.value).toEqual("02:45");
+      simulate("increment", fp.hourElement!, {
+        delta: 1,
+      });
+      expect(fp.input.value).toEqual("03:45");
 
       createInstance({
         enableTime: true,
