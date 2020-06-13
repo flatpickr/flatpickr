@@ -37,7 +37,7 @@ function scrollMonth(fp: Instance) {
 }
 
 function scrollPlugin(): Plugin {
-  return function(fp) {
+  return function (fp) {
     const monthScroller = scrollMonth(fp);
     return {
       onReady() {
@@ -45,11 +45,11 @@ function scrollPlugin(): Plugin {
           fp.timeContainer.addEventListener("wheel", scroll);
         }
 
-        fp.yearElements.forEach(yearElem =>
+        fp.yearElements.forEach((yearElem) =>
           yearElem.addEventListener("wheel", scroll)
         );
 
-        fp.monthElements.forEach(monthElem =>
+        fp.monthElements.forEach((monthElem) =>
           monthElem.addEventListener("wheel", monthScroller)
         );
 
@@ -60,11 +60,11 @@ function scrollPlugin(): Plugin {
           fp.timeContainer.removeEventListener("wheel", scroll);
         }
 
-        fp.yearElements.forEach(yearElem =>
+        fp.yearElements.forEach((yearElem) =>
           yearElem.removeEventListener("wheel", scroll)
         );
 
-        fp.monthElements.forEach(monthElem =>
+        fp.monthElements.forEach((monthElem) =>
           monthElem.removeEventListener("wheel", monthScroller)
         );
       },

@@ -13,7 +13,7 @@ let elem: undefined | HTMLInputElement, fp: Instance;
 const UA = navigator.userAgent;
 let mockAgent: string | undefined;
 
-(navigator as any).__defineGetter__("userAgent", function() {
+(navigator as any).__defineGetter__("userAgent", function () {
   return mockAgent || UA;
 });
 
@@ -409,7 +409,7 @@ describe("flatpickr", () => {
             return (
               "MAAAGIC.*^*." +
               segs
-                .map(seg => {
+                .map((seg) => {
                   let mapped = null;
                   switch (seg) {
                     case "DAYOFMONTH":
@@ -725,7 +725,7 @@ describe("flatpickr", () => {
 
     it("enabling dates by function", () => {
       createInstance({
-        enable: [d => d.getDate() === 6, new Date()],
+        enable: [(d) => d.getDate() === 6, new Date()],
         disable: [{ from: "2016-10-20", to: "2016-10-25" }],
       });
 
@@ -754,7 +754,7 @@ describe("flatpickr", () => {
       });
     });
 
-    it("triggers monthChange on jump", done => {
+    it("triggers monthChange on jump", (done) => {
       const fp = createInstance({
         defaultDate: new Date(2019, 3, 17),
         onMonthChange: () => {
@@ -766,7 +766,7 @@ describe("flatpickr", () => {
       fp.jumpToDate(new Date(2019, 4, 17), true);
     });
 
-    it("triggers yearChange on jump", done => {
+    it("triggers yearChange on jump", (done) => {
       const fp = createInstance({
         defaultDate: new Date(2019, 3, 17),
         onYearChange: () => {
@@ -984,7 +984,7 @@ describe("flatpickr", () => {
       createInstance({
         enableTime: true,
         defaultDate: "2016-10-01 3:30",
-        onChange: dates => {
+        onChange: (dates) => {
           if (dates.length) verifySelected(dates[0]);
         },
       });
@@ -1314,7 +1314,7 @@ describe("flatpickr", () => {
 
       wrapper.appendChild(input);
 
-      ["open", "close", "toggle", "clear"].forEach(type => {
+      ["open", "close", "toggle", "clear"].forEach((type) => {
         let e = document.createElement("button");
         e.setAttribute(`data-${type}`, "");
         wrapper.appendChild(e);

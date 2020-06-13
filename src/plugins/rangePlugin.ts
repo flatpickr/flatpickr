@@ -12,7 +12,7 @@ declare global {
 }
 
 function rangePlugin(config: Config = {}): Plugin {
-  return function(fp) {
+  return function (fp) {
     let dateFormat = "",
       secondInput: HTMLInputElement,
       _secondInputFocused: boolean,
@@ -178,9 +178,10 @@ function rangePlugin(config: Config = {}): Plugin {
           _prevDates = [...newDates];
         }
 
-        [fp._input.value = "", secondInput.value = ""] = fp.selectedDates.map(
-          d => fp.formatDate(d, dateFormat)
-        );
+        [
+          fp._input.value = "",
+          secondInput.value = "",
+        ] = fp.selectedDates.map((d) => fp.formatDate(d, dateFormat));
       },
     };
 

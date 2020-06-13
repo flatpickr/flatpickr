@@ -14,7 +14,7 @@ import {
 import {
   Locale as _Locale,
   CustomLocale as _CustomLocale,
-  key as _LocaleKey
+  key as _LocaleKey,
 } from "./types/locale";
 
 declare var flatpickr: FlatpickrFn;

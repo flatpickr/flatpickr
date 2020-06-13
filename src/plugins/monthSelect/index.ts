@@ -132,7 +132,7 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         const months: NodeListOf<ElementDate> = fp.rContainer.querySelectorAll(
           ".flatpickr-monthSelect-month"
         );
-        months.forEach(month => {
+        months.forEach((month) => {
           month.dateObj.setFullYear(fp.currentYear);
           if (
             (fp.config.minDate && month.dateObj < fp.config.minDate) ||
