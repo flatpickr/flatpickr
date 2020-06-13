@@ -46,13 +46,23 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
     }
 
     function addListeners() {
-      fp._bind(fp.prevMonthNav, "click", () => {
-        fp.currentYear -= 1;
+      fp._bind(fp.prevMonthNav, "click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        let selectedMonth = fp.rContainer.querySelectorAll(".flatpickr-monthSelect-month.selected")[0].dateObj.getMonth();
+        if(selectedMonth === 1) {
+            fp.currentYear--;
+        }
         selectYear();
       });
 
-      fp._bind(fp.nextMonthNav, "click", () => {
-        fp.currentYear += 1;
+      fp._bind(fp.nextMonthNav, "click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        let selectedMonth = fp.rContainer.querySelectorAll(".flatpickr-monthSelect-month.selected")[0].dateObj.getMonth();
+        if(selectedMonth === 12) {
+            fp.currentYear++;
+        }
         selectYear();
       });
     }
@@ -126,7 +136,6 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         }
         fp.currentYear = selectedDate.getFullYear();
         fp.currentYearElement.value = String(fp.currentYear);
-        setCurrentlySelected();
       }
       if (fp.rContainer) {
         const months: NodeListOf<ElementDate> = fp.rContainer.querySelectorAll(
@@ -144,6 +153,7 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
           }
         });
       }
+      setCurrentlySelected();
     }
 
     function selectMonth(e: Event) {
