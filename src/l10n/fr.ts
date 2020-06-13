@@ -56,7 +56,7 @@ export const French: CustomLocale = {
     ],
   },
 
-  ordinal: nth => {
+  ordinal: (nth) => {
     if (nth > 1) return "";
 
     return "er";

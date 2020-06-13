@@ -118,6 +118,7 @@ export type key =
   | "bg"
   | "bn"
   | "bs"
+  | "ca"
   | "cat"
   | "cs"
   | "cy"
@@ -169,4 +170,6 @@ export type key =
   | "uk"
   | "vn"
   | "zh"
+  | "uz"
+  | "uz_latn"
   | "zh_tw";

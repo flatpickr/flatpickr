@@ -52,6 +52,9 @@ export interface BaseOptions {
   */
   allowInput: boolean;
 
+  /* Allow preloading of invalid date */
+  allowInvalidPreload: boolean;
+
   /* Exactly the same as date format, but for the altInput field */
   altFormat: string;
 
@@ -70,6 +73,10 @@ export interface BaseOptions {
   /* Defines how the date will be formatted in the aria-label for calendar days, using the same tokens as dateFormat. If you change this, you should choose a value that will make sense if a screen reader reads it out loud. */
   /* Defaults to "F j, Y" */
   ariaDateFormat: string;
+
+  /* Whether the default time should be auto-filled when the input is empty and gains or loses focus. */
+  /* Defaults to true */
+  autoFillDefaultTime: boolean;
 
   /*
     Whether clicking on the input should open the picker.
@@ -258,12 +265,14 @@ export interface ParsedOptions {
   _minDate?: Date;
   _minTime?: Date;
   allowInput: boolean;
+  allowInvalidPreload: boolean;
   altFormat: string;
   altInput: boolean;
   altInputClass: string;
   animate: boolean;
   appendTo?: HTMLElement;
   ariaDateFormat: string;
+  autoFillDefaultTime: boolean;
   clickOpens: boolean;
   closeOnSelect: boolean;
   conjunction: string;
@@ -323,6 +332,7 @@ export const defaults: ParsedOptions = {
   _disable: [],
   _enable: [],
   allowInput: false,
+  allowInvalidPreload: false,
   altFormat: "F j, Y",
   altInput: false,
   altInputClass: "form-control input",
@@ -330,6 +340,7 @@ export const defaults: ParsedOptions = {
     typeof window === "object" &&
     window.navigator.userAgent.indexOf("MSIE") === -1,
   ariaDateFormat: "F j, Y",
+  autoFillDefaultTime: true,
   clickOpens: true,
   closeOnSelect: true,
   conjunction: ", ",

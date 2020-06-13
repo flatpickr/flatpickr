@@ -1,5 +1,5 @@
 import { Plugin } from "../../types/options";
-import { DayElement as MonthElement, Instance } from "../../types/instance";
+import { Instance } from "../../types/instance";
 import { monthToStr } from "../../utils/formatting";
 import { getEventTarget } from "../../utils/dom";
 
@@ -56,7 +56,7 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         selectYear();
       });
 
-      fp._bind(fp.nextMonthNav, "mousedown", (e) => {
+      fp._bind(fp.nextMonthNav, "click", (e) => {
         e.preventDefault();
         e.stopPropagation();
         let selectedMonth = fp.rContainer.querySelectorAll(".flatpickr-monthSelect-month.selected")[0].dateObj.getMonth();
@@ -92,7 +92,10 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         month.tabIndex = -1;
         month.addEventListener("click", selectMonth);
         self.monthsContainer.appendChild(month);
-        if ((fp.config.minDate && month.dateObj < fp.config.minDate) || (fp.config.maxDate && month.dateObj > fp.config.maxDate)) {
+        if (
+          (fp.config.minDate && month.dateObj < fp.config.minDate) ||
+          (fp.config.maxDate && month.dateObj > fp.config.maxDate)
+        ) {
           month.classList.add("disabled");
         }
       }
@@ -135,10 +138,15 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         fp.currentYearElement.value = String(fp.currentYear);
       }
       if (fp.rContainer) {
-        const months: NodeListOf<ElementDate> = fp.rContainer.querySelectorAll(".flatpickr-monthSelect-month");
-        months.forEach(month => {
+        const months: NodeListOf<ElementDate> = fp.rContainer.querySelectorAll(
+          ".flatpickr-monthSelect-month"
+        );
+        months.forEach((month) => {
           month.dateObj.setFullYear(fp.currentYear);
-          if ((fp.config.minDate && month.dateObj < fp.config.minDate) || (fp.config.maxDate && month.dateObj > fp.config.maxDate)) {
+          if (
+            (fp.config.minDate && month.dateObj < fp.config.minDate) ||
+            (fp.config.maxDate && month.dateObj > fp.config.maxDate)
+          ) {
             month.classList.add("disabled");
           } else {
             month.classList.remove("disabled");
@@ -152,7 +160,10 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
       e.preventDefault();
       e.stopPropagation();
       const eventTarget = getEventTarget(e);
-      if (eventTarget instanceof Element && !eventTarget.classList.contains("disabled")) {
+      if (
+        eventTarget instanceof Element &&
+        !eventTarget.classList.contains("disabled")
+      ) {
         setMonth((eventTarget as MonthElement).dateObj);
         fp.close();
       }
