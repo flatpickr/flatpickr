@@ -1456,7 +1456,7 @@ function FlatpickrInstance(
         if (
           self.timeContainer !== undefined &&
           self.minuteElement !== undefined &&
-          self.hourElement !== undefined && 
+          self.hourElement !== undefined &&
           self.input.value !== "" &&
           self.input.value !== undefined
         ) {
@@ -1627,13 +1627,14 @@ function FlatpickrInstance(
     if (e.keyCode === 13 && isInput) {
       if (allowInput) {
         if(allowEnter) {
-        self.setDate(
-          self._input.value,
-          true,
-          eventTarget === self.altInput
-            ? self.config.altFormat
-            : self.config.dateFormat
-        );
+          self.setDate(
+              self._input.value,
+              true,
+              eventTarget === self.altInput
+                  ? self.config.altFormat
+                  : self.config.dateFormat
+          );
+        }
         return (eventTarget as HTMLElement).blur();
       } else {
         self.open();
