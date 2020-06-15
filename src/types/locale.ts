@@ -55,6 +55,7 @@ export type Locale = {
   toggleTitle: string;
   amPM: [string, string];
   yearAriaLabel: string;
+  monthAriaLabel: string;
   hourAriaLabel: string;
   minuteAriaLabel: string;
   time_24hr: boolean;
@@ -117,6 +118,7 @@ export type key =
   | "bg"
   | "bn"
   | "bs"
+  | "ca"
   | "cat"
   | "cs"
   | "cy"
@@ -168,4 +170,6 @@ export type key =
   | "uk"
   | "vn"
   | "zh"
+  | "uz"
+  | "uz_latn"
   | "zh_tw";

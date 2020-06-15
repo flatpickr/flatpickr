@@ -1,5 +1,5 @@
 if (typeof Object.assign !== "function") {
-  Object.assign = function(
+  Object.assign = function (
     target: Record<string, any>,
     ...args: Record<string, any>[]
   ) {
@@ -8,7 +8,7 @@ if (typeof Object.assign !== "function") {
     }
     for (const source of args) {
       if (source) {
-        Object.keys(source).forEach(key => (target[key] = source[key]));
+        Object.keys(source).forEach((key) => (target[key] = source[key]));
       }
     }
     return target;

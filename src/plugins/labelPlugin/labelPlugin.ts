@@ -1,7 +1,7 @@
 import { Plugin } from "../../types/options";
 
 function labelPlugin(): Plugin {
-  return function(fp) {
+  return function (fp) {
     return {
       onReady() {
         const id = fp.input.id;
