@@ -1,4 +1,5 @@
-export const pad = (number: string | number) => `0${number}`.slice(-2);
+export const pad = (number: string | number, length = 2) =>
+  `000${number}`.slice(length * -1);
 export const int = (bool: boolean) => (bool === true ? 1 : 0);
 
 /* istanbul ignore next */
@@ -8,11 +9,11 @@ export function debounce<F extends Function>(
   immediate: boolean = false
 ) {
   let timeout: number | null;
-  return function(this: Function) {
+  return function (this: Function) {
     let context = this,
       args = arguments;
     timeout !== null && clearTimeout(timeout);
-    timeout = window.setTimeout(function() {
+    timeout = window.setTimeout(function () {
       timeout = null;
       if (!immediate) func.apply(context, args);
     }, wait);

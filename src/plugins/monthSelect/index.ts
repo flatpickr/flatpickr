@@ -1,5 +1,5 @@
 import { Plugin } from "../../types/options";
-import { DayElement as MonthElement, Instance } from "../../types/instance";
+import { Instance } from "../../types/instance";
 import { monthToStr } from "../../utils/formatting";
 import { getEventTarget } from "../../utils/dom";
 
@@ -46,13 +46,31 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
     }
 
     function addListeners() {
-      fp._bind(fp.prevMonthNav, "click", () => {
-        fp.currentYear -= 1;
+      fp._bind(fp.prevMonthNav, "click", e => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const selectedMonth = fp.rContainer
+          ?.querySelector<ElementDate>(".flatpickr-monthSelect-month.selected")!
+          .dateObj.getMonth();
+
+        if (selectedMonth === 1) {
+          fp.currentYear--;
+        }
         selectYear();
       });
 
-      fp._bind(fp.nextMonthNav, "mousedown", () => {
-        fp.currentYear += 1;
+      fp._bind(fp.nextMonthNav, "click", e => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const selectedMonth = fp.rContainer
+          ?.querySelector<ElementDate>(".flatpickr-monthSelect-month.selected")!
+          .dateObj.getMonth();
+
+        if (selectedMonth === 12) {
+          fp.currentYear++;
+        }
         selectYear();
       });
     }
@@ -82,7 +100,10 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         month.tabIndex = -1;
         month.addEventListener("click", selectMonth);
         self.monthsContainer.appendChild(month);
-        if ((fp.config.minDate && month.dateObj < fp.config.minDate) || (fp.config.maxDate && month.dateObj > fp.config.maxDate)) {
+        if (
+          (fp.config.minDate && month.dateObj < fp.config.minDate) ||
+          (fp.config.maxDate && month.dateObj > fp.config.maxDate)
+        ) {
           month.classList.add("disabled");
         }
       }
@@ -123,27 +144,34 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         }
         fp.currentYear = selectedDate.getFullYear();
         fp.currentYearElement.value = String(fp.currentYear);
-        setCurrentlySelected();
       }
       if (fp.rContainer) {
-        const months: NodeListOf<ElementDate> = fp.rContainer.querySelectorAll(".flatpickr-monthSelect-month");
+        const months: NodeListOf<ElementDate> = fp.rContainer.querySelectorAll(
+          ".flatpickr-monthSelect-month"
+        );
         months.forEach(month => {
           month.dateObj.setFullYear(fp.currentYear);
-          if ((fp.config.minDate && month.dateObj < fp.config.minDate) || (fp.config.maxDate && month.dateObj > fp.config.maxDate)) {
+          if (
+            (fp.config.minDate && month.dateObj < fp.config.minDate) ||
+            (fp.config.maxDate && month.dateObj > fp.config.maxDate)
+          ) {
             month.classList.add("disabled");
           } else {
             month.classList.remove("disabled");
           }
         });
       }
-      
+      setCurrentlySelected();
     }
 
     function selectMonth(e: Event) {
       e.preventDefault();
       e.stopPropagation();
       const eventTarget = getEventTarget(e);
-      if (eventTarget instanceof Element && !eventTarget.classList.contains("disabled")) {
+      if (
+        eventTarget instanceof Element &&
+        !eventTarget.classList.contains("disabled")
+      ) {
         setMonth((eventTarget as MonthElement).dateObj);
         fp.close();
       }

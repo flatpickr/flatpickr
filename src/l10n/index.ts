@@ -55,6 +55,8 @@ import { Swedish as sv } from "./sv";
 import { Thai as th } from "./th";
 import { Turkish as tr } from "./tr";
 import { Ukrainian as uk } from "./uk";
+import { Uzbek as uz } from "./uz";
+import { UzbekLatin as uzLatn } from "./uz_latn";
 import { Vietnamese as vn } from "./vn";
 import { Mandarin as zh } from "./zh";
 import { MandarinTraditional as zh_tw } from "./zh-tw";
@@ -67,6 +69,7 @@ const l10n: Record<key, CustomLocale> = {
   bg,
   bn,
   bs,
+  ca: cat,
   cat,
   cs,
   cy,
@@ -119,6 +122,8 @@ const l10n: Record<key, CustomLocale> = {
   vn,
   zh,
   zh_tw,
+  uz,
+  uz_latn: uzLatn,
 };
 
 export default l10n;
