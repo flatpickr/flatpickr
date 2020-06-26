@@ -144,6 +144,7 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         }
         fp.currentYear = selectedDate.getFullYear();
         fp.currentYearElement.value = String(fp.currentYear);
+        fp.currentMonth = selectedDate.getMonth();
       }
       if (fp.rContainer) {
         const months: NodeListOf<ElementDate> = fp.rContainer.querySelectorAll(
