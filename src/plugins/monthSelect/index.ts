@@ -54,7 +54,7 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
           ?.querySelector<ElementDate>(".flatpickr-monthSelect-month.selected")!
           .dateObj.getMonth();
 
-        if (selectedMonth === 1) {
+        if (selectedMonth === 0) {
           fp.currentYear--;
         }
         selectYear();
@@ -68,7 +68,7 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
           ?.querySelector<ElementDate>(".flatpickr-monthSelect-month.selected")!
           .dateObj.getMonth();
 
-        if (selectedMonth === 12) {
+        if (selectedMonth === 11) {
           fp.currentYear++;
         }
         selectYear();
@@ -144,6 +144,7 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         }
         fp.currentYear = selectedDate.getFullYear();
         fp.currentYearElement.value = String(fp.currentYear);
+        fp.currentMonth = selectedDate.getMonth();
       }
       if (fp.rContainer) {
         const months: NodeListOf<ElementDate> = fp.rContainer.querySelectorAll(
