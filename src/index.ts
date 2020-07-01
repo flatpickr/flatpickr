@@ -2175,6 +2175,7 @@ function FlatpickrInstance(
       (configPosHorizontal != null && configPosHorizontal === "center"
         ? (calendarWidth - inputBounds.width) / 2
         : 0);
+    if(left < 0){left = window.pageXOffset + inputBounds.left;}
     const right =
       window.document.body.offsetWidth -
       (window.pageXOffset + inputBounds.right);
