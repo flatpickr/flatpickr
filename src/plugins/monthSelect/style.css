@@ -24,6 +24,16 @@
   width: 33%;
 }
 
+.flatpickr-monthSelect-month.disabled {
+	color: #eee;
+}
+
+.flatpickr-monthSelect-month.disabled:hover,
+.flatpickr-monthSelect-month.disabled:focus {
+	cursor: not-allowed;
+	background: none !important;
+}
+
 .flatpickr-monthSelect-theme-dark {
   background: #3f4458;
 }

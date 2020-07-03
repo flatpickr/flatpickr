@@ -43,7 +43,7 @@ export type RevFormatFn = (
 export type RevFormat = Record<string, RevFormatFn>;
 export const revFormat: RevFormat = {
   D: doNothing,
-  F: function(dateObj: Date, monthName: string, locale: Locale) {
+  F: function (dateObj: Date, monthName: string, locale: Locale) {
     dateObj.setMonth(locale.months.longhand.indexOf(monthName));
   },
   G: (dateObj: Date, hour: string) => {
@@ -61,7 +61,7 @@ export const revFormat: RevFormat = {
         12 * int(new RegExp(locale.amPM[1], "i").test(amPM))
     );
   },
-  M: function(dateObj: Date, shortMonth: string, locale: Locale) {
+  M: function (dateObj: Date, shortMonth: string, locale: Locale) {
     dateObj.setMonth(locale.months.shorthand.indexOf(shortMonth));
   },
   S: (dateObj: Date, seconds: string) => {
@@ -69,7 +69,7 @@ export const revFormat: RevFormat = {
   },
   U: (_: Date, unixSeconds: string) => new Date(parseFloat(unixSeconds) * 1000),
 
-  W: function(dateObj: Date, weekNum: string, locale: Locale) {
+  W: function (dateObj: Date, weekNum: string, locale: Locale) {
     const weekNumber = parseInt(weekNum);
     const date = new Date(
       dateObj.getFullYear(),
@@ -155,14 +155,14 @@ export const formats: Formats = {
   Z: (date: Date) => date.toISOString(),
 
   // weekday name, short, e.g. Thu
-  D: function(date: Date, locale: Locale, options: ParsedOptions) {
+  D: function (date: Date, locale: Locale, options: ParsedOptions) {
     return locale.weekdays.shorthand[
       formats.w(date, locale, options) as number
     ];
   },
 
   // full month name e.g. January
-  F: function(date: Date, locale: Locale, options: ParsedOptions) {
+  F: function (date: Date, locale: Locale, options: ParsedOptions) {
     return monthToStr(
       (formats.n(date, locale, options) as number) - 1,
       false,
@@ -171,7 +171,7 @@ export const formats: Formats = {
   },
 
   // padded hour 1-12
-  G: function(date: Date, locale: Locale, options: ParsedOptions) {
+  G: function (date: Date, locale: Locale, options: ParsedOptions) {
     return pad(formats.h(date, locale, options));
   },
 
@@ -179,7 +179,7 @@ export const formats: Formats = {
   H: (date: Date) => pad(date.getHours()),
 
   // day (1-30) with ordinal suffix e.g. 1st, 2nd
-  J: function(date: Date, locale: Locale) {
+  J: function (date: Date, locale: Locale) {
     return locale.ordinal !== undefined
       ? date.getDate() + locale.ordinal(date.getDate())
       : date.getDate();
@@ -189,7 +189,7 @@ export const formats: Formats = {
   K: (date: Date, locale: Locale) => locale.amPM[int(date.getHours() > 11)],
 
   // shorthand month e.g. Jan, Sep, Oct, etc
-  M: function(date: Date, locale: Locale) {
+  M: function (date: Date, locale: Locale) {
     return monthToStr(date.getMonth(), true, locale);
   },
 
@@ -199,12 +199,12 @@ export const formats: Formats = {
   // unix timestamp
   U: (date: Date) => date.getTime() / 1000,
 
-  W: function(date: Date, _: Locale, options: ParsedOptions) {
+  W: function (date: Date, _: Locale, options: ParsedOptions) {
     return options.getWeek(date);
   },
 
-  // full year e.g. 2016
-  Y: (date: Date) => date.getFullYear(),
+  // full year e.g. 2016, padded (0001-9999)
+  Y: (date: Date) => pad(date.getFullYear(), 4),
 
   // day in month, padded (01-30)
   d: (date: Date) => pad(date.getDate()),
@@ -219,7 +219,7 @@ export const formats: Formats = {
   j: (date: Date) => date.getDate(),
 
   // weekday name, full, e.g. Thursday
-  l: function(date: Date, locale: Locale) {
+  l: function (date: Date, locale: Locale) {
     return locale.weekdays.longhand[date.getDay()];
   },
 

@@ -1,5 +1,20 @@
 import { Plugin } from "../types/options";
 import { Instance } from "../types/instance";
+import { getEventTarget } from "../utils/dom";
+
+if (typeof window.CustomEvent !== "function") {
+  function CustomEvent(typeArg: string, eventInitDict?: CustomEventInit): CustomEvent {
+    eventInitDict = eventInitDict || { bubbles: false, cancelable: false, detail: undefined };
+    const evt = document.createEvent("CustomEvent");
+    evt.initCustomEvent(typeArg, (eventInitDict.bubbles as boolean), (eventInitDict.cancelable as boolean), eventInitDict.detail);
+    return evt;
+  }
+
+  CustomEvent.prototype = window.Event.prototype;
+
+  window.CustomEvent = <any>CustomEvent;
+}
+
 function delta(e: WheelEvent) {
   return Math.max(-1, Math.min(1, (e as any).wheelDelta || -e.deltaY));
 }
@@ -10,7 +25,7 @@ const scroll = (e: WheelEvent) => {
     bubbles: true,
   });
   (ev as any).delta = delta(e);
-  (e.target as HTMLInputElement).dispatchEvent(ev);
+  (getEventTarget(e) as HTMLInputElement).dispatchEvent(ev);
 };
 
 function scrollMonth(fp: Instance) {
@@ -22,7 +37,7 @@ function scrollMonth(fp: Instance) {
 }
 
 function scrollPlugin(): Plugin {
-  return function(fp) {
+  return function (fp) {
     const monthScroller = scrollMonth(fp);
     return {
       onReady() {
@@ -30,11 +45,11 @@ function scrollPlugin(): Plugin {
           fp.timeContainer.addEventListener("wheel", scroll);
         }
 
-        fp.yearElements.forEach(yearElem =>
+        fp.yearElements.forEach((yearElem) =>
           yearElem.addEventListener("wheel", scroll)
         );
 
-        fp.monthElements.forEach(monthElem =>
+        fp.monthElements.forEach((monthElem) =>
           monthElem.addEventListener("wheel", monthScroller)
         );
 
@@ -45,11 +60,11 @@ function scrollPlugin(): Plugin {
           fp.timeContainer.removeEventListener("wheel", scroll);
         }
 
-        fp.yearElements.forEach(yearElem =>
+        fp.yearElements.forEach((yearElem) =>
           yearElem.removeEventListener("wheel", scroll)
         );
 
-        fp.monthElements.forEach(monthElem =>
+        fp.monthElements.forEach((monthElem) =>
           monthElem.removeEventListener("wheel", monthScroller)
         );
       },

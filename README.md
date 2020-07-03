@@ -29,7 +29,7 @@ Feature overview:
 - Display dates in a human-friendly format
 - Easily disable specific dates, date ranges, or any date using arbitrary logic
 - Week numbers
-- 50 locales
+- 51 locales
 - 8 colorful themes (incl. dark and material)
 - Numerous plugins
 - Libraries available for React, Angular, Vue, Ember, and more
@@ -54,6 +54,7 @@ See also:
 * [Stimulus.js Controller](https://github.com/adrienpoly/stimulus-flatpickr)
 * [Svelte Component](https://github.com/jacobmischka/svelte-flatpickr)
 * [vue-flatpickr component](https://github.com/ankurk91/vue-flatpickr-component)
+* [lit-flatpickr component](https://github.com/Matsuuu/lit-flatpickr)
 
 ## Supporting flatpickr
 

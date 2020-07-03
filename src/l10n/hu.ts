@@ -56,7 +56,7 @@ export const Hungarian: CustomLocale = {
     ],
   },
 
-  ordinal: function() {
+  ordinal: function () {
     return ".";
   },
 

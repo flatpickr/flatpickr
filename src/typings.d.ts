@@ -14,6 +14,7 @@ import {
 import {
   Locale as _Locale,
   CustomLocale as _CustomLocale,
+  key as _LocaleKey,
 } from "./types/locale";
 
 declare var flatpickr: FlatpickrFn;
@@ -32,6 +33,7 @@ declare namespace flatpickr {
     export type DateOption = _DateOption;
     export type DateRangeLimit = _DateRangeLimit;
     export type Plugin = _Plugin;
+    export type LocaleKey = _LocaleKey;
   }
 }
 

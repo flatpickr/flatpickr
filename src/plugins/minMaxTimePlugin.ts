@@ -42,7 +42,7 @@ function minMaxTimePlugin(config: Config = {}): Plugin {
     return config.getTimeLimits && config.getTimeLimits(date);
   }
 
-  return function(fp) {
+  return function (fp) {
     return {
       onReady(this: Instance) {
         state.formatDate = this.formatDate;

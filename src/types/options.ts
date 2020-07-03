@@ -52,6 +52,9 @@ export interface BaseOptions {
   */
   allowInput: boolean;
 
+  /* Allow preloading of invalid date */
+  allowInvalidPreload: boolean;
+
   /* Exactly the same as date format, but for the altInput field */
   altFormat: string;
 
@@ -70,6 +73,10 @@ export interface BaseOptions {
   /* Defines how the date will be formatted in the aria-label for calendar days, using the same tokens as dateFormat. If you change this, you should choose a value that will make sense if a screen reader reads it out loud. */
   /* Defaults to "F j, Y" */
   ariaDateFormat: string;
+
+  /* Whether the default time should be auto-filled when the input is empty and gains or loses focus. */
+  /* Defaults to true */
+  autoFillDefaultTime: boolean;
 
   /*
     Whether clicking on the input should open the picker.
@@ -164,6 +171,9 @@ By default, Flatpickr utilizes native datetime widgets unless certain options (e
   /* Date selection mode, defaults to "single" */
   mode: "single" | "multiple" | "range" | "time";
 
+  /* How the month selector in the calendar should be shown */
+  monthSelectorType: "dropdown" | "static";
+
   /* HTML for the right arrow icon, used to switch months. */
   nextArrow: string;
 
@@ -232,6 +242,7 @@ Use it along with "enableTime" to create a time picker. */
   /* Creates a wrapper to position the calendar. Use this if the input is inside a scrollable element */
   static: boolean;
 
+  /* Sets the number of months to show */
   showMonths?: number;
 
   /* Displays time picker in 24 hour mode without AM/PM selection when enabled.*/
@@ -254,12 +265,14 @@ export interface ParsedOptions {
   _minDate?: Date;
   _minTime?: Date;
   allowInput: boolean;
+  allowInvalidPreload: boolean;
   altFormat: string;
   altInput: boolean;
   altInputClass: string;
   animate: boolean;
   appendTo?: HTMLElement;
   ariaDateFormat: string;
+  autoFillDefaultTime: boolean;
   clickOpens: boolean;
   closeOnSelect: boolean;
   conjunction: string;
@@ -286,6 +299,7 @@ export interface ParsedOptions {
   minTime?: Date;
   minuteIncrement: number;
   mode: BaseOptions["mode"];
+  monthSelectorType: string;
   nextArrow: string;
   noCalendar: boolean;
   now: Date;
@@ -318,6 +332,7 @@ export const defaults: ParsedOptions = {
   _disable: [],
   _enable: [],
   allowInput: false,
+  allowInvalidPreload: false,
   altFormat: "F j, Y",
   altInput: false,
   altInputClass: "form-control input",
@@ -325,6 +340,7 @@ export const defaults: ParsedOptions = {
     typeof window === "object" &&
     window.navigator.userAgent.indexOf("MSIE") === -1,
   ariaDateFormat: "F j, Y",
+  autoFillDefaultTime: true,
   clickOpens: true,
   closeOnSelect: true,
   conjunction: ", ",
@@ -366,6 +382,7 @@ export const defaults: ParsedOptions = {
   locale: "default",
   minuteIncrement: 5,
   mode: "single",
+  monthSelectorType: "dropdown",
   nextArrow:
     "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M13.207 8.472l-7.854 7.854-0.707-0.707 7.146-7.146-7.146-7.148 0.707-0.707 7.854 7.854z' /></svg>",
   noCalendar: false,

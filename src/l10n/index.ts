@@ -29,6 +29,7 @@ import { Indonesian as id } from "./id";
 import { Icelandic as is } from "./is";
 import { Italian as it } from "./it";
 import { Japanese as ja } from "./ja";
+import { Georgian as ka } from "./ka";
 import { Korean as ko } from "./ko";
 import { Khmer as km } from "./km";
 import { Kazakh as kz } from "./kz";
@@ -54,6 +55,8 @@ import { Swedish as sv } from "./sv";
 import { Thai as th } from "./th";
 import { Turkish as tr } from "./tr";
 import { Ukrainian as uk } from "./uk";
+import { Uzbek as uz } from "./uz";
+import { UzbekLatin as uzLatn } from "./uz_latn";
 import { Vietnamese as vn } from "./vn";
 import { Mandarin as zh } from "./zh";
 import { MandarinTraditional as zh_tw } from "./zh-tw";
@@ -66,6 +69,7 @@ const l10n: Record<key, CustomLocale> = {
   bg,
   bn,
   bs,
+  ca: cat,
   cat,
   cs,
   cy,
@@ -89,6 +93,7 @@ const l10n: Record<key, CustomLocale> = {
   is,
   it,
   ja,
+  ka,
   ko,
   km,
   kz,
@@ -117,6 +122,8 @@ const l10n: Record<key, CustomLocale> = {
   vn,
   zh,
   zh_tw,
+  uz,
+  uz_latn: uzLatn,
 };
 
 export default l10n;

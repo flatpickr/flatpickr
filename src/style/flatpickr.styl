@@ -86,7 +86,7 @@
     .hasWeeks .dayContainer
       border-left 0
 
-  &.showTimeInput.hasTime
+  &.hasTime
     .flatpickr-time
       height $timeHeight
       border-top 1px solid $calendarBorderColor
@@ -175,8 +175,7 @@
     text-decoration none
     cursor pointer
     position absolute
-    top 0px
-    line-height 16px
+    top 0
     height $monthNavHeight
     padding 10px
     z-index 3
@@ -375,7 +374,7 @@
     font-size: inherit
     font-family: inherit
     font-weight: 300
-    height: $monthNavHeight - 6px
+    height: auto
     line-height: inherit
     margin: -1px 0 0 0
     outline: none
