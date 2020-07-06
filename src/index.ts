@@ -1456,7 +1456,7 @@ function FlatpickrInstance(
         if (
           self.timeContainer !== undefined &&
           self.minuteElement !== undefined &&
-          self.hourElement !== undefined && 
+          self.hourElement !== undefined &&
           self.input.value !== "" &&
           self.input.value !== undefined
         ) {
@@ -2169,12 +2169,22 @@ function FlatpickrInstance(
 
     if (self.config.inline) return;
 
-    const left =
-      window.pageXOffset +
-      inputBounds.left -
-      (configPosHorizontal != null && configPosHorizontal === "center"
-        ? (calendarWidth - inputBounds.width) / 2
-        : 0);
+    let left = window.pageXOffset + inputBounds.left;
+    let isCenter = false;
+    let isRight = false;
+
+    if (configPosHorizontal === "center") {
+      left -= (calendarWidth - inputBounds.width) / 2;
+      isCenter = true;
+    } else if (configPosHorizontal === "right") {
+      left -= calendarWidth - inputBounds.width;
+      isRight = true;
+    }
+
+    toggleClass(self.calendarContainer, "arrowLeft", !isCenter && !isRight);
+    toggleClass(self.calendarContainer, "arrowCenter", isCenter);
+    toggleClass(self.calendarContainer, "arrowRight", isRight);
+
     const right =
       window.document.body.offsetWidth -
       (window.pageXOffset + inputBounds.right);
