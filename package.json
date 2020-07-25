@@ -67,7 +67,7 @@
   "bugs": {
     "url": "https://github.com/chmln/flatpickr/issues"
   },
-  "homepage": "https://chmln.github.io/flatpickr",
+  "homepage": "https://flatpickr.js.org",
   "keywords": [
     "javascript",
     "datetimepicker",
