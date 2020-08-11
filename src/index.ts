@@ -1899,9 +1899,10 @@ function FlatpickrInstance(
       positionCalendar(positionElement);
     }
 
-    if (self.config.enableTime === true && self.config.noCalendar === true) {
-      if (
-        self.config.allowInput === false &&
+    if(self.config.noCalendar === false) {
+      focusOnDay(undefined, 7);
+    } else if (self.config.enableTime === true && self.config.noCalendar === true) {
+      if ((self.config.allowInput === false || self.config.wrap) &&
         (e === undefined ||
           !(self.timeContainer as HTMLDivElement).contains(
             e.relatedTarget as Node
