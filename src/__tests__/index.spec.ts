@@ -3,6 +3,7 @@ import { Russian } from "../l10n/ru";
 import { Instance, DayElement } from "../types/instance";
 import { Options, DateRangeLimit } from "../types/options";
 import confirmDatePlugin from "../plugins/confirmDate/confirmDate";
+import { clickOn, simulate } from "../utils/test_helpers";
 
 flatpickr.defaultConfig.animate = false;
 flatpickr.defaultConfig.closeOnSelect = true;
@@ -70,26 +71,6 @@ function incrementTime(
         MouseEvent
       );
 }
-
-function simulate(
-  eventType: string,
-  onElement: Node,
-  options?: object,
-  type?: any
-) {
-  const eventOptions = Object.assign(options || {}, { bubbles: true });
-  const evt = new (type || CustomEvent)(eventType, eventOptions);
-  try {
-    Object.assign(evt, eventOptions);
-  } catch (e) {}
-
-  onElement.dispatchEvent(evt);
-}
-
-// simulate click
-const clickOn = (element: Node) => {
-  simulate("click", element, { which: 1 }, CustomEvent);
-};
 
 describe("flatpickr", () => {
   beforeEach(beforeEachTest);

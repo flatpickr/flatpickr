@@ -50,13 +50,8 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         e.preventDefault();
         e.stopPropagation();
 
-        const selectedMonth = fp.rContainer
-          ?.querySelector<ElementDate>(".flatpickr-monthSelect-month.selected")!
-          .dateObj.getMonth();
-
-        if (selectedMonth === 0) {
-          fp.currentYear--;
-        }
+        fp.currentYear--;
+        
         selectYear();
       });
 
@@ -64,13 +59,8 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         e.preventDefault();
         e.stopPropagation();
 
-        const selectedMonth = fp.rContainer
-          ?.querySelector<ElementDate>(".flatpickr-monthSelect-month.selected")!
-          .dateObj.getMonth();
-
-        if (selectedMonth === 11) {
-          fp.currentYear++;
-        }
+        fp.currentYear++;
+        
         selectYear();
       });
     }
@@ -133,19 +123,22 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
 
     function selectYear() {
       let selectedDate = fp.selectedDates[0];
-      if (selectedDate) {
-        selectedDate = new Date(selectedDate);
-        selectedDate.setFullYear(fp.currentYear);
-        if (fp.config.minDate && selectedDate < fp.config.minDate) {
-          selectedDate = fp.config.minDate;
-        }
-        if (fp.config.maxDate && selectedDate > fp.config.maxDate) {
-          selectedDate = fp.config.maxDate;
-        }
-        fp.currentYear = selectedDate.getFullYear();
-        fp.currentYearElement.value = String(fp.currentYear);
-        fp.currentMonth = selectedDate.getMonth();
+      
+      selectedDate = selectedDate 
+          ? new Date(selectedDate)
+          : new Date;
+      
+      selectedDate.setFullYear(fp.currentYear);
+      if (fp.config.minDate && selectedDate < fp.config.minDate) {
+        selectedDate = fp.config.minDate;
       }
+      if (fp.config.maxDate && selectedDate > fp.config.maxDate) {
+        selectedDate = fp.config.maxDate;
+      }
+      fp.currentYear = selectedDate.getFullYear();
+      fp.currentYearElement.value = String(fp.currentYear);
+      fp.currentMonth = selectedDate.getMonth();
+
       if (fp.rContainer) {
         const months: NodeListOf<ElementDate> = fp.rContainer.querySelectorAll(
           ".flatpickr-monthSelect-month"
