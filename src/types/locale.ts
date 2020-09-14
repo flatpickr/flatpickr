@@ -1,5 +1,6 @@
 export type Locale = {
   weekdays: {
+    oneDigit: [string, string, string, string, string, string, string];
     shorthand: [string, string, string, string, string, string, string];
     longhand: [string, string, string, string, string, string, string];
   };
@@ -75,6 +76,7 @@ export type CustomLocale = {
   amPM?: Locale["amPM"];
   time_24hr?: Locale["time_24hr"];
   weekdays: {
+    oneDigit: [string, string, string, string, string, string, string];
     shorthand: [string, string, string, string, string, string, string];
     longhand: [string, string, string, string, string, string, string];
   };

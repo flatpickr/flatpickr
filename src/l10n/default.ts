@@ -2,6 +2,7 @@ import { Locale } from "../types/locale";
 
 export const english: Locale = {
   weekdays: {
+    oneDigit: ["S", "M", "T", "W", "T", "F", "S"],
     shorthand: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
     longhand: [
       "Sunday",

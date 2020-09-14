@@ -195,6 +195,9 @@ Use it along with "enableTime" to create a time picker. */
   /* Fires before the calendar instance is destroyed */
   onDestroy: Hook | Hook[];
 
+  /* Show One Digit day codes */
+  oneDigitDayOfWeek: boolean;
+
   /* Fires when valid keyboard input for calendar is detected */
   onKeyDown: Hook | Hook[];
 
@@ -307,6 +310,7 @@ export interface ParsedOptions {
   onClose: Hook[];
   onDayCreate: Hook[];
   onDestroy: Hook[];
+  oneDigitDayOfWeek: boolean;
   onKeyDown: Hook[];
   onMonthChange: Hook[];
   onOpen: Hook[];
@@ -391,6 +395,7 @@ export const defaults: ParsedOptions = {
   onClose: [],
   onDayCreate: [],
   onDestroy: [],
+  oneDigitDayOfWeek: false,
   onKeyDown: [],
   onMonthChange: [],
   onOpen: [],

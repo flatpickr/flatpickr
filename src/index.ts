@@ -1232,7 +1232,9 @@ function FlatpickrInstance(
     }
 
     const firstDayOfWeek = self.l10n.firstDayOfWeek;
-    let weekdays = [...self.l10n.weekdays.shorthand];
+    let weekdays = self.config.oneDigitDayOfWeek
+      ? [...self.l10n.weekdays.oneDigit]
+      : [...self.l10n.weekdays.shorthand];
 
     if (firstDayOfWeek > 0 && firstDayOfWeek < weekdays.length) {
       weekdays = [
