@@ -659,6 +659,54 @@ describe("flatpickr", () => {
       expect(fp._input.value).toBe("");
     });
 
+    it("onKeyDown defaults to true", () => {
+      createInstance({});
+
+      expect(fp.config.allowClearing).toBe(true);
+    });
+
+    it("onKeyDown backspace while allowClearing is true", () => {
+      createInstance({
+        allowClearing: true,
+      });
+
+      fp.setDate("2016-11-03");
+      fp.open();
+
+      simulate(
+        "keydown",
+        fp.input,
+        {
+          keyCode: 8, // "Backspace"
+          bubbles: true,
+        },
+        KeyboardEvent
+      );
+
+      expect(fp.selectedDates.length).toBe(0);
+    });
+
+    it("onKeyDown backspace while allowClearing is false", () => {
+      createInstance({
+        allowClearing: false,
+      });
+
+      fp.setDate("2016-11-03");
+      fp.open();
+
+      simulate(
+        "keydown",
+        fp.input,
+        {
+          keyCode: 8, // "Backspace"
+          bubbles: true,
+        },
+        KeyboardEvent
+      );
+
+      expect(fp.selectedDates.length).toBe(1);
+    });
+
     it("onKeyDown", () => {
       createInstance({
         enableTime: true,
