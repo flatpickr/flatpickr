@@ -1,5 +1,5 @@
-import flatpickr from "../../index";
-import monthSelectPlugin from "./index";
+import flatpickr from "index";
+import monthSelectPlugin from "plugins/monthSelect/index";
 import { German } from "l10n/de";
 import { Instance } from "types/instance";
 import { Options } from "types/options";
