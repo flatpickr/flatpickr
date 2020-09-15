@@ -50,13 +50,7 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         e.preventDefault();
         e.stopPropagation();
 
-        const selectedMonth = fp.rContainer
-          ?.querySelector<ElementDate>(".flatpickr-monthSelect-month.selected")!
-          .dateObj.getMonth();
-
-        if (selectedMonth === 0) {
-          fp.currentYear--;
-        }
+        fp.currentYear--;
         selectYear();
       });
 
@@ -64,13 +58,7 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         e.preventDefault();
         e.stopPropagation();
 
-        const selectedMonth = fp.rContainer
-          ?.querySelector<ElementDate>(".flatpickr-monthSelect-month.selected")!
-          .dateObj.getMonth();
-
-        if (selectedMonth === 11) {
-          fp.currentYear++;
-        }
+        fp.currentYear++;
         selectYear();
       });
     }

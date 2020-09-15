@@ -59,4 +59,27 @@ describe("monthSelect", () => {
 
     expect(fp.altInput.value).toEqual("03 19");
   });
+
+  describe("year nav", () => {
+    describe("next/prev year buttons", () => {
+      it("should increment/decrement year when clicked (#2275)", () => {
+        const initYear = 2020;
+
+        const fp = createInstance({
+          plugins: [monthSelectPlugin()],
+          defaultDate: new Date(`${initYear}-03-20`),
+        }) as Instance;
+
+        const prevButton = fp.monthNav.querySelector(".flatpickr-prev-month")!;
+        prevButton.dispatchEvent(new MouseEvent("click"));
+
+        expect(fp.currentYear).toEqual(initYear - 1);
+
+        const nextButton = fp.monthNav.querySelector(".flatpickr-next-month")!;
+        nextButton.dispatchEvent(new MouseEvent("click"));
+
+        expect(fp.currentYear).toEqual(initYear);
+      });
+    });
+  });
 });
