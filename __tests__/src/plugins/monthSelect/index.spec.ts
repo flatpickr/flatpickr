@@ -80,6 +80,25 @@ describe("monthSelect", () => {
 
         expect(fp.currentYear).toEqual(initYear);
       });
+
+      it("should update displayed year when clicked (#2277)", () => {
+        const initYear = new Date().getFullYear();
+
+        const fp = createInstance({
+          plugins: [monthSelectPlugin()],
+        }) as Instance;
+
+        const prevButton = fp.monthNav.querySelector(".flatpickr-prev-month")!;
+        prevButton.dispatchEvent(new MouseEvent("click"));
+
+        expect(fp.currentYearElement.value).toEqual(`${initYear - 1}`);
+
+        const nextButton = fp.monthNav.querySelector(".flatpickr-next-month")!;
+        nextButton.dispatchEvent(new MouseEvent("click"));
+        nextButton.dispatchEvent(new MouseEvent("click"));
+
+        expect(fp.currentYearElement.value).toEqual(`${initYear + 1}`);
+      });
     });
   });
 });

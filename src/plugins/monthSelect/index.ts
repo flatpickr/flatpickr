@@ -131,9 +131,11 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
           selectedDate = fp.config.maxDate;
         }
         fp.currentYear = selectedDate.getFullYear();
-        fp.currentYearElement.value = String(fp.currentYear);
         fp.currentMonth = selectedDate.getMonth();
       }
+
+      fp.currentYearElement.value = String(fp.currentYear);
+
       if (fp.rContainer) {
         const months: NodeListOf<ElementDate> = fp.rContainer.querySelectorAll(
           ".flatpickr-monthSelect-month"
