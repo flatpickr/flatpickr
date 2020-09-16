@@ -49,9 +49,9 @@ export const Vietnamese: CustomLocale = {
       "Tháng tám",
       "Tháng chín",
       "Tháng mười",
-      "Tháng 11",
-      "Tháng 12",
-    ],
+      "Tháng mười một",
+      "Tháng mười hai",
+    ]
   },
 
   firstDayOfWeek: 1,
