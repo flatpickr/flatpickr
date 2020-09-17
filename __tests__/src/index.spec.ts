@@ -1,8 +1,8 @@
-import flatpickr from "../index";
-import { Russian } from "../l10n/ru";
-import { Instance, DayElement } from "../types/instance";
-import { Options, DateRangeLimit } from "../types/options";
-import confirmDatePlugin from "../plugins/confirmDate/confirmDate";
+import flatpickr from "index";
+import { Russian } from "l10n/ru";
+import { Instance, DayElement } from "types/instance";
+import { Options, DateRangeLimit } from "types/options";
+import confirmDatePlugin from "plugins/confirmDate/confirmDate";
 
 flatpickr.defaultConfig.animate = false;
 flatpickr.defaultConfig.closeOnSelect = true;
@@ -1592,6 +1592,38 @@ describe("flatpickr", () => {
         defaultDate: "2016-12-27T16:16:22.585Z",
       });
       expect((fp.altInput as HTMLInputElement).value).toEqual("December");
+    });
+  });
+
+  describe("events + hooks", () => {
+    describe("onOpen", () => {
+      it("should fire only once", () => {
+        let timesFired = 0;
+
+        const fp = createInstance({
+          onOpen: () => timesFired++,
+        });
+
+        fp.open();
+        expect(timesFired).toEqual(1);
+      });
+    });
+    describe("onBlur", () => {
+      it("doesn't misfire", () => {
+        let timesFired = 0;
+        const fp = createInstance({
+          onChange: () => timesFired++,
+        });
+        fp._input.focus();
+        document.body.focus();
+        expect(timesFired).toEqual(0);
+      });
+    });
+  });
+
+  describe("server-side rendering", () => {
+    it("can be imported", () => {
+      expect(typeof flatpickr).toEqual("function");
     });
   });
 });

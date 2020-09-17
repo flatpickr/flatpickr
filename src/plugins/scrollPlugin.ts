@@ -3,10 +3,22 @@ import { Instance } from "../types/instance";
 import { getEventTarget } from "../utils/dom";
 
 if (typeof window.CustomEvent !== "function") {
-  function CustomEvent(typeArg: string, eventInitDict?: CustomEventInit): CustomEvent {
-    eventInitDict = eventInitDict || { bubbles: false, cancelable: false, detail: undefined };
+  function CustomEvent(
+    typeArg: string,
+    eventInitDict?: CustomEventInit
+  ): CustomEvent {
+    eventInitDict = eventInitDict || {
+      bubbles: false,
+      cancelable: false,
+      detail: undefined,
+    };
     const evt = document.createEvent("CustomEvent");
-    evt.initCustomEvent(typeArg, (eventInitDict.bubbles as boolean), (eventInitDict.cancelable as boolean), eventInitDict.detail);
+    evt.initCustomEvent(
+      typeArg,
+      eventInitDict.bubbles as boolean,
+      eventInitDict.cancelable as boolean,
+      eventInitDict.detail
+    );
     return evt;
   }
 
