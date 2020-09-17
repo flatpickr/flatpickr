@@ -5,8 +5,8 @@
 
 .flatpickr-monthSelect-month {
   background: none;
-  border: 0;
-  border-radius: 2px;
+  border: 1px solid transparent;
+  border-radius: 4px;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   color: #393939;
@@ -52,6 +52,10 @@
   color: rgba(255, 255, 255, 0.95);
 }
 
+.flatpickr-monthSelect-month.today {
+  border-color: #959ea9;
+}
+
 .flatpickr-monthSelect-month:hover,
 .flatpickr-monthSelect-month:focus {
   background: #e6e6e6;
@@ -63,6 +67,13 @@
 .flatpickr-monthSelect-theme-dark .flatpickr-monthSelect-month:focus {
   background: #646c8c;
   border-color: #646c8c;
+}
+
+.flatpickr-monthSelect-month.today:hover,
+.flatpickr-monthSelect-month.today:focus {
+  background: #959ea9;
+  border-color: #959ea9;
+  color: #fff;
 }
 
 .flatpickr-monthSelect-month.selected {
