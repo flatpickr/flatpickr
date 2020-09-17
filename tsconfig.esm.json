@@ -1,0 +1,9 @@
+{
+    "extends": "./tsconfig",
+    "include": ["src"],
+    "compilerOptions": {
+        "target": "es6",
+        "module": "es2015",
+        "outDir": "dist/esm"
+    }
+}
