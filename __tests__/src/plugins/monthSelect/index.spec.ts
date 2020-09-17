@@ -99,6 +99,28 @@ describe("monthSelect", () => {
 
         expect(fp.currentYearElement.value).toEqual(`${initYear + 1}`);
       });
+
+      it("should honor minDate / maxDate options (#2279)", () => {
+        const lastYear = new Date().getFullYear() - 1;
+        const nextYear = new Date().getFullYear() + 1;
+
+        const fp = createInstance({
+          plugins: [monthSelectPlugin()],
+          minDate: `${lastYear}-03-20`,
+          maxDate: `${nextYear}-03-20`,
+        }) as Instance;
+
+        const prevButton = fp.monthNav.querySelector(".flatpickr-prev-month")!;
+        prevButton.dispatchEvent(new MouseEvent("click"));
+
+        expect(prevButton.classList).toContain("flatpickr-disabled");
+
+        const nextButton = fp.monthNav.querySelector(".flatpickr-next-month")!;
+        nextButton.dispatchEvent(new MouseEvent("click"));
+        nextButton.dispatchEvent(new MouseEvent("click"));
+
+        expect(nextButton.classList).toContain("flatpickr-disabled");
+      });
     });
   });
 });

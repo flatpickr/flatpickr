@@ -50,7 +50,7 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         e.preventDefault();
         e.stopPropagation();
 
-        fp.currentYear--;
+        fp.changeYear(fp.currentYear - 1);
         selectYear();
       });
 
@@ -58,7 +58,7 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         e.preventDefault();
         e.stopPropagation();
 
-        fp.currentYear++;
+        fp.changeYear(fp.currentYear + 1);
         selectYear();
       });
     }
@@ -110,8 +110,9 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         currentlySelected[index].classList.remove("selected");
       }
 
+      const targetMonth = (fp.selectedDates[0] || new Date()).getMonth();
       const month = fp.rContainer.querySelector(
-        `.flatpickr-monthSelect-month:nth-child(${fp.currentMonth + 1})`
+        `.flatpickr-monthSelect-month:nth-child(${targetMonth + 1})`
       );
 
       if (month) {
@@ -131,7 +132,6 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
           selectedDate = fp.config.maxDate;
         }
         fp.currentYear = selectedDate.getFullYear();
-        fp.currentMonth = selectedDate.getMonth();
       }
 
       fp.currentYearElement.value = String(fp.currentYear);
@@ -171,7 +171,6 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
     function setMonth(date: Date) {
       const selectedDate = new Date(date);
       selectedDate.setFullYear(fp.currentYear);
-      fp.currentMonth = selectedDate.getMonth();
 
       fp.setDate(selectedDate, true);
 
@@ -241,6 +240,9 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
       onValueUpdate: setCurrentlySelected,
       onKeyDown,
       onReady: [
+        () => {
+          fp.currentMonth = 0;
+        },
         clearUnnecessaryDOMElements,
         addListeners,
         addMonths,
