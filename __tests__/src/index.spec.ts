@@ -1608,6 +1608,17 @@ describe("flatpickr", () => {
         expect(timesFired).toEqual(1);
       });
     });
+    describe("onBlur", () => {
+      it("doesn't misfire", () => {
+        let timesFired = 0;
+        const fp = createInstance({
+          onChange: () => timesFired++,
+        });
+        fp._input.focus();
+        document.body.focus();
+        expect(timesFired).toEqual(0);
+      });
+    });
   });
 
   describe("server-side rendering", () => {

@@ -466,7 +466,9 @@ function FlatpickrInstance(
       }
     }
 
-    if (self.config.allowInput) bind(self._input, "blur", onBlur);
+    if (self.config.allowInput) {
+      bind(self._input, "blur", onBlur);
+    }
   }
 
   /**
@@ -1597,6 +1599,7 @@ function FlatpickrInstance(
 
     if (
       isInput &&
+      (self.selectedDates.length > 0 || self._input.value.length > 0) &&
       !(e.relatedTarget && isCalendarElem(e.relatedTarget as HTMLElement))
     ) {
       self.setDate(
