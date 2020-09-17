@@ -225,7 +225,11 @@ Use it along with "enableTime" to create a time picker. */
   plugins: Plugin[];
 
   /* How the calendar should be positioned with regards to the input. Defaults to "auto" */
-  position: "auto" | "above" | "below";
+  position:
+    | "auto"
+    | "above"
+    | "below"
+    | ((self: Instance, customElement: HTMLElement | undefined) => void);
 
   /*
     The element off of which the calendar will be positioned.
