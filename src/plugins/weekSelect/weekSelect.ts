@@ -8,7 +8,7 @@ export type PlusWeeks = {
 };
 
 function weekSelectPlugin(): Plugin<PlusWeeks> {
-  return function(fp) {
+  return function (fp) {
     function onDayHover(event: MouseEvent) {
       const day = getEventTarget(event) as DayElement;
       if (!day.classList.contains("flatpickr-day")) return;
@@ -76,7 +76,7 @@ function weekSelectPlugin(): Plugin<PlusWeeks> {
       onYearChange: highlightWeek,
       onOpen: highlightWeek,
       onClose: clearHover,
-      onParseConfig: function() {
+      onParseConfig: function () {
         fp.config.mode = "single";
         fp.config.enableTime = false;
         fp.config.dateFormat = fp.config.dateFormat

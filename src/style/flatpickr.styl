@@ -86,7 +86,7 @@
     .hasWeeks .dayContainer
       border-left 0
 
-  &.showTimeInput.hasTime
+  &.hasTime
     .flatpickr-time
       height $timeHeight
       border-top 1px solid $calendarBorderColor
@@ -112,10 +112,15 @@
     width 0
     left 22px
 
-  &.rightMost
+  &.rightMost, &.arrowRight
     &:before, &:after
       left auto
       right 22px
+
+  &.arrowCenter
+    &:before, &:after
+      left 50%
+      right 50%
 
   &:before
     border-width 5px
