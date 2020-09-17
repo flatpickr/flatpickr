@@ -206,4 +206,41 @@ describe("monthSelect", () => {
       expect(getSelectedCell()?.textContent).toEqual("June");
     });
   });
+
+  describe("range mode", () => {
+    it("gives visual feedback after selecting the first range bound", () => {
+      const fp = createInstance({
+        mode: "range",
+        plugins: [monthSelectPlugin()],
+      }) as Instance;
+
+      // open flatpickr
+      fp.input.dispatchEvent(new MouseEvent("click"));
+
+      const firstSelectionTarget = fp.rContainer!
+        .querySelector(".flatpickr-monthSelect-month:nth-child(2)")!;
+      firstSelectionTarget.dispatchEvent(new MouseEvent("click"));
+
+      // NOTE: monthSelect still isn't fully built for "range" mode:
+      // it collapses after the first click instead of staying open,
+      // and must be re-opened to observe the hover UI feedback.
+      fp.input.dispatchEvent(new MouseEvent("click"));
+
+      const hoverTarget = fp.rContainer!
+        .querySelector(".flatpickr-monthSelect-month:nth-child(6)")!;
+      hoverTarget.dispatchEvent(
+        new MouseEvent("mouseover", { bubbles: true })
+      );
+
+      const cellsBetweenTargets = Array.from(
+        fp.rContainer!.querySelectorAll(".flatpickr-monthSelect-month")
+      ).slice(2, 5);
+
+      expect(firstSelectionTarget.classList).toContain("startRange");
+      expect(hoverTarget.classList).toContain("endRange");
+      cellsBetweenTargets.forEach((cell) => {
+        expect(cell.classList).toContain("inRange");
+      });
+    });
+  });
 });

@@ -1,5 +1,5 @@
 import { Plugin } from "../../types/options";
-import { Instance } from "../../types/instance";
+import { Instance, DayElement } from "../../types/instance";
 import { monthToStr } from "../../utils/formatting";
 import { clearNode, getEventTarget } from "../../utils/dom";
 
@@ -60,31 +60,18 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
       );
 
       for (let i = 0; i < 12; i++) {
-        const month = fp._createElement<MonthElement>(
-          "span",
-          "flatpickr-monthSelect-month"
+        const month = fp.createDay(
+          "flatpickr-monthSelect-month",
+          new Date(fp.currentYear, i),
+          0,
+          i
         );
-        month.dateObj = new Date(fp.currentYear, i);
-        month.$i = i;
+        if (month.dateObj.getMonth() === new Date().getMonth() &&
+          month.dateObj.getFullYear() === new Date().getFullYear())
+          month.classList.add("today");
         month.textContent = monthToStr(i, config.shorthand, fp.l10n);
-        month.tabIndex = -1;
         month.addEventListener("click", selectMonth);
         self.monthsContainer.appendChild(month);
-        if (
-          (fp.config.minDate && month.dateObj < fp.config.minDate) ||
-          (fp.config.maxDate && month.dateObj > fp.config.maxDate)
-        )
-          month.classList.add("disabled");
-        if (
-          month.dateObj.getMonth() === new Date().getMonth() &&
-          month.dateObj.getFullYear() === new Date().getFullYear()
-        )
-          month.classList.add("today");
-        if (
-          month.dateObj.getMonth() === fp.selectedDates[0]?.getMonth() &&
-          month.dateObj.getFullYear() === fp.selectedDates[0]?.getFullYear()
-        )
-          month.classList.add("selected");
       }
 
       fp.rContainer.appendChild(self.monthsContainer);
@@ -110,6 +97,17 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         if (fp.rContainer) clearNode(fp.rContainer);
         buildMonths();
       });
+
+      fp._bind(
+        self.monthsContainer as HTMLElement,
+        "mouseover",
+        (e: MouseEvent) => {
+          if (fp.config.mode === "range")
+            fp.onMouseOver(
+              getEventTarget(e) as DayElement,
+              "flatpickr-monthSelect-month"
+            );
+        });
     }
 
     function setCurrentlySelected() {
@@ -265,7 +263,6 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
 
     return {
       onParseConfig() {
-        fp.config.mode = "single";
         fp.config.enableTime = false;
       },
       onValueUpdate: setCurrentlySelected,
