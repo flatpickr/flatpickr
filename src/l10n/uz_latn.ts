@@ -1,4 +1,4 @@
-/* Azerbaijan locals for flatpickr */
+/* Uzbek locals for flatpickr */
 import { CustomLocale } from "../types/locale";
 import { FlatpickrFn } from "../types/instance";
 
@@ -9,20 +9,19 @@ const fp =
         l10ns: {},
       } as FlatpickrFn);
 
-export const Azerbaijan: CustomLocale = {
+export const UzbekLatin: CustomLocale = {
   weekdays: {
-    shorthand: ["B.", "B.e.", "Ç.a.", "Ç.", "C.a.", "C.", "Ş."],
+    shorthand: ["Ya", "Du", "Se", "Cho", "Pa", "Ju", "Sha"],
     longhand: [
-      "Bazar",
-      "Bazar ertəsi",
-      "Çərşənbə axşamı",
-      "Çərşənbə",
-      "Cümə axşamı",
-      "Cümə",
-      "Şənbə",
+      "Yakshanba",
+      "Dushanba",
+      "Seshanba",
+      "Chorshanba",
+      "Payshanba",
+      "Juma",
+      "Shanba",
     ],
   },
-
   months: {
     shorthand: [
       "Yan",
@@ -30,9 +29,9 @@ export const Azerbaijan: CustomLocale = {
       "Mar",
       "Apr",
       "May",
-      "İyn",
-      "İyl",
-      "Avq",
+      "Iyun",
+      "Iyul",
+      "Avg",
       "Sen",
       "Okt",
       "Noy",
@@ -44,27 +43,28 @@ export const Azerbaijan: CustomLocale = {
       "Mart",
       "Aprel",
       "May",
-      "İyun",
-      "İyul",
-      "Avqust",
-      "Sentyabr",
-      "Oktyabr",
+      "Iyun",
+      "Iyul",
+      "Avgust",
+      "Sentabr",
+      "Oktabr",
       "Noyabr",
       "Dekabr",
     ],
   },
   firstDayOfWeek: 1,
-  ordinal: () => {
-    return ".";
+  ordinal: function () {
+    return "";
   },
-  rangeSeparator: " - ",
-  weekAbbreviation: "Hf",
-  scrollTitle: "Artırmaq üçün sürüşdürün",
-  toggleTitle: "Aç / Bağla",
-  amPM: ["GƏ", "GS"],
+  rangeSeparator: " — ",
+  weekAbbreviation: "Hafta",
+  scrollTitle: "Kattalashtirish uchun aylantiring",
+  toggleTitle: "O‘tish uchun bosing",
+  amPM: ["AM", "PM"],
+  yearAriaLabel: "Yil",
   time_24hr: true,
 };
 
-fp.l10ns.az = Azerbaijan;
+fp.l10ns["uz_latn"] = UzbekLatin;
 
 export default fp.l10ns;

@@ -53,7 +53,7 @@ export const Belarusian: CustomLocale = {
     ],
   },
   firstDayOfWeek: 1,
-  ordinal: function() {
+  ordinal: function () {
     return "";
   },
   rangeSeparator: " — ",

@@ -56,7 +56,7 @@ export const Welsh: CustomLocale = {
 
   firstDayOfWeek: 1,
 
-  ordinal: nth => {
+  ordinal: (nth) => {
     if (nth === 1) return "af";
 
     if (nth === 2) return "ail";
