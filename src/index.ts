@@ -1538,13 +1538,12 @@ function FlatpickrInstance(
         ) > 0)
     )
       return false;
-    if (self.config.enable.length === 0 && self.config.disable.length === 0)
-      return true;
+    if (!self.config.enable && self.config.disable.length === 0) return true;
 
     if (dateToCheck === undefined) return false;
 
-    const bool = self.config.enable.length > 0,
-      array = bool ? self.config.enable : self.config.disable;
+    const bool = !!self.config.enable,
+      array = self.config.enable ?? self.config.disable;
 
     for (let i = 0, d; i < array.length; i++) {
       d = array[i];
@@ -1561,7 +1560,7 @@ function FlatpickrInstance(
       )
         // disabled by date
         return bool;
-      else if (typeof d === "string" && dateToCheck !== undefined) {
+      else if (typeof d === "string") {
         // disabled by date string
         const parsed = self.parseDate(d, undefined, true);
         return parsed && parsed.getTime() === dateToCheck.getTime()
@@ -2072,7 +2071,7 @@ function FlatpickrInstance(
       !self.config.inline &&
       self.config.mode === "single" &&
       !self.config.disable.length &&
-      !self.config.enable.length &&
+      !self.config.enable &&
       !self.config.weekNumbers &&
       /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
         navigator.userAgent
