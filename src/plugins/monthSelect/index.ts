@@ -55,6 +55,18 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
 
       self.monthsContainer.tabIndex = -1;
 
+      fp._bind(
+        self.monthsContainer as HTMLElement,
+        "mouseover",
+        (e: MouseEvent) => {
+          if (fp.config.mode === "range")
+            fp.onMouseOver(
+              getEventTarget(e) as DayElement,
+              "flatpickr-monthSelect-month"
+            );
+        }
+      );
+
       fp.calendarContainer.classList.add(
         `flatpickr-monthSelect-theme-${config.theme}`
       );
@@ -66,8 +78,10 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
           0,
           i
         );
-        if (month.dateObj.getMonth() === new Date().getMonth() &&
-          month.dateObj.getFullYear() === new Date().getFullYear())
+        if (
+          month.dateObj.getMonth() === new Date().getMonth() &&
+          month.dateObj.getFullYear() === new Date().getFullYear()
+        )
           month.classList.add("today");
         month.textContent = monthToStr(i, config.shorthand, fp.l10n);
         month.addEventListener("click", selectMonth);
@@ -97,17 +111,6 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         if (fp.rContainer) clearNode(fp.rContainer);
         buildMonths();
       });
-
-      fp._bind(
-        self.monthsContainer as HTMLElement,
-        "mouseover",
-        (e: MouseEvent) => {
-          if (fp.config.mode === "range")
-            fp.onMouseOver(
-              getEventTarget(e) as DayElement,
-              "flatpickr-monthSelect-month"
-            );
-        });
     }
 
     function setCurrentlySelected() {
@@ -172,20 +175,44 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
       e.stopPropagation();
 
       const eventTarget = getEventTarget(e);
-      if (
-        eventTarget instanceof Element &&
-        !eventTarget.classList.contains("flatpickr-disabled")
-      ) {
-        setMonth((eventTarget as MonthElement).dateObj);
-        fp.close();
+
+      if (!(eventTarget instanceof Element)) return;
+      if (eventTarget.classList.contains("flatpickr-disabled")) return;
+      if (eventTarget.classList.contains("notAllowed")) return; // necessary??
+
+      setMonth((eventTarget as MonthElement).dateObj);
+
+      if (fp.config.closeOnSelect) {
+        const single = fp.config.mode === "single";
+        const range =
+          fp.config.mode === "range" && fp.selectedDates.length === 2;
+
+        if (single || range) fp.close();
       }
     }
 
     function setMonth(date: Date) {
-      const selectedDate = new Date(date);
-      selectedDate.setFullYear(fp.currentYear);
+      const selectedDate = new Date(
+        fp.currentYear,
+        date.getMonth(),
+        date.getDate()
+      );
 
-      fp.setDate(selectedDate, true);
+      switch (fp.config.mode) {
+        case "single":
+          fp.selectedDates = [selectedDate];
+
+          break;
+        case "range":
+          if (fp.selectedDates.length === 2) fp.clear(false, false);
+          fp.selectedDates.push(selectedDate);
+          fp.selectedDates.sort((a, b) => a.getTime() - b.getTime());
+
+          break;
+      }
+
+      fp.latestSelectedDateObj = selectedDate;
+      fp.updateValue();
 
       setCurrentlySelected();
     }

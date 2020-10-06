@@ -68,6 +68,7 @@ function FlatpickrInstance(
   self.destroy = destroy;
   self.isEnabled = isEnabled;
   self.jumpToDate = jumpToDate;
+  self.updateValue = updateValue;
   self.open = open;
   self.redraw = redraw;
   self.set = set;

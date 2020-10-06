@@ -95,6 +95,7 @@ export type Instance = Elements &
     destroy: () => void;
     isEnabled: (date: DateOption, timeless?: boolean) => boolean;
     jumpToDate: (date?: DateOption, triggerChange?: boolean) => void;
+    updateValue: (triggerChange?: boolean) => void;
     onMouseOver: (elem?: DayElement, cellClass?: string) => void;
     open: (e?: FocusEvent | MouseEvent, positionElement?: HTMLElement) => void;
     redraw: () => void;

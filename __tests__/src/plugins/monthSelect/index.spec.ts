@@ -208,38 +208,84 @@ describe("monthSelect", () => {
   });
 
   describe("range mode", () => {
-    it("gives visual feedback after selecting the first range bound", () => {
-      const fp = createInstance({
-        mode: "range",
-        plugins: [monthSelectPlugin()],
-      }) as Instance;
+    let fp: Instance;
 
-      // open flatpickr
-      fp.input.dispatchEvent(new MouseEvent("click"));
+    function selectableMonths(): NodeListOf<Element> {
+      return fp.rContainer!.querySelectorAll(".flatpickr-monthSelect-month")!;
+    }
 
-      const firstSelectionTarget = fp.rContainer!
-        .querySelector(".flatpickr-monthSelect-month:nth-child(2)")!;
-      firstSelectionTarget.dispatchEvent(new MouseEvent("click"));
+    describe("after first selection/click", () => {
+      beforeEach(() => {
+        fp = createInstance({
+          mode: "range",
+          plugins: [monthSelectPlugin()],
+        });
 
-      // NOTE: monthSelect still isn't fully built for "range" mode:
-      // it collapses after the first click instead of staying open,
-      // and must be re-opened to observe the hover UI feedback.
-      fp.input.dispatchEvent(new MouseEvent("click"));
+        fp.input.dispatchEvent(new MouseEvent("click")); // open flatpickr
+        selectableMonths()[1].dispatchEvent(new MouseEvent("click"));
+      });
 
-      const hoverTarget = fp.rContainer!
-        .querySelector(".flatpickr-monthSelect-month:nth-child(6)")!;
-      hoverTarget.dispatchEvent(
-        new MouseEvent("mouseover", { bubbles: true })
-      );
+      it("keeps calendar open until second selection/click", () => {
+        expect(fp.calendarContainer.classList).toContain("open");
 
-      const cellsBetweenTargets = Array.from(
-        fp.rContainer!.querySelectorAll(".flatpickr-monthSelect-month")
-      ).slice(2, 5);
+        selectableMonths()[5].dispatchEvent(new MouseEvent("click"));
+        expect(fp.calendarContainer.classList).not.toContain("open");
+      });
 
-      expect(firstSelectionTarget.classList).toContain("startRange");
-      expect(hoverTarget.classList).toContain("endRange");
-      cellsBetweenTargets.forEach((cell) => {
-        expect(cell.classList).toContain("inRange");
+      describe("when hovering over other another month cell", () => {
+        beforeEach(() => {
+          selectableMonths()[5].dispatchEvent(
+            new MouseEvent("mouseover", { bubbles: true })
+          );
+        });
+
+        it("highlights all cells in the tentative range", () => {
+          expect(selectableMonths()[1].classList).toContain("startRange");
+
+          Array.from(selectableMonths())
+            .slice(2, 5)
+            .forEach((cell) => {
+              expect(cell.classList).toContain("inRange");
+            });
+
+          expect(selectableMonths()[5].classList).toContain("endRange");
+        });
+      });
+
+      describe("when hovering over another month cell in a different year", () => {
+        beforeEach(() => {
+          const nextButton = fp.monthNav.querySelector(
+            ".flatpickr-next-month"
+          )!;
+          nextButton.dispatchEvent(new MouseEvent("click"));
+
+          selectableMonths()[5].dispatchEvent(
+            new MouseEvent("mouseover", { bubbles: true })
+          );
+        });
+
+        it("highlights all visible cells in the tentative range", () => {
+          Array.from(selectableMonths())
+            .slice(0, 5)
+            .forEach((cell) => {
+              expect(cell.classList).toContain("inRange");
+            });
+
+          expect(selectableMonths()[5].classList).toContain("endRange");
+        });
+      });
+    });
+
+    describe("after two clicks (completed range selection)", () => {
+      beforeEach(() => {
+        fp = createInstance({
+          mode: "range",
+          plugins: [monthSelectPlugin()],
+        });
+
+        fp.input.dispatchEvent(new MouseEvent("click")); // open flatpickr
+        selectableMonths()[1].dispatchEvent(new MouseEvent("click"));
+        selectableMonths()[5].dispatchEvent(new MouseEvent("click"));
       });
     });
   });
