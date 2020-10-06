@@ -160,9 +160,9 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
             (fp.config.minDate && month.dateObj < fp.config.minDate) ||
             (fp.config.maxDate && month.dateObj > fp.config.maxDate)
           ) {
-            month.classList.add("disabled");
+            month.classList.add("flatpickr-disabled");
           } else {
-            month.classList.remove("disabled");
+            month.classList.remove("flatpickr-disabled");
           }
         });
       }
@@ -172,10 +172,11 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
     function selectMonth(e: Event) {
       e.preventDefault();
       e.stopPropagation();
+
       const eventTarget = getEventTarget(e);
       if (
         eventTarget instanceof Element &&
-        !eventTarget.classList.contains("disabled")
+        !eventTarget.classList.contains("flatpickr-disabled")
       ) {
         setMonth((eventTarget as MonthElement).dateObj);
         fp.close();

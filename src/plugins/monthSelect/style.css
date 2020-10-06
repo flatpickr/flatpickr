@@ -24,12 +24,12 @@
   width: 33%;
 }
 
-.flatpickr-monthSelect-month.disabled {
+.flatpickr-monthSelect-month.flatpickr-disabled {
 	color: #eee;
 }
 
-.flatpickr-monthSelect-month.disabled:hover,
-.flatpickr-monthSelect-month.disabled:focus {
+.flatpickr-monthSelect-month.flatpickr-disabled:hover,
+.flatpickr-monthSelect-month.flatpickr-disabled:focus {
 	cursor: not-allowed;
 	background: none !important;
 }
