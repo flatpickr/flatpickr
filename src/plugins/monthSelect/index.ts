@@ -8,6 +8,7 @@ export interface Config {
   dateFormat: string;
   altFormat: string;
   theme: string;
+  _stubbedCurrentMonth?: number;
 }
 
 export interface ElementDate extends Element {
@@ -233,6 +234,22 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
       }
     }
 
+    // Help the prev/next year nav honor config.minDate (see 3fa5a69)
+    function stubCurrentMonth() {
+      config._stubbedCurrentMonth = fp._initialDate.getMonth();
+
+      fp._initialDate.setMonth(0);
+      fp.currentMonth = 0;
+    }
+
+    function unstubCurrentMonth() {
+      if (!config._stubbedCurrentMonth) return;
+
+      fp._initialDate.setMonth(config._stubbedCurrentMonth);
+      fp.currentMonth = config._stubbedCurrentMonth;
+      delete config._stubbedCurrentMonth;
+    }
+
     function destroyPluginInstance() {
       if (self.monthsContainer !== null) {
         const months = self.monthsContainer.querySelectorAll(
@@ -253,9 +270,7 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
       onValueUpdate: setCurrentlySelected,
       onKeyDown,
       onReady: [
-        () => {
-          fp.currentMonth = 0;
-        },
+        stubCurrentMonth,
         clearUnnecessaryDOMElements,
         buildMonths,
         bindEvents,
@@ -264,7 +279,7 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
           fp.loadedPlugins.push("monthSelect");
         },
       ],
-      onDestroy: destroyPluginInstance,
+      onDestroy: [unstubCurrentMonth, destroyPluginInstance],
     };
   };
 }

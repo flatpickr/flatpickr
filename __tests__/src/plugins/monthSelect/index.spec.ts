@@ -121,6 +121,37 @@ describe("monthSelect", () => {
 
         expect(nextButton.classList).toContain("flatpickr-disabled");
       });
+
+      describe("when in range mode, after abandoning input", () => {
+        let fp: Instance;
+
+        beforeEach(() => {
+          const lastYear = new Date().getFullYear() - 1;
+
+          fp = createInstance({
+            mode: "range",
+            plugins: [monthSelectPlugin()],
+            minDate: `${lastYear}-03-20`,
+          }) as Instance;
+
+          fp.input.dispatchEvent(new MouseEvent("click")); // open flatpickr
+
+          fp.rContainer!.querySelectorAll(
+            ".flatpickr-monthSelect-month"
+          )![1].dispatchEvent(new MouseEvent("click")); // pick start date
+
+          document.dispatchEvent(new MouseEvent("click")); // abandon input
+        });
+
+        it("should still honor minDate options", () => {
+          const prevButton = fp.monthNav.querySelector(
+            ".flatpickr-prev-month"
+          )!;
+          prevButton.dispatchEvent(new MouseEvent("click"));
+
+          expect(prevButton.classList).toContain("flatpickr-disabled");
+        });
+      });
     });
   });
 
