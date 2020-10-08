@@ -127,10 +127,11 @@ export type Instance = Elements &
       options?: { capture?: boolean };
     }[];
 
-    _bind: <E extends Element>(
+    _bind: <E extends Element | Window | Document>(
       element: E | E[],
       event: string | string[],
-      handler: (e?: any) => void
+      handler: (e?: any) => void,
+      options?: { capture?: boolean; once?: boolean; passive?: boolean }
     ) => void;
     _createElement: <E extends HTMLElement>(
       tag: keyof HTMLElementTagNameMap,

@@ -250,6 +250,37 @@ describe("monthSelect", () => {
 
           expect(selectableMonths()[5].classList).toContain("endRange");
         });
+
+        describe("and then prematurely abandoning input", () => {
+          describe("by clicking out", () => {
+            beforeEach(() => {
+              document.dispatchEvent(new MouseEvent("mousedown")); // close flatpickr
+            });
+
+            it("clears the highlighting", () => {
+              selectableMonths().forEach((cell) => {
+                expect(cell.classList).not.toContain("startRange");
+                expect(cell.classList).not.toContain("inRange");
+                expect(cell.classList).not.toContain("endRange");
+              });
+            });
+          });
+
+          describe("by alt-tabbing out and back in", () => {
+            beforeEach(() => {
+              window.document.dispatchEvent(new FocusEvent("blur"));
+              window.document.dispatchEvent(new FocusEvent("focus"));
+            });
+
+            it("clears the highlighting", () => {
+              selectableMonths().forEach((cell) => {
+                expect(cell.classList).not.toContain("startRange");
+                expect(cell.classList).not.toContain("inRange");
+                expect(cell.classList).not.toContain("endRange");
+              });
+            });
+          });
+        });
       });
 
       describe("when hovering over another month cell in a different year", () => {
@@ -286,6 +317,30 @@ describe("monthSelect", () => {
         fp.input.dispatchEvent(new MouseEvent("click")); // open flatpickr
         selectableMonths()[1].dispatchEvent(new MouseEvent("click"));
         selectableMonths()[5].dispatchEvent(new MouseEvent("click"));
+      });
+
+      describe("when clicking again to start over", () => {
+        beforeEach(() => {
+          fp.input.dispatchEvent(new MouseEvent("click")); // reopen flatpickr
+
+          selectableMonths()[3].dispatchEvent(new MouseEvent("click"));
+          selectableMonths()[3].dispatchEvent(
+            new MouseEvent("mouseover", { bubbles: true })
+          ); // class changes seem to be triggered by hover, not click...
+        });
+
+        it("clears the highlighting", () => {
+          expect(selectableMonths()[3].classList).toContain("startRange");
+
+          [
+            ...Array.from(selectableMonths()).slice(0, 3),
+            ...Array.from(selectableMonths()).slice(4),
+          ].forEach((cell) => {
+            expect(cell.classList).not.toContain("startRange");
+            expect(cell.classList).not.toContain("inRange");
+            expect(cell.classList).not.toContain("endRange");
+          });
+        });
       });
     });
   });

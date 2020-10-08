@@ -366,7 +366,7 @@ function FlatpickrInstance(
     element: E | E[],
     event: string | string[],
     handler: (e?: any) => void,
-    options?: object
+    options?: { capture?: boolean; once?: boolean; passive?: boolean }
   ): void {
     if (event instanceof Array)
       return event.forEach((ev) => bind(element, ev, handler, options));

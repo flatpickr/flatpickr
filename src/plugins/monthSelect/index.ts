@@ -45,7 +45,7 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
       }
     }
 
-    function buildMonths() {
+    function build() {
       if (!fp.rContainer) return;
 
       self.monthsContainer = fp._createElement<HTMLDivElement>(
@@ -55,21 +55,21 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
 
       self.monthsContainer.tabIndex = -1;
 
-      fp._bind(
-        self.monthsContainer as HTMLElement,
-        "mouseover",
-        (e: MouseEvent) => {
-          if (fp.config.mode === "range")
-            fp.onMouseOver(
-              getEventTarget(e) as DayElement,
-              "flatpickr-monthSelect-month"
-            );
-        }
-      );
+      buildMonths();
+
+      fp.rContainer.appendChild(self.monthsContainer);
 
       fp.calendarContainer.classList.add(
         `flatpickr-monthSelect-theme-${config.theme}`
       );
+    }
+
+    function buildMonths() {
+      if (!self.monthsContainer) return;
+
+      clearNode(self.monthsContainer);
+
+      const frag = document.createDocumentFragment();
 
       for (let i = 0; i < 12; i++) {
         const month = fp.createDay(
@@ -85,10 +85,10 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
           month.classList.add("today");
         month.textContent = monthToStr(i, config.shorthand, fp.l10n);
         month.addEventListener("click", selectMonth);
-        self.monthsContainer.appendChild(month);
+        frag.appendChild(month);
       }
 
-      fp.rContainer.appendChild(self.monthsContainer);
+      self.monthsContainer.appendChild(frag);
     }
 
     function bindEvents() {
@@ -98,7 +98,6 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
 
         fp.changeYear(fp.currentYear - 1);
         selectYear();
-        if (fp.rContainer) clearNode(fp.rContainer);
         buildMonths();
       });
 
@@ -108,9 +107,20 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
 
         fp.changeYear(fp.currentYear + 1);
         selectYear();
-        if (fp.rContainer) clearNode(fp.rContainer);
         buildMonths();
       });
+
+      fp._bind(
+        self.monthsContainer as HTMLElement,
+        "mouseover",
+        (e: MouseEvent) => {
+          if (fp.config.mode === "range")
+            fp.onMouseOver(
+              getEventTarget(e) as DayElement,
+              "flatpickr-monthSelect-month"
+            );
+        }
+      );
     }
 
     function setCurrentlySelected() {
@@ -204,7 +214,10 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
 
           break;
         case "range":
-          if (fp.selectedDates.length === 2) fp.clear(false, false);
+          if (fp.selectedDates.length === 2) {
+            fp.clear(false, false);
+            buildMonths();
+          }
           fp.selectedDates.push(selectedDate);
           fp.selectedDates.sort((a, b) => a.getTime() - b.getTime());
 
@@ -260,6 +273,16 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
       }
     }
 
+    function closeHook() {
+      if (
+        fp.config?.mode === "range" &&
+        fp.selectedDates.length === 1
+      )
+        fp.clear(false);
+
+      if (!fp.selectedDates.length) buildMonths();
+    }
+
     // Help the prev/next year nav honor config.minDate (see 3fa5a69)
     function stubCurrentMonth() {
       config._stubbedCurrentMonth = fp._initialDate.getMonth();
@@ -297,14 +320,21 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
       onReady: [
         stubCurrentMonth,
         clearUnnecessaryDOMElements,
-        buildMonths,
+        build,
         bindEvents,
         setCurrentlySelected,
         () => {
+          fp.config.onClose.push(closeHook);
           fp.loadedPlugins.push("monthSelect");
         },
       ],
-      onDestroy: [unstubCurrentMonth, destroyPluginInstance],
+      onDestroy: [
+        unstubCurrentMonth,
+        destroyPluginInstance,
+        () => {
+          fp.config.onClose = fp.config.onClose.filter(hook => hook !== closeHook)
+        },
+      ],
     };
   };
 }
