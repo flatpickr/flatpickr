@@ -1466,7 +1466,10 @@ function FlatpickrInstance(
           updateTime();
         }
 
-        self.close();
+        const isBody = eventTarget_1.isEqualNode(document.querySelector("body"));
+        if (!isBody) {
+          self.close();
+        }
 
         if (
           self.config &&
