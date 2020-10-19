@@ -56,6 +56,7 @@ export const Japanese: CustomLocale = {
   time_24hr: true,
   rangeSeparator: " から ",
   firstDayOfWeek: 1,
+  monthAriaLabel: '月',
 };
 
 fp.l10ns.ja = Japanese;
