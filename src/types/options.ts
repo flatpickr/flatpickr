@@ -263,7 +263,7 @@ export type Options = Partial<BaseOptions>;
 
 export interface ParsedOptions {
   _disable: DateLimit<Date>[];
-  _enable: DateLimit<Date>[];
+  _enable?: DateLimit<Date>[];
   _maxDate?: Date;
   _maxTime?: Date;
   _minDate?: Date;
@@ -287,7 +287,7 @@ export interface ParsedOptions {
   defaultSeconds: number;
   disable: DateLimit<Date>[];
   disableMobile: boolean;
-  enable: DateLimit<Date>[];
+  enable?: DateLimit<Date>[];
   enableSeconds: boolean;
   enableTime: boolean;
   errorHandler: (err: Error) => void;
@@ -334,7 +334,6 @@ export interface ParsedOptions {
 
 export const defaults: ParsedOptions = {
   _disable: [],
-  _enable: [],
   allowInput: false,
   allowInvalidPreload: false,
   altFormat: "F j, Y",
@@ -354,7 +353,6 @@ export const defaults: ParsedOptions = {
   defaultSeconds: 0,
   disable: [],
   disableMobile: false,
-  enable: [],
   enableSeconds: false,
   enableTime: false,
   errorHandler: (err: Error) =>

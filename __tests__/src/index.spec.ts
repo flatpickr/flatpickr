@@ -616,15 +616,15 @@ describe("flatpickr", () => {
 
       expect(fp.config.disable.indexOf(null as any)).toBe(-1);
 
-      expect((fp.config.enable[0] as DateRangeLimit).from instanceof Date).toBe(
+      expect(
+        (fp.config.enable?.[0] as DateRangeLimit).from instanceof Date
+      ).toBe(true);
+      expect((fp.config.enable?.[0] as DateRangeLimit).to instanceof Date).toBe(
         true
       );
-      expect((fp.config.enable[0] as DateRangeLimit).to instanceof Date).toBe(
-        true
-      );
-      expect(fp.config.enable[1] instanceof Date).toBe(true);
+      expect(fp.config.enable?.[1] instanceof Date).toBe(true);
 
-      expect(fp.config.enable.indexOf(null as any)).toBe(-1);
+      expect(fp.config.enable?.indexOf(null as any)).toBe(-1);
     });
 
     it("documentClick", () => {
