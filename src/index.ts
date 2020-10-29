@@ -423,11 +423,11 @@ function FlatpickrInstance(
 
     if (window.ontouchstart !== undefined)
       bind(window.document, "touchstart", documentClick);
-    else bind(window.document, "click", documentClick);
+    else bind(window.document, "mousedown", documentClick);
     bind(window.document, "focus", documentClick, { capture: true });
 
     bind(self._input, "focus", self.open);
-    bind(self._input, "click", self.open);
+    bind(self._input, "mousedown", self.open);
 
     if (self.daysContainer !== undefined) {
       bind(self.monthNav, "click", onMonthNavClick);

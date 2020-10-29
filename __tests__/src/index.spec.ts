@@ -636,7 +636,7 @@ describe("flatpickr", () => {
       fp._input.focus();
 
       expect(fp.isOpen).toBe(true);
-      simulate("click", window.document.body, { which: 1 }, CustomEvent);
+      simulate("mousedown", window.document.body, { which: 1 }, CustomEvent);
       fp._input.blur();
 
       expect(fp.isOpen).toBe(false);
@@ -653,7 +653,7 @@ describe("flatpickr", () => {
       expect(fp.selectedDates.length).toBe(1);
 
       fp.isOpen = true;
-      simulate("click", window.document.body, { which: 1 }, CustomEvent);
+      simulate("mousedown", window.document.body, { which: 1 }, CustomEvent);
       expect(fp.isOpen).toBe(false);
       expect(fp.selectedDates.length).toBe(0);
       expect(fp._input.value).toBe("");
