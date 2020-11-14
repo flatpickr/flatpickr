@@ -416,7 +416,8 @@ function FlatpickrInstance(
           onMouseOver(getEventTarget(e) as DayElement);
       });
 
-    bind(window.document.body, "keydown", onKeyDown);
+    if(!self.config.disableKeyDownBinding)
+      bind(window.document.body, "keydown", onKeyDown);
 
     if (!self.config.inline && !self.config.static)
       bind(window, "resize", debouncedResize);
@@ -1972,6 +1973,7 @@ function FlatpickrInstance(
       "static",
       "enableSeconds",
       "disableMobile",
+      "disableKeyDownBinding",
     ];
 
     const userConfig = {

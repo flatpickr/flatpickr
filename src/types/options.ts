@@ -120,6 +120,9 @@ export interface BaseOptions {
 By default, Flatpickr utilizes native datetime widgets unless certain options (e.g. disable) are used. */
   disableMobile: boolean;
 
+  /** Disable keyDown binding will stop monotoring keydown events, in some cases user only wants to use mouse/touch to select a date and leave the input as readonly. */
+  disableKeyDownBinding: boolean;
+
   /* Disables all dates except these specified. See https://chmln.github.io/flatpickr/examples/#disabling-all-dates-except-select-few */
   enable: DateLimit<DateOption>[];
 
@@ -288,6 +291,7 @@ export interface ParsedOptions {
   disable: DateLimit<Date>[];
   disableMobile: boolean;
   enable?: DateLimit<Date>[];
+  disableKeyDownBinding?: boolean;
   enableSeconds: boolean;
   enableTime: boolean;
   errorHandler: (err: Error) => void;
@@ -353,6 +357,7 @@ export const defaults: ParsedOptions = {
   defaultSeconds: 0,
   disable: [],
   disableMobile: false,
+  disableKeyDownBinding: false,
   enableSeconds: false,
   enableTime: false,
   errorHandler: (err: Error) =>
