@@ -701,7 +701,7 @@ describe("flatpickr", () => {
       fp.open();
       fp.input.focus();
 
-      simulate("keydown", document.body, {
+      simulate("keydown", fp.calendarContainer, {
         // "ArrowRight"
         keyCode: 39,
         ctrlKey: true,
@@ -709,12 +709,12 @@ describe("flatpickr", () => {
       expect(fp.currentMonth).toBe(1);
       expect(fp.currentYear).toBe(2017);
 
-      simulate("keydown", document.body, {
+      simulate("keydown", fp.calendarContainer, {
         // "ArrowLeft"
         keyCode: 37,
         ctrlKey: true,
       });
-      simulate("keydown", document.body, {
+      simulate("keydown", fp.calendarContainer, {
         // "ArrowLeft"
         keyCode: 37,
         ctrlKey: true,

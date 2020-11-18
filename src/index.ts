@@ -417,8 +417,8 @@ function FlatpickrInstance(
       });
 
     bind(self._input, "keydown", onKeyDown);
-    if (self.daysContainer !== undefined) {
-      bind(self.daysContainer, "keydown", onKeyDown);
+    if (self.calendarContainer !== undefined) {
+      bind(self.calendarContainer, "keydown", onKeyDown);
     }
 
     if (!self.config.inline && !self.config.static)
