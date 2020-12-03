@@ -55,7 +55,6 @@ export const Japanese: CustomLocale = {
   },
   time_24hr: true,
   rangeSeparator: " から ",
-  firstDayOfWeek: 1,
   monthAriaLabel: '月',
   amPM: ["午前", "午後"],
   yearAriaLabel: "年",
