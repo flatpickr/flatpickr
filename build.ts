@@ -53,18 +53,18 @@ async function readFileAsync(path: string): Promise<string> {
   }
 }
 
-function uglify(src: string) {
-  const minified = terser.minify(src, {
-    output: {
-      preamble: version,
-      comments: false,
-    },
-  });
-
-  if (minified.error) {
-    logErr(minified.error);
+async function uglify(src: string) {
+  try {
+    const { code } = await terser.minify(src, {
+      output: {
+        preamble: version,
+        comments: false,
+      },
+    });
+    return code;
+  } catch (err) {
+    logErr(err);
   }
-  return minified.code;
 }
 
 async function buildFlatpickrJs() {
@@ -77,7 +77,7 @@ async function buildScripts() {
   try {
     await buildFlatpickrJs();
     const transpiled = await readFileAsync("./dist/flatpickr.js");
-    fs.writeFile("./dist/flatpickr.min.js", uglify(transpiled));
+    fs.writeFile("./dist/flatpickr.min.js", await uglify(transpiled));
   } catch (e) {
     logErr(e);
   }

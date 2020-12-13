@@ -1518,7 +1518,7 @@ function FlatpickrInstance(
     }
   }
 
-  function isEnabled(date: DateOption, timeless: boolean = true): boolean {
+  function isEnabled(date: DateOption, timeless = true): boolean {
     const dateToCheck = self.parseDate(date, undefined, timeless); // timeless
 
     if (
@@ -1592,7 +1592,7 @@ function FlatpickrInstance(
   }
 
   function onBlur(e: FocusEvent) {
-    var isInput = e.target === self._input;
+    const isInput = e.target === self._input;
 
     if (
       isInput &&
@@ -2169,7 +2169,7 @@ function FlatpickrInstance(
           distanceFromBottom < calendarHeight &&
           inputBounds.top > calendarHeight);
 
-    let top =
+    const top =
       window.pageYOffset +
       inputBounds.top +
       (!showOnTop ? positionElement.offsetHeight + 2 : -calendarHeight - 2);
@@ -2237,7 +2237,7 @@ function FlatpickrInstance(
   function getDocumentStyleSheet() {
     let editableSheet = null;
     for (let i = 0; i < document.styleSheets.length; i++) {
-      let sheet = document.styleSheets[i] as CSSStyleSheet;
+      const sheet = document.styleSheets[i] as CSSStyleSheet;
       try {
         sheet.cssRules;
       } catch (err) {
@@ -2250,7 +2250,7 @@ function FlatpickrInstance(
   }
 
   function createStyleSheet() {
-    let style = document.createElement("style");
+    const style = document.createElement("style");
     document.head.appendChild(style);
     return style.sheet as CSSStyleSheet;
   }
@@ -2876,7 +2876,7 @@ function _flatpickr(
     .call(nodeList)
     .filter((x) => x instanceof HTMLElement) as HTMLElement[];
 
-  let instances: Instance[] = [];
+  const instances: Instance[] = [];
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i];
     try {
@@ -2961,7 +2961,6 @@ if (typeof jQuery !== "undefined" && typeof jQuery.fn !== "undefined") {
   };
 }
 
-// eslint-disable-next-line @typescript-eslint/camelcase
 Date.prototype.fp_incr = function (days: number | string) {
   return new Date(
     this.getFullYear(),
