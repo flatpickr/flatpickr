@@ -5,7 +5,7 @@ export const int = (bool: boolean) => (bool === true ? 1 : 0);
 /* istanbul ignore next */
 export function debounce<F extends Function>(fn: F, wait: number) {
   let t: NodeJS.Timeout;
-  return function (this:any) {
+  return function (this: any) {
     clearTimeout(t);
     t = setTimeout(() => fn.apply(this, arguments), wait);
   };
