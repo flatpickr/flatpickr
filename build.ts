@@ -69,7 +69,6 @@ async function uglify(src: string) {
 
 async function buildFlatpickrJs() {
   const bundle = await rollup.rollup(rollupConfig);
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   return bundle.write(rollupConfig.output as rollup.OutputOptions);
 }
 
@@ -213,7 +212,6 @@ function watch(path: string, cb: (path: string) => void) {
 
 async function start() {
   if (DEV_MODE) {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     (rollupConfig.output as rollup.OutputOptions).sourcemap = true;
     const indexExists = await fs.pathExists("./index.html");
     if (!indexExists) {
