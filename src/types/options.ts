@@ -150,7 +150,7 @@ By default, Flatpickr utilizes native datetime widgets unless certain options (e
 
   /* The locale, either as a string (e.g. "ru", "en") or as an object.
   See https://chmln.github.io/flatpickr/localization/ */
-  locale: LocaleKey | CustomLocale;
+  locale: LocaleKey | Partial<CustomLocale>;
 
   /* The maximum date that a user can pick to (inclusive). */
   maxDate: DateOption;
