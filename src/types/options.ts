@@ -150,7 +150,7 @@ By default, Flatpickr utilizes native datetime widgets unless certain options (e
 
   /* The locale, either as a string (e.g. "ru", "en") or as an object.
   See https://chmln.github.io/flatpickr/localization/ */
-  locale: LocaleKey | CustomLocale;
+  locale: LocaleKey | Partial<CustomLocale>;
 
   /* The maximum date that a user can pick to (inclusive). */
   maxDate: DateOption;
@@ -225,7 +225,11 @@ Use it along with "enableTime" to create a time picker. */
   plugins: Plugin[];
 
   /* How the calendar should be positioned with regards to the input. Defaults to "auto" */
-  position: "auto" | "above" | "below";
+  position:
+    | "auto"
+    | "above"
+    | "below"
+    | ((self: Instance, customElement: HTMLElement | undefined) => void);
 
   /*
     The element off of which the calendar will be positioned.
@@ -259,7 +263,7 @@ export type Options = Partial<BaseOptions>;
 
 export interface ParsedOptions {
   _disable: DateLimit<Date>[];
-  _enable: DateLimit<Date>[];
+  _enable?: DateLimit<Date>[];
   _maxDate?: Date;
   _maxTime?: Date;
   _minDate?: Date;
@@ -283,7 +287,7 @@ export interface ParsedOptions {
   defaultSeconds: number;
   disable: DateLimit<Date>[];
   disableMobile: boolean;
-  enable: DateLimit<Date>[];
+  enable?: DateLimit<Date>[];
   enableSeconds: boolean;
   enableTime: boolean;
   errorHandler: (err: Error) => void;
@@ -330,7 +334,6 @@ export interface ParsedOptions {
 
 export const defaults: ParsedOptions = {
   _disable: [],
-  _enable: [],
   allowInput: false,
   allowInvalidPreload: false,
   altFormat: "F j, Y",
@@ -350,7 +353,6 @@ export const defaults: ParsedOptions = {
   defaultSeconds: 0,
   disable: [],
   disableMobile: false,
-  enable: [],
   enableSeconds: false,
   enableTime: false,
   errorHandler: (err: Error) =>

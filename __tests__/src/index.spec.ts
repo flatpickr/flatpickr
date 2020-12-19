@@ -1,8 +1,8 @@
-import flatpickr from "../index";
-import { Russian } from "../l10n/ru";
-import { Instance, DayElement } from "../types/instance";
-import { Options, DateRangeLimit } from "../types/options";
-import confirmDatePlugin from "../plugins/confirmDate/confirmDate";
+import flatpickr from "index";
+import { Russian } from "l10n/ru";
+import { Instance, DayElement } from "types/instance";
+import { Options, DateRangeLimit } from "types/options";
+import confirmDatePlugin from "plugins/confirmDate/confirmDate";
 
 flatpickr.defaultConfig.animate = false;
 flatpickr.defaultConfig.closeOnSelect = true;
@@ -616,15 +616,15 @@ describe("flatpickr", () => {
 
       expect(fp.config.disable.indexOf(null as any)).toBe(-1);
 
-      expect((fp.config.enable[0] as DateRangeLimit).from instanceof Date).toBe(
+      expect(
+        (fp.config.enable?.[0] as DateRangeLimit).from instanceof Date
+      ).toBe(true);
+      expect((fp.config.enable?.[0] as DateRangeLimit).to instanceof Date).toBe(
         true
       );
-      expect((fp.config.enable[0] as DateRangeLimit).to instanceof Date).toBe(
-        true
-      );
-      expect(fp.config.enable[1] instanceof Date).toBe(true);
+      expect(fp.config.enable?.[1] instanceof Date).toBe(true);
 
-      expect(fp.config.enable.indexOf(null as any)).toBe(-1);
+      expect(fp.config.enable?.indexOf(null as any)).toBe(-1);
     });
 
     it("documentClick", () => {
@@ -636,7 +636,7 @@ describe("flatpickr", () => {
       fp._input.focus();
 
       expect(fp.isOpen).toBe(true);
-      simulate("click", window.document.body, { which: 1 }, CustomEvent);
+      simulate("mousedown", window.document.body, { which: 1 }, CustomEvent);
       fp._input.blur();
 
       expect(fp.isOpen).toBe(false);
@@ -653,7 +653,7 @@ describe("flatpickr", () => {
       expect(fp.selectedDates.length).toBe(1);
 
       fp.isOpen = true;
-      simulate("click", window.document.body, { which: 1 }, CustomEvent);
+      simulate("mousedown", window.document.body, { which: 1 }, CustomEvent);
       expect(fp.isOpen).toBe(false);
       expect(fp.selectedDates.length).toBe(0);
       expect(fp._input.value).toBe("");
@@ -1592,6 +1592,38 @@ describe("flatpickr", () => {
         defaultDate: "2016-12-27T16:16:22.585Z",
       });
       expect((fp.altInput as HTMLInputElement).value).toEqual("December");
+    });
+  });
+
+  describe("events + hooks", () => {
+    describe("onOpen", () => {
+      it("should fire only once", () => {
+        let timesFired = 0;
+
+        const fp = createInstance({
+          onOpen: () => timesFired++,
+        });
+
+        fp.open();
+        expect(timesFired).toEqual(1);
+      });
+    });
+    describe("onBlur", () => {
+      it("doesn't misfire", () => {
+        let timesFired = 0;
+        const fp = createInstance({
+          onChange: () => timesFired++,
+        });
+        fp._input.focus();
+        document.body.focus();
+        expect(timesFired).toEqual(0);
+      });
+    });
+  });
+
+  describe("server-side rendering", () => {
+    it("can be imported", () => {
+      expect(typeof flatpickr).toEqual("function");
     });
   });
 });

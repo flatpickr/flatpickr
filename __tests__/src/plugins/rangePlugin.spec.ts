@@ -1,7 +1,7 @@
 import flatpickr from "index";
 import rangePlugin from "plugins/rangePlugin";
-import { Options } from "../types/options";
-import { Instance } from "../types/instance";
+import { Options } from "types/options";
+import { Instance } from "types/instance";
 
 type RangeInstance = Instance & {
   secondInput: HTMLInputElement;
