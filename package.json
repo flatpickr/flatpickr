@@ -51,7 +51,7 @@
     "typescript": "^4.1.3"
   },
   "main": "dist/flatpickr.js",
-  "module": "dist/esm/src/index.js",
+  "module": "dist/esm/index.js",
   "style": "dist/flatpickr.css",
   "types": "./dist/typings.d.ts",
   "repository": {
