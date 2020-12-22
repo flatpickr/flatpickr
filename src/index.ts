@@ -2161,15 +2161,13 @@ function FlatpickrInstance(
       configPos = self.config.position.split(" "),
       configPosVertical = configPos[0],
       configPosHorizontal = configPos.length > 1 ? configPos[1] : null,
-      inputBounds = self.config.appendTo
-        ? {
-            top: positionElement.offsetHeight,
-            bottom: positionElement.offsetTop,
-            left: positionElement.offsetLeft,
-            right: positionElement.offsetWidth,
-            width: positionElement.clientWidth,
-          }
-        : positionElement.getBoundingClientRect(),
+      inputBounds = {
+        top: positionElement.offsetTop,
+        bottom: positionElement.offsetTop + positionElement.offsetHeight,
+        left: positionElement.offsetLeft,
+        right: positionElement.offsetLeft + positionElement.offsetWidth,
+        width: positionElement.offsetWidth,
+      },
       distanceFromBottom = window.innerHeight - inputBounds.bottom,
       showOnTop =
         configPosVertical === "above" ||
@@ -2178,7 +2176,8 @@ function FlatpickrInstance(
           inputBounds.top > calendarHeight);
 
     const top = self.config.appendTo
-      ? inputBounds.top + (!showOnTop ? 2 : -calendarHeight - 2)
+      ? inputBounds.top +
+        (!showOnTop ? positionElement.offsetHeight + 2 : -calendarHeight - 2)
       : window.pageYOffset +
         inputBounds.top +
         (!showOnTop ? positionElement.offsetHeight + 2 : -calendarHeight - 2);
