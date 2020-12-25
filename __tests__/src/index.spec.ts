@@ -777,6 +777,18 @@ describe("flatpickr", () => {
 
       fp.jumpToDate(new Date(2020, 4, 17), true);
     });
+
+    it("open() and clickOpens interaction", () => {
+      const fp = createInstance({
+        clickOpens: false,
+      });
+
+      simulate("click", fp._input);
+      expect(fp.isOpen).toEqual(false);
+
+      fp.open();
+      expect(fp.isOpen).toEqual(true);
+    });
   });
 
   describe("UI", () => {
