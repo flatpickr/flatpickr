@@ -1372,6 +1372,28 @@ describe("flatpickr", () => {
       wrapper.parentNode && wrapper.parentNode.removeChild(wrapper);
     });
 
+    it("Time picker initial entry", () => {
+      const fp = createInstance({
+         enableTime: true,
+         noCalendar: true,
+         dateFormat: "H:i",
+         time_24hr: true,
+      });
+      fp._input.click();
+      fp.hourElement!.value = "16";
+
+      simulate(
+        "keydown",
+        fp.hourElement!,
+        {
+          keyCode: 13, // "Enter"
+        },
+        KeyboardEvent
+      );
+
+      expect(fp.hourElement!.value).toEqual("16");
+    });
+
     it("valid mouseover behavior in range mode", () => {
       createInstance({
         mode: "range",
