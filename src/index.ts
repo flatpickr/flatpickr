@@ -178,7 +178,7 @@ function FlatpickrInstance(
         defaults.hours,
         defaults.minutes,
         defaults.seconds,
-        0
+        defaultDate.getMilliseconds()
       );
 
       self.selectedDates = [defaultDate];
