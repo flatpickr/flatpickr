@@ -373,10 +373,7 @@ function FlatpickrInstance(
 
     element.addEventListener(event, handler, options);
     self._handlers.push({
-      element: element as Element,
-      event,
-      handler,
-      options,
+      remove: () => element.removeEventListener(event, handler),
     });
   }
 
@@ -426,8 +423,10 @@ function FlatpickrInstance(
     else bind(window.document, "mousedown", documentClick);
     bind(window.document, "focus", documentClick, { capture: true });
 
-    bind(self._input, "focus", self.open);
-    bind(self._input, "mousedown", self.open);
+    if (self.config.clickOpens === true) {
+      bind(self._input, "focus", self.open);
+      bind(self._input, "click", self.open);
+    }
 
     if (self.daysContainer !== undefined) {
       bind(self.monthNav, "click", onMonthNavClick);
@@ -1342,12 +1341,7 @@ function FlatpickrInstance(
     if (self.config !== undefined) triggerEvent("onDestroy");
 
     for (let i = self._handlers.length; i--; ) {
-      const h = self._handlers[i];
-      h.element.removeEventListener(
-        h.event,
-        h.handler as EventListener,
-        h.options
-      );
+      self._handlers[i].remove();
     }
 
     self._handlers = [];
@@ -1876,8 +1870,10 @@ function FlatpickrInstance(
     if (self.isMobile === true) {
       if (e) {
         e.preventDefault();
-        const eventTarget = getEventTarget(e) as HTMLInputElement;
-        eventTarget && eventTarget.blur();
+        const eventTarget = getEventTarget(e);
+        if (eventTarget) {
+          (eventTarget as HTMLInputElement).blur();
+        }
       }
 
       if (self.mobileInput !== undefined) {
@@ -1887,10 +1883,9 @@ function FlatpickrInstance(
 
       triggerEvent("onOpen");
       return;
-    }
-
-    if (self._input.disabled || self.config.inline || !self.config.clickOpens)
+    } else if (self._input.disabled || self.config.inline) {
       return;
+    }
 
     const wasOpen = self.isOpen;
 
@@ -2379,6 +2374,15 @@ function FlatpickrInstance(
     showMonths: [buildMonths, setCalendarWidth, buildWeekdays],
     minDate: [jumpToDate],
     maxDate: [jumpToDate],
+    clickOpens: [() => {
+          if (self.config.clickOpens === true) {
+      bind(self._input, "focus", self.open);
+      bind(self._input, "click", self.open);
+    } else {
+      self._input.removeEventListener("focus", self.open);
+      self._input.removeEventListener("click", self.open);
+    }
+    }],
   };
 
   function set<K extends keyof Options>(
