@@ -71,14 +71,14 @@ export const createDateParser = ({ config = defaults, l10n = english }) => (
     if (datestr === "today") {
       parsedDate = new Date();
       timeless = true;
+    } else if (config && config.parseDate) {
+      parsedDate = config.parseDate(date, format);
     } else if (
       /Z$/.test(datestr) ||
       /GMT$/.test(datestr) // datestrings w/ timezone
-    )
+    ) {
       parsedDate = new Date(date);
-    else if (config && config.parseDate)
-      parsedDate = config.parseDate(date, format);
-    else {
+    } else {
       parsedDate =
         !config || !config.noCalendar
           ? new Date(new Date().getFullYear(), 0, 1, 0, 0, 0, 0)
