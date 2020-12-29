@@ -40,8 +40,17 @@ export const Arabic: CustomLocale = {
       "ديسمبر",
     ],
   },
-
-  rangeSeparator: " - ",
+  firstDayOfWeek: 6,
+  rangeSeparator: " إلى ",
+  weekAbbreviation: "Wk",
+  scrollTitle: "قم بالتمرير للزيادة",
+  toggleTitle: "اضغط للتبديل",
+  amPM: ["ص", "م"],
+  yearAriaLabel: "سنة",
+  monthAriaLabel: "شهر",
+  hourAriaLabel: "ساعة",
+  minuteAriaLabel: "دقيقة",
+  time_24hr: false,
 };
 
 fp.l10ns.ar = Arabic;
