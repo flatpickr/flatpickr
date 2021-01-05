@@ -56,7 +56,7 @@ export const Lithuanian: CustomLocale = {
 
   firstDayOfWeek: 1,
 
-  ordinal: function() {
+  ordinal: function () {
     return "-a";
   },
   rangeSeparator: " iki ",

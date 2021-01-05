@@ -53,23 +53,22 @@ async function readFileAsync(path: string): Promise<string> {
   }
 }
 
-function uglify(src: string) {
-  const minified = terser.minify(src, {
-    output: {
-      preamble: version,
-      comments: false,
-    },
-  });
-
-  if (minified.error) {
-    logErr(minified.error);
+async function uglify(src: string) {
+  try {
+    const { code } = await terser.minify(src, {
+      output: {
+        preamble: version,
+        comments: false,
+      },
+    });
+    return code;
+  } catch (err) {
+    logErr(err);
   }
-  return minified.code;
 }
 
 async function buildFlatpickrJs() {
   const bundle = await rollup.rollup(rollupConfig);
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   return bundle.write(rollupConfig.output as rollup.OutputOptions);
 }
 
@@ -77,14 +76,14 @@ async function buildScripts() {
   try {
     await buildFlatpickrJs();
     const transpiled = await readFileAsync("./dist/flatpickr.js");
-    fs.writeFile("./dist/flatpickr.min.js", uglify(transpiled));
+    fs.writeFile("./dist/flatpickr.min.js", await uglify(transpiled));
   } catch (e) {
     logErr(e);
   }
 }
 
 function buildExtras(folder: "plugins" | "l10n") {
-  return async function(changedPath?: string) {
+  return async function (changedPath?: string) {
     const [srcPaths, cssPaths] = await Promise.all(
       changedPath !== undefined
         ? changedPath.endsWith(".ts")
@@ -99,8 +98,8 @@ function buildExtras(folder: "plugins" | "l10n") {
     try {
       await Promise.all([
         ...srcPaths
-          .filter(p => !p.includes(".spec.ts"))
-          .map(async sourcePath => {
+          .filter((p) => !p.includes(".spec.ts"))
+          .map(async (sourcePath) => {
             const bundle = await rollup.rollup({
               ...rollupConfig,
               cache: undefined,
@@ -124,7 +123,7 @@ function buildExtras(folder: "plugins" | "l10n") {
                   : customModuleNames[fileName] || fileName,
             });
           }),
-        ...(cssPaths.map(p => fs.copy(p, p.replace("src", "dist"))) as any),
+        ...(cssPaths.map((p) => fs.copy(p, p.replace("src", "dist"))) as any),
       ]);
     } catch (err) {
       logErr(err);
@@ -139,14 +138,8 @@ async function transpileStyle(src: string, compress = false) {
     } as any)
       .include(`${__dirname}/src/style`)
       .include(`${__dirname}/src/style/themes`)
-      .use(
-        stylusAutoprefixer({
-          browsers: pkg.browserslist,
-        })
-      )
-      .render((err: Error | undefined, css: string) =>
-        !err ? resolve(css) : reject(err)
-      );
+      .use(stylusAutoprefixer())
+      .render((err, css) => (!err ? resolve(css) : reject(err)));
   });
 }
 
@@ -172,7 +165,7 @@ async function buildThemes() {
   try {
     const themePaths = await resolveGlob("./src/style/themes/*.styl");
     await Promise.all(
-      themePaths.map(async themePath => {
+      themePaths.map(async (themePath) => {
         const match = themeRegex.exec(themePath);
         if (!match) return;
 
@@ -219,35 +212,16 @@ function watch(path: string, cb: (path: string) => void) {
 
 async function start() {
   if (DEV_MODE) {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     (rollupConfig.output as rollup.OutputOptions).sourcemap = true;
     const indexExists = await fs.pathExists("./index.html");
     if (!indexExists) {
       await fs.copyFile("./index.template.html", "./index.html");
     }
-    const write = (s: string) => process.stdout.write(`rollup: ${s}`);
     const watcher = rollup.watch([getConfig({ dev: true })]);
-
-    watcher.on("event", logEvent);
 
     function exit() {
       watcher.close();
-      watchers.forEach(w => w.close());
-    }
-
-    interface RollupWatchEvent {
-      code: string;
-      input?: string;
-      output?: string;
-    }
-
-    function logEvent(e: RollupWatchEvent) {
-      write(
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        [e.code, e.input && `${e.input} -> ${e.output!}`, "\n"]
-          .filter(x => x)
-          .join(" ")
-      );
+      watchers.forEach((w) => w.close());
     }
 
     //catches ctrl+c event

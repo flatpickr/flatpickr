@@ -17,7 +17,6 @@ export const getConfig = (opts?: { dev: boolean }): RollupOptions => ({
     banner: `/* flatpickr v${pkg.version}, @license MIT */`,
     ...(opts && opts.dev ? { sourcemap: true } : {}),
   },
-  experimentalOptimizeChunks: true,
   onwarn(warning) {
     const ignoredCircular = ["src/types/options.ts", "src/utils/dates.ts"];
 
@@ -25,7 +24,6 @@ export const getConfig = (opts?: { dev: boolean }): RollupOptions => ({
     else if (
       warning.code !== "CIRCULAR_DEPENDENCY" ||
       !warning.importer ||
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       !ignoredCircular.includes(warning.importer!)
     ) {
       throw Error(warning.message);
@@ -47,9 +45,6 @@ export const getConfig = (opts?: { dev: boolean }): RollupOptions => ({
         ]
       : []),
   ],
-  watch: {
-    chokidar: false,
-  },
 });
 
 export default getConfig();

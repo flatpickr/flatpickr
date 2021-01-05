@@ -70,6 +70,7 @@ export type CustomLocale = {
   toggleTitle?: Locale["toggleTitle"];
   scrollTitle?: Locale["scrollTitle"];
   yearAriaLabel?: string;
+  monthAriaLabel?: string;
   hourAriaLabel?: string;
   minuteAriaLabel?: string;
   amPM?: Locale["amPM"];
@@ -118,6 +119,7 @@ export type key =
   | "bg"
   | "bn"
   | "bs"
+  | "ca"
   | "cat"
   | "cs"
   | "cy"

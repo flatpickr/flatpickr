@@ -83,9 +83,6 @@ export type Instance = Elements &
     minDateHasTime: boolean;
     maxDateHasTime: boolean;
 
-    showTimeInput: boolean;
-    _showTimeInput: boolean;
-
     // Methods
     changeMonth: (
       value: number,
@@ -122,10 +119,7 @@ export type Instance = Elements &
     // Internals
 
     _handlers: {
-      event: string;
-      element: Element;
-      handler: (e?: Event) => void;
-      options?: { capture?: boolean };
+      remove: () => void;
     }[];
 
     _bind: <E extends Element>(
