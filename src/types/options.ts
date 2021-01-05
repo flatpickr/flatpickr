@@ -74,10 +74,6 @@ export interface BaseOptions {
   /* Defaults to "F j, Y" */
   ariaDateFormat: string;
 
-  /* Whether the default time should be auto-filled when the input is empty and gains or loses focus. */
-  /* Defaults to true */
-  autoFillDefaultTime: boolean;
-
   /*
     Whether clicking on the input should open the picker.
     Set it to false if you only want to open the calendar programmatically
@@ -276,7 +272,6 @@ export interface ParsedOptions {
   animate: boolean;
   appendTo?: HTMLElement;
   ariaDateFormat: string;
-  autoFillDefaultTime: boolean;
   clickOpens: boolean;
   closeOnSelect: boolean;
   conjunction: string;
@@ -343,7 +338,6 @@ export const defaults: ParsedOptions = {
     typeof window === "object" &&
     window.navigator.userAgent.indexOf("MSIE") === -1,
   ariaDateFormat: "F j, Y",
-  autoFillDefaultTime: true,
   clickOpens: true,
   closeOnSelect: true,
   conjunction: ", ",
