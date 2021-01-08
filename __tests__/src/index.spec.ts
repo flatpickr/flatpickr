@@ -3,6 +3,7 @@ import { Russian } from "l10n/ru";
 import { Instance, DayElement } from "types/instance";
 import { Options, DateRangeLimit } from "types/options";
 import confirmDatePlugin from "plugins/confirmDate/confirmDate";
+import { getDefaultHours } from "utils/dates";
 
 flatpickr.defaultConfig.animate = false;
 flatpickr.defaultConfig.closeOnSelect = true;
@@ -777,6 +778,18 @@ describe("flatpickr", () => {
 
       fp.jumpToDate(new Date(2020, 4, 17), true);
     });
+
+    it("open() and clickOpens interaction", () => {
+      const fp = createInstance({
+        clickOpens: false,
+      });
+
+      simulate("click", fp._input);
+      expect(fp.isOpen).toEqual(false);
+
+      fp.open();
+      expect(fp.isOpen).toEqual(true);
+    });
   });
 
   describe("UI", () => {
@@ -1184,6 +1197,22 @@ describe("flatpickr", () => {
       expect(fp.input.value.length).toBeGreaterThan(0);
     });
 
+    it("getDefaultHours()", () => {
+      const fp = createInstance({
+        noCalendar: true,
+        enableTime: true,
+        dateFormat: "H:i",
+        minDate: "02:30",
+        defaultHour: 2,
+        defaultMinute: 45,
+      });
+      const values = getDefaultHours(fp.config);
+      expect(values.hours).toEqual(2);
+      expect(values.minutes).toEqual(45);
+      expect(fp.hourElement!.value).toEqual("02");
+      expect(fp.minuteElement!.value).toEqual("45");
+    });
+
     it("time picker: default hours/mins", () => {
       createInstance({
         noCalendar: true,
@@ -1193,6 +1222,9 @@ describe("flatpickr", () => {
         defaultHour: 2,
         defaultMinute: 45,
       });
+
+      expect(fp.hourElement!.value).toEqual("02");
+      expect(fp.minuteElement!.value).toEqual("45");
 
       fp.open();
       simulate("increment", fp.hourElement!, {
@@ -1358,6 +1390,28 @@ describe("flatpickr", () => {
 
       instance.destroy();
       wrapper.parentNode && wrapper.parentNode.removeChild(wrapper);
+    });
+
+    it("Time picker initial entry", () => {
+      const fp = createInstance({
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "H:i",
+        time_24hr: true,
+      });
+      fp._input.click();
+      fp.hourElement!.value = "16";
+
+      simulate(
+        "keydown",
+        fp.hourElement!,
+        {
+          keyCode: 13, // "Enter"
+        },
+        KeyboardEvent
+      );
+
+      expect(fp.hourElement!.value).toEqual("16");
     });
 
     it("valid mouseover behavior in range mode", () => {
