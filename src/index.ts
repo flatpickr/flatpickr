@@ -2220,6 +2220,7 @@ function FlatpickrInstance(
     let editableSheet = null;
     for (let i = 0; i < document.styleSheets.length; i++) {
       const sheet = document.styleSheets[i] as CSSStyleSheet;
+      if (!sheet.cssRules) continue;
       try {
         sheet.cssRules;
       } catch (err) {
