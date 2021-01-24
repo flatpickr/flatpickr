@@ -77,5 +77,8 @@
     "ie >= 9",
     "last 2 versions",
     "safari >= 7"
-  ]
+  ],
+  "dependencies": {
+    "jquery": "^3.5.1"
+  }
 }
