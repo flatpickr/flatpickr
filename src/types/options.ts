@@ -229,6 +229,15 @@ Use it along with "enableTime" to create a time picker. */
     | "auto"
     | "above"
     | "below"
+    | "auto left"
+    | "auto center"
+    | "auto right"
+    | "above left"
+    | "above center"
+    | "above right"
+    | "below left"
+    | "below center"
+    | "below right"
     | ((self: Instance, customElement: HTMLElement | undefined) => void);
 
   /*
