@@ -2082,9 +2082,12 @@ function FlatpickrInstance(
   }
 
   function getInputElem() {
-    return self.config.wrap
-      ? (element.querySelector("[data-input]") as HTMLInputElement)
-      : (element as HTMLInputElement);
+    if (!self.config.wrap)
+      return element as HTMLInputElement;
+    element = element.querySelector("[data-input]") as HTMLInputElement
+    if (!element)
+      throw new Error(`flatpickr: wrapper element must contains "data-input" attribute.`);
+    return element;
   }
 
   function setupLocale() {
