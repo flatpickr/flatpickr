@@ -2086,7 +2086,7 @@ function FlatpickrInstance(
       return element as HTMLInputElement;
     element = element.querySelector("[data-input]") as HTMLInputElement
     if (!element)
-      throw new Error(`flatpickr: wrapper element must contains "data-input" attribute.`);
+      throw new Error(`flatpickr: an input element with "data-input" attribute is required.`);
     return element;
   }
 
