@@ -188,12 +188,17 @@ function FlatpickrInstance(
       timeWrapper(e);
     }
 
-    const prevValue = self._input.value;
-
-    setHoursFromInputs();
+    const valueFromInput = self._input.value;
+    const dateFromInput = self.parseDate(valueFromInput);
+    if (dateFromInput && self.latestSelectedDateObj && dateFromInput.getTime() !== self.latestSelectedDateObj.getTime()) {
+      self.selectedDates.splice(self.selectedDates.length-1, 1, self.latestSelectedDateObj = dateFromInput);
+      setHours(dateFromInput.getHours(), dateFromInput.getMinutes(), dateFromInput.getSeconds());
+    } else {
+      setHoursFromInputs();
+    }
     updateValue();
 
-    if (self._input.value !== prevValue) {
+    if (self._input.value !== valueFromInput) {
       self._debouncedChange();
     }
   }
