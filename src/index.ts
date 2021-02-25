@@ -190,9 +190,9 @@ function FlatpickrInstance(
 
     const valueFromInput = self._input.value;
     const dateFromInput = self.parseDate(valueFromInput);
-    if (dateFromInput && self.latestSelectedDateObj && dateFromInput.getTime() !== self.latestSelectedDateObj.getTime()) {
-      self.selectedDates.splice(self.selectedDates.length-1, 1, self.latestSelectedDateObj = dateFromInput);
-      setHours(dateFromInput.getHours(), dateFromInput.getMinutes(), dateFromInput.getSeconds());
+    const latestDate = self.latestSelectedDateObj;
+    if (valueFromInput && latestDate && dateFromInput?.getTime() !== latestDate?.getTime()) {
+      setDate(dateFromInput!);
     } else {
       setHoursFromInputs();
     }
