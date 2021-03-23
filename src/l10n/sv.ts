@@ -14,7 +14,7 @@ export const Swedish: CustomLocale = {
   weekAbbreviation: "v",
 
   weekdays: {
-    shorthand: ["Sön", "Mån", "Tis", "Ons", "Tor", "Fre", "Lör"],
+    shorthand: ["sön", "Mån", "Tis", "Ons", "Tor", "Fre", "Lör"],
     longhand: [
       "Söndag",
       "Måndag",
@@ -56,6 +56,7 @@ export const Swedish: CustomLocale = {
       "December",
     ],
   },
+  rangeSeparator: ' till ',
   time_24hr: true,
 
   ordinal: () => {
