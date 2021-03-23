@@ -14,7 +14,7 @@ export const Swedish: CustomLocale = {
   weekAbbreviation: "v",
 
   weekdays: {
-    shorthand: ["sön", "Mån", "Tis", "Ons", "Tor", "Fre", "Lör"],
+    shorthand: ["Sön", "Mån", "Tis", "Ons", "Tor", "Fre", "Lör"],
     longhand: [
       "Söndag",
       "Måndag",
