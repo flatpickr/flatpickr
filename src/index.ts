@@ -395,7 +395,10 @@ function FlatpickrInstance(
           onMouseOver(getEventTarget(e) as DayElement);
       });
 
-    bind(window.document.body, "keydown", onKeyDown);
+    bind(self._input, "keydown", onKeyDown);
+    if (self.calendarContainer !== undefined) {
+      bind(self.calendarContainer, "keydown", onKeyDown);
+    }
 
     if (!self.config.inline && !self.config.static)
       bind(window, "resize", debouncedResize);
