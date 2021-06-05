@@ -513,6 +513,10 @@ describe("flatpickr", () => {
 
       fp.set("mode", "range");
       expect(fp.config.mode).toEqual("range");
+
+      const elem = document.createElement("div");
+      fp.set("positionElement", elem);
+      expect(fp._positionElement).toEqual(elem);
     });
 
     it("set() minDate/maxDate updates current view", () => {

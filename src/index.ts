@@ -2361,6 +2361,7 @@ function FlatpickrInstance(
     showMonths: [buildMonths, setCalendarWidth, buildWeekdays],
     minDate: [jumpToDate],
     maxDate: [jumpToDate],
+    positionElement: [setupInputs],
     clickOpens: [
       () => {
         if (self.config.clickOpens === true) {
