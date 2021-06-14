@@ -448,9 +448,9 @@ function FlatpickrInstance(
       }
     }
 
-    if (self.config.allowInput) {
-      bind(self._input, "blur", onBlur);
-    }
+    // if (self.config.allowInput) {
+    //   bind(self._input, "blur", onBlur);
+    // }
   }
 
   /**
@@ -1572,23 +1572,23 @@ function FlatpickrInstance(
     return false;
   }
 
-  function onBlur(e: FocusEvent) {
-    const isInput = e.target === self._input;
+  // function onBlur(e: FocusEvent) {
+  //   const isInput = e.target === self._input;
 
-    if (
-      isInput &&
-      (self.selectedDates.length > 0 || self._input.value.length > 0) &&
-      !(e.relatedTarget && isCalendarElem(e.relatedTarget as HTMLElement))
-    ) {
-      self.setDate(
-        self._input.value,
-        true,
-        e.target === self.altInput
-          ? self.config.altFormat
-          : self.config.dateFormat
-      );
-    }
-  }
+  //   if (
+  //     isInput &&
+  //     (self.selectedDates.length > 0 || self._input.value.length > 0) &&
+  //     !(e.relatedTarget && isCalendarElem(e.relatedTarget as HTMLElement))
+  //   ) {
+  //     self.setDate(
+  //       self._input.value,
+  //       true,
+  //       e.target === self.altInput
+  //         ? self.config.altFormat
+  //         : self.config.dateFormat
+  //     );
+  //   }
+  // }
 
   function onKeyDown(e: KeyboardEvent) {
     // e.key                      e.keyCode
