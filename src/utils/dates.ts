@@ -102,12 +102,12 @@ export const createDateParser = ({ config = defaults, l10n = english }) => (
             });
           }
         } else if (!isBackSlash) regexStr += "."; // don't really care
-
-        ops.forEach(
-          ({ fn, val }) =>
-            (parsedDate = fn(parsedDate as Date, val, locale) || parsedDate)
-        );
       }
+
+      ops.forEach(
+        ({ fn, val }) =>
+          (parsedDate = fn(parsedDate as Date, val, locale) || parsedDate)
+      );
 
       parsedDate = matched ? parsedDate : undefined;
     }
