@@ -644,7 +644,7 @@ function FlatpickrInstance(
   ) {
     const dateIsEnabled = isEnabled(date, true),
       dayElement = createElement<DayElement>(
-        "span",
+        "button",
         "flatpickr-day " + className,
         date.getDate().toString()
       );
@@ -690,6 +690,7 @@ function FlatpickrInstance(
         }
       }
     } else {
+      dayElement.disabled = true;
       dayElement.classList.add("flatpickr-disabled");
     }
 

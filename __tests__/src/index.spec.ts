@@ -1442,6 +1442,7 @@ describe("flatpickr", () => {
       simulate("mouseover", day(32));
       expect(day(32).classList.contains("endRange")).toEqual(false);
       expect(day(24).classList.contains("flatpickr-disabled")).toEqual(true);
+      expect(day(24).disabled).toEqual(true);
       expect(day(25).classList.contains("notAllowed")).toEqual(true);
 
       for (let i = 25; i < 32; i++)
@@ -1450,6 +1451,7 @@ describe("flatpickr", () => {
       for (let i = 17; i < 22; i++) {
         expect(day(i).classList.contains("notAllowed")).toEqual(false);
         expect(day(i).classList.contains("flatpickr-disabled")).toEqual(false);
+        expect(day(i).disabled).toEqual(false);
       }
 
       simulate("click", fp.days.childNodes[17], { which: 1 }, MouseEvent);
