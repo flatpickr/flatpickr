@@ -247,31 +247,52 @@ function FlatpickrInstance(
         compareDates(self.latestSelectedDateObj, self.config.maxDate, true) ===
           0);
 
-    if (limitMaxHours) {
-      const maxTime =
-        self.config.maxTime !== undefined
-          ? self.config.maxTime
-          : (self.config.maxDate as Date);
-      hours = Math.min(hours, maxTime.getHours());
-      if (hours === maxTime.getHours())
-        minutes = Math.min(minutes, maxTime.getMinutes());
+    if (
+      self.config.maxTime !== undefined &&
+      self.config.minTime !== undefined &&
+      self.config.minTime > self.config.maxTime
+    ) {
+      if (
+        hours >= self.config.maxTime.getHours() &&
+        hours < self.config.minTime.getHours()
+      ) {
+        hours = self.config.minTime.getHours();
+        if (
+          hours === self.config.minTime.getHours() &&
+          minutes < self.config.minTime.getMinutes()
+        )
+          minutes = self.config.minTime.getMinutes();
 
-      if (minutes === maxTime.getMinutes())
-        seconds = Math.min(seconds, maxTime.getSeconds());
-    }
+        if (minutes === self.config.minTime.getMinutes())
+          seconds = Math.max(seconds, self.config.minTime.getSeconds());
+      }
+    } else {
+      if (limitMaxHours) {
+        const maxTime =
+          self.config.maxTime !== undefined
+            ? self.config.maxTime
+            : (self.config.maxDate as Date);
+        hours = Math.min(hours, maxTime.getHours());
+        if (hours === maxTime.getHours())
+          minutes = Math.min(minutes, maxTime.getMinutes());
 
-    if (limitMinHours) {
-      const minTime =
-        self.config.minTime !== undefined
-          ? self.config.minTime
-          : self.config.minDate!;
+        if (minutes === maxTime.getMinutes())
+          seconds = Math.min(seconds, maxTime.getSeconds());
+      }
 
-      hours = Math.max(hours, minTime.getHours());
-      if (hours === minTime.getHours() && minutes < minTime.getMinutes())
-        minutes = minTime.getMinutes();
+      if (limitMinHours) {
+        const minTime =
+          self.config.minTime !== undefined
+            ? self.config.minTime
+            : self.config.minDate!;
 
-      if (minutes === minTime.getMinutes())
-        seconds = Math.max(seconds, minTime.getSeconds());
+        hours = Math.max(hours, minTime.getHours());
+        if (hours === minTime.getHours() && minutes < minTime.getMinutes())
+          minutes = minTime.getMinutes();
+
+        if (minutes === minTime.getMinutes())
+          seconds = Math.max(seconds, minTime.getSeconds());
+      }
     }
 
     setHours(hours, minutes, seconds);
