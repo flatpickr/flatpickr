@@ -1277,6 +1277,30 @@ describe("flatpickr", () => {
       expect(fp.input.value).toEqual("02:30");
     });
 
+    it("time picker: minTime/maxTime reversed", () => {
+      createInstance({
+        enableTime: true,
+        minTime: "05:30",
+        maxTime: "03:30",
+        defaultDate: "2021-07-01 3:30",
+      });
+
+      fp.open();
+
+      expect(fp.input.value).toEqual("2021-07-01 03:30");
+
+      incrementTime("hourElement", +1);
+      expect(fp.input.value).toEqual("2021-07-01 05:30");
+
+      incrementTime("hourElement", +1);
+      expect(fp.input.value).toEqual("2021-07-01 06:30");
+
+      incrementTime("hourElement", -1);
+      incrementTime("hourElement", -1);
+      incrementTime("hourElement", -1);
+      expect(fp.input.value).toEqual("2021-07-01 05:30");
+    });
+
     it("time picker: minDate/maxDate + preloading", () => {
       createInstance({
         enableTime: true,

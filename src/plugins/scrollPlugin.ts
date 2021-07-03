@@ -3,7 +3,7 @@ import { Instance } from "../types/instance";
 import { getEventTarget } from "../utils/dom";
 
 if (typeof window.CustomEvent !== "function") {
-  function CustomEvent(
+  const CustomEvent = function (
     typeArg: string,
     eventInitDict?: CustomEventInit
   ): CustomEvent {
@@ -20,7 +20,7 @@ if (typeof window.CustomEvent !== "function") {
       eventInitDict.detail
     );
     return evt;
-  }
+  };
 
   CustomEvent.prototype = window.Event.prototype;
 

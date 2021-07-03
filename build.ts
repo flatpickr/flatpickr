@@ -219,10 +219,10 @@ async function start() {
     }
     const watcher = rollup.watch([getConfig({ dev: true })]);
 
-    function exit() {
+    const exit = function () {
       watcher.close();
       watchers.forEach((w) => w.close());
-    }
+    };
 
     //catches ctrl+c event
     process.on("SIGINT", exit);
