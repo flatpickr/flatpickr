@@ -154,6 +154,20 @@ export const isBetween = (ts: number, ts1: number, ts2: number) => {
   return ts > Math.min(ts1, ts2) && ts < Math.max(ts1, ts2);
 };
 
+export const calculateSecondsSinceMidnight = (
+  hours: number,
+  minutes: number,
+  seconds: number
+) => {
+  return hours * 3600 + minutes * 60 + seconds;
+};
+
+export const parseSeconds = (secondsSinceMidnight: number) => {
+  const hours = Math.floor(secondsSinceMidnight / 3600),
+    minutes = (secondsSinceMidnight - hours * 3600) / 60;
+  return [hours, minutes, secondsSinceMidnight - hours * 3600 - minutes * 60];
+};
+
 export const duration = {
   DAY: 86400000,
 };
