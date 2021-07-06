@@ -49,26 +49,28 @@ function rangePlugin(config: Config = {}): Plugin {
 
       secondInput.setAttribute("data-fp-omit", "");
 
-      fp._bind(secondInput, ["focus", "click"], () => {
-        if (fp.selectedDates[1]) {
-          fp.latestSelectedDateObj = fp.selectedDates[1];
-          fp._setHoursFromDate(fp.selectedDates[1]);
-          fp.jumpToDate(fp.selectedDates[1]);
-        }
+      if (fp.config.clickOpens) {
+        fp._bind(secondInput, ["focus", "click"], () => {
+          if (fp.selectedDates[1]) {
+            fp.latestSelectedDateObj = fp.selectedDates[1];
+            fp._setHoursFromDate(fp.selectedDates[1]);
+            fp.jumpToDate(fp.selectedDates[1]);
+          }
 
-        _secondInputFocused = true;
-        fp.isOpen = false;
-        fp.open(
-          undefined,
-          config.position === "left" ? fp._input : secondInput
-        );
-      });
+          _secondInputFocused = true;
+          fp.isOpen = false;
+          fp.open(
+            undefined,
+            config.position === "left" ? fp._input : secondInput
+          );
+        });
 
-      fp._bind(fp._input, ["focus", "click"], (e: FocusEvent) => {
-        e.preventDefault();
-        fp.isOpen = false;
-        fp.open();
-      });
+        fp._bind(fp._input, ["focus", "click"], (e: FocusEvent) => {
+          e.preventDefault();
+          fp.isOpen = false;
+          fp.open();
+        });
+      }
 
       if (fp.config.allowInput)
         fp._bind(secondInput, "keydown", (e: KeyboardEvent) => {

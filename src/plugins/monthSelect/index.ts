@@ -46,31 +46,19 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
     }
 
     function addListeners() {
-      fp._bind(fp.prevMonthNav, "click", e => {
+      fp._bind(fp.prevMonthNav, "click", (e) => {
         e.preventDefault();
         e.stopPropagation();
 
-        const selectedMonth = fp.rContainer
-          ?.querySelector<ElementDate>(".flatpickr-monthSelect-month.selected")!
-          .dateObj.getMonth();
-
-        if (selectedMonth === 0) {
-          fp.currentYear--;
-        }
+        fp.changeYear(fp.currentYear - 1);
         selectYear();
       });
 
-      fp._bind(fp.nextMonthNav, "click", e => {
+      fp._bind(fp.nextMonthNav, "click", (e) => {
         e.preventDefault();
         e.stopPropagation();
 
-        const selectedMonth = fp.rContainer
-          ?.querySelector<ElementDate>(".flatpickr-monthSelect-month.selected")!
-          .dateObj.getMonth();
-
-        if (selectedMonth === 11) {
-          fp.currentYear++;
-        }
+        fp.changeYear(fp.currentYear + 1);
         selectYear();
       });
     }
@@ -122,8 +110,9 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         currentlySelected[index].classList.remove("selected");
       }
 
+      const targetMonth = (fp.selectedDates[0] || new Date()).getMonth();
       const month = fp.rContainer.querySelector(
-        `.flatpickr-monthSelect-month:nth-child(${fp.currentMonth + 1})`
+        `.flatpickr-monthSelect-month:nth-child(${targetMonth + 1})`
       );
 
       if (month) {
@@ -143,14 +132,15 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
           selectedDate = fp.config.maxDate;
         }
         fp.currentYear = selectedDate.getFullYear();
-        fp.currentYearElement.value = String(fp.currentYear);
-        fp.currentMonth = selectedDate.getMonth();
       }
+
+      fp.currentYearElement.value = String(fp.currentYear);
+
       if (fp.rContainer) {
         const months: NodeListOf<ElementDate> = fp.rContainer.querySelectorAll(
           ".flatpickr-monthSelect-month"
         );
-        months.forEach(month => {
+        months.forEach((month) => {
           month.dateObj.setFullYear(fp.currentYear);
           if (
             (fp.config.minDate && month.dateObj < fp.config.minDate) ||
@@ -181,7 +171,6 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
     function setMonth(date: Date) {
       const selectedDate = new Date(date);
       selectedDate.setFullYear(fp.currentYear);
-      fp.currentMonth = selectedDate.getMonth();
 
       fp.setDate(selectedDate, true);
 
@@ -251,6 +240,9 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
       onValueUpdate: setCurrentlySelected,
       onKeyDown,
       onReady: [
+        () => {
+          fp.currentMonth = 0;
+        },
         clearUnnecessaryDOMElements,
         addListeners,
         addMonths,
