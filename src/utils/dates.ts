@@ -79,11 +79,6 @@ export const createDateParser = ({ config = defaults, l10n = english }) => (
     ) {
       parsedDate = new Date(date);
     } else {
-      parsedDate =
-        !config || !config.noCalendar
-          ? new Date(new Date().getFullYear(), 0, 1, 0, 0, 0, 0)
-          : (new Date(new Date().setHours(0, 0, 0, 0)) as Date);
-
       let matched,
         ops: { fn: RevFormatFn; val: string }[] = [];
 
@@ -102,12 +97,17 @@ export const createDateParser = ({ config = defaults, l10n = english }) => (
             });
           }
         } else if (!isBackSlash) regexStr += "."; // don't really care
-
-        ops.forEach(
-          ({ fn, val }) =>
-            (parsedDate = fn(parsedDate as Date, val, locale) || parsedDate)
-        );
       }
+
+      parsedDate =
+        !config || !config.noCalendar
+          ? new Date(new Date().getFullYear(), 0, 1, 0, 0, 0, 0)
+          : (new Date(new Date().setHours(0, 0, 0, 0)) as Date);
+
+      ops.forEach(
+        ({ fn, val }) =>
+          (parsedDate = fn(parsedDate as Date, val, locale) || parsedDate)
+      );
 
       parsedDate = matched ? parsedDate : undefined;
     }
@@ -152,6 +152,20 @@ export function compareTimes(date1: Date, date2: Date) {
 
 export const isBetween = (ts: number, ts1: number, ts2: number) => {
   return ts > Math.min(ts1, ts2) && ts < Math.max(ts1, ts2);
+};
+
+export const calculateSecondsSinceMidnight = (
+  hours: number,
+  minutes: number,
+  seconds: number
+) => {
+  return hours * 3600 + minutes * 60 + seconds;
+};
+
+export const parseSeconds = (secondsSinceMidnight: number) => {
+  const hours = Math.floor(secondsSinceMidnight / 3600),
+    minutes = (secondsSinceMidnight - hours * 3600) / 60;
+  return [hours, minutes, secondsSinceMidnight - hours * 3600 - minutes * 60];
 };
 
 export const duration = {

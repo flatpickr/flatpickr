@@ -176,6 +176,14 @@ function rangePlugin(config: Config = {}): Plugin {
             ? [_prevDates[0], newSelectedDate]
             : [newSelectedDate, _prevDates[1]];
 
+          if (newDates[0].getTime() > newDates[1].getTime()) {
+            if (_secondInputFocused) {
+              newDates[0] = newDates[1];
+            } else {
+              newDates[1] = newDates[0];
+            }
+          }
+
           fp.setDate(newDates, false);
           _prevDates = [...newDates];
         }

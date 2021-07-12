@@ -30,6 +30,8 @@ import {
   duration,
   isBetween,
   getDefaultHours,
+  calculateSecondsSinceMidnight,
+  parseSeconds,
 } from "./utils/dates";
 
 import { tokenRegex, monthToStr } from "./utils/formatting";
@@ -247,31 +249,60 @@ function FlatpickrInstance(
         compareDates(self.latestSelectedDateObj, self.config.maxDate, true) ===
           0);
 
-    if (limitMaxHours) {
-      const maxTime =
-        self.config.maxTime !== undefined
-          ? self.config.maxTime
-          : (self.config.maxDate as Date);
-      hours = Math.min(hours, maxTime.getHours());
-      if (hours === maxTime.getHours())
-        minutes = Math.min(minutes, maxTime.getMinutes());
+    if (
+      self.config.maxTime !== undefined &&
+      self.config.minTime !== undefined &&
+      self.config.minTime > self.config.maxTime
+    ) {
+      const minBound = calculateSecondsSinceMidnight(
+        self.config.minTime.getHours(),
+        self.config.minTime.getMinutes(),
+        self.config.minTime.getSeconds()
+      );
+      const maxBound = calculateSecondsSinceMidnight(
+        self.config.maxTime.getHours(),
+        self.config.maxTime.getMinutes(),
+        self.config.maxTime.getSeconds()
+      );
+      const currentTime = calculateSecondsSinceMidnight(
+        hours,
+        minutes,
+        seconds
+      );
 
-      if (minutes === maxTime.getMinutes())
-        seconds = Math.min(seconds, maxTime.getSeconds());
-    }
+      if (currentTime > maxBound && currentTime < minBound) {
+        const result = parseSeconds(minBound);
+        hours = result[0];
+        minutes = result[1];
+        seconds = result[2];
+      }
+    } else {
+      if (limitMaxHours) {
+        const maxTime =
+          self.config.maxTime !== undefined
+            ? self.config.maxTime
+            : (self.config.maxDate as Date);
+        hours = Math.min(hours, maxTime.getHours());
+        if (hours === maxTime.getHours())
+          minutes = Math.min(minutes, maxTime.getMinutes());
 
-    if (limitMinHours) {
-      const minTime =
-        self.config.minTime !== undefined
-          ? self.config.minTime
-          : self.config.minDate!;
+        if (minutes === maxTime.getMinutes())
+          seconds = Math.min(seconds, maxTime.getSeconds());
+      }
 
-      hours = Math.max(hours, minTime.getHours());
-      if (hours === minTime.getHours() && minutes < minTime.getMinutes())
-        minutes = minTime.getMinutes();
+      if (limitMinHours) {
+        const minTime =
+          self.config.minTime !== undefined
+            ? self.config.minTime
+            : self.config.minDate!;
 
-      if (minutes === minTime.getMinutes())
-        seconds = Math.max(seconds, minTime.getSeconds());
+        hours = Math.max(hours, minTime.getHours());
+        if (hours === minTime.getHours() && minutes < minTime.getMinutes())
+          minutes = minTime.getMinutes();
+
+        if (minutes === minTime.getMinutes())
+          seconds = Math.max(seconds, minTime.getSeconds());
+      }
     }
 
     setHours(hours, minutes, seconds);
@@ -2361,6 +2392,7 @@ function FlatpickrInstance(
     showMonths: [buildMonths, setCalendarWidth, buildWeekdays],
     minDate: [jumpToDate],
     maxDate: [jumpToDate],
+    positionElement: [updatePositionElement],
     clickOpens: [
       () => {
         if (self.config.clickOpens === true) {
@@ -2594,6 +2626,10 @@ function FlatpickrInstance(
     if (!self.config.allowInput)
       self._input.setAttribute("readonly", "readonly");
 
+    updatePositionElement();
+  }
+
+  function updatePositionElement() {
     self._positionElement = self.config.positionElement || self._input;
   }
 

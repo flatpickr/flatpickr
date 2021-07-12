@@ -513,6 +513,10 @@ describe("flatpickr", () => {
 
       fp.set("mode", "range");
       expect(fp.config.mode).toEqual("range");
+
+      const elem = document.createElement("div");
+      fp.set("positionElement", elem);
+      expect(fp._positionElement).toEqual(elem);
     });
 
     it("set() minDate/maxDate updates current view", () => {
@@ -1271,6 +1275,36 @@ describe("flatpickr", () => {
 
       incrementTime("hourElement", -1);
       expect(fp.input.value).toEqual("02:30");
+    });
+
+    it("time picker: minTime/maxTime reversed", () => {
+      createInstance({
+        enableTime: true,
+        minTime: "05:30",
+        maxTime: "03:30",
+        defaultDate: "2021-07-01 1:29",
+      });
+
+      fp.open();
+
+      expect(fp.input.value).toEqual("2021-07-01 01:29");
+
+      incrementTime("hourElement", +1);
+      expect(fp.input.value).toEqual("2021-07-01 02:29");
+
+      incrementTime("hourElement", +1);
+      expect(fp.input.value).toEqual("2021-07-01 03:29");
+
+      incrementTime("hourElement", +1);
+      expect(fp.input.value).toEqual("2021-07-01 05:30");
+
+      incrementTime("hourElement", +1);
+      expect(fp.input.value).toEqual("2021-07-01 06:30");
+
+      incrementTime("hourElement", -1);
+      incrementTime("hourElement", -1);
+      incrementTime("hourElement", -1);
+      expect(fp.input.value).toEqual("2021-07-01 05:30");
     });
 
     it("time picker: minDate/maxDate + preloading", () => {
