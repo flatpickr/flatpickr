@@ -2392,6 +2392,7 @@ function FlatpickrInstance(
     showMonths: [buildMonths, setCalendarWidth, buildWeekdays],
     minDate: [jumpToDate],
     maxDate: [jumpToDate],
+    positionElement: [updatePositionElement],
     clickOpens: [
       () => {
         if (self.config.clickOpens === true) {
@@ -2625,6 +2626,10 @@ function FlatpickrInstance(
     if (!self.config.allowInput)
       self._input.setAttribute("readonly", "readonly");
 
+    updatePositionElement();
+  }
+
+  function updatePositionElement() {
     self._positionElement = self.config.positionElement || self._input;
   }
 
