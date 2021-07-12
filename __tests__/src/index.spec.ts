@@ -673,7 +673,7 @@ describe("flatpickr", () => {
       fp.jumpToDate("2016-2-1");
 
       fp.open();
-      (fp.days.childNodes[15] as HTMLSpanElement).focus();
+      (fp.days.childNodes[15] as HTMLButtonElement).focus();
 
       simulate(
         "keydown",
@@ -1476,6 +1476,7 @@ describe("flatpickr", () => {
       simulate("mouseover", day(32));
       expect(day(32).classList.contains("endRange")).toEqual(false);
       expect(day(24).classList.contains("flatpickr-disabled")).toEqual(true);
+      expect(day(24).disabled).toEqual(true);
       expect(day(25).classList.contains("notAllowed")).toEqual(true);
 
       for (let i = 25; i < 32; i++)
@@ -1484,11 +1485,34 @@ describe("flatpickr", () => {
       for (let i = 17; i < 22; i++) {
         expect(day(i).classList.contains("notAllowed")).toEqual(false);
         expect(day(i).classList.contains("flatpickr-disabled")).toEqual(false);
+        expect(day(i).disabled).toEqual(false);
       }
 
       simulate("click", fp.days.childNodes[17], { which: 1 }, MouseEvent);
       expect(fp.selectedDates.length).toEqual(2);
       expect(fp.input.value).toEqual("2016-01-13 to 2016-01-17");
+    });
+
+    it("today is accessible and keyboard navigation to other day is possible", () => {
+      createInstance({});
+
+      const isToday = (element: DayElement) => element === fp.todayDateElem;
+      fp.days.childNodes.forEach((day) => {
+        const element = day as DayElement;
+        expect(element.tabIndex).toEqual(isToday(element) ? 0 : -1);
+      });
+
+      // navigate to the left
+      fp.todayDateElem?.focus();
+      simulate("keydown", fp.todayDateElem as Node, { keyCode: 37 }, KeyboardEvent);
+      const todayIndex = Array.from(fp.days.childNodes).indexOf(fp.todayDateElem as ChildNode);
+      expect((fp.days.childNodes[todayIndex - 1] as DayElement).tabIndex).toEqual(0);
+      expect((fp.todayDateElem as DayElement).tabIndex).toEqual(-1);
+
+      // select other day
+      simulate("keydown", fp.days.childNodes[todayIndex - 1] as Node, { keyCode: 13 }, KeyboardEvent);
+      expect((fp.selectedDateElem as DayElement).tabIndex).toEqual(0);
+      expect((fp.todayDateElem as DayElement).tabIndex).toEqual(-1);
     });
 
     it("adds disabled class to disabled prev/next month arrows", () => {
