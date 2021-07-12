@@ -30,6 +30,8 @@ import {
   duration,
   isBetween,
   getDefaultHours,
+  calculateSecondsSinceMidnight,
+  parseSeconds,
 } from "./utils/dates";
 
 import { tokenRegex, monthToStr } from "./utils/formatting";
@@ -252,19 +254,27 @@ function FlatpickrInstance(
       self.config.minTime !== undefined &&
       self.config.minTime > self.config.maxTime
     ) {
-      if (
-        hours >= self.config.maxTime.getHours() &&
-        hours < self.config.minTime.getHours()
-      ) {
-        hours = self.config.minTime.getHours();
-        if (
-          hours === self.config.minTime.getHours() &&
-          minutes < self.config.minTime.getMinutes()
-        )
-          minutes = self.config.minTime.getMinutes();
+      const minBound = calculateSecondsSinceMidnight(
+        self.config.minTime.getHours(),
+        self.config.minTime.getMinutes(),
+        self.config.minTime.getSeconds()
+      );
+      const maxBound = calculateSecondsSinceMidnight(
+        self.config.maxTime.getHours(),
+        self.config.maxTime.getMinutes(),
+        self.config.maxTime.getSeconds()
+      );
+      const currentTime = calculateSecondsSinceMidnight(
+        hours,
+        minutes,
+        seconds
+      );
 
-        if (minutes === self.config.minTime.getMinutes())
-          seconds = Math.max(seconds, self.config.minTime.getSeconds());
+      if (currentTime > maxBound && currentTime < minBound) {
+        const result = parseSeconds(minBound);
+        hours = result[0];
+        minutes = result[1];
+        seconds = result[2];
       }
     } else {
       if (limitMaxHours) {

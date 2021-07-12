@@ -1282,12 +1282,18 @@ describe("flatpickr", () => {
         enableTime: true,
         minTime: "05:30",
         maxTime: "03:30",
-        defaultDate: "2021-07-01 3:30",
+        defaultDate: "2021-07-01 1:29",
       });
 
       fp.open();
 
-      expect(fp.input.value).toEqual("2021-07-01 03:30");
+      expect(fp.input.value).toEqual("2021-07-01 01:29");
+
+      incrementTime("hourElement", +1);
+      expect(fp.input.value).toEqual("2021-07-01 02:29");
+
+      incrementTime("hourElement", +1);
+      expect(fp.input.value).toEqual("2021-07-01 03:29");
 
       incrementTime("hourElement", +1);
       expect(fp.input.value).toEqual("2021-07-01 05:30");
