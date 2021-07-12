@@ -79,11 +79,6 @@ export const createDateParser = ({ config = defaults, l10n = english }) => (
     ) {
       parsedDate = new Date(date);
     } else {
-      parsedDate =
-        !config || !config.noCalendar
-          ? new Date(new Date().getFullYear(), 0, 1, 0, 0, 0, 0)
-          : (new Date(new Date().setHours(0, 0, 0, 0)) as Date);
-
       let matched,
         ops: { fn: RevFormatFn; val: string }[] = [];
 
@@ -102,12 +97,17 @@ export const createDateParser = ({ config = defaults, l10n = english }) => (
             });
           }
         } else if (!isBackSlash) regexStr += "."; // don't really care
-
-        ops.forEach(
-          ({ fn, val }) =>
-            (parsedDate = fn(parsedDate as Date, val, locale) || parsedDate)
-        );
       }
+
+      parsedDate =
+        !config || !config.noCalendar
+          ? new Date(new Date().getFullYear(), 0, 1, 0, 0, 0, 0)
+          : (new Date(new Date().setHours(0, 0, 0, 0)) as Date);
+
+      ops.forEach(
+        ({ fn, val }) =>
+          (parsedDate = fn(parsedDate as Date, val, locale) || parsedDate)
+      );
 
       parsedDate = matched ? parsedDate : undefined;
     }
