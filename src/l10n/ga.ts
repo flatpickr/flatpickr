@@ -58,6 +58,6 @@ export const Irish: CustomLocale = {
   time_24hr: true,
 };
 
-fp.l10ns.hr = Irish;
+fp.l10ns.ga = Irish;
 
 export default fp.l10ns;
