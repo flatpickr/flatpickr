@@ -42,7 +42,7 @@ export function createNumberInput(
   inputClassName: string,
   opts?: Record<string, any>
 ) {
-  const wrapper = createElement<HTMLDivElement>("div", "numInputWrapper"),
+  const wrapper = createElement<HTMLDivElement>("span", "numInputWrapper"),
     numInput = createElement<HTMLInputElement>(
       "input",
       "numInput " + inputClassName
