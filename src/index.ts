@@ -1468,6 +1468,8 @@ function FlatpickrInstance(
       );
 
       if (lostFocus && isIgnored) {
+
+        /* THIS CAUSES THE INABILITY TO CLEAR THE DATE/TIME VALUES
         if (
           self.timeContainer !== undefined &&
           self.minuteElement !== undefined &&
@@ -1477,6 +1479,7 @@ function FlatpickrInstance(
         ) {
           updateTime();
         }
+        */
 
         self.close();
 
