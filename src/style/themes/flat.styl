@@ -1,0 +1,14 @@
+@require "../flatpickr"
+
+.flatpickr-calendar
+    border-radius 0
+
+span.flatpickr-day
+    border-radius 0
+    height $daySize - $dayMargin
+    line-height $daySize - $dayMargin
+    margin $dayMargin
+
+    &.selected, &.startRange, &.endRange
+        &.startRange, &.endRange, &.startRange.endRange
+            border-radius 0
