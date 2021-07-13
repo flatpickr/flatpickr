@@ -48,7 +48,7 @@ export type Plugin<E = {}> = (fp: Instance & E) => Options;
 
 export interface BaseOptions {
   /*
-  Allows the user to enter a date directly input the input field. By default, direct entry is disabled.
+  Allows the user to enter a date directly into the input field. By default, direct entry is disabled.
   */
   allowInput: boolean;
 
