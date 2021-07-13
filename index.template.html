@@ -17,8 +17,20 @@
         "Roboto", "Oxygen", "Ubuntu", "Helvetica Neue", Arial, sans-serif;
     }
 
+    label {
+      display: block;
+    }
+
     label > div {
       margin-bottom: 4px;
+    }
+
+    label + label {
+      margin-top: 2rem;
+    }
+
+    .container {
+      float: right;
     }
   </style>
 </head>
@@ -30,12 +42,17 @@
         <input placeholder="Select Date..." class=date />
       </label>
 
-      <!--
       <label>
-        <div>Date 2</div>
-        <input placeholder="Select Date..." class=date id=input2 />
+        <div>Positioned datepicker</div>
+        <div class="container">
+          <input placeholder="Select Date..." class="positioned-date" />
+        </div>
       </label>
-      -->
+
+      <label>
+        <div>Custom element datepicker</div>
+        <custom-datepicker></custom-datepicker>
+      </label>
     </div>
   </div>
   
@@ -50,9 +67,55 @@
   <script src="./dist/plugins/weekSelect/weekSelect.js"></script>
 
   <script>
-    var fp = flatpickr(".date", {
+    var fp = flatpickr(".date", {});
+    var fp2 = flatpickr(".positioned-date", {
+      'positionElement': this.input
+    });
+  </script>
 
-    })
+  <script>
+    class CustomDatepicker extends HTMLElement {
+      constructor() {
+        super();
+        this._shadow = this.attachShadow({mode: 'open'});
+        this._shadow.innerHTML = `
+          <style>
+            @import 'dist/flatpickr.css';
+            @import 'dist/ie.css';
+            @import 'dist/plugins/confirmDate/confirmDate.css';
+            @import 'dist/plugins/monthSelect/style.css';
+
+            #container {
+              position: relative;
+              width: 100%;
+            }
+
+            input {
+              float: right;
+            }
+          </style>
+          <div id="container">
+            <input placeholder="Select Date..." class="date" />
+          </div>
+        `;
+      }
+
+      get container() {
+        return this.shadowRoot.querySelector('#container');
+      }
+
+      get input() {
+        return this.container.querySelector('input');
+      }
+
+      connectedCallback() {
+        this._flatpickr = flatpickr(this.container, {
+          'positionElement': this.input,
+          'appendTo': this.container
+        });
+      }
+    }
+    customElements.define('custom-datepicker', CustomDatepicker);
   </script>
 </body>
 </html>
