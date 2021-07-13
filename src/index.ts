@@ -190,12 +190,17 @@ function FlatpickrInstance(
       timeWrapper(e);
     }
 
-    const prevValue = self._input.value;
-
-    setHoursFromInputs();
+    const valueFromInput = self._input.value;
+    const dateFromInput = self.parseDate(valueFromInput);
+    const latestDate = self.latestSelectedDateObj;
+    if (valueFromInput && latestDate && dateFromInput?.getTime() !== latestDate?.getTime()) {
+      setDate(dateFromInput!);
+    } else {
+      setHoursFromInputs();
+    }
     updateValue();
 
-    if (self._input.value !== prevValue) {
+    if (self._input.value !== valueFromInput) {
       self._debouncedChange();
     }
   }
@@ -1650,6 +1655,7 @@ function FlatpickrInstance(
             ? self.config.altFormat
             : self.config.dateFormat
         );
+        self.close();
         return (eventTarget as HTMLElement).blur();
       } else {
         self.open();
