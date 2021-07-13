@@ -123,4 +123,55 @@ describe("monthSelect", () => {
       });
     });
   });
+
+  describe("month cell styling", () => {
+    it("should apply .today to current month of current year", () => {
+      const fp = createInstance({
+        plugins: [monthSelectPlugin()],
+      }) as Instance;
+
+      const getTodayCell = (): (Element | null | undefined) =>
+        fp.rContainer?.querySelector(".today");
+      const currentMonth = fp.l10n.months.longhand[new Date().getMonth()]
+
+      expect(getTodayCell()?.textContent).toEqual(currentMonth);
+
+      const prevButton = fp.monthNav.querySelector(".flatpickr-prev-month")!;
+      prevButton.dispatchEvent(new MouseEvent("click"));
+
+      expect(getTodayCell()).toBeNull();
+
+      const nextButton = fp.monthNav.querySelector(".flatpickr-next-month")!;
+      nextButton.dispatchEvent(new MouseEvent("click"));
+
+      expect(getTodayCell()?.textContent).toEqual(currentMonth);
+    });
+
+    it("should apply .selected to selected month of selected year", () => {
+      const fp = createInstance({
+        plugins: [monthSelectPlugin()],
+      }) as Instance;
+
+      const getSelectedCell = (): (Element | null | undefined) =>
+        fp.rContainer?.querySelector(".selected");
+
+      expect(getSelectedCell()).toBeNull();
+
+      const selectionTarget = fp.rContainer!
+        .querySelector(".flatpickr-monthSelect-month:nth-child(6)")!;
+      selectionTarget.dispatchEvent(new MouseEvent("click"));
+
+      expect(getSelectedCell()?.textContent).toEqual("June");
+
+      const prevButton = fp.monthNav.querySelector(".flatpickr-prev-month")!;
+      prevButton.dispatchEvent(new MouseEvent("click"));
+
+      expect(getSelectedCell()).toBeNull();
+
+      const nextButton = fp.monthNav.querySelector(".flatpickr-next-month")!;
+      nextButton.dispatchEvent(new MouseEvent("click"));
+
+      expect(getSelectedCell()?.textContent).toEqual("June");
+    });
+  });
 });
