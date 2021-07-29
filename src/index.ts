@@ -1433,9 +1433,6 @@ function FlatpickrInstance(
   }
 
   function isCalendarElem(elem: HTMLElement) {
-    if (self.config.appendTo && self.config.appendTo.contains(elem))
-      return true;
-
     return self.calendarContainer.contains(elem);
   }
 
