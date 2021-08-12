@@ -3,7 +3,7 @@ import { Instance } from "../types/instance";
 import { getEventTarget } from "../utils/dom";
 
 if (typeof window.CustomEvent !== "function") {
-  const CustomEvent = function (
+  const CustomEventPolyfill = function (
     typeArg: string,
     eventInitDict?: CustomEventInit
   ): CustomEvent {
@@ -22,9 +22,9 @@ if (typeof window.CustomEvent !== "function") {
     return evt;
   };
 
-  CustomEvent.prototype = window.Event.prototype;
+  CustomEventPolyfill.prototype = window.Event.prototype;
 
-  window.CustomEvent = <any>CustomEvent;
+  window.CustomEvent = <any>CustomEventPolyfill;
 }
 
 function delta(e: WheelEvent) {
