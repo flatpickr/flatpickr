@@ -40,7 +40,7 @@ export const AlgerianArabic: CustomLocale = {
       "ديسمبر",
     ],
   },
-  firstDayOfWeek: 6,
+  firstDayOfWeek: 0,
   rangeSeparator: " إلى ",
   weekAbbreviation: "Wk",
   scrollTitle: "قم بالتمرير للزيادة",
