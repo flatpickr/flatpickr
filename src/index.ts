@@ -131,6 +131,7 @@ function FlatpickrInstance(
   function getClosestActiveElement() {
     return (self.calendarContainer?.getRootNode() as unknown as DocumentOrShadowRoot).activeElement || document.activeElement;
   }
+
   function bindToInstance<F extends Function>(fn: F): F {
     return fn.bind(self);
   }
