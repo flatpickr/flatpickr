@@ -1468,6 +1468,15 @@ function FlatpickrInstance(
       );
 
       if (lostFocus && isIgnored) {
+        if (self.config.allowInput) {
+          self.setDate(self._input.value, 
+            true, 
+            eventTarget === self.altInput
+              ? self.config.altFormat
+              : self.config.dateFormat
+          );
+        }
+        
         if (
           self.timeContainer !== undefined &&
           self.minuteElement !== undefined &&
@@ -1477,15 +1486,7 @@ function FlatpickrInstance(
         ) {
           updateTime();
         }
-
-        if (self.config.allowInput) {
-          self.setDate(self._input.value, 
-            true, 
-            eventTarget === self.altInput
-              ? self.config.altFormat
-              : self.config.dateFormat
-          );
-        }
+        
         self.close();
 
         if (
