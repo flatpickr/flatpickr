@@ -126,6 +126,7 @@ export type key =
   | "da"
   | "de"
   | "default"
+  | "el"
   | "en"
   | "eo"
   | "es"
