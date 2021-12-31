@@ -678,7 +678,7 @@ function FlatpickrInstance(
   ) {
     const dateIsEnabled = isEnabled(date, true),
       dayElement = createElement<DayElement>(
-        "span",
+        "button",
         "flatpickr-day " + className,
         date.getDate().toString()
       );
@@ -689,20 +689,18 @@ function FlatpickrInstance(
       "aria-label",
       self.formatDate(date, self.config.ariaDateFormat)
     );
+    dayElement.tabIndex = -1;
 
-    if (
-      className.indexOf("hidden") === -1 &&
-      compareDates(date, self.now) === 0
-    ) {
+    if (className.indexOf("hidden") === -1 && isToday(date)) {
       self.todayDateElem = dayElement;
       dayElement.classList.add("today");
       dayElement.setAttribute("aria-current", "date");
     }
 
     if (dateIsEnabled) {
-      dayElement.tabIndex = -1;
       if (isDateSelected(date)) {
         dayElement.classList.add("selected");
+        dayElement.tabIndex = 0;
         self.selectedDateElem = dayElement;
 
         if (self.config.mode === "range") {
@@ -722,8 +720,11 @@ function FlatpickrInstance(
 
           if (className === "nextMonthDay") dayElement.classList.add("inRange");
         }
+      } else if (isToday(date) && self.selectedDates.length === 0) {
+        dayElement.tabIndex = 0;
       }
     } else {
+      dayElement.disabled = true;
       dayElement.classList.add("flatpickr-disabled");
     }
 
@@ -751,6 +752,10 @@ function FlatpickrInstance(
 
   function focusOnDayElem(targetNode: DayElement) {
     targetNode.focus();
+    Array.from(self.days.childNodes)
+      .filter((day) => (day as DayElement) !== targetNode)
+      .forEach((day) => ((day as DayElement).tabIndex = -1));
+    targetNode.tabIndex = 0;
     if (self.config.mode === "range") onMouseOver(targetNode);
   }
 
@@ -2743,6 +2748,10 @@ function FlatpickrInstance(
     }
 
     return false;
+  }
+
+  function isToday(date: Date) {
+    return compareDates(date, self.now) === 0;
   }
 
   function isDateInRange(date: Date) {
