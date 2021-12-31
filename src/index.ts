@@ -478,7 +478,6 @@ function FlatpickrInstance(
       if (self.amPM !== undefined) {
         bind(self.amPM, "click", (e) => {
           updateTime(e);
-          triggerChange();
         });
       }
     }
