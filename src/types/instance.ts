@@ -121,10 +121,7 @@ export type Instance = Elements &
     // Internals
 
     _handlers: {
-      event: string;
-      element: Element;
-      handler: (e?: Event) => void;
-      options?: { capture?: boolean };
+      remove: () => void;
     }[];
 
     _bind: <E extends Element | Window | Document>(

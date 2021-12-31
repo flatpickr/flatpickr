@@ -24,7 +24,6 @@ export const getConfig = (opts?: { dev: boolean }): RollupOptions => ({
     else if (
       warning.code !== "CIRCULAR_DEPENDENCY" ||
       !warning.importer ||
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       !ignoredCircular.includes(warning.importer!)
     ) {
       throw Error(warning.message);

@@ -72,6 +72,7 @@ export const Catalan: CustomLocale = {
   },
 
   firstDayOfWeek: 1,
+  rangeSeparator: " a ",
   time_24hr: true,
 };
 

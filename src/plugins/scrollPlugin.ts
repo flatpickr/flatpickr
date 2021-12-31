@@ -3,7 +3,7 @@ import { Instance } from "../types/instance";
 import { getEventTarget } from "../utils/dom";
 
 if (typeof window.CustomEvent !== "function") {
-  function CustomEvent(
+  const CustomEvent = function (
     typeArg: string,
     eventInitDict?: CustomEventInit
   ): CustomEvent {
@@ -20,7 +20,7 @@ if (typeof window.CustomEvent !== "function") {
       eventInitDict.detail
     );
     return evt;
-  }
+  };
 
   CustomEvent.prototype = window.Event.prototype;
 
@@ -57,13 +57,17 @@ function scrollPlugin(): Plugin {
           fp.timeContainer.addEventListener("wheel", scroll);
         }
 
-        fp.yearElements.forEach((yearElem) =>
-          yearElem.addEventListener("wheel", scroll)
-        );
+        if (fp.yearElements) {
+          fp.yearElements.forEach((yearElem) =>
+            yearElem.addEventListener("wheel", scroll)
+          );
+        }
 
-        fp.monthElements.forEach((monthElem) =>
-          monthElem.addEventListener("wheel", monthScroller)
-        );
+        if (fp.monthElements) {
+          fp.monthElements.forEach((monthElem) =>
+            monthElem.addEventListener("wheel", monthScroller)
+          );
+        }
 
         fp.loadedPlugins.push("scroll");
       },
@@ -72,13 +76,17 @@ function scrollPlugin(): Plugin {
           fp.timeContainer.removeEventListener("wheel", scroll);
         }
 
-        fp.yearElements.forEach((yearElem) =>
-          yearElem.removeEventListener("wheel", scroll)
-        );
+        if (fp.yearElements) {
+          fp.yearElements.forEach((yearElem) =>
+            yearElem.removeEventListener("wheel", scroll)
+          );
+        }
 
-        fp.monthElements.forEach((monthElem) =>
-          monthElem.removeEventListener("wheel", monthScroller)
-        );
+        if (fp.monthElements) {
+          fp.monthElements.forEach((monthElem) =>
+            monthElem.removeEventListener("wheel", monthScroller)
+          );
+        }
       },
     };
   };

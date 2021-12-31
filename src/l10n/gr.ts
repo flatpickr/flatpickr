@@ -30,8 +30,8 @@ export const Greek: CustomLocale = {
       "Μάρ",
       "Απρ",
       "Μάι",
-      "Ιού",
-      "Ιού",
+      "Ιούν",
+      "Ιούλ",
       "Αύγ",
       "Σεπ",
       "Οκτ",
@@ -64,8 +64,11 @@ export const Greek: CustomLocale = {
   rangeSeparator: " έως ",
   scrollTitle: "Μετακυλήστε για προσαύξηση",
   toggleTitle: "Κάντε κλικ για αλλαγή",
-
   amPM: ["ΠΜ", "ΜΜ"],
+  yearAriaLabel: "χρόνος",
+  monthAriaLabel: "μήνας",
+  hourAriaLabel: "ώρα",
+  minuteAriaLabel: "λεπτό",
 };
 
 fp.l10ns.gr = Greek;

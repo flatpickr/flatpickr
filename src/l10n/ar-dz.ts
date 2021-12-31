@@ -1,4 +1,4 @@
-/* Arabic locals for flatpickr */
+/* Algerian Arabic locals for flatpickr */
 import { CustomLocale } from "../types/locale";
 import { FlatpickrFn } from "../types/instance";
 
@@ -9,7 +9,7 @@ const fp =
         l10ns: {},
       } as FlatpickrFn);
 
-export const Arabic: CustomLocale = {
+export const AlgerianArabic: CustomLocale = {
   weekdays: {
     shorthand: ["أحد", "اثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت"],
     longhand: [
@@ -26,33 +26,32 @@ export const Arabic: CustomLocale = {
   months: {
     shorthand: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
     longhand: [
-      "يناير",
-      "فبراير",
+      "جانفي",
+      "فيفري",
       "مارس",
-      "أبريل",
-      "مايو",
-      "يونيو",
-      "يوليو",
-      "أغسطس",
+      "أفريل",
+      "ماي",
+      "جوان",
+      "جويليه",
+      "أوت",
       "سبتمبر",
       "أكتوبر",
       "نوفمبر",
       "ديسمبر",
     ],
   },
-  firstDayOfWeek: 6,
+  firstDayOfWeek: 0,
   rangeSeparator: " إلى ",
   weekAbbreviation: "Wk",
   scrollTitle: "قم بالتمرير للزيادة",
   toggleTitle: "اضغط للتبديل",
-  amPM: ["ص", "م"],
   yearAriaLabel: "سنة",
   monthAriaLabel: "شهر",
   hourAriaLabel: "ساعة",
   minuteAriaLabel: "دقيقة",
-  time_24hr: false,
+  time_24hr: true,
 };
 
-fp.l10ns.ar = Arabic;
+fp.l10ns.ar = AlgerianArabic;
 
 export default fp.l10ns;
