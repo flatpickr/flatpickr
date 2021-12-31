@@ -390,7 +390,7 @@ function FlatpickrInstance(
 
     element.addEventListener(event, handler, options);
     self._handlers.push({
-      remove: () => element.removeEventListener(event, handler),
+      remove: () => element.removeEventListener(event, handler, options),
     });
   }
 
