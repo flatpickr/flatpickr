@@ -128,6 +128,10 @@ function FlatpickrInstance(
     triggerEvent("onReady");
   }
 
+  function getClosestActiveElement() {
+    return (self.calendarContainer?.getRootNode() as unknown as DocumentOrShadowRoot).activeElement || document.activeElement;
+  }
+
   function bindToInstance<F extends Function>(fn: F): F {
     return fn.bind(self);
   }
@@ -812,12 +816,14 @@ function FlatpickrInstance(
   }
 
   function focusOnDay(current: DayElement | undefined, offset: number) {
-    const dayFocused = isInView(document.activeElement || document.body);
+    const activeElement = getClosestActiveElement();
+
+    const dayFocused = isInView(activeElement || document.body);
     const startElem =
       current !== undefined
         ? current
         : dayFocused
-        ? (document.activeElement as DayElement)
+        ? (activeElement as DayElement)
         : self.selectedDateElem !== undefined && isInView(self.selectedDateElem)
         ? self.selectedDateElem
         : self.todayDateElem !== undefined && isInView(self.todayDateElem)
@@ -1691,10 +1697,11 @@ function FlatpickrInstance(
           if (!isTimeObj && !isInput) {
             e.preventDefault();
 
+            const activeElement = getClosestActiveElement();
             if (
               self.daysContainer !== undefined &&
               (allowInput === false ||
-                (document.activeElement && isInView(document.activeElement)))
+                (activeElement && isInView(activeElement)))
             ) {
               const delta = e.keyCode === 39 ? 1 : -1;
 
