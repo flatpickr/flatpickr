@@ -1657,16 +1657,19 @@ function FlatpickrInstance(
     const allowInput = self.config.allowInput;
     const allowKeydown = self.isOpen && (!allowInput || !isInput);
     const allowInlineKeydown = self.config.inline && isInput && !allowInput;
+    const allowEnter = self.config.allowEnter;
 
     if (e.keyCode === 13 && isInput) {
       if (allowInput) {
-        self.setDate(
-          self._input.value,
-          true,
-          eventTarget === self.altInput
-            ? self.config.altFormat
-            : self.config.dateFormat
-        );
+        if(allowEnter) {
+          self.setDate(
+              self._input.value,
+              true,
+              eventTarget === self.altInput
+                  ? self.config.altFormat
+                  : self.config.dateFormat
+          );
+        }
         return (eventTarget as HTMLElement).blur();
       } else {
         self.open();
