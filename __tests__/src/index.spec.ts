@@ -632,36 +632,79 @@ describe("flatpickr", () => {
       expect(fp.config.enable?.indexOf(null as any)).toBe(-1);
     });
 
-    it("documentClick", () => {
-      createInstance({
-        mode: "range",
+    describe("documentClick", () => {
+      it("should close popup", () => {
+        createInstance({
+          mode: "range",
+        });
+
+        simulate("focus", fp._input, { which: 1, bubbles: true }, CustomEvent);
+        fp._input.focus();
+
+        expect(fp.isOpen).toBe(true);
+        simulate("mousedown", window.document.body, { which: 1 }, CustomEvent);
+        fp._input.blur();
+
+        expect(fp.isOpen).toBe(false);
+        expect(fp.calendarContainer.classList.contains("open")).toBe(false);
+
+        expect(fp.selectedDates.length).toBe(0);
       });
 
-      simulate("focus", fp._input, { which: 1, bubbles: true }, CustomEvent);
-      fp._input.focus();
+      it("should set and clear the selectedDates", () => {
+        createInstance({
+          mode: "range",
+        });
 
-      expect(fp.isOpen).toBe(true);
-      simulate("mousedown", window.document.body, { which: 1 }, CustomEvent);
-      fp._input.blur();
+        simulate("focus", fp._input);
+        simulate(
+          "click",
+          fp.days.childNodes[15],
+          { which: 1, bubbles: true },
+          CustomEvent
+        );
+        expect(fp.selectedDates.length).toBe(1);
 
-      expect(fp.isOpen).toBe(false);
-      expect(fp.calendarContainer.classList.contains("open")).toBe(false);
+        fp.isOpen = true;
+        simulate("mousedown", window.document.body, { which: 1 }, CustomEvent);
+        expect(fp.isOpen).toBe(false);
+        expect(fp.selectedDates.length).toBe(0);
+        expect(fp._input.value).toBe("");
+      });
 
-      expect(fp.selectedDates.length).toBe(0);
-      simulate("focus", fp._input);
-      simulate(
-        "click",
-        fp.days.childNodes[15],
-        { which: 1, bubbles: true },
-        CustomEvent
-      );
-      expect(fp.selectedDates.length).toBe(1);
+      it("should revert invalid date before closing #2089", () => {
+        // To supress console.warn
+        jest.spyOn(console, "warn").mockImplementation(() => {});
 
-      fp.isOpen = true;
-      simulate("mousedown", window.document.body, { which: 1 }, CustomEvent);
-      expect(fp.isOpen).toBe(false);
-      expect(fp.selectedDates.length).toBe(0);
-      expect(fp._input.value).toBe("");
+        createInstance({
+          allowInput: true,
+          defaultDate: ["2020-01-22", "2020-01-28"],
+          mode: "range",
+        });
+
+        simulate("focus", fp._input);
+        fp._input.value = "test";
+        simulate("mousedown", window.document.body, { which: 1 }, CustomEvent);
+        expect(fp.isOpen).toBe(false);
+        expect(fp.selectedDates.length).toBe(0);
+        expect(fp._input.value).toBe("");
+      });
+
+      it("should use altFormat when altInput is enabled", () => {
+        createInstance({
+          allowInput: true,
+          altInput: true,
+          altFormat: "j F Y",
+          defaultDate: "2020-01-22",
+        });
+
+        expect(fp.selectedDates[0]).toEqual(new Date("2020-01-22T00:00:00"));
+        simulate("focus", fp._input);
+        simulate("mousedown", window.document.body, { which: 1 }, CustomEvent);
+        expect(fp.isOpen).toBe(false);
+        expect(fp.selectedDates[0]).toEqual(new Date("2020-01-22T00:00:00"));
+        expect(fp._input.value).toBe("22 January 2020");
+      });
     });
 
     it("onKeyDown", () => {
