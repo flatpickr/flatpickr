@@ -1,4 +1,7 @@
 import flatpickr from "index";
+import { French } from "l10n/fr";
+import { Irish } from "l10n/ga";
+import { Japanese } from "l10n/ja";
 import { Russian } from "l10n/ru";
 import { Instance, DayElement } from "types/instance";
 import { Options, DateRangeLimit } from "types/options";
@@ -262,6 +265,36 @@ describe("flatpickr", () => {
         expect(date.getTime()).toBeDefined();
         expect(date.getTime()).toEqual(Date.parse("2016-12-27T16:16:22.585Z"));
       });
+
+      it("should parse string with unicode characters", () => {
+        createInstance({
+          defaultDate: "03 février 2021",
+          dateFormat: "d F Y",
+          locale: French,
+        });
+
+        expect(fp.selectedDates[0]).toEqual(new Date("2021-02-03T00:00:00"));
+      });
+
+      it("should parse string with space contained in month names", () => {
+        createInstance({
+          defaultDate: "Dé Domhnaigh 5 Meán Fómhair 2021",
+          dateFormat: "l j F Y",
+          locale: Irish,
+        });
+
+        expect(fp.selectedDates[0]).toEqual(new Date("2021-09-05T00:00:00"));
+      });
+
+      it("should parse string without delimiters", () => {
+        createInstance({
+          defaultDate: "2021年2月3日",
+          dateFormat: "Y年Fj日",
+          locale: Japanese,
+        });
+
+        expect(fp.selectedDates[0]).toEqual(new Date("2021-02-03T00:00:00"));
+      });
     });
 
     describe("time string parser", () => {
@@ -395,7 +428,7 @@ describe("flatpickr", () => {
 
         fp.setDate("Thu 20 October, '16");
         expect(fp.input.value).toEqual(RESULT);
-        fp.setDate("2015-11-21 19:29:49");
+        fp.setDate("2015-11-21T19:29:49Z");
         expect(fp.input.value).not.toEqual(RESULT);
       });
     });
