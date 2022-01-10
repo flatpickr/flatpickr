@@ -389,6 +389,19 @@ describe("flatpickr", () => {
 
         expect((fp.hourElement as HTMLInputElement).value).toEqual("23");
       });
+
+      it("should parse string which has meridian indicator before hour", () => {
+        createInstance({
+          enableTime: true,
+          noCalendar: true,
+          dateFormat: "Kh時",
+          defaultDate: "午後3時",
+          locale: Japanese,
+        });
+
+        expect(fp.selectedDates[0]).toBeDefined();
+        expect(fp.selectedDates[0].getHours()).toBe(15);
+      });
     });
   });
 
