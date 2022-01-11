@@ -25,6 +25,7 @@ import { Hebrew as he } from "./he";
 import { Hindi as hi } from "./hi";
 import { Croatian as hr } from "./hr";
 import { Hungarian as hu } from "./hu";
+import { Armenian as hy } from "./hy";
 import { Indonesian as id } from "./id";
 import { Icelandic as is } from "./is";
 import { Italian as it } from "./it";
@@ -90,6 +91,7 @@ const l10n: Record<key, CustomLocale> = {
   hi,
   hr,
   hu,
+  hy,
   id,
   is,
   it,

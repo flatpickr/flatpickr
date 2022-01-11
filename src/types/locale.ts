@@ -139,6 +139,7 @@ export type key =
   | "hi"
   | "hr"
   | "hu"
+  | "hy"
   | "id"
   | "is"
   | "it"
