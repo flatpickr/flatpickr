@@ -2672,7 +2672,7 @@ function FlatpickrInstance(
 
     self.mobileFormatStr =
       inputType === "datetime-local"
-        ? "Y-m-d\\TH:i:S"
+        ? "Y-m-d\\TH:i"
         : inputType === "date"
         ? "Y-m-d"
         : "H:i:S";
