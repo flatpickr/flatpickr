@@ -59,6 +59,7 @@ export const Austria: CustomLocale = {
   rangeSeparator: " bis ",
   scrollTitle: "Zum Ändern scrollen",
   toggleTitle: "Zum Umschalten klicken",
+  time_24hr: true,
 };
 
 fp.l10ns.at = Austria;
