@@ -8,7 +8,7 @@ import { Bosnian as bs } from "./bs";
 import { Bulgarian as bg } from "./bg";
 import { Bangla as bn } from "./bn";
 import { Catalan as cat } from "./cat";
-import { Kurdish as ckb } from "./cs";
+import { Kurdish as ckb } from "./ckb";
 import { Czech as cs } from "./cs";
 import { Welsh as cy } from "./cy";
 import { Danish as da } from "./da";
