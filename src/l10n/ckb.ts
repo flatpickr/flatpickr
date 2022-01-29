@@ -59,6 +59,6 @@ export const Kurdish: CustomLocale = {
   },
 };
 
-fp.l10ns.ckb = Kurdish(sorani);
+fp.l10ns.ckb = Kurdish;
 
 export default fp.l10ns;
