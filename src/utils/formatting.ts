@@ -67,11 +67,11 @@ export const revFormat: RevFormat = {
   S: (dateObj: Date, seconds: string) => {
     dateObj.setSeconds(parseFloat(seconds));
   },
-  U: (_: Date, unixSeconds: string) => new Date(parseFloat(unixSeconds) * 1000),
+  U: (_: Date, unixSeconds: string, locale: Locale) => new locale.date(parseFloat(unixSeconds) * 1000),
 
   W: function (dateObj: Date, weekNum: string, locale: Locale) {
     const weekNumber = parseInt(weekNum);
-    const date = new Date(
+    const date = new locale.date(
       dateObj.getFullYear(),
       0,
       2 + (weekNumber - 1) * 7,
@@ -111,8 +111,8 @@ export const revFormat: RevFormat = {
   s: (dateObj: Date, seconds: string) => {
     dateObj.setSeconds(parseFloat(seconds));
   },
-  u: (_: Date, unixMillSeconds: string) =>
-    new Date(parseFloat(unixMillSeconds)),
+  u: (_: Date, unixMillSeconds: string, locale: Locale) =>
+    new locale.date(parseFloat(unixMillSeconds)),
   w: doNothing,
   y: (dateObj: Date, year: string) => {
     dateObj.setFullYear(2000 + parseFloat(year));
@@ -122,7 +122,7 @@ export const revFormat: RevFormat = {
 export type TokenRegex = { [k in token]: string };
 export const tokenRegex: TokenRegex = {
   D: "(\\w+)",
-  F: "(\\w+)",
+  F: "(\\S+)",
   G: "(\\d\\d|\\d)",
   H: "(\\d\\d|\\d)",
   J: "(\\d\\d|\\d)\\w+",

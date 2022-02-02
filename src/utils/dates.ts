@@ -55,21 +55,21 @@ export const createDateParser = ({ config = defaults, l10n = english }) => (
   let parsedDate: Date | undefined;
   const dateOrig = date;
 
-  if (date instanceof Date) parsedDate = new Date(date.getTime());
+  if (date instanceof Date) parsedDate = new locale.date(date.getTime());
   else if (
     typeof date !== "string" &&
     date.toFixed !== undefined // timestamp
   )
     // create a copy
 
-    parsedDate = new Date(date);
+    parsedDate = new locale.date(date);
   else if (typeof date === "string") {
     // date string
     const format = givenFormat || (config || defaults).dateFormat;
     const datestr = String(date).trim();
 
     if (datestr === "today") {
-      parsedDate = new Date();
+      parsedDate = new locale.date();
       timeless = true;
     } else if (config && config.parseDate) {
       parsedDate = config.parseDate(date, format);
@@ -77,7 +77,7 @@ export const createDateParser = ({ config = defaults, l10n = english }) => (
       /Z$/.test(datestr) ||
       /GMT$/.test(datestr) // datestrings w/ timezone
     ) {
-      parsedDate = new Date(date);
+      parsedDate = new locale.date(date);
     } else {
       let matched,
         ops: { fn: RevFormatFn; val: string }[] = [];
@@ -101,8 +101,8 @@ export const createDateParser = ({ config = defaults, l10n = english }) => (
 
       parsedDate =
         !config || !config.noCalendar
-          ? new Date(new Date().getFullYear(), 0, 1, 0, 0, 0, 0)
-          : (new Date(new Date().setHours(0, 0, 0, 0)) as Date);
+          ? new locale.date(new locale.date().getFullYear(), 0, 1, 0, 0, 0, 0)
+          : (new locale.date(new locale.date().setHours(0, 0, 0, 0)) as Date);
 
       ops.forEach(
         ({ fn, val }) =>

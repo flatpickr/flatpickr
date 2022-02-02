@@ -47,6 +47,7 @@ export type Locale = {
     number,
     number
   ];
+  isLeap: (month: number, year: number) => boolean;
   firstDayOfWeek: number;
   ordinal: (nth: number) => string;
   rangeSeparator: string;
@@ -59,12 +60,15 @@ export type Locale = {
   hourAriaLabel: string;
   minuteAriaLabel: string;
   time_24hr: boolean;
+  getWeek?: (date: Date) => string | number;
+  date: { new(year?: number|string|Date, month?: number, day?: number, hours?: number, minutes?: number, seconds?: number, miliseconds?: number): Date };
 };
 
 export type CustomLocale = {
   ordinal?: Locale["ordinal"];
   daysInMonth?: Locale["daysInMonth"];
   firstDayOfWeek?: Locale["firstDayOfWeek"];
+  isLeap?: Locale["isLeap"];
   rangeSeparator?: Locale["rangeSeparator"];
   weekAbbreviation?: Locale["weekAbbreviation"];
   toggleTitle?: Locale["toggleTitle"];
@@ -75,6 +79,8 @@ export type CustomLocale = {
   minuteAriaLabel?: string;
   amPM?: Locale["amPM"];
   time_24hr?: Locale["time_24hr"];
+  getWeek?: Locale["getWeek"];
+  date?: Locale["date"];
   weekdays: {
     shorthand: [string, string, string, string, string, string, string];
     longhand: [string, string, string, string, string, string, string];

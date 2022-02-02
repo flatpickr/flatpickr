@@ -91,7 +91,7 @@ function minMaxTimePlugin(config: Config = {}): Plugin {
             if (currentTime > maxBound && currentTime < minBound) {
               const result = parseSeconds(minBound);
               fp.setDate(
-                new Date(latest.getTime()).setHours(
+                new this.l10n.date(latest.getTime()).setHours(
                   result[0],
                   result[1],
                   result[2]
@@ -102,7 +102,7 @@ function minMaxTimePlugin(config: Config = {}): Plugin {
           } else {
             if (compareDates(latest, fp.config.maxTime as Date, false) > 0) {
               fp.setDate(
-                new Date(latest.getTime()).setHours(
+                new this.l10n.date(latest.getTime()).setHours(
                   (fp.config.maxTime as Date).getHours(),
                   (fp.config.maxTime as Date).getMinutes(),
                   (fp.config.maxTime as Date).getSeconds(),
@@ -114,7 +114,7 @@ function minMaxTimePlugin(config: Config = {}): Plugin {
               compareDates(latest, fp.config.minTime as Date, false) < 0
             ) {
               fp.setDate(
-                new Date(latest.getTime()).setHours(
+                new this.l10n.date(latest.getTime()).setHours(
                   (fp.config.minTime as Date).getHours(),
                   (fp.config.minTime as Date).getMinutes(),
                   (fp.config.minTime as Date).getSeconds(),
@@ -138,7 +138,7 @@ function minMaxTimePlugin(config: Config = {}): Plugin {
 
           if (minTime && compareTimes(latest, minTime) < 0) {
             fp.setDate(
-              new Date(latest.getTime()).setHours(
+              new this.l10n.date(latest.getTime()).setHours(
                 minTime.getHours(),
                 minTime.getMinutes(),
                 minTime.getSeconds(),
@@ -148,7 +148,7 @@ function minMaxTimePlugin(config: Config = {}): Plugin {
             );
           } else if (maxTime && compareTimes(latest, maxTime) > 0) {
             fp.setDate(
-              new Date(latest.getTime()).setHours(
+              new this.l10n.date(latest.getTime()).setHours(
                 maxTime.getHours(),
                 maxTime.getMinutes(),
                 maxTime.getSeconds(),
