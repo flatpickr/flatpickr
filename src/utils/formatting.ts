@@ -122,7 +122,7 @@ export const revFormat: RevFormat = {
 export type TokenRegex = { [k in token]: string };
 export const tokenRegex: TokenRegex = {
   D: "(\\w+)",
-  F: "(\\S+)",
+  F: "(\\w+)",
   G: "(\\d\\d|\\d)",
   H: "(\\d\\d|\\d)",
   J: "(\\d\\d|\\d)\\w+",
