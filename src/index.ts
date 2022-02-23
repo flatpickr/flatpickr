@@ -132,7 +132,10 @@ function FlatpickrInstance(
   }
 
   function getClosestActiveElement() {
-    return (self.calendarContainer?.getRootNode() as unknown as DocumentOrShadowRoot).activeElement || document.activeElement;
+    return (
+      ((self.calendarContainer?.getRootNode() as unknown) as DocumentOrShadowRoot)
+        .activeElement || document.activeElement
+    );
   }
 
   function bindToInstance<F extends Function>(fn: F): F {
@@ -369,7 +372,8 @@ function FlatpickrInstance(
       year / 1000 > 1 ||
       (event.key === "Enter" && !/[^\d]/.test(year.toString()))
     ) {
-      changeYear(year);
+      const adjustYear = self.config.buddhistYear ? 543 : 0;
+      changeYear(year - adjustYear);
     }
   }
 
@@ -1479,14 +1483,15 @@ function FlatpickrInstance(
 
       if (lostFocus && isIgnored) {
         if (self.config.allowInput) {
-          self.setDate(self._input.value, 
-            true, 
+          self.setDate(
+            self._input.value,
+            true,
             eventTarget === self.altInput
               ? self.config.altFormat
               : self.config.dateFormat
           );
         }
-        
+
         if (
           self.timeContainer !== undefined &&
           self.minuteElement !== undefined &&
@@ -1496,7 +1501,7 @@ function FlatpickrInstance(
         ) {
           updateTime();
         }
-        
+
         self.close();
 
         if (
@@ -2783,7 +2788,8 @@ function FlatpickrInstance(
         self.monthsDropdownContainer.value = d.getMonth().toString();
       }
 
-      yearElement.value = d.getFullYear().toString();
+      const adjustYear = self.config.buddhistYear ? 543 : 0;
+      yearElement.value = (d.getFullYear() + adjustYear).toString();
     });
 
     self._hidePrevMonthArrow =
