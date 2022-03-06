@@ -121,6 +121,7 @@ export type key =
   | "bs"
   | "ca"
   | "cat"
+  | "ckb"
   | "cs"
   | "cy"
   | "da"
