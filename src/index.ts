@@ -197,17 +197,12 @@ function FlatpickrInstance(
       timeWrapper(e);
     }
 
-    const valueFromInput = self._input.value;
-    const dateFromInput = self.parseDate(valueFromInput);
-    const latestDate = self.latestSelectedDateObj;
-    if (valueFromInput && latestDate && dateFromInput?.getTime() !== latestDate?.getTime()) {
-      setDate(dateFromInput!);
-    } else {
-      setHoursFromInputs();
-    }
+    const prevValue = self._input.value;
+
+    setHoursFromInputs();
     updateValue();
 
-    if (self._input.value !== valueFromInput) {
+    if (self._input.value !== prevValue) {
       self._debouncedChange();
     }
   }
@@ -1470,13 +1465,9 @@ function FlatpickrInstance(
             ~(e as any).path.indexOf(self.altInput)));
 
       const lostFocus =
-        e.type === "blur"
-          ? isInput &&
-            e.relatedTarget &&
-            !isCalendarElem(e.relatedTarget as HTMLElement)
-          : !isInput &&
-            !isCalendarElement &&
-            !isCalendarElem(e.relatedTarget as HTMLElement);
+        !isInput &&
+        !isCalendarElement &&
+        !isCalendarElem(e.relatedTarget as HTMLElement);
 
       const isIgnored = !self.config.ignoredFocusElements.some((elem) =>
         elem.contains(eventTarget as Node)
@@ -1486,7 +1477,7 @@ function FlatpickrInstance(
         if (self.config.allowInput) {
           self.setDate(
             self._input.value,
-            true,
+            false,
             self.config.altInput
               ? self.config.altFormat
               : self.config.dateFormat
@@ -1502,7 +1493,7 @@ function FlatpickrInstance(
         ) {
           updateTime();
         }
-        
+
         self.close();
 
         if (

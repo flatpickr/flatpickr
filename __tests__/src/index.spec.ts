@@ -751,6 +751,41 @@ describe("flatpickr", () => {
         expect(fp.selectedDates[0]).toEqual(new Date("2020-01-22T00:00:00"));
         expect(fp._input.value).toBe("22 January 2020");
       });
+
+      it("should be updated correctly via mouse events when altInput is enabled #2653", () => {
+        createInstance({
+          allowInput: true,
+          altInput: true,
+          altFormat: "j F Y H:i",
+          defaultDate: "2020-01-22 03:04",
+          enableTime: true,
+        });
+
+        expect(fp.selectedDates[0]).toEqual(new Date("2020-01-22T03:04:00"));
+        simulate("focus", fp._input);
+        simulate("mousedown", window.document.body, { which: 1 }, CustomEvent);
+        expect(fp.isOpen).toBe(false);
+        expect(fp._input.value).toBe("22 January 2020 03:04");
+      });
+
+      it("should trigger onChange only once", () => {
+        let timesFired = 0;
+
+        createInstance({
+          allowInput: true,
+          altInput: true,
+          altFormat: "j F Y H:i",
+          enableTime: true,
+          onChange: () => timesFired++,
+        });
+
+        simulate("focus", fp._input);
+        fp._input.value = "22 January 2020 03:04";
+        simulate("mousedown", window.document.body, { which: 1 }, CustomEvent);
+        simulate("blur", fp._input);
+        expect(fp.isOpen).toBe(false);
+        expect(timesFired).toEqual(1);
+      });
     });
 
     it("onKeyDown", () => {
@@ -815,6 +850,29 @@ describe("flatpickr", () => {
       });
       expect(fp.currentMonth).toBe(11);
       expect(fp.currentYear).toBe(2016);
+    });
+
+    it("onKeyDown closes flatpickr on Enter when allowInput set to true", () => {
+      createInstance({
+        enableTime: true,
+        allowInput: true,
+        altInput: true,
+      });
+
+      fp.jumpToDate("2016-2-1");
+
+      fp.open();
+      (fp.days.childNodes[15] as HTMLSpanElement).focus();
+
+      simulate(
+        "keydown",
+        fp._input,
+        {
+          keyCode: 13, // "Enter"
+        },
+        KeyboardEvent
+      );
+      expect(fp.isOpen).toEqual(false);
     });
 
     it("enabling dates by function", () => {
@@ -1830,10 +1888,11 @@ describe("flatpickr", () => {
       it("doesn't misfire", () => {
         let timesFired = 0;
         const fp = createInstance({
+          allowInput: true,
           onChange: () => timesFired++,
         });
         fp._input.focus();
-        document.body.focus();
+        simulate("blur", fp._input);
         expect(timesFired).toEqual(0);
       });
     });
