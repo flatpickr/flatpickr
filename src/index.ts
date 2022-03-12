@@ -321,7 +321,7 @@ function FlatpickrInstance(
   function setHoursFromDate(dateObj?: Date) {
     const date = dateObj || self.latestSelectedDateObj;
 
-    if (date) {
+    if (date && date instanceof Date) {
       setHours(date.getHours(), date.getMinutes(), date.getSeconds());
     }
   }
@@ -2749,7 +2749,8 @@ function FlatpickrInstance(
 
   function isDateSelected(date: Date) {
     for (let i = 0; i < self.selectedDates.length; i++) {
-      if (compareDates(self.selectedDates[i], date) === 0) return "" + i;
+      const selectedDate = self.selectedDates[i];
+      if (selectedDate instanceof Date && compareDates(selectedDate, date) === 0) return "" + i;
     }
 
     return false;
