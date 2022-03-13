@@ -132,7 +132,10 @@ function FlatpickrInstance(
   }
 
   function getClosestActiveElement() {
-    return (self.calendarContainer?.getRootNode() as unknown as DocumentOrShadowRoot).activeElement || document.activeElement;
+    return (
+      ((self.calendarContainer?.getRootNode() as unknown) as DocumentOrShadowRoot)
+        .activeElement || document.activeElement
+    );
   }
 
   function bindToInstance<F extends Function>(fn: F): F {
@@ -2750,7 +2753,11 @@ function FlatpickrInstance(
   function isDateSelected(date: Date) {
     for (let i = 0; i < self.selectedDates.length; i++) {
       const selectedDate = self.selectedDates[i];
-      if (selectedDate instanceof Date && compareDates(selectedDate, date) === 0) return "" + i;
+      if (
+        selectedDate instanceof Date &&
+        compareDates(selectedDate, date) === 0
+      )
+        return "" + i;
     }
 
     return false;

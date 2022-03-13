@@ -56,7 +56,7 @@ export const Swedish: CustomLocale = {
       "december",
     ],
   },
-  rangeSeparator: ' till ',
+  rangeSeparator: " till ",
   time_24hr: true,
 
   ordinal: () => {

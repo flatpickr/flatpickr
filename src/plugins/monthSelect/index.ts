@@ -274,10 +274,7 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
     }
 
     function closeHook() {
-      if (
-        fp.config?.mode === "range" &&
-        fp.selectedDates.length === 1
-      )
+      if (fp.config?.mode === "range" && fp.selectedDates.length === 1)
         fp.clear(false);
 
       if (!fp.selectedDates.length) buildMonths();
@@ -332,7 +329,9 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         unstubCurrentMonth,
         destroyPluginInstance,
         () => {
-          fp.config.onClose = fp.config.onClose.filter(hook => hook !== closeHook)
+          fp.config.onClose = fp.config.onClose.filter(
+            (hook) => hook !== closeHook
+          );
         },
       ],
     };

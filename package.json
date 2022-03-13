@@ -10,6 +10,7 @@
     "build:types": "tsc -p tsconfig.declarations.json",
     "build:post": "cp src/typings.d.ts dist/typings.d.ts",
     "fmt": "prettier --ignore-path .gitignore --trailing-comma es5 --write \"**/*.ts\"",
+    "fmt:check": "prettier --ignore-path .gitignore --trailing-comma es5 --check \"**/*.ts\"",
     "start": "npm run build:build -- --dev",
     "test": "run-s test:typecheck test:unit",
     "test:typecheck": "tsc --noEmit --incremental",

@@ -11,15 +11,7 @@ const fp =
 
 export const Armenian: CustomLocale = {
   weekdays: {
-    shorthand: [
-      "Կիր",
-      "Երկ",
-      "Երք",
-      "Չրք",
-      "Հնգ",
-      "Ուրբ",
-      "Շբթ",
-    ],
+    shorthand: ["Կիր", "Երկ", "Երք", "Չրք", "Հնգ", "Ուրբ", "Շբթ"],
     longhand: [
       "Կիրակի",
       "Եկուշաբթի",
