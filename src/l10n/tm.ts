@@ -53,7 +53,7 @@ export const Turkmen: CustomLocale = {
     ],
   },
   firstDayOfWeek: 1,
-  ordinal: function () {
+  ordinal: (nth: number) => {
     var s = nth % 100;
     switch (s) {
         case 0:
