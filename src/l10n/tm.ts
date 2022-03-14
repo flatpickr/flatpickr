@@ -11,63 +11,63 @@ const fp =
 
 export const Turkmen: CustomLocale = {
   weekdays: {
-    shorthand: ['Ýek','Du','Si','Çar','Pen','An','Şen'],
+    shorthand: ["Ýek", "Du", "Si", "Çar", "Pen", "An", "Şen"],
     longhand: [
-      'Ýekşenbe',
-      'Duşenbe',
-      'Sişenbe',
-      'Çarşenbe',
-      'Penşenbe',
-      'Anna',
-      'Şenbe'
+      "Ýekşenbe",
+      "Duşenbe",
+      "Sişenbe",
+      "Çarşenbe",
+      "Penşenbe",
+      "Anna",
+      "Şenbe",
     ],
   },
   months: {
     shorthand: [
-      'Ýan',
-      'Few',
-      'Mart',
-      'Apr',
-      'Maý',
-      'Iýun',
-      'Iýul',
-      'Awg',
-      'Sen',
-      'Okt',
-      'Noý',
-      'Dek'
+      "Ýan",
+      "Few",
+      "Mart",
+      "Apr",
+      "Maý",
+      "Iýun",
+      "Iýul",
+      "Awg",
+      "Sen",
+      "Okt",
+      "Noý",
+      "Dek",
     ],
     longhand: [
-      'Ýanwar',
-      'Fewral',
-      'Mart',
-      'Aprel',
-      'Maý',
-      'Iýun',
-      'Iýul',
-      'Awgust',
-      'Sentýabr',
-      'Oktýabr',
-      'Noýabr',
-      'Dekabr'
+      "Ýanwar",
+      "Fewral",
+      "Mart",
+      "Aprel",
+      "Maý",
+      "Iýun",
+      "Iýul",
+      "Awgust",
+      "Sentýabr",
+      "Oktýabr",
+      "Noýabr",
+      "Dekabr",
     ],
   },
   firstDayOfWeek: 1,
   ordinal: (nth: number) => {
     var s = nth % 100;
     switch (s) {
-        case 0:
-            return "-njy";
-        case 6:
-            return "-njy";
-        case 9:
-            return "-njy";
-        case 10:
-            return "-njy";
-        case 30:
-            return "-njy";
-        default:
-            return "-nji";
+      case 0:
+        return "-njy";
+      case 6:
+        return "-njy";
+      case 9:
+        return "-njy";
+      case 10:
+        return "-njy";
+      case 30:
+        return "-njy";
+      default:
+        return "-nji";
     }
   },
   rangeSeparator: " — ",
