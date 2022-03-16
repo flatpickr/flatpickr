@@ -10,15 +10,21 @@ const fp =
         l10ns: {},
       } as FlatpickrFn);
 
-
-function getWeek(givenDate: Date|JalaliDate): number {
-    var date = new JalaliDate(givenDate.getTime());
-    date.setHours(0, 0, 0, 0);
-    var week1 = new JalaliDate(givenDate.getFullYear(), 0, 1);
-    var week2 = new JalaliDate(givenDate.getFullYear(), 0, ((week1.getDay() + 6) % 7), 0, 0, 0);
-    var weeks = 1 + Math.round(((date.getTime() - week2.getTime()) / 86400000) / 7);
-    if (weeks > 0) return weeks;
-    return getWeek(new JalaliDate(givenDate.getFullYear(), 0, 0));
+function getWeek(givenDate: Date | JalaliDate): number {
+  var date = new JalaliDate(givenDate.getTime());
+  date.setHours(0, 0, 0, 0);
+  var week1 = new JalaliDate(givenDate.getFullYear(), 0, 1);
+  var week2 = new JalaliDate(
+    givenDate.getFullYear(),
+    0,
+    (week1.getDay() + 6) % 7,
+    0,
+    0,
+    0
+  );
+  var weeks = 1 + Math.round((date.getTime() - week2.getTime()) / 86400000 / 7);
+  if (weeks > 0) return weeks;
+  return getWeek(new JalaliDate(givenDate.getFullYear(), 0, 0));
 }
 
 export const Persian: CustomLocale = {
@@ -66,8 +72,10 @@ export const Persian: CustomLocale = {
     ],
   },
   daysInMonth: [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29],
-  isLeap: function(month: number, year: number) {
-    return month === 11 && [1, 5, 9, 13, 17, 22, 26, 30].indexOf(year % 33) > -1;
+  isLeap: function (month: number, year: number) {
+    return (
+      month === 11 && [1, 5, 9, 13, 17, 22, 26, 30].indexOf(year % 33) > -1
+    );
   },
   firstDayOfWeek: 6,
   ordinal: () => {
@@ -84,7 +92,7 @@ export const Persian: CustomLocale = {
   minuteAriaLabel: "دقیقه",
   time_24hr: false,
   getWeek,
-  date: JalaliDate
+  date: JalaliDate,
 };
 
 fp.l10ns.fa = Persian;

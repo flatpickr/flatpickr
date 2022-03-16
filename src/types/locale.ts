@@ -61,7 +61,17 @@ export type Locale = {
   minuteAriaLabel: string;
   time_24hr: boolean;
   getWeek?: (date: Date) => string | number;
-  date: { new(year?: number|string|Date, month?: number, day?: number, hours?: number, minutes?: number, seconds?: number, miliseconds?: number): Date };
+  date: {
+    new (
+      year?: number | string | Date,
+      month?: number,
+      day?: number,
+      hours?: number,
+      minutes?: number,
+      seconds?: number,
+      miliseconds?: number
+    ): Date;
+  };
 };
 
 export type CustomLocale = {
