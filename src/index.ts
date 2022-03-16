@@ -129,7 +129,10 @@ function FlatpickrInstance(
   }
 
   function getClosestActiveElement() {
-    return (self.calendarContainer?.getRootNode() as unknown as DocumentOrShadowRoot).activeElement || document.activeElement;
+    return (
+      ((self.calendarContainer?.getRootNode() as unknown) as DocumentOrShadowRoot)
+        .activeElement || document.activeElement
+    );
   }
 
   function bindToInstance<F extends Function>(fn: F): F {
@@ -318,7 +321,7 @@ function FlatpickrInstance(
   function setHoursFromDate(dateObj?: Date) {
     const date = dateObj || self.latestSelectedDateObj;
 
-    if (date) {
+    if (date && date instanceof Date) {
       setHours(date.getHours(), date.getMinutes(), date.getSeconds());
     }
   }
@@ -1460,13 +1463,9 @@ function FlatpickrInstance(
             ~(e as any).path.indexOf(self.altInput)));
 
       const lostFocus =
-        e.type === "blur"
-          ? isInput &&
-            e.relatedTarget &&
-            !isCalendarElem(e.relatedTarget as HTMLElement)
-          : !isInput &&
-            !isCalendarElement &&
-            !isCalendarElem(e.relatedTarget as HTMLElement);
+        !isInput &&
+        !isCalendarElement &&
+        !isCalendarElem(e.relatedTarget as HTMLElement);
 
       const isIgnored = !self.config.ignoredFocusElements.some((elem) =>
         elem.contains(eventTarget as Node)
@@ -1474,14 +1473,15 @@ function FlatpickrInstance(
 
       if (lostFocus && isIgnored) {
         if (self.config.allowInput) {
-          self.setDate(self._input.value, 
-            true, 
+          self.setDate(
+            self._input.value,
+            false,
             self.config.altInput
               ? self.config.altFormat
               : self.config.dateFormat
           );
         }
-        
+
         if (
           self.timeContainer !== undefined &&
           self.minuteElement !== undefined &&
@@ -1491,7 +1491,7 @@ function FlatpickrInstance(
         ) {
           updateTime();
         }
-        
+
         self.close();
 
         if (
@@ -1662,6 +1662,7 @@ function FlatpickrInstance(
             ? self.config.altFormat
             : self.config.dateFormat
         );
+        self.close();
         return (eventTarget as HTMLElement).blur();
       } else {
         self.open();
@@ -2150,6 +2151,10 @@ function FlatpickrInstance(
         : undefined),
     };
 
+    tokenRegex.D = `(${self.l10n.weekdays.shorthand.join("|")})`;
+    tokenRegex.l = `(${self.l10n.weekdays.longhand.join("|")})`;
+    tokenRegex.M = `(${self.l10n.months.shorthand.join("|")})`;
+    tokenRegex.F = `(${self.l10n.months.longhand.join("|")})`;
     tokenRegex.K = `(${self.l10n.amPM[0]}|${
       self.l10n.amPM[1]
     }|${self.l10n.amPM[0].toLowerCase()}|${self.l10n.amPM[1].toLowerCase()})`;
@@ -2750,7 +2755,12 @@ function FlatpickrInstance(
 
   function isDateSelected(date: Date) {
     for (let i = 0; i < self.selectedDates.length; i++) {
-      if (compareDates(self.selectedDates[i], date) === 0) return "" + i;
+      const selectedDate = self.selectedDates[i];
+      if (
+        selectedDate instanceof Date &&
+        compareDates(selectedDate, date) === 0
+      )
+        return "" + i;
     }
 
     return false;

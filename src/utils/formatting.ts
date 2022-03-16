@@ -47,7 +47,7 @@ export const revFormat: RevFormat = {
     dateObj.setMonth(locale.months.longhand.indexOf(monthName));
   },
   G: (dateObj: Date, hour: string) => {
-    dateObj.setHours(parseFloat(hour));
+    dateObj.setHours((dateObj.getHours() >= 12 ? 12 : 0) + parseFloat(hour));
   },
   H: (dateObj: Date, hour: string) => {
     dateObj.setHours(parseFloat(hour));
@@ -93,7 +93,7 @@ export const revFormat: RevFormat = {
     dateObj.setDate(parseFloat(day));
   },
   h: (dateObj: Date, hour: string) => {
-    dateObj.setHours(parseFloat(hour));
+    dateObj.setHours((dateObj.getHours() >= 12 ? 12 : 0) + parseFloat(hour));
   },
   i: (dateObj: Date, minutes: string) => {
     dateObj.setMinutes(parseFloat(minutes));
@@ -121,13 +121,13 @@ export const revFormat: RevFormat = {
 
 export type TokenRegex = { [k in token]: string };
 export const tokenRegex: TokenRegex = {
-  D: "(\\w+)",
-  F: "(\\w+)",
+  D: "", // locale-dependent, setup on runtime
+  F: "", // locale-dependent, setup on runtime
   G: "(\\d\\d|\\d)",
   H: "(\\d\\d|\\d)",
   J: "(\\d\\d|\\d)\\w+",
   K: "", // locale-dependent, setup on runtime
-  M: "(\\w+)",
+  M: "", // locale-dependent, setup on runtime
   S: "(\\d\\d|\\d)",
   U: "(.+)",
   W: "(\\d\\d|\\d)",
@@ -137,7 +137,7 @@ export const tokenRegex: TokenRegex = {
   h: "(\\d\\d|\\d)",
   i: "(\\d\\d|\\d)",
   j: "(\\d\\d|\\d)",
-  l: "(\\w+)",
+  l: "", // locale-dependent, setup on runtime
   m: "(\\d\\d|\\d)",
   n: "(\\d\\d|\\d)",
   s: "(\\d\\d|\\d)",

@@ -27,10 +27,15 @@ function confirmDatePlugin(pluginConfig: Config): Plugin {
     return {
       onKeyDown(_: Date[], __: string, ___: Instance, e: KeyboardEvent) {
         const eventTarget = getEventTarget(e);
+        const isTargetLastFocusableElement =
+          (!fp.config.time_24hr && eventTarget === fp.amPM) ||
+          (fp.config.time_24hr &&
+            ((fp.config.enableSeconds && eventTarget === fp.secondElement) ||
+              (!fp.config.enableSeconds && eventTarget === fp.minuteElement)));
         if (
           fp.config.enableTime &&
           e.key === "Tab" &&
-          eventTarget === fp.amPM
+          isTargetLastFocusableElement
         ) {
           e.preventDefault();
           confirmContainer.focus();
