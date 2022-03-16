@@ -67,7 +67,8 @@ export const revFormat: RevFormat = {
   S: (dateObj: Date, seconds: string) => {
     dateObj.setSeconds(parseFloat(seconds));
   },
-  U: (_: Date, unixSeconds: string, locale: Locale) => new locale.date(parseFloat(unixSeconds) * 1000),
+  U: (_: Date, unixSeconds: string, locale: Locale) =>
+    new locale.date(parseFloat(unixSeconds) * 1000),
 
   W: function (dateObj: Date, weekNum: string, locale: Locale) {
     const weekNumber = parseInt(weekNum);

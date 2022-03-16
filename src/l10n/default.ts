@@ -44,8 +44,8 @@ export const english: Locale = {
     ],
   },
   daysInMonth: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
-  isLeap: function(month: number, yr: number) {
-    return month === 1 && ((yr % 4 === 0 && yr % 100 !== 0) || yr % 400 === 0)
+  isLeap: function (month: number, yr: number) {
+    return month === 1 && ((yr % 4 === 0 && yr % 100 !== 0) || yr % 400 === 0);
   },
   firstDayOfWeek: 0,
   ordinal: (nth: number) => {
@@ -72,7 +72,7 @@ export const english: Locale = {
   hourAriaLabel: "Hour",
   minuteAriaLabel: "Minute",
   time_24hr: false,
-  date: Date
+  date: Date,
 };
 
 export default english;

@@ -81,7 +81,9 @@ function FlatpickrInstance(
   function setupHelperFunctions() {
     self.utils = {
       getDaysInMonth(month = self.currentMonth, yr = self.currentYear) {
-        return self.l10n.daysInMonth[month] + (self.l10n.isLeap(month, yr) ? 1 : 0);
+        return (
+          self.l10n.daysInMonth[month] + (self.l10n.isLeap(month, yr) ? 1 : 0)
+        );
       },
     };
   }
@@ -843,10 +845,16 @@ function FlatpickrInstance(
 
   function buildMonthDays(year: number, month: number) {
     const firstOfMonth =
-      (new self.l10n.date(year, month, 1).getDay() - self.l10n.firstDayOfWeek + 7) % 7;
+      (new self.l10n.date(year, month, 1).getDay() -
+        self.l10n.firstDayOfWeek +
+        7) %
+      7;
 
-    const previousMonth = new self.l10n.date(year, month, 0);  
-    const prevMonthDays = self.utils.getDaysInMonth(previousMonth.getMonth(), previousMonth.getFullYear());
+    const previousMonth = new self.l10n.date(year, month, 0);
+    const prevMonthDays = self.utils.getDaysInMonth(
+      previousMonth.getMonth(),
+      previousMonth.getFullYear()
+    );
 
     const daysInMonth = self.utils.getDaysInMonth(month, year),
       days = window.document.createDocumentFragment(),
@@ -862,7 +870,11 @@ function FlatpickrInstance(
       days.appendChild(
         createDay(
           `flatpickr-day ${prevMonthDayClass}`,
-          new self.l10n.date(previousMonth.getFullYear(), previousMonth.getMonth(), dayNumber),
+          new self.l10n.date(
+            previousMonth.getFullYear(),
+            previousMonth.getMonth(),
+            dayNumber
+          ),
           dayNumber,
           dayIndex
         )
@@ -968,7 +980,9 @@ function FlatpickrInstance(
         "flatpickr-monthDropdown-month"
       );
 
-      month.value = new self.l10n.date(self.currentYear, i).getMonth().toString();
+      month.value = new self.l10n.date(self.currentYear, i)
+        .getMonth()
+        .toString();
       month.textContent = monthToStr(
         i,
         self.config.shorthandCurrentMonth,
@@ -2164,10 +2178,7 @@ function FlatpickrInstance(
       ...JSON.parse(JSON.stringify(element.dataset || {})),
     } as Options;
 
-    if (
-      userConfig.getWeek === undefined &&
-      self.l10n.getWeek !== undefined
-    ) {
+    if (userConfig.getWeek === undefined && self.l10n.getWeek !== undefined) {
       self.config.getWeek = self.l10n.getWeek;
     }
 
@@ -2587,7 +2598,7 @@ function FlatpickrInstance(
           self.config.maxDate.getTime() < self.now.getTime()
         ? self.config.maxDate
         : self.now;
-	self._initialDate = new self.l10n.date(self._initialDate.getTime());
+    self._initialDate = new self.l10n.date(self._initialDate.getTime());
 
     self.currentYear = self._initialDate.getFullYear();
     self.currentMonth = self._initialDate.getMonth();
