@@ -53,6 +53,13 @@ export const Albanian: CustomLocale = {
       "Dhjetor",
     ],
   },
+  firstDayOfWeek: 1,
+  rangeSeparator: " deri ",
+  weekAbbreviation: "Java",
+  yearAriaLabel: "Viti",
+  monthAriaLabel: "Muaji",
+  hourAriaLabel: "Ora",
+  minuteAriaLabel: "Minuta",
   time_24hr: true,
 };
 
