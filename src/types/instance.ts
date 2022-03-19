@@ -108,6 +108,10 @@ export type Instance = Elements &
       triggerChange?: boolean,
       format?: string
     ) => void;
+    setSelectedDate: (
+      inputDate: DateOption | DateOption[],
+      format?: string
+    ) => void;
     toggle: () => void;
 
     pad: (num: string | number) => string;

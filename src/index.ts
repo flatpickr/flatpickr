@@ -76,6 +76,7 @@ function FlatpickrInstance(
   self.redraw = redraw;
   self.set = set;
   self.setDate = setDate;
+  self.setSelectedDate = setSelectedDate;
   self.toggle = toggle;
 
   function setupHelperFunctions() {
