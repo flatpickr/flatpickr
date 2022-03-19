@@ -66,7 +66,7 @@ function incrementTime(
   const childNodeNum = by >= 0 ? 1 : 2;
 
   if (e !== undefined && e.parentNode)
-    for (let i = times; i--; )
+    for (let i = times; i--;)
       simulate(
         "click",
         e.parentNode.childNodes[childNodeNum],
@@ -85,7 +85,7 @@ function simulate(
   const evt = new (type || CustomEvent)(eventType, eventOptions);
   try {
     Object.assign(evt, eventOptions);
-  } catch (e) {}
+  } catch (e) { }
 
   onElement.dispatchEvent(evt);
 }
@@ -720,7 +720,7 @@ describe("flatpickr", () => {
 
       it("should revert invalid date before closing #2089", () => {
         // To supress console.warn
-        jest.spyOn(console, "warn").mockImplementation(() => {});
+        jest.spyOn(console, "warn").mockImplementation(() => { });
 
         createInstance({
           allowInput: true,
@@ -781,9 +781,7 @@ describe("flatpickr", () => {
 
         simulate("focus", fp._input);
         fp._input.value = "22 January 2020 03:04";
-        simulate("mousedown", window.document.body, { which: 1 }, CustomEvent);
-        simulate("blur", fp._input);
-        expect(fp.isOpen).toBe(false);
+        simulate("blur", fp._input, { target: fp._input, test: 1 }, FocusEvent);
         expect(timesFired).toEqual(1);
       });
     });
@@ -1091,7 +1089,9 @@ describe("flatpickr", () => {
         const expectedWeekNumbers = Array(6)
           .fill(null)
           .map((_, i) =>
-            fp.config.getWeek((fp.days.children[7 * i] as DayElement).dateObj)
+            fp.config.getWeek(
+              (fp.days.children[7 * i + 6] as DayElement).dateObj
+            )
           );
 
         const actualWeekNumbers = Array.from(
