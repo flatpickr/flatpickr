@@ -742,7 +742,7 @@ function FlatpickrInstance(
       self.weekNumbers &&
       self.config.showMonths === 1 &&
       className !== "prevMonthDay" &&
-      i % 7 === 0
+      i % 7 === 6
     ) {
       self.weekNumbers.insertAdjacentHTML(
         "beforeend",
