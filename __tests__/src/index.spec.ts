@@ -66,7 +66,7 @@ function incrementTime(
   const childNodeNum = by >= 0 ? 1 : 2;
 
   if (e !== undefined && e.parentNode)
-    for (let i = times; i--;)
+    for (let i = times; i--; )
       simulate(
         "click",
         e.parentNode.childNodes[childNodeNum],
@@ -85,7 +85,7 @@ function simulate(
   const evt = new (type || CustomEvent)(eventType, eventOptions);
   try {
     Object.assign(evt, eventOptions);
-  } catch (e) { }
+  } catch (e) {}
 
   onElement.dispatchEvent(evt);
 }
@@ -720,7 +720,7 @@ describe("flatpickr", () => {
 
       it("should revert invalid date before closing #2089", () => {
         // To supress console.warn
-        jest.spyOn(console, "warn").mockImplementation(() => { });
+        jest.spyOn(console, "warn").mockImplementation(() => {});
 
         createInstance({
           allowInput: true,
@@ -1687,6 +1687,9 @@ describe("flatpickr", () => {
       simulate("mouseover", day(32));
       expect(day(32).classList.contains("endRange")).toEqual(false);
       expect(day(24).classList.contains("flatpickr-disabled")).toEqual(true);
+      expect(day(24).classList.contains("flatpickr-user-disabled")).toEqual(
+        true
+      );
       expect(day(25).classList.contains("notAllowed")).toEqual(true);
 
       for (let i = 25; i < 32; i++)
@@ -1695,6 +1698,9 @@ describe("flatpickr", () => {
       for (let i = 17; i < 22; i++) {
         expect(day(i).classList.contains("notAllowed")).toEqual(false);
         expect(day(i).classList.contains("flatpickr-disabled")).toEqual(false);
+        expect(day(i).classList.contains("flatpickr-user-disabled")).toEqual(
+          false
+        );
       }
 
       simulate("click", fp.days.childNodes[17], { which: 1 }, MouseEvent);

@@ -5,6 +5,7 @@ import {
   DateLimit,
   DateRangeLimit,
   DateOption,
+  DateEnabled,
   defaults as defaultOptions,
   Hook,
   HookKey,
@@ -682,7 +683,7 @@ function FlatpickrInstance(
     _dayNumber: number,
     i: number
   ) {
-    const dateIsEnabled = isEnabled(date, true),
+    const dateIsEnabled = isEnabledSpecific(date, true),
       dayElement = createElement<DayElement>(
         "span",
         className,
@@ -705,8 +706,11 @@ function FlatpickrInstance(
       dayElement.setAttribute("aria-current", "date");
     }
 
-    if (dateIsEnabled) {
+    if (dateIsEnabled === true || dateIsEnabled === "user-enabled") {
       dayElement.tabIndex = -1;
+      if (dateIsEnabled === "user-enabled") {
+        dayElement.classList.add("flatpickr-user-enabled");
+      }
       if (isDateSelected(date)) {
         dayElement.classList.add("selected");
         self.selectedDateElem = dayElement;
@@ -731,6 +735,15 @@ function FlatpickrInstance(
       }
     } else {
       dayElement.classList.add("flatpickr-disabled");
+      if (dateIsEnabled === "user-disabled") {
+        dayElement.classList.add("flatpickr-user-disabled");
+      }
+      if (dateIsEnabled === "min-date-disabled") {
+        dayElement.classList.add("flatpickr-min-date-disabled");
+      }
+      if (dateIsEnabled === "max-date-disabled") {
+        dayElement.classList.add("flatpickr-max-date-disabled");
+      }
     }
 
     if (self.config.mode === "range") {
@@ -1546,27 +1559,35 @@ function FlatpickrInstance(
       buildMonthSwitch();
     }
   }
-
   function isEnabled(date: DateOption, timeless = true): boolean {
+    const isEnabled = isEnabledSpecific(date, timeless);
+    return isEnabled === "user-enabled" || isEnabled === true;
+  }
+  function isEnabledSpecific(date: DateOption, timeless = true): DateEnabled {
     const dateToCheck = self.parseDate(date, undefined, timeless); // timeless
 
     if (
-      (self.config.minDate &&
-        dateToCheck &&
-        compareDates(
-          dateToCheck,
-          self.config.minDate,
-          timeless !== undefined ? timeless : !self.minDateHasTime
-        ) < 0) ||
-      (self.config.maxDate &&
-        dateToCheck &&
-        compareDates(
-          dateToCheck,
-          self.config.maxDate,
-          timeless !== undefined ? timeless : !self.maxDateHasTime
-        ) > 0)
-    )
-      return false;
+      self.config.minDate &&
+      dateToCheck &&
+      compareDates(
+        dateToCheck,
+        self.config.minDate,
+        timeless !== undefined ? timeless : !self.minDateHasTime
+      ) < 0
+    ) {
+      return "min-date-disabled";
+    }
+    if (
+      self.config.maxDate &&
+      dateToCheck &&
+      compareDates(
+        dateToCheck,
+        self.config.maxDate,
+        timeless !== undefined ? timeless : !self.maxDateHasTime
+      ) > 0
+    ) {
+      return "max-date-disabled";
+    }
     if (!self.config.enable && self.config.disable.length === 0) return true;
 
     if (dateToCheck === undefined) return false;
@@ -1574,37 +1595,43 @@ function FlatpickrInstance(
     const bool = !!self.config.enable,
       array = self.config.enable ?? self.config.disable;
 
-    for (let i = 0, d; i < array.length; i++) {
-      d = array[i];
+    const isUserEnabled = (function (): undefined | boolean {
+      for (let i = 0, d; i < array.length; i++) {
+        d = array[i];
 
-      if (
-        typeof d === "function" &&
-        d(dateToCheck) // disabled by function
-      )
-        return bool;
-      else if (
-        d instanceof Date &&
-        dateToCheck !== undefined &&
-        d.getTime() === dateToCheck.getTime()
-      )
-        // disabled by date
-        return bool;
-      else if (typeof d === "string") {
-        // disabled by date string
-        const parsed = self.parseDate(d, undefined, true);
-        return parsed && parsed.getTime() === dateToCheck.getTime()
-          ? bool
-          : !bool;
-      } else if (
-        // disabled by range
-        typeof d === "object" &&
-        dateToCheck !== undefined &&
-        (d as DateRangeLimit).from &&
-        (d as DateRangeLimit).to &&
-        dateToCheck.getTime() >= (d as DateRangeLimit<Date>).from.getTime() &&
-        dateToCheck.getTime() <= (d as DateRangeLimit<Date>).to.getTime()
-      )
-        return bool;
+        if (
+          typeof d === "function" &&
+          d(dateToCheck) // disabled by function
+        )
+          return bool;
+        else if (
+          d instanceof Date &&
+          dateToCheck !== undefined &&
+          d.getTime() === dateToCheck.getTime()
+        )
+          // disabled by date
+          return bool;
+        else if (typeof d === "string") {
+          // disabled by date string
+          const parsed = self.parseDate(d, undefined, true);
+          return parsed && parsed.getTime() === dateToCheck.getTime()
+            ? bool
+            : !bool;
+        } else if (
+          // disabled by range
+          typeof d === "object" &&
+          dateToCheck !== undefined &&
+          (d as DateRangeLimit).from &&
+          (d as DateRangeLimit).to &&
+          dateToCheck.getTime() >= (d as DateRangeLimit<Date>).from.getTime() &&
+          dateToCheck.getTime() <= (d as DateRangeLimit<Date>).to.getTime()
+        )
+          return bool;
+      }
+    })();
+
+    if (isUserEnabled !== undefined) {
+      return isUserEnabled ? "user-enabled" : "user-disabled";
     }
 
     return !bool;
