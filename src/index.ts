@@ -679,7 +679,7 @@ function FlatpickrInstance(
   function createDay(
     className: string,
     date: Date,
-    dayNumber: number,
+    _dayNumber: number,
     i: number
   ) {
     const dateIsEnabled = isEnabled(date, true),
@@ -742,7 +742,7 @@ function FlatpickrInstance(
       self.weekNumbers &&
       self.config.showMonths === 1 &&
       className !== "prevMonthDay" &&
-      dayNumber % 7 === 1
+      i % 7 === 0
     ) {
       self.weekNumbers.insertAdjacentHTML(
         "beforeend",

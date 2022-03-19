@@ -1080,6 +1080,29 @@ describe("flatpickr", () => {
       expect(fp.selectedDates[0].getMinutes()).toEqual(17);
     });
 
+    it("Renders week numbers correctly", () => {
+      createInstance({
+        weekNumbers: true,
+      });
+      fp.changeYear(2022);
+      fp.changeMonth(1);
+
+      while (fp.currentYear != 2023) {
+        const expectedWeekNumbers = Array(6)
+          .fill(null)
+          .map((_, i) =>
+            fp.config.getWeek((fp.days.children[7 * i] as DayElement).dateObj)
+          );
+
+        const actualWeekNumbers = Array.from(
+          fp.weekWrapper!.children[1].children
+        ).map((w) => parseInt((w as DayElement).innerHTML, 10));
+
+        expect(actualWeekNumbers).toEqual(expectedWeekNumbers);
+        fp.changeMonth(1, true);
+      }
+    });
+
     describe("mobile calendar", () => {
       describe(".isMobile", () => {
         it("returns true", () => {
