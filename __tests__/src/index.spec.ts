@@ -66,7 +66,7 @@ function incrementTime(
   const childNodeNum = by >= 0 ? 1 : 2;
 
   if (e !== undefined && e.parentNode)
-    for (let i = times; i--;)
+    for (let i = times; i--; )
       simulate(
         "click",
         e.parentNode.childNodes[childNodeNum],
@@ -85,7 +85,7 @@ function simulate(
   const evt = new (type || CustomEvent)(eventType, eventOptions);
   try {
     Object.assign(evt, eventOptions);
-  } catch (e) { }
+  } catch (e) {}
 
   onElement.dispatchEvent(evt);
 }
@@ -720,7 +720,7 @@ describe("flatpickr", () => {
 
       it("should revert invalid date before closing #2089", () => {
         // To supress console.warn
-        jest.spyOn(console, "warn").mockImplementation(() => { });
+        jest.spyOn(console, "warn").mockImplementation(() => {});
 
         createInstance({
           allowInput: true,
