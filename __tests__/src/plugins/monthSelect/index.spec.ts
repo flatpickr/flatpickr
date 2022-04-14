@@ -208,7 +208,9 @@ describe("monthSelect", () => {
 
   describe("range mode", () => {
     const getMonthCells = (instance?: Instance): NodeListOf<Element> => {
-      return (instance || fp()).rContainer!.querySelectorAll(".flatpickr-monthSelect-month")!;
+      return (instance || fp()).rContainer!.querySelectorAll(
+        ".flatpickr-monthSelect-month"
+      )!;
     };
 
     describe("after first selection/click", () => {

@@ -89,6 +89,21 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
       }
 
       self.monthsContainer.appendChild(frag);
+      if (
+        fp.config.minDate &&
+        fp.currentYear === fp.config.minDate.getFullYear()
+      )
+        fp.prevMonthNav.classList.add("flatpickr-disabled");
+      else if (!fp.config.minDate)
+        fp.prevMonthNav.classList.remove("flatpickr-disabled");
+
+      if (
+        fp.config.maxDate &&
+        fp.currentYear === fp.config.maxDate.getFullYear()
+      )
+        fp.nextMonthNav.classList.add("flatpickr-disabled");
+      else if (!fp.config.maxDate)
+        fp.nextMonthNav.classList.remove("flatpickr-disabled");
     }
 
     function bindEvents() {
