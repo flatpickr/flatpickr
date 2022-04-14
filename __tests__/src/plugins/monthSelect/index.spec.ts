@@ -1,5 +1,7 @@
 import flatpickr from "index";
-import monthSelectPlugin from "plugins/monthSelect/index";
+import monthSelectPlugin, {
+  Config as PluginConfig,
+} from "plugins/monthSelect/index";
 import { German } from "l10n/de";
 import { Instance } from "types/instance";
 import { Options } from "types/options";
@@ -7,6 +9,12 @@ import { Options } from "types/options";
 flatpickr.defaultConfig.animate = false;
 
 jest.useFakeTimers();
+
+const createInstance = (options?: Options, pluginConfig?: PluginConfig) =>
+  flatpickr(document.createElement("input"), {
+    plugins: [monthSelectPlugin({ ...pluginConfig })],
+    ...options,
+  });
 
 describe("monthSelect", () => {
   // memoized instance
@@ -199,8 +207,10 @@ describe("monthSelect", () => {
   });
 
   describe("range mode", () => {
-    const getMonthCells = (): NodeListOf<Element> => {
-      return fp().rContainer!.querySelectorAll(".flatpickr-monthSelect-month")!;
+    const getMonthCells = (instance?: Instance): NodeListOf<Element> => {
+      return (instance || fp()).rContainer!.querySelectorAll(
+        ".flatpickr-monthSelect-month"
+      )!;
     };
 
     describe("after first selection/click", () => {
@@ -321,6 +331,19 @@ describe("monthSelect", () => {
             expect(cell.classList).not.toContain("endRange");
           });
         });
+      });
+    });
+
+    describe("events", () => {
+      it("fires change events", () => {
+        const fn = jest.fn();
+        const fp = createInstance({
+          onChange: fn,
+        });
+
+        getMonthCells(fp)[3].dispatchEvent(new MouseEvent("click"));
+
+        expect(fn).toHaveBeenCalled();
       });
     });
   });
