@@ -287,8 +287,8 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
     function stubCurrentMonth() {
       config._stubbedCurrentMonth = fp._initialDate.getMonth();
 
-      fp._initialDate.setMonth(0);
-      fp.currentMonth = 0;
+      fp._initialDate.setMonth(config._stubbedCurrentMonth);
+      fp.currentMonth = config._stubbedCurrentMonth;
     }
 
     function unstubCurrentMonth() {
