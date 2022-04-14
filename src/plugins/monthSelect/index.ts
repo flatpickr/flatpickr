@@ -94,7 +94,7 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         fp.currentYear === fp.config.minDate.getFullYear()
       )
         fp.prevMonthNav.classList.add("flatpickr-disabled");
-      else if (!fp.config.minDate)
+      else
         fp.prevMonthNav.classList.remove("flatpickr-disabled");
 
       if (
@@ -102,7 +102,7 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         fp.currentYear === fp.config.maxDate.getFullYear()
       )
         fp.nextMonthNav.classList.add("flatpickr-disabled");
-      else if (!fp.config.maxDate)
+      else
         fp.nextMonthNav.classList.remove("flatpickr-disabled");
     }
 
