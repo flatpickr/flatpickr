@@ -207,26 +207,29 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         date.getMonth(),
         date.getDate()
       );
+      let selectedDates: Date[] = [];
 
       switch (fp.config.mode) {
         case "single":
-          fp.selectedDates = [selectedDate];
-
+          selectedDates = [selectedDate];
           break;
+
+        case "multiple":
+          selectedDates.push(selectedDate);
+          break;
+
         case "range":
           if (fp.selectedDates.length === 2) {
-            fp.clear(false, false);
-            buildMonths();
+            selectedDates = [selectedDate];
+          } else {
+            selectedDates = fp.selectedDates.concat([selectedDate]);
+            selectedDates.sort((a, b) => a.getTime() - b.getTime());
           }
-          fp.selectedDates.push(selectedDate);
-          fp.selectedDates.sort((a, b) => a.getTime() - b.getTime());
 
           break;
       }
 
-      fp.latestSelectedDateObj = selectedDate;
-      fp.updateValue();
-
+      fp.setDate(selectedDates, true);
       setCurrentlySelected();
     }
 
