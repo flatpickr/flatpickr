@@ -450,7 +450,9 @@ function FlatpickrInstance(
     bind(window.document, "focus", documentClick, { capture: true });
 
     if (self.config.clickOpens === true) {
-      bind(self._input, "focus", self.open);
+      if (self.config.focusOpens === true) {
+        bind(self._input, "focus", self.open);
+      }
       bind(self._input, "click", self.open);
     }
 
@@ -2422,7 +2424,9 @@ function FlatpickrInstance(
     clickOpens: [
       () => {
         if (self.config.clickOpens === true) {
-          bind(self._input, "focus", self.open);
+          if (self.config.focusOpens === true) {
+            bind(self._input, "focus", self.open);
+          }
           bind(self._input, "click", self.open);
         } else {
           self._input.removeEventListener("focus", self.open);
