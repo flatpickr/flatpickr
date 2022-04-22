@@ -17,6 +17,7 @@ import { english as en } from "./default";
 import { Esperanto as eo } from "./eo";
 import { Spanish as es } from "./es";
 import { Estonian as et } from "./et";
+import { Basque as eu } from "./eu";
 import { Persian as fa } from "./fa";
 import { Finnish as fi } from "./fi";
 import { Faroese as fo } from "./fo";
