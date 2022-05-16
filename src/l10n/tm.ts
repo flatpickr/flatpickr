@@ -54,7 +54,7 @@ export const Turkmen: CustomLocale = {
   },
   firstDayOfWeek: 1,
   ordinal: (nth: number) => {
-    var s = nth % 100;
+    var s = nth % 10 == 0 ? nth % 100 : nth % 10;
     switch (s) {
       case 0:
         return "-njy";
