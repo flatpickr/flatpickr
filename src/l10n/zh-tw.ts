@@ -55,5 +55,5 @@ export const MandarinTraditional: CustomLocale = {
   scrollTitle: "滾動切換",
   toggleTitle: "點擊切換 12/24 小時時制",
 };
-fp.l10ns.zh_tw = MandarinTraditional;
+fp.l10ns["zh-tw"] = MandarinTraditional;
 export default fp.l10ns;
