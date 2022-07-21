@@ -62,7 +62,7 @@ import { Uzbek as uz } from "./uz";
 import { UzbekLatin as uzLatn } from "./uz_latn";
 import { Vietnamese as vn } from "./vn";
 import { Mandarin as zh } from "./zh";
-import { MandarinTraditional as zh_tw } from "./zh-tw";
+import { MandarinTraditional as zhTw } from "./zh_tw";
 
 const l10n: Record<key, CustomLocale> = {
   ar,
@@ -127,7 +127,7 @@ const l10n: Record<key, CustomLocale> = {
   uk,
   vn,
   zh,
-  zh_tw,
+  zh_tw: zhTw,
   uz,
   uz_latn: uzLatn,
 };
