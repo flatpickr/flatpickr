@@ -59,7 +59,7 @@ export const revFormat: RevFormat = {
   K: (dateObj: Date, amPM: string, locale: Locale) => {
     dateObj.setHours(
       (dateObj.getHours() % 12) +
-      12 * int(new RegExp(locale.amPM[1], "i").test(amPM))
+        12 * int(new RegExp(locale.amPM[1], "i").test(amPM))
     );
   },
   M: function (dateObj: Date, shortMonth: string, locale: Locale) {
@@ -87,7 +87,7 @@ export const revFormat: RevFormat = {
   },
   Y: (dateObj: Date, year: string, locale: Locale, options: ParsedOptions) => {
     if (options.useLocaleYear) {
-      const adj = locale.localeYearAdjustment || 0
+      const adj = locale.localeYearAdjustment || 0;
       dateObj.setFullYear(parseFloat(year) - adj);
     } else {
       dateObj.setFullYear(parseFloat(year));
@@ -122,9 +122,10 @@ export const revFormat: RevFormat = {
   w: doNothing,
   y: (dateObj: Date, year: string, locale: Locale, options: ParsedOptions) => {
     if (options.useLocaleYear) {
-      const adj = locale.localeYearAdjustment || 0
-      const centuryYear = Math.floor((new Date().getFullYear() + adj) / 100) * 100
-      const fullYear = centuryYear + parseFloat(year) - adj
+      const adj = locale.localeYearAdjustment || 0;
+      const centuryYear =
+        Math.floor((new Date().getFullYear() + adj) / 100) * 100;
+      const fullYear = centuryYear + parseFloat(year) - adj;
       dateObj.setFullYear(fullYear);
     } else {
       dateObj.setFullYear(2000 + parseFloat(year));
@@ -260,9 +261,11 @@ export const formats: Formats = {
   // last two digits of year e.g. 16 for 2016
   y: function (date: Date, locale: Locale, options: ParsedOptions) {
     if (options.useLocaleYear) {
-      return String(date.getFullYear() + (locale.localeYearAdjustment || 0)).substring(2);
+      return String(
+        date.getFullYear() + (locale.localeYearAdjustment || 0)
+      ).substring(2);
     } else {
       return String(date.getFullYear()).substring(2);
     }
-  }
+  },
 };

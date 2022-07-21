@@ -425,5 +425,5 @@ export const defaults: ParsedOptions = {
   time_24hr: false,
   weekNumbers: false,
   wrap: false,
-  useLocaleYear: false
+  useLocaleYear: false,
 };
