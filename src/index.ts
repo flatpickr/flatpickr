@@ -1460,6 +1460,7 @@ function FlatpickrInstance(
     if (self.isOpen && !self.config.inline) {
       const eventTarget = getEventTarget(e);
       const isCalendarElement = isCalendarElem(eventTarget as HTMLElement);
+      const valueChanged = self._input.value.trimEnd() !== getDateStr();
       const isInput =
         eventTarget === self.input ||
         eventTarget === self.altInput ||
@@ -1484,7 +1485,7 @@ function FlatpickrInstance(
         if (self.config.allowInput) {
           self.setDate(
             self._input.value,
-            false,
+            valueChanged,
             self.config.altInput
               ? self.config.altFormat
               : self.config.dateFormat
