@@ -170,7 +170,7 @@ function rangePlugin(config: Config = {}): Plugin {
             ? [...selDates]
             : _prevDates;
 
-        if (_prevDates.length > selDates.length) {
+        if (selDates.length && _prevDates.length > selDates.length) {
           const newSelectedDate = selDates[0];
           const newDates = _secondInputFocused
             ? [_prevDates[0], newSelectedDate]
