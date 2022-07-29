@@ -1970,8 +1970,11 @@ function FlatpickrInstance(
 
       if (self.selectedDates) {
         self.selectedDates = self.selectedDates.filter((d) => isEnabled(d));
-        if (!self.selectedDates.length && type === "min")
+        if (!self.selectedDates.length && type === "min"){
           setHoursFromDate(dateObj);
+          const { hours, minutes, seconds } = getDefaultHours(self.config);
+          setHours(hours, minutes, seconds);
+        }
         updateValue();
       }
 
