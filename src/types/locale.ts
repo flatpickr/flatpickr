@@ -112,6 +112,7 @@ export type CustomLocale = {
 };
 
 export type key =
+  | "af"
   | "ar"
   | "at"
   | "az"
