@@ -70,6 +70,6 @@ export const Afrikaans: CustomLocale = {
   firstDayOfWeek: 0,
 };
 
-fp.l10ns.de = Afrikaans;
+fp.l10ns.af = Afrikaans;
 
 export default fp.l10ns;
