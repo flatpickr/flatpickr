@@ -53,11 +53,15 @@ export const Mandarin: CustomLocale = {
       "十二月",
     ],
   },
-
   rangeSeparator: " 至 ",
   weekAbbreviation: "周",
   scrollTitle: "滚动切换",
   toggleTitle: "点击切换 12/24 小时时制",
+  amPM: ["上午", "下午"],
+  monthAriaLabel: "月",
+  hourAriaLabel: "小时",
+  minuteAriaLabel: "分钟",
+  time_24hr: true
 };
 
 fp.l10ns.zh = Mandarin;
