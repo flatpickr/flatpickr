@@ -53,6 +53,7 @@ export const Mandarin: CustomLocale = {
       "十二月",
     ],
   },
+
   rangeSeparator: " 至 ",
   weekAbbreviation: "周",
   scrollTitle: "滚动切换",
@@ -61,7 +62,7 @@ export const Mandarin: CustomLocale = {
   monthAriaLabel: "月",
   hourAriaLabel: "小时",
   minuteAriaLabel: "分钟",
-  time_24hr: true
+  
 };
 
 fp.l10ns.zh = Mandarin;
