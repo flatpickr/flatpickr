@@ -152,9 +152,25 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
       const month = fp.rContainer.querySelector(
         `.flatpickr-monthSelect-month:nth-child(${targetMonth + 1})`
       );
+      const months = fp.rContainer.querySelectorAll(
+        `.flatpickr-monthSelect-month`
+      );
+      const startRangeMonth = fp.rContainer.querySelector(`.startRange`);
+      const endRangeMonth = fp.rContainer.querySelector(`.endRange`);
 
       if (month) {
         month.classList.add("selected");
+        if (
+          startRangeMonth &&
+          endRangeMonth &&
+          !startRangeMonth.classList.contains("selected")
+        ) {
+          for (let index = 0; index < months.length; index++) {
+            months[index].classList.remove("startRange");
+            months[index].classList.remove("inRange");
+            months[index].classList.remove("endRange");
+          }
+        }
       }
     }
 
