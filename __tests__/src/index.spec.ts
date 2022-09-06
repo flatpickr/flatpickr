@@ -560,6 +560,14 @@ describe("flatpickr", () => {
       fp.set("mode", "range");
       expect(fp.config.mode).toEqual("range");
 
+
+      // config "useUTC" default value is false;
+      expect(fp.config.useUTC).toEqual(false);
+      fp.set("useUTC", true);
+      expect(fp.config.useUTC).toEqual(true);
+      fp.set("useUTC", false);
+      expect(fp.config.useUTC).toEqual(false);
+
       const elem = document.createElement("div");
       fp.set("positionElement", elem);
       expect(fp._positionElement).toEqual(elem);
