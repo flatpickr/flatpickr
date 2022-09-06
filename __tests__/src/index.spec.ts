@@ -560,7 +560,6 @@ describe("flatpickr", () => {
       fp.set("mode", "range");
       expect(fp.config.mode).toEqual("range");
 
-
       // config "useUTC" default value is false;
       expect(fp.config.useUTC).toEqual(false);
       fp.set("useUTC", true);
