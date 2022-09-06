@@ -152,6 +152,9 @@ By default, Flatpickr utilizes native datetime widgets unless certain options (e
   See https://chmln.github.io/flatpickr/localization/ */
   locale: LocaleKey | Partial<CustomLocale>;
 
+  /* enforce UTC timezone */
+  useUTC: boolean;
+
   /* The maximum date that a user can pick to (inclusive). */
   maxDate: DateOption;
 
@@ -306,6 +309,7 @@ export interface ParsedOptions {
   ignoredFocusElements: HTMLElement[];
   inline: boolean;
   locale: LocaleKey | CustomLocale;
+  useUTC: Options["useUTC"];
   maxDate?: Date;
   maxTime?: Date;
   minDate?: Date;
@@ -391,6 +395,7 @@ export const defaults: ParsedOptions = {
   ignoredFocusElements: [],
   inline: false,
   locale: "default",
+  useUTC: false,
   minuteIncrement: 5,
   mode: "single",
   monthSelectorType: "dropdown",
