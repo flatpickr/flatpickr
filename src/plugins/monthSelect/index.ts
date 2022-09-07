@@ -74,7 +74,9 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
       for (let i = 0; i < 12; i++) {
         const month = fp.createDay(
           "flatpickr-monthSelect-month",
-          new Date(fp.currentYear, i),
+          fp.config.useUTC
+            ? new Date(Date.UTC(fp.currentYear, i))
+            : new Date(fp.currentYear, i),
           0,
           i
         );

@@ -867,7 +867,9 @@ function FlatpickrInstance(
       days.appendChild(
         createDay(
           `flatpickr-day ${prevMonthDayClass}`,
-          new Date(year, month - 1, dayNumber),
+          self.config.useUTC
+            ? new Date(Date.UTC(year, month - 1, dayNumber))
+            : new Date(year, month - 1, dayNumber),
           dayNumber,
           dayIndex
         )
@@ -879,7 +881,9 @@ function FlatpickrInstance(
       days.appendChild(
         createDay(
           "flatpickr-day",
-          new Date(year, month, dayNumber),
+          self.config.useUTC
+            ? new Date(Date.UTC(year, month, dayNumber))
+            : new Date(year, month, dayNumber),
           dayNumber,
           dayIndex
         )
@@ -896,7 +900,9 @@ function FlatpickrInstance(
       days.appendChild(
         createDay(
           `flatpickr-day ${nextMonthDayClass}`,
-          new Date(year, month + 1, dayNum % daysInMonth),
+          self.config.useUTC
+            ? new Date(Date.UTC(year, month + 1, dayNum % daysInMonth))
+            : new Date(year, month + 1, dayNum % daysInMonth),
           dayNum,
           dayIndex
         )
@@ -924,7 +930,9 @@ function FlatpickrInstance(
     const frag = document.createDocumentFragment();
 
     for (let i = 0; i < self.config.showMonths; i++) {
-      const d = new Date(self.currentYear, self.currentMonth, 1);
+      const d = self.config.useUTC
+        ? new Date(Date.UTC(self.currentYear, self.currentMonth, 1))
+        : new Date(self.currentYear, self.currentMonth, 1);
       d.setMonth(self.currentMonth + i);
 
       frag.appendChild(buildMonthDays(d.getFullYear(), d.getMonth()));
@@ -2777,7 +2785,9 @@ function FlatpickrInstance(
     if (self.config.noCalendar || self.isMobile || !self.monthNav) return;
 
     self.yearElements.forEach((yearElement, i) => {
-      const d = new Date(self.currentYear, self.currentMonth, 1);
+      const d = self.config.useUTC
+        ? new Date(Date.UTC(self.currentYear, self.currentMonth, 1))
+        : new Date(self.currentYear, self.currentMonth, 1);
       d.setMonth(self.currentMonth + i);
 
       if (
