@@ -106,7 +106,8 @@ export const createDateParser = ({ config = defaults, l10n = english }) => (
 
       ops.forEach(
         ({ fn, val }) =>
-          (parsedDate = fn(parsedDate as Date, val, locale, config) || parsedDate)
+          (parsedDate =
+            fn(parsedDate as Date, val, locale, config) || parsedDate)
       );
 
       parsedDate = matched ? parsedDate : undefined;

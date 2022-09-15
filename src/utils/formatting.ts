@@ -47,11 +47,28 @@ export type RevFormatFn = (
 ) => Date | void | undefined;
 export type RevFormat = Record<string, RevFormatFn>;
 export const revFormat: RevFormat = {
-  a: function (dateObj: Date, alteredYear: string, _: Locale, options: ParsedOptions) {
-    dateObj.setFullYear(baseTwoDigitsYear + parseFloat(alteredYear) - (options.alterYear % 100));
+  a: function (
+    dateObj: Date,
+    alteredYear: string,
+    _: Locale,
+    options: ParsedOptions
+  ) {
+    dateObj.setFullYear(
+      baseTwoDigitsYear + parseFloat(alteredYear) - (options.alterYear % 100)
+    );
   },
-  A: function (dateObj: Date, alteredYear: string, _: Locale, options: ParsedOptions) {
-    console.log(parseFloat(alteredYear),'alter',options.alterYear,parseFloat(alteredYear)-options.alterYear)
+  A: function (
+    dateObj: Date,
+    alteredYear: string,
+    _: Locale,
+    options: ParsedOptions
+  ) {
+    console.log(
+      parseFloat(alteredYear),
+      "alter",
+      options.alterYear,
+      parseFloat(alteredYear) - options.alterYear
+    );
     dateObj.setFullYear(parseFloat(alteredYear) - options.alterYear);
   },
   D: doNothing,
@@ -166,10 +183,12 @@ export type Formats = Record<
 >;
 export const formats: Formats = {
   // get last 2 digits altered year
-  a: (date: Date, _: Locale, options: ParsedOptions) => pad(date.getFullYear() + options.alterYear, 2),
+  a: (date: Date, _: Locale, options: ParsedOptions) =>
+    pad(date.getFullYear() + options.alterYear, 2),
 
   // get full altered year padded (0001-9999)
-  A: (date: Date, _: Locale, options: ParsedOptions) => pad(date.getFullYear() + options.alterYear, 4),
+  A: (date: Date, _: Locale, options: ParsedOptions) =>
+    pad(date.getFullYear() + options.alterYear, 4),
 
   // get the date in UTC
   Z: (date: Date) => date.toISOString(),

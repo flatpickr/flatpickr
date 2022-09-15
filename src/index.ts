@@ -366,7 +366,8 @@ function FlatpickrInstance(
    */
   function onYearInput(event: KeyboardEvent & IncrementEvent) {
     const eventTarget = getEventTarget(event) as HTMLInputElement;
-    const year = parseInt(eventTarget.value) + (event.delta || 0) - self.config.alterYear;
+    const year =
+      parseInt(eventTarget.value) + (event.delta || 0) - self.config.alterYear;
 
     if (
       year / 1000 > 1 ||
