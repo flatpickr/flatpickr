@@ -3,6 +3,8 @@ import { Locale } from "../types/locale";
 import { ParsedOptions } from "../types/options";
 
 export type token =
+  | "a"
+  | "A"
   | "D"
   | "F"
   | "G"
@@ -35,13 +37,23 @@ export const monthToStr = (
   locale: Locale
 ) => locale.months[shorthand ? "shorthand" : "longhand"][monthNumber];
 
+const baseTwoDigitsYear = 2000;
+
 export type RevFormatFn = (
   date: Date,
   data: string,
-  locale: Locale
+  locale: Locale,
+  options: ParsedOptions
 ) => Date | void | undefined;
 export type RevFormat = Record<string, RevFormatFn>;
 export const revFormat: RevFormat = {
+  a: function (dateObj: Date, alteredYear: string, _: Locale, options: ParsedOptions) {
+    dateObj.setFullYear(baseTwoDigitsYear + parseFloat(alteredYear) - (options.alterYear % 100));
+  },
+  A: function (dateObj: Date, alteredYear: string, _: Locale, options: ParsedOptions) {
+    console.log(parseFloat(alteredYear),'alter',options.alterYear,parseFloat(alteredYear)-options.alterYear)
+    dateObj.setFullYear(parseFloat(alteredYear) - options.alterYear);
+  },
   D: doNothing,
   F: function (dateObj: Date, monthName: string, locale: Locale) {
     dateObj.setMonth(locale.months.longhand.indexOf(monthName));
@@ -115,12 +127,14 @@ export const revFormat: RevFormat = {
     new Date(parseFloat(unixMillSeconds)),
   w: doNothing,
   y: (dateObj: Date, year: string) => {
-    dateObj.setFullYear(2000 + parseFloat(year));
+    dateObj.setFullYear(baseTwoDigitsYear + parseFloat(year));
   },
 };
 
 export type TokenRegex = { [k in token]: string };
 export const tokenRegex: TokenRegex = {
+  a: "(\\d{2})",
+  A: "(\\d{4})",
   D: "", // locale-dependent, setup on runtime
   F: "", // locale-dependent, setup on runtime
   G: "(\\d\\d|\\d)",
@@ -151,6 +165,12 @@ export type Formats = Record<
   (date: Date, locale: Locale, options: ParsedOptions) => string | number
 >;
 export const formats: Formats = {
+  // get last 2 digits altered year
+  a: (date: Date, _: Locale, options: ParsedOptions) => pad(date.getFullYear() + options.alterYear, 2),
+
+  // get full altered year padded (0001-9999)
+  A: (date: Date, _: Locale, options: ParsedOptions) => pad(date.getFullYear() + options.alterYear, 4),
+
   // get the date in UTC
   Z: (date: Date) => date.toISOString(),
 

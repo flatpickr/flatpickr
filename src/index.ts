@@ -366,7 +366,7 @@ function FlatpickrInstance(
    */
   function onYearInput(event: KeyboardEvent & IncrementEvent) {
     const eventTarget = getEventTarget(event) as HTMLInputElement;
-    const year = parseInt(eventTarget.value) + (event.delta || 0);
+    const year = parseInt(eventTarget.value) + (event.delta || 0) - self.config.alterYear;
 
     if (
       year / 1000 > 1 ||
@@ -2794,7 +2794,7 @@ function FlatpickrInstance(
         self.monthsDropdownContainer.value = d.getMonth().toString();
       }
 
-      yearElement.value = d.getFullYear().toString();
+      yearElement.value = (d.getFullYear() + self.config.alterYear).toString();
     });
 
     self._hidePrevMonthArrow =
