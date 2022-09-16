@@ -162,6 +162,19 @@ describe("flatpickr", () => {
       fp.set("minDate", "2016-10-20");
       expect(fp.config.minDate).toBeDefined();
     });
+
+    it("does not throw when allowInvalidPreload is set and an initial value is not a date", () => {
+      const el = document.createElement("input");
+      el.value = 'DD-MM-YYYY';
+
+      createInstance({
+        allowInvalidPreload: true,
+      }, el);
+
+      simulate("focus", fp._input, { which: 1, bubbles: true }, CustomEvent);
+      expect(fp.calendarContainer.classList.contains('open')).toBeTruthy();
+
+    })
   });
 
   describe("datetimestring parser", () => {
