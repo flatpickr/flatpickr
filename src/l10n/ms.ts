@@ -53,4 +53,6 @@ export const Malaysian: CustomLocale = {
   },
 };
 
+fp.l10ns.ms = Malaysian;
+
 export default fp.l10ns;
