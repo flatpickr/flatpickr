@@ -366,6 +366,7 @@ export const defaults: ParsedOptions = {
   enableTime: false,
   errorHandler: (err: Error) =>
     typeof console !== "undefined" && console.warn(err),
+  formatDate: undefined,
   getWeek: (givenDate: Date) => {
     const date = new Date(givenDate.getTime());
     date.setHours(0, 0, 0, 0);
