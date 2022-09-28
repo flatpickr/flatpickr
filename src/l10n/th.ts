@@ -59,6 +59,7 @@ export const Thai: CustomLocale = {
   scrollTitle: "เลื่อนเพื่อเพิ่มหรือลด",
   toggleTitle: "คลิกเพื่อเปลี่ยน",
   time_24hr: true,
+  localeYearAdjustment: 543,
 
   ordinal: () => {
     return "";
