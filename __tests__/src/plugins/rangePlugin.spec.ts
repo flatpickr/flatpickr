@@ -41,4 +41,17 @@ describe("rangePlugin", () => {
     expect(fp._input.getAttribute("readonly")).toBe("readonly");
     expect(secondInput.getAttribute("readonly")).toBe("readonly");
   });
+
+  it("can clear dates and then be re-configured", () => {
+    const secondInput = document.createElement("input");
+    const fp = createInstance({
+      plugins: [rangePlugin({ input: secondInput })],
+      defaultDate: ["2017-10-20", "2017-10-25"],
+      allowInput: false,
+    }) as RangeInstance;
+
+    fp.clear();
+    expect(fp.selectedDates.length).toEqual(0);
+    expect(() => fp.set("onChange", () => {})).not.toThrow();
+  });
 });
