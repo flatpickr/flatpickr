@@ -304,6 +304,7 @@ export interface ParsedOptions {
   getWeek: (date: Date) => string | number;
   hourIncrement: number;
   ignoredFocusElements: HTMLElement[];
+  ignoredClasses: string[];
   inline: boolean;
   locale: LocaleKey | CustomLocale;
   maxDate?: Date;
@@ -389,6 +390,7 @@ export const defaults: ParsedOptions = {
   },
   hourIncrement: 1,
   ignoredFocusElements: [],
+  ignoredClasses: [],
   inline: false,
   locale: "default",
   minuteIncrement: 5,

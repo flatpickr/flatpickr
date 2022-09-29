@@ -1472,8 +1472,18 @@ function FlatpickrInstance(
         !isCalendarElement &&
         !isCalendarElem(e.relatedTarget as HTMLElement);
 
-      const isIgnored = !self.config.ignoredFocusElements.some((elem) =>
-        elem.contains(eventTarget as Node)
+      const isIgnored = !(
+        self.config.ignoredFocusElements.some((elem) =>
+          elem.contains(eventTarget as Node)
+        ) ||
+        e.composedPath().some((e) => {
+          const className = (e as Element)?.className || "";
+          let ignored = false;
+          for (const ignoredClass of self.config.ignoredClasses) {
+            ignored = className.includes(ignoredClass);
+          }
+          return ignored;
+        })
       );
 
       if (lostFocus && isIgnored) {
