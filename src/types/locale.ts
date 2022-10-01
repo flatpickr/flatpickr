@@ -59,6 +59,7 @@ export type Locale = {
   hourAriaLabel: string;
   minuteAriaLabel: string;
   time_24hr: boolean;
+  localeYearAdjustment: number;
 };
 
 export type CustomLocale = {
@@ -75,6 +76,7 @@ export type CustomLocale = {
   minuteAriaLabel?: string;
   amPM?: Locale["amPM"];
   time_24hr?: Locale["time_24hr"];
+  localeYearAdjustment?: Locale["localeYearAdjustment"];
   weekdays: {
     shorthand: [string, string, string, string, string, string, string];
     longhand: [string, string, string, string, string, string, string];

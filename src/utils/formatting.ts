@@ -38,7 +38,8 @@ export const monthToStr = (
 export type RevFormatFn = (
   date: Date,
   data: string,
-  locale: Locale
+  locale: Locale,
+  options: ParsedOptions
 ) => Date | void | undefined;
 export type RevFormat = Record<string, RevFormatFn>;
 export const revFormat: RevFormat = {
@@ -84,8 +85,13 @@ export const revFormat: RevFormat = {
 
     return date;
   },
-  Y: (dateObj: Date, year: string) => {
-    dateObj.setFullYear(parseFloat(year));
+  Y: (dateObj: Date, year: string, locale: Locale, options: ParsedOptions) => {
+    if (options.useLocaleYear) {
+      const adj = locale.localeYearAdjustment || 0;
+      dateObj.setFullYear(parseFloat(year) - adj);
+    } else {
+      dateObj.setFullYear(parseFloat(year));
+    }
   },
   Z: (_: Date, ISODate: string) => new Date(ISODate),
 
@@ -114,8 +120,16 @@ export const revFormat: RevFormat = {
   u: (_: Date, unixMillSeconds: string) =>
     new Date(parseFloat(unixMillSeconds)),
   w: doNothing,
-  y: (dateObj: Date, year: string) => {
-    dateObj.setFullYear(2000 + parseFloat(year));
+  y: (dateObj: Date, year: string, locale: Locale, options: ParsedOptions) => {
+    if (options.useLocaleYear) {
+      const adj = locale.localeYearAdjustment || 0;
+      const centuryYear =
+        Math.floor((new Date().getFullYear() + adj) / 100) * 100;
+      const fullYear = centuryYear + parseFloat(year) - adj;
+      dateObj.setFullYear(fullYear);
+    } else {
+      dateObj.setFullYear(2000 + parseFloat(year));
+    }
   },
 };
 
@@ -204,7 +218,13 @@ export const formats: Formats = {
   },
 
   // full year e.g. 2016, padded (0001-9999)
-  Y: (date: Date) => pad(date.getFullYear(), 4),
+  Y: function (date: Date, locale: Locale, options: ParsedOptions) {
+    if (options.useLocaleYear) {
+      return pad(date.getFullYear() + (locale.localeYearAdjustment || 0), 4);
+    } else {
+      return pad(date.getFullYear(), 4);
+    }
+  },
 
   // day in month, padded (01-30)
   d: (date: Date) => pad(date.getDate()),
@@ -239,5 +259,13 @@ export const formats: Formats = {
   w: (date: Date) => date.getDay(),
 
   // last two digits of year e.g. 16 for 2016
-  y: (date: Date) => String(date.getFullYear()).substring(2),
+  y: function (date: Date, locale: Locale, options: ParsedOptions) {
+    if (options.useLocaleYear) {
+      return String(
+        date.getFullYear() + (locale.localeYearAdjustment || 0)
+      ).substring(2);
+    } else {
+      return String(date.getFullYear()).substring(2);
+    }
+  },
 };
