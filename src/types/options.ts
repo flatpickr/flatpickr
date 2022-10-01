@@ -83,6 +83,13 @@ export interface BaseOptions {
     Set it to false if you only want to open the calendar programmatically
   */
   clickOpens: boolean;
+  /*
+     Option that when set to false calendar does not open on focus but 
+     instead only opens when the user interacts with it, either by clicking 
+     on the field with the mouse or pressing the down-arrow while the 
+     field is focussed.
+  */
+  focusOpens: boolean;
 
   /* Whether calendar should close after date selection */
   closeOnSelect: boolean;
@@ -287,6 +294,7 @@ export interface ParsedOptions {
   ariaDateFormat: string;
   autoFillDefaultTime: boolean;
   clickOpens: boolean;
+  focusOpens: boolean;
   closeOnSelect: boolean;
   conjunction: string;
   dateFormat: string;
@@ -354,6 +362,7 @@ export const defaults: ParsedOptions = {
   ariaDateFormat: "F j, Y",
   autoFillDefaultTime: true,
   clickOpens: true,
+  focusOpens: true,
   closeOnSelect: true,
   conjunction: ", ",
   dateFormat: "Y-m-d",
