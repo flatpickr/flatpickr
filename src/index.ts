@@ -2199,7 +2199,13 @@ function FlatpickrInstance(
       configPos = self.config.position.split(" "),
       configPosVertical = configPos[0],
       configPosHorizontal = configPos.length > 1 ? configPos[1] : null,
-      inputBounds = positionElement.getBoundingClientRect(),
+      inputBounds = {
+        top: positionElement.offsetTop,
+        bottom: positionElement.offsetTop + positionElement.offsetHeight,
+        left: positionElement.offsetLeft,
+        right: positionElement.offsetLeft + positionElement.offsetWidth,
+        width: positionElement.offsetWidth,
+      },
       distanceFromBottom = window.innerHeight - inputBounds.bottom,
       showOnTop =
         configPosVertical === "above" ||
@@ -2207,10 +2213,12 @@ function FlatpickrInstance(
           distanceFromBottom < calendarHeight &&
           inputBounds.top > calendarHeight);
 
-    const top =
-      window.pageYOffset +
-      inputBounds.top +
-      (!showOnTop ? positionElement.offsetHeight + 2 : -calendarHeight - 2);
+    const top = self.config.appendTo
+      ? inputBounds.top +
+        (!showOnTop ? positionElement.offsetHeight + 2 : -calendarHeight - 2)
+      : window.pageYOffset +
+        inputBounds.top +
+        (!showOnTop ? positionElement.offsetHeight + 2 : -calendarHeight - 2);
 
     toggleClass(self.calendarContainer, "arrowTop", !showOnTop);
     toggleClass(self.calendarContainer, "arrowBottom", showOnTop);
