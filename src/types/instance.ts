@@ -146,7 +146,8 @@ export type Instance = Elements &
     __hideNextMonthArrow: boolean;
     __hidePrevMonthArrow: boolean;
     _positionCalendar: (customPositionElement?: HTMLElement) => void;
-
+    _duration: boolean;
+    
     utils: {
       getDaysInMonth: (month?: number, year?: number) => number;
     };
