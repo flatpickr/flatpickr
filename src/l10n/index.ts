@@ -44,6 +44,7 @@ import { Burmese as my } from "./my";
 import { Dutch as nl } from "./nl";
 import { NorwegianNynorsk as nn } from "./nn";
 import { Norwegian as no } from "./no";
+import { Occitan as oc } from "./oc";
 import { Punjabi as pa } from "./pa";
 import { Polish as pl } from "./pl";
 import { Portuguese as pt } from "./pt";
@@ -111,6 +112,7 @@ const l10n: Record<key, CustomLocale> = {
   nl,
   nn,
   no,
+  oc,
   pa,
   pl,
   pt,
