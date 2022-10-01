@@ -7,6 +7,12 @@ export type DateLimit<D = DateOption> =
   | D
   | DateRangeLimit<D>
   | ((date: Date) => boolean);
+export type DateEnabled =
+  | boolean
+  | "user-enabled"
+  | "user-disabled"
+  | "min-date-disabled"
+  | "max-date-disabled";
 
 export type Hook = (
   dates: Date[],
