@@ -706,7 +706,7 @@ function FlatpickrInstance(
     }
 
     if (dateIsEnabled) {
-      dayElement.tabIndex = -1;
+      dayElement.tabIndex = self.config.inline ? 0 : -1;
       if (isDateSelected(date)) {
         dayElement.classList.add("selected");
         self.selectedDateElem = dayElement;
@@ -961,7 +961,7 @@ function FlatpickrInstance(
       );
     };
 
-    self.monthsDropdownContainer.tabIndex = -1;
+    self.monthsDropdownContainer.tabIndex = self.config.inline ? 0 : -1;
 
     self.monthsDropdownContainer.innerHTML = "";
 
@@ -979,7 +979,9 @@ function FlatpickrInstance(
         self.config.shorthandCurrentMonth,
         self.l10n
       );
-      month.tabIndex = -1;
+      if (!self.config.inline) {
+        month.tabIndex = -1;
+      }
 
       if (self.currentMonth === i) {
         month.selected = true;
@@ -1025,7 +1027,10 @@ function FlatpickrInstance(
       monthElement = self.monthsDropdownContainer;
     }
 
-    const yearInput = createNumberInput("cur-year", { tabindex: "-1" });
+    const yearInput = createNumberInput("cur-year");
+    if (!self.config.inline) {
+      yearInput.tabIndex = -1;
+    }
 
     const yearElement = yearInput.getElementsByTagName(
       "input"
@@ -1774,6 +1779,7 @@ function FlatpickrInstance(
             }
           } else if (
             !self.config.noCalendar &&
+            !self.config.inline &&
             self.daysContainer &&
             self.daysContainer.contains(eventTarget as Node) &&
             e.shiftKey
