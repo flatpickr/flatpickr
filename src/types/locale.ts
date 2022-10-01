@@ -113,6 +113,7 @@ export type CustomLocale = {
 
 export type key =
   | "ar"
+  | "ar_sy"
   | "at"
   | "az"
   | "be"
