@@ -2640,6 +2640,10 @@ function FlatpickrInstance(
       self.altInput.required = self.input.required;
       self.altInput.tabIndex = self.input.tabIndex;
       self.altInput.type = "text";
+
+      // Work around IE bug: https://github.com/flatpickr/flatpickr/issues/1333
+      self.input.placeholder = "";
+
       self.input.setAttribute("type", "hidden");
 
       if (!self.config.static && self.input.parentNode)
