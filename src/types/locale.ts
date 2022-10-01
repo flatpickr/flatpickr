@@ -131,6 +131,7 @@ export type key =
   | "eo"
   | "es"
   | "et"
+  | "eu"
   | "fa"
   | "fi"
   | "fo"
