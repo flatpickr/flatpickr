@@ -1,0 +1,17 @@
+.flatpickr-clear {
+	height: 30px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	background: rgba(0,0,0,0.06)
+}
+
+.flatpickr-clear .clear-icon {
+	margin-right: 5px;
+}
+
+.flatpickr-clear.darkTheme {
+	color: white;
+	fill: white;
+}
