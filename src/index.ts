@@ -856,8 +856,14 @@ function FlatpickrInstance(
     const daysInMonth = self.utils.getDaysInMonth(month, year),
       days = window.document.createDocumentFragment(),
       isMultiMonth = self.config.showMonths > 1,
-      prevMonthDayClass = isMultiMonth ? "prevMonthDay hidden" : "prevMonthDay",
-      nextMonthDayClass = isMultiMonth ? "nextMonthDay hidden" : "nextMonthDay";
+      prevMonthDayClass =
+        isMultiMonth || self.config.hidePrevMonthDays
+          ? "prevMonthDay hidden"
+          : "prevMonthDay",
+      nextMonthDayClass =
+        isMultiMonth || self.config.hideNextMonthDays
+          ? "nextMonthDay hidden"
+          : "nextMonthDay";
 
     let dayNumber = prevMonthDays + 1 - firstOfMonth,
       dayIndex = 0;
