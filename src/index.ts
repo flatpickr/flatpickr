@@ -639,8 +639,8 @@ function FlatpickrInstance(
     self.calendarContainer.appendChild(fragment);
 
     const customAppend =
-      self.config.appendTo !== undefined &&
-      self.config.appendTo.nodeType !== undefined;
+      (self.config.appendTo !== undefined && self.config.appendTo.nodeType !== undefined) ||
+      (self.config.positionElement !== undefined && self.config.positionElement.nodeType !== undefined)
 
     if (self.config.inline || self.config.static) {
       self.calendarContainer.classList.add(
@@ -655,6 +655,8 @@ function FlatpickrInstance(
           );
         else if (self.config.appendTo !== undefined)
           self.config.appendTo.appendChild(self.calendarContainer);
+        else if (self.config.positionElement !== undefined)
+          self.config.positionElement.appendChild(self.calendarContainer);
       }
 
       if (self.config.static) {
