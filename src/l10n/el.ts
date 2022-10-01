@@ -71,6 +71,6 @@ export const Greek: CustomLocale = {
   minuteAriaLabel: "λεπτό",
 };
 
-fp.l10ns.gr = Greek;
+fp.l10ns.el = Greek;
 
 export default fp.l10ns;
