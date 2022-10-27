@@ -1462,10 +1462,10 @@ function FlatpickrInstance(
         self.element.contains(eventTarget as HTMLElement) ||
         // web components
         // e.path is not present in all browsers. circumventing typechecks
-        ((e as any).path &&
-          (e as any).path.indexOf &&
-          (~(e as any).path.indexOf(self.input) ||
-            ~(e as any).path.indexOf(self.altInput)));
+        ((e as any).composedPath() &&
+          (e as any).composedPath().indexOf &&
+          (~(e as any).composedPath().indexOf(self.input) ||
+            ~(e as any).composedPath().indexOf(self.altInput)));
 
       const lostFocus =
         !isInput &&
