@@ -261,6 +261,12 @@ Use it along with "enableTime" to create a time picker. */
   /* Displays time picker in 24 hour mode without AM/PM selection when enabled.*/
   time_24hr: boolean;
 
+  /* Update input value attribute when a date has been selected,
+  - Used in conjunction with altInput config since this will prevent the update value of the hidden input.
+  - With this approach issues related with different assigned values to this input will be fixed since it must be 
+  Controlled by developer at the OnSelectedDate callback */
+  updateInputVal: boolean;
+
   /* Display week numbers left of the calendar. */
   weekNumbers: boolean;
 
@@ -337,6 +343,7 @@ export interface ParsedOptions {
   showMonths: number;
   static: boolean;
   time_24hr: boolean;
+  updateInputVal: boolean;
   weekNumbers: boolean;
   wrap: boolean;
 }
@@ -419,6 +426,7 @@ export const defaults: ParsedOptions = {
   showMonths: 1,
   static: false,
   time_24hr: false,
+  updateInputVal: true,
   weekNumbers: false,
   wrap: false,
 };
