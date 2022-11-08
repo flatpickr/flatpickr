@@ -1194,7 +1194,9 @@ function FlatpickrInstance(
     if (self.config.enableSeconds) {
       self.timeContainer.classList.add("hasSeconds");
 
-      const secondInput = createNumberInput("flatpickr-second");
+      const secondInput = createNumberInput("flatpickr-second", {
+      "aria-label": self.l10n.secondAriaLabel,
+    });
       self.secondElement = secondInput.getElementsByTagName(
         "input"
       )[0] as HTMLInputElement;
