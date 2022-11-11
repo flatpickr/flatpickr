@@ -1331,7 +1331,9 @@ function FlatpickrInstance(
   }
 
   function clear(triggerChangeEvent = true, toInitial = true) {
-    self.input.value = "";
+    if (self.config.updateInputVal) {
+      self.input.value = "";
+    }
 
     if (self.altInput !== undefined) self.altInput.value = "";
 
@@ -1462,10 +1464,10 @@ function FlatpickrInstance(
         self.element.contains(eventTarget as HTMLElement) ||
         // web components
         // e.path is not present in all browsers. circumventing typechecks
-        ((e as any).path &&
-          (e as any).path.indexOf &&
-          (~(e as any).path.indexOf(self.input) ||
-            ~(e as any).path.indexOf(self.altInput)));
+        ((e as any).composedPath() &&
+          (e as any).composedPath().indexOf &&
+          (~(e as any).composedPath().indexOf(self.input) ||
+            ~(e as any).composedPath().indexOf(self.altInput)));
 
       const lostFocus =
         !isInput &&
@@ -2006,6 +2008,7 @@ function FlatpickrInstance(
       "static",
       "enableSeconds",
       "disableMobile",
+      "updateInputVal",
     ];
 
     const userConfig = {
@@ -2841,7 +2844,9 @@ function FlatpickrInstance(
           : "";
     }
 
-    self.input.value = getDateStr(self.config.dateFormat);
+    if (self.config.updateInputVal) {
+      self.input.value = getDateStr(self.config.dateFormat);
+    }
 
     if (self.altInput !== undefined) {
       self.altInput.value = getDateStr(self.config.altFormat);
