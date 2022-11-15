@@ -499,15 +499,26 @@ function FlatpickrInstance(
    * @param {boolean} triggerChange if change events should be triggered
    */
   function jumpToDate(jumpDate?: DateOption, triggerChange?: boolean) {
-    const jumpTo =
-      jumpDate !== undefined
-        ? self.parseDate(jumpDate)
-        : self.latestSelectedDateObj ||
-          (self.config.minDate && self.config.minDate > self.now
-            ? self.config.minDate
-            : self.config.maxDate && self.config.maxDate < self.now
-            ? self.config.maxDate
-            : self.now);
+    let jumpTo;
+
+    if (jumpDate !== undefined) {
+      jumpTo = self.parseDate(jumpDate);
+    } else if (
+      self.latestSelectedDateObj !== undefined &&
+      // latestSelectedDateObj meets the minDate & maxDate requirements (if set)
+      (!self.config.minDate ||
+        self.latestSelectedDateObj >= self.config.minDate) &&
+      (!self.config.maxDate ||
+        self.latestSelectedDateObj <= self.config.maxDate)
+    ) {
+      jumpTo = self.latestSelectedDateObj;
+    } else if (self.config.minDate && self.config.minDate > self.now) {
+      jumpTo = self.config.minDate;
+    } else if (self.config.maxDate && self.config.maxDate < self.now) {
+      jumpTo = self.config.maxDate;
+    } else {
+      jumpTo = self.now;
+    }
 
     const oldYear = self.currentYear;
     const oldMonth = self.currentMonth;
