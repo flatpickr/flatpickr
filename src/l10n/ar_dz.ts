@@ -52,6 +52,6 @@ export const AlgerianArabic: CustomLocale = {
   time_24hr: true,
 };
 
-fp.l10ns.ar = AlgerianArabic;
+fp.l10ns.ar_dz = AlgerianArabic;
 
 export default fp.l10ns;
