@@ -1,6 +1,7 @@
 import { key, CustomLocale } from "../types/locale";
 
 import { Arabic as ar } from "./ar";
+import { AlgerianArabic as ar_dz } from "./ar_dz";
 import { Austria as at } from "./at";
 import { Azerbaijan as az } from "./az";
 import { Belarusian as be } from "./be";
