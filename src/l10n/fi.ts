@@ -60,6 +60,7 @@ export const Finnish: CustomLocale = {
     return ".";
   },
   time_24hr: true,
+  rangeSeparator: "–",
 };
 
 fp.l10ns.fi = Finnish;
