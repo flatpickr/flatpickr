@@ -1106,7 +1106,7 @@ describe("flatpickr", () => {
     describe("mobile calendar", () => {
       describe(".isMobile", () => {
         it("returns true", () => {
-          mockAgent = "Android";
+          mockAgent = "Android, Mobile";
           createInstance();
 
           expect(fp.isMobile).toBe(true);
@@ -1115,7 +1115,7 @@ describe("flatpickr", () => {
 
       describe("init", () => {
         it("with value", () => {
-          mockAgent = "Android";
+          mockAgent = "Android, Mobile";
           createInstance({
             enableTime: true,
           });
@@ -1139,7 +1139,7 @@ describe("flatpickr", () => {
           const el = document.createElement("input");
           el.className = "foo bar";
 
-          mockAgent = "Android";
+          mockAgent = "Android, Mobile";
           createInstance({}, el);
 
           const mobileInput = fp.mobileInput as HTMLInputElement;
@@ -1154,7 +1154,7 @@ describe("flatpickr", () => {
             const el = document.createElement("input");
             el.setAttribute("step", "3");
 
-            mockAgent = "Android";
+            mockAgent = "Android, Mobile";
             createInstance({}, el);
 
             const mobileInput = fp.mobileInput as HTMLInputElement;
@@ -1166,7 +1166,7 @@ describe("flatpickr", () => {
             const el = document.createElement("input");
             el.removeAttribute("step");
 
-            mockAgent = "Android";
+            mockAgent = "Android, Mobile";
             createInstance({}, el);
 
             const mobileInput = fp.mobileInput as HTMLInputElement;
@@ -1181,7 +1181,7 @@ describe("flatpickr", () => {
           el.disabled = true;
           el.required = true;
 
-          mockAgent = "Android";
+          mockAgent = "Android, Mobile";
           createInstance({}, el);
 
           const mobileInput = fp.mobileInput as HTMLInputElement;
@@ -1192,7 +1192,7 @@ describe("flatpickr", () => {
         });
 
         it("with confirmDatePlugin", () => {
-          mockAgent = "Android";
+          mockAgent = "Android, Mobile";
           createInstance({
             plugins: [confirmDatePlugin({})],
           });
