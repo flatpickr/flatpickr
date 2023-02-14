@@ -58,6 +58,6 @@ export const Vietnamese: CustomLocale = {
   rangeSeparator: " đến ",
 };
 
-fp.l10ns.vn = Vietnamese;
+fp.l10ns.vn = fp.l10ns.vi = Vietnamese;
 
 export default fp.l10ns;
