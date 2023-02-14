@@ -125,6 +125,7 @@ const l10n: Record<key, CustomLocale> = {
   th,
   tr,
   uk,
+  vi: vn,
   vn,
   zh,
   zh_tw: zhTw,

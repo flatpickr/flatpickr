@@ -172,6 +172,7 @@ export type key =
   | "th"
   | "tr"
   | "uk"
+  | "vi"
   | "vn"
   | "zh"
   | "uz"
