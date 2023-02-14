@@ -136,14 +136,18 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
       );
 
       const yearInputParent = fp.yearElements[0].parentElement as HTMLElement,
-            yearNavArrowUp = yearInputParent.querySelector(".arrowUp") as HTMLElement,
-            yearNavArrowDown = yearInputParent.querySelector(".arrowDown") as HTMLElement;
+        yearNavArrowUp = yearInputParent.querySelector(
+          ".arrowUp"
+        ) as HTMLElement,
+        yearNavArrowDown = yearInputParent.querySelector(
+          ".arrowDown"
+        ) as HTMLElement;
 
       fp._bind([yearNavArrowUp, yearNavArrowDown], "click", function () {
-          setTimeout(() => {
-              buildMonths();
-          }, 0);
-      }); 
+        setTimeout(() => {
+          buildMonths();
+        }, 0);
+      });
     }
 
     function setCurrentlySelected() {
