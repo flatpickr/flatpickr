@@ -127,6 +127,10 @@ By default, Flatpickr utilizes native datetime widgets unless certain options (e
    */
   enableSeconds: boolean;
 
+  /* Enables milliseconds selection in the time picker.
+   */
+  enableMilliSeconds: boolean;
+
   /* Enables the time picker */
   enableTime: boolean;
 
@@ -294,10 +298,12 @@ export interface ParsedOptions {
   defaultHour: number;
   defaultMinute: number;
   defaultSeconds: number;
+  defaultMilliSeconds: number;
   disable: DateLimit<Date>[];
   disableMobile: boolean;
   enable?: DateLimit<Date>[];
   enableSeconds: boolean;
+  enableMilliSeconds: boolean;
   enableTime: boolean;
   errorHandler: (err: Error) => void;
   formatDate?: Options["formatDate"];
@@ -360,9 +366,11 @@ export const defaults: ParsedOptions = {
   defaultHour: 12,
   defaultMinute: 0,
   defaultSeconds: 0,
+  defaultMilliSeconds: 0,
   disable: [],
   disableMobile: false,
   enableSeconds: false,
+  enableMilliSeconds: false,
   enableTime: false,
   errorHandler: (err: Error) =>
     typeof console !== "undefined" && console.warn(err),
