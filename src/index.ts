@@ -2904,6 +2904,7 @@ function FlatpickrInstance(
     }
 
     self.input.value = getDateStr(self.config.dateFormat);
+    console.log(self.input.value);
 
     if (self.altInput !== undefined) {
       self.altInput.value = getDateStr(self.config.altFormat);
@@ -2988,8 +2989,6 @@ function FlatpickrInstance(
         self.amPM.textContent =
           self.l10n.amPM[int(self.amPM.textContent === self.l10n.amPM[0])];
       }
-
-      console.log("input value set");
 
       input.value = pad(newValue, isMilliSecondElem ? 3 : 2);
     }
