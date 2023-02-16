@@ -2904,7 +2904,6 @@ function FlatpickrInstance(
     }
 
     self.input.value = getDateStr(self.config.dateFormat);
-    console.log(self.input.value);
 
     if (self.altInput !== undefined) {
       self.altInput.value = getDateStr(self.config.altFormat);
