@@ -25,7 +25,8 @@ export type token =
   | "s"
   | "u"
   | "w"
-  | "y";
+  | "y"
+  | "A";
 
 const doNothing = (): undefined => undefined;
 
@@ -117,6 +118,9 @@ export const revFormat: RevFormat = {
   y: (dateObj: Date, year: string) => {
     dateObj.setFullYear(2000 + parseFloat(year));
   },
+  A: (dateObj: Date, milliseconds: string) => {
+    dateObj.setMilliseconds(parseFloat(milliseconds));
+  },
 };
 
 export type TokenRegex = { [k in token]: string };
@@ -144,6 +148,7 @@ export const tokenRegex: TokenRegex = {
   u: "(.+)",
   w: "(\\d\\d|\\d)",
   y: "(\\d{2})",
+  A: "(\\d{9})",
 };
 
 export type Formats = Record<
@@ -240,4 +245,8 @@ export const formats: Formats = {
 
   // last two digits of year e.g. 16 for 2016
   y: (date: Date) => String(date.getFullYear()).substring(2),
+
+  // milliseconds 0 - 999,999,999
+  A: (date: Date, _: Locale, options: ParsedOptions) =>
+    pad(String(date.getMilliseconds()), options.msPrecision),
 };

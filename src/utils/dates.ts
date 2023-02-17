@@ -176,11 +176,13 @@ export function getDefaultHours(config: ParsedOptions) {
   let hours = config.defaultHour;
   let minutes = config.defaultMinute;
   let seconds = config.defaultSeconds;
+  let milliseconds = config.defaultMilliSeconds;
 
   if (config.minDate !== undefined) {
     const minHour = config.minDate.getHours();
     const minMinutes = config.minDate.getMinutes();
     const minSeconds = config.minDate.getSeconds();
+    const minMilliseconds = config.minDate.getMilliseconds();
 
     if (hours < minHour) {
       hours = minHour;
@@ -192,17 +194,28 @@ export function getDefaultHours(config: ParsedOptions) {
 
     if (hours === minHour && minutes === minMinutes && seconds < minSeconds)
       seconds = config.minDate.getSeconds();
+
+    if (
+      hours === minHour &&
+      minutes === minMinutes &&
+      seconds === minSeconds &&
+      milliseconds < minMilliseconds
+    )
+      milliseconds = config.minDate.getMilliseconds();
   }
 
   if (config.maxDate !== undefined) {
     const maxHr = config.maxDate.getHours();
     const maxMinutes = config.maxDate.getMinutes();
+    const maxSeconds = config.maxDate.getSeconds();
+    const maxMilliseconds = config.maxDate.getMilliseconds();
     hours = Math.min(hours, maxHr);
 
     if (hours === maxHr) minutes = Math.min(maxMinutes, minutes);
-    if (hours === maxHr && minutes === maxMinutes)
-      seconds = config.maxDate.getSeconds();
+    if (hours === maxHr && minutes === maxMinutes) seconds = maxSeconds;
+    if (hours === maxHr && minutes === maxMinutes && seconds === maxSeconds)
+      milliseconds = maxMilliseconds;
   }
 
-  return { hours, minutes, seconds };
+  return { hours, minutes, seconds, milliseconds };
 }

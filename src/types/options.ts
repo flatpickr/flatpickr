@@ -127,6 +127,10 @@ By default, Flatpickr utilizes native datetime widgets unless certain options (e
    */
   enableSeconds: boolean;
 
+  /* Enables milliseconds selection in the time picker.
+   */
+  enableMilliSeconds: boolean;
+
   /* Enables the time picker */
   enableTime: boolean;
 
@@ -173,6 +177,9 @@ By default, Flatpickr utilizes native datetime widgets unless certain options (e
 
   /* How the month selector in the calendar should be shown */
   monthSelectorType: "dropdown" | "static";
+
+  /* precision for the millisecond input, if enabled  */
+  msPrecision: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
   /* HTML for the right arrow icon, used to switch months. */
   nextArrow: string;
@@ -294,10 +301,12 @@ export interface ParsedOptions {
   defaultHour: number;
   defaultMinute: number;
   defaultSeconds: number;
+  defaultMilliSeconds: number;
   disable: DateLimit<Date>[];
   disableMobile: boolean;
   enable?: DateLimit<Date>[];
   enableSeconds: boolean;
+  enableMilliSeconds: boolean;
   enableTime: boolean;
   errorHandler: (err: Error) => void;
   formatDate?: Options["formatDate"];
@@ -313,6 +322,7 @@ export interface ParsedOptions {
   minuteIncrement: number;
   mode: BaseOptions["mode"];
   monthSelectorType: string;
+  msPrecision: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
   nextArrow: string;
   noCalendar: boolean;
   now: Date;
@@ -360,9 +370,11 @@ export const defaults: ParsedOptions = {
   defaultHour: 12,
   defaultMinute: 0,
   defaultSeconds: 0,
+  defaultMilliSeconds: 0,
   disable: [],
   disableMobile: false,
   enableSeconds: false,
+  enableMilliSeconds: false,
   enableTime: false,
   errorHandler: (err: Error) =>
     typeof console !== "undefined" && console.warn(err),
@@ -394,6 +406,7 @@ export const defaults: ParsedOptions = {
   minuteIncrement: 5,
   mode: "single",
   monthSelectorType: "dropdown",
+  msPrecision: 3,
   nextArrow:
     "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M13.207 8.472l-7.854 7.854-0.707-0.707 7.146-7.146-7.146-7.148 0.707-0.707 7.854 7.854z' /></svg>",
   noCalendar: false,

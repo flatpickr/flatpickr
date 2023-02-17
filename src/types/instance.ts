@@ -47,6 +47,7 @@ export interface Elements {
   hourElement?: HTMLInputElement;
   minuteElement?: HTMLInputElement;
   secondElement?: HTMLInputElement;
+  milliSecondElement?: HTMLInputElement;
   amPM?: HTMLSpanElement;
 
   pluginElements: Node[];
