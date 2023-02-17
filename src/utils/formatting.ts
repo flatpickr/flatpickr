@@ -148,7 +148,7 @@ export const tokenRegex: TokenRegex = {
   u: "(.+)",
   w: "(\\d\\d|\\d)",
   y: "(\\d{2})",
-  A: "(\\d{3})",
+  A: "(\\d{9})",
 };
 
 export type Formats = Record<
@@ -246,6 +246,7 @@ export const formats: Formats = {
   // last two digits of year e.g. 16 for 2016
   y: (date: Date) => String(date.getFullYear()).substring(2),
 
-  // last two digits of year e.g. 16 for 2016
-  A: (date: Date) => pad(String(date.getMilliseconds()), 3),
+  // milliseconds 0 - 999,999,999
+  A: (date: Date, _: Locale, options: ParsedOptions) =>
+    pad(String(date.getMilliseconds()), options.msPrecision),
 };
