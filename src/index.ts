@@ -240,7 +240,8 @@ function FlatpickrInstance(
           : 0,
       milliseconds =
         self.milliSecondElement !== undefined
-          ? (parseInt(self.milliSecondElement.value, 10) || 0) % 1000
+          ? (parseInt(self.milliSecondElement.value, 10) || 0) %
+            10 ** self.config.msPrecision
           : 0;
 
     if (self.amPM !== undefined) {
@@ -379,7 +380,10 @@ function FlatpickrInstance(
       self.secondElement.value = pad(seconds);
 
     if (self.milliSecondElement !== undefined)
-      self.milliSecondElement.value = pad(milliseconds || 0, 3);
+      self.milliSecondElement.value = pad(
+        milliseconds || 0,
+        self.config.msPrecision
+      );
   }
 
   /**
@@ -1260,7 +1264,7 @@ function FlatpickrInstance(
         self.latestSelectedDateObj
           ? self.latestSelectedDateObj.getMilliseconds()
           : defaults.milliseconds,
-        3
+        self.config.msPrecision
       );
 
       self.milliSecondElement.setAttribute(
@@ -1268,8 +1272,14 @@ function FlatpickrInstance(
         self.minuteElement.getAttribute("step") as string
       );
       self.milliSecondElement.setAttribute("min", "0");
-      self.milliSecondElement.setAttribute("max", "999");
-      self.milliSecondElement.setAttribute("maxlength", "3");
+      self.milliSecondElement.setAttribute(
+        "max",
+        "9".repeat(self.config.msPrecision)
+      );
+      self.milliSecondElement.setAttribute(
+        "maxlength",
+        `${self.config.msPrecision}`
+      );
 
       self.timeContainer.appendChild(
         createElement("span", "flatpickr-time-separator", ":")
@@ -2958,7 +2968,7 @@ function FlatpickrInstance(
     if (
       typeof input.value !== "undefined" &&
       (input.value.length === 2 ||
-        (isMilliSecondElem && input.value.length === 3))
+        (isMilliSecondElem && input.value.length === self.config.msPrecision))
     ) {
       const isHourElem = input === self.hourElement,
         isMinuteElem = input === self.minuteElement;
@@ -2989,7 +2999,10 @@ function FlatpickrInstance(
           self.l10n.amPM[int(self.amPM.textContent === self.l10n.amPM[0])];
       }
 
-      input.value = pad(newValue, isMilliSecondElem ? 3 : 2);
+      input.value = pad(
+        newValue,
+        isMilliSecondElem ? self.config.msPrecision : 2
+      );
     }
   }
 
