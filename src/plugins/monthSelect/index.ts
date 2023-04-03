@@ -148,6 +148,12 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         currentlySelected[index].classList.remove("selected");
       }
 
+      if (
+        fp.latestSelectedDateObj !== undefined &&
+        fp.latestSelectedDateObj.getFullYear() !== fp.currentYear
+      )
+        return;
+
       const targetMonth = fp.selectedDates[0].getMonth();
       const month = fp.rContainer.querySelector(
         `.flatpickr-monthSelect-month:nth-child(${targetMonth + 1})`
@@ -329,6 +335,7 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         fp.config.enableTime = false;
       },
       onValueUpdate: setCurrentlySelected,
+      onYearChange: setCurrentlySelected,
       onKeyDown,
       onReady: [
         stubCurrentMonth,
