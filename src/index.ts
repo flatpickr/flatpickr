@@ -1624,7 +1624,9 @@ function FlatpickrInstance(
 
   function onBlur(e: FocusEvent) {
     const isInput = e.target === self._input;
-    const valueChanged = self._input.value.trimEnd() !== getDateStr();
+    const clonedInput = self.input.closest('.flatpickr-input') as HTMLElement;
+    const clonedInputValue = clonedInput.getAttribute('value') as string;
+    const valueChanged = self._input.value.trimEnd() !== self.formatDate(new Date(clonedInputValue), self.config.altFormat);
 
     if (
       isInput &&
