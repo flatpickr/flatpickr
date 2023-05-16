@@ -91,7 +91,7 @@ export const createDateParser = ({ config = defaults, l10n = english }) => (
           regexStr += tokenRegex[token];
           const match = new RegExp(regexStr).exec(date);
           if (match && (matched = true)) {
-            ops[token !== "Y" ? "push" : "unshift"]({
+            ops[token !== "Y" && token !== "y" ? "push" : "unshift"]({
               fn: revFormat[token],
               val: match[++matchIndex],
             });
