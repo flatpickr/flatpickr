@@ -66,6 +66,6 @@ export const Norwegian: CustomLocale = {
   },
 };
 
-fp.l10ns.no = Norwegian;
+fp.l10ns.no = fp.l10ns.nb = Norwegian;
 
 export default fp.l10ns;
