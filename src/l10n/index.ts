@@ -109,6 +109,7 @@ const l10n: Record<key, CustomLocale> = {
   ms,
   my,
   nl,
+  nb: no,
   nn,
   no,
   pa,
