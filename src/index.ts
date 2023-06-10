@@ -179,10 +179,11 @@ function FlatpickrInstance(
     e?: MouseEvent | IncrementEvent | KeyboardEvent | FocusEvent
   ) {
     if (self.selectedDates.length === 0) {
+      const now = new Date();
       const defaultDate =
         self.config.minDate === undefined ||
-        compareDates(new Date(), self.config.minDate) >= 0
-          ? new Date()
+        compareDates(now, self.config.minDate) >= 0
+          ? now
           : new Date(self.config.minDate.getTime());
 
       const defaults = getDefaultHours(self.config);

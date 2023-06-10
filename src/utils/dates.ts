@@ -79,7 +79,7 @@ export const createDateParser = ({ config = defaults, l10n = english }) => (
     ) {
       parsedDate = new Date(date);
     } else {
-      let matched,
+      let matched = false,
         ops: { fn: RevFormatFn; val: string }[] = [];
 
       for (let i = 0, matchIndex = 0, regexStr = ""; i < format.length; i++) {
@@ -90,7 +90,8 @@ export const createDateParser = ({ config = defaults, l10n = english }) => (
         if (tokenRegex[token] && !escaped) {
           regexStr += tokenRegex[token];
           const match = new RegExp(regexStr).exec(date);
-          if (match && (matched = true)) {
+          if (match) {
+            matched = true;
             ops[token !== "Y" ? "push" : "unshift"]({
               fn: revFormat[token],
               val: match[++matchIndex],
@@ -119,9 +120,13 @@ export const createDateParser = ({ config = defaults, l10n = english }) => (
     return undefined;
   }
 
-  if (timeless === true) parsedDate.setHours(0, 0, 0, 0);
-
-  return parsedDate;
+  return timeless === true
+    ? new Date(
+        parsedDate.getFullYear(),
+        parsedDate.getMonth(),
+        parsedDate.getDate()
+      )
+    : parsedDate;
 };
 
 /**
@@ -169,7 +174,7 @@ export const parseSeconds = (secondsSinceMidnight: number) => {
 };
 
 export const duration = {
-  DAY: 86400000,
+  DAY: 86_400_000,
 };
 
 export function getDefaultHours(config: ParsedOptions) {

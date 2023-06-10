@@ -176,6 +176,9 @@ describe("flatpickr", () => {
         expect(fp.selectedDates[0].getFullYear()).toEqual(date.getFullYear());
         expect(fp.selectedDates[0].getMonth()).toEqual(date.getMonth());
         expect(fp.selectedDates[0].getDate()).toEqual(date.getDate());
+        expect(fp.selectedDates[0].getMilliseconds()).toEqual(
+          date.getMilliseconds()
+        );
       });
 
       it("should parse unix time", () => {
@@ -189,6 +192,9 @@ describe("flatpickr", () => {
         expect(fp.selectedDates[0].getFullYear()).toEqual(date.getFullYear());
         expect(fp.selectedDates[0].getMonth()).toEqual(date.getMonth());
         expect(fp.selectedDates[0].getDate()).toEqual(date.getDate());
+        expect(fp.selectedDates[0].getMilliseconds()).toEqual(
+          date.getMilliseconds()
+        );
       });
 
       it('should parse "2016-10"', () => {
@@ -412,12 +418,12 @@ describe("flatpickr", () => {
         DEFAULT_FORMAT_3 = "Y-m-d";
 
       it(`should format the date with the pattern "${DEFAULT_FORMAT_1}"`, () => {
-        const RESULT = "20.10.16 09:19:59";
+        const RESULT = "20.10.16 09:19:09";
         createInstance({
           dateFormat: DEFAULT_FORMAT_1,
         });
 
-        fp.setDate("20.10.16 09:19:59");
+        fp.setDate("20.10.16 09:19:09");
         expect(fp.input.value).toEqual(RESULT);
         fp.setDate("2015.11.21 19:29:49");
         expect(fp.input.value).not.toEqual(RESULT);
@@ -640,7 +646,7 @@ describe("flatpickr", () => {
       }
 
       fp.setDate("");
-      expect(fp.latestSelectedDateObj).toEqual(undefined);
+      expect(fp.latestSelectedDateObj).toBeUndefined();
     });
 
     it("parses dates in enable[] and disable[]", () => {

@@ -123,26 +123,26 @@ export type TokenRegex = { [k in token]: string };
 export const tokenRegex: TokenRegex = {
   D: "", // locale-dependent, setup on runtime
   F: "", // locale-dependent, setup on runtime
-  G: "(\\d\\d|\\d)",
-  H: "(\\d\\d|\\d)",
-  J: "(\\d\\d|\\d)\\w+",
+  G: "(\\d{1,2})",
+  H: "(\\d{1,2})",
+  J: "(\\d{1,2})\\w+",
   K: "", // locale-dependent, setup on runtime
   M: "", // locale-dependent, setup on runtime
-  S: "(\\d\\d|\\d)",
-  U: "(.+)",
-  W: "(\\d\\d|\\d)",
+  S: "(\\d{1,2})",
+  U: "(\\d+(?:\\.\\d+)?)",
+  W: "(\\d{1,2})",
   Y: "(\\d{4})",
   Z: "(.+)",
-  d: "(\\d\\d|\\d)",
-  h: "(\\d\\d|\\d)",
-  i: "(\\d\\d|\\d)",
-  j: "(\\d\\d|\\d)",
+  d: "(\\d{1,2})",
+  h: "(\\d{1,2})",
+  i: "(\\d{1,2})",
+  j: "(\\d{1,2})",
   l: "", // locale-dependent, setup on runtime
-  m: "(\\d\\d|\\d)",
-  n: "(\\d\\d|\\d)",
-  s: "(\\d\\d|\\d)",
-  u: "(.+)",
-  w: "(\\d\\d|\\d)",
+  m: "(\\d{1,2})",
+  n: "(\\d{1,2})",
+  s: "(\\d{1,2})",
+  u: "(\\d+(?:\\.\\d+)?)",
+  w: "(\\d{1,2})",
   y: "(\\d{2})",
 };
 
@@ -193,7 +193,7 @@ export const formats: Formats = {
     return monthToStr(date.getMonth(), true, locale);
   },
 
-  // seconds 00-59
+  // seconds (00-59)
   S: (date: Date) => pad(date.getSeconds()),
 
   // unix timestamp
@@ -229,7 +229,7 @@ export const formats: Formats = {
   // the month number (1-12)
   n: (date: Date) => date.getMonth() + 1,
 
-  // seconds 0-59
+  // seconds (0-59)
   s: (date: Date) => date.getSeconds(),
 
   // Unix Milliseconds
