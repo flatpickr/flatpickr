@@ -70,19 +70,24 @@ export const revFormat: RevFormat = {
   U: (_: Date, unixSeconds: string) => new Date(parseFloat(unixSeconds) * 1000),
 
   W: function (dateObj: Date, weekNum: string, locale: Locale) {
-    const weekNumber = parseInt(weekNum);
-    const date = new Date(
+    const dateTmp = new Date(
       dateObj.getFullYear(),
       0,
-      2 + (weekNumber - 1) * 7,
+      2 + (parseInt(weekNum) - 1) * 7,
       0,
       0,
       0,
       0
     );
-    date.setDate(date.getDate() - date.getDay() + locale.firstDayOfWeek);
+    dateTmp.setDate(
+      dateTmp.getDate() - dateTmp.getDay() + locale.firstDayOfWeek
+    );
 
-    return date;
+    dateObj.setFullYear(
+      dateTmp.getFullYear(),
+      dateTmp.getMonth(),
+      dateTmp.getDate()
+    );
   },
   Y: (dateObj: Date, year: string) => {
     dateObj.setFullYear(parseFloat(year));

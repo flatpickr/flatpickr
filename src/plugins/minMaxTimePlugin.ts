@@ -64,12 +64,16 @@ function minMaxTimePlugin(config: Config = {}): Plugin {
         if (latest && matchingTimeLimit !== undefined) {
           this.set(matchingTimeLimit);
 
-          (fp.config.minTime as Date).setFullYear(latest.getFullYear());
-          (fp.config.maxTime as Date).setFullYear(latest.getFullYear());
-          (fp.config.minTime as Date).setMonth(latest.getMonth());
-          (fp.config.maxTime as Date).setMonth(latest.getMonth());
-          (fp.config.minTime as Date).setDate(latest.getDate());
-          (fp.config.maxTime as Date).setDate(latest.getDate());
+          (fp.config.minTime as Date).setFullYear(
+            latest.getFullYear(),
+            latest.getMonth(),
+            latest.getDate()
+          );
+          (fp.config.maxTime as Date).setFullYear(
+            latest.getFullYear(),
+            latest.getMonth(),
+            latest.getDate()
+          );
 
           if ((fp.config.minTime as Date) > (fp.config.maxTime as Date)) {
             const minBound = calculateSecondsSinceMidnight(
