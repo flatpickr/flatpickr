@@ -185,14 +185,10 @@ function FlatpickrInstance(
         compareDates(now, self.config.minDate) >= 0
           ? now
           : new Date(self.config.minDate.getTime());
+      defaultDate.setMilliseconds(0);
 
       const defaults = getDefaultHours(self.config);
-      defaultDate.setHours(
-        defaults.hours,
-        defaults.minutes,
-        defaults.seconds,
-        defaultDate.getMilliseconds()
-      );
+      defaultDate.setHours(defaults.hours, defaults.minutes, defaults.seconds);
 
       self.selectedDates = [defaultDate];
       self.latestSelectedDateObj = defaultDate;
@@ -316,7 +312,7 @@ function FlatpickrInstance(
       }
     }
 
-    setHours(hours, minutes, seconds);
+    setHours(hours, minutes, self.secondElement !== undefined ? seconds : null);
   }
 
   /**
@@ -337,11 +333,29 @@ function FlatpickrInstance(
    * @param {Number} hours the hour. whether its military
    *                 or am-pm gets inferred from config
    * @param {Number} minutes the minutes
-   * @param {Number} seconds the seconds (optional)
+   * @param {Number} seconds the seconds
    */
-  function setHours(hours: number, minutes: number, seconds: number) {
+  function setHours(hours: number, minutes: number, seconds: number | null) {
     if (self.latestSelectedDateObj !== undefined) {
-      self.latestSelectedDateObj.setHours(hours % 24, minutes, seconds || 0, 0);
+      const origHours = self.latestSelectedDateObj.getHours();
+      const origMinutes = self.latestSelectedDateObj.getMinutes();
+      const origSeconds = self.latestSelectedDateObj.getSeconds();
+      self.latestSelectedDateObj.setHours(
+        hours % 24,
+        minutes,
+        seconds !== null ? seconds : self.latestSelectedDateObj.getSeconds(),
+        self.latestSelectedDateObj.getMilliseconds()
+      );
+      if (
+        origHours !== self.latestSelectedDateObj.getHours() ||
+        origMinutes !== self.latestSelectedDateObj.getMinutes() ||
+        origSeconds !== self.latestSelectedDateObj.getSeconds()
+      ) {
+        if (seconds === null) {
+          self.latestSelectedDateObj.setSeconds(0);
+        }
+        self.latestSelectedDateObj.setMilliseconds(0);
+      }
     }
 
     if (!self.hourElement || !self.minuteElement || self.isMobile) return;
@@ -357,7 +371,7 @@ function FlatpickrInstance(
     if (self.amPM !== undefined)
       self.amPM.textContent = self.l10n.amPM[int(hours >= 12)];
 
-    if (self.secondElement !== undefined)
+    if (self.secondElement !== undefined && seconds !== null)
       self.secondElement.value = pad(seconds);
   }
 

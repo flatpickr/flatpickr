@@ -1282,6 +1282,37 @@ describe("flatpickr", () => {
       expect(fp.hourElement.value).toEqual("09");
     });
 
+    it("time input seconds must be cleared after hours increment when not enabled", () => {
+      createInstance({
+        dateFormat: "Y-m-d H:i:S",
+        enableTime: true,
+        defaultDate: "2000-12-13 5:6:3",
+      });
+
+      expect(fp.input.value).toEqual("2000-12-13 05:06:03");
+
+      fp.open();
+
+      incrementTime("hourElement", 1);
+      expect(fp.input.value).toEqual("2000-12-13 06:06:00");
+    });
+
+    it("time input seconds must be kept after hours increment when enabled", () => {
+      createInstance({
+        dateFormat: "Y-m-d H:i:S",
+        enableTime: true,
+        enableSeconds: true,
+        defaultDate: "2000-12-13 5:6:3",
+      });
+
+      expect(fp.input.value).toEqual("2000-12-13 05:06:03");
+
+      fp.open();
+
+      incrementTime("hourElement", 1);
+      expect(fp.input.value).toEqual("2000-12-13 06:06:03");
+    });
+
     it("time input respects minDate", () => {
       createInstance({
         enableTime: true,
