@@ -10,7 +10,6 @@ export type token =
   | "J"
   | "K"
   | "M"
-  | "N"
   | "S"
   | "U"
   | "W"
@@ -35,6 +34,77 @@ export const monthToStr = (
   shorthand: boolean,
   locale: Locale
 ) => locale.months[shorthand ? "shorthand" : "longhand"][monthNumber];
+
+const setDateSeconds = (
+  dateObj: Date,
+  secondsStr: string,
+  isAbsolute: boolean
+): void => {
+  const secondsArr = secondsStr.split(".", 2);
+  let seconds = parseInt(secondsArr[0]);
+  let nanos =
+    secondsArr.length > 1
+      ? Math.floor(
+          parseInt(secondsArr[1]) * Math.pow(10, 9 - secondsArr[1].length)
+        )
+      : 0;
+
+  if (isAbsolute) {
+    dateObj.setTime(seconds * 1000);
+  } else {
+    dateObj.setSeconds(seconds);
+  }
+
+  dateObj.setMilliseconds(Math.floor(nanos / 1_000_000));
+  nanos = nanos - dateObj.getMilliseconds() * 1_000_000;
+
+  if (nanos) {
+    (dateObj as any).flatpickrNanoseconds = nanos;
+  } else if ((dateObj as any).flatpickrNanoseconds !== undefined) {
+    delete (dateObj as any).flatpickrNanoseconds;
+  }
+};
+
+const formatDateSeconds = (
+  date: Date,
+  isAbsolute: boolean,
+  formatSecondsPrecision: number
+): string => {
+  const seconds = isAbsolute
+    ? Math.floor(date.getTime() / 1000)
+    : date.getSeconds();
+  const nanos =
+    date.getMilliseconds() * 1_000_000 +
+    ((date as any).flatpickrNanoseconds || 0);
+
+  if (formatSecondsPrecision > 0) {
+    return seconds + "." + pad(nanos, 9).slice(0, formatSecondsPrecision);
+  } else if (formatSecondsPrecision < 0 && nanos) {
+    return seconds + "." + pad(nanos, 9).replace(/0+$/, "");
+  }
+  return "" + seconds;
+};
+
+const moveNumberDot = (number: string, offset: number): string => {
+  let pos = number.indexOf(".");
+  if (pos !== -1) {
+    number = number.slice(0, pos) + number.slice(pos + 1);
+  } else {
+    pos = number.length;
+  }
+
+  const newPos = pos + offset;
+  if (newPos <= 0) {
+    return "0." + pad(number, -newPos + 1);
+  } else if (newPos < number.length) {
+    return number.slice(0, newPos) + "." + number.slice(newPos);
+  }
+
+  while (newPos > number.length) {
+    number += "0";
+  }
+  return number;
+};
 
 export type RevFormatFn = (
   date: Date,
@@ -65,22 +135,12 @@ export const revFormat: RevFormat = {
   M: function (dateObj: Date, shortMonth: string, locale: Locale) {
     dateObj.setMonth(locale.months.shorthand.indexOf(shortMonth));
   },
-  N: (dateObj: Date, fractionalSeconds: string) => {
-    var nanos = Math.floor(
-      parseFloat(fractionalSeconds) * Math.pow(10, 9 - fractionalSeconds.length)
-    );
-    dateObj.setMilliseconds(Math.floor(nanos / 1_000_000));
-    nanos = nanos - dateObj.getMilliseconds() * 1_000_000;
-    if (nanos) {
-      (dateObj as any).flatpickrNanoseconds = nanos;
-    } else if ((dateObj as any).flatpickrNanoseconds !== undefined) {
-      delete (dateObj as any).flatpickrNanoseconds;
-    }
-  },
   S: (dateObj: Date, seconds: string) => {
-    dateObj.setSeconds(parseFloat(seconds));
+    setDateSeconds(dateObj, seconds, false);
   },
-  U: (_: Date, unixSeconds: string) => new Date(parseFloat(unixSeconds) * 1000),
+  U: (dateObj: Date, unixSeconds: string) => {
+    setDateSeconds(dateObj, unixSeconds, true);
+  },
 
   W: function (dateObj: Date, weekNum: string, locale: Locale) {
     const weekNumber = parseInt(weekNum);
@@ -122,10 +182,11 @@ export const revFormat: RevFormat = {
     dateObj.setMonth(parseFloat(month) - 1);
   },
   s: (dateObj: Date, seconds: string) => {
-    dateObj.setSeconds(parseFloat(seconds));
+    setDateSeconds(dateObj, seconds, false);
   },
-  u: (_: Date, unixMillSeconds: string) =>
-    new Date(parseFloat(unixMillSeconds)),
+  u: (dateObj: Date, unixMilliseconds: string) => {
+    setDateSeconds(dateObj, moveNumberDot(unixMilliseconds, -3), true);
+  },
   w: doNothing,
   y: (dateObj: Date, year: string) => {
     dateObj.setFullYear(2000 + parseFloat(year));
@@ -141,9 +202,8 @@ export const tokenRegex: TokenRegex = {
   J: "(\\d{1,2})\\w+",
   K: "", // locale-dependent, setup on runtime
   M: "", // locale-dependent, setup on runtime
-  N: "((?<=\\.)\\d+(?!\\d))",
-  S: "(\\d{1,2})",
-  U: "(\\d+)",
+  S: "(\\d{1,2}(?:\\.\\d+)?)",
+  U: "(\\d+(?:\\.\\d+)?)",
   W: "(\\d{1,2})",
   Y: "(\\d{4})",
   Z: "(.+)",
@@ -154,8 +214,8 @@ export const tokenRegex: TokenRegex = {
   l: "", // locale-dependent, setup on runtime
   m: "(\\d{1,2})",
   n: "(\\d{1,2})",
-  s: "(\\d{1,2})",
-  u: "(\\d+)",
+  s: "(\\d{1,2}(?:\\.\\d+)?)",
+  u: "(\\d+(?:\\.\\d+)?)",
   w: "(\\d{1,2})",
   y: "(\\d{2})",
 };
@@ -207,19 +267,17 @@ export const formats: Formats = {
     return monthToStr(date.getMonth(), true, locale);
   },
 
-  // fractional seconds with nanosecond precision (0-999_999_999)
-  N: (date: Date) =>
-    pad(
-      date.getMilliseconds() * 1_000_000 +
-        ((date as any).flatpickrNanoseconds || 0),
-      9
-    ),
-
   // seconds (00-59)
-  S: (date: Date) => pad(date.getSeconds()),
+  S: (date: Date, _: Locale, options: ParsedOptions) => {
+    const res = formatDateSeconds(date, false, options.formatSecondsPrecision);
+    const resArr = res.split(".");
+    resArr[0] = pad(resArr[0], 2);
+    return resArr.join(".");
+  },
 
   // unix timestamp
-  U: (date: Date) => Math.floor(date.getTime() / 1000),
+  U: (date: Date, _: Locale, options: ParsedOptions) =>
+    formatDateSeconds(date, true, options.formatSecondsPrecision),
 
   W: function (date: Date, _: Locale, options: ParsedOptions) {
     return options.getWeek(date);
@@ -252,10 +310,15 @@ export const formats: Formats = {
   n: (date: Date) => date.getMonth() + 1,
 
   // seconds (0-59)
-  s: (date: Date) => date.getSeconds(),
+  s: (date: Date, _: Locale, options: ParsedOptions) =>
+    formatDateSeconds(date, false, options.formatSecondsPrecision),
 
   // Unix Milliseconds
-  u: (date: Date) => date.getTime(),
+  u: (date: Date, _: Locale, options: ParsedOptions) =>
+    moveNumberDot(
+      formatDateSeconds(date, true, options.formatSecondsPrecision),
+      3
+    ),
 
   // number of the day of the week
   w: (date: Date) => date.getDay(),

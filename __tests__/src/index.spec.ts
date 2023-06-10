@@ -171,6 +171,7 @@ describe("flatpickr", () => {
           defaultDate: 1477111633771,
           enableTime: true,
           enableSeconds: true,
+          formatSecondsPrecision: 9,
         });
 
         const date = new Date("2016-10-22T04:47:13.771Z");
@@ -178,16 +179,57 @@ describe("flatpickr", () => {
         expect(fp.selectedDates[0].getFullYear()).toEqual(date.getFullYear());
         expect(fp.selectedDates[0].getMonth()).toEqual(date.getMonth());
         expect(fp.selectedDates[0].getDate()).toEqual(date.getDate());
-        // TODO - needs fractional seconds support
-        // expect(fp.selectedDates[0].getMilliseconds()).toEqual(
-        //   date.getMilliseconds()
-        // );
+        expect(fp.selectedDates[0].getMilliseconds()).toEqual(
+          date.getMilliseconds()
+        );
+        expect(
+          (fp.selectedDates[0] as any).flatpickrNanoseconds
+        ).toBeUndefined();
       });
 
-      it("should parse unix time", () => {
+      it("should parse unix time - without fractional seconds", () => {
         createInstance({
-          defaultDate: "1477111633.7710234564", // shouldn't parse as a timestamp
-          dateFormat: "U.N",
+          defaultDate: "1477111633", // shouldn't parse as a timestamp
+          dateFormat: "U",
+          formatSecondsPrecision: 9,
+        });
+
+        const date = new Date("2016-10-22T04:47:13Z");
+        expect(fp.selectedDates[0]).toBeDefined();
+        expect(fp.selectedDates[0].getFullYear()).toEqual(date.getFullYear());
+        expect(fp.selectedDates[0].getMonth()).toEqual(date.getMonth());
+        expect(fp.selectedDates[0].getDate()).toEqual(date.getDate());
+        expect(fp.selectedDates[0].getMilliseconds()).toEqual(0);
+        expect(
+          (fp.selectedDates[0] as any).flatpickrNanoseconds
+        ).toBeUndefined();
+      });
+
+      it("should parse unix time - with milliseconds", () => {
+        createInstance({
+          defaultDate: "1477111633.771",
+          dateFormat: "U",
+          formatSecondsPrecision: 9,
+        });
+
+        const date = new Date("2016-10-22T04:47:13.771Z");
+        expect(fp.selectedDates[0]).toBeDefined();
+        expect(fp.selectedDates[0].getFullYear()).toEqual(date.getFullYear());
+        expect(fp.selectedDates[0].getMonth()).toEqual(date.getMonth());
+        expect(fp.selectedDates[0].getDate()).toEqual(date.getDate());
+        expect(fp.selectedDates[0].getMilliseconds()).toEqual(
+          date.getMilliseconds()
+        );
+        expect(
+          (fp.selectedDates[0] as any).flatpickrNanoseconds
+        ).toBeUndefined();
+      });
+
+      it("should parse unix time - with nanoseconds", () => {
+        createInstance({
+          defaultDate: "1477111633.7710234564",
+          dateFormat: "U",
+          formatSecondsPrecision: 9,
         });
 
         const date = new Date("2016-10-22T04:47:13.771Z");
@@ -199,28 +241,15 @@ describe("flatpickr", () => {
           date.getMilliseconds()
         );
         expect((fp.selectedDates[0] as any).flatpickrNanoseconds).toEqual(
-          23456
+          23_456
         );
       });
 
-      it("should parse U with floating point", () => {
+      it("should parse u with decimal point", () => {
         createInstance({
-          defaultDate: "1477111633.771",
-          dateFormat: "U",
-        });
-
-        const date = new Date("2016-10-22T04:47:13Z");
-        expect(fp.selectedDates[0]).toBeDefined();
-        expect(fp.selectedDates[0].getFullYear()).toEqual(date.getFullYear());
-        expect(fp.selectedDates[0].getMonth()).toEqual(date.getMonth());
-        expect(fp.selectedDates[0].getDate()).toEqual(date.getDate());
-        expect(fp.selectedDates[0].getMilliseconds()).toEqual(0);
-      });
-
-      it("should parse u with floating point", () => {
-        createInstance({
-          defaultDate: "1477111633771.4",
+          defaultDate: "1477111633771.23457",
           dateFormat: "u",
+          formatSecondsPrecision: 9,
         });
 
         const date = new Date("2016-10-22T04:47:13.771Z");
@@ -231,20 +260,9 @@ describe("flatpickr", () => {
         expect(fp.selectedDates[0].getMilliseconds()).toEqual(
           date.getMilliseconds()
         );
-      });
-
-      it("should parse U.N without explicit fractional seconds", () => {
-        createInstance({
-          defaultDate: "1477111633",
-          dateFormat: "U.N",
-        });
-
-        const date = new Date("2016-10-22T04:47:13Z");
-        expect(fp.selectedDates[0]).toBeDefined();
-        expect(fp.selectedDates[0].getFullYear()).toEqual(date.getFullYear());
-        expect(fp.selectedDates[0].getMonth()).toEqual(date.getMonth());
-        expect(fp.selectedDates[0].getDate()).toEqual(date.getDate());
-        expect(fp.selectedDates[0].getMilliseconds()).toEqual(0);
+        expect((fp.selectedDates[0] as any).flatpickrNanoseconds).toEqual(
+          234_570
+        );
       });
 
       it('should parse "2016-10"', () => {
@@ -1156,7 +1174,7 @@ describe("flatpickr", () => {
 
     it("direct entry when allowInput is true must preserve milliseconds/nanoseconds", () => {
       createInstance({
-        dateFormat: "j.n.Y h:i:s.N K",
+        dateFormat: "j.n.Y h:i:s K",
         allowInput: true,
         enableTime: true,
         defaultDate: "2.7.2040 5:6:3.8 PM",
@@ -1169,6 +1187,7 @@ describe("flatpickr", () => {
       expect(fp.selectedDates[0].getMinutes()).toEqual(6);
       expect(fp.selectedDates[0].getSeconds()).toEqual(3);
       expect(fp.selectedDates[0].getMilliseconds()).toEqual(800);
+      expect((fp.selectedDates[0] as any).flatpickrNanoseconds).toBeUndefined();
 
       // set - no change
       fp.input.focus();
@@ -1183,6 +1202,7 @@ describe("flatpickr", () => {
       expect(fp.selectedDates[0].getMinutes()).toEqual(6);
       expect(fp.selectedDates[0].getSeconds()).toEqual(3);
       expect(fp.selectedDates[0].getMilliseconds()).toEqual(800);
+      expect((fp.selectedDates[0] as any).flatpickrNanoseconds).toBeUndefined();
 
       // set2 - update
       fp.input.focus();
@@ -1417,10 +1437,11 @@ describe("flatpickr", () => {
       createInstance({
         dateFormat: "Y-m-d H:i:S",
         enableTime: true,
-        defaultDate: "2000-12-13 5:6:3",
+        defaultDate: "2000-12-13 5:6:3.010020",
+        formatSecondsPrecision: -1,
       });
 
-      expect(fp.input.value).toEqual("2000-12-13 05:06:03");
+      expect(fp.input.value).toEqual("2000-12-13 05:06:03.01002");
 
       fp.open();
 
@@ -1428,15 +1449,16 @@ describe("flatpickr", () => {
       expect(fp.input.value).toEqual("2000-12-13 06:06:00");
     });
 
-    it("time input seconds must be kept after hours increment when enabled", () => {
+    it("time input fractional seconds must be cleared after hours increment", () => {
       createInstance({
         dateFormat: "Y-m-d H:i:S",
         enableTime: true,
         enableSeconds: true,
-        defaultDate: "2000-12-13 5:6:3",
+        defaultDate: "2000-12-13 5:6:3.010020",
+        formatSecondsPrecision: -1,
       });
 
-      expect(fp.input.value).toEqual("2000-12-13 05:06:03");
+      expect(fp.input.value).toEqual("2000-12-13 05:06:03.01002");
 
       fp.open();
 

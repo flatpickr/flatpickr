@@ -135,6 +135,10 @@ By default, Flatpickr utilizes native datetime widgets unless certain options (e
   /* Allows using a custom date formatting function instead of the built-in. Generally unnecessary.  */
   formatDate: (date: Date, format: string, locale: Locale) => string;
 
+  /* Fractional seconds precision (used only when seconds are present in the format).
+   */
+  formatSecondsPrecision: -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+
   /* If "weekNumbers" are enabled, this is the function that outputs the week number for a given dates, optionally along with other text  */
   getWeek: (date: Date) => string | number;
 
@@ -301,6 +305,7 @@ export interface ParsedOptions {
   enableTime: boolean;
   errorHandler: (err: Error) => void;
   formatDate?: Options["formatDate"];
+  formatSecondsPrecision: BaseOptions["formatSecondsPrecision"];
   getWeek: (date: Date) => string | number;
   hourIncrement: number;
   ignoredFocusElements: HTMLElement[];
@@ -366,6 +371,7 @@ export const defaults: ParsedOptions = {
   enableTime: false,
   errorHandler: (err: Error) =>
     typeof console !== "undefined" && console.warn(err),
+  formatSecondsPrecision: 0,
   getWeek: (givenDate: Date) => {
     const date = new Date(givenDate.getTime());
     date.setHours(0, 0, 0, 0);
