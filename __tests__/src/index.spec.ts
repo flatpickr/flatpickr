@@ -186,8 +186,8 @@ describe("flatpickr", () => {
 
       it("should parse unix time", () => {
         createInstance({
-          defaultDate: "1477111633.771", // shouldnt parse as a timestamp
-          dateFormat: "U",
+          defaultDate: "1477111633.7710234564", // shouldn't parse as a timestamp
+          dateFormat: "U.N",
         });
 
         const date = new Date("2016-10-22T04:47:13.771Z");
@@ -198,6 +198,53 @@ describe("flatpickr", () => {
         expect(fp.selectedDates[0].getMilliseconds()).toEqual(
           date.getMilliseconds()
         );
+        expect((fp.selectedDates[0] as any).flatpickrNanoseconds).toEqual(
+          23456
+        );
+      });
+
+      it("should parse U with floating point", () => {
+        createInstance({
+          defaultDate: "1477111633.771",
+          dateFormat: "U",
+        });
+
+        const date = new Date("2016-10-22T04:47:13Z");
+        expect(fp.selectedDates[0]).toBeDefined();
+        expect(fp.selectedDates[0].getFullYear()).toEqual(date.getFullYear());
+        expect(fp.selectedDates[0].getMonth()).toEqual(date.getMonth());
+        expect(fp.selectedDates[0].getDate()).toEqual(date.getDate());
+        expect(fp.selectedDates[0].getMilliseconds()).toEqual(0);
+      });
+
+      it("should parse u with floating point", () => {
+        createInstance({
+          defaultDate: "1477111633771.4",
+          dateFormat: "u",
+        });
+
+        const date = new Date("2016-10-22T04:47:13.771Z");
+        expect(fp.selectedDates[0]).toBeDefined();
+        expect(fp.selectedDates[0].getFullYear()).toEqual(date.getFullYear());
+        expect(fp.selectedDates[0].getMonth()).toEqual(date.getMonth());
+        expect(fp.selectedDates[0].getDate()).toEqual(date.getDate());
+        expect(fp.selectedDates[0].getMilliseconds()).toEqual(
+          date.getMilliseconds()
+        );
+      });
+
+      it("should parse U.N without explicit fractional seconds", () => {
+        createInstance({
+          defaultDate: "1477111633",
+          dateFormat: "U.N",
+        });
+
+        const date = new Date("2016-10-22T04:47:13Z");
+        expect(fp.selectedDates[0]).toBeDefined();
+        expect(fp.selectedDates[0].getFullYear()).toEqual(date.getFullYear());
+        expect(fp.selectedDates[0].getMonth()).toEqual(date.getMonth());
+        expect(fp.selectedDates[0].getDate()).toEqual(date.getDate());
+        expect(fp.selectedDates[0].getMilliseconds()).toEqual(0);
       });
 
       it('should parse "2016-10"', () => {

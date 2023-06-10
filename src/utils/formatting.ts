@@ -141,9 +141,9 @@ export const tokenRegex: TokenRegex = {
   J: "(\\d{1,2})\\w+",
   K: "", // locale-dependent, setup on runtime
   M: "", // locale-dependent, setup on runtime
-  N: "((?<=.)\\d+(?!\\d))",
+  N: "((?<=\\.)\\d+(?!\\d))",
   S: "(\\d{1,2})",
-  U: "(\\d+(?:\\.\\d+)?)",
+  U: "(\\d+)",
   W: "(\\d{1,2})",
   Y: "(\\d{4})",
   Z: "(.+)",
@@ -155,7 +155,7 @@ export const tokenRegex: TokenRegex = {
   m: "(\\d{1,2})",
   n: "(\\d{1,2})",
   s: "(\\d{1,2})",
-  u: "(\\d+(?:\\.\\d+)?)",
+  u: "(\\d+)",
   w: "(\\d{1,2})",
   y: "(\\d{2})",
 };
@@ -219,7 +219,7 @@ export const formats: Formats = {
   S: (date: Date) => pad(date.getSeconds()),
 
   // unix timestamp
-  U: (date: Date) => date.getTime() / 1000,
+  U: (date: Date) => Math.floor(date.getTime() / 1000),
 
   W: function (date: Date, _: Locale, options: ParsedOptions) {
     return options.getWeek(date);
