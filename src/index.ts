@@ -355,6 +355,11 @@ function FlatpickrInstance(
           self.latestSelectedDateObj.setSeconds(0);
         }
         self.latestSelectedDateObj.setMilliseconds(0);
+        if (
+          (self.latestSelectedDateObj as any).flatpickrNanoseconds !== undefined
+        ) {
+          delete (self.latestSelectedDateObj as any).flatpickrNanoseconds;
+        }
       }
     }
 

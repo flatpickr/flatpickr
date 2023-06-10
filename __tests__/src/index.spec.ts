@@ -1107,6 +1107,67 @@ describe("flatpickr", () => {
       expect(fp.selectedDates[0].getMinutes()).toEqual(17);
     });
 
+    it("direct entry when allowInput is true must preserve milliseconds/nanoseconds", () => {
+      createInstance({
+        dateFormat: "j.n.Y h:i:s.N K",
+        allowInput: true,
+        enableTime: true,
+        defaultDate: "2.7.2040 5:6:3.8 PM",
+      });
+      expect(fp.selectedDates[0]).toBeDefined();
+      expect(fp.selectedDates[0].getFullYear()).toEqual(2040);
+      expect(fp.selectedDates[0].getMonth()).toEqual(6); // 6 === July
+      expect(fp.selectedDates[0].getDate()).toEqual(2);
+      expect(fp.selectedDates[0].getHours()).toEqual(17);
+      expect(fp.selectedDates[0].getMinutes()).toEqual(6);
+      expect(fp.selectedDates[0].getSeconds()).toEqual(3);
+      expect(fp.selectedDates[0].getMilliseconds()).toEqual(800);
+
+      // set - no change
+      fp.input.focus();
+      fp.input.value = "2.7.2040 5:6:3.8 PM";
+      fp.input.blur();
+
+      expect(fp.selectedDates[0]).toBeDefined();
+      expect(fp.selectedDates[0].getFullYear()).toEqual(2040);
+      expect(fp.selectedDates[0].getMonth()).toEqual(6); // 6 === July
+      expect(fp.selectedDates[0].getDate()).toEqual(2);
+      expect(fp.selectedDates[0].getHours()).toEqual(17);
+      expect(fp.selectedDates[0].getMinutes()).toEqual(6);
+      expect(fp.selectedDates[0].getSeconds()).toEqual(3);
+      expect(fp.selectedDates[0].getMilliseconds()).toEqual(800);
+
+      // set2 - update
+      fp.input.focus();
+      fp.input.value = "4.9.2060 1:2:3.9770655 AM";
+      fp.input.blur();
+
+      expect(fp.selectedDates[0]).toBeDefined();
+      expect(fp.selectedDates[0].getFullYear()).toEqual(2060);
+      expect(fp.selectedDates[0].getMonth()).toEqual(8); // 8 === September
+      expect(fp.selectedDates[0].getDate()).toEqual(4);
+      expect(fp.selectedDates[0].getHours()).toEqual(1);
+      expect(fp.selectedDates[0].getMinutes()).toEqual(2);
+      expect(fp.selectedDates[0].getSeconds()).toEqual(3);
+      expect(fp.selectedDates[0].getMilliseconds()).toEqual(977);
+      expect((fp.selectedDates[0] as any).flatpickrNanoseconds).toEqual(65_500);
+
+      // set2 - no change
+      fp.input.focus();
+      fp.input.value = "4.9.2060 1:2:3.9770655 AM";
+      fp.input.blur();
+
+      expect(fp.selectedDates[0]).toBeDefined();
+      expect(fp.selectedDates[0].getFullYear()).toEqual(2060);
+      expect(fp.selectedDates[0].getMonth()).toEqual(8); // 8 === September
+      expect(fp.selectedDates[0].getDate()).toEqual(4);
+      expect(fp.selectedDates[0].getHours()).toEqual(1);
+      expect(fp.selectedDates[0].getMinutes()).toEqual(2);
+      expect(fp.selectedDates[0].getSeconds()).toEqual(3);
+      expect(fp.selectedDates[0].getMilliseconds()).toEqual(977);
+      expect((fp.selectedDates[0] as any).flatpickrNanoseconds).toEqual(65_500);
+    });
+
     it("Renders week numbers correctly", () => {
       createInstance({
         weekNumbers: true,

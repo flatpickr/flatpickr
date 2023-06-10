@@ -10,6 +10,7 @@ export type token =
   | "J"
   | "K"
   | "M"
+  | "N"
   | "S"
   | "U"
   | "W"
@@ -63,6 +64,18 @@ export const revFormat: RevFormat = {
   },
   M: function (dateObj: Date, shortMonth: string, locale: Locale) {
     dateObj.setMonth(locale.months.shorthand.indexOf(shortMonth));
+  },
+  N: (dateObj: Date, fractionalSeconds: string) => {
+    var nanos = Math.floor(
+      parseFloat(fractionalSeconds) * Math.pow(10, 9 - fractionalSeconds.length)
+    );
+    dateObj.setMilliseconds(Math.floor(nanos / 1_000_000));
+    nanos = nanos - dateObj.getMilliseconds() * 1_000_000;
+    if (nanos) {
+      (dateObj as any).flatpickrNanoseconds = nanos;
+    } else if ((dateObj as any).flatpickrNanoseconds !== undefined) {
+      delete (dateObj as any).flatpickrNanoseconds;
+    }
   },
   S: (dateObj: Date, seconds: string) => {
     dateObj.setSeconds(parseFloat(seconds));
@@ -128,6 +141,7 @@ export const tokenRegex: TokenRegex = {
   J: "(\\d{1,2})\\w+",
   K: "", // locale-dependent, setup on runtime
   M: "", // locale-dependent, setup on runtime
+  N: "((?<=.)\\d+(?!\\d))",
   S: "(\\d{1,2})",
   U: "(\\d+(?:\\.\\d+)?)",
   W: "(\\d{1,2})",
@@ -192,6 +206,14 @@ export const formats: Formats = {
   M: function (date: Date, locale: Locale) {
     return monthToStr(date.getMonth(), true, locale);
   },
+
+  // fractional seconds with nanosecond precision (0-999_999_999)
+  N: (date: Date) =>
+    pad(
+      date.getMilliseconds() * 1_000_000 +
+        ((date as any).flatpickrNanoseconds || 0),
+      9
+    ),
 
   // seconds (00-59)
   S: (date: Date) => pad(date.getSeconds()),
