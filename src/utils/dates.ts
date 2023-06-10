@@ -50,22 +50,30 @@ export const createDateParser = ({ config = defaults, l10n = english }) => (
 ): Date | undefined => {
   if (date !== 0 && !date) return undefined;
 
+  const format = givenFormat || (config || defaults).dateFormat;
   const locale = customLocale || l10n;
 
   let parsedDate: Date | undefined;
   const dateOrig = date;
 
-  if (date instanceof Date) parsedDate = new Date(date.getTime());
-  else if (
+  if (
     typeof date !== "string" &&
-    date.toFixed !== undefined // timestamp
-  )
-    // create a copy
+    !(date instanceof Date) &&
+    (date as any).toFixed !== undefined // timestamp in milliseconds
+  ) {
+    date = new Date(date);
+  }
 
-    parsedDate = new Date(date);
-  else if (typeof date === "string") {
+  if (date instanceof Date) {
+    date = createDateFormatter({ config: config, l10n: l10n })(
+      date,
+      format,
+      locale
+    );
+  }
+
+  if (typeof date === "string") {
     // date string
-    const format = givenFormat || (config || defaults).dateFormat;
     const datestr = String(date).trim();
 
     if (datestr === "today") {
