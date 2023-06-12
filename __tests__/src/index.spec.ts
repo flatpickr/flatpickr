@@ -155,6 +155,19 @@ describe("flatpickr", () => {
       expect(fp.days.querySelector(".selected")).toEqual(null);
     });
 
+    it("should parse out-of-bounds dates when allowInvalidPreload is set", () => {
+      createInstance({
+        allowInvalidPreload: true,
+        minDate: "2023-12-28",
+        maxDate: "2023-12-29",
+      });
+
+      fp.setDate("2023-12-27"); // date lower than minDate
+      expect(fp.input.value).toEqual("2023-12-27");
+      fp.setDate("2024-01-01"); // date higher than maxDate
+      expect(fp.input.value).toEqual("2024-01-01");
+    });
+
     it("doesn't throw with undefined properties", () => {
       createInstance({
         onChange: undefined,
