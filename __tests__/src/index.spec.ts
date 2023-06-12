@@ -165,16 +165,25 @@ describe("flatpickr", () => {
 
     it("does not throw when allowInvalidPreload is set and an initial value is not a date", () => {
       const el = document.createElement("input");
-      el.value = 'DD-MM-YYYY';
+      el.value = "DD-MM-YYYY";
 
-      createInstance({
-        allowInvalidPreload: true,
-      }, el);
+      // To supress console.warn
+      const consoleWarnMock = jest
+        .spyOn(console, "warn")
+        .mockImplementation(() => {});
 
+      createInstance(
+        {
+          allowInvalidPreload: true,
+        },
+        el
+      );
+
+      expect(console.warn).toBeCalled();
       simulate("focus", fp._input, { which: 1, bubbles: true }, CustomEvent);
-      expect(fp.calendarContainer.classList.contains('open')).toBeTruthy();
-
-    })
+      expect(fp.calendarContainer.classList.contains("open")).toBeTruthy();
+      consoleWarnMock.mockRestore();
+    });
   });
 
   describe("datetimestring parser", () => {
@@ -733,7 +742,9 @@ describe("flatpickr", () => {
 
       it("should revert invalid date before closing #2089", () => {
         // To supress console.warn
-        jest.spyOn(console, "warn").mockImplementation(() => {});
+        const consoleWarnMock = jest
+          .spyOn(console, "warn")
+          .mockImplementation(() => {});
 
         createInstance({
           allowInput: true,
@@ -747,6 +758,9 @@ describe("flatpickr", () => {
         expect(fp.isOpen).toBe(false);
         expect(fp.selectedDates.length).toBe(0);
         expect(fp._input.value).toBe("");
+        expect(consoleWarnMock).toBeCalled();
+
+        consoleWarnMock.mockRestore();
       });
 
       it("should use altFormat when altInput is enabled", () => {
