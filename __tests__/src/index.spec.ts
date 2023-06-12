@@ -155,12 +155,47 @@ describe("flatpickr", () => {
       expect(fp.days.querySelector(".selected")).toEqual(null);
     });
 
+    it("should parse out-of-bounds dates when allowInvalidPreload is set", () => {
+      createInstance({
+        allowInvalidPreload: true,
+        minDate: "2023-12-28",
+        maxDate: "2023-12-29",
+      });
+
+      fp.setDate("2023-12-27"); // date lower than minDate
+      expect(fp.input.value).toEqual("2023-12-27");
+      fp.setDate("2024-01-01"); // date higher than maxDate
+      expect(fp.input.value).toEqual("2024-01-01");
+    });
+
     it("doesn't throw with undefined properties", () => {
       createInstance({
         onChange: undefined,
       });
       fp.set("minDate", "2016-10-20");
       expect(fp.config.minDate).toBeDefined();
+    });
+
+    it("does not throw when allowInvalidPreload is set and an initial value is not a date", () => {
+      const el = document.createElement("input");
+      el.value = "DD-MM-YYYY";
+
+      // To supress console.warn
+      const consoleWarnMock = jest
+        .spyOn(console, "warn")
+        .mockImplementation(() => {});
+
+      createInstance(
+        {
+          allowInvalidPreload: true,
+        },
+        el
+      );
+
+      expect(console.warn).toBeCalled();
+      simulate("focus", fp._input, { which: 1, bubbles: true }, CustomEvent);
+      expect(fp.calendarContainer.classList.contains("open")).toBeTruthy();
+      consoleWarnMock.mockRestore();
     });
   });
 
@@ -720,7 +755,9 @@ describe("flatpickr", () => {
 
       it("should revert invalid date before closing #2089", () => {
         // To supress console.warn
-        jest.spyOn(console, "warn").mockImplementation(() => {});
+        const consoleWarnMock = jest
+          .spyOn(console, "warn")
+          .mockImplementation(() => {});
 
         createInstance({
           allowInput: true,
@@ -734,6 +771,9 @@ describe("flatpickr", () => {
         expect(fp.isOpen).toBe(false);
         expect(fp.selectedDates.length).toBe(0);
         expect(fp._input.value).toBe("");
+        expect(consoleWarnMock).toBeCalled();
+
+        consoleWarnMock.mockRestore();
       });
 
       it("should use altFormat when altInput is enabled", () => {

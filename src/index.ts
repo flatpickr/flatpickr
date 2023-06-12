@@ -2344,8 +2344,9 @@ function FlatpickrInstance(
 
     self.selectedDateElem = target;
 
-    if (self.config.mode === "single") self.selectedDates = [selectedDate];
-    else if (self.config.mode === "multiple") {
+    if (self.config.mode === "single") {
+      self.selectedDates = selectedDate ? [selectedDate] : [];
+    } else if (self.config.mode === "multiple") {
       const selectedIndex = isDateSelected(selectedDate);
 
       if (selectedIndex) self.selectedDates.splice(parseInt(selectedIndex), 1);
@@ -2493,7 +2494,7 @@ function FlatpickrInstance(
       );
 
     self.selectedDates = (self.config.allowInvalidPreload
-      ? dates
+      ? dates.filter((d) => d instanceof Date)
       : dates.filter(
           (d) => d instanceof Date && isEnabled(d, false)
         )) as Date[];
