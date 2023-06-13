@@ -133,7 +133,16 @@ By default, Flatpickr utilizes native datetime widgets unless certain options (e
   errorHandler: (e: Error) => void;
 
   /* Allows using a custom date formatting function instead of the built-in. Generally unnecessary.  */
-  formatDate: (date: Date, format: string, locale: Locale) => string;
+  formatDate: (
+    date: Date,
+    format: string,
+    locale: Locale,
+    formatSecondsPrecision: BaseOptions["formatSecondsPrecision"]
+  ) => string;
+
+  /* Fractional seconds precision (used only when seconds are present in the format).
+   */
+  formatSecondsPrecision: -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
   /* If "weekNumbers" are enabled, this is the function that outputs the week number for a given dates, optionally along with other text  */
   getWeek: (date: Date) => string | number;
@@ -219,7 +228,12 @@ Use it along with "enableTime" to create a time picker. */
   onPreCalendarPosition: Hook | Hook[];
 
   /* A custom datestring parser */
-  parseDate: (date: string, format: string) => Date;
+  parseDate: (
+    date: string | Date,
+    format: string,
+    timeless: boolean,
+    locale: Locale
+  ) => Date | undefined;
 
   /* Plugins. See https://chmln.github.io/flatpickr/plugins/ */
   plugins: Plugin[];
@@ -301,6 +315,7 @@ export interface ParsedOptions {
   enableTime: boolean;
   errorHandler: (err: Error) => void;
   formatDate?: Options["formatDate"];
+  formatSecondsPrecision: BaseOptions["formatSecondsPrecision"];
   getWeek: (date: Date) => string | number;
   hourIncrement: number;
   ignoredFocusElements: HTMLElement[];
@@ -366,6 +381,7 @@ export const defaults: ParsedOptions = {
   enableTime: false,
   errorHandler: (err: Error) =>
     typeof console !== "undefined" && console.warn(err),
+  formatSecondsPrecision: 0,
   getWeek: (givenDate: Date) => {
     const date = new Date(givenDate.getTime());
     date.setHours(0, 0, 0, 0);
@@ -380,7 +396,7 @@ export const defaults: ParsedOptions = {
     return (
       1 +
       Math.round(
-        ((date.getTime() - week1.getTime()) / 86400000 -
+        ((date.getTime() - week1.getTime()) / 86_400_000 -
           3 +
           ((week1.getDay() + 6) % 7)) /
           7

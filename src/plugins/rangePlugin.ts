@@ -13,7 +13,7 @@ declare global {
 
 function rangePlugin(config: Config = {}): Plugin {
   return function (fp) {
-    let dateFormat = "",
+    let dateFormat: string,
       secondInput: HTMLInputElement,
       _secondInputFocused: boolean,
       _prevDates: Date[];

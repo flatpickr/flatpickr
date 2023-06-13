@@ -1,5 +1,10 @@
-export const pad = (number: string | number, length = 2) =>
-  `000${number}`.slice(length * -1);
+export const pad = (number: string | number, length = 2) => {
+  let res = "" + number;
+  while (res.length < length) {
+    res = "0" + res;
+  }
+  return res;
+};
 export const int = (bool: boolean) => (bool === true ? 1 : 0);
 
 /* istanbul ignore next */
