@@ -1,6 +1,6 @@
 import { int, pad } from "../utils";
 import { Locale } from "../types/locale";
-import { ParsedOptions } from "../types/options";
+import { defaults, BaseOptions } from "../types/options";
 
 export type token =
   | "D"
@@ -110,7 +110,7 @@ export type RevFormatFn = (
   date: Date,
   data: string,
   locale: Locale
-) => Date | void | undefined;
+) => Date | void;
 export type RevFormat = Record<string, RevFormatFn>;
 export const revFormat: RevFormat = {
   D: doNothing,
@@ -220,33 +220,50 @@ export const tokenRegex: TokenRegex = {
   y: "(\\d{2})",
 };
 
+type ParsedFormatSecondsPrecision = BaseOptions["formatSecondsPrecision"];
 export type Formats = Record<
   token,
-  (date: Date, locale: Locale, options: ParsedOptions) => string | number
+  (
+    date: Date,
+    locale: Locale,
+    formatSecondsPrecision: ParsedFormatSecondsPrecision
+  ) => string
 >;
 export const formats: Formats = {
   // get the date in UTC
   Z: (date: Date) => date.toISOString(),
 
   // weekday name, short, e.g. Thu
-  D: function (date: Date, locale: Locale, options: ParsedOptions) {
+  D: function (
+    date: Date,
+    locale: Locale,
+    formatSecondsPrecision: ParsedFormatSecondsPrecision
+  ) {
     return locale.weekdays.shorthand[
-      formats.w(date, locale, options) as number
+      parseInt(formats.w(date, locale, formatSecondsPrecision))
     ];
   },
 
   // full month name e.g. January
-  F: function (date: Date, locale: Locale, options: ParsedOptions) {
+  F: function (
+    date: Date,
+    locale: Locale,
+    formatSecondsPrecision: ParsedFormatSecondsPrecision
+  ) {
     return monthToStr(
-      (formats.n(date, locale, options) as number) - 1,
+      parseInt(formats.n(date, locale, formatSecondsPrecision)) - 1,
       false,
       locale
     );
   },
 
   // padded hour 1-12
-  G: function (date: Date, locale: Locale, options: ParsedOptions) {
-    return pad(formats.h(date, locale, options));
+  G: function (
+    date: Date,
+    locale: Locale,
+    formatSecondsPrecision: ParsedFormatSecondsPrecision
+  ) {
+    return pad(formats.h(date, locale, formatSecondsPrecision));
   },
 
   // hours with leading zero e.g. 03
@@ -254,9 +271,10 @@ export const formats: Formats = {
 
   // day (1-30) with ordinal suffix e.g. 1st, 2nd
   J: function (date: Date, locale: Locale) {
-    return locale.ordinal !== undefined
-      ? date.getDate() + locale.ordinal(date.getDate())
-      : date.getDate();
+    return (
+      date.getDate() +
+      (locale.ordinal !== undefined ? locale.ordinal(date.getDate()) : "")
+    );
   },
 
   // AM/PM
@@ -268,20 +286,25 @@ export const formats: Formats = {
   },
 
   // seconds (00-59)
-  S: (date: Date, _: Locale, options: ParsedOptions) => {
-    const res = formatDateSeconds(date, false, options.formatSecondsPrecision);
+  S: (
+    date: Date,
+    _: Locale,
+    formatSecondsPrecision: ParsedFormatSecondsPrecision
+  ) => {
+    const res = formatDateSeconds(date, false, formatSecondsPrecision);
     const resArr = res.split(".");
     resArr[0] = pad(resArr[0], 2);
     return resArr.join(".");
   },
 
   // unix timestamp
-  U: (date: Date, _: Locale, options: ParsedOptions) =>
-    formatDateSeconds(date, true, options.formatSecondsPrecision),
+  U: (
+    date: Date,
+    _: Locale,
+    formatSecondsPrecision: ParsedFormatSecondsPrecision
+  ) => formatDateSeconds(date, true, formatSecondsPrecision),
 
-  W: function (date: Date, _: Locale, options: ParsedOptions) {
-    return options.getWeek(date);
-  },
+  W: (date: Date) => "" + defaults.getWeek(date), // overrided by createDateFormatter, cannot use globals here
 
   // full year e.g. 2016, padded (0001-9999)
   Y: (date: Date) => pad(date.getFullYear(), 4),
@@ -290,13 +313,13 @@ export const formats: Formats = {
   d: (date: Date) => pad(date.getDate()),
 
   // hour from 1-12 (am/pm)
-  h: (date: Date) => (date.getHours() % 12 ? date.getHours() % 12 : 12),
+  h: (date: Date) => "" + (date.getHours() % 12 ? date.getHours() % 12 : 12),
 
   // minutes, padded with leading zero e.g. 09
   i: (date: Date) => pad(date.getMinutes()),
 
   // day in month (1-30)
-  j: (date: Date) => date.getDate(),
+  j: (date: Date) => "" + date.getDate(),
 
   // weekday name, full, e.g. Thursday
   l: function (date: Date, locale: Locale) {
@@ -307,21 +330,24 @@ export const formats: Formats = {
   m: (date: Date) => pad(date.getMonth() + 1),
 
   // the month number (1-12)
-  n: (date: Date) => date.getMonth() + 1,
+  n: (date: Date) => "" + (date.getMonth() + 1),
 
   // seconds (0-59)
-  s: (date: Date, _: Locale, options: ParsedOptions) =>
-    formatDateSeconds(date, false, options.formatSecondsPrecision),
+  s: (
+    date: Date,
+    _: Locale,
+    formatSecondsPrecision: ParsedFormatSecondsPrecision
+  ) => formatDateSeconds(date, false, formatSecondsPrecision),
 
   // Unix Milliseconds
-  u: (date: Date, _: Locale, options: ParsedOptions) =>
-    moveNumberDot(
-      formatDateSeconds(date, true, options.formatSecondsPrecision),
-      3
-    ),
+  u: (
+    date: Date,
+    _: Locale,
+    formatSecondsPrecision: ParsedFormatSecondsPrecision
+  ) => moveNumberDot(formatDateSeconds(date, true, formatSecondsPrecision), 3),
 
   // number of the day of the week
-  w: (date: Date) => date.getDay(),
+  w: (date: Date) => "" + date.getDay(),
 
   // last two digits of year e.g. 16 for 2016
   y: (date: Date) => String(date.getFullYear()).substring(2),

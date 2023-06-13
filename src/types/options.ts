@@ -133,7 +133,12 @@ By default, Flatpickr utilizes native datetime widgets unless certain options (e
   errorHandler: (e: Error) => void;
 
   /* Allows using a custom date formatting function instead of the built-in. Generally unnecessary.  */
-  formatDate: (date: Date, format: string, locale: Locale) => string;
+  formatDate: (
+    date: Date,
+    format: string,
+    locale: Locale,
+    formatSecondsPrecision: BaseOptions["formatSecondsPrecision"]
+  ) => string;
 
   /* Fractional seconds precision (used only when seconds are present in the format).
    */
@@ -223,7 +228,12 @@ Use it along with "enableTime" to create a time picker. */
   onPreCalendarPosition: Hook | Hook[];
 
   /* A custom datestring parser */
-  parseDate: (date: string, format: string) => Date;
+  parseDate: (
+    date: string | Date,
+    format: string,
+    timeless: boolean,
+    locale: Locale
+  ) => Date | undefined;
 
   /* Plugins. See https://chmln.github.io/flatpickr/plugins/ */
   plugins: Plugin[];

@@ -528,7 +528,7 @@ describe("flatpickr", () => {
           parseDate(dateStr, formatStr) {
             let segs = formatStr.split("-");
             let date = new Date();
-            dateStr.split(".*^*.").forEach((v, i) => {
+            (dateStr as string).split(".*^*.").forEach((v, i) => {
               if (i === 0) return;
               let seg = segs[i - 1];
               switch (seg) {
@@ -575,6 +575,30 @@ describe("flatpickr", () => {
 
         fp.setDate(new Date(2016, 10, 20));
         expect(fp.input.value).not.toEqual(RESULT);
+      });
+
+      it("flatpickr.formatDate() must accept fractional seconds precision", () => {
+        createInstance({
+          allowInput: true,
+          dateFormat: "Y-m-d H:i:S",
+          formatDate(date, formatStr, locale) {
+            return flatpickr
+              .formatDate(date, formatStr, locale, 5)
+              .replace(/:0{1,2}(\.0+)?$/, "");
+          },
+        });
+
+        fp.input.focus();
+        fp.input.value = "2020-10-20 15:16:17.8009";
+        fp.input.blur();
+
+        expect(fp.input.value).toEqual("2020-10-20 15:16:17.80090");
+
+        fp.input.focus();
+        fp.input.value = "2020-10-20 15:16:00";
+        fp.input.blur();
+
+        expect(fp.input.value).toEqual("2020-10-20 15:16");
       });
     });
   });

@@ -6,7 +6,7 @@ import {
   revFormat,
   formats,
 } from "./formatting";
-import { defaults, ParsedOptions } from "../types/options";
+import { defaults, BaseOptions, ParsedOptions } from "../types/options";
 import { english } from "../l10n/default";
 
 export interface FormatterArgs {
@@ -21,20 +21,25 @@ export const createDateFormatter = ({
   isMobile = false,
 }: FormatterArgs) => (
   dateObj: Date,
-  frmt: string,
-  overrideLocale?: Locale
+  format: string,
+  overrideLocale?: Locale,
+  overrideFormatSecondsPrecision?: BaseOptions["formatSecondsPrecision"]
 ): string => {
   const locale = overrideLocale || l10n;
+  const formatSecondsPrecision =
+    overrideFormatSecondsPrecision || config.formatSecondsPrecision || 0;
 
   if (config.formatDate !== undefined && !isMobile) {
-    return config.formatDate(dateObj, frmt, locale);
+    return config.formatDate(dateObj, format, locale, formatSecondsPrecision);
   }
 
-  return frmt
+  return format
     .split("")
     .map((c, i, arr) =>
       formats[c as token] && arr[i - 1] !== "\\"
-        ? formats[c as token](dateObj, locale, config)
+        ? c === "W"
+          ? (date: Date) => "" + config.getWeek(date)
+          : formats[c as token](dateObj, locale, formatSecondsPrecision)
         : c !== "\\"
         ? c
         : ""
@@ -43,15 +48,15 @@ export const createDateFormatter = ({
 };
 
 export const createDateParser = ({ config = defaults, l10n = english }) => (
-  date: Date | string | number,
+  date: string | Date | number,
   givenFormat?: string,
-  timeless?: boolean,
-  customLocale?: Locale
+  timeless: boolean = false,
+  overrideLocale?: Locale
 ): Date | undefined => {
   if (date !== 0 && !date) return undefined;
 
-  const format = givenFormat || (config || defaults).dateFormat;
-  const locale = customLocale || l10n;
+  const format = givenFormat || config.dateFormat;
+  const locale = overrideLocale || l10n;
 
   let parsedDate: Date | undefined;
   const dateOrig = date;
@@ -79,8 +84,8 @@ export const createDateParser = ({ config = defaults, l10n = english }) => (
     if (datestr === "today") {
       parsedDate = new Date();
       timeless = true;
-    } else if (config && config.parseDate) {
-      parsedDate = config.parseDate(date, format);
+    } else if (config.parseDate) {
+      parsedDate = config.parseDate(date, format, timeless, locale);
     } else if (
       /Z$/.test(datestr) ||
       /GMT$/.test(datestr) // datestrings w/ timezone
@@ -111,7 +116,7 @@ export const createDateParser = ({ config = defaults, l10n = english }) => (
       parsedDate =
         !config || !config.noCalendar
           ? new Date(new Date().getFullYear(), 0, 1, 0, 0, 0, 0)
-          : (new Date(new Date().setHours(0, 0, 0, 0)) as Date);
+          : new Date(new Date().setHours(0, 0, 0, 0));
 
       ops.forEach(
         ({ fn, val }) =>

@@ -1,4 +1,4 @@
-import { DateOption, Options, ParsedOptions } from "./options";
+import { DateOption, BaseOptions, Options, ParsedOptions } from "./options";
 import { Locale, CustomLocale, key as LocaleKey } from "./locale";
 
 import { RevFormat, Formats, TokenRegex } from "../utils/formatting";
@@ -160,12 +160,8 @@ export interface FlatpickrFn {
   l10ns: { [k in LocaleKey]?: CustomLocale } & { default: Locale };
   localize: (l10n: CustomLocale) => void;
   setDefaults: (config: Options) => void;
-  parseDate: (
-    date: DateOption,
-    format?: string,
-    timeless?: boolean
-  ) => Date | undefined;
-  formatDate: (date: Date, format: string) => string;
+  parseDate: BaseOptions["parseDate"];
+  formatDate: BaseOptions["formatDate"];
   compareDates: (date1: Date, date2: Date, timeless?: boolean) => number;
 }
 
