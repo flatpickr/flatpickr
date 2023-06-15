@@ -164,8 +164,7 @@ By default, Flatpickr utilizes native datetime widgets unless certain options (e
   /* The minimum time that a user can start picking from (inclusive). */
   minTime: DateOption;
 
-  /* Adjusts the step for the minute input (incl. scrolling)
-  Defaults to 5 */
+  /* Adjusts the step for the minute input (incl. scrolling) */
   minuteIncrement: number;
 
   /* Date selection mode, defaults to "single" */
@@ -391,7 +390,7 @@ export const defaults: ParsedOptions = {
   ignoredFocusElements: [],
   inline: false,
   locale: "default",
-  minuteIncrement: 5,
+  minuteIncrement: 1,
   mode: "single",
   monthSelectorType: "dropdown",
   nextArrow:
