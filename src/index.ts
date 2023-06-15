@@ -1207,7 +1207,7 @@ function FlatpickrInstance(
 
       self.secondElement.setAttribute(
         "step",
-        self.minuteElement.getAttribute("step") as string
+        self.config.secondIncrement.toString()
       );
       self.secondElement.setAttribute("min", "0");
       self.secondElement.setAttribute("max", "59");
