@@ -1241,8 +1241,8 @@ describe("flatpickr", () => {
     it("time input and increments", () => {
       createInstance({
         enableTime: true,
+        minuteIncrement: 10,
         defaultDate: "2017-1-1 10:00",
-        //minDate: "2017-1-01 3:35",
       });
 
       expect(fp.hourElement).toBeDefined();
@@ -1259,7 +1259,7 @@ describe("flatpickr", () => {
       expect(fp.hourElement.value).toEqual("11");
 
       incrementTime("minuteElement", 1);
-      expect(fp.minuteElement.value).toEqual("05");
+      expect(fp.minuteElement.value).toEqual("10");
 
       simulate("click", fp.amPM, { which: 1 }, MouseEvent);
       expect(fp.amPM.textContent).toEqual("PM");
@@ -1276,9 +1276,39 @@ describe("flatpickr", () => {
       expect(fp.hourElement.value).toEqual("09");
     });
 
+    it("time input and seconds increment", () => {
+      createInstance({
+        enableTime: true,
+        enableSeconds: true,
+        secondIncrement: 15,
+        defaultDate: "2017-1-1 10:00:30",
+      });
+
+      expect(fp.minuteElement).toBeDefined();
+      expect(fp.secondElement).toBeDefined();
+
+      if (!fp.minuteElement || !fp.secondElement) return;
+
+      expect(fp.minuteElement.value).toEqual("00");
+      expect(fp.secondElement.value).toEqual("30");
+
+      incrementTime("minuteElement", 1);
+      expect(fp.minuteElement.value).toEqual("01");
+      expect(fp.secondElement.value).toEqual("30");
+
+      incrementTime("secondElement", 1);
+      expect(fp.minuteElement.value).toEqual("01");
+      expect(fp.secondElement.value).toEqual("45");
+
+      incrementTime("minuteElement", 1);
+      expect(fp.minuteElement.value).toEqual("02");
+      expect(fp.secondElement.value).toEqual("45");
+    });
+
     it("time input respects minDate", () => {
       createInstance({
         enableTime: true,
+        minuteIncrement: 5,
         dateFormat: "Y-m-d H:i",
         defaultDate: "2017-1-1 4:00",
         minDate: "2017-1-01 3:35",
@@ -1319,6 +1349,7 @@ describe("flatpickr", () => {
     it("time input respects maxDate", () => {
       createInstance({
         enableTime: true,
+        minuteIncrement: 5,
         defaultDate: "2017-1-1 3:00",
         maxDate: "2017-1-01 3:35",
       });
