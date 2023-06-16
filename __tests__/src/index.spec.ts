@@ -1895,29 +1895,65 @@ describe("flatpickr", () => {
   });
 
   describe("events + hooks", () => {
-    describe("onOpen", () => {
-      it("should fire only once", () => {
-        let timesFired = 0;
+    it("onOpen/onClose should fire only once", () => {
+      let openTimesFired = 0;
+      let closeTimesFired = 0;
 
-        const fp = createInstance({
-          onOpen: () => timesFired++,
-        });
-
-        fp.open();
-        expect(timesFired).toEqual(1);
+      const fp = createInstance({
+        onOpen: () => openTimesFired++,
+        onClose: () => closeTimesFired++,
       });
+
+      expect(fp.isOpen).toBe(false);
+      expect(openTimesFired).toEqual(0);
+      expect(closeTimesFired).toEqual(0);
+
+      fp.open();
+      expect(fp.isOpen).toBe(true);
+      expect(openTimesFired).toEqual(1);
+      expect(closeTimesFired).toEqual(0);
+
+      fp.close();
+      expect(fp.isOpen).toBe(false);
+      expect(openTimesFired).toEqual(1);
+      expect(closeTimesFired).toEqual(1);
     });
-    describe("onBlur", () => {
-      it("doesn't misfire", () => {
-        let timesFired = 0;
-        const fp = createInstance({
-          allowInput: true,
-          onChange: () => timesFired++,
-        });
-        fp._input.focus();
-        simulate("blur", fp._input);
-        expect(timesFired).toEqual(0);
+
+    it("onOpen/onClose should fire only once with allowInput and focus/blur", async () => {
+      let openTimesFired = 0;
+      let closeTimesFired = 0;
+
+      const fp = createInstance({
+        allowInput: true,
+        onOpen: () => openTimesFired++,
+        onClose: () => closeTimesFired++,
       });
+
+      expect(fp.isOpen).toBe(false);
+      expect(openTimesFired).toEqual(0);
+      expect(closeTimesFired).toEqual(0);
+
+      fp.input.focus();
+      expect(fp.isOpen).toBe(true);
+      expect(openTimesFired).toEqual(1);
+      expect(closeTimesFired).toEqual(0);
+
+      fp.input.blur();
+      jest.runAllTimers();
+      expect(fp.isOpen).toBe(false);
+      expect(openTimesFired).toEqual(1);
+      expect(closeTimesFired).toEqual(1);
+    });
+
+    it("onBlur doesn't misfire", () => {
+      let timesFired = 0;
+      const fp = createInstance({
+        allowInput: true,
+        onChange: () => timesFired++,
+      });
+      fp._input.focus();
+      simulate("blur", fp._input);
+      expect(timesFired).toEqual(0);
     });
   });
 
