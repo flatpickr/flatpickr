@@ -781,9 +781,7 @@ describe("flatpickr", () => {
 
         simulate("focus", fp._input);
         fp._input.value = "22 January 2020 03:04";
-        simulate("mousedown", window.document.body, { which: 1 }, CustomEvent);
-        simulate("blur", fp._input);
-        expect(fp.isOpen).toBe(false);
+        simulate("blur", fp._input, { target: fp._input, test: 1 }, FocusEvent);
         expect(timesFired).toEqual(1);
       });
     });
@@ -1078,6 +1076,31 @@ describe("flatpickr", () => {
       expect(fp.selectedDates[0].getDate()).toEqual(20);
       expect(fp.selectedDates[0].getHours()).toEqual(20);
       expect(fp.selectedDates[0].getMinutes()).toEqual(17);
+    });
+
+    it("Renders week numbers correctly", () => {
+      createInstance({
+        weekNumbers: true,
+      });
+      fp.changeYear(2022);
+      fp.changeMonth(1);
+
+      while (fp.currentYear != 2023) {
+        const expectedWeekNumbers = Array(6)
+          .fill(null)
+          .map((_, i) =>
+            fp.config.getWeek(
+              (fp.days.children[7 * i + 6] as DayElement).dateObj
+            )
+          );
+
+        const actualWeekNumbers = Array.from(
+          fp.weekWrapper!.children[1].children
+        ).map((w) => parseInt((w as DayElement).innerHTML, 10));
+
+        expect(actualWeekNumbers).toEqual(expectedWeekNumbers);
+        fp.changeMonth(1, true);
+      }
     });
 
     describe("mobile calendar", () => {

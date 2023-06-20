@@ -89,6 +89,19 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
       }
 
       self.monthsContainer.appendChild(frag);
+      if (
+        fp.config.minDate &&
+        fp.currentYear === fp.config.minDate.getFullYear()
+      )
+        fp.prevMonthNav.classList.add("flatpickr-disabled");
+      else fp.prevMonthNav.classList.remove("flatpickr-disabled");
+
+      if (
+        fp.config.maxDate &&
+        fp.currentYear === fp.config.maxDate.getFullYear()
+      )
+        fp.nextMonthNav.classList.add("flatpickr-disabled");
+      else fp.nextMonthNav.classList.remove("flatpickr-disabled");
     }
 
     function bindEvents() {
@@ -207,26 +220,29 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         date.getMonth(),
         date.getDate()
       );
+      let selectedDates: Date[] = [];
 
       switch (fp.config.mode) {
         case "single":
-          fp.selectedDates = [selectedDate];
-
+          selectedDates = [selectedDate];
           break;
+
+        case "multiple":
+          selectedDates.push(selectedDate);
+          break;
+
         case "range":
           if (fp.selectedDates.length === 2) {
-            fp.clear(false, false);
-            buildMonths();
+            selectedDates = [selectedDate];
+          } else {
+            selectedDates = fp.selectedDates.concat([selectedDate]);
+            selectedDates.sort((a, b) => a.getTime() - b.getTime());
           }
-          fp.selectedDates.push(selectedDate);
-          fp.selectedDates.sort((a, b) => a.getTime() - b.getTime());
 
           break;
       }
 
-      fp.latestSelectedDateObj = selectedDate;
-      fp.updateValue();
-
+      fp.setDate(selectedDates, true);
       setCurrentlySelected();
     }
 
@@ -284,8 +300,8 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
     function stubCurrentMonth() {
       config._stubbedCurrentMonth = fp._initialDate.getMonth();
 
-      fp._initialDate.setMonth(0);
-      fp.currentMonth = 0;
+      fp._initialDate.setMonth(config._stubbedCurrentMonth);
+      fp.currentMonth = config._stubbedCurrentMonth;
     }
 
     function unstubCurrentMonth() {

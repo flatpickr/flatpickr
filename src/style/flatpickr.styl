@@ -370,11 +370,9 @@
       pointer-events none
 
   .flatpickr-monthDropdown-months
-    appearance: menulist
     background: $monthBackground
     border: none
     border-radius: 0
-    box-sizing: border-box
     color: inherit
     cursor: pointer
     font-size: inherit
@@ -387,9 +385,10 @@
     padding: 0 0 0 0.5ch
     position: relative
     vertical-align: initial
-    -webkit-box-sizing: border-box
+    box-sizing: border-box
     -webkit-appearance: menulist
     -moz-appearance: menulist
+    appearance: menulist
     width: auto
 
     &:focus, &:active
@@ -460,8 +459,8 @@ span.flatpickr-weekday
   display inline-block
   display -ms-flexbox
   display flex
-  flex-wrap wrap
   -ms-flex-wrap wrap
+  flex-wrap wrap
   -ms-flex-pack: justify
   justify-content space-around
   transform: translate3d(0px, 0px, 0px);

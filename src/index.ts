@@ -678,7 +678,7 @@ function FlatpickrInstance(
   function createDay(
     className: string,
     date: Date,
-    dayNumber: number,
+    _dayNumber: number,
     i: number
   ) {
     const dateIsEnabled = isEnabled(date, true),
@@ -741,7 +741,7 @@ function FlatpickrInstance(
       self.weekNumbers &&
       self.config.showMonths === 1 &&
       className !== "prevMonthDay" &&
-      dayNumber % 7 === 1
+      i % 7 === 6
     ) {
       self.weekNumbers.insertAdjacentHTML(
         "beforeend",
@@ -1631,10 +1631,11 @@ function FlatpickrInstance(
 
   function onBlur(e: FocusEvent) {
     const isInput = e.target === self._input;
+    const valueChanged = self._input.value.trimEnd() !== getDateStr();
 
     if (
       isInput &&
-      (self.selectedDates.length > 0 || self._input.value.length > 0) &&
+      valueChanged &&
       !(e.relatedTarget && isCalendarElem(e.relatedTarget as HTMLElement))
     ) {
       self.setDate(
@@ -2823,7 +2824,11 @@ function FlatpickrInstance(
         : self.currentYear > self.config.maxDate.getFullYear());
   }
 
-  function getDateStr(format: string) {
+  function getDateStr(specificFormat?: string) {
+    const format =
+      specificFormat ||
+      (self.config.altInput ? self.config.altFormat : self.config.dateFormat);
+
     return self.selectedDates
       .map((dObj) => self.formatDate(dObj, format))
       .filter(
