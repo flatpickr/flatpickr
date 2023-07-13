@@ -25,6 +25,7 @@ export type HookKey =
   | "onOpen"
   | "onParseConfig"
   | "onReady"
+  | "onBuildDays"
   | "onValueUpdate"
   | "onYearChange"
   | "onPreCalendarPosition";
@@ -39,6 +40,7 @@ export const HOOKS: HookKey[] = [
   "onOpen",
   "onParseConfig",
   "onReady",
+  "onBuildDays",
   "onValueUpdate",
   "onYearChange",
   "onPreCalendarPosition",
@@ -210,6 +212,9 @@ Use it along with "enableTime" to create a time picker. */
   /* Fires once the calendar instance is ready */
   onReady: Hook | Hook[];
 
+  /* Fires after days drawed */
+  onBuildDays: Hook | Hook[];
+
   /* Like onChange, but fires immediately after any date changes */
   onValueUpdate: Hook | Hook[];
 
@@ -325,6 +330,7 @@ export interface ParsedOptions {
   onOpen: Hook[];
   onParseConfig: Hook[];
   onReady: Hook[];
+  onBuildDays: Hook[];
   onValueUpdate: Hook[];
   onYearChange: Hook[];
   onPreCalendarPosition: Hook[];
@@ -407,6 +413,7 @@ export const defaults: ParsedOptions = {
   onOpen: [],
   onParseConfig: [],
   onReady: [],
+  onBuildDays: [],
   onValueUpdate: [],
   onYearChange: [],
   onPreCalendarPosition: [],

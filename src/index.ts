@@ -936,6 +936,8 @@ function FlatpickrInstance(
     if (self.config.mode === "range" && self.selectedDates.length === 1) {
       onMouseOver();
     }
+
+    triggerEvent("onBuildDays");
   }
 
   function buildMonthSwitch() {
