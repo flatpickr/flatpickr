@@ -11,16 +11,8 @@ const fp =
 
 export const Malaysian: CustomLocale = {
   weekdays: {
-    shorthand: ["Min", "Isn", "Sel", "Rab", "Kha", "Jum", "Sab"],
-    longhand: [
-      "Minggu",
-      "Isnin",
-      "Selasa",
-      "Rabu",
-      "Khamis",
-      "Jumaat",
-      "Sabtu",
-    ],
+    shorthand: ["Aha", "Isn", "Sel", "Rab", "Kha", "Jum", "Sab"],
+    longhand: ["Ahad", "Isnin", "Selasa", "Rabu", "Khamis", "Jumaat", "Sabtu"],
   },
 
   months: {
@@ -60,5 +52,7 @@ export const Malaysian: CustomLocale = {
     return "";
   },
 };
+
+fp.l10ns.ms = Malaysian;
 
 export default fp.l10ns;

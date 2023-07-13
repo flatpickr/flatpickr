@@ -1,4 +1,4 @@
-name: 'tests'
+name: 'GitHub Actions'
 
 on:
   push:
@@ -15,3 +15,12 @@ jobs:
     - uses: actions/checkout@v2
     - uses: bahmutov/npm-install@v1
     - run: npm test
+
+  prettier:
+    name: 'prettier'
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: bahmutov/npm-install@v1
+      - run: npm run fmt:check
