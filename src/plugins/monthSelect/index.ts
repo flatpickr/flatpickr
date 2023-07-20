@@ -341,6 +341,13 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
           fp.loadedPlugins.push("monthSelect");
         },
       ],
+      onOpen: [
+        () => {
+          selectYear();
+          buildMonths();
+          setCurrentlySelected();
+        },
+      ],
       onDestroy: [
         unstubCurrentMonth,
         destroyPluginInstance,
