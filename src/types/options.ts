@@ -226,19 +226,19 @@ Use it along with "enableTime" to create a time picker. */
 
   /* How the calendar should be positioned with regards to the input. Defaults to "auto" */
   position:
-    | "auto"
-    | "above"
-    | "below"
-    | "auto left"
-    | "auto center"
-    | "auto right"
-    | "above left"
-    | "above center"
-    | "above right"
-    | "below left"
-    | "below center"
-    | "below right"
-    | ((self: Instance, customElement: HTMLElement | undefined) => void);
+  | "auto"
+  | "above"
+  | "below"
+  | "auto left"
+  | "auto center"
+  | "auto right"
+  | "above left"
+  | "above center"
+  | "above right"
+  | "below left"
+  | "below center"
+  | "below right"
+  | ((self: Instance, customElement: HTMLElement | undefined) => void);
 
   /*
     The element off of which the calendar will be positioned.
@@ -280,6 +280,7 @@ export interface ParsedOptions {
   allowInput: boolean;
   allowInvalidPreload: boolean;
   altFormat: string;
+  focusOutTriggerChange: boolean;
   altInput: boolean;
   altInputClass: string;
   animate: boolean;
@@ -346,6 +347,7 @@ export const defaults: ParsedOptions = {
   allowInput: false,
   allowInvalidPreload: false,
   altFormat: "F j, Y",
+  focusOutTriggerChange: false,
   altInput: false,
   altInputClass: "form-control input",
   animate:
@@ -383,7 +385,7 @@ export const defaults: ParsedOptions = {
         ((date.getTime() - week1.getTime()) / 86400000 -
           3 +
           ((week1.getDay() + 6) % 7)) /
-          7
+        7
       )
     );
   },
