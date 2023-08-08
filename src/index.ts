@@ -393,7 +393,6 @@ function FlatpickrInstance(
 
     if (element instanceof Array)
       return element.forEach((el) => bind(el, event, handler, options));
-
     element.addEventListener(event, handler, options);
     self._handlers.push({
       remove: () => element.removeEventListener(event, handler, options),
@@ -1480,7 +1479,7 @@ function FlatpickrInstance(
         if (self.config.allowInput) {
           self.setDate(
             self._input.value,
-            false,
+            self.config.focusOutTriggerChange,
             self.config.altInput
               ? self.config.altFormat
               : self.config.dateFormat
