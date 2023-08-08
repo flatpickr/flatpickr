@@ -280,6 +280,7 @@ export interface ParsedOptions {
   allowInput: boolean;
   allowInvalidPreload: boolean;
   altFormat: string;
+  focusOutTriggerChange: boolean;
   altInput: boolean;
   altInputClass: string;
   animate: boolean;
@@ -346,6 +347,7 @@ export const defaults: ParsedOptions = {
   allowInput: false,
   allowInvalidPreload: false,
   altFormat: "F j, Y",
+  focusOutTriggerChange: false,
   altInput: false,
   altInputClass: "form-control input",
   animate:
