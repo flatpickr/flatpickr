@@ -1491,7 +1491,7 @@ function FlatpickrInstance(
         if (self.config.allowInput) {
           self.setDate(
             self._input.value,
-            false,
+            true,
             self.config.altInput
               ? self.config.altFormat
               : self.config.dateFormat
