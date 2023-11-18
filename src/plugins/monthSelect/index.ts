@@ -220,7 +220,7 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         date.getMonth(),
         date.getDate()
       );
-      let selectedDates: Date[] = [];
+      let selectedDates: Date[] = fp.selectedDates;;
 
       switch (fp.config.mode) {
         case "single":
@@ -228,7 +228,12 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
           break;
 
         case "multiple":
-          selectedDates.push(selectedDate);
+          const selectedDateIndex = selectedDates.findIndex((d) => d.getTime() === selectedDate.getTime());
+          if (selectedDateIndex !== -1) {
+              selectedDates.splice(selectedDateIndex, 1);
+          } else {
+              selectedDates.push(selectedDate);
+          }
           break;
 
         case "range":
