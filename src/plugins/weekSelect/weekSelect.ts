@@ -19,9 +19,9 @@ function weekSelectPlugin(): Plugin<PlusWeeks> {
       const dayIndSeven = dayIndex / 7;
       const weekStartDay = (days[7 * Math.floor(dayIndSeven)] as DayElement)
         .dateObj;
-      const weekEndDay = (days[
-        7 * Math.ceil(dayIndSeven + 0.01) - 1
-      ] as DayElement).dateObj;
+      const weekEndDay = (
+        days[7 * Math.ceil(dayIndSeven + 0.01) - 1] as DayElement
+      ).dateObj;
 
       for (let i = days.length; i--; ) {
         const day = days[i] as DayElement;
@@ -39,12 +39,16 @@ function weekSelectPlugin(): Plugin<PlusWeeks> {
         selDate.getMonth() === fp.currentMonth &&
         selDate.getFullYear() === fp.currentYear
       ) {
-        fp.weekStartDay = (fp.days.childNodes[
-          7 * Math.floor((fp.selectedDateElem as DayElement).$i / 7)
-        ] as DayElement).dateObj;
-        fp.weekEndDay = (fp.days.childNodes[
-          7 * Math.ceil((fp.selectedDateElem as DayElement).$i / 7 + 0.01) - 1
-        ] as DayElement).dateObj;
+        fp.weekStartDay = (
+          fp.days.childNodes[
+            7 * Math.floor((fp.selectedDateElem as DayElement).$i / 7)
+          ] as DayElement
+        ).dateObj;
+        fp.weekEndDay = (
+          fp.days.childNodes[
+            7 * Math.ceil((fp.selectedDateElem as DayElement).$i / 7 + 0.01) - 1
+          ] as DayElement
+        ).dateObj;
       }
       const days = fp.days.childNodes;
       for (let i = days.length; i--; ) {

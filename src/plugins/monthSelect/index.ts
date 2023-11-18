@@ -228,11 +228,13 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
           break;
 
         case "multiple":
-          const selectedDateIndex = selectedDates.findIndex((d) => d.getTime() === selectedDate.getTime());
+          const selectedDateIndex = selectedDates.findIndex(
+            (d) => d.getTime() === selectedDate.getTime()
+          );
           if (selectedDateIndex !== -1) {
-              selectedDates.splice(selectedDateIndex, 1);
+            selectedDates.splice(selectedDateIndex, 1);
           } else {
-              selectedDates.push(selectedDate);
+            selectedDates.push(selectedDate);
           }
           break;
 
@@ -283,9 +285,11 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
       }
 
       if (shouldMove) {
-        (self.monthsContainer.children[
-          (12 + index + shifts[e.keyCode]) % 12
-        ] as HTMLElement).focus();
+        (
+          self.monthsContainer.children[
+            (12 + index + shifts[e.keyCode]) % 12
+          ] as HTMLElement
+        ).focus();
       } else if (
         e.keyCode === 13 &&
         self.monthsContainer.contains(document.activeElement)

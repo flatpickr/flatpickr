@@ -16,7 +16,7 @@ export type Locale = {
       string,
       string,
       string,
-      string
+      string,
     ];
     longhand: [
       string,
@@ -30,7 +30,7 @@ export type Locale = {
       string,
       string,
       string,
-      string
+      string,
     ];
   };
   daysInMonth: [
@@ -45,7 +45,7 @@ export type Locale = {
     number,
     number,
     number,
-    number
+    number,
   ];
   firstDayOfWeek: number;
   ordinal: (nth: number) => string;
@@ -92,7 +92,7 @@ export type CustomLocale = {
       string,
       string,
       string,
-      string
+      string,
     ];
     longhand: [
       string,
@@ -106,7 +106,7 @@ export type CustomLocale = {
       string,
       string,
       string,
-      string
+      string,
     ];
   };
 };
