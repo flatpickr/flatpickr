@@ -220,7 +220,7 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
         date.getMonth(),
         date.getDate()
       );
-      let selectedDates: Date[] = fp.selectedDates;
+      let selectedDates: Date[] = fp.selectedDates;;
 
       switch (fp.config.mode) {
         case "single":
