@@ -2834,14 +2834,15 @@ function FlatpickrInstance(
    * Updates the values of inputs associated with the calendar
    */
   function updateValue(triggerChange = true) {
-    if (self.selectedDates.length === 0) {
-        return;
-    }
     if (self.mobileInput !== undefined && self.mobileFormatStr) {
       self.mobileInput.value =
         self.latestSelectedDateObj !== undefined
           ? self.formatDate(self.latestSelectedDateObj, self.mobileFormatStr)
           : "";
+    }
+
+    if (self.selectedDates.length === 0) {
+        return;
     }
 
     self.input.value = getDateStr(self.config.dateFormat);
