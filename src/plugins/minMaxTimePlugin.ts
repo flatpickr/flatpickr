@@ -1,8 +1,10 @@
 import { Instance } from "../types/instance";
 import {
+  calculateSecondsSinceMidnight,
   compareDates,
   compareTimes,
   createDateFormatter,
+  parseSeconds,
 } from "../utils/dates";
 
 import { Plugin } from "../types/options";
@@ -69,26 +71,59 @@ function minMaxTimePlugin(config: Config = {}): Plugin {
           (fp.config.minTime as Date).setDate(latest.getDate());
           (fp.config.maxTime as Date).setDate(latest.getDate());
 
-          if (compareDates(latest, fp.config.maxTime as Date, false) > 0) {
-            fp.setDate(
-              new Date(latest.getTime()).setHours(
-                (fp.config.maxTime as Date).getHours(),
-                (fp.config.maxTime as Date).getMinutes(),
-                (fp.config.maxTime as Date).getSeconds(),
-                (fp.config.maxTime as Date).getMilliseconds()
-              ),
-              false
+          if ((fp.config.minTime as Date) > (fp.config.maxTime as Date)) {
+            const minBound = calculateSecondsSinceMidnight(
+              (fp.config.minTime as Date).getHours(),
+              (fp.config.minTime as Date).getMinutes(),
+              (fp.config.minTime as Date).getSeconds()
             );
-          } else if (compareDates(latest, fp.config.minTime as Date, false) < 0)
-            fp.setDate(
-              new Date(latest.getTime()).setHours(
-                (fp.config.minTime as Date).getHours(),
-                (fp.config.minTime as Date).getMinutes(),
-                (fp.config.minTime as Date).getSeconds(),
-                (fp.config.minTime as Date).getMilliseconds()
-              ),
-              false
+            const maxBound = calculateSecondsSinceMidnight(
+              (fp.config.maxTime as Date).getHours(),
+              (fp.config.maxTime as Date).getMinutes(),
+              (fp.config.maxTime as Date).getSeconds()
             );
+            const currentTime = calculateSecondsSinceMidnight(
+              latest.getHours(),
+              latest.getMinutes(),
+              latest.getSeconds()
+            );
+
+            if (currentTime > maxBound && currentTime < minBound) {
+              const result = parseSeconds(minBound);
+              fp.setDate(
+                new Date(latest.getTime()).setHours(
+                  result[0],
+                  result[1],
+                  result[2]
+                ),
+                false
+              );
+            }
+          } else {
+            if (compareDates(latest, fp.config.maxTime as Date, false) > 0) {
+              fp.setDate(
+                new Date(latest.getTime()).setHours(
+                  (fp.config.maxTime as Date).getHours(),
+                  (fp.config.maxTime as Date).getMinutes(),
+                  (fp.config.maxTime as Date).getSeconds(),
+                  (fp.config.maxTime as Date).getMilliseconds()
+                ),
+                false
+              );
+            } else if (
+              compareDates(latest, fp.config.minTime as Date, false) < 0
+            ) {
+              fp.setDate(
+                new Date(latest.getTime()).setHours(
+                  (fp.config.minTime as Date).getHours(),
+                  (fp.config.minTime as Date).getMinutes(),
+                  (fp.config.minTime as Date).getSeconds(),
+                  (fp.config.minTime as Date).getMilliseconds()
+                ),
+                false
+              );
+            }
+          }
         } else {
           const newMinMax = state.defaults || {
             minTime: undefined,

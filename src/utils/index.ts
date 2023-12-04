@@ -3,21 +3,12 @@ export const pad = (number: string | number, length = 2) =>
 export const int = (bool: boolean) => (bool === true ? 1 : 0);
 
 /* istanbul ignore next */
-export function debounce<F extends Function>(
-  func: F,
-  wait: number,
-  immediate: boolean = false
-) {
-  let timeout: number | null;
-  return function (this: Function) {
-    let context = this,
-      args = arguments;
-    timeout !== null && clearTimeout(timeout);
-    timeout = window.setTimeout(function () {
-      timeout = null;
-      if (!immediate) func.apply(context, args);
-    }, wait);
-    if (immediate && !timeout) func.apply(context, args);
+export function debounce<F extends Function>(fn: F, wait: number) {
+  let t: NodeJS.Timeout;
+  return function (this: any) {
+    const args = arguments;
+    clearTimeout(t);
+    t = setTimeout(() => fn.apply(this, args), wait);
   };
 }
 

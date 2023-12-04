@@ -95,6 +95,8 @@ export type Instance = Elements &
     destroy: () => void;
     isEnabled: (date: DateOption, timeless?: boolean) => boolean;
     jumpToDate: (date?: DateOption, triggerChange?: boolean) => void;
+    updateValue: (triggerChange?: boolean) => void;
+    onMouseOver: (elem?: DayElement, cellClass?: string) => void;
     open: (e?: FocusEvent | MouseEvent, positionElement?: HTMLElement) => void;
     redraw: () => void;
     set: (
@@ -119,22 +121,26 @@ export type Instance = Elements &
     // Internals
 
     _handlers: {
-      event: string;
-      element: Element;
-      handler: (e?: Event) => void;
-      options?: { capture?: boolean };
+      remove: () => void;
     }[];
 
-    _bind: <E extends Element>(
+    _bind: <E extends Element | Window | Document>(
       element: E | E[],
       event: string | string[],
-      handler: (e?: any) => void
+      handler: (e?: any) => void,
+      options?: { capture?: boolean; once?: boolean; passive?: boolean }
     ) => void;
     _createElement: <E extends HTMLElement>(
       tag: keyof HTMLElementTagNameMap,
       className: string,
       content?: string
     ) => E;
+    createDay: (
+      className: string,
+      date: Date,
+      dayNumber: number,
+      i: number
+    ) => DayElement;
     _setHoursFromDate: (date: Date) => void;
     _debouncedChange: () => void;
     __hideNextMonthArrow: boolean;

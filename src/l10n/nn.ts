@@ -1,4 +1,4 @@
-/* Austria locals for flatpickr */
+/* Norwegian locals for flatpickr */
 import { CustomLocale } from "../types/locale";
 import { FlatpickrFn } from "../types/instance";
 
@@ -9,39 +9,39 @@ const fp =
         l10ns: {},
       } as FlatpickrFn);
 
-export const Austria: CustomLocale = {
+export const NorwegianNynorsk: CustomLocale = {
   weekdays: {
-    shorthand: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
+    shorthand: ["Sø.", "Må.", "Ty.", "On.", "To.", "Fr.", "La."],
     longhand: [
-      "Sonntag",
-      "Montag",
-      "Dienstag",
-      "Mittwoch",
-      "Donnerstag",
-      "Freitag",
-      "Samstag",
+      "Søndag",
+      "Måndag",
+      "Tysdag",
+      "Onsdag",
+      "Torsdag",
+      "Fredag",
+      "Laurdag",
     ],
   },
 
   months: {
     shorthand: [
-      "Jän",
+      "Jan",
       "Feb",
-      "Mär",
+      "Mars",
       "Apr",
       "Mai",
-      "Jun",
-      "Jul",
+      "Juni",
+      "Juli",
       "Aug",
       "Sep",
       "Okt",
       "Nov",
-      "Dez",
+      "Des",
     ],
     longhand: [
-      "Jänner",
+      "Januar",
       "Februar",
-      "März",
+      "Mars",
       "April",
       "Mai",
       "Juni",
@@ -50,18 +50,22 @@ export const Austria: CustomLocale = {
       "September",
       "Oktober",
       "November",
-      "Dezember",
+      "Desember",
     ],
   },
 
   firstDayOfWeek: 1,
-  weekAbbreviation: "KW",
-  rangeSeparator: " bis ",
-  scrollTitle: "Zum Ändern scrollen",
-  toggleTitle: "Zum Umschalten klicken",
+  rangeSeparator: " til ",
+  weekAbbreviation: "Veke",
+  scrollTitle: "Scroll for å endre",
+  toggleTitle: "Klikk for å veksle",
   time_24hr: true,
+
+  ordinal: () => {
+    return ".";
+  },
 };
 
-fp.l10ns.at = Austria;
+fp.l10ns.nn = NorwegianNynorsk;
 
 export default fp.l10ns;

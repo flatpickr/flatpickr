@@ -71,19 +71,14 @@ export const createDateParser = ({ config = defaults, l10n = english }) => (
     if (datestr === "today") {
       parsedDate = new Date();
       timeless = true;
+    } else if (config && config.parseDate) {
+      parsedDate = config.parseDate(date, format);
     } else if (
       /Z$/.test(datestr) ||
       /GMT$/.test(datestr) // datestrings w/ timezone
-    )
+    ) {
       parsedDate = new Date(date);
-    else if (config && config.parseDate)
-      parsedDate = config.parseDate(date, format);
-    else {
-      parsedDate =
-        !config || !config.noCalendar
-          ? new Date(new Date().getFullYear(), 0, 1, 0, 0, 0, 0)
-          : (new Date(new Date().setHours(0, 0, 0, 0)) as Date);
-
+    } else {
       let matched,
         ops: { fn: RevFormatFn; val: string }[] = [];
 
@@ -102,12 +97,17 @@ export const createDateParser = ({ config = defaults, l10n = english }) => (
             });
           }
         } else if (!isBackSlash) regexStr += "."; // don't really care
-
-        ops.forEach(
-          ({ fn, val }) =>
-            (parsedDate = fn(parsedDate as Date, val, locale) || parsedDate)
-        );
       }
+
+      parsedDate =
+        !config || !config.noCalendar
+          ? new Date(new Date().getFullYear(), 0, 1, 0, 0, 0, 0)
+          : (new Date(new Date().setHours(0, 0, 0, 0)) as Date);
+
+      ops.forEach(
+        ({ fn, val }) =>
+          (parsedDate = fn(parsedDate as Date, val, locale) || parsedDate)
+      );
 
       parsedDate = matched ? parsedDate : undefined;
     }
@@ -154,6 +154,55 @@ export const isBetween = (ts: number, ts1: number, ts2: number) => {
   return ts > Math.min(ts1, ts2) && ts < Math.max(ts1, ts2);
 };
 
+export const calculateSecondsSinceMidnight = (
+  hours: number,
+  minutes: number,
+  seconds: number
+) => {
+  return hours * 3600 + minutes * 60 + seconds;
+};
+
+export const parseSeconds = (secondsSinceMidnight: number) => {
+  const hours = Math.floor(secondsSinceMidnight / 3600),
+    minutes = (secondsSinceMidnight - hours * 3600) / 60;
+  return [hours, minutes, secondsSinceMidnight - hours * 3600 - minutes * 60];
+};
+
 export const duration = {
   DAY: 86400000,
 };
+
+export function getDefaultHours(config: ParsedOptions) {
+  let hours = config.defaultHour;
+  let minutes = config.defaultMinute;
+  let seconds = config.defaultSeconds;
+
+  if (config.minDate !== undefined) {
+    const minHour = config.minDate.getHours();
+    const minMinutes = config.minDate.getMinutes();
+    const minSeconds = config.minDate.getSeconds();
+
+    if (hours < minHour) {
+      hours = minHour;
+    }
+
+    if (hours === minHour && minutes < minMinutes) {
+      minutes = minMinutes;
+    }
+
+    if (hours === minHour && minutes === minMinutes && seconds < minSeconds)
+      seconds = config.minDate.getSeconds();
+  }
+
+  if (config.maxDate !== undefined) {
+    const maxHr = config.maxDate.getHours();
+    const maxMinutes = config.maxDate.getMinutes();
+    hours = Math.min(hours, maxHr);
+
+    if (hours === maxHr) minutes = Math.min(maxMinutes, minutes);
+    if (hours === maxHr && minutes === maxMinutes)
+      seconds = config.maxDate.getSeconds();
+  }
+
+  return { hours, minutes, seconds };
+}
