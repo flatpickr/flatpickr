@@ -159,9 +159,7 @@ function FlatpickrInstance(
           self.daysContainer.style.width = daysWidth + "px";
 
           self.calendarContainer.style.width =
-            daysWidth +
-            (self.weekWrapper?.offsetWidth || 0) +
-            "px";
+            daysWidth + (self.weekWrapper?.offsetWidth || 0) + "px";
 
           self.calendarContainer.style.removeProperty("visibility");
           self.calendarContainer.style.removeProperty("display");
@@ -420,10 +418,6 @@ function FlatpickrInstance(
       });
     }
 
-    if (self._handlers?.length) {
-      self._handlers.forEach((h) => h.remove());
-    }
-
     if (self.isMobile) {
       setupMobile();
       return;
@@ -575,6 +569,7 @@ function FlatpickrInstance(
 
   function buildWeekNumbers() {
     self.innerContainer?.querySelector(".flatpickr-weekwrapper")?.remove();
+    self.weekWrapper = undefined;
 
     if (self.config.weekNumbers && self.config.showMonths === 1) {
       const { weekWrapper, weekNumbers } = buildWeeks();
@@ -596,11 +591,12 @@ function FlatpickrInstance(
     (fragment || self.calendarContainer)
       ?.querySelector(".flatpickr-time")
       ?.remove();
+    self.timeContainer = undefined;
+
     if (self.config.enableTime) {
       (fragment || self.calendarContainer).appendChild(buildTime());
     }
   }
-
 
   function build() {
     const fragment = window.document.createDocumentFragment();
@@ -1214,6 +1210,7 @@ function FlatpickrInstance(
     self.timeContainer.appendChild(minuteInput);
 
     if (self.config.time_24hr) self.timeContainer.classList.add("time24hr");
+    else self.timeContainer.classList.remove("time24hr");
 
     if (self.config.enableSeconds) {
       self.timeContainer.classList.add("hasSeconds");
@@ -1243,6 +1240,7 @@ function FlatpickrInstance(
       self.timeContainer.appendChild(secondInput);
     } else {
       self.secondElement?.remove();
+      self.secondElement = undefined;
     }
 
     if (!self.config.time_24hr) {
@@ -1263,6 +1261,7 @@ function FlatpickrInstance(
       self.timeContainer.appendChild(self.amPM);
     } else {
       self.amPM?.remove();
+      self.amPM = undefined;
     }
 
     return self.timeContainer;
@@ -2445,12 +2444,9 @@ function FlatpickrInstance(
     return self.isMobile ? [] : [buildTimePicker, bindEvents];
   };
   const callbacksForMonths = () => {
-    return self.isMobile ? [] : [
-      buildWeekNumbers,
-      buildWeekdays,
-      buildMonths,
-      setCalendarWidth
-    ];
+    return self.isMobile
+      ? []
+      : [buildWeekNumbers, buildWeekdays, buildMonths, setCalendarWidth];
   };
 
   const CALLBACKS: { [k in keyof Options]: Function[] } = {
@@ -2498,9 +2494,7 @@ function FlatpickrInstance(
       return callbacksForTime();
     },
     get weekNumbers() {
-      return self.isMobile
-        ? []
-        : [...callbacksForMonths(), bindEvents];
+      return self.isMobile ? [] : [...callbacksForMonths(), bindEvents];
     },
   };
 
