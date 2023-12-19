@@ -1,5 +1,5 @@
 {
-  "name": "flatpickr-ng",
+  "name": "flatpickr",
   "version": "4.6.13",
   "description": "A lightweight, powerful javascript datetime picker",
   "scripts": {
@@ -57,12 +57,12 @@
   "types": "./dist/typings.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/justwellsolets/flatpickr.git"
+    "url": "git+https://github.com/chmln/flatpickr.git"
   },
-  "author": "justwellsolets <justwellsolets@gmail.com>",
+  "author": "Gregory <gregory.mkv@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/justwellsolets/flatpickr/issues"
+    "url": "https://github.com/chmln/flatpickr/issues"
   },
   "homepage": "https://flatpickr.js.org",
   "keywords": [
