@@ -2319,6 +2319,7 @@ function FlatpickrInstance(
   function selectDate(e: MouseEvent | KeyboardEvent) {
     e.preventDefault();
     e.stopPropagation();
+    onMouseOver(getEventTarget(e) as DayElement);
 
     const isSelectable = (day: Element) =>
       day.classList &&
