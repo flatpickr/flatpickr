@@ -47,6 +47,7 @@ import { Norwegian as no } from "./no";
 import { Punjabi as pa } from "./pa";
 import { Polish as pl } from "./pl";
 import { Portuguese as pt } from "./pt";
+import { Romansh as rm } from "./rm";
 import { Romanian as ro } from "./ro";
 import { Russian as ru } from "./ru";
 import { Sinhala as si } from "./si";
@@ -114,6 +115,7 @@ const l10n: Record<key, CustomLocale> = {
   pa,
   pl,
   pt,
+  rm,
   ro,
   ru,
   si,
