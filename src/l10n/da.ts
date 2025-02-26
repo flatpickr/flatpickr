@@ -62,6 +62,7 @@ export const Danish: CustomLocale = {
   rangeSeparator: " til ",
   weekAbbreviation: "uge",
   time_24hr: true,
+  yearAriaLabel: "år",
 };
 
 fp.l10ns.da = Danish;

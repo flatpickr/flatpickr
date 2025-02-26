@@ -60,6 +60,7 @@ export const German: CustomLocale = {
   scrollTitle: "Zum Ändern scrollen",
   toggleTitle: "Zum Umschalten klicken",
   time_24hr: true,
+  yearAriaLabel: "Jahr",
 };
 
 fp.l10ns.de = German;

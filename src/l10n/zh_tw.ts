@@ -54,6 +54,7 @@ export const MandarinTraditional: CustomLocale = {
   weekAbbreviation: "週",
   scrollTitle: "滾動切換",
   toggleTitle: "點擊切換 12/24 小時時制",
+  yearAriaLabel: "年",
 };
 fp.l10ns.zh_tw = MandarinTraditional;
 export default fp.l10ns;

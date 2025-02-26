@@ -58,6 +58,7 @@ export const Swedish: CustomLocale = {
   },
   rangeSeparator: " till ",
   time_24hr: true,
+  yearAriaLabel: "år",
 
   ordinal: () => {
     return ".";
