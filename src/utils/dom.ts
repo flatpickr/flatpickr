@@ -78,3 +78,20 @@ export function getEventTarget(event: Event): EventTarget | null {
     return event.target;
   }
 }
+
+export function isNode(elem: unknown): elem is Node {
+  if (elem instanceof Node) {
+    return true;
+  }
+
+  // Safari exhibits certain cross-realm ownership issues
+  // (https://bugs.webkit.org/show_bug.cgi?id=160952)
+  // so the `instanceof` check above might fail on values
+  // that actually are Node. We fall back to duck typing
+  // the value.
+  if (typeof elem === "object" && elem) {
+    return "nodeType" in elem;
+  }
+
+  return false;
+}

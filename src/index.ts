@@ -22,6 +22,7 @@ import {
   findParent,
   toggleClass,
   getEventTarget,
+  isNode,
 } from "./utils/dom";
 import {
   compareDates,
@@ -2938,7 +2939,7 @@ function _flatpickr(
   // static list
   const nodes = Array.prototype.slice
     .call(nodeList)
-    .filter((x) => x instanceof HTMLElement) as HTMLElement[];
+    .filter((x) => x.nodeType === Node.ELEMENT_NODE) as HTMLElement[];
 
   const instances: Instance[] = [];
   for (let i = 0; i < nodes.length; i++) {
@@ -2986,7 +2987,7 @@ var flatpickr = function (
 ) {
   if (typeof selector === "string") {
     return _flatpickr(window.document.querySelectorAll(selector), config);
-  } else if (selector instanceof Node) {
+  } else if (isNode(selector)) {
     return _flatpickr([selector], config);
   } else {
     return _flatpickr(selector, config);
