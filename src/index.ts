@@ -1479,7 +1479,7 @@ function FlatpickrInstance(
       if (lostFocus && isIgnored) {
         if (self.config.allowInput) {
           self.setDate(
-            self._input.value,
+            getInputValue(self._input),
             false,
             self.config.altInput
               ? self.config.altFormat
@@ -1630,7 +1630,7 @@ function FlatpickrInstance(
       !(e.relatedTarget && isCalendarElem(e.relatedTarget as HTMLElement))
     ) {
       self.setDate(
-        self._input.value,
+        getInputValue(self._input),
         true,
         e.target === self.altInput
           ? self.config.altFormat
@@ -1662,14 +1662,14 @@ function FlatpickrInstance(
     if (e.keyCode === 13 && isInput) {
       if (allowInput) {
         self.setDate(
-          self._input.value,
+          getInputValue(self._input),
           true,
           eventTarget === self.altInput
             ? self.config.altFormat
             : self.config.dateFormat
         );
         self.close();
-        return (eventTarget as HTMLElement).blur();
+        return;
       } else {
         self.open();
       }
@@ -2569,10 +2569,7 @@ function FlatpickrInstance(
       self.config.defaultDate ||
       ((self.input.nodeName === "INPUT" ||
         self.input.nodeName === "TEXTAREA") &&
-      self.input.placeholder &&
-      self.input.value === self.input.placeholder
-        ? null
-        : self.input.value);
+        getInputValue(self.input));
 
     if (preloadedDate) setSelectedDate(preloadedDate, self.config.dateFormat);
 
@@ -2610,6 +2607,12 @@ function FlatpickrInstance(
       (self.config.maxDate.getHours() > 0 ||
         self.config.maxDate.getMinutes() > 0 ||
         self.config.maxDate.getSeconds() > 0);
+  }
+
+  function getInputValue(input: HTMLInputElement): string {
+    return input.placeholder && input.value === input.placeholder
+      ? ""
+      : input.value;
   }
 
   function setupInputs() {
