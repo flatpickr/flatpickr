@@ -7,7 +7,7 @@ export function toggleClass(
   elem.classList.remove(className);
 }
 
-export function doc(): Document {
+function getDocument(): Document {
   try {
     // UGLY PATCH to get around cross realm issue for now...will need to retract later
     // Attempt to access top.location; will throw if cross-origin
@@ -19,13 +19,14 @@ export function doc(): Document {
   }
 }
 
+export const doc = getDocument();
 
 export function createElement<T extends HTMLElement>(
   tag: keyof HTMLElementTagNameMap,
   className: string,
   content?: string
 ): T {
-  const e = doc().createElement(tag) as T;
+  const e = doc.createElement(tag) as T;
   className = className || "";
   content = content || "";
 
