@@ -164,7 +164,7 @@ export const calculateSecondsSinceMidnight = (
 
 export const parseSeconds = (secondsSinceMidnight: number) => {
   const hours = Math.floor(secondsSinceMidnight / 3600),
-    minutes = (secondsSinceMidnight - hours * 3600) / 60;
+    minutes = Math.floor((secondsSinceMidnight - hours * 3600) / 60);
   return [hours, minutes, secondsSinceMidnight - hours * 3600 - minutes * 60];
 };
 

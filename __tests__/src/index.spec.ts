@@ -6,7 +6,7 @@ import { Russian } from "l10n/ru";
 import { Instance, DayElement } from "types/instance";
 import { Options, DateRangeLimit } from "types/options";
 import confirmDatePlugin from "plugins/confirmDate/confirmDate";
-import { getDefaultHours } from "utils/dates";
+import { getDefaultHours, parseSeconds } from "utils/dates";
 
 flatpickr.defaultConfig.animate = false;
 flatpickr.defaultConfig.closeOnSelect = true;
@@ -1426,6 +1426,15 @@ describe("flatpickr", () => {
       expect(values.minutes).toEqual(45);
       expect(fp.hourElement!.value).toEqual("02");
       expect(fp.minuteElement!.value).toEqual("45");
+    });
+
+    it("parseSeconds()", () => {
+      // Returns whole [hours, minutes, seconds] components
+      expect(parseSeconds(90)).toEqual([0, 1, 30]);
+      expect(parseSeconds(3723)).toEqual([1, 2, 3]);
+      expect(parseSeconds(59)).toEqual([0, 0, 59]);
+      expect(parseSeconds(3600)).toEqual([1, 0, 0]);
+      expect(parseSeconds(0)).toEqual([0, 0, 0]);
     });
 
     it("time picker: default hours/mins", () => {
