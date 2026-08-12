@@ -95,6 +95,11 @@ const clickOn = (element: Node) => {
   simulate("click", element, { which: 1 }, CustomEvent);
 };
 
+// simulate a pointer press away from the calendar, which is what documentClick listens for
+const pressOutside = () => {
+  simulate("mousedown", document.body, { which: 1 }, MouseEvent);
+};
+
 describe("flatpickr", () => {
   beforeEach(beforeEachTest);
 
@@ -1076,6 +1081,63 @@ describe("flatpickr", () => {
       expect(fp.selectedDates[0].getDate()).toEqual(20);
       expect(fp.selectedDates[0].getHours()).toEqual(20);
       expect(fp.selectedDates[0].getMinutes()).toEqual(17);
+    });
+
+    it("announces a direct entry committed by clicking outside when allowInput is true (#2941)", () => {
+      const onChange = jest.fn();
+      createInstance({ allowInput: true, onChange });
+
+      fp.input.focus();
+      fp.input.value = "1999-12-31";
+      pressOutside();
+      fp.input.blur();
+
+      expect(fp.input.value).toEqual("1999-12-31");
+      expect(onChange).toHaveBeenCalledTimes(1);
+    });
+
+    it("announces a direct entry committed by clicking outside when altInput is on (#2941)", () => {
+      const onChange = jest.fn();
+      createInstance({
+        allowInput: true,
+        altInput: true,
+        altFormat: "d.m.Y",
+        defaultDate: "2001-01-01",
+        onChange,
+      });
+
+      const altInput = fp.altInput as HTMLInputElement;
+      altInput.focus();
+      altInput.value = "20.07.1969";
+      pressOutside();
+      altInput.blur();
+
+      expect(fp.input.value).toEqual("1969-07-20");
+      expect(onChange).toHaveBeenCalledTimes(1);
+    });
+
+    it("announces a direct entry cleared by hand and committed by clicking outside (#2941)", () => {
+      const onChange = jest.fn();
+      createInstance({ allowInput: true, defaultDate: "2001-01-01", onChange });
+
+      fp.input.focus();
+      fp.input.value = "";
+      pressOutside();
+      fp.input.blur();
+
+      expect(fp.input.value).toEqual("");
+      expect(onChange).toHaveBeenCalledTimes(1);
+    });
+
+    it("stays silent when clicking outside without a direct entry (#2941)", () => {
+      const onChange = jest.fn();
+      createInstance({ allowInput: true, defaultDate: "2001-01-01", onChange });
+
+      fp.input.focus();
+      pressOutside();
+      fp.input.blur();
+
+      expect(onChange).not.toHaveBeenCalled();
     });
 
     it("Renders week numbers correctly", () => {
