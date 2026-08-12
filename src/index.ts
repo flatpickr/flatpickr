@@ -1478,9 +1478,15 @@ function FlatpickrInstance(
 
       if (lostFocus && isIgnored) {
         if (self.config.allowInput) {
+          // Committing a hand-typed value is a change like any other, so it has to be announced
+          // (#2941). onBlur cannot cover this: clicking a non-focusable element commits the value
+          // without ever blurring the input, and when a blur does follow, this call has already
+          // applied the value, leaving onBlur nothing to detect.
+          const valueChanged = self._input.value.trimEnd() !== getDateStr();
+
           self.setDate(
             self._input.value,
-            false,
+            valueChanged,
             self.config.altInput
               ? self.config.altFormat
               : self.config.dateFormat
