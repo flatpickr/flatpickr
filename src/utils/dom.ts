@@ -7,12 +7,26 @@ export function toggleClass(
   elem.classList.remove(className);
 }
 
+function getDocument(): Document {
+  try {
+    // UGLY PATCH to get around cross realm issue for now...will need to retract later
+    // Attempt to access top.location; will throw if cross-origin
+    window.top.location.pathname;
+    return window.top.document; // Get parent window if inside iframe for new client
+  } catch (err) {
+    // Cross-origin access blocked → fallback to current window
+    return window.document;
+  }
+}
+
+export const doc = getDocument();
+
 export function createElement<T extends HTMLElement>(
   tag: keyof HTMLElementTagNameMap,
   className: string,
   content?: string
 ): T {
-  const e = window.document.createElement(tag) as T;
+  const e = doc.createElement(tag) as T;
   className = className || "";
   content = content || "";
 

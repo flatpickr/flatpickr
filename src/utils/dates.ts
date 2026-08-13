@@ -15,6 +15,16 @@ export interface FormatterArgs {
   isMobile?: boolean;
 }
 
+// 🔹 Safe check for cross-context Date instances
+export const isInstanceOfDate = (date: any): date is Date => {
+  return (
+    typeof date === "object" &&
+    Object.prototype.toString.call(date) === "[object Date]" &&
+    typeof date.getTime === "function" &&
+    !isNaN(date.getTime())
+  );
+};
+
 export const createDateFormatter = ({
   config = defaults,
   l10n = english,
@@ -24,23 +34,23 @@ export const createDateFormatter = ({
   frmt: string,
   overrideLocale?: Locale
 ): string => {
-  const locale = overrideLocale || l10n;
+    const locale = overrideLocale || l10n;
 
-  if (config.formatDate !== undefined && !isMobile) {
-    return config.formatDate(dateObj, frmt, locale);
-  }
+    if (config.formatDate !== undefined && !isMobile) {
+      return config.formatDate(dateObj, frmt, locale);
+    }
 
-  return frmt
-    .split("")
-    .map((c, i, arr) =>
-      formats[c as token] && arr[i - 1] !== "\\"
-        ? formats[c as token](dateObj, locale, config)
-        : c !== "\\"
-        ? c
-        : ""
-    )
-    .join("");
-};
+    return frmt
+      .split("")
+      .map((c, i, arr) =>
+        formats[c as token] && arr[i - 1] !== "\\"
+          ? formats[c as token](dateObj, locale, config)
+          : c !== "\\"
+            ? c
+            : ""
+      )
+      .join("");
+  };
 
 export const createDateParser = ({ config = defaults, l10n = english }) => (
   date: Date | string | number,
@@ -55,7 +65,7 @@ export const createDateParser = ({ config = defaults, l10n = english }) => (
   let parsedDate: Date | undefined;
   const dateOrig = date;
 
-  if (date instanceof Date) parsedDate = new Date(date.getTime());
+  if (isInstanceOfDate(date)) parsedDate = new Date(date.getTime());
   else if (
     typeof date !== "string" &&
     date.toFixed !== undefined // timestamp
@@ -114,7 +124,7 @@ export const createDateParser = ({ config = defaults, l10n = english }) => (
   }
 
   /* istanbul ignore next */
-  if (!(parsedDate instanceof Date && !isNaN(parsedDate.getTime()))) {
+  if (!(isInstanceOfDate(parsedDate) && !isNaN(parsedDate.getTime()))) {
     config.errorHandler(new Error(`Invalid date provided: ${dateOrig}`));
     return undefined;
   }
