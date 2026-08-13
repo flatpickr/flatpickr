@@ -446,10 +446,24 @@ function FlatpickrInstance(
     if (!self.config.inline && !self.config.static)
       bind(window, "resize", debouncedResize);
 
-    if (window.ontouchstart !== undefined)
-      bind(document, "touchstart", documentClick);
-    else bind(document, "mousedown", documentClick);
-    bind(document, "focus", documentClick, { capture: true });
+    // The calendar renders wherever `appendTo` (or its `document.body` fallback) actually is,
+    // which may be a different document/realm than the local `document` this module resolves to
+    // (see positionCalendar's `renderDoc`/`renderWin` for why). Clicks made in that document never
+    // bubble to a listener bound only on the local one, so "click outside closes the calendar"
+    // silently stopped working whenever the two differ. Bind on both — harmless duplicate bind when
+    // they're the same document, since `bind()` always removes its own listener on destroy.
+    const appendTargetDoc = (
+      (self.config.appendTo !== undefined ? self.config.appendTo : document.body) as HTMLElement
+    ).ownerDocument;
+    const outsideClickDocs =
+      appendTargetDoc !== document ? [document, appendTargetDoc] : [document];
+
+    outsideClickDocs.forEach((outsideClickDoc) => {
+      if (window.ontouchstart !== undefined)
+        bind(outsideClickDoc, "touchstart", documentClick);
+      else bind(outsideClickDoc, "mousedown", documentClick);
+      bind(outsideClickDoc, "focus", documentClick, { capture: true });
+    });
 
     if (self.config.clickOpens === true) {
       bind(self._input, "focus", self.open);
@@ -2191,6 +2205,24 @@ function FlatpickrInstance(
     triggerEvent("onPreCalendarPosition");
     const positionElement = customPositionElement || self._positionElement;
 
+    // The calendar element is created via createElement()/`doc` (see utils/dom.ts), which may
+    // resolve to `window.top.document` when embedded cross-realm (e.g. inside an iframe). But
+    // it's rendered wherever it's actually inserted into the DOM — which is `self.config.appendTo`
+    // if set, otherwise that same `document.body`. getBoundingClientRect()/scroll offset/viewport
+    // size all need to be read relative to THAT render target's own window, not unconditionally
+    // the local `window` (which previously caused wrong/negative positions when appendTo pointed
+    // at a different realm than `positionElement`, e.g. appending to the top window while the
+    // input measured itself in iframe-local coordinates, or vice versa).
+    const appendTarget = self.config.appendTo !== undefined ? self.config.appendTo : document.body;
+    const renderWin = appendTarget.ownerDocument.defaultView || window;
+    const renderDoc = appendTarget.ownerDocument;
+    const inputWin = positionElement.ownerDocument.defaultView || window;
+    const rawInputBounds = positionElement.getBoundingClientRect();
+    const frameOffset =
+      inputWin !== renderWin && (inputWin as any).frameElement
+        ? (inputWin as any).frameElement.getBoundingClientRect()
+        : { top: 0, left: 0 };
+
     const calendarHeight = Array.prototype.reduce.call(
       self.calendarContainer.children,
       ((acc: number, child: HTMLElement) => acc + child.offsetHeight) as any,
@@ -2200,8 +2232,15 @@ function FlatpickrInstance(
       configPos = self.config.position.split(" "),
       configPosVertical = configPos[0],
       configPosHorizontal = configPos.length > 1 ? configPos[1] : null,
-      inputBounds = positionElement.getBoundingClientRect(),
-      distanceFromBottom = window.innerHeight - inputBounds.bottom,
+      inputBounds = {
+        top: rawInputBounds.top + frameOffset.top,
+        bottom: rawInputBounds.bottom + frameOffset.top,
+        left: rawInputBounds.left + frameOffset.left,
+        right: rawInputBounds.right + frameOffset.left,
+        width: rawInputBounds.width,
+        height: rawInputBounds.height,
+      },
+      distanceFromBottom = renderWin.innerHeight - inputBounds.bottom,
       showOnTop =
         configPosVertical === "above" ||
         (configPosVertical !== "below" &&
@@ -2209,7 +2248,7 @@ function FlatpickrInstance(
           inputBounds.top > calendarHeight);
 
     const top =
-      window.pageYOffset +
+      renderWin.pageYOffset +
       inputBounds.top +
       (!showOnTop ? positionElement.offsetHeight + 2 : -calendarHeight - 2);
 
@@ -2218,7 +2257,7 @@ function FlatpickrInstance(
 
     if (self.config.inline) return;
 
-    let left = window.pageXOffset + inputBounds.left;
+    let left = renderWin.pageXOffset + inputBounds.left;
     let isCenter = false;
     let isRight = false;
 
@@ -2235,9 +2274,9 @@ function FlatpickrInstance(
     toggleClass(self.calendarContainer, "arrowRight", isRight);
 
     const right =
-      document.body.offsetWidth - (window.pageXOffset + inputBounds.right);
-    const rightMost = left + calendarWidth > document.body.offsetWidth;
-    const centerMost = right + calendarWidth > document.body.offsetWidth;
+      renderDoc.body.offsetWidth - (renderWin.pageXOffset + inputBounds.right);
+    const rightMost = left + calendarWidth > renderDoc.body.offsetWidth;
+    const centerMost = right + calendarWidth > renderDoc.body.offsetWidth;
 
     toggleClass(self.calendarContainer, "rightMost", rightMost);
 
@@ -2255,7 +2294,7 @@ function FlatpickrInstance(
       const doc = getDocumentStyleSheet() as CSSStyleSheet;
       // some testing environments don't have css support
       if (doc === undefined) return;
-      const bodyWidth = document.body.offsetWidth;
+      const bodyWidth = renderDoc.body.offsetWidth;
       const centerLeft = Math.max(0, bodyWidth / 2 - calendarWidth / 2);
       const centerBefore = ".flatpickr-calendar.centerMost:before";
       const centerAfter = ".flatpickr-calendar.centerMost:after";
