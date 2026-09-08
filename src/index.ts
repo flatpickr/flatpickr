@@ -2159,8 +2159,14 @@ function FlatpickrInstance(
 
     tokenRegex.D = `(${self.l10n.weekdays.shorthand.join("|")})`;
     tokenRegex.l = `(${self.l10n.weekdays.longhand.join("|")})`;
-    tokenRegex.M = `(${self.l10n.months.shorthand.join("|")})`;
-    tokenRegex.F = `(${self.l10n.months.longhand.join("|")})`;
+    tokenRegex.M = `(${self.l10n.months.shorthand
+      .slice()
+      .sort((a, b) => b.length - a.length)
+      .join("|")})`;
+    tokenRegex.F = `(${self.l10n.months.longhand
+      .slice()
+      .sort((a, b) => b.length - a.length)
+      .join("|")})`;
     tokenRegex.K = `(${self.l10n.amPM[0]}|${
       self.l10n.amPM[1]
     }|${self.l10n.amPM[0].toLowerCase()}|${self.l10n.amPM[1].toLowerCase()})`;
