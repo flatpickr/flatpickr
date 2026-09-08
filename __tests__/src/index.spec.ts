@@ -1851,6 +1851,59 @@ describe("flatpickr", () => {
   });
 
   describe("Localization", () => {
+    it.each(["M", "F"])(
+      "parses numeric month names with the %s token",
+      (token) => {
+        createInstance({
+          locale: {
+            months: {
+              shorthand: [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10",
+                "11",
+                "12",
+              ],
+              longhand: [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10",
+                "11",
+                "12",
+              ],
+            },
+          },
+        });
+
+        for (let month = 0; month < 12; month++) {
+          const date = new Date(2025, month, 24);
+          for (const format of [
+            `Y-${token}-d`,
+            `d-${token}-Y`,
+            `Y-d-${token}`,
+          ]) {
+            const formatted = fp.formatDate(date, format);
+            expect(fp.parseDate(formatted, format)).toEqual(date);
+          }
+          expect(fp.formatDate(date, token)).toEqual(String(month + 1));
+        }
+      }
+    );
+
     it("By locale config option", () => {
       createInstance({
         locale: Russian,
