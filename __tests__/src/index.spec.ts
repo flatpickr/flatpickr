@@ -850,6 +850,37 @@ describe("flatpickr", () => {
       expect(fp.currentYear).toBe(2016);
     });
 
+    it.each([
+      [39, "2026-01-15", "2026-01-16"],
+      [37, "2026-01-15", "2026-01-14"],
+      [38, "2026-01-15", "2026-01-08"],
+      [40, "2026-01-15", "2026-01-22"],
+      [37, "2026-01-01", "2025-12-31"],
+      [39, "2025-12-31", "2026-01-01"],
+    ])(
+      "navigates across years with multiple months (%s, %s)",
+      (keyCode, from, to) => {
+        createInstance({
+          mode: "range",
+          showMonths: 2,
+          defaultDate: "2025-12-01",
+        });
+        fp.open();
+        const day = Array.from(
+          fp.daysContainer!.querySelectorAll<DayElement>(".flatpickr-day")
+        ).find(
+          (candidate) =>
+            !candidate.classList.contains("hidden") &&
+            fp.formatDate(candidate.dateObj, "Y-m-d") === from
+        )!;
+        day.focus();
+        simulate("keydown", day, { keyCode });
+        const focused = document.activeElement as DayElement;
+        expect(focused.dateObj).toBeDefined();
+        expect(fp.formatDate(focused.dateObj, "Y-m-d")).toBe(to);
+      }
+    );
+
     it("onKeyDown closes flatpickr on Enter when allowInput set to true", () => {
       createInstance({
         enableTime: true,
