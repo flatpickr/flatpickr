@@ -781,7 +781,8 @@ function FlatpickrInstance(
   function getNextAvailableDay(current: DayElement, delta: number) {
     const givenMonth =
       current.className.indexOf("Month") === -1
-        ? current.dateObj.getMonth()
+        ? current.dateObj.getMonth() +
+          12 * (current.dateObj.getFullYear() - self.currentYear)
         : self.currentMonth;
     const endMonth = delta > 0 ? self.config.showMonths : -1;
     const loopDelta = delta > 0 ? 1 : -1;
