@@ -784,6 +784,27 @@ describe("flatpickr", () => {
         simulate("blur", fp._input, { target: fp._input, test: 1 }, FocusEvent);
         expect(timesFired).toEqual(1);
       });
+
+      it("should not close when the input is inside a shadow root #2766", () => {
+        const host = document.createElement("div");
+        document.body.appendChild(host);
+        const shadowInput = document.createElement("input");
+        host.attachShadow({ mode: "open" }).appendChild(shadowInput);
+
+        createInstance({}, shadowInput);
+        fp.open();
+
+        shadowInput.dispatchEvent(
+          new MouseEvent("mousedown", { bubbles: true, composed: true })
+        );
+        expect(fp.isOpen).toBe(true);
+
+        simulate("mousedown", window.document.body, { which: 1 }, CustomEvent);
+        expect(fp.isOpen).toBe(false);
+
+        destroyInstance();
+        host.remove();
+      });
     });
 
     it("onKeyDown", () => {
