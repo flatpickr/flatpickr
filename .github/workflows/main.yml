@@ -9,18 +9,24 @@ on:
 jobs:
   tests:
     name: 'tests'
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
     - uses: bahmutov/npm-install@v1
     - run: npm test
 
   prettier:
     name: 'prettier'
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
       - uses: bahmutov/npm-install@v1
       - run: npm run fmt:check
