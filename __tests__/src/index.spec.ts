@@ -1135,6 +1135,27 @@ describe("flatpickr", () => {
           expect(fp.latestSelectedDateObj.getMinutes()).toBe(30);
         });
 
+        it("doesn't rewrite the native value while typing #3144", () => {
+          mockAgent = "Android";
+          createInstance({
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            defaultDate: "05:05",
+          });
+
+          const mobileInput = fp.mobileInput as HTMLInputElement;
+          // first digit of "15" typed into the hour field
+          mobileInput.value = "01:05";
+          simulate("change", mobileInput);
+
+          expect(fp.input.value).toBe("01:05");
+          expect(mobileInput.value).toBe("01:05");
+
+          fp.setDate("13:30");
+          expect(mobileInput.value).toBe("13:30:00");
+        });
+
         it("copy className and adds own", () => {
           const el = document.createElement("input");
           el.className = "foo bar";

@@ -2835,10 +2835,22 @@ function FlatpickrInstance(
    */
   function updateValue(triggerChange = true) {
     if (self.mobileInput !== undefined && self.mobileFormatStr) {
-      self.mobileInput.value =
+      const mobileValue =
         self.latestSelectedDateObj !== undefined
           ? self.formatDate(self.latestSelectedDateObj, self.mobileFormatStr)
           : "";
+      const currentDate = self.parseDate(
+        self.mobileInput.value,
+        self.mobileFormatStr
+      );
+
+      // Browsers leave out zero seconds ("15:05", not "15:05:00"). Writing an
+      // equivalent value back resets the field the user is typing in (#3144)
+      if (
+        currentDate === undefined ||
+        self.formatDate(currentDate, self.mobileFormatStr) !== mobileValue
+      )
+        self.mobileInput.value = mobileValue;
     }
 
     self.input.value = getDateStr(self.config.dateFormat);
