@@ -78,3 +78,8 @@ export function getEventTarget(event: Event): EventTarget | null {
     return event.target;
   }
 }
+
+// Works across windows, unlike `instanceof Node`
+export function isNode(value: unknown): value is Node {
+  return typeof (value as Node | null)?.nodeType === "number";
+}

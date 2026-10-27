@@ -784,6 +784,43 @@ describe("flatpickr", () => {
         simulate("blur", fp._input, { target: fp._input, test: 1 }, FocusEvent);
         expect(timesFired).toEqual(1);
       });
+
+      it("should work with an element from another window #3138", () => {
+        const iframe = document.createElement("iframe");
+        document.body.appendChild(iframe);
+        const frameDoc = iframe.contentDocument as Document;
+        const frameInput = frameDoc.createElement("input");
+        frameDoc.body.appendChild(frameInput);
+        expect(frameInput instanceof HTMLElement).toBe(false);
+
+        createInstance({}, frameInput);
+        expect(fp.calendarContainer.ownerDocument).toBe(frameDoc);
+        expect(frameDoc.body.contains(fp.calendarContainer)).toBe(true);
+
+        fp.open();
+        expect(fp.isOpen).toBe(true);
+        frameDoc.body.dispatchEvent(
+          new MouseEvent("mousedown", { bubbles: true })
+        );
+        expect(fp.isOpen).toBe(false);
+
+        destroyInstance();
+        iframe.remove();
+      });
+
+      it("should work with an element whose document has no window", () => {
+        const template = document.createElement("template");
+        template.innerHTML = "<input>";
+        const clone = template.content.cloneNode(true) as DocumentFragment;
+        const input = clone.querySelector("input") as HTMLInputElement;
+        expect(input.ownerDocument.defaultView).toBe(null);
+
+        createInstance({}, input);
+        expect(fp.calendarContainer.ownerDocument).toBe(document);
+        expect(document.body.contains(fp.calendarContainer)).toBe(true);
+
+        destroyInstance();
+      });
     });
 
     it("onKeyDown", () => {
