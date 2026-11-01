@@ -58,7 +58,7 @@ export const Icelandic: CustomLocale = {
     return ".";
   },
 
-  firstDayOfWeek: 1,
+  firstDayOfWeek: 0,
   rangeSeparator: " til ",
   weekAbbreviation: "vika",
   yearAriaLabel: "Ár",
