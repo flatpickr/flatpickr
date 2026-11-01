@@ -53,6 +53,8 @@ export const Sinhala: CustomLocale = {
       "දෙසැම්බර්",
     ],
   },
+
+  firstDayOfWeek: 1,
   time_24hr: true,
 };
 

@@ -54,6 +54,8 @@ export const Mandarin: CustomLocale = {
     ],
   },
 
+  firstDayOfWeek: 1,
+
   rangeSeparator: " 至 ",
   weekAbbreviation: "周",
   scrollTitle: "滚动切换",

@@ -54,7 +54,7 @@ export const Thai: CustomLocale = {
     ],
   },
 
-  firstDayOfWeek: 1,
+  firstDayOfWeek: 0,
   rangeSeparator: " ถึง ",
   scrollTitle: "เลื่อนเพื่อเพิ่มหรือลด",
   toggleTitle: "คลิกเพื่อเปลี่ยน",

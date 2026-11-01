@@ -46,7 +46,7 @@ export const Indonesian: CustomLocale = {
     ],
   },
 
-  firstDayOfWeek: 1,
+  firstDayOfWeek: 0,
 
   ordinal: () => {
     return "";

@@ -55,7 +55,7 @@ export const Khmer: CustomLocale = {
   ordinal: () => {
     return "";
   },
-  firstDayOfWeek: 1,
+  firstDayOfWeek: 0,
   rangeSeparator: " ដល់ ",
   weekAbbreviation: "សប្តាហ៍",
   scrollTitle: "រំកិលដើម្បីបង្កើន",
