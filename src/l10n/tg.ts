@@ -6,8 +6,8 @@ const fp =
   typeof window !== "undefined" && window.flatpickr !== undefined
     ? window.flatpickr
     : ({
-      l10ns: {},
-    } as FlatpickrFn);
+        l10ns: {},
+      } as FlatpickrFn);
 
 export const Tajik: CustomLocale = {
   weekdays: {
