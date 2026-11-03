@@ -55,7 +55,7 @@ import { Slovenian as sl } from "./sl";
 import { Albanian as sq } from "./sq";
 import { Serbian as sr } from "./sr";
 import { Swedish as sv } from "./sv";
-import { Tajik as tj } from " ./tj";
+import { Tajik as tj } from "./tj";
 import { Thai as th } from "./th";
 import { Turkish as tr } from "./tr";
 import { Ukrainian as uk } from "./uk";
