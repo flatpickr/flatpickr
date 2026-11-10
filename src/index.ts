@@ -2320,6 +2320,8 @@ function FlatpickrInstance(
     e.preventDefault();
     e.stopPropagation();
 
+    if (self.input.disabled || self._input.disabled) return;
+
     const isSelectable = (day: Element) =>
       day.classList &&
       day.classList.contains("flatpickr-day") &&

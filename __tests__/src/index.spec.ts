@@ -98,6 +98,29 @@ const clickOn = (element: Node) => {
 describe("flatpickr", () => {
   beforeEach(beforeEachTest);
 
+  it("preserves the date when the input becomes disabled while open", () => {
+    const onChange = jest.fn();
+    createInstance({ defaultDate: "2026-11-10", onChange });
+    fp.open();
+    expect(fp.isOpen).toBe(true);
+
+    const nextDay = fp.days.querySelector(
+      ".selected + .flatpickr-day"
+    ) as HTMLElement;
+    fp.input.disabled = true;
+    try {
+      clickOn(nextDay);
+      expect(fp.input.value).toBe("2026-11-10");
+      expect(onChange).not.toHaveBeenCalled();
+    } finally {
+      fp.input.disabled = false;
+    }
+
+    clickOn(nextDay);
+    expect(fp.input.value).toBe("2026-11-11");
+    expect(onChange).toHaveBeenCalledTimes(1);
+  });
+
   describe("init", () => {
     it("should gracefully handle no elements", () => {
       expect(flatpickr([])).toEqual([]);
