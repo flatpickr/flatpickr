@@ -104,7 +104,9 @@ describe("flatpickr", () => {
     fp.open();
     expect(fp.isOpen).toBe(true);
 
-    const nextDay = fp.days.querySelector(".selected + .flatpickr-day") as HTMLElement;
+    const nextDay = fp.days.querySelector(
+      ".selected + .flatpickr-day"
+    ) as HTMLElement;
     fp.input.disabled = true;
     try {
       clickOn(nextDay);
