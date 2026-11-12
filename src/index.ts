@@ -178,6 +178,8 @@ function FlatpickrInstance(
   function updateTime(
     e?: MouseEvent | IncrementEvent | KeyboardEvent | FocusEvent
   ) {
+    if (self.input.disabled || self._input.disabled) return false;
+
     if (self.selectedDates.length === 0) {
       const defaultDate =
         self.config.minDate === undefined ||
@@ -208,6 +210,8 @@ function FlatpickrInstance(
     if (self._input.value !== prevValue) {
       self._debouncedChange();
     }
+
+    return true;
   }
 
   function ampm2military(hour: number, amPM: string) {
@@ -1748,8 +1752,7 @@ function FlatpickrInstance(
             changeYear(self.currentYear - delta);
           } else if (self.config.enableTime) {
             if (!isTimeObj && self.hourElement) self.hourElement.focus();
-            updateTime(e);
-            self._debouncedChange();
+            if (updateTime(e)) self._debouncedChange();
           }
 
           break;
