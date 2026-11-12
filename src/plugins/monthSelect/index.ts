@@ -203,7 +203,7 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
       if (eventTarget.classList.contains("flatpickr-disabled")) return;
       if (eventTarget.classList.contains("notAllowed")) return; // necessary??
 
-      setMonth((eventTarget as MonthElement).dateObj);
+      if (!setMonth((eventTarget as MonthElement).dateObj)) return;
 
       if (fp.config.closeOnSelect) {
         const single = fp.config.mode === "single";
@@ -215,6 +215,8 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
     }
 
     function setMonth(date: Date) {
+      if (fp.input.disabled || fp._input.disabled) return false;
+
       const selectedDate = new Date(
         fp.currentYear,
         date.getMonth(),
@@ -244,6 +246,7 @@ function monthSelectPlugin(pluginConfig?: Partial<Config>): Plugin {
 
       fp.setDate(selectedDates, true);
       setCurrentlySelected();
+      return true;
     }
 
     const shifts: Record<number, number> = {
