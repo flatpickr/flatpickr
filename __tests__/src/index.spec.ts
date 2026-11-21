@@ -1488,6 +1488,30 @@ describe("flatpickr", () => {
       expect(fp.input.value).toEqual("02:30");
     });
 
+    it.each([
+      ["11:00:00", 1, "11:00:05"],
+      ["14:00:00", 1, "14:00:00"],
+      ["11:00:10", -1, "11:00:05"],
+      ["10:00:10", -1, "10:00:10"],
+    ])(
+      "time picker: stepping seconds from %s in direction %i gives %s with date bounds",
+      (startTime, increment, expectedTime) => {
+        createInstance({
+          enableTime: true,
+          enableSeconds: true,
+          dateFormat: "Y-m-d H:i:S",
+          minDate: "2020-05-01 10:00:10",
+          maxDate: "2020-05-01 14:00:00",
+          defaultDate: `2020-05-01 ${startTime}`,
+        });
+
+        fp.open();
+        incrementTime("secondElement", increment);
+
+        expect(fp.input.value).toBe(`2020-05-01 ${expectedTime}`);
+      }
+    );
+
     it("time picker: minTime/maxTime reversed", () => {
       createInstance({
         enableTime: true,
