@@ -293,11 +293,12 @@ function FlatpickrInstance(
             ? self.config.maxTime
             : (self.config.maxDate as Date);
         hours = Math.min(hours, maxTime.getHours());
-        if (hours === maxTime.getHours())
+        if (hours === maxTime.getHours()) {
           minutes = Math.min(minutes, maxTime.getMinutes());
 
-        if (minutes === maxTime.getMinutes())
-          seconds = Math.min(seconds, maxTime.getSeconds());
+          if (minutes === maxTime.getMinutes())
+            seconds = Math.min(seconds, maxTime.getSeconds());
+        }
       }
 
       if (limitMinHours) {
@@ -307,11 +308,12 @@ function FlatpickrInstance(
             : self.config.minDate!;
 
         hours = Math.max(hours, minTime.getHours());
-        if (hours === minTime.getHours() && minutes < minTime.getMinutes())
-          minutes = minTime.getMinutes();
+        if (hours === minTime.getHours()) {
+          minutes = Math.max(minutes, minTime.getMinutes());
 
-        if (minutes === minTime.getMinutes())
-          seconds = Math.max(seconds, minTime.getSeconds());
+          if (minutes === minTime.getMinutes())
+            seconds = Math.max(seconds, minTime.getSeconds());
+        }
       }
     }
 
